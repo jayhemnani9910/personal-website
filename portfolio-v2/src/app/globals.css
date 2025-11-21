@@ -1,0 +1,275 @@
+@import "tailwindcss";
+
+:root {
+  /* ═══════════════════════════════════════════════════════════════
+     PROJECT AETHER - THE VOID PALETTE (Ethereal Intelligence)
+     ═══════════════════════════════════════════════════════════════ */
+
+  /* Background: The Void (deep blue-tinted blacks, never pure #000) */
+  --bg-void: #030305;
+  --bg-abyss: #0A0A0F;
+  --bg-surface: #131318;
+
+  /* Typography: Readable whites with depth */
+  --text-primary: #ffffff;
+  --text-secondary: rgba(255, 255, 255, 0.70);
+  --text-muted: rgba(255, 255, 255, 0.40);
+
+  /* The Intelligence: Neon accents for data/logic visualization */
+  --neon-cyan: #00f0ff;
+  --neon-purple: #7000ff;
+  --neon-blue: #0066ff;
+
+  /* Liquid Glass Material */
+  --glass-bg-start: rgba(255, 255, 255, 0.03);
+  --glass-bg-end: rgba(255, 255, 255, 0.01);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --glass-glow: rgba(255, 255, 255, 0.05);
+  --glass-blur: 16px;
+
+  /* Legacy compatibility (gradually migrate away) */
+  --color-bg-primary: var(--bg-void);
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-muted: var(--text-muted);
+  --color-accent-cyan: var(--neon-cyan);
+  --color-accent-purple: var(--neon-purple);
+
+  /* Fonts */
+  --font-sans: var(--font-inter);
+  --font-mono: var(--font-jetbrains-mono);
+
+  /* Layout rhythm */
+  --section-padding: clamp(72px, 12vw, 128px);
+  --card-radius: 20px;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   Typographic + Layout Utilities
+   ═══════════════════════════════════════════════════════════════ */
+
+.section-shell {
+  width: min(1200px, calc(100% - 2.5rem));
+  margin: 0 auto;
+}
+
+.section-block {
+  padding: var(--section-padding) 0;
+}
+
+.eyebrow {
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  color: var(--neon-cyan);
+  font-family: var(--font-mono);
+}
+
+.title-xl {
+  font-size: clamp(2.75rem, 5vw, 4.25rem);
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  font-weight: 800;
+}
+
+.body-base {
+  color: var(--text-secondary);
+  line-height: 1.65;
+  font-size: 1rem;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.45rem 0.75rem;
+  border-radius: 999px;
+  background: var(--glass-bg-start);
+  border: 1px solid var(--glass-border);
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+  font-family: var(--font-mono);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   LIQUID GLASS MATERIAL SYSTEM
+   ═══════════════════════════════════════════════════════════════ */
+
+.glass-panel {
+  background: linear-gradient(180deg,
+      var(--glass-bg-start) 0%,
+      var(--glass-bg-end) 100%);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--glass-border);
+  box-shadow: inset 0 1px 0 0 var(--glass-glow);
+}
+
+.glass-panel-hover {
+  transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.glass-panel-hover:hover {
+  background: linear-gradient(180deg,
+      rgba(255, 255, 255, 0.06) 0%,
+      rgba(255, 255, 255, 0.02) 100%);
+  border-color: rgba(255, 255, 255, 0.15);
+  box-shadow:
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.1),
+    0 8px 32px rgba(0, 240, 255, 0.1);
+}
+
+/* Legacy glass utilities (for gradual migration) */
+.glass {
+  background: var(--glass-bg-start);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--glass-border);
+  box-shadow: inset 0 1px 0 0 var(--glass-glow);
+}
+
+.glass-hover {
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.glass-hover:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.12);
+  transform: translateY(-1px);
+  box-shadow:
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.08),
+    0 0 0 1px rgba(255, 255, 255, 0.12);
+}
+
+.glass-card {
+  background-color: var(--glass-bg-start);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  box-shadow: inset 0 1px 0 0 var(--glass-glow);
+}
+
+.glass-card-hover {
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.glass-card-hover:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.12);
+  transform: translateY(-2px) scale(1.01);
+  box-shadow:
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.08),
+    0 0 0 1px rgba(255, 255, 255, 0.12);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   SPOTLIGHT EFFECT (for Bento Grid)
+   ═══════════════════════════════════════════════════════════════ */
+
+.spotlight-card {
+  position: relative;
+  isolation: isolate;
+}
+
+.spotlight-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: radial-gradient(600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+      var(--neon-cyan),
+      transparent 40%);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.3s;
+  pointer-events: none;
+}
+
+.spotlight-card:hover::before {
+  opacity: 1;
+}
+
+@media (max-width: 768px),
+(prefers-reduced-motion: reduce) {
+  .spotlight-card::before {
+    opacity: 0;
+    display: none;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   NEON GLOW EFFECTS
+   ═══════════════════════════════════════════════════════════════ */
+
+.glow-cyan {
+  box-shadow: 0 0 20px rgba(0, 240, 255, 0.3);
+}
+
+.glow-purple {
+  box-shadow: 0 0 20px rgba(112, 0, 255, 0.3);
+}
+
+.glow-blue {
+  box-shadow: 0 0 20px rgba(0, 102, 255, 0.3);
+}
+
+/* Apple-style Display Typography */
+.text-display {
+  font-size: clamp(2.5rem, 8vw, 8rem);
+  line-height: 0.9;
+  letter-spacing: -0.04em;
+  font-weight: 700;
+}
+
+/* Lenis Scroll Tuning */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis.lenis-scrolling iframe {
+  pointer-events: none;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-bg-primary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-bg-tertiary);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-text-muted);
+}
+
+/* Utilities */
+.text-balance {
+  text-wrap: balance;
+}
+
+.mask-gradient {
+  mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
+}
