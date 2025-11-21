@@ -29,6 +29,13 @@ yarn-error.log*
 *.pem
 Thumbs.db
 
+# Archives
+*.zip
+*.tar
+*.tar.gz
+*.rar
+*.7z
+
 # IDE
 .vscode/
 .idea/
