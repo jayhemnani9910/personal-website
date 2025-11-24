@@ -28,7 +28,8 @@ export function useMousePosition(ref: RefObject<HTMLElement | null>) {
 
         element.addEventListener("mousemove", handleMouseMove);
         return () => element.removeEventListener("mousemove", handleMouseMove);
-    }, [ref]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [ref.current]);
 
     return position;
 }
