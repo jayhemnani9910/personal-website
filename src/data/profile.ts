@@ -1,9 +1,9 @@
 export const HERO_CONTENT = {
   title: "Jay Hemnani",
   role: "Data Engineer",
-  tagline: "Architecting clarity from chaos in data, systems, and AI.",
-  subTagline: "Building reliable pipelines and intelligent systems.",
-  highlight: "clarity",
+  tagline: "Engineering resilient data pipelines and autonomous AI systems.",
+  subTagline: "Transforming raw data into actionable intelligence.",
+  highlight: "resilient",
   cta: {
     primary: "Initialize System",
     secondary: "Explore Selected Works"

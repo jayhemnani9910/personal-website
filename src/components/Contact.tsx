@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { Send, Mail, Github, Linkedin, Twitter } from "lucide-react";
 import MagneticButton from "./MagneticButton";
 import { SOCIAL_LINKS } from "@/data/profile";
+// import { sendEmail } from "@/actions/sendEmail"; // Removed for static export
 
 export function Contact() {
     const [formState, setFormState] = useState({
@@ -14,20 +15,44 @@ export function Contact() {
     });
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isSent, setIsSent] = useState(false);
+    const [error, setError] = useState<string | null>(null);
 
-    const handleSubmit = async (e: React.FormEvent) => {
+    const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
+        if (!formState.name.trim() || !formState.email.trim() || !formState.message.trim()) {
+            setError("Please fill in all fields.");
+            return;
+        }
+        if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(formState.email)) {
+            setError("Enter a valid email address.");
+            return;
+        }
+
         setIsSubmitting(true);
-        // Simulate API call
-        await new Promise(resolve => setTimeout(resolve, 1500));
-        setIsSubmitting(false);
-        setIsSent(true);
-        setFormState({ name: "", email: "", message: "" });
-        setTimeout(() => setIsSent(false), 5000);
+        setError(null);
+        setIsSent(false);
+
+        const subject = `Portfolio Contact from ${formState.name}`;
+        const body = `Name: ${formState.name}\nEmail: ${formState.email}\n\nMessage:\n${formState.message}`;
+        const mailtoLink = `mailto:${SOCIAL_LINKS.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+
+        try {
+            const opened = window.open(mailtoLink, "_self");
+            if (opened === null) {
+                throw new Error("Mail client blocked");
+            }
+            setIsSent(true);
+            setFormState({ name: "", email: "", message: "" });
+            setTimeout(() => setIsSent(false), 4000);
+        } catch {
+            setError("Couldn't open your mail app. Email me directly at " + SOCIAL_LINKS.email);
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     return (
-        <section id="contact" className="relative section-block section-shell overflow-hidden">
+        <section id="contact" className="relative section-block section-shell overflow-hidden scroll-mt-28 md:scroll-mt-32">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24">
                 {/* Left Column: Info & Socials */}
                 <motion.div
@@ -134,13 +159,13 @@ export function Contact() {
                             <MagneticButton>
                                 <button
                                     type="submit"
-                                    disabled={isSubmitting || isSent}
+                                    disabled={isSubmitting}
                                     className="w-full py-4 rounded-xl bg-[var(--color-text-primary)] text-[var(--color-bg-primary)] font-bold flex items-center justify-center gap-2 hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
                                 >
                                     {isSubmitting ? (
-                                        <span className="animate-pulse">Sending...</span>
+                                        <span className="animate-pulse">Opening mail app…</span>
                                     ) : isSent ? (
-                                        <span>Message Sent!</span>
+                                        <span>Mail app opened</span>
                                     ) : (
                                         <>
                                             Send Message
@@ -153,6 +178,27 @@ export function Contact() {
                     </div>
                 </motion.div>
             </div>
+
+            {/* Toast Notification */}
+            {(isSent || error) && (
+                <motion.div
+                    initial={{ opacity: 0, y: 50 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 50 }}
+                    className={`fixed bottom-8 right-8 px-6 py-4 rounded-xl border backdrop-blur-md z-50 ${error
+                        ? "bg-red-500/10 border-red-500/20 text-red-400"
+                        : "bg-emerald-500/10 border-emerald-500/20 text-emerald-400"
+                        }`}
+                    aria-live="polite"
+                >
+                    <div className="flex items-center gap-3">
+                        <div className={`w-2 h-2 rounded-full ${error ? "bg-red-500" : "bg-emerald-500"}`} />
+                        <p className="font-medium">
+                            {error ? error : "Opening your mail app… If nothing happens, email me directly at " + SOCIAL_LINKS.email}
+                        </p>
+                    </div>
+                </motion.div>
+            )}
         </section>
     );
 }

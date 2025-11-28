@@ -2,12 +2,13 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
-import type { Project } from "@/data/types";
+import type { Project } from "@/lib/definitions";
+import { ProjectSummary } from "@/lib/content";
 import { getProjectGradientByType } from "@/lib/generativeArt";
 import { hoverScale, hoverGlow, springStiff } from "@/lib/animation";
 
 interface BentoCardProps {
-    project: Project;
+    project: Project | ProjectSummary;
     className?: string;
 }
 
@@ -23,7 +24,7 @@ interface BentoCardProps {
  */
 export function BentoCard({ project, className = "" }: BentoCardProps) {
     const gradient = getProjectGradientByType(project.id, project.tech);
-    const description = project.summary || project.headline;
+    const description = (project as Project & { headline?: string }).headline ?? project.summary;
 
     return (
         <Link href={`/projects/${project.id}`} className={className}>
@@ -33,7 +34,7 @@ export function BentoCard({ project, className = "" }: BentoCardProps) {
                 viewport={{ once: true, margin: "-50px" }}
                 whileHover={{ ...hoverScale, ...hoverGlow }}
                 transition={springStiff}
-                className="spotlight-card glass-panel glass-panel-hover rounded-2xl p-6 min-h-[280px] relative overflow-hidden group cursor-pointer h-full"
+                className="spotlight-card glass-panel glass-panel-hover crystal-card rounded-2xl p-6 min-h-[280px] relative overflow-hidden group cursor-pointer h-full"
             >
                 {/* Generative Art Background */}
                 <div

@@ -1,5 +1,68 @@
 @import "tailwindcss";
 
+/* ═══════════════════════════════════════════════════════════════
+   ACCESSIBILITY BASELINE
+   ═══════════════════════════════════════════════════════════════ */
+
+/* Skip to main content link */
+.skip-link {
+  position: fixed;
+  top: -100%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9999;
+  padding: 1rem 2rem;
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  border: 2px solid var(--neon-cyan);
+  border-radius: 0.5rem;
+  font-weight: 600;
+  transition: top 0.2s ease;
+}
+
+.skip-link:focus {
+  top: 1rem;
+  outline: none;
+}
+
+/* Focus visible baseline */
+:focus-visible {
+  outline: 2px solid var(--neon-cyan);
+  outline-offset: 2px;
+}
+
+/* Remove focus ring for mouse users */
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* Reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  /* Keep opacity transitions for graceful degradation */
+  .motion-safe-opacity {
+    transition: opacity 0.2s ease !important;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  :root {
+    --glass-border: rgba(255, 255, 255, 0.3);
+    --text-secondary: rgba(255, 255, 255, 0.9);
+    --text-muted: rgba(255, 255, 255, 0.7);
+  }
+}
+
 :root {
   /* ═══════════════════════════════════════════════════════════════
      PROJECT AETHER - THE VOID PALETTE (Ethereal Intelligence)
@@ -169,6 +232,8 @@
 .spotlight-card {
   position: relative;
   isolation: isolate;
+  overflow: hidden;
+  /* Ensure the glow doesn't spill out awkwardly */
 }
 
 .spotlight-card::before {
@@ -177,7 +242,9 @@
   inset: 0;
   border-radius: inherit;
   padding: 1px;
+  /* Border width */
   background: radial-gradient(600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+      rgba(255, 255, 255, 0.6),
       var(--neon-cyan),
       transparent 40%);
   -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
@@ -185,17 +252,36 @@
   mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   mask-composite: exclude;
   opacity: 0;
-  transition: opacity 0.3s;
+  transition: opacity 0.3s ease;
   pointer-events: none;
+  z-index: 2;
 }
 
-.spotlight-card:hover::before {
+/* Inner Glow (Lumos) */
+.spotlight-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(400px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+      rgba(0, 240, 255, 0.1),
+      transparent 40%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.spotlight-card:hover::before,
+.spotlight-card:hover::after {
   opacity: 1;
 }
 
 @media (max-width: 768px),
 (prefers-reduced-motion: reduce) {
-  .spotlight-card::before {
+
+  .spotlight-card::before,
+  .spotlight-card::after {
     opacity: 0;
     display: none;
   }
@@ -272,4 +358,57 @@ html.lenis body {
 
 .mask-gradient {
   mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
+}
+
+/* --- Crystal Prism Effect (New) --- */
+.crystal-card {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0);
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.crystal-card:hover {
+  background: rgba(255, 255, 255, 0.07);
+  border-color: rgba(255, 255, 255, 0.2);
+  box-shadow:
+    0 0 20px rgba(0, 240, 255, 0.1),
+    0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+  transform: translateY(-2px) scale(1.01);
+}
+
+.crystal-card h3 {
+  transition: text-shadow 0.3s ease;
+}
+
+.crystal-card:hover h3 {
+  text-shadow: 0 0 8px rgba(0, 240, 255, 0.5);
+}
+
+@keyframes shake {
+
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+
+  10%,
+  30%,
+  50%,
+  70%,
+  90% {
+    transform: translateX(-5px);
+  }
+
+  20%,
+  40%,
+  60%,
+  80% {
+    transform: translateX(5px);
+  }
+}
+
+.animate-shake {
+  animation: shake 0.5s cubic-bezier(.36, .07, .19, .97) both;
 }

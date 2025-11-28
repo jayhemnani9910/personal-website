@@ -2,8 +2,8 @@ import { Resume } from "@/data/types";
 
 export const RESUME: Resume = {
   name: "Jay Hemnani",
-  tagline: "Data Analyst",
-  summary: "Graduate student in Data Analytics with hands-on experience developing SQL/Python pipelines and transforming complex datasets into scalable reporting solutions. I apply data engineering and analytical methods to surface performance trends and deliver actionable insights that guide data-driven decisions across cross-functional teams.",
+  tagline: "Data Engineer",
+  summary: "Data engineer who turns messy datasets into trustworthy pipelines and dashboards. I build SQL/Python automations and models that make metrics reliable for product and executive decisions.",
   location: "San Jose, CA",
   contact: {
     email: "jay.hemnani@sjsu.edu",

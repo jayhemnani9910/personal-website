@@ -1,81 +1,83 @@
 "use client";
 
 import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion";
-import { useCommand } from "@/components/CommandProvider";
+import { TRANSITIONS, VARIANTS } from "@/lib/motion-tokens";
+import { useTerminal } from "@/context/TerminalContext";
 import MagneticButton from "./MagneticButton";
 import { HERO_CONTENT, UI_COPY } from "@/data/profile";
-import { springSoft } from "@/lib/animation";
 
 export function Hero() {
-    const { setOpen } = useCommand();
+    const { toggleTerminal } = useTerminal();
     const { scrollY } = useScroll();
     const prefersReducedMotion = useReducedMotion();
 
     // Cinematic Scroll Effects (respect reduced motion)
     const yMotion = useTransform(scrollY, [0, 500], [0, 200]); // Text parallax
     const scaleMotion = useTransform(scrollY, [0, 300], [1, 0.9]); // Text zoom out
-    const opacityMotion = useTransform(scrollY, [0, 300], [1, 0]); // General fade
-    const buttonOpacityMotion = useTransform(scrollY, [0, 100], [1, 0]); // Button fade out fast
-    const bgMotion = useTransform(scrollY, [0, 500], [0, 100]); // Background parallax
-
-    const y1 = prefersReducedMotion ? 0 : yMotion;
-    const scale = prefersReducedMotion ? 1 : scaleMotion;
-    const opacity = prefersReducedMotion ? 1 : opacityMotion;
-    const buttonOpacity = prefersReducedMotion ? 1 : buttonOpacityMotion;
-    const bgY = prefersReducedMotion ? 0 : bgMotion;
+    const opacityMotion = useTransform(scrollY, [0, 300], [1, 0]); // Fade out
 
     return (
-        <section className="relative min-h-screen flex flex-col justify-center items-center overflow-hidden pt-20">
-            {/* Subtle Grid Background with Parallax */}
-            <motion.div style={{ y: bgY, willChange: "transform" }} className="absolute inset-0 z-0">
-                <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]" />
-                <div className="absolute left-0 right-0 top-0 -z-10 m-auto h-[310px] w-[310px] rounded-full bg-[var(--color-accent-primary)] opacity-10 blur-[100px]" />
-            </motion.div>
+        <section className="relative h-screen flex flex-col items-center justify-center overflow-hidden">
 
+            {/* Content Layer */}
             <motion.div
-                style={{ y: y1 ?? 0, opacity: opacity ?? 1, scale: scale ?? 1 }}
-                className="z-10 container mx-auto px-4 text-center flex flex-col items-center"
+                style={{ y: prefersReducedMotion ? 0 : yMotion, scale: prefersReducedMotion ? 1 : scaleMotion, opacity: opacityMotion }}
+                className="relative z-10 text-center px-6 max-w-5xl mx-auto"
             >
+
+
                 <motion.h1
-                    initial={{ opacity: 0, y: 30 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ ...springSoft, delay: 0.1 }}
-                    className="text-8xl md:text-[10rem] font-bold tracking-tighter mb-8 text-balance text-white leading-[0.9]"
+                    variants={VARIANTS.fadeInUp}
+                    initial="initial"
+                    animate="animate"
+                    transition={{ ...TRANSITIONS.smooth, duration: 1 }}
+                    className="text-7xl md:text-9xl font-bold tracking-tighter mb-8 bg-clip-text text-transparent bg-gradient-to-b from-white via-white to-white/50"
                 >
                     {HERO_CONTENT.title}
                 </motion.h1>
 
-                <motion.p
-                    initial={{ opacity: 0, y: 30 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ ...springSoft, delay: 0.2 }}
-                    className="text-2xl md:text-3xl text-[var(--color-text-secondary)] max-w-3xl mb-12 leading-relaxed font-light"
-                >
-                    {HERO_CONTENT.role} {HERO_CONTENT.tagline}
-                    <br />
-                    {HERO_CONTENT.subTagline} <span className="text-white font-medium">{HERO_CONTENT.highlight}</span>.
-                </motion.p>
-
                 <motion.div
-                    style={{ opacity: buttonOpacity ?? 1 }}
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 0.5, delay: 0.6 }}
-                    className="flex flex-col sm:flex-row gap-4"
+                    variants={VARIANTS.fadeInUp}
+                    initial="initial"
+                    animate="animate"
+                    transition={{ ...TRANSITIONS.smooth, delay: 0.2 }}
+                    className="space-y-6 mb-12"
                 >
-                    <MagneticButton onClick={() => setOpen(true)}>
-                        <button className="relative px-8 py-4 rounded-full bg-[var(--color-text-primary)] text-[var(--color-bg-primary)] font-semibold overflow-hidden group">
-                            <span className="absolute inset-0 bg-gradient-to-tr from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                            <span className="relative z-10">{HERO_CONTENT.cta.primary}</span>
+                    <p className="text-xl md:text-2xl text-[var(--color-text-secondary)] max-w-3xl mx-auto leading-relaxed font-light">
+                        {HERO_CONTENT.tagline}
+                    </p>
+                    <p className="text-lg md:text-xl text-[var(--color-text-muted)] max-w-2xl mx-auto">
+                        {HERO_CONTENT.subTagline}
+                    </p>
+                </motion.div>
+
+                {/* Magnetic Command Group */}
+                <motion.div
+                    variants={VARIANTS.fadeInUp}
+                    initial="initial"
+                    animate="animate"
+                    transition={{ ...TRANSITIONS.smooth, delay: 0.4 }}
+                    className="flex flex-col sm:flex-row items-center justify-center gap-4"
+                >
+                    <MagneticButton>
+                        <button
+                            onClick={toggleTerminal}
+                            className="group relative px-8 py-4 rounded-full bg-white text-black font-semibold text-lg transition-all hover:scale-105 active:scale-95"
+                        >
+                            <span className="relative z-10 flex items-center gap-2">
+                                {HERO_CONTENT.cta.primary}
+                                <span className="text-xs font-mono opacity-50 group-hover:opacity-100 transition-opacity">⌘K</span>
+                            </span>
+                            <div className="absolute inset-0 rounded-full bg-gradient-to-r from-[var(--neon-cyan)] to-[var(--neon-purple)] opacity-0 group-hover:opacity-20 blur-lg transition-opacity duration-500" />
                         </button>
                     </MagneticButton>
 
                     <MagneticButton>
                         <a
                             href="#projects"
-                            className="px-8 py-4 rounded-full bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.1)] text-[var(--color-text-primary)] font-medium hover:bg-[rgba(255,255,255,0.1)] transition-colors backdrop-blur-sm"
+                            className="group relative px-8 py-4 rounded-full bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.1)] text-white font-medium text-lg backdrop-blur-md transition-all hover:bg-[rgba(255,255,255,0.1)] hover:border-[rgba(255,255,255,0.2)]"
                         >
-                            {HERO_CONTENT.cta.secondary}
+                            <span>Explore Projects</span>
                         </a>
                     </MagneticButton>
                 </motion.div>
@@ -83,22 +85,13 @@ export function Hero() {
 
             {/* Scroll Indicator */}
             <motion.div
-                style={{ opacity: opacity ?? 1 }}
-                className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 1, duration: 1 }}
+                className="absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
             >
-                <span className="text-[10px] uppercase tracking-widest text-[var(--color-text-muted)]">{UI_COPY.nav.scroll}</span>
-                <motion.div
-                    animate={{
-                        y: [0, 12, 0],
-                        opacity: [1, 0, 1]
-                    }}
-                    transition={{
-                        duration: 2,
-                        repeat: Infinity,
-                        ease: "easeInOut"
-                    }}
-                    className="w-[1px] h-12 bg-gradient-to-b from-[var(--color-text-muted)] to-transparent"
-                />
+                <span className="text-[10px] uppercase tracking-[0.2em] text-[var(--color-text-muted)]">{UI_COPY.nav.scroll}</span>
+                <div className="w-[1px] h-12 bg-gradient-to-b from-[var(--color-text-muted)] to-transparent" />
             </motion.div>
         </section>
     );

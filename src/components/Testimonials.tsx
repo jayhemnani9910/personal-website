@@ -3,35 +3,9 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import Image from "next/image";
-import { Quote, ChevronLeft, ChevronRight } from "lucide-react";
+import { Quote, ChevronLeft, ChevronRight, User } from "lucide-react";
 import MagneticButton from "./MagneticButton";
-
-const TESTIMONIALS = [
-    {
-        id: 1,
-        text: "Jay transformed our vague data requirements into a high-performance analytics engine. His ability to bridge technical complexity with business value is unmatched.",
-        author: "Sarah Chen",
-        role: "CTO",
-        company: "Nexus AI",
-        image: "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=100&h=100&fit=crop&crop=faces"
-    },
-    {
-        id: 2,
-        text: "The dashboard Jay built isn't just functional; it's a work of art. The attention to detail in the user experience made adoption seamless across our organization.",
-        author: "Marcus Thorne",
-        role: "Product Director",
-        company: "Vanguard Systems",
-        image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop&crop=faces"
-    },
-    {
-        id: 3,
-        text: "Working with Jay was a masterclass in modern engineering. He delivered a scalable, future-proof solution that cut our processing time by 60%.",
-        author: "Elena Rodriguez",
-        role: "VP of Engineering",
-        company: "Streamline Data",
-        image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=100&h=100&fit=crop&crop=faces"
-    }
-];
+import { TESTIMONIALS } from "@/../content/testimonials";
 
 export function Testimonials() {
     const [activeIndex, setActiveIndex] = useState(0);
@@ -112,14 +86,18 @@ export function Testimonials() {
                                     </p>
 
                                     <div className="flex items-center gap-4">
-                                        <div className="w-12 h-12 rounded-full overflow-hidden border border-[rgba(255,255,255,0.1)]">
-                                            <Image
-                                                src={TESTIMONIALS[activeIndex].image}
-                                                alt={TESTIMONIALS[activeIndex].author}
-                                                width={48}
-                                                height={48}
-                                                className="w-full h-full object-cover"
-                                            />
+                                        <div className="w-12 h-12 rounded-full overflow-hidden border border-[rgba(255,255,255,0.1)] bg-[rgba(255,255,255,0.05)] flex items-center justify-center">
+                                            {TESTIMONIALS[activeIndex].image ? (
+                                                <Image
+                                                    src={TESTIMONIALS[activeIndex].image}
+                                                    alt={TESTIMONIALS[activeIndex].author}
+                                                    width={48}
+                                                    height={48}
+                                                    className="w-full h-full object-cover"
+                                                />
+                                            ) : (
+                                                <User className="w-6 h-6 text-[var(--text-muted)]" />
+                                            )}
                                         </div>
                                         <div className="text-left">
                                             <h4 className="font-bold text-[var(--color-text-primary)]">

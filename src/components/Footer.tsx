@@ -1,6 +1,7 @@
 "use client";
 
-import { NAV_LINKS } from "@/data/navigation";
+import { ArrowUp } from "lucide-react";
+import { motion } from "framer-motion";
 
 export function Footer() {
     const currentYear = new Date().getFullYear();
@@ -16,17 +17,15 @@ export function Footer() {
                         </p>
                     </div>
 
-                    <div className="flex gap-8">
-                        {NAV_LINKS.map((link) => (
-                            <a
-                                key={link.name}
-                                href={link.href}
-                                className="text-sm text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors"
-                            >
-                                {link.name}
-                            </a>
-                        ))}
-                    </div>
+                    {/* Right Side: Scroll to Top */}
+                    <motion.button
+                        whileHover={{ scale: 1.1, y: -2 }}
+                        whileTap={{ scale: 0.9 }}
+                        onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+                        className="group flex items-center justify-center w-12 h-12 rounded-full bg-white/5 border border-white/10 backdrop-blur-md transition-all hover:bg-white/10 hover:border-white/20"
+                    >
+                        <ArrowUp className="w-5 h-5 text-white/70 group-hover:text-white transition-colors" />
+                    </motion.button>
                 </div>
             </div>
         </footer>
