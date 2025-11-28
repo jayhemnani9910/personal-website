@@ -2,7 +2,7 @@
 import { renderHook, act } from '@testing-library/react';
 import { useRef } from 'react';
 import { useMousePosition } from './useMousePosition';
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect } from 'vitest';
 
 describe('useMousePosition', () => {
     it('should attach listener when ref becomes available (simulating conditional rendering)', async () => {
