@@ -37,7 +37,7 @@ export function GlobalBackground() {
             />
 
             {/* Noise Texture for depth */}
-            <div className="absolute inset-0 opacity-[0.03] bg-[url('/noise.png')] mix-blend-overlay" />
+            <div className="absolute inset-0 opacity-[0.04] bg-[radial-gradient(circle_at_center,_rgba(255,255,255,0.08)_0.5px,_transparent_1px)] bg-[length:6px_6px] mix-blend-overlay" />
         </div>
     );
 }

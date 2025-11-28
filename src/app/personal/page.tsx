@@ -8,7 +8,7 @@ export default function PersonalPage() {
     return (
         <main className="min-h-screen bg-[#050505] text-white flex flex-col items-center justify-center p-4 relative overflow-hidden">
             {/* Background Noise */}
-            <div className="absolute inset-0 bg-[url('/noise.png')] opacity-5 pointer-events-none" />
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(255,255,255,0.08)_0.5px,_transparent_1px)] bg-[length:6px_6px] opacity-5 pointer-events-none" />
 
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
