@@ -8,7 +8,7 @@
   <a href="mailto:jay.hemnani@sjsu.edu"><img src="https://img.shields.io/badge/Email-jay.hemnani@sjsu.edu-EA4335?style=for-the-badge&logo=gmail&logoColor=white" /></a>
 </p>
 
-<img src="https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png" />
+<img src="https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/aqua.png" />
 
 <br>
 
@@ -24,7 +24,7 @@ Currently pursuing my Master's at **San Jose State University**, building system
 
 <br>
 
-<img src="https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png" />
+<img src="https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/aqua.png" />
 
 ## Featured Projects
 
@@ -43,7 +43,7 @@ Currently pursuing my Master's at **San Jose State University**, building system
   <a href="https://github.com/jayhemnani9910/fifa-soccer-ds"><img src="https://github-readme-stats.vercel.app/api/pin/?username=jayhemnani9910&repo=fifa-soccer-ds&theme=tokyonight&hide_border=true" /></a>
 </p>
 
-<img src="https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png" />
+<img src="https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/aqua.png" />
 
 ## Research & Publications
 
@@ -52,7 +52,7 @@ Currently pursuing my Master's at **San Jose State University**, building system
 | **Stacking Ensemble for Diabetes Prediction** | ML ensemble achieving 82.68% accuracy on health data | AIMV-21 |
 | **Efficient Vaccine Scheduler** | CPU-scheduling-inspired prioritization framework | AIMV-21 |
 
-<img src="https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png" />
+<img src="https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/aqua.png" />
 
 ## GitHub Activity
 
@@ -68,7 +68,7 @@ Currently pursuing my Master's at **San Jose State University**, building system
   <img src="./profile-3d-contrib/profile-night-rainbow.svg" alt="3D Contributions" />
 </p>
 
-<img src="https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png" />
+<img src="https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/aqua.png" />
 
 <p align="center">
   <img src="https://komarev.com/ghpvc/?username=jayhemnani9910&color=3B82F6&style=flat-square&label=Profile+Views" />
