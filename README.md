@@ -66,7 +66,7 @@ Currently pursuing my Master's at **San Jose State University**, building system
 
 ### Trophy Case
 <p align="center">
-  <img src="https://github-profile-trophy.vercel.app/?username=jayhemnani9910&theme=tokyonight&no-frame=true&no-bg=true&column=7" alt="Trophies" />
+  <img src="https://github-trophies.vercel.app/?username=jayhemnani9910&theme=tokyonight&no-frame=true&no-bg=true&column=6" alt="Trophies" />
 </p>
 
 ### Stats & Streak
