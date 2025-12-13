@@ -28,36 +28,20 @@ Currently pursuing my Master's at **San Jose State University**, building system
 
 ## Featured Projects
 
-<table>
-<tr>
-<td width="50%">
+<p align="center">
+  <a href="https://github.com/jayhemnani9910/soccer-analyzer"><img src="https://github-readme-stats.vercel.app/api/pin/?username=jayhemnani9910&repo=soccer-analyzer&theme=tokyonight&hide_border=true" /></a>
+  <a href="https://github.com/jayhemnani9910/nobel-dataintelligence"><img src="https://github-readme-stats.vercel.app/api/pin/?username=jayhemnani9910&repo=nobel-dataintelligence&theme=tokyonight&hide_border=true" /></a>
+</p>
 
-### Stock Data Platform
-> Batch + Streaming platform for market analytics
+<p align="center">
+  <a href="https://github.com/jayhemnani9910/agent-zero"><img src="https://github-readme-stats.vercel.app/api/pin/?username=jayhemnani9910&repo=agent-zero&theme=tokyonight&hide_border=true" /></a>
+  <a href="https://github.com/jayhemnani9910/agentic-logger"><img src="https://github-readme-stats.vercel.app/api/pin/?username=jayhemnani9910&repo=agentic-logger&theme=tokyonight&hide_border=true" /></a>
+</p>
 
-<img src="https://skillicons.dev/icons?i=python,kafka,docker,postgresql" />
-
-- Real-time ticks + batch OHLC in single warehouse
-- Kafka with idempotent writes
-- Airflow orchestrated pipelines
-- Interactive SMA/EMA dashboards
-
-</td>
-<td width="50%">
-
-### La Liga Live
-> Real-time match analytics with xG, heatmaps
-
-<img src="https://skillicons.dev/icons?i=python,fastapi,redis" />
-
-- Live xG curves & shot maps
-- Possession/pressing zone analysis
-- Low-latency event processing
-- Single-screen tactical view
-
-</td>
-</tr>
-</table>
+<p align="center">
+  <a href="https://github.com/jayhemnani9910/contextbox"><img src="https://github-readme-stats.vercel.app/api/pin/?username=jayhemnani9910&repo=contextbox&theme=tokyonight&hide_border=true" /></a>
+  <a href="https://github.com/jayhemnani9910/fifa-soccer-ds"><img src="https://github-readme-stats.vercel.app/api/pin/?username=jayhemnani9910&repo=fifa-soccer-ds&theme=tokyonight&hide_border=true" /></a>
+</p>
 
 <img src="https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png" />
 
