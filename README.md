@@ -16,6 +16,10 @@ Data Engineer specializing in **real-time data pipelines** and **autonomous AI s
 
 Currently pursuing my Master's at **San Jose State University**, building systems that handle streaming market data, sports analytics, and supply chain optimization.
 
+- 🔭 Working on: **Real-time data pipelines & streaming architectures**
+- 🌱 Learning: **MLOps, LLM orchestration, and distributed systems**
+- 💬 Ask me about: **Kafka, Airflow, Python, Data Engineering, SQL optimization**
+
 ---
 
 ## Featured Projects
@@ -24,11 +28,7 @@ Currently pursuing my Master's at **San Jose State University**, building system
 > **Batch + Streaming platform for market analytics**
 
 <p>
-  <img src="https://img.shields.io/badge/Python-3776AB?style=flat-square&logo=python&logoColor=white" />
-  <img src="https://img.shields.io/badge/Kafka-231F20?style=flat-square&logo=apache-kafka&logoColor=white" />
-  <img src="https://img.shields.io/badge/Airflow-017CEE?style=flat-square&logo=apache-airflow&logoColor=white" />
-  <img src="https://img.shields.io/badge/TimescaleDB-FDB515?style=flat-square&logo=timescale&logoColor=black" />
-  <img src="https://img.shields.io/badge/Dash-008DE4?style=flat-square&logo=plotly&logoColor=white" />
+  <img src="https://skillicons.dev/icons?i=python,kafka,docker,postgresql" />
 </p>
 
 - Unified real-time ticks and batch OHLC data into single query-friendly warehouse
@@ -42,9 +42,7 @@ Currently pursuing my Master's at **San Jose State University**, building system
 > **Real-time match analytics with xG, heatmaps, formations**
 
 <p>
-  <img src="https://img.shields.io/badge/Python-3776AB?style=flat-square&logo=python&logoColor=white" />
-  <img src="https://img.shields.io/badge/Streamlit-FF4B4B?style=flat-square&logo=streamlit&logoColor=white" />
-  <img src="https://img.shields.io/badge/Pandas-150458?style=flat-square&logo=pandas&logoColor=white" />
+  <img src="https://skillicons.dev/icons?i=python,fastapi,redis" />
 </p>
 
 - Real-time xG curves, shot maps, possession/pressing zones
@@ -66,11 +64,23 @@ Currently pursuing my Master's at **San Jose State University**, building system
 
 ## GitHub Activity
 
+### Trophy Case
+<p align="center">
+  <img src="https://github-profile-trophy.vercel.app/?username=jayhemnani9910&theme=tokyonight&no-frame=true&no-bg=true&column=7" alt="Trophies" />
+</p>
+
+### Stats & Streak
 <p align="center">
   <img src="https://github-readme-stats.vercel.app/api?username=jayhemnani9910&show_icons=true&theme=tokyonight&hide_border=true&count_private=true" alt="GitHub Stats" />
   <img src="https://github-readme-streak-stats.herokuapp.com/?user=jayhemnani9910&theme=tokyonight&hide_border=true" alt="GitHub Streak" />
 </p>
 
+### Activity Graph
+<p align="center">
+  <img src="https://github-readme-activity-graph.vercel.app/graph?username=jayhemnani9910&theme=tokyo-night&hide_border=true" alt="Activity Graph" />
+</p>
+
+### Top Languages
 <p align="center">
   <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=jayhemnani9910&layout=compact&theme=tokyonight&hide_border=true" alt="Top Languages" />
 </p>
