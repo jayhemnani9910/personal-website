@@ -1,0 +1,46 @@
+---
+title: "Hello World: Building a Multi-Mode Portfolio"
+date: "2024-11-26"
+summary: "Introducing the new portfolio architecture - a single site that adapts to different audiences."
+excerpt: "How I built a portfolio that serves recruiters, personal branding, and content creation from one codebase."
+tags: ["next.js", "architecture", "portfolio"]
+category: "engineering"
+featured: true
+draft: false
+---
+
+# Hello World
+
+Welcome to my redesigned portfolio. This isn't just another Next.js site – it's an experiment in building adaptive web experiences.
+
+## The Problem
+
+As a data engineer, I wear multiple hats. Sometimes I'm presenting to recruiters who want to see my experience. Other times, I'm showcasing my personal brand or sharing technical content. Traditional portfolios force you to choose one identity.
+
+## The Solution
+
+I built a **multi-mode architecture** where the same content can be presented in different ways:
+
+- **Portfolio Mode**: Resume-focused, clean, professional
+- **Brand Mode**: Motion-heavy, creative, personality-forward
+- **Product Mode**: Landing page style, conversion-optimized
+- **Blog Mode**: Content-first, reading-focused
+
+## Technical Highlights
+
+```typescript
+// Mode switching with React Context
+const { mode, setMode } = useMode();
+
+// Content adapts to mode
+<HeroSection variant={mode} />
+```
+
+The entire site is statically generated for GitHub Pages, with no server runtime required.
+
+## What's Next
+
+I'll be sharing more about the technical decisions, motion design system, and content architecture in upcoming posts.
+
+Stay tuned!
+

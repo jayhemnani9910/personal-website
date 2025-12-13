@@ -1,0 +1,13 @@
+# robots.txt for Jay Hemnani Portfolio
+# https://jeyhemnani.com
+
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://jeyhemnani.com/sitemap.xml
+
+# Disallow build artifacts and internal paths
+Disallow: /_next/
+Disallow: /api/
+

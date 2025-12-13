@@ -1,0 +1,109 @@
+/* style.css */
+
+/* ==== Tokens ==== */
+:root{
+  --bg:#111315;
+  --sheet:#17191c;
+  --text:#ededed;
+  --muted:#bdbdbd;
+  --border:#2a2f36;
+  --accent:#1877F2;            /* big-tech style blue */
+  --accent-strong:#0a5bd3;
+  --radius:8px;                /* tighter, more professional */
+  --shadow:0 24px 72px rgba(0,0,0,.45);
+  --font:'Inter',system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+}
+
+/* ==== Base ==== */
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--bg);color:var(--text);font-family:var(--font);line-height:1.6;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+a:focus-visible,button:focus-visible,summary:focus-visible{outline:3px solid var(--accent-strong);outline-offset:3px}
+.skip-link{position:absolute;left:-9999px}
+.skip-link:focus{left:12px;top:10px;background:#000;color:#fff;padding:.45rem .7rem;border-radius:8px;z-index:999}
+
+/* ==== A4 Sheet ==== */
+.sheet{
+  margin:28px auto 64px;
+  width:min(860px,100%);
+  background:var(--sheet);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  padding:32px 36px;
+}
+.top-accent{height:8px;background:var(--accent);border-radius:999px;margin-bottom:18px}
+
+/* ==== Header ==== */
+.resume-header{display:flex;justify-content:space-between;align-items:flex-start;gap:1rem;border-bottom:1px solid var(--border);padding-bottom:.6rem;margin-bottom:1rem}
+.name{margin:0;font-size:clamp(1.9rem,4vw,2.25rem);font-weight:900;letter-spacing:.2px}
+.tagline{margin:.25rem 0 0;font-weight:800;font-size:clamp(1rem,2.5vw,1.15rem);color:#d7e6ff}
+.contact{display:flex;gap:.5rem;flex-wrap:wrap;justify-content:flex-end;font-style:normal}
+.contact-link{color:var(--text)}
+.location{color:var(--muted);width:100%;text-align:right}
+
+/* ==== Sections ==== */
+.section{margin-top:1.15rem}
+.section-title{
+  font-size:1.1rem;
+  font-weight:800;
+  letter-spacing:.04em;
+  color:#e3e3e3;
+  margin:0 0 .55rem;
+  padding-left:.6rem;
+  border-left:3px solid var(--accent); /* left accent for cleaner look */
+}
+.lede{margin:.25rem 0 0;color:var(--muted);max-width:72ch;text-align:justify}
+.inline-list{display:flex;flex-wrap:wrap;gap:.5rem 1rem;margin:.25rem 0 0;padding-left:0;list-style:none}
+.inline-list li{margin:0}
+.inline-list li::before{content:"• ";color:var(--accent)}
+
+/* ==== Experience & Lists ==== */
+.item{margin:16px 0 10px}
+.item-head{display:flex;justify-content:space-between;gap:12px;align-items:baseline}
+.role{font-weight:800}
+.submeta{color:var(--muted);font-weight:600}
+.meta{color:var(--muted);font-weight:600;white-space:nowrap}
+.bullets{margin:.25rem 0 .7rem 1.1rem;padding-left:1.1rem;list-style:disc}
+.bullets li{margin:.35rem 0} /* a little more breathing room */
+.bullets.compact{margin:.15rem 0 .45rem 1.1rem}
+.bullets.compact li{margin:.22rem 0}
+
+/* ==== Skills / Education ==== */
+.cols{display:grid;grid-template-columns:repeat(2,1fr);gap:.6rem .8rem}
+.cols h3{margin:.2rem 0 .25rem;font-size:.98rem}
+.cols p{margin:0;color:var(--muted)}
+.edu{display:grid;gap:.45rem .8rem}
+.edu-row{display:flex;justify-content:space-between;gap:12px}
+.edu .meta{color:var(--muted)}
+.edu-row.sub{font-size:.95rem;color:var(--muted)}
+
+/* ==== Footer ==== */
+.footer{margin-top:1rem;border-top:1px solid var(--border);padding-top:.6rem;color:var(--muted);text-align:right}
+
+/* ==== Responsive tweaks ==== */
+@media (max-width:640px){
+  .sheet{padding:24px 20px}
+  .resume-header{flex-direction:column;gap:.4rem}
+  .location{text-align:left}
+  .cols{grid-template-columns:1fr}
+}
+
+/* ==== Print ==== */
+@page{size:A4;margin:10mm}
+@media print{
+  body{background:#fff;color:#111}
+  .sheet{width:auto;box-shadow:none;border:1px solid #ddd;background:#fff}
+  .top-accent{background:#000}
+  a{color:#000;text-decoration:underline}
+  a[href^="http"]::after{content:" (" attr(href) ")";font-size:.9em} /* show URLs on print */
+  .footer{text-align:left}
+  .item,.edu-row{break-inside:avoid}
+}
+
+/* ==== Reduced motion ==== */
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{transition:none !important;animation:none !important}
+}
