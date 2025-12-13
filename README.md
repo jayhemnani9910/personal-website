@@ -8,94 +8,83 @@
   <a href="mailto:jay.hemnani@sjsu.edu"><img src="https://img.shields.io/badge/Email-jay.hemnani@sjsu.edu-EA4335?style=for-the-badge&logo=gmail&logoColor=white" /></a>
 </p>
 
----
+<img src="https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png" />
 
-## About Me
+<br>
 
 Data Engineer specializing in **real-time data pipelines** and **autonomous AI systems**. I transform raw data into actionable intelligence through scalable architectures and intuitive analytics interfaces.
 
 Currently pursuing my Master's at **San Jose State University**, building systems that handle streaming market data, sports analytics, and supply chain optimization.
 
-- 🔭 Working on: **Real-time data pipelines & streaming architectures**
-- 🌱 Learning: **MLOps, LLM orchestration, and distributed systems**
-- 💬 Ask me about: **Kafka, Airflow, Python, Data Engineering, SQL optimization**
+<br>
 
----
+🔭 **Working on:** Real-time data pipelines & streaming architectures
+🌱 **Learning:** MLOps, LLM orchestration, and distributed systems
+💬 **Ask me about:** Kafka, Airflow, Python, Data Engineering, SQL optimization
+
+<br>
+
+<img src="https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png" />
 
 ## Featured Projects
 
+<table>
+<tr>
+<td width="50%">
+
 ### Stock Data Platform
-> **Batch + Streaming platform for market analytics**
+> Batch + Streaming platform for market analytics
 
-<p>
-  <img src="https://skillicons.dev/icons?i=python,kafka,docker,postgresql" />
-</p>
+<img src="https://skillicons.dev/icons?i=python,kafka,docker,postgresql" />
 
-- Unified real-time ticks and batch OHLC data into single query-friendly warehouse
-- Kafka topics for near-real-time ingestion with idempotent writes
-- Airflow orchestration for batch ingests, backfills, and dimensional loads
-- Interactive dashboards with SMA/EMA indicators and intraday heatmaps
+- Real-time ticks + batch OHLC in single warehouse
+- Kafka with idempotent writes
+- Airflow orchestrated pipelines
+- Interactive SMA/EMA dashboards
 
----
+</td>
+<td width="50%">
 
 ### La Liga Live
-> **Real-time match analytics with xG, heatmaps, formations**
+> Real-time match analytics with xG, heatmaps
 
-<p>
-  <img src="https://skillicons.dev/icons?i=python,fastapi,redis" />
-</p>
+<img src="https://skillicons.dev/icons?i=python,fastapi,redis" />
 
-- Real-time xG curves, shot maps, possession/pressing zones
-- Live event feed processing with latency-optimized charts
-- One-screen view of game state for faster tactical insights
+- Live xG curves & shot maps
+- Possession/pressing zone analysis
+- Low-latency event processing
+- Single-screen tactical view
 
----
+</td>
+</tr>
+</table>
+
+<img src="https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png" />
 
 ## Research & Publications
-
-### IEEE Xplore Publications
 
 | Paper | Topic | Year |
 |-------|-------|------|
 | **Stacking Ensemble for Diabetes Prediction** | ML ensemble achieving 82.68% accuracy on health data | AIMV-21 |
 | **Efficient Vaccine Scheduler** | CPU-scheduling-inspired prioritization framework | AIMV-21 |
 
----
+<img src="https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png" />
 
 ## GitHub Activity
 
-### Trophy Case
-<p align="center">
-  <img src="https://github-trophies.vercel.app/?username=jayhemnani9910&theme=tokyonight&no-frame=true&no-bg=true&column=6" alt="Trophies" />
-</p>
-
-### Stats & Streak
 <p align="center">
   <img src="https://github-readme-stats.vercel.app/api?username=jayhemnani9910&show_icons=true&theme=tokyonight&hide_border=true&count_private=true" alt="GitHub Stats" />
-  <img src="https://github-readme-streak-stats.herokuapp.com/?user=jayhemnani9910&theme=tokyonight&hide_border=true" alt="GitHub Streak" />
 </p>
 
-### Activity Graph
-<p align="center">
-  <img src="https://github-readme-activity-graph.vercel.app/graph?username=jayhemnani9910&theme=tokyo-night&hide_border=true" alt="Activity Graph" />
-</p>
-
-### Top Languages
-<p align="center">
-  <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=jayhemnani9910&layout=compact&theme=tokyonight&hide_border=true" alt="Top Languages" />
-</p>
-
-### Contribution Snake
 <p align="center">
   <img src="https://raw.githubusercontent.com/jayhemnani9910/personal-website/output/github-snake.svg" alt="Snake animation" />
 </p>
 
-### 3D Contribution Graph
 <p align="center">
   <img src="./profile-3d-contrib/profile-night-rainbow.svg" alt="3D Contributions" />
 </p>
 
----
+<img src="https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png" />
 
 <p align="center">
   <img src="https://komarev.com/ghpvc/?username=jayhemnani9910&color=3B82F6&style=flat-square&label=Profile+Views" />
