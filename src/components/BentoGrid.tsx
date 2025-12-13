@@ -14,8 +14,12 @@ interface BentoGridProps {
 
 export function BentoGrid({ projects }: BentoGridProps) {
     const gridRef = useRef<HTMLDivElement>(null);
-    const mousePos = useMousePosition(gridRef);
     const prefersReducedMotion = useReducedMotion();
+
+    // Use 'css-vars' mode to update styles directly and avoid re-renders
+    useMousePosition(gridRef, {
+        mode: prefersReducedMotion ? 'state' : 'css-vars'
+    });
 
     const featuredProjects = projects.filter(p => p.featured);
 
@@ -42,12 +46,6 @@ export function BentoGrid({ projects }: BentoGridProps) {
             <div
                 ref={gridRef}
                 className="grid grid-cols-1 md:grid-cols-3 auto-rows-[280px] gap-4 relative"
-                style={
-                    !prefersReducedMotion ? {
-                        "--mouse-x": `${mousePos.x}px`,
-                        "--mouse-y": `${mousePos.y}px`,
-                    } as React.CSSProperties : {}
-                }
             >
                 {featuredProjects.slice(0, 6).map((project, index) => (
                     <BentoCard
