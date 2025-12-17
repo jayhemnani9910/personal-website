@@ -14,43 +14,50 @@ interface SkillsRadarProps {
 
 export function SkillsRadar({ data }: SkillsRadarProps) {
     const containerRef = useRef<HTMLDivElement>(null);
-    const [hasSize, setHasSize] = useState(false);
+    const [isReady, setIsReady] = useState(false);
 
     useEffect(() => {
         const container = containerRef.current;
         if (!container) return;
 
-        // Use requestAnimationFrame to ensure DOM has painted
-        const checkSize = () => {
-            if (container.offsetWidth > 0 && container.offsetHeight > 0) {
-                setHasSize(true);
-                return true;
-            }
-            return false;
+        let timeoutId: NodeJS.Timeout;
+
+        // Small delay to ensure layout is stable and container has dimensions
+        const scheduleRender = () => {
+            timeoutId = setTimeout(() => {
+                if (container.offsetWidth > 0 && container.offsetHeight > 0) {
+                    setIsReady(true);
+                }
+            }, 100);
         };
 
-        // Check after next frame
-        const rafId = requestAnimationFrame(() => {
-            if (!checkSize()) {
-                // Fallback: Use ResizeObserver
-                const observer = new ResizeObserver((entries) => {
-                    for (const entry of entries) {
-                        if (entry.contentRect.width > 0 && entry.contentRect.height > 0) {
-                            setHasSize(true);
-                            observer.disconnect();
-                        }
-                    }
-                });
-                observer.observe(container);
+        // Use ResizeObserver to detect when container gets dimensions
+        const observer = new ResizeObserver((entries) => {
+            for (const entry of entries) {
+                if (entry.contentRect.width > 0 && entry.contentRect.height > 0) {
+                    scheduleRender();
+                    observer.disconnect();
+                    break;
+                }
             }
         });
 
-        return () => cancelAnimationFrame(rafId);
+        // Check if already has size, otherwise observe
+        if (container.offsetWidth > 0 && container.offsetHeight > 0) {
+            scheduleRender();
+        } else {
+            observer.observe(container);
+        }
+
+        return () => {
+            observer.disconnect();
+            clearTimeout(timeoutId);
+        };
     }, []);
 
     return (
         <div ref={containerRef} className="w-full h-full min-h-[180px]">
-            {hasSize && (
+            {isReady && (
                 <ResponsiveContainer width="100%" height="100%">
                     <RadarChart cx="50%" cy="50%" outerRadius="70%" data={data}>
                         <PolarGrid stroke="rgba(255,255,255,0.1)" />
