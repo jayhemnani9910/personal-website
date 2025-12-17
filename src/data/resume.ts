@@ -3,11 +3,11 @@ import { Resume } from "@/data/types";
 export const RESUME: Resume = {
   name: "Jay Hemnani",
   tagline: "Data Engineer",
-  summary: "Data engineer who turns messy datasets into trustworthy pipelines and dashboards. I build SQL/Python automations and models that make metrics reliable for product and executive decisions.",
+  summary: "End-to-end builder with production experience in computer vision systems and sports analytics. I ship fast—prototypes to production in days, not weeks—combining deep technical expertise with a relentless focus on user impact and operational excellence.",
   location: "San Jose, CA",
   contact: {
     email: "jay.hemnani@sjsu.edu",
-    github: "https://github.com/jeyhemnani99",
+    github: "https://github.com/jayhemnani9910",
     linkedin: "https://linkedin.com/in/jayhemnani",
   },
   coreCompetencies: [

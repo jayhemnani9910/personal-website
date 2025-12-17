@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
+import { useRef, useState } from "react";
 import type { Project } from "@/lib/definitions";
 import { ProjectSummary } from "@/lib/content";
 import { getProjectGradientByType } from "@/lib/generativeArt";
@@ -14,7 +15,7 @@ interface BentoCardProps {
 
 /**
  * BentoCard Component
- * 
+ *
  * Individual project card for the Bento Grid with:
  * - Generative art background (seeded by project ID)
  * - Spotlight hover effect (via CSS)
@@ -25,15 +26,31 @@ interface BentoCardProps {
 export function BentoCard({ project, className = "" }: BentoCardProps) {
     const gradient = getProjectGradientByType(project.id, project.tech);
     const description = (project as Project & { headline?: string }).headline ?? project.summary;
+    const cardRef = useRef<HTMLDivElement>(null);
+    const [mousePosition, setMousePosition] = useState({ x: 50, y: 50 });
+
+    const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+        if (!cardRef.current) return;
+        const rect = cardRef.current.getBoundingClientRect();
+        const x = ((e.clientX - rect.left) / rect.width) * 100;
+        const y = ((e.clientY - rect.top) / rect.height) * 100;
+        setMousePosition({ x, y });
+
+        // Update CSS variables for spotlight effect
+        cardRef.current.style.setProperty('--mouse-x', `${x}%`);
+        cardRef.current.style.setProperty('--mouse-y', `${y}%`);
+    };
 
     return (
         <Link href={`/projects/${project.id}`} className={className}>
             <motion.div
+                ref={cardRef}
                 initial={{ opacity: 0, scale: 0.9 }}
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true, margin: "-50px" }}
                 whileHover={{ ...hoverScale, ...hoverGlow }}
                 transition={springStiff}
+                onMouseMove={handleMouseMove}
                 className="spotlight-card glass-panel glass-panel-hover crystal-card rounded-2xl p-6 min-h-[280px] relative overflow-hidden group cursor-pointer h-full"
             >
                 {/* Generative Art Background */}
@@ -48,16 +65,16 @@ export function BentoCard({ project, className = "" }: BentoCardProps) {
                     <div>
                         <div className="flex items-center gap-2 mb-3">
                             <span className="w-2 h-2 rounded-full bg-[var(--neon-cyan)] shadow-[0_0_10px_var(--neon-cyan)]" />
-                            <span className="text-xs font-mono text-[var(--text-muted)] uppercase tracking-wider">
+                            <span className="text-xs font-mono font-semibold text-[var(--text-muted)] uppercase tracking-[0.15em]">
                                 {project.role}
                             </span>
                         </div>
 
-                        <h3 className="text-2xl font-bold mb-3 tracking-tight group-hover:text-[var(--neon-cyan)] transition-colors duration-300">
+                        <h3 className="text-2xl font-bold mb-3 tracking-[-0.02em] leading-tight group-hover:text-[var(--neon-cyan)] transition-all duration-300 group-hover:[text-shadow:0_0_12px_rgba(0,240,255,0.4)]">
                             {project.title}
                         </h3>
 
-                        <p className="text-sm text-[var(--text-secondary)] leading-relaxed line-clamp-3">
+                        <p className="text-sm text-[var(--text-secondary)] leading-relaxed line-clamp-3 font-medium">
                             {description}
                         </p>
                     </div>

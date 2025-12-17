@@ -8,6 +8,7 @@ import { GlobalBackground } from "@/components/GlobalBackground";
 import { TerminalProvider } from "@/context/TerminalContext";
 import { TerminalOverlay } from "@/components/TerminalOverlay";
 import { SkipLink } from "@/components/SkipLink";
+import { ScanLine } from "@/components/ScanLine";
 import { useReducedMotion } from "framer-motion";
 import { usePathname } from "next/navigation";
 
@@ -20,6 +21,7 @@ export function ClientLayout({ children }: { children: React.ReactNode }) {
     const inner = (
         <TerminalProvider>
             {!prefersReducedMotion && isLanding && <GlobalBackground />}
+            <ScanLine />
             <TerminalOverlay />
             {children}
         </TerminalProvider>

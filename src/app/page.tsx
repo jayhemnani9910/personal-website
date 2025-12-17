@@ -3,7 +3,7 @@ import { Hero } from "@/components/Hero";
 import { ProjectDNAStrip } from "@/components/ProjectDNAStrip";
 import { ResumeTimeline } from "@/components/ResumeTimeline";
 import { BentoGrid } from "@/components/BentoGrid";
-import { Testimonials } from "@/components/Testimonials";
+import { ImpactMetrics } from "@/components/ImpactMetrics";
 import { LabSection } from "@/components/LabSection";
 import { Contact } from "@/components/Contact";
 import { Footer } from "@/components/Footer";
@@ -20,7 +20,7 @@ export default async function Home() {
       <ProjectDNAStrip projects={projects} />
       <ResumeTimeline />
       <BentoGrid projects={projects} />
-      <Testimonials />
+      <ImpactMetrics />
       <LabSection />
       <Contact />
       <Footer />

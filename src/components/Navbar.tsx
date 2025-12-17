@@ -149,13 +149,13 @@ export function Navbar() {
                         })}
                     </div>
 
-                    {/* System Status */}
+                    {/* System Status - Live Indicator */}
                     <div className="hidden md:flex items-center gap-2 px-3 py-1 rounded-full bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.05)]">
                         <span className="relative flex h-2 w-2">
-                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-75 duration-700"></span>
-                            <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--neon-cyan)] opacity-75 duration-1000"></span>
+                            <span className="relative inline-flex rounded-full h-2 w-2 bg-[var(--neon-cyan)]" style={{ boxShadow: '0 0 6px var(--neon-cyan)' }}></span>
                         </span>
-                        <span className="text-xs font-mono text-[var(--color-text-muted)]">System Online</span>
+                        <span className="text-xs font-mono text-[var(--color-text-muted)] uppercase tracking-wider">Live</span>
                     </div>
 
                     {/* Terminal Toggle */}

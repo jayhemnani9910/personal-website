@@ -5,19 +5,50 @@ import { TRANSITIONS, VARIANTS } from "@/lib/motion-tokens";
 import { useTerminal } from "@/context/TerminalContext";
 import MagneticButton from "./MagneticButton";
 import { HERO_CONTENT, UI_COPY } from "@/data/profile";
+import { useState, useEffect } from "react";
 
 export function Hero() {
     const { toggleTerminal } = useTerminal();
     const { scrollY } = useScroll();
     const prefersReducedMotion = useReducedMotion();
 
+    // Typing animation state
+    const [displayedText, setDisplayedText] = useState("");
+    const [isTypingComplete, setIsTypingComplete] = useState(false);
+
     // Cinematic Scroll Effects (respect reduced motion)
     const yMotion = useTransform(scrollY, [0, 500], [0, 200]); // Text parallax
     const scaleMotion = useTransform(scrollY, [0, 300], [1, 0.9]); // Text zoom out
     const opacityMotion = useTransform(scrollY, [0, 300], [1, 0]); // Fade out
 
+    // Terminal typing effect for tagline
+    useEffect(() => {
+        if (prefersReducedMotion) {
+            setDisplayedText(HERO_CONTENT.tagline);
+            setIsTypingComplete(true);
+            return;
+        }
+
+        let currentIndex = 0;
+        const interval = setInterval(() => {
+            if (currentIndex <= HERO_CONTENT.tagline.length) {
+                setDisplayedText(HERO_CONTENT.tagline.slice(0, currentIndex));
+                currentIndex++;
+            } else {
+                setIsTypingComplete(true);
+                clearInterval(interval);
+            }
+        }, 50);
+
+        return () => clearInterval(interval);
+    }, [prefersReducedMotion]);
+
     return (
         <section className="relative h-screen flex flex-col items-center justify-center overflow-hidden">
+            {/* Animated Dot Grid Background */}
+            <div className="absolute inset-0 overflow-hidden pointer-events-none">
+                <div className="dot-grid" />
+            </div>
 
             {/* Content Layer */}
             <motion.div
@@ -31,7 +62,7 @@ export function Hero() {
                     initial="initial"
                     animate="animate"
                     transition={{ ...TRANSITIONS.smooth, duration: 1 }}
-                    className="text-7xl md:text-9xl font-bold tracking-tighter mb-8 bg-clip-text text-transparent bg-gradient-to-b from-white via-white to-white/50"
+                    className="text-7xl md:text-9xl font-extrabold tracking-[-0.04em] mb-8 bg-clip-text text-transparent animated-gradient-text"
                 >
                     {HERO_CONTENT.title}
                 </motion.h1>
@@ -43,12 +74,21 @@ export function Hero() {
                     transition={{ ...TRANSITIONS.smooth, delay: 0.2 }}
                     className="space-y-6 mb-12"
                 >
-                    <p className="text-xl md:text-2xl text-[var(--color-text-secondary)] max-w-3xl mx-auto leading-relaxed font-light">
-                        {HERO_CONTENT.tagline}
-                    </p>
-                    <p className="text-lg md:text-xl text-[var(--color-text-muted)] max-w-2xl mx-auto">
+                    <div className="text-xl md:text-2xl text-[var(--color-text-secondary)] max-w-3xl mx-auto leading-relaxed font-mono">
+                        <span className="text-[var(--neon-cyan)]">{">"}</span>{" "}
+                        <span className="font-light">{displayedText}</span>
+                        {!isTypingComplete && (
+                            <span className="typing-cursor">|</span>
+                        )}
+                    </div>
+                    <motion.p
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: isTypingComplete ? 1 : 0 }}
+                        transition={{ duration: 0.5 }}
+                        className="text-lg md:text-xl text-[var(--color-text-muted)] max-w-2xl mx-auto"
+                    >
                         {HERO_CONTENT.subTagline}
-                    </p>
+                    </motion.p>
                 </motion.div>
 
                 {/* Magnetic Command Group */}
@@ -78,6 +118,15 @@ export function Hero() {
                             className="group relative px-8 py-4 rounded-full bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.1)] text-white font-medium text-lg backdrop-blur-md transition-all hover:bg-[rgba(255,255,255,0.1)] hover:border-[rgba(255,255,255,0.2)]"
                         >
                             <span>Explore Projects</span>
+                        </a>
+                    </MagneticButton>
+
+                    <MagneticButton>
+                        <a
+                            href="/resume"
+                            className="group relative px-8 py-4 rounded-full bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.1)] text-white font-medium text-lg backdrop-blur-md transition-all hover:bg-[rgba(255,255,255,0.1)] hover:border-[rgba(255,255,255,0.2)]"
+                        >
+                            <span>Download Resume</span>
                         </a>
                     </MagneticButton>
                 </motion.div>

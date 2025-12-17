@@ -1,8 +1,8 @@
 export const HERO_CONTENT = {
   title: "Jay Hemnani",
   role: "Data Engineer",
-  tagline: "Building production ML systems & data pipelines that scale.",
-  subTagline: "Computer vision, real-time analytics, and backend infrastructure.",
+  tagline: "Shipping production CV systems and end-to-end data platforms.",
+  subTagline: "Full-stack builder with sports domain expertise. Fast iteration, production-ready code.",
   highlight: "production",
   cta: {
     primary: "Work With Me",

@@ -61,15 +61,59 @@ export function Contact() {
                     viewport={{ once: true }}
                     transition={{ duration: 0.6 }}
                 >
-                    <h2 className="text-5xl md:text-7xl font-bold tracking-tighter mb-8 leading-[0.9]">
-                        Let&apos;s build <br />
-                        <span className="text-[var(--color-text-muted)]">something</span> <br />
-                        <span className="text-[var(--color-accent-primary)]">extraordinary.</span>
+                    <h2 className="text-5xl md:text-7xl heading-premium-lg mb-8">
+                        Let&apos;s Build <br />
+                        <span className="text-[var(--color-accent-primary)]">Something</span>
                     </h2>
 
-                    <p className="text-xl text-[var(--color-text-secondary)] mb-12 max-w-md leading-relaxed">
-                        Open for collaborations, freelance projects, or just a chat about the future of data engineering.
+                    <p className="text-lg text-[var(--color-text-secondary)] mb-8 max-w-md">
+                        Currently open to full-time roles and select freelance projects.
                     </p>
+
+                    {/* CTA Options */}
+                    <div className="flex flex-col gap-4 mb-12">
+                        <MagneticButton>
+                            <a
+                                href={`mailto:${SOCIAL_LINKS.email}?subject=Full-Time Opportunity`}
+                                className="glass-card p-6 rounded-2xl border border-[rgba(255,255,255,0.1)] hover:border-[var(--color-accent-primary)] transition-all group block"
+                            >
+                                <div className="flex items-start justify-between">
+                                    <div>
+                                        <h3 className="text-xl font-bold text-[var(--color-text-primary)] mb-2">
+                                            Hire Me Full-Time
+                                        </h3>
+                                        <p className="text-sm text-[var(--color-text-secondary)]">
+                                            Looking for a Data Engineer to join your team
+                                        </p>
+                                    </div>
+                                    <div className="w-10 h-10 rounded-full bg-[rgba(255,255,255,0.05)] flex items-center justify-center group-hover:bg-[var(--color-accent-primary)] transition-colors duration-300 flex-shrink-0">
+                                        <Mail className="w-5 h-5 text-[var(--color-text-primary)]" />
+                                    </div>
+                                </div>
+                            </a>
+                        </MagneticButton>
+
+                        <MagneticButton>
+                            <a
+                                href={`mailto:${SOCIAL_LINKS.email}?subject=Freelance Project Inquiry`}
+                                className="glass-card p-6 rounded-2xl border border-[rgba(255,255,255,0.1)] hover:border-[var(--color-accent-primary)] transition-all group block"
+                            >
+                                <div className="flex items-start justify-between">
+                                    <div>
+                                        <h3 className="text-xl font-bold text-[var(--color-text-primary)] mb-2">
+                                            Freelance Project
+                                        </h3>
+                                        <p className="text-sm text-[var(--color-text-secondary)]">
+                                            Contract work and consulting engagements
+                                        </p>
+                                    </div>
+                                    <div className="w-10 h-10 rounded-full bg-[rgba(255,255,255,0.05)] flex items-center justify-center group-hover:bg-[var(--color-accent-primary)] transition-colors duration-300 flex-shrink-0">
+                                        <Mail className="w-5 h-5 text-[var(--color-text-primary)]" />
+                                    </div>
+                                </div>
+                            </a>
+                        </MagneticButton>
+                    </div>
 
                     <div className="flex flex-col gap-6">
                         <a

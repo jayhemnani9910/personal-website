@@ -33,12 +33,12 @@ export function BentoGrid({ projects }: BentoGridProps) {
                 transition={{ type: "spring", stiffness: 100, damping: 20 }}
                 className="mb-16 text-center"
             >
-                <div className="eyebrow mb-3">Selected Works</div>
-                <p className="title-xl text-balance">
-                    Data platforms, streaming analytics, and research builds.
-                </p>
-                <p className="body-base max-w-2xl mx-auto mt-4">
-                    One data model → shared cards and case studies. Each card pulls straight from the same project definitions that feed the detail pages.
+                <div className="eyebrow mb-4">Selected Works</div>
+                <h2 className="title-xl text-balance">
+                    Production pipelines, computer vision systems, and end-to-end data platforms.
+                </h2>
+                <p className="body-base max-w-2xl mx-auto mt-6 font-medium">
+                    Built fast, shipped to production. Full-stack solutions from data engineering to ML deployment.
                 </p>
             </motion.div>
 
