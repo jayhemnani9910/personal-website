@@ -1,4 +1,5 @@
 "use client";
+import { useState, useEffect } from "react";
 import { Radar, RadarChart, PolarGrid, PolarAngleAxis, ResponsiveContainer } from "recharts";
 
 interface Skill {
@@ -12,6 +13,16 @@ interface SkillsRadarProps {
 }
 
 export function SkillsRadar({ data }: SkillsRadarProps) {
+    const [isMounted, setIsMounted] = useState(false);
+
+    useEffect(() => {
+        setIsMounted(true);
+    }, []);
+
+    if (!isMounted) {
+        return <div className="w-full h-[300px] md:h-[400px]" />;
+    }
+
     return (
         <div className="w-full h-[300px] md:h-[400px]">
             <ResponsiveContainer width="100%" height="100%">
