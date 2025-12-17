@@ -2,10 +2,10 @@ import type { NextConfig } from "next";
 
 /**
  * GitHub Pages Deployment Configuration
- * 
- * For custom domain (jeyhemnani.com): Leave basePath/assetPrefix empty
+ *
+ * For custom domain (jayhemnani.me): Leave basePath/assetPrefix empty
  * For repo path (username.github.io/repo): Set basePath to "/repo-name"
- * 
+ *
  * Toggle via environment variable: NEXT_PUBLIC_BASE_PATH
  */
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";

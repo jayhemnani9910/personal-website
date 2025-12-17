@@ -27,18 +27,18 @@ Currently pursuing my Master's at **San Jose State University**, building system
 ## Featured Projects
 
 <p align="center">
-  <a href="https://github.com/jayhemnani9910/soccer-analyzer"><img src="https://github-readme-stats.vercel.app/api/pin/?username=jayhemnani9910&repo=soccer-analyzer&bg_color=0A0A0F&title_color=00F0FF&text_color=ffffff&icon_color=7000FF&border_color=131318" /></a>
-  <a href="https://github.com/jayhemnani9910/nobel-dataintelligence"><img src="https://github-readme-stats.vercel.app/api/pin/?username=jayhemnani9910&repo=nobel-dataintelligence&bg_color=0A0A0F&title_color=00F0FF&text_color=ffffff&icon_color=7000FF&border_color=131318" /></a>
-</p>
-
-<p align="center">
-  <a href="https://github.com/jayhemnani9910/agent-zero"><img src="https://github-readme-stats.vercel.app/api/pin/?username=jayhemnani9910&repo=agent-zero&bg_color=0A0A0F&title_color=00F0FF&text_color=ffffff&icon_color=7000FF&border_color=131318" /></a>
-  <a href="https://github.com/jayhemnani9910/agentic-logger"><img src="https://github-readme-stats.vercel.app/api/pin/?username=jayhemnani9910&repo=agentic-logger&bg_color=0A0A0F&title_color=00F0FF&text_color=ffffff&icon_color=7000FF&border_color=131318" /></a>
-</p>
-
-<p align="center">
-  <a href="https://github.com/jayhemnani9910/contextbox"><img src="https://github-readme-stats.vercel.app/api/pin/?username=jayhemnani9910&repo=contextbox&bg_color=0A0A0F&title_color=00F0FF&text_color=ffffff&icon_color=7000FF&border_color=131318" /></a>
   <a href="https://github.com/jayhemnani9910/fifa-soccer-ds"><img src="https://github-readme-stats.vercel.app/api/pin/?username=jayhemnani9910&repo=fifa-soccer-ds&bg_color=0A0A0F&title_color=00F0FF&text_color=ffffff&icon_color=7000FF&border_color=131318" /></a>
+  <a href="https://github.com/jayhemnani9910/soccer-vision-research"><img src="https://github-readme-stats.vercel.app/api/pin/?username=jayhemnani9910&repo=soccer-vision-research&bg_color=0A0A0F&title_color=00F0FF&text_color=ffffff&icon_color=7000FF&border_color=131318" /></a>
+</p>
+
+<p align="center">
+  <a href="https://github.com/jayhemnani9910/nobel-dataintelligence"><img src="https://github-readme-stats.vercel.app/api/pin/?username=jayhemnani9910&repo=nobel-dataintelligence&bg_color=0A0A0F&title_color=00F0FF&text_color=ffffff&icon_color=7000FF&border_color=131318" /></a>
+  <a href="https://github.com/jayhemnani9910/revolu-idea"><img src="https://github-readme-stats.vercel.app/api/pin/?username=jayhemnani9910&repo=revolu-idea&bg_color=0A0A0F&title_color=00F0FF&text_color=ffffff&icon_color=7000FF&border_color=131318" /></a>
+</p>
+
+<p align="center">
+  <a href="https://github.com/jayhemnani9910/webcrawler"><img src="https://github-readme-stats.vercel.app/api/pin/?username=jayhemnani9910&repo=webcrawler&bg_color=0A0A0F&title_color=00F0FF&text_color=ffffff&icon_color=7000FF&border_color=131318" /></a>
+  <a href="https://github.com/jayhemnani9910/contextbox"><img src="https://github-readme-stats.vercel.app/api/pin/?username=jayhemnani9910&repo=contextbox&bg_color=0A0A0F&title_color=00F0FF&text_color=ffffff&icon_color=7000FF&border_color=131318" /></a>
 </p>
 
 ---
@@ -59,11 +59,7 @@ Currently pursuing my Master's at **San Jose State University**, building system
 </p>
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/jayhemnani9910/personal-website/output/github-snake.svg" alt="Snake animation" />
-</p>
-
-<p align="center">
-  <img src="./profile-3d-contrib/profile-night-rainbow.svg" alt="3D Contributions" />
+  <img src="https://raw.githubusercontent.com/jayhemnani9910/jayhemnani9910/output/github-snake.svg" alt="Snake animation" />
 </p>
 
 ---
