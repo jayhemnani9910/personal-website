@@ -1,20 +1,21 @@
 export const HERO_CONTENT = {
   title: "Jay Hemnani",
   role: "Data Engineer",
-  tagline: "Engineering resilient data pipelines and autonomous AI systems.",
-  subTagline: "Transforming raw data into actionable intelligence.",
-  highlight: "resilient",
+  tagline: "Building production ML systems & data pipelines that scale.",
+  subTagline: "Computer vision, real-time analytics, and backend infrastructure.",
+  highlight: "production",
   cta: {
-    primary: "Initialize System",
-    secondary: "Explore Selected Works"
+    primary: "Work With Me",
+    secondary: "See My Work"
   }
 };
 
 export const SOCIAL_LINKS = {
   email: "jay.hemnani@sjsu.edu",
-  github: "https://github.com/jeyhemnani99",
+  github: "https://github.com/jayhemnani9910",
   linkedin: "https://linkedin.com/in/jayhemnani",
-  twitter: "https://twitter.com/jayhemnani"
+  twitter: "https://twitter.com/jayhemnani",
+  youtube: "https://youtube.com/@jayhemnani"
 };
 
 export const UI_COPY = {

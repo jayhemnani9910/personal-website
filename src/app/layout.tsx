@@ -20,7 +20,7 @@ export const metadata: Metadata = {
     template: `%s | ${SITE_CONFIG.name}`,
   },
   description: SITE_CONFIG.description,
-  keywords: ["Data Engineer", "Full Stack Developer", "Python", "SQL", "React", "Next.js", "Machine Learning"],
+  keywords: ["Data Engineer", "Computer Vision", "Python", "Machine Learning", "MLOps", "YOLO", "PyTorch", "FastAPI", "Data Pipelines", "Backend Engineer"],
   authors: [{ name: SITE_CONFIG.name, url: SITE_CONFIG.url }],
   creator: SITE_CONFIG.name,
   openGraph: {

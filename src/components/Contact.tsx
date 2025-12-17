@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Send, Mail, Github, Linkedin, Twitter } from "lucide-react";
+import { Send, Mail, Github, Linkedin, Twitter, Youtube } from "lucide-react";
 import MagneticButton from "./MagneticButton";
 import { SOCIAL_LINKS } from "@/data/profile";
 // import { sendEmail } from "@/actions/sendEmail"; // Removed for static export
@@ -89,6 +89,7 @@ export function Contact() {
                             {[
                                 { icon: Github, href: SOCIAL_LINKS.github, label: "GitHub" },
                                 { icon: Linkedin, href: SOCIAL_LINKS.linkedin, label: "LinkedIn" },
+                                { icon: Youtube, href: SOCIAL_LINKS.youtube, label: "YouTube" },
                                 { icon: Twitter, href: SOCIAL_LINKS.twitter, label: "Twitter" }
                             ].map((social) => (
                                 <MagneticButton key={social.label}>

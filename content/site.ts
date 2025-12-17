@@ -8,8 +8,8 @@
 export const SITE_CONFIG = {
   name: "Jay Hemnani",
   title: "Jay Hemnani | Data Engineer",
-  description: "Engineering resilient data pipelines and autonomous AI systems. Transforming raw data into actionable intelligence.",
-  url: "https://jeyhemnani.com",
+  description: "Data Engineer specializing in production ML systems, computer vision pipelines, and scalable data infrastructure. Available for full-time roles and freelance projects.",
+  url: "https://jayhemnani.me",
   
   // Social/OG
   ogImage: "/og-image.png",
@@ -27,21 +27,22 @@ export const SITE_CONFIG = {
   // Social links
   social: {
     email: "jay.hemnani@sjsu.edu",
-    github: "https://github.com/jeyhemnani99",
+    github: "https://github.com/jayhemnani9910",
     linkedin: "https://linkedin.com/in/jayhemnani",
     twitter: "https://twitter.com/jayhemnani",
+    youtube: "https://youtube.com/@jayhemnani",
   },
   
   // Hero content
   hero: {
     title: "Jay Hemnani",
     role: "Data Engineer",
-    tagline: "Engineering resilient data pipelines and autonomous AI systems.",
-    subTagline: "Transforming raw data into actionable intelligence.",
-    highlight: "resilient",
+    tagline: "Building production ML systems & data pipelines that scale.",
+    subTagline: "Computer vision, real-time analytics, and backend infrastructure.",
+    highlight: "production",
     cta: {
-      primary: "Initialize System",
-      secondary: "Explore Selected Works",
+      primary: "Work With Me",
+      secondary: "See My Work",
     },
   },
   
