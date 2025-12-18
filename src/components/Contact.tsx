@@ -154,7 +154,7 @@ export function Contact() {
                                         href={social.href}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="w-12 h-12 rounded-full border flex items-center justify-center transition-colors hover:border-[var(--accent)] hover:text-[var(--accent)]"
+                                        className="w-12 h-12 rounded-full border flex items-center justify-center transition-all duration-200 hover:border-[var(--accent)] hover:text-[var(--accent)] hover:-translate-y-1.5 hover:scale-105 hover:shadow-[0_8px_24px_rgba(10,132,255,0.25)]"
                                         style={{
                                             borderColor: 'var(--border)',
                                             color: 'var(--text-secondary)'

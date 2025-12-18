@@ -1,7 +1,8 @@
 "use client";
 
 import { RESUME } from "@/data/resume";
-import { Download } from "lucide-react";
+import { Download, ArrowLeft } from "lucide-react";
+import Link from "next/link";
 
 export default function ResumePage() {
   const handleDownload = () => {
@@ -139,8 +140,15 @@ export default function ResumePage() {
 
       <div className="min-h-screen py-12 px-6" style={{ background: 'var(--bg-primary)', color: 'var(--text-primary)' }}>
         <div className="print-container max-w-4xl mx-auto">
-          {/* Download Button - Hidden in Print */}
-          <div className="no-print mb-8 flex justify-end">
+          {/* Navigation Buttons - Hidden in Print */}
+          <div className="no-print mb-8 flex justify-between items-center">
+            <Link
+              href="/"
+              className="btn btn-secondary flex items-center gap-2"
+            >
+              <ArrowLeft size={20} />
+              Back
+            </Link>
             <button
               onClick={handleDownload}
               className="btn btn-primary flex items-center gap-2"

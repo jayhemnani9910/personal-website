@@ -43,7 +43,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
   }
 
   return (
-    <main id="main-content" className="min-h-screen bg-[var(--bg-void)]">
+    <main id="main-content" className="min-h-screen" style={{ background: 'var(--bg-primary)' }}>
       <Navbar />
 
       <article className="pt-32 pb-20 section-shell">
@@ -51,7 +51,8 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
           {/* Back Link */}
           <Link
             href="/blog"
-            className="inline-flex items-center gap-2 text-[var(--text-muted)] hover:text-[var(--neon-cyan)] transition-colors mb-8"
+            className="inline-flex items-center gap-2 transition-colors mb-8 hover:text-[var(--accent)]"
+            style={{ color: 'var(--text-muted)' }}
           >
             <ArrowLeft className="w-4 h-4" />
             Back to blog
@@ -59,7 +60,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
 
           {/* Header */}
           <header className="mb-12">
-            <div className="flex flex-wrap items-center gap-4 text-sm text-[var(--text-muted)] mb-4">
+            <div className="flex flex-wrap items-center gap-4 text-sm mb-4" style={{ color: 'var(--text-muted)' }}>
               <div className="flex items-center gap-2">
                 <Calendar className="w-4 h-4" />
                 <time dateTime={post.date}>
@@ -85,7 +86,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
                 {post.tags.map((tag) => (
                   <span
                     key={tag}
-                    className="chip"
+                    className="chip inline-flex items-center gap-1"
                   >
                     <Tag className="w-3 h-3" />
                     {tag}
@@ -96,22 +97,21 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
           </header>
 
           {/* Content */}
-          <div className="prose prose-invert prose-lg max-w-none">
-            <div className="glass-panel p-8 rounded-2xl prose-invert prose-lg max-w-none space-y-4">
-              {post.content.split(/\n\s*\n/).map((block, idx) => (
-                <p key={idx} className="text-[var(--text-secondary)] whitespace-pre-wrap">
-                  {block.trim()}
-                </p>
-              ))}
-            </div>
+          <div className="card p-8 space-y-4">
+            {post.content.split(/\n\s*\n/).map((block, idx) => (
+              <p key={idx} className="whitespace-pre-wrap" style={{ color: 'var(--text-secondary)' }}>
+                {block.trim()}
+              </p>
+            ))}
           </div>
 
           {/* Post Footer */}
-          <footer className="mt-16 pt-8 border-t border-[var(--glass-border)]">
+          <footer className="mt-16 pt-8" style={{ borderTop: '1px solid var(--border)' }}>
             <div className="flex justify-between items-center">
               <Link
                 href="/blog"
-                className="inline-flex items-center gap-2 text-[var(--neon-cyan)] hover:text-[var(--neon-purple)] transition-colors"
+                className="inline-flex items-center gap-2 transition-colors hover:opacity-80"
+                style={{ color: 'var(--accent)' }}
               >
                 <ArrowLeft className="w-4 h-4" />
                 More posts

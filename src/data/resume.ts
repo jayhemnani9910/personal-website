@@ -132,26 +132,21 @@ export const RESUME: Resume = {
   education: [
     {
       institution: "San José State University",
-      degree: "M.S. in Data Analytics",
+      degree: "M.S. in Applied Data Intelligence (MS ADI)",
       location: "San Jose, CA",
-      start: "2023",
-      end: "2025",
+      start: "2025",
+      end: "Present",
       gpa: "",
       courses: [
-        "Data Warehousing & Pipeline",
+        "Data Warehousing",
         "Big Data Analytics",
         "Distributed Systems",
-        "Natural Language Processing",
-        "Computer Vision",
-        "Applied Statistics",
-        "Machine Learning",
-        "Deep Learning",
-        "Data Mining",
-        "Cloud Computing"
+        "Data Visualization",
+        "DATA 220 - Advanced Mathematics"
       ],
       achievements: [],
-      thesis: "Real-time Sports Analytics Pipeline",
-      thesisDescription: "Designed and implemented a scalable data pipeline for real-time sports analytics using Apache Kafka, Spark Streaming, and computer vision models for player tracking and performance metrics."
+      thesis: "",
+      thesisDescription: ""
     },
     {
       institution: "Pandit Deendayal Energy University (PDEU)",
