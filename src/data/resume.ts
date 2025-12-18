@@ -22,20 +22,20 @@ export const RESUME: Resume = {
   ],
   skills: [
     {
-      category: "Data access",
-      items: [{ name: "SQL/NoSQL" }, { name: "CSV/json" }]
+      category: "Languages",
+      items: [{ name: "Python" }, { name: "Java" }, { name: "C++" }, { name: "Swift" }, { name: "Go" }, { name: "Kotlin" }]
     },
     {
-      category: "Analysis",
-      items: [{ name: "Python" }, { name: "Excel" }]
+      category: "Databases",
+      items: [{ name: "MySQL" }, { name: "PySpark" }, { name: "MongoDB" }, { name: "Bash" }]
     },
     {
-      category: "Visualization",
-      items: [{ name: "Matplotlib" }, { name: "Plotly" }, { name: "dashboards" }]
+      category: "Cloud",
+      items: [{ name: "AWS" }, { name: "GCP" }, { name: "Azure" }, { name: "Kubernetes" }, { name: "Docker" }]
     },
     {
-      category: "Automation",
-      items: [{ name: "ETL/ELT jobs" }, { name: "data quality checks" }]
+      category: "Software",
+      items: [{ name: "DevOps" }, { name: "CI/CD" }, { name: "Agile" }, { name: "Testing" }]
     }
   ],
   experience: [
@@ -85,14 +85,13 @@ export const RESUME: Resume = {
         {
           title: "AI/ML Intern",
           employmentType: "internship",
-          period: { label: "Summer 2021", start: "2021-05", end: "2021-08" },
+          period: { label: "Jan–May 2022", start: "2022-01", end: "2022-05" },
           location: "Gujarat, India",
           tech: ["Python", "Scikit-learn", "TensorFlow", "Pandas", "NumPy"],
           summary: "Analytics & Modeling",
           bullets: [
-            { text: "Prototyped ML-based credit-fraud detection, addressing class imbalance to improve F-score on minority classes." },
-            { text: "Implemented SMOTE and ensemble techniques to handle imbalanced datasets with 99.9% negative class ratio." },
-            { text: "Reduced false positive rate by 35% while maintaining high recall for fraud detection." }
+            { text: "Engineered an advanced Credit Fraud Detection system leveraging ML algorithms and data imbalance techniques, resulting in enhanced predictive accuracy and F1-score." },
+            { text: "Developed a comprehensive data analytics framework leveraging statistical models and data visualization tools, resulting in a 15% increase in operational efficiency." }
           ]
         }
       ]
@@ -102,16 +101,15 @@ export const RESUME: Resume = {
       location: "Gujarat, India",
       roles: [
         {
-          title: "iOS Development Intern",
+          title: "iOS App Development Intern",
           employmentType: "internship",
-          period: { label: "Summer 2020", start: "2020-05", end: "2020-08" },
+          period: { label: "Jun–Aug 2021", start: "2021-06", end: "2021-08" },
           location: "Gujarat, India",
           tech: ["Swift", "UIKit", "Core Data", "Xcode", "Git"],
           summary: "Product Engineering",
           bullets: [
-            { text: "Built 'CodeLock' (privacy/security) in Swift, implementing encryption-first flows and a polished native UI." },
-            { text: "Implemented AES-256 encryption for secure local storage of sensitive user data." },
-            { text: "Achieved 4.5+ star rating on App Store with 1000+ downloads in first month." }
+            { text: "Led the development of CodeLock, an iOS privacy and security application, implementing robust encryption algorithms and user-friendly design." },
+            { text: "Analyzed user engagement metrics to identify areas for improvement. Implemented data-driven changes that led to a 20% increase in user retention." }
           ]
         }
       ]
@@ -121,16 +119,16 @@ export const RESUME: Resume = {
       location: "Gujarat, India",
       roles: [
         {
-          title: "AI/ML Intern",
+          title: "SWE Intern",
           employmentType: "internship",
-          period: { label: "Winter 2019", start: "2019-12", end: "2020-02" },
+          period: { label: "May–Nov 2019", start: "2019-05", end: "2019-11" },
           location: "Gujarat, India",
-          tech: ["Python", "Flask", "MongoDB", "Collaborative Filtering", "REST APIs"],
-          summary: "Recommendations & Delivery",
+          tech: ["Azure", "CI/CD", "Microservices", "REST APIs"],
+          summary: "Cloud-Native Development",
           bullets: [
-            { text: "Designed a hybrid recommendation engine (popularity + collaborative filtering) to boost user retention." },
-            { text: "Increased user engagement by 22% through personalized content recommendations." },
-            { text: "Built RESTful APIs to serve real-time recommendations with <100ms latency." }
+            { text: "Built a Cloud-Native Communication Platform for First Responders using microservices architecture on Azure." },
+            { text: "Implemented cloud-native microservices architecture, increasing deployment velocity by 30%." },
+            { text: "Established robust CI/CD pipelines, reducing manual deployment intervention by 15%." }
           ]
         }
       ]
@@ -163,23 +161,24 @@ export const RESUME: Resume = {
     {
       institution: "Pandit Deendayal Energy University (PDEU)",
       degree: "B.Tech in Computer Engineering",
-      location: "Gujarat, India",
+      location: "Gandhinagar, India",
       start: "2018",
       end: "2022",
-      gpa: "3.7/4.0",
+      gpa: "8.7/10",
       courses: [
-        "Data Structures & Algorithms",
-        "Database Management Systems",
+        "Software Development",
+        "Internet of Things",
         "Operating Systems",
-        "Computer Networks",
-        "Software Engineering",
-        "Artificial Intelligence",
-        "Web Development",
-        "Mobile App Development"
+        "Big Data Analytics",
+        "Computer Vision",
+        "Natural Language Processing"
       ],
-      achievements: [],
-      thesis: "Credit Card Fraud Detection using Ensemble Learning",
-      thesisDescription: "Developed an ensemble machine learning system combining Random Forest, XGBoost, and Neural Networks to detect fraudulent transactions with 98.5% accuracy on imbalanced datasets."
+      achievements: [
+        "Rubik's Cube: 16.7 sec (WCA)",
+        "Graphic Design: 2 internships, 1 conference, 1 startup, 3 clubs"
+      ],
+      thesis: "",
+      thesisDescription: ""
     }
   ],
   publications: [
@@ -190,18 +189,18 @@ export const RESUME: Resume = {
       description: "Six-model stack achieving ~82.68% accuracy on PIMA dataset.",
       abstract: "This paper presents a novel stacking ensemble approach for diabetes prediction combining six base classifiers (Random Forest, SVM, KNN, Logistic Regression, Decision Tree, and Naive Bayes) with a meta-learner. The proposed method achieves 82.68% accuracy on the PIMA Indians Diabetes dataset, outperforming individual classifiers by 5-8%. We demonstrate the effectiveness of feature engineering and hyperparameter optimization in improving prediction reliability for early diabetes detection.",
       coAuthors: [],
-      link: "",
-      github: ""
+      link: "https://ieeexplore.ieee.org/document/9670920",
+      github: "https://github.com/jayhemnani9910/diabetes-prediction-stacking"
     },
     {
-      title: "Efficient Vaccine Scheduler using Priority Queue Algorithms",
-      venue: "Journal of Healthcare Informatics",
+      title: "CPU Scheduling Algorithms Analysis",
+      venue: "IEEE International Conference",
       year: "2021",
-      description: "Priority-aware scheduling inspired by OS CPU scheduling algorithms.",
-      abstract: "We propose an efficient vaccine distribution scheduler that applies operating system CPU scheduling principles to healthcare logistics. The system uses a multi-level priority queue considering age, health conditions, and occupation to optimize vaccine appointment allocation. Simulation results show 40% improvement in throughput and 60% reduction in wait times compared to FCFS approaches. The algorithm was deployed in a pilot program serving 50,000+ citizens.",
+      description: "Comparative analysis of CPU scheduling algorithms with priority queue optimization.",
+      abstract: "This paper presents a comparative study of various CPU scheduling algorithms including FCFS, SJF, Priority, and Round Robin. We analyze their performance metrics and propose optimizations using priority queue data structures for improved throughput and reduced waiting times.",
       coAuthors: [],
-      link: "",
-      github: ""
+      link: "https://ieeexplore.ieee.org/document/9670986",
+      github: "https://github.com/jayhemnani9910/cpu-scheduling-algorithms"
     }
   ]
 };
