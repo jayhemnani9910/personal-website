@@ -2,32 +2,49 @@
 
 import { ArrowUp } from "lucide-react";
 import { motion } from "framer-motion";
+import { useLenis } from "lenis/react";
 
 export function Footer() {
-    const currentYear = new Date().getFullYear();
+  const currentYear = new Date().getFullYear();
+  const lenis = useLenis();
 
-    return (
-        <footer className="py-12 border-t border-[rgba(255,255,255,0.05)]">
-            <div className="container mx-auto px-4">
-                <div className="flex flex-col md:flex-row justify-between items-center gap-6">
-                    <div className="flex flex-col items-center md:items-start gap-2">
-                        <span className="font-mono font-bold text-lg text-[var(--color-text-primary)]">Jay Hemnani</span>
-                        <p className="text-sm text-[var(--color-text-muted)]">
-                            &copy; {currentYear} All rights reserved.
-                        </p>
-                    </div>
+  const scrollToTop = () => {
+    if (lenis) {
+      lenis.scrollTo(0, {
+        duration: 1.2,
+        easing: (t: number) => 1 - Math.pow(1 - t, 4),
+      });
+    } else {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  };
 
-                    {/* Right Side: Scroll to Top */}
-                    <motion.button
-                        whileHover={{ scale: 1.1, y: -2 }}
-                        whileTap={{ scale: 0.9 }}
-                        onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-                        className="group flex items-center justify-center w-12 h-12 rounded-full bg-white/5 border border-white/10 backdrop-blur-md transition-all hover:bg-white/10 hover:border-white/20"
-                    >
-                        <ArrowUp className="w-5 h-5 text-white/70 group-hover:text-white transition-colors" />
-                    </motion.button>
-                </div>
-            </div>
-        </footer>
-    );
+  return (
+    <footer
+      className="py-6"
+      style={{ borderTop: "1px solid var(--border)" }}
+    >
+      <div className="section-shell">
+        <div className="flex justify-between items-center">
+          {/* Copyright */}
+          <p className="body-sm" style={{ color: "var(--text-muted)" }}>
+            © {currentYear} Jay Hemnani
+          </p>
+
+          {/* Back to top */}
+          <motion.button
+            onClick={scrollToTop}
+            className="flex items-center gap-2 body-sm transition-colors hover:text-[var(--accent)]"
+            style={{ color: "var(--text-secondary)" }}
+            whileHover={{ y: -3, scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            aria-label="Back to top"
+          >
+            <span>Back to top</span>
+            <ArrowUp className="w-4 h-4" />
+          </motion.button>
+        </div>
+      </div>
+    </footer>
+  );
 }

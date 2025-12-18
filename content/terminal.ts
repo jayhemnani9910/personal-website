@@ -5,11 +5,36 @@
  */
 
 export const TERMINAL_FILES: Record<string, string> = {
-  "about.txt": "Data Engineer & Full Stack Developer. Passionate about building resilient systems.",
-  "projects.md": "Check out /projects for a full list of my work.",
-  "contact.txt": "Email: jay.hemnani@sjsu.edu",
-  "skills.json": '["Python", "SQL", "React", "Next.js", "AWS", "Docker"]',
-  "secret.log": "ACCESS DENIED. ENCRYPTED.",
+  "about.txt": "Data Engineer & Full Stack Developer. Building resilient systems at scale.",
+  "projects.md": "Type 'projects' to navigate to the projects page.",
+  "contact.txt": `Email: jay.hemnani@sjsu.edu
+GitHub: github.com/jayhemnani9910
+LinkedIn: linkedin.com/in/jayhemnani`,
+  "skills.json": JSON.stringify({
+    languages: ["Python", "SQL", "TypeScript", "JavaScript", "Swift"],
+    frameworks: ["FastAPI", "React", "Next.js", "PyTorch", "Flask"],
+    data: ["Apache Spark", "Airflow", "dbt", "Kafka", "Pandas"],
+    cloud: ["AWS", "GCP", "Docker", "Kubernetes"],
+    ml: ["YOLOv8", "OpenCV", "Scikit-learn", "TensorFlow", "LangChain"]
+  }, null, 2),
+  "education.md": `## Education
+
+**San Jose State University**
+M.S. in Data Analytics | San Jose, CA
+
+**Pandit Deendayal Energy University**
+B.Tech in Computer Engineering | GPA: 3.7/4.0 | Gujarat, India`,
+  "experience.md": `## Experience
+
+**Data Analyst** @ Elite Hotel Group
+- End-to-end data pipelines and analytics
+
+**Creative Lead** @ Freelance (2022-2024)
+- Client projects and creative direction
+
+**AI/ML Intern** @ Amnex, Cygnus SoftTech, Cactus Creatives
+- Computer vision and ML model development`,
+  "secret.log": "ACCESS DENIED. ENCRYPTED. Nice try though!",
 };
 
 export const BOOT_SEQUENCE: string[] = [

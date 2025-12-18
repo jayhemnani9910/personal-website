@@ -1,10 +1,7 @@
 "use client";
 
 import Link from "next/link";
-
-import { useRef } from "react";
-import { motion, useReducedMotion } from "framer-motion";
-import { useMousePosition } from "@/hooks/useMousePosition";
+import { motion } from "framer-motion";
 import { BentoCard } from "./BentoCard";
 import { ProjectSummary } from "@/lib/content";
 
@@ -13,97 +10,62 @@ interface BentoGridProps {
 }
 
 export function BentoGrid({ projects }: BentoGridProps) {
-    const gridRef = useRef<HTMLDivElement>(null);
-    const prefersReducedMotion = useReducedMotion();
-
-    // Use 'css-vars' mode to update styles directly and avoid re-renders
-    useMousePosition(gridRef, {
-        mode: prefersReducedMotion ? 'state' : 'css-vars'
-    });
-
-    const featuredProjects = projects.filter(p => p.featured);
+    const featuredProjects = projects
+        .filter((p) => p.featured)
+        .sort((a, b) => (a.priority ?? 99) - (b.priority ?? 99));
 
     return (
-        <section id="projects" className="relative section-block section-shell scroll-mt-28 md:scroll-mt-32">
-            {/* Section Header */}
-            <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ type: "spring", stiffness: 100, damping: 20 }}
-                className="mb-16 text-center"
-            >
-                <div className="eyebrow mb-4">Selected Works</div>
-                <h2 className="title-xl text-balance">
-                    Production pipelines, computer vision systems, and end-to-end data platforms.
-                </h2>
-                <p className="body-base max-w-2xl mx-auto mt-6 font-medium">
-                    Built fast, shipped to production. Full-stack solutions from data engineering to ML deployment.
-                </p>
-            </motion.div>
-
-            {/* Bento Grid with Mouse Tracking */}
-            <div
-                ref={gridRef}
-                className="grid grid-cols-1 md:grid-cols-3 auto-rows-[280px] gap-4 relative"
-            >
-                {featuredProjects.slice(0, 6).map((project, index) => (
-                    <BentoCard
-                        key={project.id}
-                        project={project}
-                        className={getBentoLayout(index)}
-                    />
-                ))}
+        <section id="projects" className="section-block">
+            {/* Section Divider */}
+            <div className="section-wide mb-12">
+                <div className="h-px bg-[var(--border)]" />
             </div>
 
-            {/* View All Projects Link */}
-            <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                className="mt-12 text-center"
-            >
-                <Link
-                    href="/projects"
-                    className="inline-flex items-center gap-2 text-[var(--neon-cyan)] hover:text-[var(--neon-purple)] transition-colors font-mono text-sm group"
+            <div className="section-wide">
+                {/* Header */}
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5 }}
+                    className="mb-12"
                 >
-                    <span>View All Projects</span>
-                    <svg
-                        width="16"
-                        height="16"
-                        viewBox="0 0 16 16"
-                        fill="none"
-                        className="group-hover:translate-x-1 transition-transform"
-                    >
-                        <path
-                            d="M3 8h10m0 0L9 4m4 4l-4 4"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                        />
-                    </svg>
-                </Link>
-            </motion.div>
+                    <span className="eyebrow mb-3 block">Selected Works</span>
+                    <h2 className="title-xl">Projects</h2>
+                </motion.div>
+
+                {/* Bento Grid */}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    {featuredProjects.slice(0, 6).map((project, index) => (
+                        <motion.div
+                            key={project.id}
+                            initial={{ opacity: 0, y: 30 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.4, delay: index * 0.1 }}
+                            className={index < 2 ? "md:col-span-2" : ""}
+                        >
+                            <BentoCard
+                                project={project}
+                                size={index < 2 ? "large" : "standard"}
+                            />
+                        </motion.div>
+                    ))}
+                </div>
+
+                {/* View All */}
+                <motion.div
+                    initial={{ opacity: 0 }}
+                    whileInView={{ opacity: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5, delay: 0.3 }}
+                    className="mt-12 text-center"
+                >
+                    <Link href="/projects" className="btn btn-secondary">
+                        View All Projects
+                    </Link>
+                </motion.div>
+            </div>
         </section>
     );
-}
-
-/**
- * Get Bento Grid layout class for a given index.
- * Creates an interesting masonry-style layout with varying card sizes.
- * 
- * @param index - Card index in the grid
- * @returns Tailwind classes for grid positioning
- */
-function getBentoLayout(index: number): string {
-    const layouts = [
-        "md:col-span-2 md:row-span-1", // Wide (Hero)
-        "md:col-span-1 md:row-span-1", // Square
-        "md:col-span-1 md:row-span-2", // Tall
-        "md:col-span-2 md:row-span-1", // Wide
-        "md:col-span-1 md:row-span-1", // Square
-        "md:col-span-2 md:row-span-1", // Wide
-    ];
-    return layouts[index] || "md:col-span-1 md:row-span-1";
 }

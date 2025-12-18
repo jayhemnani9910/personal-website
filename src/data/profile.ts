@@ -1,8 +1,8 @@
 export const HERO_CONTENT = {
   title: "Jay Hemnani",
   role: "Data Engineer",
-  tagline: "Shipping production CV systems and end-to-end data platforms.",
-  subTagline: "Full-stack builder with sports domain expertise. Fast iteration, production-ready code.",
+  tagline: "AI enthusiast building intelligent automated systems.",
+  subTagline: "Data pipelines, ML workflows, and production-ready solutions.",
   highlight: "production",
   cta: {
     primary: "Work With Me",
@@ -11,7 +11,7 @@ export const HERO_CONTENT = {
 };
 
 export const SOCIAL_LINKS = {
-  email: "jay.hemnani@sjsu.edu",
+  email: "jayhemnani992000@gmail.com",
   github: "https://github.com/jayhemnani9910",
   linkedin: "https://linkedin.com/in/jayhemnani",
   twitter: "https://twitter.com/jayhemnani",

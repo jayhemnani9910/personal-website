@@ -25,19 +25,20 @@ export function ProjectsClient({ projects }: ProjectsClientProps) {
     });
 
     return (
-        <main className="min-h-screen bg-[var(--bg-void)]">
+        <main className="min-h-screen" style={{ background: 'var(--bg-primary)' }}>
             <Navbar />
 
-            <section className="pt-32 pb-20 section-shell">
-                <div className="max-w-4xl mx-auto">
+            <section className="pt-40 pb-20">
+                <div className="section-wide">
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.5 }}
-                        className="mb-12 text-center"
+                        className="mb-12"
                     >
-                        <h1 className="title-xl mb-4">Project Archive</h1>
-                        <p className="body-base text-[var(--text-secondary)]">
+                        <p className="eyebrow mb-3">Archive</p>
+                        <h1 className="title-xl mb-4">All Projects</h1>
+                        <p className="body-base max-w-2xl" style={{ color: 'var(--text-secondary)' }}>
                             A complete catalog of data engineering pipelines, AI systems, and web applications.
                         </p>
                     </motion.div>
@@ -47,40 +48,48 @@ export function ProjectsClient({ projects }: ProjectsClientProps) {
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.5, delay: 0.1 }}
-                        className="relative mb-16 max-w-xl mx-auto"
+                        className="relative mb-12 max-w-md"
                     >
-                        <div className="relative group">
-                            <div className="absolute inset-0 bg-gradient-to-r from-[var(--neon-cyan)] to-[var(--neon-purple)] rounded-full opacity-20 group-hover:opacity-30 blur transition-opacity" />
-                            <div className="relative flex items-center bg-[var(--bg-surface)] border border-[var(--glass-border)] rounded-full px-6 py-4 focus-within:border-[var(--neon-cyan)] transition-colors">
-                                <Search className="w-5 h-5 text-[var(--text-muted)] mr-3" />
-                                <input
-                                    type="text"
-                                    placeholder="Search by technology, title, or keyword..."
-                                    value={searchQuery}
-                                    onChange={(e) => setSearchQuery(e.target.value)}
-                                    className="w-full bg-transparent border-none outline-none text-[var(--text-primary)] placeholder-[var(--text-muted)]"
-                                />
-                            </div>
+                        <div className="relative flex items-center">
+                            <Search className="absolute left-4 w-5 h-5" style={{ color: 'var(--text-muted)' }} />
+                            <input
+                                type="text"
+                                placeholder="Search projects..."
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                                className="input pl-12 rounded-full"
+                            />
                         </div>
                     </motion.div>
 
-                    {/* Projects Grid */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        {filteredProjects.map((project, index) => (
-                            <motion.div
-                                key={project.id}
-                                initial={{ opacity: 0, y: 20 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ duration: 0.5, delay: index * 0.05 }}
-                            >
-                                <BentoCard project={project} className="h-full" />
-                            </motion.div>
-                        ))}
+                    {/* Bento Grid - Repeating pattern: 2 large + 4 small */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                        {filteredProjects.map((project, index) => {
+                            // Pattern repeats every 6: positions 0,1 are large, 2-5 are small
+                            const positionInPattern = index % 6;
+                            const isLarge = positionInPattern < 2;
+
+                            return (
+                                <motion.div
+                                    key={project.id}
+                                    initial={{ opacity: 0, y: 20 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ duration: 0.4, delay: (index % 12) * 0.05 }}
+                                    className={isLarge ? "md:col-span-2" : ""}
+                                >
+                                    <BentoCard
+                                        project={project}
+                                        size={isLarge ? "large" : "standard"}
+                                        className="h-full"
+                                    />
+                                </motion.div>
+                            );
+                        })}
                     </div>
 
                     {filteredProjects.length === 0 && (
                         <div className="text-center py-20">
-                            <p className="text-[var(--text-muted)]">No projects found matching your search.</p>
+                            <p className="body-base" style={{ color: 'var(--text-muted)' }}>No projects found matching your search.</p>
                         </div>
                     )}
                 </div>

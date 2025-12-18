@@ -1,14 +1,10 @@
 "use client";
 
 import { ReactLenis } from "lenis/react";
-import { ChronosBackground } from "@/components/ChronosBackground";
-import { AmbientBackground } from "@/components/AmbientBackground";
-import { MousePositionProvider } from "@/context/MousePositionContext";
-import { GlobalBackground } from "@/components/GlobalBackground";
 import { TerminalProvider } from "@/context/TerminalContext";
 import { TerminalOverlay } from "@/components/TerminalOverlay";
 import { SkipLink } from "@/components/SkipLink";
-import { ScanLine } from "@/components/ScanLine";
+import { TransitionLayout } from "@/components/TransitionLayout";
 import { useReducedMotion } from "framer-motion";
 import { usePathname } from "next/navigation";
 
@@ -16,28 +12,19 @@ export function ClientLayout({ children }: { children: React.ReactNode }) {
     const prefersReducedMotion = useReducedMotion();
     const pathname = usePathname();
     const isLanding = pathname === "/";
-    const needsMouse = !prefersReducedMotion && isLanding;
 
-    const inner = (
+    const content = (
         <TerminalProvider>
-            {!prefersReducedMotion && isLanding && <GlobalBackground />}
-            <ScanLine />
             <TerminalOverlay />
-            {children}
+            <TransitionLayout>
+                {children}
+            </TransitionLayout>
         </TerminalProvider>
-    );
-
-    const content = needsMouse ? (
-        <MousePositionProvider>{inner}</MousePositionProvider>
-    ) : (
-        inner
     );
 
     return (
         <>
             <SkipLink />
-            {!prefersReducedMotion && isLanding && <AmbientBackground />}
-            {!prefersReducedMotion && isLanding && <ChronosBackground />}
             {prefersReducedMotion || !isLanding ? (
                 content
             ) : (

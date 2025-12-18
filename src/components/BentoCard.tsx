@@ -1,121 +1,81 @@
 "use client";
 
-import { motion } from "framer-motion";
 import Link from "next/link";
-import { useRef, useState } from "react";
+import { Github } from "lucide-react";
 import type { Project } from "@/lib/definitions";
 import { ProjectSummary } from "@/lib/content";
-import { getProjectGradientByType } from "@/lib/generativeArt";
-import { hoverScale, hoverGlow, springStiff } from "@/lib/animation";
 
 interface BentoCardProps {
     project: Project | ProjectSummary;
+    size?: "large" | "standard";
     className?: string;
 }
 
-/**
- * BentoCard Component
- *
- * Individual project card for the Bento Grid with:
- * - Generative art background (seeded by project ID)
- * - Spotlight hover effect (via CSS)
- * - Glass panel styling
- * - Tech stack badges
- * - Smooth scale animation on hover
- */
-export function BentoCard({ project, className = "" }: BentoCardProps) {
-    const gradient = getProjectGradientByType(project.id, project.tech);
+export function BentoCard({ project, size = "standard", className = "" }: BentoCardProps) {
     const description = (project as Project & { headline?: string }).headline ?? project.summary;
-    const cardRef = useRef<HTMLDivElement>(null);
-    const [mousePosition, setMousePosition] = useState({ x: 50, y: 50 });
-
-    const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-        if (!cardRef.current) return;
-        const rect = cardRef.current.getBoundingClientRect();
-        const x = ((e.clientX - rect.left) / rect.width) * 100;
-        const y = ((e.clientY - rect.top) / rect.height) * 100;
-        setMousePosition({ x, y });
-
-        // Update CSS variables for spotlight effect
-        cardRef.current.style.setProperty('--mouse-x', `${x}%`);
-        cardRef.current.style.setProperty('--mouse-y', `${y}%`);
-    };
+    const isLarge = size === "large";
+    const maxTechTags = isLarge ? 5 : 3;
 
     return (
-        <Link href={`/projects/${project.id}`} className={className}>
-            <motion.div
-                ref={cardRef}
-                initial={{ opacity: 0, scale: 0.9 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true, margin: "-50px" }}
-                whileHover={{ ...hoverScale, ...hoverGlow }}
-                transition={springStiff}
-                onMouseMove={handleMouseMove}
-                className="spotlight-card glass-panel glass-panel-hover crystal-card rounded-2xl p-6 min-h-[280px] relative overflow-hidden group cursor-pointer h-full"
+        <div className={`block ${className}`}>
+            <div
+                className={`card card-interactive h-full flex flex-col ${
+                    isLarge ? "p-8" : "p-6"
+                }`}
             >
-                {/* Generative Art Background */}
-                <div
-                    className="absolute inset-0 opacity-20 group-hover:opacity-30 transition-opacity duration-500"
-                    style={{ background: gradient }}
-                />
+                {/* Role */}
+                <span className="eyebrow mb-3">{project.role}</span>
 
-                {/* Content Layer */}
-                <div className="relative z-10 h-full flex flex-col justify-between">
-                    {/* Header */}
-                    <div>
-                        <div className="flex items-center gap-2 mb-3">
-                            <span className="w-2 h-2 rounded-full bg-[var(--neon-cyan)] shadow-[0_0_10px_var(--neon-cyan)]" />
-                            <span className="text-xs font-mono font-semibold text-[var(--text-muted)] uppercase tracking-[0.15em]">
-                                {project.role}
-                            </span>
-                        </div>
-
-                        <h3 className="text-2xl font-bold mb-3 tracking-[-0.02em] leading-tight group-hover:text-[var(--neon-cyan)] transition-all duration-300 group-hover:[text-shadow:0_0_12px_rgba(0,240,255,0.4)]">
-                            {project.title}
-                        </h3>
-
-                        <p className="text-sm text-[var(--text-secondary)] leading-relaxed line-clamp-3 font-medium">
-                            {description}
-                        </p>
-                    </div>
-
-                    {/* Tech Stack Pills */}
-                    <div className="flex flex-wrap gap-2 mt-4">
-                        {project.tech.slice(0, 3).map((tech) => (
-                            <span
-                                key={tech}
-                                className="px-2 py-1 text-xs font-mono rounded bg-[var(--bg-abyss)] border border-[var(--glass-border)] text-[var(--text-secondary)] hover:border-[var(--neon-cyan)] hover:text-[var(--neon-cyan)] transition-colors"
-                            >
-                                {tech}
-                            </span>
-                        ))}
-                        {project.tech.length > 3 && (
-                            <span className="px-2 py-1 text-xs font-mono text-[var(--text-muted)]">
-                                +{project.tech.length - 3} more
-                            </span>
-                        )}
-                    </div>
-                </div>
-
-                {/* Hover Indicator */}
-                <div className="absolute bottom-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <svg
-                        width="20"
-                        height="20"
-                        viewBox="0 0 20 20"
-                        fill="none"
-                        className="text-[var(--neon-cyan)]"
+                {/* Title - wrapped in Link */}
+                <Link href={`/projects/${project.id}`} className="group">
+                    <h3
+                        className={`font-semibold mb-2 text-[var(--text-primary)] group-hover:text-[var(--accent)] transition-colors ${
+                            isLarge ? "text-2xl lg:text-3xl" : "text-xl"
+                        }`}
                     >
-                        <path
-                            d="M4 10h12m0 0l-4-4m4 4l-4 4"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                        />
-                    </svg>
+                        {project.title}
+                    </h3>
+                </Link>
+
+                {/* Description */}
+                <p
+                    className={`body-sm mb-4 flex-1 ${
+                        isLarge ? "line-clamp-3" : "line-clamp-2"
+                    }`}
+                >
+                    {description}
+                </p>
+
+                {/* Tech Stack */}
+                <div className="flex flex-wrap gap-2 pt-4 border-t border-[var(--border)]">
+                    {project.tech.slice(0, maxTechTags).map((tech) => (
+                        <span key={tech} className="chip">
+                            {tech}
+                        </span>
+                    ))}
+                    {project.tech.length > maxTechTags && (
+                        <span className="chip">
+                            +{project.tech.length - maxTechTags}
+                        </span>
+                    )}
                 </div>
-            </motion.div>
-        </Link>
+
+                {/* GitHub Link */}
+                {project.github && (
+                    <div className="mt-4 pt-4 border-t border-[var(--border)]">
+                        <a
+                            href={project.github}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-2 text-sm text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors"
+                            onClick={(e) => e.stopPropagation()}
+                        >
+                            <Github className="w-4 h-4" />
+                            <span>Source Code</span>
+                        </a>
+                    </div>
+                )}
+            </div>
+        </div>
     );
 }

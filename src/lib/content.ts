@@ -3,7 +3,7 @@ import path from "path";
 import matter from "gray-matter";
 import { ProjectSchema, PostSchema, Project, Post, calculateReadingTime } from "./definitions";
 
-export type ProjectSummary = Pick<Project, "id" | "title" | "summary" | "role" | "period" | "domain" | "tags" | "tech" | "featured" | "priority" | "links">;
+export type ProjectSummary = Pick<Project, "id" | "title" | "summary" | "role" | "period" | "domain" | "tags" | "tech" | "featured" | "priority" | "github" | "links">;
 
 const CONTENT_DIR = path.join(process.cwd(), "content");
 
@@ -65,6 +65,7 @@ export async function getProjectSummaries(): Promise<ProjectSummary[]> {
         tech: p.tech,
         featured: p.featured,
         priority: p.priority,
+        github: p.github,
         links: p.links,
     }));
 }

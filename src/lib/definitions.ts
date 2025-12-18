@@ -17,6 +17,7 @@ export const ProjectSchema = z.object({
     impact: z.array(z.string()),
     featured: z.boolean().optional(),
     priority: z.number().optional(),
+    github: z.string().url().optional(),
     links: z.record(z.string(), z.string()).nullable().transform(v => v || undefined).optional(),
     // Architecture diagram data could be complex, keeping it optional/any for now or defining strict schema later
     architecture: z.any().optional(),

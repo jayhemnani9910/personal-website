@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { ClientLayout } from "@/components/ClientLayout";
+import { ThemeProvider } from "@/context/ThemeContext";
 import { SITE_CONFIG } from "@/../content/site";
 
 // Offline-friendly fallbacks; replace with next/font when network is available
@@ -8,7 +9,10 @@ const inter = { variable: "" };
 const jetbrainsMono = { variable: "" };
 
 export const viewport: Viewport = {
-  themeColor: "#030305",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
+    { media: "(prefers-color-scheme: dark)", color: "#000000" },
+  ],
   width: "device-width",
   initialScale: 1,
 };
@@ -68,11 +72,31 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark">
+    <html lang="en" suppressHydrationWarning>
+      <head>
+        {/* Inline script to prevent theme flash */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                try {
+                  var theme = localStorage.getItem('theme');
+                  if (!theme) {
+                    theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+                  }
+                  document.documentElement.setAttribute('data-theme', theme);
+                } catch (e) {}
+              })();
+            `,
+          }}
+        />
+      </head>
       <body
-        className={`${inter.variable} ${jetbrainsMono.variable} antialiased bg-[var(--bg-void)] text-[var(--text-primary)]`}
+        className={`${inter.variable} ${jetbrainsMono.variable} antialiased`}
       >
-        <ClientLayout>{children}</ClientLayout>
+        <ThemeProvider>
+          <ClientLayout>{children}</ClientLayout>
+        </ThemeProvider>
       </body>
     </html>
   );

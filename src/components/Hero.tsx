@@ -1,146 +1,160 @@
 "use client";
 
 import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion";
-import { TRANSITIONS, VARIANTS } from "@/lib/motion-tokens";
+import { useRef } from "react";
 import { useTerminal } from "@/context/TerminalContext";
-import MagneticButton from "./MagneticButton";
-import { HERO_CONTENT, UI_COPY } from "@/data/profile";
-import { useState, useEffect } from "react";
+import { HERO_CONTENT } from "@/data/profile";
 
-export function Hero() {
+interface HeroProps {
+    stats?: {
+        projects: number;
+        technologies: number;
+        domains: number;
+    };
+}
+
+export function Hero({ stats }: HeroProps) {
     const { toggleTerminal } = useTerminal();
-    const { scrollY } = useScroll();
     const prefersReducedMotion = useReducedMotion();
+    const ref = useRef(null);
 
-    // Typing animation state
-    const [displayedText, setDisplayedText] = useState("");
-    const [isTypingComplete, setIsTypingComplete] = useState(false);
+    const { scrollYProgress } = useScroll({
+        target: ref,
+        offset: ["start start", "end start"]
+    });
 
-    // Cinematic Scroll Effects (respect reduced motion)
-    const yMotion = useTransform(scrollY, [0, 500], [0, 200]); // Text parallax
-    const scaleMotion = useTransform(scrollY, [0, 300], [1, 0.9]); // Text zoom out
-    const opacityMotion = useTransform(scrollY, [0, 300], [1, 0]); // Fade out
+    // Parallax: background moves slower than scroll
+    const y = useTransform(scrollYProgress, [0, 1], ["0%", "30%"]);
+    const opacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
 
-    // Terminal typing effect for tagline
-    useEffect(() => {
-        if (prefersReducedMotion) {
-            setDisplayedText(HERO_CONTENT.tagline);
-            setIsTypingComplete(true);
-            return;
-        }
-
-        let currentIndex = 0;
-        const interval = setInterval(() => {
-            if (currentIndex <= HERO_CONTENT.tagline.length) {
-                setDisplayedText(HERO_CONTENT.tagline.slice(0, currentIndex));
-                currentIndex++;
-            } else {
-                setIsTypingComplete(true);
-                clearInterval(interval);
-            }
-        }, 50);
-
-        return () => clearInterval(interval);
-    }, [prefersReducedMotion]);
+    const fadeIn = {
+        initial: { opacity: 0, y: 30 },
+        animate: { opacity: 1, y: 0 },
+    };
 
     return (
-        <section className="relative h-screen flex flex-col items-center justify-center overflow-hidden">
-            {/* Animated Dot Grid Background */}
-            <div className="absolute inset-0 overflow-hidden pointer-events-none">
-                <div className="dot-grid" />
-            </div>
+        <section ref={ref} className="relative min-h-screen flex items-center justify-center overflow-hidden">
+            {/* Parallax Background */}
+            {!prefersReducedMotion && (
+                <motion.div
+                    style={{ y }}
+                    className="absolute inset-0 pointer-events-none"
+                >
+                    {/* Left top orb */}
+                    <div
+                        className="absolute top-1/4 left-[10%] w-64 h-64 rounded-full blur-3xl"
+                        style={{ background: 'var(--accent)', opacity: 'var(--orb-opacity-2)' }}
+                    />
+                    {/* Left bottom orb */}
+                    <div
+                        className="absolute bottom-1/4 left-[5%] w-48 h-48 rounded-full blur-3xl"
+                        style={{ background: 'var(--accent)', opacity: 'var(--orb-opacity-2)' }}
+                    />
+                    {/* Right top orb */}
+                    <div
+                        className="absolute top-1/5 right-[10%] w-56 h-56 rounded-full blur-3xl"
+                        style={{ background: 'var(--accent)', opacity: 'var(--orb-opacity-2)' }}
+                    />
+                    {/* Right bottom orb */}
+                    <div
+                        className="absolute bottom-1/3 right-[8%] w-72 h-72 rounded-full blur-3xl"
+                        style={{ background: 'var(--accent)', opacity: 'var(--orb-opacity-2)' }}
+                    />
+                </motion.div>
+            )}
 
-            {/* Content Layer */}
-            <motion.div
-                style={{ y: prefersReducedMotion ? 0 : yMotion, scale: prefersReducedMotion ? 1 : scaleMotion, opacity: opacityMotion }}
-                className="relative z-10 text-center px-6 max-w-5xl mx-auto"
-            >
-
-
+            <motion.div style={{ opacity }} className="section-shell text-center py-32 relative z-10">
+                {/* Name */}
                 <motion.h1
-                    variants={VARIANTS.fadeInUp}
+                    variants={fadeIn}
                     initial="initial"
                     animate="animate"
-                    transition={{ ...TRANSITIONS.smooth, duration: 1 }}
-                    className="text-7xl md:text-9xl font-extrabold tracking-[-0.04em] mb-8 bg-clip-text text-transparent animated-gradient-text"
+                    transition={{ duration: 0.6 }}
+                    className="title-hero mb-6"
                 >
                     {HERO_CONTENT.title}
                 </motion.h1>
 
-                <motion.div
-                    variants={VARIANTS.fadeInUp}
+                {/* Tagline */}
+                <motion.p
+                    variants={fadeIn}
                     initial="initial"
                     animate="animate"
-                    transition={{ ...TRANSITIONS.smooth, delay: 0.2 }}
-                    className="space-y-6 mb-12"
+                    transition={{ duration: 0.6, delay: 0.1 }}
+                    className="body-lg max-w-2xl mx-auto mb-4"
                 >
-                    <div className="text-xl md:text-2xl text-[var(--color-text-secondary)] max-w-3xl mx-auto leading-relaxed font-mono">
-                        <span className="text-[var(--neon-cyan)]">{">"}</span>{" "}
-                        <span className="font-light">{displayedText}</span>
-                        {!isTypingComplete && (
-                            <span className="typing-cursor">|</span>
-                        )}
-                    </div>
-                    <motion.p
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: isTypingComplete ? 1 : 0 }}
-                        transition={{ duration: 0.5 }}
-                        className="text-lg md:text-xl text-[var(--color-text-muted)] max-w-2xl mx-auto"
+                    {HERO_CONTENT.tagline}
+                </motion.p>
+
+                {/* Sub-tagline */}
+                <motion.p
+                    variants={fadeIn}
+                    initial="initial"
+                    animate="animate"
+                    transition={{ duration: 0.6, delay: 0.2 }}
+                    className="body-base max-w-xl mx-auto mb-12"
+                    style={{ color: "var(--text-muted)" }}
+                >
+                    {HERO_CONTENT.subTagline}
+                </motion.p>
+
+                {/* CTAs */}
+                <motion.div
+                    variants={fadeIn}
+                    initial="initial"
+                    animate="animate"
+                    transition={{ duration: 0.6, delay: 0.3 }}
+                    className="flex flex-wrap items-center justify-center gap-4"
+                >
+                    <button
+                        onClick={toggleTerminal}
+                        className="btn btn-primary"
                     >
-                        {HERO_CONTENT.subTagline}
-                    </motion.p>
+                        {HERO_CONTENT.cta.primary}
+                    </button>
+
+                    <a href="#projects" className="btn btn-secondary">
+                        View Projects
+                    </a>
                 </motion.div>
 
-                {/* Magnetic Command Group */}
-                <motion.div
-                    variants={VARIANTS.fadeInUp}
-                    initial="initial"
-                    animate="animate"
-                    transition={{ ...TRANSITIONS.smooth, delay: 0.4 }}
-                    className="flex flex-col sm:flex-row items-center justify-center gap-4"
-                >
-                    <MagneticButton>
-                        <button
-                            onClick={toggleTerminal}
-                            className="group relative px-8 py-4 rounded-full bg-white text-black font-semibold text-lg transition-all hover:scale-105 active:scale-95"
-                        >
-                            <span className="relative z-10 flex items-center gap-2">
-                                {HERO_CONTENT.cta.primary}
-                                <span className="text-xs font-mono opacity-50 group-hover:opacity-100 transition-opacity">⌘K</span>
-                            </span>
-                            <div className="absolute inset-0 rounded-full bg-gradient-to-r from-[var(--neon-cyan)] to-[var(--neon-purple)] opacity-0 group-hover:opacity-20 blur-lg transition-opacity duration-500" />
-                        </button>
-                    </MagneticButton>
-
-                    <MagneticButton>
-                        <a
-                            href="#projects"
-                            className="group relative px-8 py-4 rounded-full bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.1)] text-white font-medium text-lg backdrop-blur-md transition-all hover:bg-[rgba(255,255,255,0.1)] hover:border-[rgba(255,255,255,0.2)]"
-                        >
-                            <span>Explore Projects</span>
-                        </a>
-                    </MagneticButton>
-
-                    <MagneticButton>
-                        <a
-                            href="/resume"
-                            className="group relative px-8 py-4 rounded-full bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.1)] text-white font-medium text-lg backdrop-blur-md transition-all hover:bg-[rgba(255,255,255,0.1)] hover:border-[rgba(255,255,255,0.2)]"
-                        >
-                            <span>Download Resume</span>
-                        </a>
-                    </MagneticButton>
-                </motion.div>
-            </motion.div>
-
-            {/* Scroll Indicator */}
-            <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 1, duration: 1 }}
-                className="absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
-            >
-                <span className="text-[10px] uppercase tracking-[0.2em] text-[var(--color-text-muted)]">{UI_COPY.nav.scroll}</span>
-                <div className="w-[1px] h-12 bg-gradient-to-b from-[var(--color-text-muted)] to-transparent" />
+                {/* Stats */}
+                {stats && (
+                    <motion.div
+                        variants={fadeIn}
+                        initial="initial"
+                        animate="animate"
+                        transition={{ duration: 0.6, delay: 0.4 }}
+                        className="mt-20"
+                    >
+                        <div className="grid grid-cols-3 gap-8 md:gap-16 max-w-lg mx-auto">
+                            <div className="text-center">
+                                <div className="text-4xl md:text-5xl font-semibold mb-2" style={{ color: 'var(--accent)' }}>
+                                    {stats.projects}
+                                </div>
+                                <div className="text-xs uppercase tracking-widest" style={{ color: 'var(--text-muted)' }}>
+                                    Projects
+                                </div>
+                            </div>
+                            <div className="text-center">
+                                <div className="text-4xl md:text-5xl font-semibold mb-2" style={{ color: 'var(--accent)' }}>
+                                    {stats.technologies}
+                                </div>
+                                <div className="text-xs uppercase tracking-widest" style={{ color: 'var(--text-muted)' }}>
+                                    Technologies
+                                </div>
+                            </div>
+                            <div className="text-center">
+                                <div className="text-4xl md:text-5xl font-semibold mb-2" style={{ color: 'var(--accent)' }}>
+                                    {stats.domains}
+                                </div>
+                                <div className="text-xs uppercase tracking-widest" style={{ color: 'var(--text-muted)' }}>
+                                    Domains
+                                </div>
+                            </div>
+                        </div>
+                    </motion.div>
+                )}
             </motion.div>
         </section>
     );

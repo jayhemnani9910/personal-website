@@ -74,7 +74,29 @@ export function TerminalOverlay() {
             case "help":
                 newHistory.push({
                     type: "output",
-                    content: "Available commands: help, ls, cat [file], clear, exit, whoami, open [url], date",
+                    content: `Available commands:
+
+Files
+  ls              List available files
+  cat [file]      Display file contents
+
+Navigation
+  projects        Go to projects page
+  resume          Go to resume page
+
+Quick Info
+  skills          Display technical skills
+  contact         Show contact info
+  education       Show education
+  experience      Show work experience
+
+System
+  help            Show this help message
+  whoami          Current user
+  date            Show current date
+  open [url]      Open URL in browser
+  clear           Clear terminal
+  exit            Close terminal`,
                 });
                 break;
             case "ls":
@@ -133,6 +155,28 @@ export function TerminalOverlay() {
                 } else {
                     newHistory.push({ type: "error", content: "User is not in the sudoers file. This incident will be reported." });
                 }
+                break;
+            case "skills":
+                newHistory.push({ type: "output", content: TERMINAL_FILES["skills.json"] });
+                break;
+            case "contact":
+                newHistory.push({ type: "output", content: TERMINAL_FILES["contact.txt"] });
+                break;
+            case "education":
+                newHistory.push({ type: "output", content: TERMINAL_FILES["education.md"] });
+                break;
+            case "experience":
+                newHistory.push({ type: "output", content: TERMINAL_FILES["experience.md"] });
+                break;
+            case "projects":
+                router.push("/projects");
+                newHistory.push({ type: "output", content: "Navigating to /projects..." });
+                closeTerminal();
+                break;
+            case "resume":
+                router.push("/resume");
+                newHistory.push({ type: "output", content: "Navigating to /resume..." });
+                closeTerminal();
                 break;
             default:
                 newHistory.push({ type: "error", content: `Command not found: ${command}` });

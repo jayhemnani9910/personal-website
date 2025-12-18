@@ -57,6 +57,9 @@ export interface EducationItem {
     end?: string;
     gpa?: string;
     courses?: string[];
+    achievements?: string[];        // Dean's list, scholarships, awards
+    thesis?: string;                // Thesis/capstone project title
+    thesisDescription?: string;     // Brief description of thesis work
 }
 
 export interface PublicationItem {
@@ -64,7 +67,10 @@ export interface PublicationItem {
     venue?: string;
     year?: string;
     description?: string;
-    link?: string;
+    abstract?: string;              // Extended summary/abstract
+    link?: string;                  // Paper link (arxiv, journal, etc.)
+    github?: string;                // GitHub repository link
+    coAuthors?: string[];           // List of co-authors
 }
 
 export interface CertificationItem {
