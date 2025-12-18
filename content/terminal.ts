@@ -7,7 +7,7 @@
 export const TERMINAL_FILES: Record<string, string> = {
   "about.txt": "Data Engineer & Full Stack Developer. Building resilient systems at scale.",
   "projects.md": "Type 'projects' to navigate to the projects page.",
-  "contact.txt": `Email: jay.hemnani@sjsu.edu
+  "contact.txt": `Email: jayhemnani992000@gmail.com
 GitHub: github.com/jayhemnani9910
 LinkedIn: linkedin.com/in/jayhemnani`,
   "skills.json": JSON.stringify({
@@ -23,7 +23,7 @@ LinkedIn: linkedin.com/in/jayhemnani`,
 M.S. in Data Analytics | San Jose, CA
 
 **Pandit Deendayal Energy University**
-B.Tech in Computer Engineering | GPA: 3.7/4.0 | Gujarat, India`,
+B.Tech in Computer Engineering | GPA: 8.7/10 | Gujarat, India`,
   "experience.md": `## Experience
 
 **Data Analyst** @ Elite Hotel Group

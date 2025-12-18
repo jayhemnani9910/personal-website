@@ -46,7 +46,7 @@ export const RESUME: Resume = {
         {
           title: "Data Analyst",
           employmentType: "full-time",
-          period: { label: "2024–Present", start: "2024-01" },
+          period: { label: "Summer 2025", start: "2025-05" },
           location: "San Jose, CA",
           tech: ["Python", "SQL", "Tableau", "Excel", "Power BI", "Airflow"],
           bullets: [
@@ -136,7 +136,7 @@ export const RESUME: Resume = {
       location: "San Jose, CA",
       start: "2023",
       end: "2025",
-      gpa: "3.9/4.0",
+      gpa: "",
       courses: [
         "Data Warehousing & Pipeline",
         "Big Data Analytics",

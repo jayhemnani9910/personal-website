@@ -26,7 +26,7 @@ export const SITE_CONFIG = {
   
   // Social links
   social: {
-    email: "jay.hemnani@sjsu.edu",
+    email: "jayhemnani992000@gmail.com",
     github: "https://github.com/jayhemnani9910",
     linkedin: "https://linkedin.com/in/jayhemnani",
     twitter: "https://twitter.com/jayhemnani",
