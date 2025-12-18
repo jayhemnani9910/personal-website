@@ -23,19 +23,19 @@ export const RESUME: Resume = {
   skills: [
     {
       category: "Languages",
-      items: [{ name: "Python" }, { name: "Java" }, { name: "C++" }, { name: "Swift" }, { name: "Go" }, { name: "Kotlin" }]
+      items: [{ name: "Python" }, { name: "SQL" }, { name: "Java" }, { name: "C++" }, { name: "Swift" }, { name: "Go" }]
     },
     {
-      category: "Databases",
-      items: [{ name: "MySQL" }, { name: "PySpark" }, { name: "MongoDB" }, { name: "Bash" }]
+      category: "Data",
+      items: [{ name: "MySQL" }, { name: "PySpark" }, { name: "MongoDB" }, { name: "Pandas" }, { name: "NumPy" }]
     },
     {
       category: "Cloud",
-      items: [{ name: "AWS" }, { name: "GCP" }, { name: "Azure" }, { name: "Kubernetes" }, { name: "Docker" }]
+      items: [{ name: "AWS" }, { name: "GCP" }, { name: "Azure" }, { name: "Docker" }, { name: "Kubernetes" }]
     },
     {
-      category: "Software",
-      items: [{ name: "DevOps" }, { name: "CI/CD" }, { name: "Agile" }, { name: "Testing" }]
+      category: "Tools",
+      items: [{ name: "Git" }, { name: "CI/CD" }, { name: "Tableau" }, { name: "Airflow" }]
     }
   ],
   experience: [
@@ -50,11 +50,9 @@ export const RESUME: Resume = {
           location: "San Jose, CA",
           tech: ["Python", "SQL", "Tableau", "Excel", "Power BI", "Airflow"],
           bullets: [
-            { text: "Automated mission-critical reporting via SQL/Python pipelines, cutting manual effort by 40% and eliminating data drift across weekly/monthly closes." },
-            { text: "Engineered consistency checks across multi-source exports, restoring trust in financial and operational KPIs." },
-            { text: "Built executive-ready dashboards and variance analyses, enabling proactive decisions on occupancy and revenue trends." },
-            { text: "Developed predictive models for demand forecasting, improving revenue management accuracy by 25%." },
-            { text: "Collaborated with cross-functional teams to define and track key business metrics across 15+ properties." }
+            { text: "Automated reporting pipelines with SQL/Python, reducing manual work and improving data consistency." },
+            { text: "Built dashboards for occupancy and revenue tracking across multiple properties." },
+            { text: "Developed demand forecasting models to support revenue management decisions." }
           ]
         }
       ]
@@ -70,10 +68,8 @@ export const RESUME: Resume = {
           tech: ["Figma", "Adobe Creative Suite", "Google Analytics", "Mixpanel"],
           summary: "Brand systems & measurable campaigns",
           bullets: [
-            { text: "Standardized templates and asset workflows, reducing creative turnaround time by ~30%." },
-            { text: "Designed and tracked A/B experiments for campaign operations, using lightweight analytics to optimize engagement." },
-            { text: "Delivered brand identity systems for 10+ clients across tech, hospitality, and e-commerce sectors." },
-            { text: "Managed end-to-end creative projects from concept to delivery, maintaining 100% on-time delivery rate." }
+            { text: "Delivered brand identity systems and marketing assets for clients in tech and hospitality." },
+            { text: "Ran A/B experiments on campaigns and tracked engagement metrics." }
           ]
         }
       ]
@@ -90,8 +86,8 @@ export const RESUME: Resume = {
           tech: ["Python", "Scikit-learn", "TensorFlow", "Pandas", "NumPy"],
           summary: "Analytics & Modeling",
           bullets: [
-            { text: "Engineered an advanced Credit Fraud Detection system leveraging ML algorithms and data imbalance techniques, resulting in enhanced predictive accuracy and F1-score." },
-            { text: "Developed a comprehensive data analytics framework leveraging statistical models and data visualization tools, resulting in a 15% increase in operational efficiency." }
+            { text: "Built credit fraud detection system using ML with techniques for handling class imbalance (SMOTE, ensemble methods)." },
+            { text: "Created data analytics dashboards with statistical models for operational reporting." }
           ]
         }
       ]
@@ -108,8 +104,8 @@ export const RESUME: Resume = {
           tech: ["Swift", "UIKit", "Core Data", "Xcode", "Git"],
           summary: "Product Engineering",
           bullets: [
-            { text: "Led the development of CodeLock, an iOS privacy and security application, implementing robust encryption algorithms and user-friendly design." },
-            { text: "Analyzed user engagement metrics to identify areas for improvement. Implemented data-driven changes that led to a 20% increase in user retention." }
+            { text: "Developed CodeLock, an iOS privacy/security app with encryption and secure local storage." },
+            { text: "Tracked user engagement metrics and iterated on UX based on usage patterns." }
           ]
         }
       ]
@@ -126,9 +122,8 @@ export const RESUME: Resume = {
           tech: ["Azure", "CI/CD", "Microservices", "REST APIs"],
           summary: "Cloud-Native Development",
           bullets: [
-            { text: "Built a Cloud-Native Communication Platform for First Responders using microservices architecture on Azure." },
-            { text: "Implemented cloud-native microservices architecture, increasing deployment velocity by 30%." },
-            { text: "Established robust CI/CD pipelines, reducing manual deployment intervention by 15%." }
+            { text: "Built a cloud-native communication platform for first responders using microservices on Azure." },
+            { text: "Set up CI/CD pipelines for automated testing and deployment." }
           ]
         }
       ]
