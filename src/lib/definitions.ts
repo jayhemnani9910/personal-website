@@ -83,9 +83,10 @@ const DeepDiveSchema = z.object({
         z.array(CodeSnippetSchema)
     ]).optional(),
 
-    // Section 5: Results deep dive (can be string or array)
+    // Section 5: Results deep dive (can be string, array of strings, or array of objects)
     metrics: z.union([
         z.string(),
+        z.array(z.string()),
         z.array(z.object({
             value: z.string(),
             label: z.string(),

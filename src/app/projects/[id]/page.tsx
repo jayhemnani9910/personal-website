@@ -1,6 +1,7 @@
 import { getAllProjects, getProject } from "@/lib/content";
 import { ProjectDetail } from "@/components/ProjectDetail";
 import { FifaSoccerDSPage } from "@/components/projects/FifaSoccerDSPage";
+import { SoccerVisionResearchPage } from "@/components/projects/SoccerVisionResearchPage";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { notFound } from "next/navigation";
@@ -8,6 +9,7 @@ import { notFound } from "next/navigation";
 // Custom pages for specific projects
 const CUSTOM_PROJECT_PAGES: Record<string, React.ComponentType<{ project: Awaited<ReturnType<typeof getProject>> & {} }>> = {
     "fifa-soccer-ds": FifaSoccerDSPage,
+    "soccer-vision-research": SoccerVisionResearchPage,
 };
 
 export default async function ProjectPage({ params }: { params: Promise<{ id: string }> }) {

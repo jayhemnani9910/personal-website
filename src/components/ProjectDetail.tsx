@@ -15,7 +15,8 @@ import {
   Lightbulb,
   GitBranch,
   Target,
-  BookOpen
+  BookOpen,
+  ChartNoAxesCombined
 } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
@@ -386,23 +387,35 @@ export function ProjectDetail({ project }: { project: Project }) {
                       <p className="text-sm text-[var(--color-text-secondary)] whitespace-pre-wrap">{deepDive.metrics}</p>
                     </div>
                   ) : deepDive.metrics.length > 0 && (
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8">
-                      {deepDive.metrics.map((metric, i) => (
-                        <div key={i} className="glass p-4 rounded-xl border border-[var(--color-border)] text-center">
-                          <div className="text-2xl md:text-3xl font-bold text-[var(--color-text-primary)] mb-1">
-                            {metric.value}
+                    // Check if first item is a string (array of strings) or object (structured metrics)
+                    typeof deepDive.metrics[0] === 'string' ? (
+                      <div className="mt-8 space-y-3">
+                        {(deepDive.metrics as string[]).map((metric, i) => (
+                          <div key={i} className="flex gap-3 items-start p-3 rounded-lg bg-[var(--color-bg-secondary)] border border-[var(--color-border)]">
+                            <ChartNoAxesCombined className="w-4 h-4 text-[var(--color-accent-purple)] flex-shrink-0 mt-0.5" />
+                            <span className="text-sm text-[var(--color-text-secondary)]">{metric}</span>
                           </div>
-                          <div className="text-xs text-[var(--color-text-muted)] uppercase tracking-wider">
-                            {metric.label}
-                          </div>
-                          {metric.context && (
-                            <div className="text-xs text-[var(--color-text-muted)] mt-2 opacity-75">
-                              {metric.context}
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8">
+                        {(deepDive.metrics as { value: string; label: string; context?: string }[]).map((metric, i) => (
+                          <div key={i} className="glass p-4 rounded-xl border border-[var(--color-border)] text-center">
+                            <div className="text-2xl md:text-3xl font-bold text-[var(--color-text-primary)] mb-1">
+                              {metric.value}
                             </div>
-                          )}
-                        </div>
-                      ))}
-                    </div>
+                            <div className="text-xs text-[var(--color-text-muted)] uppercase tracking-wider">
+                              {metric.label}
+                            </div>
+                            {metric.context && (
+                              <div className="text-xs text-[var(--color-text-muted)] mt-2 opacity-75">
+                                {metric.context}
+                              </div>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    )
                   )
                 )}
 
