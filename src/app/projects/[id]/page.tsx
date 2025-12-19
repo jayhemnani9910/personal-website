@@ -2,6 +2,8 @@ import { getAllProjects, getProject } from "@/lib/content";
 import { ProjectDetail } from "@/components/ProjectDetail";
 import { FifaSoccerDSPage } from "@/components/projects/FifaSoccerDSPage";
 import { SoccerVisionResearchPage } from "@/components/projects/SoccerVisionResearchPage";
+import { NobelDataIntelligencePage } from "@/components/projects/NobelDataIntelligencePage";
+import { StockDataPlatformPage } from "@/components/projects/StockDataPlatformPage";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { notFound } from "next/navigation";
@@ -10,6 +12,8 @@ import { notFound } from "next/navigation";
 const CUSTOM_PROJECT_PAGES: Record<string, React.ComponentType<{ project: Awaited<ReturnType<typeof getProject>> & {} }>> = {
     "fifa-soccer-ds": FifaSoccerDSPage,
     "soccer-vision-research": SoccerVisionResearchPage,
+    "nobel-dataintelligence": NobelDataIntelligencePage,
+    "stock-data-platform": StockDataPlatformPage,
 };
 
 export default async function ProjectPage({ params }: { params: Promise<{ id: string }> }) {
