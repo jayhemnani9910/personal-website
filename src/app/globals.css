@@ -104,7 +104,8 @@ body {
 .section-shell {
   max-width: 1120px;
   margin: 0 auto;
-  padding: 0 var(--space-3);
+  padding-left: var(--space-3);
+  padding-right: var(--space-3);
 }
 
 .section-block {
