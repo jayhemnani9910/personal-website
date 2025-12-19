@@ -1,71 +1,53 @@
-[![Live Demo](https://img.shields.io/badge/Live%20Demo-Open-2ea44f?style=for-the-badge)](https://jayhemnani9910.github.io/personal-website/)
+# Personal Website
 
-<p align="center">
-  <img src="https://readme-typing-svg.herokuapp.com?font=Fira+Code&weight=600&size=28&pause=1000&color=00F0FF&center=true&vCenter=true&width=600&lines=Jay+Hemnani;Data+Engineer;Building+Resilient+Data+Systems" alt="Typing SVG" />
-</p>
+[![Live](https://img.shields.io/badge/Live-jayhemnani.me-2ea44f?style=for-the-badge)](https://jayhemnani.me)
 
-<p align="center">
-  <a href="https://jayhemnani.me"><img src="https://img.shields.io/badge/Portfolio-jayhemnani.me-00F0FF?style=for-the-badge&logo=google-chrome&logoColor=white" /></a>
-  <a href="https://linkedin.com/in/jayhemnani"><img src="https://img.shields.io/badge/LinkedIn-jayhemnani-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white" /></a>
-  <a href="mailto:jay.hemnani@sjsu.edu"><img src="https://img.shields.io/badge/Email-jay.hemnani@sjsu.edu-7000FF?style=for-the-badge&logo=gmail&logoColor=white" /></a>
-</p>
+Portfolio website built with Next.js 14, TypeScript, and Tailwind CSS.
 
-<br>
+## Features
 
-Data Engineer specializing in **real-time data pipelines** and **autonomous AI systems**. I transform raw data into actionable intelligence through scalable architectures and intuitive analytics interfaces.
+- **Projects** — 25+ projects with detailed case studies
+- **Lab** — Experimental builds and prototypes
+- **Blog** — Technical writing
+- **Resume** — Role-specific PDFs (Data Engineer, ML, SWE, Analyst)
 
-Currently pursuing my Master's at **San Jose State University**, building systems that handle streaming market data, sports analytics, and supply chain optimization.
+## Tech Stack
 
-<br>
+- Next.js 14 (App Router)
+- TypeScript
+- Tailwind CSS
+- MDX for content
+- Deployed on GitHub Pages
 
-🔭 **Working on:** Real-time data pipelines & streaming architectures
-🌱 **Learning:** MLOps, LLM orchestration, and distributed systems
-💬 **Ask me about:** Kafka, Airflow, Python, Data Engineering, SQL optimization
+## Local Development
 
-<br>
+```bash
+npm install
+npm run dev
+```
 
----
+Open [http://localhost:3000](http://localhost:3000)
 
-## Featured Projects
+## Structure
 
-<p align="center">
-  <a href="https://github.com/jayhemnani9910/fifa-soccer-ds"><img src="https://github-readme-stats.vercel.app/api/pin/?username=jayhemnani9910&repo=fifa-soccer-ds&bg_color=0A0A0F&title_color=00F0FF&text_color=ffffff&icon_color=7000FF&border_color=131318" /></a>
-  <a href="https://github.com/jayhemnani9910/soccer-vision-research"><img src="https://github-readme-stats.vercel.app/api/pin/?username=jayhemnani9910&repo=soccer-vision-research&bg_color=0A0A0F&title_color=00F0FF&text_color=ffffff&icon_color=7000FF&border_color=131318" /></a>
-</p>
+```
+src/
+├── app/           # Pages (projects, blog, resume, lab)
+├── components/    # Reusable UI components
+├── content/       # MDX project files
+├── data/          # Static data (projects, experience)
+└── lib/           # Utilities
+```
 
-<p align="center">
-  <a href="https://github.com/jayhemnani9910/nobel-dataintelligence"><img src="https://github-readme-stats.vercel.app/api/pin/?username=jayhemnani9910&repo=nobel-dataintelligence&bg_color=0A0A0F&title_color=00F0FF&text_color=ffffff&icon_color=7000FF&border_color=131318" /></a>
-  <a href="https://github.com/jayhemnani9910/revolu-idea"><img src="https://github-readme-stats.vercel.app/api/pin/?username=jayhemnani9910&repo=revolu-idea&bg_color=0A0A0F&title_color=00F0FF&text_color=ffffff&icon_color=7000FF&border_color=131318" /></a>
-</p>
+## Deployment
 
-<p align="center">
-  <a href="https://github.com/jayhemnani9910/webcrawler"><img src="https://github-readme-stats.vercel.app/api/pin/?username=jayhemnani9910&repo=webcrawler&bg_color=0A0A0F&title_color=00F0FF&text_color=ffffff&icon_color=7000FF&border_color=131318" /></a>
-  <a href="https://github.com/jayhemnani9910/contextbox"><img src="https://github-readme-stats.vercel.app/api/pin/?username=jayhemnani9910&repo=contextbox&bg_color=0A0A0F&title_color=00F0FF&text_color=ffffff&icon_color=7000FF&border_color=131318" /></a>
-</p>
+```bash
+npm run build
+npm run deploy
+```
 
----
-
-## Research & Publications
-
-| Paper | Topic | Year |
-|-------|-------|------|
-| **Stacking Ensemble for Diabetes Prediction** | ML ensemble achieving 82.68% accuracy on health data | AIMV-21 |
-| **Efficient Vaccine Scheduler** | CPU-scheduling-inspired prioritization framework | AIMV-21 |
+Deploys to GitHub Pages via `gh-pages` branch.
 
 ---
 
-## GitHub Activity
-
-<p align="center">
-  <img src="https://github-readme-stats.vercel.app/api?username=jayhemnani9910&show_icons=true&bg_color=0A0A0F&title_color=00F0FF&text_color=ffffff&icon_color=7000FF&border_color=131318&count_private=true" alt="GitHub Stats" />
-</p>
-
-<p align="center">
-  <img src="https://raw.githubusercontent.com/jayhemnani9910/jayhemnani9910/output/github-snake.svg" alt="Snake animation" />
-</p>
-
----
-
-<p align="center">
-  <img src="https://komarev.com/ghpvc/?username=jayhemnani9910&color=00F0FF&style=flat-square&label=Profile+Views" />
-</p>
+[jayhemnani.me](https://jayhemnani.me)
