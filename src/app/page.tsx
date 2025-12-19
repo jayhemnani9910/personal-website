@@ -3,6 +3,7 @@ import { Hero } from "@/components/Hero";
 import { ResumeTimeline } from "@/components/ResumeTimeline";
 import { AcademicsSection } from "@/components/AcademicsSection";
 import { BentoGrid } from "@/components/BentoGrid";
+import { CourseworkSection } from "@/components/CourseworkSection";
 import { Contact } from "@/components/Contact";
 import { Footer } from "@/components/Footer";
 
@@ -25,6 +26,7 @@ export default async function Home() {
       <ResumeTimeline />
       <AcademicsSection />
       <BentoGrid projects={projects} />
+      <CourseworkSection />
       <Contact />
       <Footer />
     </main>

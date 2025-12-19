@@ -23,6 +23,8 @@ import { MobileConnectPage } from "@/components/projects/MobileConnectPage";
 import { ImmigrationDBPage } from "@/components/projects/ImmigrationDBPage";
 import { BasicBankingPage } from "@/components/projects/BasicBankingPage";
 import { AccurateGuesserPage } from "@/components/projects/AccurateGuesserPage";
+import { KayakDistributedPage } from "@/components/projects/KayakDistributedPage";
+import { AirbnbDistributedPage } from "@/components/projects/AirbnbDistributedPage";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { notFound } from "next/navigation";
@@ -52,6 +54,8 @@ const CUSTOM_PROJECT_PAGES: Record<string, React.ComponentType<{ project: Awaite
     "immigration-db": ImmigrationDBPage,
     "basic-banking": BasicBankingPage,
     "accurate-guesser": AccurateGuesserPage,
+    "kayak-distributed": KayakDistributedPage,
+    "airbnb-distributed": AirbnbDistributedPage,
 };
 
 export default async function ProjectPage({ params }: { params: Promise<{ id: string }> }) {
