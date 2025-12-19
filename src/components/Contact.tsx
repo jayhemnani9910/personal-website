@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Send, Mail, Github, Linkedin, Twitter, Youtube } from "lucide-react";
 import MagneticButton from "./MagneticButton";
@@ -10,6 +10,80 @@ interface FormErrors {
     name?: string;
     email?: string;
     message?: string;
+}
+
+// Typewriter effect for placeholders
+function TypewriterPlaceholder({ phrases, typingSpeed = 80, pauseDuration = 2000 }: {
+    phrases: string[];
+    typingSpeed?: number;
+    pauseDuration?: number;
+}) {
+    const [displayText, setDisplayText] = useState("");
+    const [phraseIndex, setPhraseIndex] = useState(0);
+    const [isDeleting, setIsDeleting] = useState(false);
+
+    useEffect(() => {
+        const currentPhrase = phrases[phraseIndex];
+
+        const timeout = setTimeout(() => {
+            if (!isDeleting) {
+                if (displayText.length < currentPhrase.length) {
+                    setDisplayText(currentPhrase.slice(0, displayText.length + 1));
+                } else {
+                    setTimeout(() => setIsDeleting(true), pauseDuration);
+                }
+            } else {
+                if (displayText.length > 0) {
+                    setDisplayText(displayText.slice(0, -1));
+                } else {
+                    setIsDeleting(false);
+                    setPhraseIndex((prev) => (prev + 1) % phrases.length);
+                }
+            }
+        }, isDeleting ? typingSpeed / 2 : typingSpeed);
+
+        return () => clearTimeout(timeout);
+    }, [displayText, isDeleting, phraseIndex, phrases, typingSpeed, pauseDuration]);
+
+    return displayText;
+}
+
+// Social icon with brand-colored glow
+function SocialIcon({ icon: Icon, href, label, glowColor }: {
+    icon: typeof Github;
+    href: string;
+    label: string;
+    glowColor: string;
+}) {
+    return (
+        <MagneticButton>
+            <a
+                href={href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group w-12 h-12 rounded-full border flex items-center justify-center transition-all duration-300 hover:-translate-y-1.5"
+                style={{
+                    borderColor: 'var(--border)',
+                }}
+                aria-label={label}
+            >
+                <Icon
+                    className="w-5 h-5 transition-all duration-300"
+                    style={{
+                        color: 'var(--text-secondary)',
+                    }}
+                    onMouseEnter={(e) => {
+                        e.currentTarget.style.color = glowColor;
+                        e.currentTarget.style.filter = `drop-shadow(0 0 8px ${glowColor}) drop-shadow(0 0 16px ${glowColor})`;
+                    }}
+                    onMouseLeave={(e) => {
+                        e.currentTarget.style.color = 'var(--text-secondary)';
+                        e.currentTarget.style.filter = 'none';
+                    }}
+                />
+            </a>
+        </MagneticButton>
+    );
 }
 
 export function Contact() {
@@ -22,6 +96,33 @@ export function Contact() {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isSent, setIsSent] = useState(false);
     const [toastError, setToastError] = useState<string | null>(null);
+
+    // Fun placeholder phrases
+    const namePhrases = [
+        "Tony Stark",
+        "Future collaborator",
+        "The next big thing",
+        "Someone awesome",
+        "A fellow builder",
+        "Your name here :)",
+    ];
+
+    const emailPhrases = [
+        "definitely.not.spam@gmail.com",
+        "hire.me@please.com",
+        "totally.real@email.com",
+        "will.reply@promise.io",
+        "not.a.bot@human.org",
+        "your.actual@email.com",
+    ];
+
+    const messagePlaceholder = `Hey Jay! 👋
+
+I came across your portfolio and was impressed by your data engineering work. I'd love to chat about a potential opportunity...`;
+
+    // Typewriter states for placeholders
+    const namePlaceholder = TypewriterPlaceholder({ phrases: namePhrases });
+    const emailPlaceholder = TypewriterPlaceholder({ phrases: emailPhrases, typingSpeed: 70 });
 
     const validateField = (name: string, value: string): string => {
         switch (name) {
@@ -69,10 +170,7 @@ export function Contact() {
         const mailtoLink = `mailto:${SOCIAL_LINKS.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 
         try {
-            const opened = window.open(mailtoLink, "_self");
-            if (opened === null) {
-                throw new Error("Mail client blocked");
-            }
+            window.location.href = mailtoLink;
             setIsSent(true);
             setFormState({ name: "", email: "", message: "" });
             setErrors({});
@@ -83,6 +181,13 @@ export function Contact() {
             setIsSubmitting(false);
         }
     };
+
+    const socialIcons = [
+        { icon: Github, href: SOCIAL_LINKS.github, label: "GitHub", glowColor: "#ffffff" },
+        { icon: Linkedin, href: SOCIAL_LINKS.linkedin, label: "LinkedIn", glowColor: "#0A66C2" },
+        { icon: Youtube, href: SOCIAL_LINKS.youtube, label: "YouTube", glowColor: "#FF0000" },
+        { icon: Twitter, href: SOCIAL_LINKS.twitter, label: "Twitter", glowColor: "#1DA1F2" }
+    ];
 
     return (
         <section id="contact" className="section-block section-shell scroll-mt-28 md:scroll-mt-32">
@@ -143,27 +248,14 @@ export function Contact() {
                         </a>
 
                         <div className="flex gap-4 mt-4">
-                            {[
-                                { icon: Github, href: SOCIAL_LINKS.github, label: "GitHub" },
-                                { icon: Linkedin, href: SOCIAL_LINKS.linkedin, label: "LinkedIn" },
-                                { icon: Youtube, href: SOCIAL_LINKS.youtube, label: "YouTube" },
-                                { icon: Twitter, href: SOCIAL_LINKS.twitter, label: "Twitter" }
-                            ].map((social) => (
-                                <MagneticButton key={social.label}>
-                                    <a
-                                        href={social.href}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="w-12 h-12 rounded-full border flex items-center justify-center transition-all duration-200 hover:border-[var(--accent)] hover:text-[var(--accent)] hover:-translate-y-1.5 hover:scale-105 hover:shadow-[0_8px_24px_rgba(10,132,255,0.25)]"
-                                        style={{
-                                            borderColor: 'var(--border)',
-                                            color: 'var(--text-secondary)'
-                                        }}
-                                        aria-label={social.label}
-                                    >
-                                        <social.icon className="w-5 h-5" />
-                                    </a>
-                                </MagneticButton>
+                            {socialIcons.map((social) => (
+                                <SocialIcon
+                                    key={social.label}
+                                    icon={social.icon}
+                                    href={social.href}
+                                    label={social.label}
+                                    glowColor={social.glowColor}
+                                />
                             ))}
                         </div>
                     </div>
@@ -195,7 +287,7 @@ export function Contact() {
                                         if (errors.name) setErrors({ ...errors, name: undefined });
                                     }}
                                     className={`input ${errors.name ? 'border-red-500 focus:border-red-500' : ''}`}
-                                    placeholder="John Doe"
+                                    placeholder={namePlaceholder || "Your name"}
                                 />
                                 <AnimatePresence>
                                     {errors.name && (
@@ -227,7 +319,7 @@ export function Contact() {
                                         if (errors.email) setErrors({ ...errors, email: undefined });
                                     }}
                                     className={`input ${errors.email ? 'border-red-500 focus:border-red-500' : ''}`}
-                                    placeholder="john@example.com"
+                                    placeholder={emailPlaceholder || "your@email.com"}
                                 />
                                 <AnimatePresence>
                                     {errors.email && (
@@ -252,14 +344,14 @@ export function Contact() {
                                 </label>
                                 <textarea
                                     id="message"
-                                    rows={4}
+                                    rows={5}
                                     value={formState.message}
                                     onChange={(e) => {
                                         setFormState({ ...formState, message: e.target.value });
                                         if (errors.message) setErrors({ ...errors, message: undefined });
                                     }}
                                     className={`input resize-none ${errors.message ? 'border-red-500 focus:border-red-500' : ''}`}
-                                    placeholder="Tell me about your project..."
+                                    placeholder={messagePlaceholder}
                                 />
                                 <AnimatePresence>
                                     {errors.message && (
@@ -287,10 +379,10 @@ export function Contact() {
                                                 <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
                                                 <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
                                             </svg>
-                                            Sending...
+                                            Opening mail...
                                         </span>
                                     ) : isSent ? (
-                                        <span>Mail app opened</span>
+                                        <span>Check your mail app!</span>
                                     ) : (
                                         <>
                                             Send Message
@@ -325,7 +417,7 @@ export function Contact() {
                                 style={{ background: toastError ? '#ef4444' : '#10b981' }}
                             />
                             <p className="font-medium">
-                                {toastError ? toastError : "Opening your mail app... If nothing happens, email me directly at " + SOCIAL_LINKS.email}
+                                {toastError ? toastError : "Your mail app should open now - just hit send!"}
                             </p>
                         </div>
                     </motion.div>
