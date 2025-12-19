@@ -1,5 +1,6 @@
 import { Navbar } from "@/components/Navbar";
 import { Hero } from "@/components/Hero";
+import { ToolkitSection } from "@/components/ToolkitSection";
 import { ResumeTimeline } from "@/components/ResumeTimeline";
 import { AcademicsSection } from "@/components/AcademicsSection";
 import { BentoGrid } from "@/components/BentoGrid";
@@ -23,6 +24,7 @@ export default async function Home() {
     <main id="main-content" className="relative min-h-screen flex flex-col">
       <Navbar />
       <Hero stats={stats} />
+      <ToolkitSection />
       <ResumeTimeline />
       <AcademicsSection />
       <BentoGrid projects={projects} />
