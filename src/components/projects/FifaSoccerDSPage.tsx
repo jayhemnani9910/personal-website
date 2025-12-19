@@ -77,7 +77,7 @@ export function FifaSoccerDSPage({ project }: { project: Project }) {
             <header className="pt-32 pb-12 px-6">
                 <div className="max-w-4xl mx-auto">
                     <Link
-                        href="/#projects"
+                        href="/projects"
                         className="inline-flex items-center gap-2 text-sm text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors mb-8"
                     >
                         <ArrowLeft className="w-4 h-4" />

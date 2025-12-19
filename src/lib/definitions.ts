@@ -1,6 +1,61 @@
 import { z } from "zod";
 
 // ============================================================================
+// CODE SNIPPET SCHEMA (for technical deep dives)
+// ============================================================================
+const CodeSnippetSchema = z.object({
+    title: z.string(),
+    language: z.string(),
+    code: z.string(),
+    explanation: z.string().optional(),
+});
+
+// Learning can be a plain string or a structured object with insight/description
+const LearningSchema = z.union([
+    z.string(),
+    z.object({
+        insight: z.string(),
+        description: z.string(),
+    })
+]);
+
+// ============================================================================
+// DEEP DIVE SCHEMA (progressive disclosure content)
+// ============================================================================
+const DeepDiveSchema = z.object({
+    // Section 1: Extended problem context (why this matters)
+    context: z.string().optional(),
+
+    // Section 2: Technical architecture
+    architecture: z.string().optional(),
+    components: z.array(z.string()).optional(),
+    dataFlow: z.string().optional(),
+
+    // Section 3: Key decisions and trade-offs
+    keyDecisions: z.array(z.object({
+        decision: z.string(),
+        reasoning: z.string(),
+        alternatives: z.string().optional(),
+    })).optional(),
+
+    // Section 4: Code highlights
+    codeSnippets: z.array(CodeSnippetSchema).optional(),
+
+    // Section 5: Results deep dive
+    metrics: z.array(z.object({
+        value: z.string(),
+        label: z.string(),
+        context: z.string().optional(),
+    })).optional(),
+
+    // Section 6: Learnings and takeaways (can be strings or structured objects)
+    learnings: z.array(LearningSchema).optional(),
+
+    // Section 7: Future improvements (optional)
+    futureWork: z.array(z.string()).optional(),
+});
+
+// ============================================================================
 // PROJECT SCHEMA
 // ============================================================================
 export const ProjectSchema = z.object({
@@ -21,7 +76,13 @@ export const ProjectSchema = z.object({
     links: z.record(z.string(), z.string()).nullable().transform(v => v || undefined).optional(),
     // Architecture diagram data could be complex, keeping it optional/any for now or defining strict schema later
     architecture: z.any().optional(),
+    // Progressive disclosure content for technical deep dives
+    deepDive: DeepDiveSchema.optional(),
 });
+
+export type DeepDive = z.infer<typeof DeepDiveSchema>;
+export type CodeSnippet = z.infer<typeof CodeSnippetSchema>;
+export type Learning = z.infer<typeof LearningSchema>;
 
 export type Project = z.infer<typeof ProjectSchema>;
 

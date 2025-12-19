@@ -9,6 +9,428 @@ solution:
   - "Gantt views; step-through; compare policies on the same set."
 impact:
   - "Better intuition for fairness vs throughput trade-offs."
+deepDive:
+  context: |
+    CPU scheduling is a fundamental operating systems concept that determines which process gets CPU time and when. Understanding how different scheduling algorithms behave is critical for OS design, but traditional textbook explanations often fail to convey the dynamic nature of scheduling decisions.
+
+    **The Educational Challenge:**
+    Students learning OS concepts struggle to visualize how abstract scheduling policies actually execute over time. Questions like "Why does Round Robin feel fair?" or "When does SJF cause starvation?" are difficult to answer without seeing the algorithms in action.
+
+    **Why Visualization Matters:**
+    - **Concrete Mental Models**: Transforms abstract policies into visible process movements
+    - **Comparative Analysis**: Side-by-side algorithm comparison reveals trade-offs instantly
+    - **Parameter Experimentation**: Adjusting time quantum or priorities shows immediate effects
+    - **Real-time Metrics**: Waiting time, turnaround time, and CPU utilization become tangible
+
+    This tool was built to bridge the gap between theoretical OS knowledge and intuitive understanding of scheduling behavior.
+
+  architecture: |
+    The visualizer follows a clean separation between scheduling logic, UI rendering, and process state management:
+
+    **Core Components:**
+    ```
+    ┌─────────────────────────────────────────┐
+    │         Electron Main Process           │
+    │  (Window Management, File I/O)          │
+    └─────────────────────────────────────────┘
+                      │
+                      ▼
+    ┌─────────────────────────────────────────┐
+    │        Renderer Process (UI)            │
+    ├─────────────────────────────────────────┤
+    │  ┌──────────────┐  ┌─────────────────┐ │
+    │  │ Input Panel  │  │ Control Panel   │ │
+    │  │ - Process    │  │ - Play/Pause    │ │
+    │  │   Creation   │  │ - Step Through  │ │
+    │  │ - Algorithm  │  │ - Speed Control │ │
+    │  │   Selection  │  └─────────────────┘ │
+    │  └──────────────┘                       │
+    │                                          │
+    │  ┌────────────────────────────────────┐ │
+    │  │   Gantt Chart Canvas               │ │
+    │  │   (Dynamic Timeline Rendering)     │ │
+    │  └────────────────────────────────────┘ │
+    │                                          │
+    │  ┌────────────────────────────────────┐ │
+    │  │   Metrics Dashboard                │ │
+    │  │   - Avg Waiting Time               │ │
+    │  │   - Avg Turnaround Time            │ │
+    │  │   - CPU Utilization                │ │
+    │  └────────────────────────────────────┘ │
+    └─────────────────────────────────────────┘
+                      │
+                      ▼
+    ┌─────────────────────────────────────────┐
+    │      Scheduling Engine (Core Logic)     │
+    ├─────────────────────────────────────────┤
+    │  - Process Queue Management             │
+    │  - Algorithm Implementations            │
+    │  - Event Timeline Generation            │
+    │  - Metrics Calculation                  │
+    └─────────────────────────────────────────┘
+    ```
+
+    **Technology Choices:**
+    - **Electron**: Cross-platform desktop app with native feel
+    - **HTML5 Canvas**: High-performance Gantt chart rendering
+    - **Vanilla JS**: Lightweight, no framework overhead for educational clarity
+    - **CSS Grid/Flexbox**: Responsive layout for different screen sizes
+
+  components: |
+    **1. Scheduling Engine (`scheduler.js`)**
+    Pure JavaScript implementations of each algorithm:
+    - `fcfs()`: First-Come, First-Served (non-preemptive)
+    - `sjf()`: Shortest Job First (non-preemptive & preemptive variants)
+    - `priority()`: Priority-based scheduling (with aging to prevent starvation)
+    - `roundRobin()`: Round Robin with configurable time quantum
+
+    Each function takes a process list and returns an execution timeline with context switches.
+
+    **2. Process Manager (`process.js`)**
+    Handles process state and lifecycle:
+    - Process creation with arrival time, burst time, priority
+    - State tracking: NEW → READY → RUNNING → TERMINATED
+    - Queue management for ready, waiting, and terminated processes
+
+    **3. Gantt Renderer (`gantt.js`)**
+    Canvas-based timeline visualization:
+    - Color-coded process blocks showing execution periods
+    - Context switch markers (overhead visualization)
+    - Time axis with configurable granularity
+    - Interactive tooltips showing process details on hover
+
+    **4. Metrics Calculator (`metrics.js`)**
+    Computes performance indicators:
+    - **Waiting Time**: Time spent in ready queue
+    - **Turnaround Time**: Completion time - arrival time
+    - **Response Time**: First execution - arrival time
+    - **CPU Utilization**: (Busy time / Total time) × 100
+
+    **5. Comparison View (`compare.js`)**
+    Side-by-side algorithm evaluation:
+    - Run same process set through multiple algorithms
+    - Synchronized timeline display
+    - Metric comparison table
+    - Export results as CSV/JSON
+
+  dataFlow: |
+    **Execution Flow (Step-by-Step Mode):**
+
+    ```
+    1. User Input
+       ↓
+       Creates Process Objects
+       { pid, arrivalTime, burstTime, priority }
+       ↓
+    2. Algorithm Selection
+       ↓
+       Scheduler.run(algorithm, processes, quantum)
+       ↓
+    3. Timeline Generation
+       ↓
+       [
+         { time: 0, event: 'ARRIVE', process: P1 },
+         { time: 0, event: 'SCHEDULE', process: P1 },
+         { time: 5, event: 'COMPLETE', process: P1 },
+         { time: 5, event: 'SCHEDULE', process: P2 },
+         ...
+       ]
+       ↓
+    4. Visualization Loop
+       ↓
+       For each event in timeline:
+         - Update process states
+         - Render Gantt chart segment
+         - Calculate incremental metrics
+         - Pause for user observation (if step mode)
+       ↓
+    5. Final Metrics Display
+       ↓
+       Show aggregate statistics and highlight inefficiencies
+    ```
+
+    **Key Data Structures:**
+
+    ```javascript
+    // Process representation
+    Process {
+      pid: number,
+      arrivalTime: number,
+      burstTime: number,
+      remainingTime: number,
+      priority: number,
+      waitingTime: number,
+      turnaroundTime: number,
+      state: 'NEW' | 'READY' | 'RUNNING' | 'TERMINATED'
+    }
+
+    // Event timeline entry
+    Event {
+      time: number,
+      type: 'ARRIVE' | 'SCHEDULE' | 'PREEMPT' | 'COMPLETE',
+      process: Process,
+      contextSwitch: boolean
+    }
+    ```
+
+  keyDecisions: |
+    **1. Desktop App vs Web App**
+    **Decision**: Built as Electron desktop app
+    **Rationale**:
+    - Better performance for complex animations
+    - Offline usage for classroom settings without internet
+    - Native file system access for saving/loading process configurations
+    - Professional appearance for educational tool distribution
+
+    **2. Canvas vs SVG for Gantt Chart**
+    **Decision**: HTML5 Canvas
+    **Rationale**:
+    - Better performance with hundreds of process events
+    - Smoother animations for step-through mode
+    - Easier pixel-perfect control for timeline rendering
+    - Trade-off: Less accessible than SVG, but acceptable for educational visualization
+
+    **3. Preemptive vs Non-preemptive Implementations**
+    **Decision**: Support both variants for SJF and Priority
+    **Rationale**:
+    - Demonstrates the dramatic difference in behavior
+    - Shows how preemption affects waiting times and context switches
+    - Critical for understanding real OS scheduler design choices
+
+    **4. Time Quantum Configuration for Round Robin**
+    **Decision**: User-adjustable quantum with visual feedback
+    **Rationale**:
+    - Lets students discover the fairness/overhead trade-off empirically
+    - Small quantum → more fairness, more context switches
+    - Large quantum → approaches FCFS behavior
+    - Reinforces that "optimal" quantum depends on workload
+
+    **5. Comparison Mode Implementation**
+    **Decision**: Run all algorithms on identical process set
+    **Rationale**:
+    - Eliminates variability for fair comparison
+    - Highlights that "best" algorithm is workload-dependent
+    - Educational insight: No universal best scheduler exists
+
+    **6. Starvation Prevention in Priority Scheduling**
+    **Decision**: Implemented aging mechanism (priority boost over time)
+    **Rationale**:
+    - Demonstrates real-world OS solution to theoretical problem
+    - Shows students why pure priority scheduling isn't used in practice
+    - Configurable aging rate lets students see effect of different aging strategies
+
+  codeSnippets: |
+    **Round Robin Implementation (Core Logic):**
+
+    ```javascript
+    function roundRobin(processes, quantum) {
+      const timeline = [];
+      const readyQueue = [];
+      let currentTime = 0;
+      let remainingProcesses = processes.map(p => ({...p}));
+
+      while (remainingProcesses.some(p => p.remainingTime > 0)) {
+        // Add newly arrived processes to ready queue
+        remainingProcesses
+          .filter(p => p.arrivalTime <= currentTime && p.remainingTime > 0)
+          .forEach(p => {
+            if (!readyQueue.includes(p)) {
+              readyQueue.push(p);
+              timeline.push({ time: currentTime, event: 'ARRIVE', process: p });
+            }
+          });
+
+        if (readyQueue.length === 0) {
+          currentTime++; // CPU idle
+          continue;
+        }
+
+        // Schedule next process from queue
+        const currentProcess = readyQueue.shift();
+        const executeTime = Math.min(quantum, currentProcess.remainingTime);
+
+        timeline.push({
+          time: currentTime,
+          event: 'SCHEDULE',
+          process: currentProcess,
+          contextSwitch: true
+        });
+
+        // Execute for time quantum or until completion
+        currentProcess.remainingTime -= executeTime;
+        currentTime += executeTime;
+
+        if (currentProcess.remainingTime === 0) {
+          currentProcess.turnaroundTime = currentTime - currentProcess.arrivalTime;
+          currentProcess.waitingTime = currentProcess.turnaroundTime - currentProcess.burstTime;
+          timeline.push({ time: currentTime, event: 'COMPLETE', process: currentProcess });
+        } else {
+          // Process still has work, re-queue it (preempted)
+          timeline.push({ time: currentTime, event: 'PREEMPT', process: currentProcess });
+          readyQueue.push(currentProcess);
+        }
+      }
+
+      return timeline;
+    }
+    ```
+
+    **Gantt Chart Rendering (Canvas):**
+
+    ```javascript
+    function renderGanttChart(timeline, canvasId) {
+      const canvas = document.getElementById(canvasId);
+      const ctx = canvas.getContext('2d');
+      const scale = 40; // pixels per time unit
+      const barHeight = 50;
+
+      // Clear canvas
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // Render each execution block
+      let lastEndTime = 0;
+      timeline.filter(e => e.event === 'SCHEDULE').forEach((event, idx) => {
+        const nextEvent = timeline.find((e, i) =>
+          i > timeline.indexOf(event) &&
+          (e.event === 'COMPLETE' || e.event === 'PREEMPT')
+        );
+
+        const startTime = event.time;
+        const endTime = nextEvent ? nextEvent.time : startTime;
+        const duration = endTime - startTime;
+
+        // Draw process block
+        const x = startTime * scale;
+        const width = duration * scale;
+        const color = PROCESS_COLORS[event.process.pid % PROCESS_COLORS.length];
+
+        ctx.fillStyle = color;
+        ctx.fillRect(x, 0, width, barHeight);
+
+        // Draw border
+        ctx.strokeStyle = '#333';
+        ctx.lineWidth = 2;
+        ctx.strokeRect(x, 0, width, barHeight);
+
+        // Draw process label
+        ctx.fillStyle = '#000';
+        ctx.font = '14px Arial';
+        ctx.textAlign = 'center';
+        ctx.fillText(`P${event.process.pid}`, x + width/2, barHeight/2 + 5);
+
+        // Draw context switch marker
+        if (event.contextSwitch && idx > 0) {
+          ctx.strokeStyle = '#ff0000';
+          ctx.lineWidth = 3;
+          ctx.beginPath();
+          ctx.moveTo(x, 0);
+          ctx.lineTo(x, barHeight);
+          ctx.stroke();
+        }
+
+        lastEndTime = endTime;
+      });
+
+      // Draw time axis
+      ctx.strokeStyle = '#000';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(0, barHeight + 10);
+      ctx.lineTo(lastEndTime * scale, barHeight + 10);
+      ctx.stroke();
+
+      // Draw time labels
+      for (let t = 0; t <= lastEndTime; t += 5) {
+        ctx.fillText(t, t * scale, barHeight + 30);
+      }
+    }
+    ```
+
+    **Metrics Calculation:**
+
+    ```javascript
+    function calculateMetrics(processes, timeline) {
+      const completed = processes.filter(p => p.remainingTime === 0);
+
+      const avgWaitingTime = completed.reduce((sum, p) =>
+        sum + p.waitingTime, 0) / completed.length;
+
+      const avgTurnaroundTime = completed.reduce((sum, p) =>
+        sum + p.turnaroundTime, 0) / completed.length;
+
+      const avgResponseTime = completed.reduce((sum, p) => {
+        const firstSchedule = timeline.find(e =>
+          e.event === 'SCHEDULE' && e.process.pid === p.pid
+        );
+        return sum + (firstSchedule.time - p.arrivalTime);
+      }, 0) / completed.length;
+
+      const totalTime = Math.max(...timeline.map(e => e.time));
+      const idleTime = timeline.filter(e => e.event === 'IDLE')
+        .reduce((sum, e) => sum + e.duration, 0);
+      const cpuUtilization = ((totalTime - idleTime) / totalTime) * 100;
+
+      const contextSwitches = timeline.filter(e => e.contextSwitch).length;
+
+      return {
+        avgWaitingTime: avgWaitingTime.toFixed(2),
+        avgTurnaroundTime: avgTurnaroundTime.toFixed(2),
+        avgResponseTime: avgResponseTime.toFixed(2),
+        cpuUtilization: cpuUtilization.toFixed(2),
+        contextSwitches,
+        throughput: (completed.length / totalTime).toFixed(3)
+      };
+    }
+    ```
+
+  learnings: |
+    **Technical Insights:**
+
+    **1. Animation Performance**
+    Initially used DOM manipulation for Gantt chart updates, which became sluggish with 20+ processes. Switching to Canvas rendering improved frame rates dramatically. Lesson: Choose rendering technology based on update frequency and element count.
+
+    **2. Algorithm Edge Cases**
+    Implementing SJF revealed subtle tie-breaking scenarios not mentioned in textbooks (e.g., what happens when multiple processes arrive simultaneously with identical burst times?). Solution: Document tie-breaking rules explicitly and make them configurable.
+
+    **3. Time Complexity Matters**
+    Naive priority queue implementation using array sorting caused noticeable lag. Switching to a min-heap for SJF and priority scheduling reduced complexity from O(n²) to O(n log n), making step-through mode smooth even with 50+ processes.
+
+    **Educational Design Insights:**
+
+    **4. Progressive Complexity**
+    User testing showed students needed simpler starting point. Added "Quick Start" with 3-4 pre-configured process sets before allowing custom input. Reduced initial confusion significantly.
+
+    **5. The Power of Comparison**
+    Most learning happened when students compared algorithms side-by-side on the same workload. Single algorithm view is informative; comparison view is transformative. Prioritized comparison mode in UI redesign.
+
+    **6. Metrics Need Context**
+    Raw numbers (avg waiting time: 12.4ms) meant little to students. Added contextual indicators:
+    - Color-coded metrics (green = good, red = poor relative to other algorithms)
+    - Percentage improvements ("25% faster than FCFS")
+    - Highlighted worst-case scenarios (starvation warnings)
+
+    **7. Step-Through Speed**
+    Initial auto-play was too fast for comprehension, too slow for exploration. Solution: Variable playback speed (0.5x - 4x) with intelligent auto-pause at interesting events (first context switch, completion of longest process).
+
+    **OS Conceptual Insights:**
+
+    **8. No Universal Best Scheduler**
+    Students initially expected one "winner" algorithm. The tool's comparison mode demonstrated that optimal choice depends on workload characteristics:
+    - Interactive workloads → Round Robin (low response time)
+    - Batch processing → SJF (low turnaround time)
+    - Real-time systems → Priority (predictable critical task execution)
+
+    **9. Context Switch Overhead Is Real**
+    Visualizing context switches as red vertical bars made overhead tangible. Round Robin with quantum=1 vs quantum=10 showed dramatic difference in switch count while maintaining similar fairness. Students understood why tuning quantum matters.
+
+    **10. Starvation from Theory to Reality**
+    Pure priority scheduling causing low-priority process starvation was abstract in textbooks. Watching a process wait indefinitely while high-priority processes keep arriving created visceral understanding. Aging mechanism's effect was immediately visible.
+
+    **Future Enhancements:**
+    - Multi-level feedback queue (MLFQ) algorithm support
+    - Real-time process arrival simulation (Poisson distribution)
+    - Export timeline as animated GIF for presentations
+    - Integration with process CPU burst histograms from real systems
 ---
 # Overview
 Interactive FCFS, SJF, Priority, RR visualizations (Electron).

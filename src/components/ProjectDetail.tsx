@@ -1,10 +1,22 @@
 "use client";
 
-import type { Project } from "@/lib/definitions";
+import type { Project, DeepDive, CodeSnippet, Learning } from "@/lib/definitions";
 import type { ArchitectureData, ArchitectureNode, ProjectMedia, Metric } from "@/data/types";
 import { UI_COPY } from "@/data/profile";
 import { motion } from "framer-motion";
-import { ExternalLink, Code2, ArrowLeft, Activity, Network, AlertTriangle, Smartphone } from "lucide-react";
+import {
+  ExternalLink,
+  Code2,
+  ArrowLeft,
+  Activity,
+  Network,
+  AlertTriangle,
+  Smartphone,
+  Lightbulb,
+  GitBranch,
+  Target,
+  BookOpen
+} from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import dynamic from "next/dynamic";
@@ -16,6 +28,26 @@ const ArchitectureVisualizer = dynamic(
   () => import("./ArchitectureVisualizer").then((mod) => mod.ArchitectureVisualizer),
   { ssr: false }
 );
+
+// Code block component for technical deep dives
+function CodeBlock({ snippet }: { snippet: CodeSnippet }) {
+  return (
+    <div className="rounded-lg overflow-hidden border border-[var(--color-border)] bg-[#0d1117]">
+      <div className="px-4 py-2 bg-[var(--color-bg-tertiary)] border-b border-[var(--color-border)] flex items-center justify-between">
+        <span className="text-xs text-[var(--color-text-muted)] font-mono">{snippet.title}</span>
+        <span className="text-xs text-[var(--color-text-muted)] font-mono opacity-60">{snippet.language}</span>
+      </div>
+      <pre className="p-4 overflow-x-auto text-sm">
+        <code className="text-[#e6edf3] font-mono whitespace-pre">{snippet.code}</code>
+      </pre>
+      {snippet.explanation && (
+        <div className="px-4 py-3 bg-[var(--color-bg-secondary)] border-t border-[var(--color-border)]">
+          <p className="text-sm text-[var(--color-text-secondary)]">{snippet.explanation}</p>
+        </div>
+      )}
+    </div>
+  );
+}
 
 export function ProjectDetail({ project }: { project: Project }) {
   type ProjectWithExtras = Project & {
@@ -29,16 +61,24 @@ export function ProjectDetail({ project }: { project: Project }) {
   };
 
   const richProject = project as ProjectWithExtras;
+  const deepDive = project.deepDive;
 
-  // Sections derived from the project content existence to be more robust
+  // Build dynamic table of contents based on available content
   const mediaItems = richProject.media;
   const architecture = richProject.architecture;
   const legendItems = architecture?.legend;
   const metrics = richProject.metrics;
+
   const tocSections = [
+    { id: "intro", label: "Overview" },
     { id: "problem", label: "The Problem" },
-    { id: "solution", label: "Solution & Architecture" },
-    { id: "impact", label: "Impact & Results" },
+    { id: "solution", label: "How It Works" },
+    // Technical sections (shown if deepDive content exists)
+    ...(deepDive?.keyDecisions?.length || deepDive?.codeSnippets?.length
+      ? [{ id: "technical", label: "Technical Deep Dive" }]
+      : []),
+    { id: "impact", label: "Results & Impact" },
+    ...(deepDive?.learnings?.length ? [{ id: "learnings", label: "Key Learnings" }] : []),
     ...(mediaItems && mediaItems.length > 0 ? [{ id: "media", label: "Screens & Demos" }] : []),
   ];
 
@@ -48,14 +88,37 @@ export function ProjectDetail({ project }: { project: Project }) {
         <Header project={project} />
 
         <div className="grid lg:grid-cols-[1fr,3fr] gap-12 items-start">
-          <aside className="hidden lg:block">
+          <aside className="hidden lg:block sticky top-32">
             <TableOfContents sections={tocSections} />
           </aside>
 
-          <div className="space-y-16">
-            {/* Problem & Challenge */}
-            <section id="problem" className="scroll-mt-32 space-y-8">
-              <div className="space-y-4">
+          <div className="space-y-20">
+            {/* Section 1: Overview (Intro - Everyone reads this) */}
+            <section id="intro" className="scroll-mt-32">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1 }}
+                className="space-y-6"
+              >
+                <h2 className="text-2xl font-bold text-[var(--color-text-primary)] flex items-center gap-3">
+                  <BookOpen className="w-6 h-6 text-[var(--color-accent-primary)]" />
+                  Overview
+                </h2>
+                <p className="text-lg text-[var(--color-text-secondary)] leading-relaxed max-w-3xl">
+                  {project.summary}
+                </p>
+              </motion.div>
+            </section>
+
+            {/* Section 2: The Problem (Context - Most people read this) */}
+            <section id="problem" className="scroll-mt-32">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-100px" }}
+                className="space-y-6"
+              >
                 <h2 className="text-2xl font-bold text-[var(--color-text-primary)] flex items-center gap-3">
                   <AlertTriangle className="w-6 h-6 text-[var(--color-accent-primary)]" />
                   The Problem
@@ -63,85 +126,283 @@ export function ProjectDetail({ project }: { project: Project }) {
                 <p className="text-lg text-[var(--color-text-secondary)] leading-relaxed">
                   {project.challenge}
                 </p>
-              </div>
+
+                {/* Extended context for deeper understanding */}
+                {deepDive?.context && (
+                  <div className="mt-6 p-6 rounded-xl bg-[var(--color-bg-secondary)] border border-[var(--color-border)]">
+                    <p className="text-[var(--color-text-secondary)] leading-relaxed">
+                      {deepDive.context}
+                    </p>
+                  </div>
+                )}
+              </motion.div>
             </section>
 
-            {/* Solution & Architecture */}
-            <section id="solution" className="scroll-mt-32 space-y-8">
-              <div className="space-y-4">
+            {/* Section 3: How It Works (Architecture - Technical folks continue) */}
+            <section id="solution" className="scroll-mt-32">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-100px" }}
+                className="space-y-8"
+              >
                 <h2 className="text-2xl font-bold text-[var(--color-text-primary)] flex items-center gap-3">
                   <Network className="w-6 h-6 text-[var(--neon-cyan)]" />
-                  Solution & Architecture
+                  How It Works
                 </h2>
-                <ul className="space-y-3">
+
+                {/* Solution points */}
+                <ul className="space-y-4">
                   {project.solution.map((item, idx) => (
-                    <li key={idx} className="flex gap-3 text-[var(--color-text-secondary)]">
-                      <span className="text-[var(--color-accent-cyan)] mt-1.5">▸</span>
-                      <span>{item}</span>
+                    <li key={idx} className="flex gap-4 text-[var(--color-text-secondary)]">
+                      <span className="flex-shrink-0 w-6 h-6 rounded-full bg-[var(--color-accent-cyan)]/10 text-[var(--color-accent-cyan)] flex items-center justify-center text-sm font-medium">
+                        {idx + 1}
+                      </span>
+                      <span className="leading-relaxed">{item}</span>
                     </li>
                   ))}
                 </ul>
-              </div>
 
-              {architecture?.nodes?.length ? (
-                <ProofBlock title="System Architecture">
-                  {architecture.description && (
-                    <p className="text-sm text-[var(--text-secondary)] mb-4">
-                      {architecture.description}
+                {/* Architecture description from deepDive */}
+                {deepDive?.architecture && (
+                  <div className="mt-8 space-y-4">
+                    <h3 className="text-lg font-semibold text-[var(--color-text-primary)]">Architecture</h3>
+                    <p className="text-[var(--color-text-secondary)] leading-relaxed">
+                      {deepDive.architecture}
                     </p>
-                  )}
-                  <ArchitectureVisualizer data={architecture} />
-                  {legendItems && (
-                    <div className="flex flex-wrap gap-2 mt-4">
-                      {legendItems.map((item: { label: string; type: ArchitectureNode["type"] }) => (
-                        <span key={item.label} className="chip">
-                          <span
-                            className="w-2 h-2 rounded-full"
-                            style={{ backgroundColor: architectureColors[item.type as keyof typeof architectureColors] ?? "var(--neon-cyan)" }}
-                          />
-                          {item.label}
-                        </span>
-                      ))}
-                    </div>
-                  )}
-                </ProofBlock>
-              ) : null}
+                  </div>
+                )}
+
+                {/* Components list */}
+                {deepDive?.components && deepDive.components.length > 0 && (
+                  <div className="grid sm:grid-cols-2 gap-3 mt-6">
+                    {deepDive.components.map((component, idx) => (
+                      <div
+                        key={idx}
+                        className="p-4 rounded-lg bg-[var(--color-bg-secondary)] border border-[var(--color-border)]"
+                      >
+                        <p className="text-sm text-[var(--color-text-secondary)]">{component}</p>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {/* Data flow */}
+                {deepDive?.dataFlow && (
+                  <div className="mt-8 p-6 rounded-xl bg-gradient-to-r from-[var(--color-bg-secondary)] to-transparent border border-[var(--color-border)]">
+                    <h3 className="text-lg font-semibold text-[var(--color-text-primary)] mb-3 flex items-center gap-2">
+                      <GitBranch className="w-5 h-5 text-[var(--color-accent-cyan)]" />
+                      Data Flow
+                    </h3>
+                    <p className="text-[var(--color-text-secondary)] leading-relaxed">
+                      {deepDive.dataFlow}
+                    </p>
+                  </div>
+                )}
+
+                {/* Visual architecture diagram */}
+                {architecture?.nodes?.length ? (
+                  <ProofBlock title="System Architecture">
+                    {architecture.description && (
+                      <p className="text-sm text-[var(--text-secondary)] mb-4">
+                        {architecture.description}
+                      </p>
+                    )}
+                    <ArchitectureVisualizer data={architecture} />
+                    {legendItems && (
+                      <div className="flex flex-wrap gap-2 mt-4">
+                        {legendItems.map((item: { label: string; type: ArchitectureNode["type"] }) => (
+                          <span key={item.label} className="chip">
+                            <span
+                              className="w-2 h-2 rounded-full"
+                              style={{ backgroundColor: architectureColors[item.type as keyof typeof architectureColors] ?? "var(--neon-cyan)" }}
+                            />
+                            {item.label}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                  </ProofBlock>
+                ) : null}
+              </motion.div>
             </section>
 
-            {/* Impact */}
-            <section id="impact" className="scroll-mt-32 space-y-8">
-              <div className="space-y-4">
+            {/* Section 4: Technical Deep Dive (Engineers dig in) */}
+            {(deepDive?.keyDecisions?.length || deepDive?.codeSnippets?.length) && (
+              <section id="technical" className="scroll-mt-32">
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-100px" }}
+                  className="space-y-10"
+                >
+                  <h2 className="text-2xl font-bold text-[var(--color-text-primary)] flex items-center gap-3">
+                    <Code2 className="w-6 h-6 text-[var(--color-accent-purple)]" />
+                    Technical Deep Dive
+                  </h2>
+
+                  {/* Key Decisions */}
+                  {deepDive?.keyDecisions && deepDive.keyDecisions.length > 0 && (
+                    <div className="space-y-6">
+                      <h3 className="text-lg font-semibold text-[var(--color-text-primary)]">Key Decisions & Trade-offs</h3>
+                      <div className="space-y-4">
+                        {deepDive.keyDecisions.map((item, idx) => (
+                          <div
+                            key={idx}
+                            className="p-5 rounded-xl bg-[var(--color-bg-secondary)] border border-[var(--color-border)] space-y-3"
+                          >
+                            <h4 className="font-semibold text-[var(--color-text-primary)]">
+                              {item.decision}
+                            </h4>
+                            <p className="text-sm text-[var(--color-text-secondary)] leading-relaxed">
+                              {item.reasoning}
+                            </p>
+                            {item.alternatives && (
+                              <p className="text-xs text-[var(--color-text-muted)] italic">
+                                Alternatives considered: {item.alternatives}
+                              </p>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Code Snippets */}
+                  {deepDive?.codeSnippets && deepDive.codeSnippets.length > 0 && (
+                    <div className="space-y-6">
+                      <h3 className="text-lg font-semibold text-[var(--color-text-primary)]">Code Highlights</h3>
+                      <div className="space-y-6">
+                        {deepDive.codeSnippets.map((snippet, idx) => (
+                          <CodeBlock key={idx} snippet={snippet} />
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </motion.div>
+              </section>
+            )}
+
+            {/* Section 5: Results & Impact */}
+            <section id="impact" className="scroll-mt-32">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-100px" }}
+                className="space-y-8"
+              >
                 <h2 className="text-2xl font-bold text-[var(--color-text-primary)] flex items-center gap-3">
                   <Activity className="w-6 h-6 text-[var(--color-accent-purple)]" />
-                  Impact & Results
+                  Results & Impact
                 </h2>
+
+                {/* Impact cards */}
                 <div className="grid sm:grid-cols-2 gap-4">
                   {project.impact.map((item, idx) => (
                     <ProofBlock key={idx} className="h-full">
                       <div className="flex gap-3 h-full">
-                        <span className="text-[var(--color-accent-purple)] mt-1">◦</span>
+                        <Target className="w-5 h-5 text-[var(--color-accent-purple)] flex-shrink-0 mt-0.5" />
                         <span className="text-[var(--color-text-secondary)]">{item}</span>
                       </div>
                     </ProofBlock>
                   ))}
                 </div>
-              </div>
 
-              {metrics && metrics.length > 0 && (
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                  {metrics.map((metric, i) => (
-                    <div key={i} className="glass p-4 rounded-xl border border-[var(--color-border)] text-center">
-                      <div className="text-2xl md:text-3xl font-bold text-[var(--color-text-primary)] mb-1">
-                        {metric.value}
+                {/* Deep dive metrics with context */}
+                {deepDive?.metrics && deepDive.metrics.length > 0 && (
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8">
+                    {deepDive.metrics.map((metric, i) => (
+                      <div key={i} className="glass p-4 rounded-xl border border-[var(--color-border)] text-center">
+                        <div className="text-2xl md:text-3xl font-bold text-[var(--color-text-primary)] mb-1">
+                          {metric.value}
+                        </div>
+                        <div className="text-xs text-[var(--color-text-muted)] uppercase tracking-wider">
+                          {metric.label}
+                        </div>
+                        {metric.context && (
+                          <div className="text-xs text-[var(--color-text-muted)] mt-2 opacity-75">
+                            {metric.context}
+                          </div>
+                        )}
                       </div>
-                      <div className="text-xs text-[var(--color-text-muted)] uppercase tracking-wider">
-                        {metric.label}
+                    ))}
+                  </div>
+                )}
+
+                {/* Fallback to old metrics format */}
+                {!deepDive?.metrics && metrics && metrics.length > 0 && (
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    {metrics.map((metric, i) => (
+                      <div key={i} className="glass p-4 rounded-xl border border-[var(--color-border)] text-center">
+                        <div className="text-2xl md:text-3xl font-bold text-[var(--color-text-primary)] mb-1">
+                          {metric.value}
+                        </div>
+                        <div className="text-xs text-[var(--color-text-muted)] uppercase tracking-wider">
+                          {metric.label}
+                        </div>
                       </div>
-                    </div>
-                  ))}
-                </div>
-              )}
+                    ))}
+                  </div>
+                )}
+              </motion.div>
             </section>
+
+            {/* Section 6: Key Learnings */}
+            {deepDive?.learnings && deepDive.learnings.length > 0 && (
+              <section id="learnings" className="scroll-mt-32">
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-100px" }}
+                  className="space-y-6"
+                >
+                  <h2 className="text-2xl font-bold text-[var(--color-text-primary)] flex items-center gap-3">
+                    <Lightbulb className="w-6 h-6 text-yellow-500" />
+                    Key Learnings
+                  </h2>
+                  <div className="space-y-4">
+                    {deepDive.learnings.map((learning, idx) => {
+                      const isStructured = typeof learning === 'object';
+                      return (
+                        <div
+                          key={idx}
+                          className="flex gap-4 p-4 rounded-lg bg-[var(--color-bg-secondary)] border border-[var(--color-border)]"
+                        >
+                          <span className="text-yellow-500 text-lg flex-shrink-0">→</span>
+                          {isStructured ? (
+                            <div className="space-y-2">
+                              <h4 className="font-semibold text-[var(--color-text-primary)]">
+                                {(learning as { insight: string; description: string }).insight}
+                              </h4>
+                              <p className="text-[var(--color-text-secondary)] leading-relaxed text-sm">
+                                {(learning as { insight: string; description: string }).description}
+                              </p>
+                            </div>
+                          ) : (
+                            <p className="text-[var(--color-text-secondary)] leading-relaxed">{learning as string}</p>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+
+                  {/* Future work */}
+                  {deepDive.futureWork && deepDive.futureWork.length > 0 && (
+                    <div className="mt-8 p-6 rounded-xl bg-gradient-to-r from-[var(--color-bg-secondary)] to-transparent border border-[var(--color-border)] border-dashed">
+                      <h3 className="text-lg font-semibold text-[var(--color-text-primary)] mb-4">Future Improvements</h3>
+                      <ul className="space-y-2">
+                        {deepDive.futureWork.map((item, idx) => (
+                          <li key={idx} className="flex gap-2 text-sm text-[var(--color-text-muted)]">
+                            <span>○</span>
+                            <span>{item}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                </motion.div>
+              </section>
+            )}
 
             {/* Media */}
             {mediaItems && mediaItems.length > 0 && (
@@ -195,7 +456,7 @@ function Header({ project }: { project: Project }) {
     >
       <div className="space-y-4">
         <Link
-          href="/#projects"
+          href="/projects"
           className="inline-flex items-center gap-2 text-sm text-[var(--color-text-secondary)] hover:text-[var(--color-accent-primary)] transition-colors mb-4"
         >
           <ArrowLeft className="w-4 h-4" />
@@ -240,43 +501,52 @@ function Header({ project }: { project: Project }) {
           ))}
         </div>
 
-        {project.links && (project.links.code || project.links.demo || project.links.paper) && (
-          <div className="flex gap-3">
-            {project.links.demo && (
-              <a
-                href={project.links.demo}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[var(--color-accent-primary)] text-[var(--color-bg-primary)] font-semibold hover:bg-[var(--color-accent-secondary)] transition-colors"
-              >
-                <ExternalLink className="w-4 h-4" />
-                {UI_COPY.project.demo}
-              </a>
-            )}
-            {project.links.code && (
-              <a
-                href={project.links.code}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[var(--color-bg-tertiary)] border border-[var(--color-border)] hover:border-[var(--color-accent-primary)] text-[var(--color-text-primary)] transition-colors"
-              >
-                <Code2 className="w-4 h-4" />
-                {UI_COPY.project.code}
-              </a>
-            )}
-            {project.links.paper && (
-              <a
-                href={project.links.paper}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[var(--color-bg-tertiary)] border border-[var(--color-border)] hover:border-[var(--color-accent-primary)] text-[var(--color-text-primary)] transition-colors"
-              >
-                <ExternalLink className="w-4 h-4" />
-                {UI_COPY.project.paper}
-              </a>
-            )}
-          </div>
-        )}
+        <div className="flex gap-3">
+          {project.github && (
+            <a
+              href={project.github}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[var(--color-bg-tertiary)] border border-[var(--color-border)] hover:border-[var(--color-accent-primary)] text-[var(--color-text-primary)] transition-colors"
+            >
+              <Code2 className="w-4 h-4" />
+              {UI_COPY.project.code}
+            </a>
+          )}
+          {project.links?.demo && (
+            <a
+              href={project.links.demo}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[var(--color-accent-primary)] text-[var(--color-bg-primary)] font-semibold hover:bg-[var(--color-accent-secondary)] transition-colors"
+            >
+              <ExternalLink className="w-4 h-4" />
+              {UI_COPY.project.demo}
+            </a>
+          )}
+          {project.links?.code && !project.github && (
+            <a
+              href={project.links.code}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[var(--color-bg-tertiary)] border border-[var(--color-border)] hover:border-[var(--color-accent-primary)] text-[var(--color-text-primary)] transition-colors"
+            >
+              <Code2 className="w-4 h-4" />
+              {UI_COPY.project.code}
+            </a>
+          )}
+          {project.links?.paper && (
+            <a
+              href={project.links.paper}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[var(--color-bg-tertiary)] border border-[var(--color-border)] hover:border-[var(--color-accent-primary)] text-[var(--color-text-primary)] transition-colors"
+            >
+              <ExternalLink className="w-4 h-4" />
+              {UI_COPY.project.paper}
+            </a>
+          )}
+        </div>
       </div>
     </motion.header>
   );

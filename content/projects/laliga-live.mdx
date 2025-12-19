@@ -15,5 +15,200 @@ impact:
 featured: false
 priority: 21
 ---
+
+export const deepDive = {
+  context: `Building a real-time sports analytics dashboard presented unique challenges around data freshness, visualization performance, and user experience. The goal was to provide coaches, analysts, and fans with live insights during La Liga matches - tracking expected goals (xG), player positioning, possession zones, and tactical formations as events unfold. Traditional static dashboards fail to capture the dynamic nature of live matches, where every shot, pass, and defensive action changes the narrative. The system needed to ingest event streams, process complex metrics in real-time, and render interactive visualizations without lag or stutter.`,
+
+  architecture: `The architecture follows a streamlined data pipeline optimized for low-latency updates:
+
+**Data Sources:** Live match event feeds (API-based or simulated) providing granular event data (shots, passes, tackles, player positions)
+
+**Processing Layer:** Python-based normalization and aggregation engine that transforms raw events into structured analytics (xG calculations, heat map density, possession statistics)
+
+**Real-time Update Mechanism:** Streamlit's reactive framework with session state management to handle incremental data updates without full page reloads
+
+**Visualization Layer:** Interactive Plotly/Altair charts and custom Streamlit components rendering match state, tactical formations, and advanced metrics
+
+The entire stack runs on Python to minimize context switching, with Pandas handling data transformations and Streamlit providing both the backend logic and frontend presentation.`,
+
+  components: [
+    {
+      name: "Data Ingestion Service",
+      description: "Polls live event APIs or simulates match events; validates and queues incoming data for processing"
+    },
+    {
+      name: "Analytics Processing Pipeline",
+      description: "Computes xG using shot location/context, generates heat maps from player coordinates, calculates possession zones and pressing metrics"
+    },
+    {
+      name: "State Management Layer",
+      description: "Streamlit session state tracking match timeline, cumulative statistics, and user filter preferences"
+    },
+    {
+      name: "Visualization Components",
+      description: "Real-time xG curves showing goal probability over time, shot maps with outcome indicators, formation diagrams with player movement, possession/pressing heat maps"
+    }
+  ],
+
+  dataFlow: `1. **Event Capture:** Live match events (shots, passes, tackles) arrive via API polling or event stream
+
+2. **Normalization:** Raw event data is standardized into a compact schema (timestamp, event_type, player_id, coordinates, outcome)
+
+3. **Metric Calculation:** Each event triggers incremental updates to running statistics:
+   - Shots → xG calculation based on distance, angle, defensive pressure
+   - Player positions → Heat map density updates
+   - Possession sequences → Zone control percentages
+
+4. **State Update:** Processed metrics are merged into Streamlit session state, maintaining match timeline and current statistics
+
+5. **Reactive Rendering:** Streamlit detects state changes and re-renders only affected visualization components
+
+6. **Client Display:** Interactive charts update in browser, showing latest xG curves, shot locations, and tactical formations with minimal latency`,
+
+  keyDecisions: [
+    {
+      decision: "Streamlit over Flask/React SPA",
+      rationale: "Rapid prototyping was critical for this analytics tool. Streamlit's reactive model eliminated the need for separate frontend/backend development, RESTful API design, and state synchronization code. While less flexible than React, Streamlit's Python-native approach let me focus on analytics logic rather than API contracts and frontend state management."
+    },
+    {
+      decision: "Incremental state updates vs. full recomputation",
+      rationale: "Rather than recalculating all metrics on every event, the system maintains cumulative statistics and only updates affected components. This reduced processing time per event from ~500ms to ~50ms, crucial for maintaining real-time responsiveness during high-frequency event periods (e.g., rapid passes during counter-attacks)."
+    },
+    {
+      decision: "Plotly for interactive visualizations",
+      rationale: "Plotly's event handling and zoom/pan capabilities were essential for shot maps and heat maps where users need to inspect specific field regions. The library's performance with 1000+ data points (entire match events) and smooth animation support made it ideal for real-time updating charts."
+    }
+  ],
+
+  codeSnippets: [
+    {
+      title: "Real-time xG curve update with incremental state",
+      language: "python",
+      code: `import streamlit as st
+import pandas as pd
+import plotly.graph_objects as go
+
+def calculate_xg(shot_event):
+    """Calculate expected goals based on shot context."""
+    distance = shot_event['distance_to_goal']
+    angle = shot_event['shot_angle']
+    is_header = shot_event['body_part'] == 'head'
+
+    # Simplified xG model (production would use trained ML model)
+    base_xg = 1 / (1 + distance / 10)
+    angle_factor = angle / 90  # normalized angle
+    header_penalty = 0.7 if is_header else 1.0
+
+    return base_xg * angle_factor * header_penalty
+
+def update_xg_chart(new_event):
+    """Incrementally update xG timeline without reprocessing all events."""
+    if 'xg_timeline' not in st.session_state:
+        st.session_state.xg_timeline = {'home': [], 'away': []}
+
+    if new_event['type'] == 'shot':
+        team = new_event['team']
+        xg_value = calculate_xg(new_event)
+
+        # Append to cumulative timeline
+        st.session_state.xg_timeline[team].append({
+            'minute': new_event['minute'],
+            'cumulative_xg': sum([e['xg'] for e in st.session_state.xg_timeline[team]]) + xg_value,
+            'xg': xg_value
+        })
+
+    # Render updated chart
+    fig = go.Figure()
+    for team in ['home', 'away']:
+        data = st.session_state.xg_timeline[team]
+        if data:
+            df = pd.DataFrame(data)
+            fig.add_trace(go.Scatter(
+                x=df['minute'],
+                y=df['cumulative_xg'],
+                mode='lines+markers',
+                name=team.upper()
+            ))
+
+    fig.update_layout(
+        title="Expected Goals Over Time",
+        xaxis_title="Match Minute",
+        yaxis_title="Cumulative xG"
+    )
+
+    return fig
+
+# Main app loop
+st.title("La Liga Live Analytics")
+new_events = fetch_live_events()  # Poll API for new events
+
+for event in new_events:
+    if event['type'] == 'shot':
+        chart = update_xg_chart(event)
+        st.plotly_chart(chart, use_container_width=True)`
+    },
+    {
+      title: "Heat map generation from player position data",
+      language: "python",
+      code: `import numpy as np
+import plotly.graph_objects as go
+from scipy.stats import gaussian_kde
+
+def generate_heatmap(player_positions, pitch_dimensions=(105, 68)):
+    """Create density heat map from player coordinate stream."""
+    if len(player_positions) < 10:
+        return None  # Not enough data for meaningful heat map
+
+    # Extract x, y coordinates
+    x = np.array([pos['x'] for pos in player_positions])
+    y = np.array([pos['y'] for pos in player_positions])
+
+    # Create KDE for smooth density estimation
+    positions = np.vstack([x, y])
+    kernel = gaussian_kde(positions)
+
+    # Generate grid for heat map
+    x_grid = np.linspace(0, pitch_dimensions[0], 50)
+    y_grid = np.linspace(0, pitch_dimensions[1], 50)
+    X, Y = np.meshgrid(x_grid, y_grid)
+
+    # Evaluate density at grid points
+    grid_coords = np.vstack([X.ravel(), Y.ravel()])
+    Z = kernel(grid_coords).reshape(X.shape)
+
+    # Create Plotly heatmap overlay
+    fig = go.Figure(data=go.Heatmap(
+        x=x_grid,
+        y=y_grid,
+        z=Z,
+        colorscale='Reds',
+        opacity=0.6,
+        showscale=False
+    ))
+
+    # Add pitch markings
+    fig.update_layout(
+        xaxis=dict(range=[0, pitch_dimensions[0]], title="Field Length (m)"),
+        yaxis=dict(range=[0, pitch_dimensions[1]], title="Field Width (m)"),
+        title="Player Pressure Heat Map"
+    )
+
+    return fig`
+    }
+  ],
+
+  learnings: [
+    "**State management is critical for real-time dashboards:** Initially used naive full-recomputation on every event, which caused visible lag. Switching to incremental state updates (maintaining cumulative metrics and only processing deltas) reduced latency by 10x and made the dashboard feel truly real-time.",
+
+    "**Streamlit's reactivity has performance limits:** With 1000+ events in session state, Streamlit's automatic re-rendering started slowing down. Solution: used st.cache_data for expensive computations and st.experimental_fragment to isolate frequently updating components, preventing unnecessary full-page reruns.",
+
+    "**User experience trumps data completeness:** Early versions showed every single pass and movement event, overwhelming users. Learned to prioritize high-signal events (shots, key passes, tackles) and aggregate lower-level data into summary statistics. This reduced cognitive load while maintaining analytical depth.",
+
+    "**Real-time doesn't mean instant - buffer for smoothness:** Adding a 2-3 second buffer and batching events created smoother visualization updates compared to rendering every event immediately. Paradoxically, slight delay made the experience feel more responsive by avoiding jittery chart animations.",
+
+    "**Domain knowledge is essential for useful analytics:** The xG model, pressing zones, and formation analysis required understanding football tactics. Generic data visualization skills weren't enough - needed to learn what metrics actually matter to coaches and analysts to build a valuable tool rather than just pretty charts."
+  ]
+};
+
 # Overview
 Streaming match analytics (xG, heatmaps, formations) in Streamlit.

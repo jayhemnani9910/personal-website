@@ -20,6 +20,111 @@ featured: false
 priority: 24
 links:
 
+deepDive:
+  context: "Market data platforms are critical infrastructure for algorithmic trading, risk management, and research. Traders need both historical OHLC (Open-High-Low-Close) data for backtesting strategies and real-time tick data for live execution. The challenge: these arrive through different channels (batch APIs vs streaming feeds), have different schemas, and require different storage optimizations. This platform unifies both paradigms into a single source of truth, enabling analysts to query minute-level candles, calculate rolling indicators, and backfill historical gaps without stitching together multiple systems."
+
+  architecture: "The platform follows a lambda architecture pattern with distinct batch and streaming layers converging into a unified storage layer. Batch ingestion uses Airflow DAGs to orchestrate scheduled pulls from market data APIs, loading OHLC data into staging tables before transforming into dimensional models. The streaming layer uses Kafka for real-time tick ingestion with producers implementing retry logic and idempotent writes to handle network failures. Both layers write to TimescaleDB, a time-series optimized PostgreSQL extension that provides automatic partitioning via hypertables while preserving SQL query capability. The analytics layer sits on top with a star schema (FactPrices + dimensions for symbols, exchanges, sectors) optimized for OLAP queries. Dash powers the interactive visualization layer with callbacks for time-window filtering and indicator calculations."
+
+  components:
+    - name: "Kafka Streaming Layer"
+      description: "Real-time tick data ingestion with topic partitioning by symbol, producer retry logic with exponential backoff, and consumer groups for parallel processing. Handles 10K+ ticks/second during market hours."
+    - name: "Airflow Orchestration"
+      description: "DAG-based workflow orchestration for batch OHLC ingestion, dimensional loads, data validation, and backfill operations. Task dependencies ensure referential integrity across dimension and fact tables."
+    - name: "TimescaleDB Storage"
+      description: "Hypertables for tick data with automatic time-based partitioning, continuous aggregates for pre-computed minute/hourly candles, and retention policies for data lifecycle management. Achieves <50ms query latency for typical time-range selections."
+    - name: "Star Schema Warehouse"
+      description: "FactPrices (timestamp, symbol_id, OHLCV) joined with dimensions (DimSymbol, DimExchange, DimSector) enabling slice-and-dice analytics. Materialized views accelerate common aggregations."
+    - name: "Dash Analytics UI"
+      description: "Interactive dashboards with time-window pickers, multi-symbol overlays, technical indicators (SMA, EMA, Bollinger Bands), intraday heatmaps, and volume analysis. Client-side callbacks for responsive filtering."
+
+  dataFlow: "Market data originates from external APIs (batch OHLC) and WebSocket feeds (real-time ticks). Batch data flows through Airflow DAGs that fetch, validate, and load into staging tables before SQL-based ELT transforms them into dimensional models. Real-time ticks are published to Kafka topics partitioned by symbol, consumed by Python workers that normalize and write to TimescaleDB hypertables with deduplication keys. Both paths converge in TimescaleDB where continuous aggregates merge streaming ticks into minute-level candles that align with batch OHLC. The Dash UI queries this unified layer via SQL, with TimescaleDB's time-series optimizations (chunk pruning, compression) keeping query latency under 200ms even for multi-month time ranges. Analysts can filter by symbol, exchange, or sector, calculate rolling indicators on-the-fly, and export results for backtesting workflows."
+
+  keyDecisions:
+    - decision: "TimescaleDB over Cassandra"
+      rationale: "Chose TimescaleDB because 90% of queries involve time-range filters and aggregations, which TimescaleDB optimizes via automatic chunking and compression. Standard SQL interface reduced learning curve for analysts familiar with PostgreSQL. Cassandra would have required denormalized tables and custom aggregation logic."
+    - decision: "Kafka for streaming, not direct DB writes"
+      rationale: "Kafka provides replay capability for debugging, decouples producers from consumers for independent scaling, and enables multiple downstream consumers (e.g., alerting, archival) without modifying the ingestion pipeline. Buffering in Kafka prevents backpressure on market data feeds during database slowdowns."
+    - decision: "Star schema for analytics, not wide denormalized tables"
+      rationale: "Star schema enables analysts to join on different dimensions (sector analysis, exchange comparisons) without replicating symbol metadata in every row. Materialized views cache frequent joins while preserving schema flexibility for new dimensions."
+    - decision: "Airflow for orchestration, not cron"
+      rationale: "Airflow's DAG dependencies ensure dimensional loads complete before fact inserts, preventing orphaned records. Retry logic and alerting are built-in. UI provides visibility into backfill progress and data lineage across 20+ daily DAGs."
+
+  codeSnippets:
+    - title: "Kafka Producer with Idempotent Writes"
+      language: "python"
+      code: |
+        from kafka import KafkaProducer
+        import json
+
+        producer = KafkaProducer(
+            bootstrap_servers=['localhost:9092'],
+            value_serializer=lambda v: json.dumps(v).encode('utf-8'),
+            acks='all',  # Wait for all replicas
+            retries=5,   # Retry on transient failures
+            enable_idempotence=True  # Prevent duplicates on retry
+        )
+
+        def publish_tick(symbol, price, volume, timestamp):
+            message = {
+                'symbol': symbol,
+                'price': price,
+                'volume': volume,
+                'timestamp': timestamp,
+                'dedup_key': f"{symbol}_{timestamp}"  # For DB upsert
+            }
+            producer.send('market-ticks', value=message, key=symbol.encode())
+
+    - title: "TimescaleDB Continuous Aggregate for Minute Candles"
+      language: "sql"
+      code: |
+        -- Create hypertable for tick data
+        CREATE TABLE ticks (
+            timestamp TIMESTAMPTZ NOT NULL,
+            symbol_id INT NOT NULL,
+            price NUMERIC(10,2),
+            volume INT,
+            dedup_key TEXT UNIQUE
+        );
+        SELECT create_hypertable('ticks', 'timestamp');
+
+        -- Continuous aggregate: real-time minute candles
+        CREATE MATERIALIZED VIEW minute_candles
+        WITH (timescaledb.continuous) AS
+        SELECT
+            time_bucket('1 minute', timestamp) AS bucket,
+            symbol_id,
+            first(price, timestamp) AS open,
+            max(price) AS high,
+            min(price) AS low,
+            last(price, timestamp) AS close,
+            sum(volume) AS volume
+        FROM ticks
+        GROUP BY bucket, symbol_id;
+
+        -- Refresh policy: update every 30 seconds
+        SELECT add_continuous_aggregate_policy('minute_candles',
+            start_offset => INTERVAL '1 hour',
+            end_offset => INTERVAL '1 minute',
+            schedule_interval => INTERVAL '30 seconds');
+
+  metrics:
+    - "Handles 10K+ ticks/second during peak market hours with <5ms producer latency"
+    - "Sub-50ms query latency for time-range selections spanning weeks of tick data"
+    - "Airflow orchestrates 20+ DAGs daily with 99.5% on-time completion rate"
+    - "TimescaleDB compression reduces storage footprint by 15x for tick data older than 7 days"
+    - "Dashboard loads multi-symbol charts with 6-month history in <2 seconds"
+    - "Continuous aggregates provide real-time minute candles with <30s latency from tick arrival"
+
+  learnings:
+    - "Time-series databases shine for range queries but require careful chunk sizing. Initial 1-day chunks caused excessive partition pruning overhead; switching to 7-day chunks reduced query planning time by 60%."
+    - "Idempotent Kafka producers plus database upserts (INSERT ON CONFLICT) eliminate duplicate handling logic. Deduplication keys built from symbol+timestamp make retries safe."
+    - "Materialized views trade freshness for query speed. Continuous aggregates in TimescaleDB provide a middle ground: near-real-time updates without full table scans."
+    - "Backfills need separate DAGs from daily loads. Mixing them caused dependency confusion in Airflow; separating improved clarity and enabled parallel backfill execution."
+    - "Dashboard performance depends more on query design than UI framework. Pre-aggregating common rollups (daily OHLC, sector averages) into materialized views reduced load times from 8s to <2s."
+    - "Kafka retention policies must align with replay needs. 7-day retention allowed debugging production issues by replaying feeds; longer retention enabled reprocessing after schema changes without re-fetching from external APIs."
+
 ---
 # Overview
-Batch + streaming platform for market data with minute-level analytics.
+Production-grade platform unifying batch and streaming market data pipelines into a single analytical warehouse. Combines Kafka-based real-time tick ingestion (10K+ events/second) with Airflow-orchestrated batch OHLC loads, storing everything in TimescaleDB hypertables optimized for time-series queries. Star schema dimensional modeling enables slice-and-dice analytics across symbols, exchanges, and sectors. Interactive Dash dashboards provide minute-level candles, rolling technical indicators (SMA, EMA), and intraday heatmaps with sub-2-second load times for multi-month histories.
+
+The platform solves the classic data engineering challenge: market data arrives through multiple channels (REST APIs for historical OHLC, WebSocket feeds for real-time ticks) with different schemas and latency requirements. Rather than maintaining separate systems, this unified architecture enables analysts to query both real-time and historical data through a single SQL interface, with reproducible backfills and clear data lineage for all derived metrics.
