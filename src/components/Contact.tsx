@@ -97,6 +97,9 @@ export function Contact() {
     const [isSent, setIsSent] = useState(false);
     const [toastError, setToastError] = useState<string | null>(null);
 
+    // Track focus state for each field
+    const [focusedField, setFocusedField] = useState<string | null>(null);
+
     // Fun placeholder phrases
     const namePhrases = [
         "Tony Stark",
@@ -116,13 +119,17 @@ export function Contact() {
         "your.actual@email.com",
     ];
 
-    const messagePlaceholder = `Hey Jay! 👋
+    const messagePlaceholder = `Hey Jay! I came across your portfolio and was impressed by your data engineering work. I'd love to chat about a potential opportunity...`;
 
-I came across your portfolio and was impressed by your data engineering work. I'd love to chat about a potential opportunity...`;
-
-    // Typewriter states for placeholders
+    // Typewriter states for placeholders - only show when not focused
     const namePlaceholder = TypewriterPlaceholder({ phrases: namePhrases });
     const emailPlaceholder = TypewriterPlaceholder({ phrases: emailPhrases, typingSpeed: 70 });
+
+    // Get placeholder based on focus state
+    const getPlaceholder = (field: string, animatedPlaceholder: string, fallback: string) => {
+        if (focusedField === field) return fallback;
+        return animatedPlaceholder || fallback;
+    };
 
     const validateField = (name: string, value: string): string => {
         switch (name) {
@@ -286,8 +293,10 @@ I came across your portfolio and was impressed by your data engineering work. I'
                                         setFormState({ ...formState, name: e.target.value });
                                         if (errors.name) setErrors({ ...errors, name: undefined });
                                     }}
+                                    onFocus={() => setFocusedField("name")}
+                                    onBlur={() => setFocusedField(null)}
                                     className={`input ${errors.name ? 'border-red-500 focus:border-red-500' : ''}`}
-                                    placeholder={namePlaceholder || "Your name"}
+                                    placeholder={getPlaceholder("name", namePlaceholder, "Your name")}
                                 />
                                 <AnimatePresence>
                                     {errors.name && (
@@ -318,8 +327,10 @@ I came across your portfolio and was impressed by your data engineering work. I'
                                         setFormState({ ...formState, email: e.target.value });
                                         if (errors.email) setErrors({ ...errors, email: undefined });
                                     }}
+                                    onFocus={() => setFocusedField("email")}
+                                    onBlur={() => setFocusedField(null)}
                                     className={`input ${errors.email ? 'border-red-500 focus:border-red-500' : ''}`}
-                                    placeholder={emailPlaceholder || "your@email.com"}
+                                    placeholder={getPlaceholder("email", emailPlaceholder, "your@email.com")}
                                 />
                                 <AnimatePresence>
                                     {errors.email && (
@@ -350,8 +361,10 @@ I came across your portfolio and was impressed by your data engineering work. I'
                                         setFormState({ ...formState, message: e.target.value });
                                         if (errors.message) setErrors({ ...errors, message: undefined });
                                     }}
+                                    onFocus={() => setFocusedField("message")}
+                                    onBlur={() => setFocusedField(null)}
                                     className={`input resize-none ${errors.message ? 'border-red-500 focus:border-red-500' : ''}`}
-                                    placeholder={messagePlaceholder}
+                                    placeholder={focusedField === "message" ? "Tell me about your project..." : messagePlaceholder}
                                 />
                                 <AnimatePresence>
                                     {errors.message && (
