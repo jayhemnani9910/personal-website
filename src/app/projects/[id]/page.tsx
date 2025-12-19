@@ -6,6 +6,10 @@ import { NobelDataIntelligencePage } from "@/components/projects/NobelDataIntell
 import { StockDataPlatformPage } from "@/components/projects/StockDataPlatformPage";
 import { BarcaBrainPage } from "@/components/projects/BarcaBrainPage";
 import { LaLigaLivePage } from "@/components/projects/LaLigaLivePage";
+import { WebCrawlerPage } from "@/components/projects/WebCrawlerPage";
+import { CrimeAnalyticsPage } from "@/components/projects/CrimeAnalyticsPage";
+import { ContextBoxPage } from "@/components/projects/ContextBoxPage";
+import { DiabetesStackingPage } from "@/components/projects/DiabetesStackingPage";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { notFound } from "next/navigation";
@@ -18,6 +22,10 @@ const CUSTOM_PROJECT_PAGES: Record<string, React.ComponentType<{ project: Awaite
     "stock-data-platform": StockDataPlatformPage,
     "barcabrain": BarcaBrainPage,
     "laliga-live": LaLigaLivePage,
+    "webcrawler": WebCrawlerPage,
+    "crime-analytics": CrimeAnalyticsPage,
+    "contextbox": ContextBoxPage,
+    "diabetes-stacking": DiabetesStackingPage,
 };
 
 export default async function ProjectPage({ params }: { params: Promise<{ id: string }> }) {
