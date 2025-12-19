@@ -1,4 +1,4 @@
-import { Network, Brain, Zap, Code, Database } from "lucide-react";
+import { Network, Brain, Eye, Workflow, FlaskConical, Code, Database } from "lucide-react";
 
 export interface SkillDomain {
     id: string;
@@ -20,28 +20,42 @@ export const SKILL_DOMAINS: SkillDomain[] = [
         id: "ai-llm-engineering",
         title: "AI & LLM Engineering",
         icon: Brain,
-        skills: ["LangChain", "Vector Embeddings", "Semantic Cache", "AI Agents", "GEval"],
+        skills: ["LangChain", "LangGraph", "AI Agents", "RAG", "Semantic Search"],
         color: "#8b5cf6" // purple
     },
     {
-        id: "caching-performance",
-        title: "Caching & Performance",
-        icon: Zap,
-        skills: ["Redis", "Semantic Caching", "HNSW Indexing", "TTL Strategies"],
-        color: "#f59e0b" // amber
+        id: "computer-vision",
+        title: "Computer Vision",
+        icon: Eye,
+        skills: ["PyTorch", "RF-DETR", "SAM2", "SigLIP", "ByteTrack"],
+        color: "#06b6d4" // cyan
     },
     {
-        id: "fullstack-development",
-        title: "Full-Stack Development",
+        id: "data-engineering",
+        title: "Data Engineering",
+        icon: Workflow,
+        skills: ["Apache Airflow", "TimescaleDB", "ETL Pipelines", "Stream Processing"],
+        color: "#f97316" // orange
+    },
+    {
+        id: "mlops-experimentation",
+        title: "MLOps & Experimentation",
+        icon: FlaskConical,
+        skills: ["Weights & Biases", "MLflow", "Experiment Tracking", "Model Benchmarking"],
+        color: "#84cc16" // lime
+    },
+    {
+        id: "fullstack-visualization",
+        title: "Full-Stack & Visualization",
         icon: Code,
-        skills: ["React", "Redux", "Node.js", "Express", "FastAPI"],
+        skills: ["React", "Node.js", "FastAPI", "Streamlit", "Plotly"],
         color: "#10b981" // green
     },
     {
-        id: "databases",
-        title: "Databases",
+        id: "databases-storage",
+        title: "Databases & Storage",
         icon: Database,
-        skills: ["MongoDB", "MySQL", "Redis Stack", "Vector Search"],
+        skills: ["PostgreSQL", "MongoDB", "Redis", "pgvector", "FAISS"],
         color: "#ec4899" // pink
     }
 ];
