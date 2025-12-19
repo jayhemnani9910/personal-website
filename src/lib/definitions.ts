@@ -2,22 +2,50 @@ import { z } from "zod";
 
 // ============================================================================
 // CODE SNIPPET SCHEMA (for technical deep dives)
+// Supports various field name combinations
 // ============================================================================
 const CodeSnippetSchema = z.object({
-    title: z.string(),
-    language: z.string(),
+    title: z.string().optional(),
+    label: z.string().optional(),
+    language: z.string().optional(),
+    lang: z.string().optional(),
     code: z.string(),
     explanation: z.string().optional(),
+    description: z.string().optional(),
 });
 
-// Learning can be a plain string or a structured object with insight/description
+// Learning can be a plain string or a structured object
+// Supports various field name combinations from different agents
 const LearningSchema = z.union([
     z.string(),
     z.object({
-        insight: z.string(),
-        description: z.string(),
+        insight: z.string().optional(),
+        learning: z.string().optional(),
+        lesson: z.string().optional(),
+        title: z.string().optional(),
+        description: z.string().optional(),
+        detail: z.string().optional(),
     })
 ]);
+
+// Component can be a string or structured object
+const ComponentSchema = z.union([
+    z.string(),
+    z.object({
+        name: z.string(),
+        purpose: z.string().optional(),
+        details: z.string().optional(),
+    })
+]);
+
+// Key decision supports various field name variations
+const KeyDecisionSchema = z.object({
+    decision: z.string(),
+    reasoning: z.string().optional(),
+    rationale: z.string().optional(),
+    alternatives: z.string().optional(),
+    tradeoff: z.string().optional(),
+});
 
 // ============================================================================
 // DEEP DIVE SCHEMA (progressive disclosure content)
@@ -28,31 +56,54 @@ const DeepDiveSchema = z.object({
 
     // Section 2: Technical architecture
     architecture: z.string().optional(),
-    components: z.array(z.string()).optional(),
-    dataFlow: z.string().optional(),
+    // components can be string, array of strings, or array of structured objects
+    components: z.union([
+        z.string(),
+        z.array(ComponentSchema)
+    ]).optional(),
+    // dataFlow can be string, array of strings, or array of objects with step/detail
+    dataFlow: z.union([
+        z.string(),
+        z.array(z.string()),
+        z.array(z.object({
+            step: z.string(),
+            detail: z.string().optional(),
+        }))
+    ]).optional(),
 
-    // Section 3: Key decisions and trade-offs
-    keyDecisions: z.array(z.object({
-        decision: z.string(),
-        reasoning: z.string(),
-        alternatives: z.string().optional(),
-    })).optional(),
+    // Section 3: Key decisions and trade-offs (can be string or array)
+    keyDecisions: z.union([
+        z.string(),
+        z.array(KeyDecisionSchema)
+    ]).optional(),
 
-    // Section 4: Code highlights
-    codeSnippets: z.array(CodeSnippetSchema).optional(),
+    // Section 4: Code highlights (can be string or array)
+    codeSnippets: z.union([
+        z.string(),
+        z.array(CodeSnippetSchema)
+    ]).optional(),
 
-    // Section 5: Results deep dive
-    metrics: z.array(z.object({
-        value: z.string(),
-        label: z.string(),
-        context: z.string().optional(),
-    })).optional(),
+    // Section 5: Results deep dive (can be string or array)
+    metrics: z.union([
+        z.string(),
+        z.array(z.object({
+            value: z.string(),
+            label: z.string(),
+            context: z.string().optional(),
+        }))
+    ]).optional(),
 
-    // Section 6: Learnings and takeaways (can be strings or structured objects)
-    learnings: z.array(LearningSchema).optional(),
+    // Section 6: Learnings and takeaways (can be string, or array of strings/objects)
+    learnings: z.union([
+        z.string(),
+        z.array(LearningSchema)
+    ]).optional(),
 
-    // Section 7: Future improvements (optional)
-    futureWork: z.array(z.string()).optional(),
+    // Section 7: Future improvements (can be string or array)
+    futureWork: z.union([
+        z.string(),
+        z.array(z.string())
+    ]).optional(),
 });
 
 // ============================================================================
@@ -83,6 +134,8 @@ export const ProjectSchema = z.object({
 export type DeepDive = z.infer<typeof DeepDiveSchema>;
 export type CodeSnippet = z.infer<typeof CodeSnippetSchema>;
 export type Learning = z.infer<typeof LearningSchema>;
+export type Component = z.infer<typeof ComponentSchema>;
+export type KeyDecision = z.infer<typeof KeyDecisionSchema>;
 
 export type Project = z.infer<typeof ProjectSchema>;
 
