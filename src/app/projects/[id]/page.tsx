@@ -4,6 +4,8 @@ import { FifaSoccerDSPage } from "@/components/projects/FifaSoccerDSPage";
 import { SoccerVisionResearchPage } from "@/components/projects/SoccerVisionResearchPage";
 import { NobelDataIntelligencePage } from "@/components/projects/NobelDataIntelligencePage";
 import { StockDataPlatformPage } from "@/components/projects/StockDataPlatformPage";
+import { BarcaBrainPage } from "@/components/projects/BarcaBrainPage";
+import { LaLigaLivePage } from "@/components/projects/LaLigaLivePage";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { notFound } from "next/navigation";
@@ -14,6 +16,8 @@ const CUSTOM_PROJECT_PAGES: Record<string, React.ComponentType<{ project: Awaite
     "soccer-vision-research": SoccerVisionResearchPage,
     "nobel-dataintelligence": NobelDataIntelligencePage,
     "stock-data-platform": StockDataPlatformPage,
+    "barcabrain": BarcaBrainPage,
+    "laliga-live": LaLigaLivePage,
 };
 
 export default async function ProjectPage({ params }: { params: Promise<{ id: string }> }) {
