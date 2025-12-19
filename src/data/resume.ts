@@ -23,19 +23,27 @@ export const RESUME: Resume = {
   skills: [
     {
       category: "Languages",
-      items: [{ name: "Python" }, { name: "SQL" }, { name: "Java" }, { name: "C++" }, { name: "Swift" }, { name: "Go" }]
+      items: [{ name: "Python" }, { name: "SQL" }, { name: "Java" }, { name: "Go" }, { name: "JavaScript" }, { name: "TypeScript" }]
     },
     {
       category: "Data",
-      items: [{ name: "MySQL" }, { name: "PySpark" }, { name: "MongoDB" }, { name: "Pandas" }, { name: "NumPy" }]
+      items: [{ name: "PostgreSQL" }, { name: "MySQL" }, { name: "MongoDB" }, { name: "Redis" }, { name: "TimescaleDB" }, { name: "Pandas" }]
+    },
+    {
+      category: "ML/AI",
+      items: [{ name: "PyTorch" }, { name: "PyTorch Geometric" }, { name: "FAISS" }, { name: "LangChain" }, { name: "LangGraph" }, { name: "Scikit-learn" }]
+    },
+    {
+      category: "MLOps",
+      items: [{ name: "MLflow" }, { name: "DVC" }, { name: "Weights & Biases" }, { name: "Airflow" }]
     },
     {
       category: "Cloud",
-      items: [{ name: "AWS" }, { name: "GCP" }, { name: "Azure" }, { name: "Docker" }, { name: "Kubernetes" }]
+      items: [{ name: "AWS" }, { name: "GCP" }, { name: "Docker" }, { name: "Kubernetes" }, { name: "Kafka" }]
     },
     {
-      category: "Tools",
-      items: [{ name: "Git" }, { name: "CI/CD" }, { name: "Tableau" }, { name: "Airflow" }]
+      category: "Visualization",
+      items: [{ name: "Streamlit" }, { name: "Plotly" }, { name: "Tableau" }, { name: "Dash" }]
     }
   ],
   experience: [

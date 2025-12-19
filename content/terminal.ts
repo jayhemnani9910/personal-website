@@ -11,11 +11,12 @@ export const TERMINAL_FILES: Record<string, string> = {
 GitHub: github.com/jayhemnani9910
 LinkedIn: linkedin.com/in/jayhemnani`,
   "skills.json": JSON.stringify({
-    languages: ["Python", "SQL", "TypeScript", "JavaScript", "Swift"],
-    frameworks: ["FastAPI", "React", "Next.js", "PyTorch", "Flask"],
-    data: ["Apache Spark", "Airflow", "dbt", "Kafka", "Pandas"],
+    languages: ["Python", "SQL", "TypeScript", "JavaScript", "Java", "Go"],
+    frameworks: ["FastAPI", "Flask", "React", "Next.js", "Streamlit"],
+    data: ["PostgreSQL", "Kafka", "Airflow", "Redis", "TimescaleDB", "Pandas"],
     cloud: ["AWS", "GCP", "Docker", "Kubernetes"],
-    ml: ["YOLOv8", "OpenCV", "Scikit-learn", "TensorFlow", "LangChain"]
+    ml: ["PyTorch", "PyTorch Geometric", "FAISS", "LangChain", "LangGraph", "YOLOv8"],
+    mlops: ["MLflow", "DVC", "Weights & Biases", "Ollama"]
   }, null, 2),
   "education.md": `## Education
 
