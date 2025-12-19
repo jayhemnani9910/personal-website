@@ -46,7 +46,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
     <main id="main-content" className="min-h-screen" style={{ background: 'var(--bg-primary)' }}>
       <Navbar />
 
-      <article className="pt-32 pb-20 section-shell">
+      <article className="pt-40 pb-20 section-shell">
         <div className="max-w-3xl mx-auto">
           {/* Back Link */}
           <Link
