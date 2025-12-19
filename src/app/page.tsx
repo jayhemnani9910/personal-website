@@ -4,7 +4,6 @@ import { ResumeTimeline } from "@/components/ResumeTimeline";
 import { AcademicsSection } from "@/components/AcademicsSection";
 import { BentoGrid } from "@/components/BentoGrid";
 import { CourseworkSection } from "@/components/CourseworkSection";
-import { TimelineSection } from "@/components/TimelineSection";
 import { Contact } from "@/components/Contact";
 import { Footer } from "@/components/Footer";
 
@@ -28,7 +27,6 @@ export default async function Home() {
       <AcademicsSection />
       <BentoGrid projects={projects} />
       <CourseworkSection />
-      <TimelineSection />
       <Contact />
       <Footer />
     </main>
