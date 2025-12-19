@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { GraduationCap } from "lucide-react";
+import { Wrench } from "lucide-react";
 import { SKILL_DOMAINS } from "@/data/coursework";
 
 function SkillDomainCard({ domain, index }: { domain: typeof SKILL_DOMAINS[0]; index: number }) {
@@ -29,12 +29,9 @@ function SkillDomainCard({ domain, index }: { domain: typeof SKILL_DOMAINS[0]; i
                     />
                 </div>
                 <div className="flex-1">
-                    <h3 className="text-lg font-semibold mb-1" style={{ color: 'var(--text-primary)' }}>
+                    <h3 className="text-lg font-semibold" style={{ color: 'var(--text-primary)' }}>
                         {domain.title}
                     </h3>
-                    <p className="text-xs" style={{ color: 'var(--text-muted)' }}>
-                        {domain.source}
-                    </p>
                 </div>
             </div>
 
@@ -79,12 +76,12 @@ export function CourseworkSection() {
                     className="mb-12"
                 >
                     <p className="eyebrow mb-3 flex items-center gap-2">
-                        <GraduationCap className="w-4 h-4" />
-                        Graduate Studies
+                        <Wrench className="w-4 h-4" />
+                        Skills
                     </p>
-                    <h2 className="title-xl mb-4">What I&apos;ve Been Learning</h2>
+                    <h2 className="title-xl mb-4">My Toolkit</h2>
                     <p className="body-base max-w-2xl" style={{ color: 'var(--text-secondary)' }}>
-                        Skills and technologies from my MS coursework at San Jose State University.
+                        Technologies I&apos;ve been building with lately.
                     </p>
                 </motion.div>
 
