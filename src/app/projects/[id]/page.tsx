@@ -10,6 +10,8 @@ import { WebCrawlerPage } from "@/components/projects/WebCrawlerPage";
 import { CrimeAnalyticsPage } from "@/components/projects/CrimeAnalyticsPage";
 import { ContextBoxPage } from "@/components/projects/ContextBoxPage";
 import { DiabetesStackingPage } from "@/components/projects/DiabetesStackingPage";
+import { RubiksCubePage } from "@/components/projects/RubiksCubePage";
+import { SchedulingVisualizerPage } from "@/components/projects/SchedulingVisualizerPage";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { notFound } from "next/navigation";
@@ -26,6 +28,8 @@ const CUSTOM_PROJECT_PAGES: Record<string, React.ComponentType<{ project: Awaite
     "crime-analytics": CrimeAnalyticsPage,
     "contextbox": ContextBoxPage,
     "diabetes-stacking": DiabetesStackingPage,
+    "rubiks-timer": RubiksCubePage,
+    "scheduling-visualizer": SchedulingVisualizerPage,
 };
 
 export default async function ProjectPage({ params }: { params: Promise<{ id: string }> }) {
