@@ -12,6 +12,17 @@ import { ContextBoxPage } from "@/components/projects/ContextBoxPage";
 import { DiabetesStackingPage } from "@/components/projects/DiabetesStackingPage";
 import { RubiksCubePage } from "@/components/projects/RubiksCubePage";
 import { SchedulingVisualizerPage } from "@/components/projects/SchedulingVisualizerPage";
+import { RevoluIdeaPage } from "@/components/projects/RevoluIdeaPage";
+import { OptisupplyPage } from "@/components/projects/OptisupplyPage";
+import { VaccineSchedulerPage } from "@/components/projects/VaccineSchedulerPage";
+import { ChatbotIntentsPage } from "@/components/projects/ChatbotIntentsPage";
+import { SmartWaterIoTPage } from "@/components/projects/SmartWaterIoTPage";
+import { WikipediaAnalysisPage } from "@/components/projects/WikipediaAnalysisPage";
+import { PatchingSecurityPage } from "@/components/projects/PatchingSecurityPage";
+import { MobileConnectPage } from "@/components/projects/MobileConnectPage";
+import { ImmigrationDBPage } from "@/components/projects/ImmigrationDBPage";
+import { BasicBankingPage } from "@/components/projects/BasicBankingPage";
+import { AccurateGuesserPage } from "@/components/projects/AccurateGuesserPage";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { notFound } from "next/navigation";
@@ -30,6 +41,17 @@ const CUSTOM_PROJECT_PAGES: Record<string, React.ComponentType<{ project: Awaite
     "diabetes-stacking": DiabetesStackingPage,
     "rubiks-timer": RubiksCubePage,
     "scheduling-visualizer": SchedulingVisualizerPage,
+    "revolu-idea": RevoluIdeaPage,
+    "optisupply": OptisupplyPage,
+    "vaccine-scheduler": VaccineSchedulerPage,
+    "chatbot-intents": ChatbotIntentsPage,
+    "smart-water-iot": SmartWaterIoTPage,
+    "wikipedia-analysis": WikipediaAnalysisPage,
+    "patching-security": PatchingSecurityPage,
+    "mobile-connect-suite": MobileConnectPage,
+    "immigration-db": ImmigrationDBPage,
+    "basic-banking": BasicBankingPage,
+    "accurate-guesser": AccurateGuesserPage,
 };
 
 export default async function ProjectPage({ params }: { params: Promise<{ id: string }> }) {
