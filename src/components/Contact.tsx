@@ -1,10 +1,11 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Send, Mail, Github, Linkedin, Twitter, Youtube } from "lucide-react";
 import MagneticButton from "./MagneticButton";
 import { SOCIAL_LINKS } from "@/data/profile";
+import { useTypewriterPlaceholder } from "@/hooks/useTypewriterPlaceholder";
 
 interface FormErrors {
     name?: string;
@@ -12,41 +13,26 @@ interface FormErrors {
     message?: string;
 }
 
-// Typewriter effect for placeholders
-function TypewriterPlaceholder({ phrases, typingSpeed = 80, pauseDuration = 2000 }: {
-    phrases: string[];
-    typingSpeed?: number;
-    pauseDuration?: number;
-}) {
-    const [displayText, setDisplayText] = useState("");
-    const [phraseIndex, setPhraseIndex] = useState(0);
-    const [isDeleting, setIsDeleting] = useState(false);
+// Placeholder phrases for typewriter effect (moved outside component)
+const NAME_PHRASES = [
+    "Tony Stark",
+    "Future collaborator",
+    "The next big thing",
+    "Someone awesome",
+    "A fellow builder",
+    "Your name here :)",
+];
 
-    useEffect(() => {
-        const currentPhrase = phrases[phraseIndex];
+const EMAIL_PHRASES = [
+    "definitely.not.spam@gmail.com",
+    "hire.me@please.com",
+    "totally.real@email.com",
+    "will.reply@promise.io",
+    "not.a.bot@human.org",
+    "your.actual@email.com",
+];
 
-        const timeout = setTimeout(() => {
-            if (!isDeleting) {
-                if (displayText.length < currentPhrase.length) {
-                    setDisplayText(currentPhrase.slice(0, displayText.length + 1));
-                } else {
-                    setTimeout(() => setIsDeleting(true), pauseDuration);
-                }
-            } else {
-                if (displayText.length > 0) {
-                    setDisplayText(displayText.slice(0, -1));
-                } else {
-                    setIsDeleting(false);
-                    setPhraseIndex((prev) => (prev + 1) % phrases.length);
-                }
-            }
-        }, isDeleting ? typingSpeed / 2 : typingSpeed);
-
-        return () => clearTimeout(timeout);
-    }, [displayText, isDeleting, phraseIndex, phrases, typingSpeed, pauseDuration]);
-
-    return displayText;
-}
+const MESSAGE_PLACEHOLDER = `Hey Jay! I came across your portfolio and was impressed by your data engineering work. I'd love to chat about a potential opportunity...`;
 
 // Social icon with brand-colored glow
 function SocialIcon({ icon: Icon, href, label, glowColor }: {
@@ -100,30 +86,9 @@ export function Contact() {
     // Track focus state for each field
     const [focusedField, setFocusedField] = useState<string | null>(null);
 
-    // Fun placeholder phrases
-    const namePhrases = [
-        "Tony Stark",
-        "Future collaborator",
-        "The next big thing",
-        "Someone awesome",
-        "A fellow builder",
-        "Your name here :)",
-    ];
-
-    const emailPhrases = [
-        "definitely.not.spam@gmail.com",
-        "hire.me@please.com",
-        "totally.real@email.com",
-        "will.reply@promise.io",
-        "not.a.bot@human.org",
-        "your.actual@email.com",
-    ];
-
-    const messagePlaceholder = `Hey Jay! I came across your portfolio and was impressed by your data engineering work. I'd love to chat about a potential opportunity...`;
-
-    // Typewriter states for placeholders - only show when not focused
-    const namePlaceholder = TypewriterPlaceholder({ phrases: namePhrases });
-    const emailPlaceholder = TypewriterPlaceholder({ phrases: emailPhrases, typingSpeed: 70 });
+    // Use the typewriter hook for animated placeholders
+    const { text: namePlaceholder } = useTypewriterPlaceholder(NAME_PHRASES);
+    const { text: emailPlaceholder } = useTypewriterPlaceholder(EMAIL_PHRASES, { typingSpeed: 70 });
 
     // Get placeholder based on focus state
     const getPlaceholder = (field: string, animatedPlaceholder: string, fallback: string) => {
@@ -364,7 +329,7 @@ export function Contact() {
                                     onFocus={() => setFocusedField("message")}
                                     onBlur={() => setFocusedField(null)}
                                     className={`input resize-none ${errors.message ? 'border-red-500 focus:border-red-500' : ''}`}
-                                    placeholder={focusedField === "message" ? "Tell me about your project..." : messagePlaceholder}
+                                    placeholder={focusedField === "message" ? "Tell me about your project..." : MESSAGE_PLACEHOLDER}
                                 />
                                 <AnimatePresence>
                                     {errors.message && (

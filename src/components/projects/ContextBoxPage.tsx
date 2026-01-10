@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { ArrowLeft, Github, Camera, FileText, Cpu, Search, ChevronRight, Sparkles } from "lucide-react";
 import type { Project } from "@/lib/definitions";
+import { StatCard } from "@/components/ui/StatCard";
 
 // Screenshot to vector visualization
 function ScreenshotToVector() {
@@ -267,14 +268,6 @@ function PipelineArrow({ delay }: { delay: number }) {
     );
 }
 
-function StatCard({ value, label, delay }: { value: string; label: string; delay: number }) {
-    return (
-        <div className="text-center p-6" style={{ animation: `fadeSlideUp 0.5s ease-out ${delay}ms both` }}>
-            <div className="text-4xl md:text-5xl font-bold text-[var(--accent)]">{value}</div>
-            <div className="text-sm text-[var(--text-muted)] mt-2">{label}</div>
-        </div>
-    );
-}
 
 export function ContextBoxPage({ project }: { project: Project }) {
     const [activeStage, setActiveStage] = useState(0);

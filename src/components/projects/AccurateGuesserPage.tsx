@@ -1,9 +1,10 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Link from "next/link";
-import { ArrowLeft, Gamepad2, ArrowUp, ArrowDown, CheckCircle, RotateCcw, Play, Trophy } from "lucide-react";
+import { Gamepad2, ArrowUp, ArrowDown, CheckCircle, RotateCcw, Play, Trophy } from "lucide-react";
 import type { Project } from "@/lib/definitions";
+import { ProjectHeader } from "./ProjectHeader";
+import { StatCard } from "@/components/ui/StatCard";
 
 // Game simulation
 function GameDemo() {
@@ -154,41 +155,15 @@ function StateMachine() {
     );
 }
 
-function StatCard({ value, label }: { value: string; label: string }) {
-    return (
-        <div className="text-center p-4">
-            <div className="text-3xl md:text-4xl font-bold text-[var(--accent)]">{value}</div>
-            <div className="text-xs text-[var(--text-muted)] mt-1">{label}</div>
-        </div>
-    );
-}
 
 export function AccurateGuesserPage({ project }: { project: Project }) {
     return (
         <div className="min-h-screen bg-[var(--bg-primary)]">
-            <style jsx global>{`
-                @keyframes fadeSlideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-            `}</style>
-
-            {/* Header */}
-            <header className="pt-32 pb-8 px-6">
-                <div className="max-w-6xl mx-auto">
-                    <Link href="/projects" className="inline-flex items-center gap-2 text-sm text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors mb-8">
-                        <ArrowLeft className="w-4 h-4" />Back to Projects
-                    </Link>
-                    <h1 className="text-4xl md:text-5xl font-bold text-[var(--text-primary)] mb-4" style={{ animation: 'fadeSlideUp 0.5s ease-out' }}>
-                        Accurate Guesser
-                    </h1>
-                    <p className="text-xl text-[var(--text-secondary)] mb-6 max-w-3xl" style={{ animation: 'fadeSlideUp 0.5s ease-out 100ms both' }}>
-                        Java Swing number guessing game demonstrating event-driven UI patterns.
-                    </p>
-                    <div className="flex flex-wrap gap-2" style={{ animation: 'fadeSlideUp 0.5s ease-out 200ms both' }}>
-                        {['Java', 'Swing', 'MVC', 'Event-Driven'].map((tech) => (
-                            <span key={tech} className="px-3 py-1 text-xs font-medium rounded-full bg-[var(--accent)]/10 text-[var(--accent)] border border-[var(--accent)]/20">{tech}</span>
-                        ))}
-                    </div>
-                </div>
-            </header>
+            <ProjectHeader
+                title="Accurate Guesser"
+                description="Java Swing number guessing game demonstrating event-driven UI patterns."
+                techStack={['Java', 'Swing', 'MVC', 'Event-Driven']}
+            />
 
             {/* Live Demo */}
             <section className="py-12 px-6">

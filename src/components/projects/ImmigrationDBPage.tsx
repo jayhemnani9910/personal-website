@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { ArrowLeft, Database, Users, FileText, Clock, Key, Link2, Table, ArrowRight } from "lucide-react";
 import type { Project } from "@/lib/definitions";
+import { StatCard } from "@/components/ui/StatCard";
 
 // ERD Table component
 function ERDTable({ name, columns, primaryKey, foreignKeys }: { name: string; columns: string[]; primaryKey: string; foreignKeys?: string[] }) {
@@ -46,14 +47,6 @@ function QueryExample({ title, query, description }: { title: string; query: str
     );
 }
 
-function StatCard({ value, label }: { value: string; label: string }) {
-    return (
-        <div className="text-center p-4">
-            <div className="text-3xl md:text-4xl font-bold text-[var(--accent)]">{value}</div>
-            <div className="text-xs text-[var(--text-muted)] mt-1">{label}</div>
-        </div>
-    );
-}
 
 export function ImmigrationDBPage({ project }: { project: Project }) {
     return (

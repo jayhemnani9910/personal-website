@@ -1,9 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
-import { ArrowLeft, Github, ExternalLink, Clock, Layers, BarChart3, Maximize2, Cpu } from "lucide-react";
+import { ExternalLink, Clock, Layers, BarChart3, Maximize2, Cpu } from "lucide-react";
 import type { Project } from "@/lib/definitions";
+import { ProjectHeader } from "./ProjectHeader";
+import { StatCard } from "@/components/ui/StatCard";
 
 // Algorithm cards
 function AlgorithmCard({ name, desc, pros, cons }: { name: string; desc: string; pros: string; cons: string }) {
@@ -19,54 +20,25 @@ function AlgorithmCard({ name, desc, pros, cons }: { name: string; desc: string;
     );
 }
 
-function StatCard({ value, label }: { value: string; label: string }) {
-    return (
-        <div className="text-center p-4">
-            <div className="text-3xl md:text-4xl font-bold text-[var(--accent)]">{value}</div>
-            <div className="text-xs text-[var(--text-muted)] mt-1">{label}</div>
-        </div>
-    );
-}
-
 export function SchedulingVisualizerPage({ project }: { project: Project }) {
     const [isFullscreen, setIsFullscreen] = useState(false);
     const demoUrl = "https://jayhemnani9910.github.io/cpu-scheduling-algorithms/";
 
     return (
         <div className="min-h-screen bg-[var(--bg-primary)]">
-            <style jsx global>{`
-                @keyframes fadeSlideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-            `}</style>
+            <ProjectHeader
+                title="CPU Scheduling Visualizer"
+                description="Interactive visualization of FCFS, SJF, Priority, and Round Robin algorithms."
+                techStack={['JavaScript', 'Canvas', 'Gantt Charts', 'OS Concepts']}
+                githubUrl="https://github.com/jayhemnani9910/cpu-scheduling-algorithms"
+            />
 
-            {/* Header */}
-            <header className="pt-32 pb-8 px-6">
-                <div className="max-w-6xl mx-auto">
-                    <Link href="/projects" className="inline-flex items-center gap-2 text-sm text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors mb-8">
-                        <ArrowLeft className="w-4 h-4" />Back to Projects
-                    </Link>
-                    <h1 className="text-4xl md:text-5xl font-bold text-[var(--text-primary)] mb-4" style={{ animation: 'fadeSlideUp 0.5s ease-out' }}>
-                        CPU Scheduling Visualizer
-                    </h1>
-                    <p className="text-xl text-[var(--text-secondary)] mb-6 max-w-3xl" style={{ animation: 'fadeSlideUp 0.5s ease-out 100ms both' }}>
-                        Interactive visualization of FCFS, SJF, Priority, and Round Robin algorithms.
-                    </p>
-                    <div className="flex flex-wrap items-center gap-4" style={{ animation: 'fadeSlideUp 0.5s ease-out 200ms both' }}>
-                        <div className="flex flex-wrap gap-2">
-                            {['JavaScript', 'Canvas', 'Gantt Charts', 'OS Concepts'].map((tech) => (
-                                <span key={tech} className="px-3 py-1 text-xs font-medium rounded-full bg-[var(--accent)]/10 text-[var(--accent)] border border-[var(--accent)]/20">{tech}</span>
-                            ))}
-                        </div>
-                        <div className="flex gap-3">
-                            <a href="https://github.com/jayhemnani9910/cpu-scheduling-algorithms" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-sm text-[var(--text-secondary)] hover:text-[var(--accent)]">
-                                <Github className="w-4 h-4" /> Code
-                            </a>
-                            <a href={demoUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-sm text-[var(--text-secondary)] hover:text-[var(--accent)]">
-                                <ExternalLink className="w-4 h-4" /> Full Screen
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </header>
+            {/* Full Screen Link */}
+            <div className="max-w-6xl mx-auto px-6 -mt-4 mb-4">
+                <a href={demoUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-sm text-[var(--text-secondary)] hover:text-[var(--accent)]">
+                    <ExternalLink className="w-4 h-4" /> Full Screen
+                </a>
+            </div>
 
             {/* Live Demo Embed */}
             <section className="py-8 px-6">

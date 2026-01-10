@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { ArrowLeft, Github, Search, FileText, CheckCircle, Edit3, Sparkles, ArrowRight, Cpu, Cloud, Zap } from "lucide-react";
 import type { Project } from "@/lib/definitions";
+import { StatCard } from "@/components/ui/StatCard";
 
 // Animated pipeline node
 function PipelineNode({ icon: Icon, label, delay, isActive }: { icon: React.ComponentType<{ className?: string }>; label: string; delay: number; isActive: boolean }) {
@@ -44,14 +45,6 @@ function AgentCard({ icon: Icon, name, desc, color }: { icon: React.ComponentTyp
     );
 }
 
-function StatCard({ value, label }: { value: string; label: string }) {
-    return (
-        <div className="text-center p-4">
-            <div className="text-3xl md:text-4xl font-bold text-[var(--accent)]">{value}</div>
-            <div className="text-xs text-[var(--text-muted)] mt-1">{label}</div>
-        </div>
-    );
-}
 
 function ArchitectureLayer({ name, items, color }: { name: string; items: string[]; color: string }) {
     return (

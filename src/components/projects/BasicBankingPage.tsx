@@ -1,9 +1,10 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Link from "next/link";
-import { ArrowLeft, CreditCard, User, Lock, ArrowRightLeft, Database, Code, Github, CheckCircle } from "lucide-react";
+import { CreditCard, Lock, ArrowRightLeft, Database, Code, CheckCircle, User } from "lucide-react";
 import type { Project } from "@/lib/definitions";
+import { ProjectHeader } from "./ProjectHeader";
+import { StatCard } from "@/components/ui/StatCard";
 
 // Transaction animation
 function TransactionFlow() {
@@ -71,51 +72,16 @@ function LearningPoint({ title, description }: { title: string; description: str
     );
 }
 
-function StatCard({ value, label }: { value: string; label: string }) {
-    return (
-        <div className="text-center p-4">
-            <div className="text-3xl md:text-4xl font-bold text-[var(--accent)]">{value}</div>
-            <div className="text-xs text-[var(--text-muted)] mt-1">{label}</div>
-        </div>
-    );
-}
-
 export function BasicBankingPage({ project }: { project: Project }) {
     return (
         <div className="min-h-screen bg-[var(--bg-primary)]">
-            <style jsx global>{`
-                @keyframes fadeSlideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-            `}</style>
-
-            {/* Header */}
-            <header className="pt-32 pb-8 px-6">
-                <div className="max-w-6xl mx-auto">
-                    <Link href="/projects" className="inline-flex items-center gap-2 text-sm text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors mb-8">
-                        <ArrowLeft className="w-4 h-4" />Back to Projects
-                    </Link>
-                    <div className="flex items-center gap-3 mb-4">
-                        <h1 className="text-4xl md:text-5xl font-bold text-[var(--text-primary)]" style={{ animation: 'fadeSlideUp 0.5s ease-out' }}>
-                            Basic Banking System
-                        </h1>
-                        <span className="px-2 py-1 text-xs font-medium rounded bg-purple-500/10 text-purple-500 border border-purple-500/20">
-                            Internship Project
-                        </span>
-                    </div>
-                    <p className="text-xl text-[var(--text-secondary)] mb-6 max-w-3xl" style={{ animation: 'fadeSlideUp 0.5s ease-out 100ms both' }}>
-                        Simple login + transactions to learn full-stack fundamentals.
-                    </p>
-                    <div className="flex flex-wrap items-center gap-4" style={{ animation: 'fadeSlideUp 0.5s ease-out 200ms both' }}>
-                        <div className="flex flex-wrap gap-2">
-                            {['PHP', 'MySQL', 'HTML/CSS', 'Sessions'].map((tech) => (
-                                <span key={tech} className="px-3 py-1 text-xs font-medium rounded-full bg-[var(--accent)]/10 text-[var(--accent)] border border-[var(--accent)]/20">{tech}</span>
-                            ))}
-                        </div>
-                        <a href="https://github.com/jeyhemnani99/Basic-banking-system" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-sm text-[var(--text-secondary)] hover:text-[var(--accent)]">
-                            <Github className="w-4 h-4" /> Code
-                        </a>
-                    </div>
-                </div>
-            </header>
+            <ProjectHeader
+                title="Basic Banking System"
+                description="Simple login + transactions to learn full-stack fundamentals."
+                techStack={['PHP', 'MySQL', 'HTML/CSS', 'Sessions']}
+                githubUrl="https://github.com/jeyhemnani99/Basic-banking-system"
+                badge={{ text: "Internship Project", variant: "purple" }}
+            />
 
             {/* Transaction Flow Demo */}
             <section className="py-12 px-6">

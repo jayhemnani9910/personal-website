@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { ArrowLeft, Droplets, Wifi, AlertTriangle, Database, BarChart3, Activity, Cloud, Cpu, ArrowRight } from "lucide-react";
 import type { Project } from "@/lib/definitions";
+import { StatCard } from "@/components/ui/StatCard";
 
 // Flow rate gauge
 function FlowGauge({ value, maxValue, label }: { value: number; label: string; maxValue: number }) {
@@ -77,14 +78,6 @@ function DataFlowStep({ step, title, desc }: { step: number; title: string; desc
     );
 }
 
-function StatCard({ value, label }: { value: string; label: string }) {
-    return (
-        <div className="text-center p-4">
-            <div className="text-3xl md:text-4xl font-bold text-[var(--accent)]">{value}</div>
-            <div className="text-xs text-[var(--text-muted)] mt-1">{label}</div>
-        </div>
-    );
-}
 
 export function SmartWaterIoTPage({ project }: { project: Project }) {
     const [flowRates, setFlowRates] = useState({ main: 2.5, shower: 0, outdoor: 0 });

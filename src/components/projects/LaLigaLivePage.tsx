@@ -2,8 +2,9 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { ArrowLeft, Radio, Activity, MapPin, BarChart3, ChevronRight } from "lucide-react";
+import { ArrowLeft, Github, Radio, Activity, MapPin, BarChart3, ChevronRight } from "lucide-react";
 import type { Project } from "@/lib/definitions";
+import { StatCard } from "@/components/ui/StatCard";
 
 // Live xG curve animation
 function XGCurve() {
@@ -236,14 +237,6 @@ function PipelineArrow({ delay }: { delay: number }) {
     );
 }
 
-function StatCard({ value, label, delay }: { value: string; label: string; delay: number }) {
-    return (
-        <div className="text-center p-6" style={{ animation: `fadeSlideUp 0.5s ease-out ${delay}ms both` }}>
-            <div className="text-4xl md:text-5xl font-bold text-[var(--accent)]">{value}</div>
-            <div className="text-sm text-[var(--text-muted)] mt-2">{label}</div>
-        </div>
-    );
-}
 
 export function LaLigaLivePage({ project }: { project: Project }) {
     const [activeStage, setActiveStage] = useState(0);

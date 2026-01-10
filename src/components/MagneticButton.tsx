@@ -2,7 +2,7 @@
 
 import { useRef, useState } from "react";
 import { motion } from "framer-motion";
-import { springMagnetic } from "@/lib/animation";
+import { springMagnetic } from "@/lib/motion";
 
 export default function MagneticButton({
     children,

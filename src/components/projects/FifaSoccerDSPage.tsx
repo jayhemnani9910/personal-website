@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { ArrowLeft, Github, ExternalLink } from "lucide-react";
 import type { Project } from "@/lib/definitions";
+import { StatCard } from "@/components/ui/StatCard";
 
 // Code block component with syntax highlighting styling
 function CodeBlock({ title, language, code }: { title?: string; language: string; code: string }) {

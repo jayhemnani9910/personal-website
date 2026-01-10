@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { ArrowLeft, TrendingDown, Package, Truck, Clock, AlertTriangle, BarChart3, Database, ArrowRight } from "lucide-react";
 import type { Project } from "@/lib/definitions";
+import { StatCard } from "@/components/ui/StatCard";
 
 // Animated metric card
 function MetricCard({ icon: Icon, value, label, trend, color, delay }: { icon: React.ComponentType<{ className?: string }>; value: string; label: string; trend: string; color: string; delay: number }) {
@@ -68,14 +69,6 @@ function RiskTier({ tier, percentage }: { tier: string; percentage: number }) {
     );
 }
 
-function StatCard({ value, label }: { value: string; label: string }) {
-    return (
-        <div className="text-center p-4">
-            <div className="text-3xl md:text-4xl font-bold text-[var(--accent)]">{value}</div>
-            <div className="text-xs text-[var(--text-muted)] mt-1">{label}</div>
-        </div>
-    );
-}
 
 export function OptisupplyPage({ project }: { project: Project }) {
     const [animatedPercentages, setAnimatedPercentages] = useState({ low: 0, medium: 0, high: 0 });

@@ -128,7 +128,17 @@ export const VARIANTS = {
     animate: { opacity: 1, y: 0 },
     exit: { opacity: 0, y: -24 },
   } as Variants,
-  
+
+  /** Subtle fade with small upward slide - matches CSS @keyframes fadeSlideUp */
+  fadeSlideUp: {
+    hidden: { opacity: 0, y: 10 },
+    visible: (delay = 0) => ({
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.5, ease: "easeOut", delay },
+    }),
+  } as Variants,
+
   // Scale animations
   scaleIn: {
     initial: { opacity: 0, scale: 0.95 },

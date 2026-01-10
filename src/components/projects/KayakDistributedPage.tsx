@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { ArrowLeft, Plane, Hotel, Car, Database, Server, Zap, MessageSquare, Users, Github, ArrowRight } from "lucide-react";
+import { StatCard } from "@/components/ui/StatCard";
 import type { Project } from "@/lib/definitions";
 
 // Animated service card
@@ -117,14 +118,6 @@ function EventFlowViz() {
     );
 }
 
-function StatCard({ value, label }: { value: string; label: string }) {
-    return (
-        <div className="text-center p-4">
-            <div className="text-3xl md:text-4xl font-bold text-[var(--accent)]">{value}</div>
-            <div className="text-xs text-[var(--text-muted)] mt-1">{label}</div>
-        </div>
-    );
-}
 
 export function KayakDistributedPage({ project }: { project: Project }) {
     return (

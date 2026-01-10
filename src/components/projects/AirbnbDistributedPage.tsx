@@ -2,8 +2,9 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { ArrowLeft, Home, User, Calendar, Heart, MessageSquare, Database, Server, Container, Github, ArrowRight, Brain } from "lucide-react";
+import { ArrowLeft, Github, Home, User, Calendar, Database, Server, ArrowRight, Brain } from "lucide-react";
 import type { Project } from "@/lib/definitions";
+import { StatCard } from "@/components/ui/StatCard";
 
 // Service card with animated icon
 function MicroserviceCard({ name, icon: Icon, color, description, delay }: {
@@ -128,14 +129,6 @@ function TechStackViz() {
     );
 }
 
-function StatCard({ value, label }: { value: string; label: string }) {
-    return (
-        <div className="text-center p-4">
-            <div className="text-3xl md:text-4xl font-bold text-[var(--accent)]">{value}</div>
-            <div className="text-xs text-[var(--text-muted)] mt-1">{label}</div>
-        </div>
-    );
-}
 
 export function AirbnbDistributedPage({ project }: { project: Project }) {
     return (

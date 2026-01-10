@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { FlaskConical, Terminal, Cpu, Zap, Brain, type LucideIcon } from "lucide-react";
-import { springSoft, hoverScale, hoverGlow } from "@/lib/animation";
+import { springSoft, hoverScale, hoverGlow } from "@/lib/motion";
 import { EXPERIMENTS, type Experiment } from "@/../content/lab";
 
 // Map icon names to Lucide components
