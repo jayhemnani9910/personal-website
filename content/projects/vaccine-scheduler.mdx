@@ -1,0 +1,217 @@
+---
+title: "Efficient Vaccine Scheduler"
+summary: "CPU-scheduling-inspired vaccine prioritization."
+role: "Research"
+period: "AIMV-21 / IEEE Xplore"
+tags: ["algorithms", "research"]
+tech: ["Algorithms", "Python"]
+challenge: "Design fair scheduling for limited vaccine supply."
+solution:
+  - "Priority scoring for healthcare/front-line/vulnerable groups."
+  - "Comparison of FCFS vs Priority-based policies."
+impact:
+  - "Framework for transparent, auditable prioritization policies."
+featured: false
+priority: 25
+deepDive:
+  context: |
+    During the COVID-19 pandemic, vaccine distribution became one of the most critical public health challenges globally. With limited initial supply and overwhelming demand, healthcare systems needed fair, transparent, and efficient scheduling algorithms to prioritize vaccinations.
+
+    The challenge wasn't just technical—it was ethical. How do you balance urgent medical need, occupational risk, age-based vulnerability, and social equity? Traditional first-come-first-served (FCFS) systems created digital divides, favoring those with better internet access and technological literacy.
+
+    This research project drew inspiration from CPU scheduling algorithms in operating systems—where processes compete for limited computational resources—to create a priority-based vaccine scheduling framework that could be audited, justified, and adapted to different community needs.
+
+  architecture: |
+    The vaccine scheduler follows a multi-tiered architecture inspired by operating system scheduling:
+
+    **Input Layer: Citizen Registration**
+    - Demographic data collection (age, occupation, medical history)
+    - Risk factor assessment questionnaire
+    - Location and availability preferences
+
+    **Scheduling Engine: Priority Calculation**
+    - Multi-factor priority scoring algorithm
+    - Dynamic weight adjustments based on vaccine supply
+    - Queue management with aging prevention (to avoid starvation)
+
+    **Allocation Layer: Appointment Assignment**
+    - Capacity-aware slot allocation across vaccination centers
+    - Geographic distribution optimization
+    - Real-time inventory management
+
+    **Notification System: Communication Pipeline**
+    - Automated appointment confirmations
+    - Reminder notifications (SMS/Email)
+    - Waitlist management and cancellation handling
+
+    **Admin Dashboard: Policy Management**
+    - Real-time monitoring of vaccination progress
+    - Priority weight tuning interface
+    - Fairness metrics and equity analytics
+
+  components:
+    - name: "Priority Scoring Engine"
+      description: "Calculates composite priority scores based on medical risk, occupational exposure, age, and social vulnerability factors"
+    - name: "Queue Management System"
+      description: "Maintains sorted priority queues with aging mechanisms to prevent indefinite waiting (starvation prevention)"
+    - name: "Capacity Optimizer"
+      description: "Balances appointment distribution across multiple vaccination centers based on inventory and geographical constraints"
+    - name: "Slot Allocation Algorithm"
+      description: "Assigns specific time slots considering center capacity, vaccine shelf-life, and appointment preferences"
+    - name: "Notification Service"
+      description: "Multi-channel communication system for appointment confirmations, reminders, and updates"
+    - name: "Fairness Auditor"
+      description: "Tracks demographic distribution and equity metrics to ensure no systematic bias in allocation"
+
+  dataFlow: |
+    1. **Citizen Registration**: User submits registration with demographic data, medical history, and risk factors
+
+    2. **Priority Calculation**: System computes priority score using weighted formula:
+       Priority = w1×medical_risk + w2×occupational_risk + w3×age_factor + w4×social_vulnerability
+
+    3. **Queue Insertion**: User placed in priority queue with aging timestamp to prevent starvation
+
+    4. **Vaccine Availability Event**: When new vaccine batches arrive at centers, system triggers allocation process
+
+    5. **Slot Assignment**: Algorithm selects highest-priority candidates considering:
+       - Current priority score + aging bonus
+       - Geographic proximity to vaccination centers
+       - Appointment time preferences
+       - Center capacity constraints
+
+    6. **Notification Dispatch**: Confirmed users receive appointment details via SMS/Email
+
+    7. **Confirmation & Check-in**: Users confirm attendance; no-shows trigger waitlist promotion
+
+    8. **Post-Vaccination**: Second-dose scheduling and completion tracking
+
+  keyDecisions:
+    - decision: "Priority-based vs FCFS Scheduling"
+      rationale: "Research demonstrated that pure FCFS creates digital divides and fails to prioritize high-risk populations. Priority-based scheduling with aging ensures both fairness and medical need are addressed."
+      tradeoffs: "Increased complexity in explaining allocation decisions to the public, but dramatically better health outcomes for vulnerable populations."
+
+    - decision: "Multi-factor Priority Scoring"
+      rationale: "Single-factor prioritization (e.g., age-only) ignores occupational exposure and comorbidities. Composite scoring provides nuanced risk assessment."
+      tradeoffs: "Requires careful weight calibration and regular policy updates as pandemic dynamics evolve."
+
+    - decision: "Aging Mechanism for Starvation Prevention"
+      rationale: "Without aging, lower-priority individuals could wait indefinitely. Gradually increasing priority over time ensures everyone eventually gets vaccinated."
+      tradeoffs: "Complex to tune—aging too fast undermines prioritization, too slow causes frustration."
+
+    - decision: "Capacity-Aware Allocation"
+      rationale: "Overbooking leads to wasted appointments and public frustration; underbooking wastes vaccine doses with limited shelf-life."
+      tradeoffs: "Requires real-time inventory tracking and predictive modeling of no-show rates."
+
+  codeSnippets:
+    - title: "Priority Calculation Algorithm"
+      language: "python"
+      code: |
+        def calculate_priority(citizen):
+            """
+            Computes priority score for vaccine allocation using weighted factors.
+            Higher scores indicate higher priority for vaccination.
+            """
+            # Base scores for different risk categories
+            medical_risk = assess_medical_risk(citizen.conditions)
+            occupational_risk = assess_occupational_risk(citizen.occupation)
+            age_factor = calculate_age_score(citizen.age)
+            social_vulnerability = assess_vulnerability(citizen.demographics)
+
+            # Configurable weights (can be adjusted by policy)
+            weights = {
+                'medical': 0.35,
+                'occupational': 0.30,
+                'age': 0.25,
+                'social': 0.10
+            }
+
+            # Composite priority score
+            base_priority = (
+                weights['medical'] * medical_risk +
+                weights['occupational'] * occupational_risk +
+                weights['age'] * age_factor +
+                weights['social'] * social_vulnerability
+            )
+
+            # Apply aging factor to prevent starvation
+            days_waiting = (datetime.now() - citizen.registration_date).days
+            aging_bonus = min(days_waiting * 0.05, 15)  # Cap at 15 points
+
+            return base_priority + aging_bonus
+
+        def assess_medical_risk(conditions):
+            """Evaluates medical comorbidity risk factors."""
+            high_risk_conditions = {
+                'diabetes': 25,
+                'hypertension': 20,
+                'heart_disease': 30,
+                'respiratory': 28,
+                'immunocompromised': 35
+            }
+            return max([high_risk_conditions.get(c, 0) for c in conditions], default=0)
+
+    - title: "Slot Allocation with Capacity Management"
+      language: "python"
+      code: |
+        def allocate_slots(vaccine_batch, priority_queue, centers):
+            """
+            Assigns vaccination slots from priority queue based on capacity
+            and geographic constraints.
+            """
+            allocations = []
+
+            for center in centers:
+                # Calculate available slots based on inventory and capacity
+                doses_available = min(
+                    vaccine_batch.get_doses_for_center(center),
+                    center.daily_capacity
+                )
+
+                # Account for expected no-show rate
+                overbooking_factor = 1.1  # 10% overbooking
+                slots_to_assign = int(doses_available * overbooking_factor)
+
+                # Extract candidates within geographic radius
+                candidates = priority_queue.get_nearby_citizens(
+                    center.location,
+                    radius_km=25
+                )
+
+                # Assign slots to highest priority candidates
+                for i in range(min(slots_to_assign, len(candidates))):
+                    citizen = candidates[i]
+                    slot = center.get_next_available_slot()
+
+                    allocations.append({
+                        'citizen': citizen,
+                        'center': center,
+                        'slot': slot,
+                        'priority': citizen.priority_score
+                    })
+
+                    # Send notification
+                    notify_appointment(citizen, center, slot)
+
+            return allocations
+
+  learnings:
+    - category: "Algorithmic Fairness"
+      insight: "Fairness in scheduling isn't just about algorithm efficiency—it's about transparent, explainable decisions. Publishing the priority criteria and allowing citizens to understand their queue position builds public trust."
+
+    - category: "Starvation Prevention"
+      insight: "The aging mechanism from CPU scheduling translates beautifully to real-world queues. Without it, lower-priority citizens could wait indefinitely, creating resentment and undermining vaccine confidence."
+
+    - category: "Capacity Planning"
+      insight: "Real-world scheduling requires accounting for uncertainty: no-shows, vaccine spoilage, supply chain delays. Overbooking strategies from airline industry proved valuable, but required careful calibration."
+
+    - category: "Policy Adaptability"
+      insight: "Pandemic dynamics change rapidly—new variants, shifting risk profiles, evolving supply. The system needed configurable weights that public health officials could adjust without code changes."
+
+    - category: "Digital Equity"
+      insight: "Priority-based systems must account for digital access disparities. We incorporated offline registration channels and community outreach to ensure vulnerable populations weren't systematically disadvantaged."
+
+    - category: "Comparative Analysis Value"
+      insight: "Simulating both FCFS and priority-based policies with real demographic data provided compelling evidence for policy changes. Visualization of equity metrics made abstract fairness concepts concrete for decision-makers."
+---
+# Overview
+CPU-scheduling-inspired vaccine prioritization.

@@ -1,0 +1,344 @@
+---
+title: "Immigration Management System"
+summary: "Relational schema + CRUD for immigration ops."
+role: "Developer"
+tags: ["sql"]
+tech: ["SQL", "MySQL/Postgres"]
+challenge: "Normalize complex person-/case-centric data."
+solution:
+  - "ERD → SQL DDL; indexes for frequent lookups; CRUD console."
+impact:
+  - "Predictable performance & cleaner data model."
+deepDive:
+  context: |
+    Immigration case management involves tracking complex, multi-faceted relationships between people, cases, documents, and legal processes. The challenge was to design a normalized relational schema that could handle:
+
+    - Multiple people per case (applicants, dependents, sponsors)
+    - Various case types (family-based, employment-based, asylum, etc.)
+    - Document lifecycle management (submission, expiration, renewals)
+    - Time-sensitive deadlines and status transitions
+    - Historical audit trails for compliance
+
+    The system needed to support immigration consultants managing hundreds of concurrent cases while maintaining data integrity and enabling fast queries for common operations like "show all cases with documents expiring in 30 days" or "find all dependents for applicant X."
+
+  architecture: |
+    **Database Design Approach:**
+
+    The schema follows a normalized relational model (3NF) with strategic denormalization for performance:
+
+    1. **Core Entity Tables:**
+       - `persons` - Central person registry (applicants, dependents, sponsors)
+       - `cases` - Immigration case metadata with type and status
+       - `documents` - Document tracking with expiration management
+       - `case_persons` - Many-to-many relationship with role differentiation
+
+    2. **Supporting Tables:**
+       - `case_status_history` - Audit trail for state transitions
+       - `document_types` - Lookup table for standardized document categories
+       - `case_types` - Immigration case category definitions
+
+    3. **Indexing Strategy:**
+       - Composite indexes on `(case_id, person_id, role)` for relationship queries
+       - B-tree indexes on `document_expiration_date` for deadline monitoring
+       - Full-text indexes on person names for search functionality
+
+    **Normalization Decisions:**
+    - Separated person data from case data to avoid duplication (one person can be in multiple cases)
+    - Created junction table for many-to-many relationships with additional attributes (role, primary_applicant flag)
+    - Extracted case types and document types into lookup tables for referential integrity
+
+  components: |
+    **1. Data Definition Layer (DDL)**
+    - Table creation scripts with proper constraints (PRIMARY KEY, FOREIGN KEY, NOT NULL, CHECK)
+    - Index definitions for query optimization
+    - View definitions for common query patterns
+
+    **2. CRUD Operations Layer**
+    - Parameterized SQL procedures for safe data manipulation
+    - Transaction management for multi-table operations (e.g., creating a case with multiple persons atomically)
+    - Input validation at the database level using CHECK constraints
+
+    **3. Query Interface**
+    - Console-based application for data entry and retrieval
+    - Pre-built queries for common operations (case search, document expiration alerts)
+    - Export functionality for reporting
+
+    **4. Data Integrity Mechanisms**
+    - Foreign key constraints to maintain referential integrity
+    - Triggers for automatic timestamp updates (created_at, updated_at)
+    - Cascading deletes configured appropriately (CASCADE vs RESTRICT based on business rules)
+
+  dataFlow: |
+    **1. Case Creation Flow:**
+    ```
+    User Input → Validate Person Data → Insert/Update persons table
+              → Create case record in cases table
+              → Link persons to case via case_persons junction table
+              → Initialize case_status_history with "OPEN" status
+    ```
+
+    **2. Document Submission Flow:**
+    ```
+    Document Upload → Validate document type against document_types
+                   → Insert into documents table with case_id reference
+                   → Calculate expiration date based on document type
+                   → Update case status if all required documents submitted
+    ```
+
+    **3. Case Status Transition:**
+    ```
+    Status Change Request → Validate allowed transitions (business rules)
+                         → Update cases.status field
+                         → Insert audit record in case_status_history
+                         → Trigger notifications if needed (via application layer)
+    ```
+
+    **4. Query Patterns:**
+    - **Find Expiring Documents:** Index scan on `document_expiration_date WHERE expiration_date BETWEEN NOW() AND NOW() + 30 DAYS`
+    - **Case Details:** JOIN cases, case_persons, persons to fetch complete case view
+    - **Person History:** JOIN persons, case_persons, cases to show all cases for a person
+
+  keyDecisions: |
+    **1. Normalization vs. Denormalization Trade-off**
+    - **Decision:** Keep person data normalized, denormalize case counts in persons table
+    - **Rationale:** Person data changes infrequently but is queried often. Storing `active_case_count` avoids expensive COUNT queries while accepting occasional inconsistency risk.
+
+    **2. Handling Multiple Roles per Person**
+    - **Decision:** Use `case_persons` junction table with `role` enum (applicant, dependent, sponsor, attorney)
+    - **Rationale:** Allows flexibility for one person to have multiple roles in same case (e.g., sponsor and attorney) while maintaining clean schema.
+
+    **3. Document Expiration Strategy**
+    - **Decision:** Store both `issue_date` and `expiration_date` rather than calculating on-the-fly
+    - **Rationale:** Different document types have different validity periods, and some may be extended. Pre-calculating enables efficient index-based queries for deadline monitoring.
+
+    **4. Audit Trail Implementation**
+    - **Decision:** Separate `case_status_history` table instead of JSON field in cases table
+    - **Rationale:** Enables SQL queries on historical data, maintains normalization, and allows efficient range queries (e.g., "all cases that were pending in Q2 2023").
+
+    **5. Database Engine Choice**
+    - **Decision:** MySQL/Postgres with InnoDB/default engine
+    - **Rationale:** ACID compliance critical for immigration data integrity. Row-level locking supports concurrent case updates. Native support for foreign keys and transactions.
+
+    **6. Text Encoding for Internationalization**
+    - **Decision:** UTF-8 encoding for all text fields
+    - **Rationale:** Immigration data includes names and addresses from diverse languages. UTF-8 ensures proper storage and sorting of international characters.
+
+  codeSnippets: |
+    **Core Schema Definition:**
+    ```sql
+    -- Person entity (normalized to avoid duplication)
+    CREATE TABLE persons (
+      person_id INT PRIMARY KEY AUTO_INCREMENT,
+      first_name VARCHAR(100) NOT NULL,
+      last_name VARCHAR(100) NOT NULL,
+      date_of_birth DATE NOT NULL,
+      nationality VARCHAR(100),
+      passport_number VARCHAR(50) UNIQUE,
+      email VARCHAR(255),
+      phone VARCHAR(20),
+      active_case_count INT DEFAULT 0, -- Denormalized for performance
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+      INDEX idx_name (last_name, first_name),
+      INDEX idx_dob (date_of_birth)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+    -- Case entity
+    CREATE TABLE cases (
+      case_id INT PRIMARY KEY AUTO_INCREMENT,
+      case_number VARCHAR(50) UNIQUE NOT NULL,
+      case_type_id INT NOT NULL,
+      status ENUM('OPEN', 'PENDING', 'APPROVED', 'DENIED', 'CLOSED') DEFAULT 'OPEN',
+      filing_date DATE NOT NULL,
+      target_completion_date DATE,
+      priority ENUM('LOW', 'MEDIUM', 'HIGH', 'URGENT') DEFAULT 'MEDIUM',
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+      FOREIGN KEY (case_type_id) REFERENCES case_types(case_type_id),
+      INDEX idx_status_date (status, filing_date),
+      INDEX idx_completion (target_completion_date)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+    -- Many-to-many relationship with role differentiation
+    CREATE TABLE case_persons (
+      case_person_id INT PRIMARY KEY AUTO_INCREMENT,
+      case_id INT NOT NULL,
+      person_id INT NOT NULL,
+      role ENUM('APPLICANT', 'DEPENDENT', 'SPONSOR', 'ATTORNEY') NOT NULL,
+      is_primary BOOLEAN DEFAULT FALSE,
+      relationship VARCHAR(50), -- e.g., "spouse", "child", "employer"
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      FOREIGN KEY (case_id) REFERENCES cases(case_id) ON DELETE CASCADE,
+      FOREIGN KEY (person_id) REFERENCES persons(person_id) ON DELETE RESTRICT,
+      UNIQUE KEY unique_case_person_role (case_id, person_id, role),
+      INDEX idx_person_cases (person_id, case_id)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+    -- Document tracking with expiration management
+    CREATE TABLE documents (
+      document_id INT PRIMARY KEY AUTO_INCREMENT,
+      case_id INT NOT NULL,
+      document_type_id INT NOT NULL,
+      document_number VARCHAR(100),
+      issue_date DATE NOT NULL,
+      expiration_date DATE,
+      file_path VARCHAR(500),
+      status ENUM('PENDING', 'SUBMITTED', 'APPROVED', 'REJECTED', 'EXPIRED') DEFAULT 'PENDING',
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+      FOREIGN KEY (case_id) REFERENCES cases(case_id) ON DELETE CASCADE,
+      FOREIGN KEY (document_type_id) REFERENCES document_types(document_type_id),
+      INDEX idx_expiration (expiration_date, status),
+      INDEX idx_case_docs (case_id, document_type_id)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+    ```
+
+    **Complex Query Example - Case Details with All Relationships:**
+    ```sql
+    -- View for complete case information
+    CREATE VIEW v_case_details AS
+    SELECT
+      c.case_id,
+      c.case_number,
+      ct.case_type_name,
+      c.status,
+      c.filing_date,
+      c.target_completion_date,
+      p.person_id,
+      CONCAT(p.first_name, ' ', p.last_name) AS person_name,
+      p.nationality,
+      cp.role,
+      cp.is_primary,
+      cp.relationship,
+      COUNT(DISTINCT d.document_id) AS total_documents,
+      COUNT(DISTINCT CASE WHEN d.status = 'APPROVED' THEN d.document_id END) AS approved_documents,
+      MIN(d.expiration_date) AS next_expiration
+    FROM cases c
+    INNER JOIN case_types ct ON c.case_type_id = ct.case_type_id
+    LEFT JOIN case_persons cp ON c.case_id = cp.case_id
+    LEFT JOIN persons p ON cp.person_id = p.person_id
+    LEFT JOIN documents d ON c.case_id = d.case_id
+    GROUP BY c.case_id, p.person_id, cp.case_person_id;
+
+    -- Query to find cases needing attention (expiring documents)
+    SELECT
+      c.case_number,
+      c.status,
+      p.first_name,
+      p.last_name,
+      dt.document_type_name,
+      d.expiration_date,
+      DATEDIFF(d.expiration_date, CURDATE()) AS days_until_expiration
+    FROM documents d
+    INNER JOIN cases c ON d.case_id = c.case_id
+    INNER JOIN case_persons cp ON c.case_id = cp.case_id AND cp.is_primary = TRUE
+    INNER JOIN persons p ON cp.person_id = p.person_id
+    INNER JOIN document_types dt ON d.document_type_id = dt.document_type_id
+    WHERE d.expiration_date BETWEEN CURDATE() AND DATE_ADD(CURDATE(), INTERVAL 30 DAY)
+      AND d.status NOT IN ('EXPIRED', 'REJECTED')
+      AND c.status NOT IN ('CLOSED', 'DENIED')
+    ORDER BY d.expiration_date ASC;
+    ```
+
+    **Transaction Example - Safe Case Creation:**
+    ```sql
+    -- Procedure to create a case with primary applicant atomically
+    DELIMITER $$
+
+    CREATE PROCEDURE create_immigration_case(
+      IN p_case_number VARCHAR(50),
+      IN p_case_type_id INT,
+      IN p_filing_date DATE,
+      IN p_first_name VARCHAR(100),
+      IN p_last_name VARCHAR(100),
+      IN p_date_of_birth DATE,
+      IN p_nationality VARCHAR(100),
+      IN p_passport_number VARCHAR(50),
+      OUT p_case_id INT,
+      OUT p_person_id INT
+    )
+    BEGIN
+      DECLARE EXIT HANDLER FOR SQLEXCEPTION
+      BEGIN
+        ROLLBACK;
+        RESIGNAL;
+      END;
+
+      START TRANSACTION;
+
+      -- Check if person already exists by passport
+      SELECT person_id INTO p_person_id
+      FROM persons
+      WHERE passport_number = p_passport_number
+      LIMIT 1;
+
+      -- Create person if not exists
+      IF p_person_id IS NULL THEN
+        INSERT INTO persons (first_name, last_name, date_of_birth, nationality, passport_number)
+        VALUES (p_first_name, p_last_name, p_date_of_birth, p_nationality, p_passport_number);
+        SET p_person_id = LAST_INSERT_ID();
+      END IF;
+
+      -- Create case
+      INSERT INTO cases (case_number, case_type_id, filing_date, status)
+      VALUES (p_case_number, p_case_type_id, p_filing_date, 'OPEN');
+      SET p_case_id = LAST_INSERT_ID();
+
+      -- Link person to case as primary applicant
+      INSERT INTO case_persons (case_id, person_id, role, is_primary)
+      VALUES (p_case_id, p_person_id, 'APPLICANT', TRUE);
+
+      -- Update denormalized counter
+      UPDATE persons SET active_case_count = active_case_count + 1
+      WHERE person_id = p_person_id;
+
+      -- Create initial status history entry
+      INSERT INTO case_status_history (case_id, old_status, new_status, changed_by)
+      VALUES (p_case_id, NULL, 'OPEN', USER());
+
+      COMMIT;
+    END$$
+
+    DELIMITER ;
+    ```
+
+  learnings: |
+    **Database Design Insights:**
+
+    1. **Normalization is Not Always Absolute**
+       - Started with strict 3NF but found that denormalizing `active_case_count` in the persons table eliminated expensive aggregate queries that ran on every dashboard load.
+       - Learning: Strategic denormalization for read-heavy fields is worth the added complexity of maintaining consistency.
+
+    2. **Junction Tables Should Carry Business Logic**
+       - Initially made `case_persons` a pure junction table with just IDs. Later added `role`, `is_primary`, and `relationship` fields.
+       - Learning: Many-to-many relationships in real-world domains often have attributes that belong to the relationship itself, not either entity.
+
+    3. **Date Fields Require Careful Indexing**
+       - Queries filtering by `expiration_date` ranges were slow until adding composite index `(expiration_date, status)`.
+       - Learning: Range queries on dates benefit enormously from proper indexing, and including status in the composite index eliminated filesorts.
+
+    4. **Enums vs. Foreign Keys Trade-off**
+       - Used ENUMs for `status` and `role` fields (limited, stable values) but foreign keys for `case_type` and `document_type` (extensible).
+       - Learning: ENUMs are faster and enforce constraints at the schema level, but they're rigid. Use them only for truly stable domains.
+
+    5. **Audit Trails Are Essential for Compliance**
+       - Immigration data has legal implications. The `case_status_history` table proved invaluable for tracking "when did this case move to PENDING?"
+       - Learning: For regulated domains, invest in audit infrastructure early. Retrofitting is painful.
+
+    6. **Constraints Prevent Bad Data**
+       - Foreign key constraints caught several bugs where the application tried to reference non-existent case types.
+       - CHECK constraints ensured `expiration_date > issue_date` for documents.
+       - Learning: Let the database enforce business rules where possible. It's the last line of defense against data corruption.
+
+    7. **UTF-8 Encoding is Non-Negotiable**
+       - Initially used latin1 encoding, ran into issues with names containing accented characters (José, Müller, etc.).
+       - Migration to utf8mb4 was painful but necessary.
+       - Learning: Always use UTF-8 (specifically utf8mb4 in MySQL) from day one when dealing with international data.
+
+    8. **Transactions Ensure Consistency**
+       - Creating a case involves 4-5 table inserts. Without transactions, partial failures left orphaned records.
+       - Stored procedure with transaction boundaries solved this completely.
+       - Learning: Multi-table operations must be wrapped in transactions. ACID compliance is worth the learning curve.
+---
+# Overview
+Relational schema + CRUD for immigration ops.

@@ -1,0 +1,23 @@
+---
+title: "Website Watcher"
+summary: "Production web archiver monitoring 100+ sites every 2 hours with automated change detection, full-text search across 50K+ snapshots, and zero-downtime deployment."
+role: "Builder"
+period: "2024"
+domain: "Data Engineering"
+tags: ["web-scraping", "archival", "search", "monitoring"]
+tech: ["Python", "Flask", "SQLite", "ArchiveBox", "Prometheus", "Docker"]
+github: "https://github.com/jayhemnani9910/webcrawler"
+challenge: "Build production-ready system tracking web content changes over time with versioned snapshots, intelligent discovery, and instant search across thousands of archived pages."
+solution:
+  - "ArchiveBox integration with custom crawl scheduler: discovers pages via sitemap + internal links, maintains 50K+ versioned snapshots."
+  - "Content hashing with SHA-256 diff detection triggering instant alerts on changes, reducing false positives by ~80% vs simple HTML comparison."
+  - "SQLite FTS5 full-text search enabling sub-second queries across entire archive history with ranking."
+impact:
+  - "Monitors 100+ websites automatically every 2 hours, processing 1,200+ snapshots daily with zero manual intervention."
+  - "Production deployment: Docker containerization, systemd auto-restart, Prometheus metrics tracking uptime (99.8%) and performance."
+  - "Reduced content monitoring overhead from hours of manual checking to zero with automated diff alerts."
+featured: true
+priority: 4
+---
+# Overview
+Production website archiver using ArchiveBox to snapshot pages and detect content changes. Monitors 100+ sites every 2 hours, maintaining 50K+ versioned snapshots with intelligent discovery (sitemap + internal links crawling) and full-text search. Fully containerized with Prometheus monitoring and systemd orchestration for zero-downtime operation.

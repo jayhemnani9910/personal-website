@@ -1,0 +1,208 @@
+---
+title: "Mobile Connectivity Suite"
+summary: "Android connectivity manager with REST sync and offline cache."
+role: "Developer"
+tags: ["android", "java", "kotlin"]
+tech: ["Java", "Kotlin", "Gradle", "REST"]
+challenge: "Stable connectivity in flaky network conditions."
+solution:
+  - "Connection watcher + exponential backoff; background sync."
+  - "Clean architecture modules; Gradle build flavors."
+impact:
+  - "Smoother UX and fewer failed operations."
+deepDive:
+  context: |
+    Mobile connectivity in emerging markets and variable network conditions presents unique challenges. Users frequently experience network transitions (WiFi to cellular, 4G to 3G/2G), intermittent connectivity, and high latency. Traditional synchronous REST APIs fail catastrophically in these scenarios, leading to failed transactions, data loss, and frustrated users.
+
+    The Mobile Connectivity Suite was built to address these real-world constraints. The goal was to create a resilient Android framework that could handle unstable networks gracefully while maintaining data integrity and providing responsive user experiences. The system needed to work seamlessly whether users had perfect 5G connectivity or spotty 2G coverage.
+
+    Key requirements included: intelligent connection management, automatic retry with backoff strategies, offline-first architecture with local caching, background synchronization, and transparent network state handling without burdening the user with technical details.
+
+  architecture: |
+    The architecture follows clean architecture principles with clear separation of concerns across three primary layers:
+
+    **Presentation Layer (Kotlin)**
+    - Activity/Fragment components with reactive UI updates
+    - ViewModel layer managing UI state and connectivity status
+    - LiveData streams for real-time connection state observation
+    - User-friendly indicators for sync status and network availability
+
+    **Domain Layer (Kotlin)**
+    - Connection manager orchestrating network state transitions
+    - Retry policy engine with exponential backoff algorithms
+    - Sync coordinator managing background operations
+    - Repository pattern abstracting data sources
+
+    **Data Layer (Java/Kotlin)**
+    - REST API client with OkHttp/Retrofit stack
+    - SQLite database for offline cache and pending operations queue
+    - Network state detector using Android ConnectivityManager
+    - WorkManager for reliable background sync scheduling
+
+    The system uses a modular Gradle structure with separate modules for core connectivity logic, UI components, and domain-specific features. Build flavors enable different configurations for dev/staging/production environments with varying retry policies and timeouts.
+
+  components: |
+    **ConnectionWatcher**
+    Monitors network availability and quality using Android's ConnectivityManager and NetworkCallback APIs. Detects transitions between network types (WiFi, cellular, offline) and measures connection quality through ping tests and latency sampling. Publishes connection state changes to subscribers.
+
+    **SyncEngine**
+    Coordinates data synchronization between local cache and remote servers. Implements a priority queue for pending operations, ensuring critical updates are processed first. Handles conflict resolution when local and remote data diverge. Uses WorkManager for background execution with constraints (network available, not low battery).
+
+    **RetryPolicy**
+    Implements exponential backoff with jitter to prevent thundering herd problems. Configurable max retry attempts and backoff multipliers. Distinguishes between retriable errors (network timeout, 5xx server errors) and permanent failures (4xx client errors). Persists retry state across app restarts.
+
+    **OfflineCache**
+    SQLite-backed storage layer providing fast local access to previously fetched data. Implements smart cache invalidation based on TTL and server ETags. Supports partial sync to minimize bandwidth usage. Maintains operation queue for user actions taken while offline.
+
+    **NetworkInterceptor**
+    OkHttp interceptor that enriches requests with connection metadata, implements automatic retries at the HTTP level, and provides detailed logging for debugging connectivity issues. Handles token refresh and authentication automatically.
+
+  dataFlow: |
+    **Online Request Flow:**
+    1. User action triggers data request in UI layer
+    2. ViewModel invokes repository method
+    3. Repository checks ConnectionWatcher for network availability
+    4. If online: REST client makes API call with automatic retry
+    5. Response data saved to OfflineCache
+    6. Data propagated to UI via LiveData stream
+    7. Success state displayed to user
+
+    **Offline Request Flow:**
+    1. User action while offline detected by ConnectionWatcher
+    2. Repository saves operation to pending queue in OfflineCache
+    3. Optimistic UI update shows expected result
+    4. User sees immediate feedback with "pending sync" indicator
+    5. When network restored, ConnectionWatcher triggers SyncEngine
+    6. SyncEngine processes queued operations in priority order
+    7. Successful sync updates cache and confirms operation
+    8. UI updated with final synced state
+
+    **Background Sync Flow:**
+    1. WorkManager schedules periodic sync tasks
+    2. Sync task runs only when network constraint satisfied
+    3. SyncEngine fetches updates for cached entities
+    4. Conflict resolution applied if local changes exist
+    5. Cache updated with merged data
+    6. Notifications displayed for important updates
+
+  keyDecisions: |
+    **Offline-First Architecture**
+    Chose to build offline-first rather than online-first to prioritize user experience. Every data access hits the local cache first, providing instant responses. Network requests happen asynchronously in the background. This decision meant more complex sync logic but dramatically improved perceived performance.
+
+    **WorkManager Over JobScheduler**
+    Selected WorkManager for background tasks despite JobScheduler's lower-level control. WorkManager provides backward compatibility to API 14, guaranteed execution, and simpler constraint-based scheduling. The abstraction layer simplified testing and reduced platform-specific code.
+
+    **Exponential Backoff with Jitter**
+    Implemented exponential backoff (2^n seconds) with random jitter (±30%) to prevent synchronized retry storms when network recovers. Initially tried fixed intervals, which caused server overload when many users reconnected simultaneously after outages.
+
+    **Kotlin + Java Hybrid**
+    Maintained core networking layer in Java for stability and third-party library compatibility, while migrating UI and business logic to Kotlin for null safety and coroutines. This pragmatic approach allowed gradual migration without full rewrites.
+
+    **Gradle Build Flavors**
+    Created separate build flavors (dev, staging, prod) with different API endpoints, retry configurations, and logging levels. Development builds have aggressive retries and verbose logging; production builds are optimized for battery and bandwidth conservation.
+
+    **SQLite Over Room Initially**
+    Started with raw SQLite for fine-grained control over database operations and migration strategies. Later migrated critical paths to Room for compile-time query verification while maintaining custom SQLite for complex sync logic.
+
+  codeSnippets: |
+    **Connection State Observer with Exponential Backoff**
+    ```kotlin
+    class ConnectionWatcher(private val context: Context) {
+        private val connectivityManager = context.getSystemService<ConnectivityManager>()
+        private val _connectionState = MutableLiveData<ConnectionState>()
+        val connectionState: LiveData<ConnectionState> = _connectionState
+
+        private val networkCallback = object : ConnectivityManager.NetworkCallback() {
+            override fun onAvailable(network: Network) {
+                _connectionState.postValue(ConnectionState.Online)
+                triggerBackgroundSync()
+            }
+
+            override fun onLost(network: Network) {
+                _connectionState.postValue(ConnectionState.Offline)
+            }
+        }
+
+        fun startWatching() {
+            val request = NetworkRequest.Builder()
+                .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+                .build()
+            connectivityManager?.registerNetworkCallback(request, networkCallback)
+        }
+    }
+    ```
+
+    **Retry Policy with Jitter**
+    ```kotlin
+    class ExponentialBackoffPolicy(
+        private val maxRetries: Int = 5,
+        private val baseDelayMs: Long = 1000,
+        private val maxDelayMs: Long = 60000
+    ) {
+        fun shouldRetry(attemptNumber: Int, error: Throwable): Boolean {
+            if (attemptNumber >= maxRetries) return false
+            return error.isRetriable()
+        }
+
+        fun getDelayMs(attemptNumber: Int): Long {
+            val exponentialDelay = baseDelayMs * (1 shl attemptNumber)
+            val jitter = (exponentialDelay * 0.3 * Random.nextDouble()).toLong()
+            return min(exponentialDelay + jitter, maxDelayMs)
+        }
+    }
+
+    private fun Throwable.isRetriable(): Boolean = when (this) {
+        is SocketTimeoutException, is UnknownHostException -> true
+        is HttpException -> code() in 500..599
+        else -> false
+    }
+    ```
+
+    **Offline Queue with Priority**
+    ```java
+    public class OfflineQueue {
+        private final SQLiteDatabase db;
+
+        public void enqueueOperation(Operation op) {
+            ContentValues values = new ContentValues();
+            values.put("type", op.getType());
+            values.put("priority", op.getPriority());
+            values.put("payload", op.toJson());
+            values.put("created_at", System.currentTimeMillis());
+            values.put("retry_count", 0);
+            db.insert("pending_operations", null, values);
+        }
+
+        public List<Operation> getPendingOperations() {
+            Cursor cursor = db.query("pending_operations",
+                null, "retry_count < ?", new String[]{"5"},
+                null, null, "priority DESC, created_at ASC");
+            return cursorToOperations(cursor);
+        }
+    }
+    ```
+
+  learnings: |
+    **Network Transitions Are the Real Enemy**
+    The biggest challenge wasn't complete offline mode—it was handling rapid network transitions. Users moving between WiFi zones, entering tunnels, or experiencing cellular handoffs created race conditions and partial failures. Learning: Always assume the network state can change mid-request, and design for graceful degradation.
+
+    **User Perception Trumps Technical Reality**
+    Users don't care about network reliability if the app feels responsive. Optimistic UI updates and immediate local caching made the app feel fast even on slow networks. The technical complexity of eventual consistency was worth the UX improvement. Learning: Show users what they want to see immediately, sync in the background.
+
+    **Battery Life Is a Feature**
+    Aggressive background sync killed battery life in early versions. Had to implement intelligent scheduling: sync only when charging, reduce frequency when battery low, batch multiple sync operations. Learning: Mobile apps must respect device resources; unlimited retries are not acceptable.
+
+    **Testing Network Conditions Is Hard**
+    Simulating real-world network conditions in testing is challenging. Used Android emulator network throttling, proxy tools like Charles, and even physical testing on trains and in elevators. Learning: Invest in network condition simulation tools and test on real devices in real conditions.
+
+    **Observability in Production**
+    Added extensive telemetry to understand real-world connectivity patterns: network type distributions, retry attempt histograms, sync success rates by region. This data drove optimization priorities. Learning: Instrument everything related to network operations; production behavior differs dramatically from lab conditions.
+
+    **Progressive Enhancement Works**
+    Different features had different connectivity requirements. Read-only features worked offline with cached data. Write operations required eventual connectivity. Critical transactions needed immediate sync confirmation. Learning: Not all features need the same connectivity guarantees; tier your requirements.
+
+    **Documentation for Future Maintainers**
+    The retry logic and sync coordination became complex. Created decision trees and state diagrams to document behavior. This documentation was invaluable when onboarding new team members. Learning: Complex asynchronous systems need visual documentation beyond code comments.
+---
+# Overview
+Android connectivity manager with REST sync and offline cache.

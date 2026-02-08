@@ -1,0 +1,339 @@
+---
+title: "OptiSupply"
+summary: "Analytics for a fashion retailer: shipping −15%, delays −20%, inventory −10%."
+role: "Analyst/Engineer"
+tags: ["analytics", "python", "supply-chain"]
+tech: ["Python", "Analytics", "Dashboards"]
+challenge: "Costly shipping and supplier delays; high carrying costs."
+solution:
+  - "Data model across orders, lanes, and SLAs; risk scoring."
+  - "What-if analysis to rebalance vendors and lanes."
+impact:
+  - "Reduced shipping costs (−15%), delays (−20%), inventory (−10%)."
+deepDive:
+  context: |
+    A mid-sized fashion retailer faced escalating logistics costs and inventory management challenges across their multi-vendor supply chain. With 50+ suppliers across 8 countries, inconsistent shipping performance, and seasonal demand volatility, they were experiencing:
+
+    - **15-20% shipping cost overruns** due to expedited freight and inefficient lane selection
+    - **High supplier variability** with some vendors missing deadlines 30-40% of the time
+    - **Inventory imbalances** leading to both stockouts (lost sales) and excess carrying costs
+
+    The business needed data-driven insights to optimize vendor selection, shipping lane allocation, and inventory positioning without compromising service levels. The challenge was to build an analytics framework that could handle fragmented data sources (ERP, TMS, WMS) and provide actionable recommendations for procurement and logistics teams.
+
+  architecture: |
+    **Data Pipeline & Analytics Stack:**
+
+    ```
+    Data Sources → ETL Layer → Data Warehouse → Analytics Engine → Visualization
+    ```
+
+    **Components:**
+    - **Data Integration Layer**: Python ETL scripts extracting from SAP (orders), TMS (shipments), WMS (inventory)
+    - **Data Warehouse**: Normalized schema with fact tables (orders, shipments, inventory_snapshots) and dimensions (suppliers, lanes, SKUs, time)
+    - **Analytics Engine**:
+      - Pandas/NumPy for data transformation and aggregation
+      - Scikit-learn for supplier risk scoring (classification models)
+      - Linear programming (PuLP) for lane optimization scenarios
+    - **Visualization**: Interactive dashboards (Plotly/Dash) for exploratory analysis and what-if scenarios
+
+    **Key Design Principles:**
+    - Modularity: Separate ETL, modeling, and visualization layers for maintainability
+    - Scalability: Optimized for monthly batch processing of 500K+ order lines
+    - Transparency: All metrics and risk scores traceable to source data
+
+  components: |
+    **1. Supplier Performance Scorecard**
+    - On-time delivery rate (OTDR) by supplier and product category
+    - Lead time variability (coefficient of variation)
+    - Quality metrics (reject rates, returns)
+    - Risk classification: Low/Medium/High based on historical performance
+
+    **2. Shipping Lane Optimizer**
+    - Cost modeling: freight cost per unit by lane, mode, and volume tier
+    - Transit time analysis: actual vs. scheduled delivery windows
+    - Capacity constraints: carrier volume limits and seasonal availability
+    - Recommendation engine: optimal lane selection for new orders based on cost/speed tradeoffs
+
+    **3. Inventory Positioning Model**
+    - Safety stock calculation: based on demand volatility and supplier lead time variability
+    - ABC analysis: SKU categorization by revenue contribution and turnover
+    - Reorder point optimization: balancing stockout risk vs. carrying costs
+    - Scenario planning: impact of vendor consolidation or lead time changes on inventory levels
+
+  dataFlow: |
+    **Monthly Analytics Cycle:**
+
+    1. **Data Extraction** (Week 1):
+       - Pull prior month orders, shipments, inventory movements from source systems
+       - Validate data quality: check for missing values, duplicates, outliers
+       - Enrich with external data: shipping holidays, exchange rates, fuel surcharges
+
+    2. **Transformation & Aggregation** (Week 1-2):
+       - Normalize supplier names and lane identifiers
+       - Calculate KPIs: OTDR, cost per unit, in-transit time, inventory DOH
+       - Build historical rolling averages (3/6/12 month windows)
+
+    3. **Analytics & Modeling** (Week 2):
+       - Update supplier risk scores using latest performance data
+       - Re-run lane optimization: identify cost savings opportunities
+       - Refresh inventory recommendations based on updated demand forecasts
+
+    4. **Reporting & Action** (Week 3):
+       - Generate executive summary: trends, anomalies, recommendations
+       - Share detailed dashboards with procurement and logistics teams
+       - Facilitate monthly review meetings to prioritize initiatives
+
+    **Real-time Alerting:**
+    - Automated alerts for critical delays (>5 days past scheduled delivery)
+    - Flagging of new supplier performance degradation (OTDR drops below threshold)
+
+  keyDecisions: |
+    **1. Balancing Model Complexity vs. Interpretability**
+    - **Decision**: Used transparent scoring models (weighted averages, percentile rankings) rather than black-box ML
+    - **Rationale**: Procurement stakeholders needed to understand and trust the risk scores to make vendor decisions. Interpretability > marginal accuracy gains
+    - **Trade-off**: Simpler models may miss non-linear patterns, but gained user adoption and confidence
+
+    **2. Batch Processing vs. Real-Time Streaming**
+    - **Decision**: Monthly batch analytics with daily exception alerts
+    - **Rationale**: Strategic decisions (vendor contracts, lane agreements) operate on monthly cycles. Real-time overhead not justified for core use case
+    - **Trade-off**: Some tactical delays couldn't be addressed immediately, but resource efficiency was prioritized
+
+    **3. Optimization Scope: Prescriptive vs. Descriptive**
+    - **Decision**: Focused on what-if scenario analysis rather than automated optimization
+    - **Rationale**: Supply chain decisions involve non-quantifiable factors (vendor relationships, strategic considerations). Human-in-the-loop approach better suited
+    - **Impact**: Analysts could explore trade-offs and present options rather than imposing algorithmic decisions
+
+    **4. Data Granularity: SKU-level vs. Aggregate**
+    - **Decision**: Maintained SKU-level detail in data warehouse, but aggregated to category level for most analyses
+    - **Rationale**: SKU-level insights were too noisy for 80% of use cases, but granular data preserved for deep-dives
+    - **Benefit**: Faster query performance and clearer insights for most users
+
+  codeSnippets: |
+    **Supplier Risk Scoring Algorithm:**
+    ```python
+    import pandas as pd
+    import numpy as np
+    from sklearn.preprocessing import StandardScaler
+
+    def calculate_supplier_risk_score(df_shipments):
+        """
+        Calculate supplier risk scores based on delivery performance,
+        lead time variability, and quality metrics.
+        """
+        # Aggregate metrics by supplier
+        supplier_metrics = df_shipments.groupby('supplier_id').agg({
+            'order_id': 'count',  # Volume
+            'on_time': 'mean',    # OTDR
+            'lead_time_days': ['mean', 'std'],
+            'reject_rate': 'mean'
+        }).reset_index()
+
+        # Flatten column names
+        supplier_metrics.columns = ['supplier_id', 'order_count',
+                                     'otdr', 'avg_lead_time',
+                                     'lead_time_std', 'reject_rate']
+
+        # Calculate coefficient of variation for lead time
+        supplier_metrics['lead_time_cv'] = (
+            supplier_metrics['lead_time_std'] / supplier_metrics['avg_lead_time']
+        )
+
+        # Normalize metrics (higher is worse for risk)
+        risk_features = pd.DataFrame({
+            'otdr_risk': 1 - supplier_metrics['otdr'],  # Invert OTDR
+            'variability_risk': supplier_metrics['lead_time_cv'],
+            'quality_risk': supplier_metrics['reject_rate']
+        })
+
+        # Standardize features
+        scaler = StandardScaler()
+        risk_scaled = scaler.fit_transform(risk_features)
+
+        # Weighted composite score (customizable weights)
+        weights = np.array([0.5, 0.3, 0.2])  # OTDR, variability, quality
+        supplier_metrics['risk_score'] = risk_scaled @ weights
+
+        # Classify into risk tiers
+        supplier_metrics['risk_tier'] = pd.cut(
+            supplier_metrics['risk_score'],
+            bins=[-np.inf, -0.5, 0.5, np.inf],
+            labels=['Low', 'Medium', 'High']
+        )
+
+        return supplier_metrics[['supplier_id', 'risk_score', 'risk_tier',
+                                  'otdr', 'lead_time_cv', 'order_count']]
+    ```
+
+    **Shipping Lane Cost Optimization:**
+    ```python
+    from pulp import LpProblem, LpMinimize, LpVariable, lpSum, LpStatus
+
+    def optimize_lane_allocation(orders_df, lanes_df):
+        """
+        Optimize shipping lane allocation to minimize cost while
+        meeting delivery time constraints.
+
+        orders_df: columns = [order_id, origin, destination, weight, max_transit_days]
+        lanes_df: columns = [lane_id, origin, destination, cost_per_kg, transit_days, capacity_kg]
+        """
+        # Create optimization problem
+        prob = LpProblem("Lane_Allocation", LpMinimize)
+
+        # Decision variables: amount of each order allocated to each lane
+        allocation = {}
+        for _, order in orders_df.iterrows():
+            # Find feasible lanes for this order
+            feasible_lanes = lanes_df[
+                (lanes_df['origin'] == order['origin']) &
+                (lanes_df['destination'] == order['destination']) &
+                (lanes_df['transit_days'] <= order['max_transit_days'])
+            ]
+
+            for _, lane in feasible_lanes.iterrows():
+                var_name = f"order_{order['order_id']}_lane_{lane['lane_id']}"
+                allocation[var_name] = LpVariable(
+                    var_name,
+                    lowBound=0,
+                    upBound=order['weight']
+                )
+
+        # Objective: minimize total shipping cost
+        prob += lpSum([
+            allocation[f"order_{order['order_id']}_lane_{lane['lane_id']}"] *
+            lane['cost_per_kg']
+            for _, order in orders_df.iterrows()
+            for _, lane in lanes_df.iterrows()
+            if f"order_{order['order_id']}_lane_{lane['lane_id']}" in allocation
+        ])
+
+        # Constraint: each order must be fully allocated
+        for _, order in orders_df.iterrows():
+            prob += lpSum([
+                allocation[var]
+                for var in allocation.keys()
+                if f"order_{order['order_id']}_" in var
+            ]) == order['weight']
+
+        # Constraint: lane capacity limits
+        for _, lane in lanes_df.iterrows():
+            prob += lpSum([
+                allocation[var]
+                for var in allocation.keys()
+                if f"_lane_{lane['lane_id']}" in var
+            ]) <= lane['capacity_kg']
+
+        # Solve
+        prob.solve()
+
+        # Extract results
+        results = []
+        for var in prob.variables():
+            if var.varValue > 0:
+                parts = var.name.split('_')
+                results.append({
+                    'order_id': int(parts[1]),
+                    'lane_id': int(parts[3]),
+                    'allocated_weight': var.varValue
+                })
+
+        return pd.DataFrame(results), prob.objective.value()
+    ```
+
+    **Inventory Safety Stock Calculation:**
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    def calculate_safety_stock(sku_id, demand_history, lead_time_days,
+                                lead_time_std, service_level=0.95):
+        """
+        Calculate optimal safety stock using demand and lead time variability.
+
+        Formula: SS = Z * sqrt(LT * σ_demand² + μ_demand² * σ_LT²)
+        """
+        # Calculate demand statistics
+        avg_daily_demand = np.mean(demand_history)
+        std_daily_demand = np.std(demand_history)
+
+        # Z-score for desired service level
+        z_score = stats.norm.ppf(service_level)
+
+        # Safety stock formula accounting for both demand and lead time variability
+        variance_demand = std_daily_demand ** 2
+        variance_lead_time = lead_time_std ** 2
+
+        safety_stock = z_score * np.sqrt(
+            lead_time_days * variance_demand +
+            (avg_daily_demand ** 2) * variance_lead_time
+        )
+
+        # Reorder point
+        reorder_point = (avg_daily_demand * lead_time_days) + safety_stock
+
+        return {
+            'sku_id': sku_id,
+            'safety_stock': round(safety_stock, 2),
+            'reorder_point': round(reorder_point, 2),
+            'avg_daily_demand': round(avg_daily_demand, 2),
+            'lead_time_days': lead_time_days,
+            'service_level': service_level
+        }
+    ```
+
+  learnings: |
+    **Technical Insights:**
+
+    1. **Data Quality is the Foundation**
+       - Spent 40% of project time on data cleaning and validation
+       - Inconsistent supplier naming conventions required fuzzy matching and manual curation
+       - Missing shipment dates (10-15% of records) needed imputation strategies
+       - **Lesson**: Invest upfront in data quality checks and stakeholder alignment on definitions
+
+    2. **Simple Models with Good Data > Complex Models with Poor Data**
+       - Initial attempts at ML-based demand forecasting underperformed simple moving averages due to sparse historical data
+       - Transparency and interpretability drove faster stakeholder buy-in than accuracy improvements
+       - **Lesson**: Match model complexity to data availability and user sophistication
+
+    3. **Optimization Constraints Are Business Logic**
+       - Lane optimization required non-trivial constraints: vendor preferences, strategic partnerships, seasonal capacity
+       - Some constraints were implicit and only surfaced during stakeholder reviews
+       - **Lesson**: Involve domain experts early to capture business rules that algorithms can't infer
+
+    **Business Impact:**
+
+    1. **Quantified Savings Drove Action**
+       - What-if scenarios showing $500K annual savings from vendor consolidation accelerated procurement negotiations
+       - Visual dashboards made cost drivers tangible for executives (previously buried in spreadsheets)
+       - **Impact**: Secured executive sponsorship and budget for supply chain initiatives
+
+    2. **Adoption Required Change Management**
+       - Initial resistance from procurement team who felt their expertise was being questioned
+       - Positioned analytics as "decision support" rather than "automation" to gain trust
+       - Conducted training sessions to teach teams how to interpret dashboards
+       - **Lesson**: Technical solutions alone don't drive change; user adoption requires empathy and education
+
+    3. **Incremental Wins Built Momentum**
+       - Started with high-visibility, low-risk use case (shipping lane analysis)
+       - Quick wins (15% cost reduction in 3 months) established credibility
+       - Expanded to supplier risk scoring and inventory optimization after proving value
+       - **Lesson**: Phased rollout with early victories builds organizational confidence
+
+    **Operational Learnings:**
+
+    1. **Monthly Cadence Matched Decision Cycles**
+       - Aligned analytics refresh with procurement planning meetings
+       - Created rhythm of "data → insights → action → review"
+       - **Outcome**: Analytics became embedded in operational processes, not one-off analysis
+
+    2. **Exception-Based Alerting Focused Attention**
+       - Daily alerts for critical delays (>5 days late) enabled proactive intervention
+       - Automated flagging of supplier performance degradation prompted early contract discussions
+       - **Lesson**: Combine strategic (monthly) and tactical (daily) analytics for comprehensive coverage
+
+    3. **Documentation Enabled Knowledge Transfer**
+       - Created runbooks for ETL processes, metric definitions, and dashboard usage
+       - Trained backup analysts to ensure continuity when primary analyst unavailable
+       - **Lesson**: Sustainability requires knowledge sharing beyond the original builder
+---
+# Overview
+Analytics for a fashion retailer: shipping −15%, delays −20%, inventory −10%.

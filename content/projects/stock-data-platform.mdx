@@ -1,0 +1,23 @@
+---
+title: "Stock Data Platform"
+summary: "Batch + streaming platform for market data with minute-level analytics."
+role: "Data/Analytics Engineer"
+period: "Personal"
+domain: "Market data"
+tags: ["data-platform", "streaming", "analytics"]
+tech: ["Python", "Kafka", "Airflow", "TimescaleDB/Postgres", "Dash", "SQL"]
+challenge: "Unify real-time ticks and batch OHLC data into a single, query-friendly warehouse with reproducible jobs."
+solution:
+  - "Kafka topics (ticks, news) for near-real-time ingestion; producers buffer/retry with idempotent writes."
+  - "Airflow schedules batch ingests & backfills, orchestrates validation and dimensional loads."
+  - "TimescaleDB hypertables for ticks; star schema (FactPrices + dimensions) for analytics."
+  - "Dash UI: time-window filters, rolling indicators (SMA/EMA), intraday heatmaps."
+impact:
+  - "Single source of truth for intraday + historical; reproducible backfills."
+  - "Interactive dashboards with smooth time-window slicing."
+  - "Clear lineage for KPIs and derived indicators."
+featured: false
+priority: 24
+---
+# Overview
+Production-grade platform unifying batch and streaming market data into a single analytical warehouse. Kafka for real-time ticks, Airflow for batch orchestration, TimescaleDB for time-series storage, and Dash for interactive visualization.

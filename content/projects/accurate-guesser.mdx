@@ -1,0 +1,172 @@
+---
+title: "Accurate Guesser"
+summary: "Java desktop guessing game (GUI)."
+role: "Developer"
+tags: ["java", "desktop"]
+tech: ["Java", "Swing"]
+challenge: "Fun UI with simple state machine."
+solution:
+  - "Swing GUI; input validation; scoring and replay."
+impact:
+  - "Lightweight demo of event-driven UI."
+deepDive:
+  context: "Accurate Guesser is a classic number guessing game built with Java Swing, designed to demonstrate fundamental GUI programming concepts and event-driven architecture. The player tries to guess a randomly generated number within a range, receiving feedback after each attempt. This project showcases clean separation of concerns between UI presentation, game logic, and state management - essential principles for desktop application development."
+
+  architecture: "The application follows a Model-View-Controller (MVC) pattern adapted for Swing's event-driven paradigm. The game state machine manages three primary states: INITIAL (game setup), PLAYING (active guessing), and FINISHED (game over with results). The architecture separates the game logic (random number generation, guess validation, attempt tracking) from the Swing UI components (JFrame, JPanel, JTextField, JButton), connected through ActionListener callbacks. This separation enables easy testing of game logic independently from UI concerns."
+
+  components:
+    - name: "GameEngine"
+      purpose: "Core game logic managing the secret number, guess validation, and scoring"
+      details: "Handles random number generation within configurable bounds, validates player guesses, maintains attempt counters, and calculates scoring based on accuracy and number of tries. Implements the state transitions and win/loss conditions."
+
+    - name: "GameUI (JFrame)"
+      purpose: "Main window container orchestrating all visual components"
+      details: "Extends JFrame to create the primary application window. Manages layout using BorderLayout or GridBagLayout to organize input fields, feedback labels, and action buttons. Handles window lifecycle events and coordinates communication between UI components and game logic."
+
+    - name: "InputPanel"
+      purpose: "User input controls for guess submission"
+      details: "Contains JTextField for numerical input with validation, submit button with ActionListener, and visual feedback for invalid inputs. Implements input filtering to prevent non-numeric entries and enforces range constraints before passing guesses to the game engine."
+
+    - name: "FeedbackDisplay"
+      purpose: "Visual feedback mechanism for game state and hints"
+      details: "Uses JLabel or JTextArea to display hints ('Too high!', 'Too low!', 'Correct!'), attempt counts, and current game status. Implements dynamic color coding or font styling to make feedback more intuitive and engaging."
+
+    - name: "ControlPanel"
+      purpose: "Game control actions (new game, reset, exit)"
+      details: "Provides buttons for starting new games, resetting current game, and exiting the application. Manages state transitions and confirms destructive actions (like resetting mid-game) through JOptionPane dialogs."
+
+  dataFlow: "Game flow begins with initialization where the GameEngine generates a random secret number and sets state to INITIAL. When the player enters a guess, the InputPanel validates the input and triggers an ActionEvent. The event handler extracts the guess value, passes it to GameEngine's validateGuess() method, which compares it against the secret number and returns feedback (TOO_HIGH, TOO_LOW, CORRECT). The feedback propagates back to FeedbackDisplay, which updates the UI with appropriate hints and increments the attempt counter. If correct, the game transitions to FINISHED state, displaying win statistics and enabling the replay option. State transitions are atomic and maintain consistency between UI elements and game logic."
+
+  keyDecisions:
+    - decision: "Swing over JavaFX for UI framework"
+      rationale: "Chose Swing for its maturity, extensive documentation, and lower learning curve for fundamental GUI concepts. While JavaFX offers more modern features, Swing's simplicity made it ideal for demonstrating core event-driven programming patterns without framework-specific abstractions."
+
+    - decision: "State machine for game flow control"
+      rationale: "Implemented explicit state management (INITIAL, PLAYING, FINISHED) to prevent invalid operations and ensure predictable behavior. This prevents edge cases like submitting guesses after winning or starting multiple games simultaneously. The state machine makes transitions explicit and testable."
+
+    - decision: "Input validation at UI layer"
+      rationale: "Performed validation in InputPanel before reaching GameEngine to provide immediate user feedback and maintain clean separation of concerns. The UI handles presentation-level validation (numeric input, range checks), while GameEngine focuses purely on game logic. This reduces coupling and improves user experience."
+
+    - decision: "Modal dialogs for game state changes"
+      rationale: "Used JOptionPane for win/loss notifications and replay confirmations to create clear breakpoints in game flow. Modal dialogs ensure users acknowledge outcomes before proceeding, preventing accidental game resets and making state transitions explicit."
+
+  codeSnippets:
+    - language: "java"
+      title: "Game Engine Core Logic"
+      code: |
+        public class GameEngine {
+            private int secretNumber;
+            private int attempts;
+            private GameState state;
+            private final int MIN_VALUE = 1;
+            private final int MAX_VALUE = 100;
+
+            public void startNewGame() {
+                this.secretNumber = (int)(Math.random() * MAX_VALUE) + MIN_VALUE;
+                this.attempts = 0;
+                this.state = GameState.PLAYING;
+            }
+
+            public GuessResult validateGuess(int guess) {
+                if (state != GameState.PLAYING) {
+                    throw new IllegalStateException("No active game");
+                }
+
+                attempts++;
+
+                if (guess == secretNumber) {
+                    state = GameState.FINISHED;
+                    return new GuessResult(ResultType.CORRECT, attempts);
+                } else if (guess < secretNumber) {
+                    return new GuessResult(ResultType.TOO_LOW, attempts);
+                } else {
+                    return new GuessResult(ResultType.TOO_HIGH, attempts);
+                }
+            }
+        }
+
+    - language: "java"
+      title: "Swing Event Handler Integration"
+      code: |
+        public class GameUI extends JFrame {
+            private GameEngine engine;
+            private JTextField guessInput;
+            private JLabel feedbackLabel;
+            private JLabel attemptsLabel;
+
+            private void initializeListeners() {
+                submitButton.addActionListener(e -> handleGuessSubmission());
+                newGameButton.addActionListener(e -> startNewGame());
+            }
+
+            private void handleGuessSubmission() {
+                try {
+                    int guess = Integer.parseInt(guessInput.getText());
+
+                    if (guess < 1 || guess > 100) {
+                        showError("Please enter a number between 1 and 100");
+                        return;
+                    }
+
+                    GuessResult result = engine.validateGuess(guess);
+                    updateFeedback(result);
+
+                    if (result.getType() == ResultType.CORRECT) {
+                        handleGameWin(result.getAttempts());
+                    }
+                } catch (NumberFormatException ex) {
+                    showError("Invalid input. Please enter a valid number.");
+                } catch (IllegalStateException ex) {
+                    showError("Start a new game first!");
+                }
+            }
+        }
+
+    - language: "java"
+      title: "Input Validation with DocumentFilter"
+      code: |
+        // Advanced input validation preventing non-numeric entry
+        public class NumericDocumentFilter extends DocumentFilter {
+            @Override
+            public void insertString(FilterBypass fb, int offset,
+                                    String string, AttributeSet attr)
+                                    throws BadLocationException {
+                if (string != null && string.matches("\\d+")) {
+                    super.insertString(fb, offset, string, attr);
+                }
+            }
+
+            @Override
+            public void replace(FilterBypass fb, int offset, int length,
+                               String text, AttributeSet attrs)
+                               throws BadLocationException {
+                if (text != null && text.matches("\\d*")) {
+                    super.replace(fb, offset, length, text, attrs);
+                }
+            }
+        }
+
+        // Applied to input field
+        ((AbstractDocument)guessInput.getDocument())
+            .setDocumentFilter(new NumericDocumentFilter());
+
+  learnings:
+    - insight: "Event-Driven Architecture Fundamentals"
+      description: "Building with Swing taught the core principles of event-driven programming: loose coupling through listeners, callback-based control flow, and asynchronous user interactions. Understanding how ActionListeners decouple user actions from business logic became foundational knowledge applicable to modern frameworks like React and Vue, where similar event-driven patterns dominate."
+
+    - insight: "State Management Complexity"
+      description: "Even a simple game reveals state management challenges. Without explicit state tracking (INITIAL, PLAYING, FINISHED), edge cases emerged: users submitting guesses before initialization, starting multiple games simultaneously, or continuing after winning. This experience highlighted why state management libraries (Redux, MobX) exist in complex applications - manual state tracking doesn't scale."
+
+    - insight: "Separation of Concerns in Practice"
+      description: "Implementing MVC in Swing demonstrated why architectural patterns matter. Initially mixing UI code with game logic created brittle code resistant to changes. Refactoring to separate GameEngine from GameUI made testing trivial, enabled UI redesigns without touching logic, and clarified responsibilities. This lesson applies universally across software development."
+
+    - insight: "Input Validation Layers"
+      description: "Learned to implement defense in depth: UI-level validation for immediate feedback (DocumentFilter for numeric input), application-level validation for business rules (range checking), and domain-level validation in GameEngine (state checks). Each layer serves distinct purposes and prevents different failure modes. Relying on a single validation point creates fragility."
+
+    - insight: "User Experience in Desktop Applications"
+      description: "Discovered that technical correctness doesn't equal good UX. Early versions worked but felt clunky: no visual feedback during input, unclear win conditions, and abrupt state changes. Adding color-coded hints, smooth transitions, confirmation dialogs, and immediate input validation transformed the experience. Small UI details have outsized impact on perceived quality."
+---
+# Overview
+Accurate Guesser is a classic number guessing game built with Java Swing that demonstrates fundamental desktop application development principles. Players attempt to guess a randomly generated number, receiving intelligent feedback after each attempt. Beyond being a fun game, this project serves as a comprehensive exploration of event-driven architecture, state management, and GUI programming patterns in Java.
+
+The application showcases clean separation between game logic and presentation, implements robust input validation, and provides an intuitive user experience through responsive UI feedback. It's a perfect example of how simple concepts can teach foundational programming principles that scale to complex applications.
