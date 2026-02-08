@@ -1,0 +1,159 @@
+%-------------------------
+% Data Analyst Resume - Jay Hemnani
+%-------------------------
+
+\documentclass[letterpaper,10pt]{article}
+
+\usepackage[empty]{fullpage}
+\usepackage{titlesec}
+\usepackage[usenames,dvipsnames]{color}
+\usepackage{enumitem}
+\usepackage[hidelinks]{hyperref}
+\usepackage{fancyhdr}
+\usepackage[english]{babel}
+\usepackage{tabularx}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot{}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+
+\addtolength{\oddsidemargin}{-0.6in}
+\addtolength{\evensidemargin}{-0.6in}
+\addtolength{\textwidth}{1.2in}
+\addtolength{\topmargin}{-0.6in}
+\addtolength{\textheight}{1.2in}
+
+\urlstyle{same}
+\raggedbottom
+\raggedright
+\setlength{\tabcolsep}{0in}
+
+\titleformat{\section}{
+  \vspace{-6pt}\scshape\raggedright\large\bfseries
+}{}{0em}{}[\color{black}\titlerule \vspace{-6pt}]
+
+\newcommand{\resumeItem}[1]{\item\small{#1 \vspace{-3pt}}}
+\newcommand{\resumeSubheading}[4]{
+  \vspace{-3pt}\item
+    \begin{tabular*}{0.97\textwidth}[t]{l@{\extracolsep{\fill}}r}
+      \textbf{#1} & #2 \\
+      \textit{\small#3} & \textit{\small #4} \\
+    \end{tabular*}\vspace{-8pt}
+}
+\newcommand{\resumeExpHeading}[4]{
+  \vspace{-3pt}\item
+    \begin{tabular*}{0.97\textwidth}[t]{l@{\extracolsep{\fill}}r}
+      \textbf{#1}, \textit{#3} & #2 \\
+    \end{tabular*}\vspace{-8pt}
+}
+\newcommand{\resumeProjectHeading}[2]{
+    \item
+    \begin{tabular*}{0.97\textwidth}{l@{\extracolsep{\fill}}r}
+      \small#1 & #2 \\
+    \end{tabular*}\vspace{-8pt}
+}
+\renewcommand\labelitemii{$\vcenter{\hbox{\tiny$\bullet$}}$}
+\newcommand{\resumeSubHeadingListStart}{\begin{itemize}[leftmargin=0.12in, label={}]}
+\newcommand{\resumeSubHeadingListEnd}{\end{itemize}}
+\newcommand{\resumeItemListStart}{\begin{itemize}[leftmargin=0.15in]}
+\newcommand{\resumeItemListEnd}{\end{itemize}\vspace{-6pt}}
+
+\begin{document}
+
+%----------HEADING----------
+\begin{center}
+    {\Huge \scshape Jay Hemnani} \\ \vspace{2pt}
+    \small jayhemnani992000@gmail.com $|$ GitHub: \href{https://github.com/jayhemnani9910}{github.com/jayhemnani9910} \\
+    San Jose, CA
+\end{center}
+
+%-----------EDUCATION-----------
+\section{Education}
+  \resumeSubHeadingListStart
+    \resumeSubheading
+      {Pandit Deendayal Energy University (PDEU)}{2018 -- 2022 $|$ Gandhinagar, India}
+      {B.Tech in Computer Engineering $|$ GPA: 8.7/10}{}
+      \resumeItemListStart
+        \resumeItem{\textbf{Coursework:} Statistics, Big Data Analytics, Database Systems, Business Intelligence.}
+      \resumeItemListEnd
+  \resumeSubHeadingListEnd
+
+%-----------TECHNICAL SKILLS-----------
+\section{Technical Skills}
+ \begin{itemize}[leftmargin=0.12in, label={}]
+    \small{\item{
+     \textbf{Programming:} Python, SQL (Advanced), R, JavaScript \\
+     \textbf{Analytics \& Statistics:} Pandas, NumPy, Scikit-learn, Statistical Analysis, A/B Testing, Hypothesis Testing \\
+     \textbf{Visualization \& BI:} Tableau, Power BI, Plotly, Streamlit, Dash, Excel (Advanced), Google Sheets \\
+     \textbf{Databases:} PostgreSQL, MySQL, MongoDB, BigQuery, Data Warehousing, Data Modeling \\
+     \textbf{Data Processing:} ETL/ELT Pipelines, Data Cleaning, Data Validation, Apache Airflow \\
+     \textbf{Tools:} Git, Jupyter Notebooks, Google Analytics, Looker, dbt
+    }}
+ \end{itemize}
+ \vspace{-8pt}
+
+%-----------EXPERIENCE-----------
+\section{Experience}
+  \resumeSubHeadingListStart
+
+    \resumeExpHeading
+      {Data Analyst}{Summer 2025 $|$ San Jose, CA}
+      {Elite Hotel Group}{}
+      \resumeItemListStart
+        \resumeItem{Engineered \textbf{automated reporting pipelines} using SQL and Python, reducing manual reporting effort by \textbf{40\%} and improving data consistency across multi-property analytics.}
+        \resumeItem{Designed and deployed \textbf{interactive dashboards} in Tableau and Power BI for occupancy, revenue, and KPI tracking, enabling data-driven decision-making for revenue management.}
+        \resumeItem{Developed \textbf{demand forecasting models} using time-series analysis and regression techniques, improving booking prediction accuracy to support dynamic pricing strategies.}
+      \resumeItemListEnd
+
+    \resumeExpHeading
+      {Independent Technical Consultant}{2022 -- 2024 $|$ Remote}
+      {}{}
+      \resumeItemListStart
+        \resumeItem{Provided \textbf{data analytics consulting} for small businesses, building dashboards, reports, and automation solutions for business intelligence.}
+      \resumeItemListEnd
+
+    \resumeExpHeading
+      {AI/ML Intern}{Jan -- May 2022 $|$ Gujarat, India}
+      {Amnex}{}
+      \resumeItemListStart
+        \resumeItem{Built \textbf{fraud detection analytics} using ensemble ML models achieving \textbf{94\% precision}, presenting findings to stakeholders with actionable recommendations.}
+        \resumeItem{Developed \textbf{analytics dashboards} with statistical models for operational reporting, automating KPI calculations and anomaly detection across business metrics.}
+      \resumeItemListEnd
+
+    \resumeExpHeading
+      {Software Engineering Intern}{May -- Nov 2019 $|$ Gujarat, India}
+      {Cactus Creatives}{}
+      \resumeItemListStart
+        \resumeItem{Built \textbf{data pipelines and reporting tools} for internal analytics; configured automated workflows reducing manual effort by \textbf{60\%}.}
+      \resumeItemListEnd
+
+  \resumeSubHeadingListEnd
+
+%-----------PROJECTS-----------
+\section{Projects}
+    \resumeSubHeadingListStart
+      \resumeProjectHeading
+          {\textbf{Stock Data Platform --- Financial Analytics Dashboard} $|$ \emph{Python, SQL, Airflow, TimescaleDB, Dash}}{}
+          \resumeItemListStart
+            \resumeItem{Built \textbf{interactive financial dashboards} in Dash displaying rolling indicators (SMA, EMA), intraday heatmaps, and time-window filtering for market analysis.}
+            \resumeItem{Designed \textbf{ETL pipelines} with Airflow for automated data ingestion, validation, and transformation with reproducible data lineage.}
+            \resumeItem{Created \textbf{star schema data model} (FactPrices + dimensions) optimized for analytical queries and dashboard performance.}
+          \resumeItemListEnd
+      \resumeProjectHeading
+          {\textbf{BarcaBrain --- Sports Analytics Platform} $|$ \emph{Python, Pandas, Streamlit, SQL}}{}
+          \resumeItemListStart
+            \resumeItem{Designed \textbf{analytics dashboard} for player comparison and scouting, displaying clusters, similarity scores, and attribute deltas for 10,000+ players.}
+            \resumeItem{Built \textbf{feature engineering pipeline} transforming raw match events into actionable metrics for recruitment analysis.}
+            \resumeItem{Created \textbf{interactive visualizations} enabling rapid like-for-like player discovery with filtering by role, league, and performance metrics.}
+          \resumeItemListEnd
+      \resumeProjectHeading
+          {\textbf{Kayak --- Travel Analytics} $|$ \emph{Python, SQL, Tableau}}{}
+          \resumeItemListStart
+            \resumeItem{Built \textbf{booking analytics dashboards} tracking conversion rates, search patterns, and revenue metrics across travel services.}
+            \resumeItem{Analyzed \textbf{user behavior patterns} to identify optimization opportunities for search ranking and recommendation algorithms.}
+          \resumeItemListEnd
+    \resumeSubHeadingListEnd
+
+\end{document}

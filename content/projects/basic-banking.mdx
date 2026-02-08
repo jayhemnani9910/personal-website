@@ -1,0 +1,83 @@
+---
+title: "Basic Banking System"
+summary: "Simple login + transactions with PHP backend."
+role: "Web Dev Intern"
+period: "Feb 2020"
+tags: ["web", "php"]
+tech: ["PHP", "MySQL", "HTML/CSS"]
+challenge: "Minimal banking flow for learning + demo."
+solution:
+  - "Auth, transfers, and ledger views; clean UI."
+impact:
+  - "Good primer on forms, security basics, and SQL ops."
+links:
+  code: "https://github.com/jeyhemnani99/Basic-banking-system"
+deepDive:
+  context: |
+    This was one of my first complete web applications, built during my internship to learn the fundamentals of full-stack development. The goal was to understand the complete request-response cycle, database interactions, and basic security considerations in a controlled learning environment.
+
+    While the scope was intentionally limited (basic CRUD operations for banking transactions), the project served as a practical introduction to server-side programming, SQL databases, and user authentication - concepts I'd only known theoretically before this.
+
+  architecture: |
+    Simple MVC-inspired structure with PHP handling both routing and business logic:
+
+    - **Models**: Direct SQL queries for user authentication and transaction records
+    - **Views**: HTML templates with embedded PHP for dynamic content rendering
+    - **Controllers**: PHP scripts processing form submissions and coordinating database operations
+
+    The database schema included basic tables for users (credentials, account balances) and transactions (sender, receiver, amount, timestamp). No complex relationships or normalization beyond what was necessary for the demo.
+
+  components:
+    - name: "Authentication System"
+      description: "Login/logout flow with session management. Used PHP sessions to maintain user state and basic password hashing (md5 at the time - learned about bcrypt later)."
+
+    - name: "Transaction Module"
+      description: "Form-based money transfers between accounts. Implemented basic validation to prevent negative balances and self-transfers."
+
+    - name: "Transaction History"
+      description: "Simple ledger view showing incoming and outgoing transfers. Basic SQL JOINs to fetch related user data."
+
+    - name: "Admin Dashboard"
+      description: "Overview page showing all users and their balances. First exposure to role-based access control concepts."
+
+  dataFlow: |
+    1. User submits login credentials via POST request
+    2. PHP script queries MySQL database to verify credentials
+    3. On success, create session and redirect to dashboard
+    4. For transfers: validate inputs, check sender balance, execute dual UPDATE queries (debit sender, credit receiver)
+    5. Insert transaction record for audit trail
+    6. Reload dashboard with updated balances
+
+    All database operations were synchronous with direct query execution. No ORM, prepared statements were manually implemented after learning about SQL injection.
+
+  keyDecisions:
+    - decision: "Choosing procedural PHP over frameworks"
+      rationale: "Wanted to understand the fundamentals before using abstractions like Laravel. This helped me appreciate what frameworks do under the hood."
+
+    - decision: "Manual SQL queries instead of ORM"
+      rationale: "Needed to learn SQL syntax, table relationships, and query optimization basics. Wrote JOIN queries by hand to understand database operations."
+
+    - decision: "Session-based authentication"
+      rationale: "Simplest authentication mechanism to implement. Learned about session cookies, server-side storage, and state management."
+
+    - decision: "Minimal frontend styling"
+      rationale: "Focus was on backend logic. Used basic HTML/CSS to make it functional but not fancy - this was about learning server-side concepts."
+
+  learnings:
+    - learning: "Security fundamentals"
+      description: "First real exposure to SQL injection, XSS vulnerabilities, and why input validation matters. Initially wrote vulnerable code, then learned to use prepared statements and sanitize outputs."
+
+    - learning: "Database design basics"
+      description: "Understanding primary keys, foreign keys, and why atomicity matters in financial transactions. Learned the hard way about race conditions when two transfers happened simultaneously."
+
+    - learning: "State management"
+      description: "How sessions work, cookie-based authentication, and the stateless nature of HTTP. This foundation helped later when learning about JWT tokens and modern auth patterns."
+
+    - learning: "Form handling and validation"
+      description: "Server-side validation, error messaging, and user feedback. Learned why client-side validation alone isn't enough."
+
+    - learning: "Development workflow"
+      description: "Setting up local PHP/MySQL environment (XAMPP), debugging with var_dump(), and basic version control with Git. First project where I used branches and commits meaningfully."
+---
+# Overview
+Simple login + transactions with PHP backend.

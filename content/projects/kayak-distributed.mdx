@@ -1,0 +1,25 @@
+---
+title: "Kayak - Travel Metasearch"
+summary: "3-tier distributed system simulating Kayak's travel booking with microservices, caching, and AI recommendations."
+role: "Team Project"
+period: "Personal"
+domain: "Distributed Systems"
+tags: ["distributed-systems", "microservices", "full-stack"]
+tech: ["Node.js", "MySQL", "MongoDB", "Redis", "Kafka", "Docker", "JWT", "AI Agents"]
+github: "https://github.com/zohebwaghu/Kayak---DATA-236-Final-Project"
+challenge: "Build a production-style 3-tier architecture handling flight, hotel, and car rental bookings with event-driven synchronization."
+solution:
+  - "API Gateway with JWT auth, rate limiting, and request routing to downstream services."
+  - "Microservices: User, Search, Booking services with independent scaling."
+  - "MySQL for OLTP bookings, MongoDB for analytics/logging, Redis for search caching."
+  - "Kafka for event streaming: booking confirmations, inventory updates, user actions."
+  - "AI-powered recommendation service using LangChain agents."
+impact:
+  - "End-to-end booking flow with transactional integrity and inventory control."
+  - "Sub-100ms search responses via Redis caching layer."
+  - "Real-time event streaming for cross-service synchronization."
+featured: false
+priority: 8
+---
+# Overview
+Full-stack travel metasearch platform built as a DATA 236 final project. Implements 3-tier distributed architecture with microservices, event-driven communication via Kafka, and intelligent caching strategies.

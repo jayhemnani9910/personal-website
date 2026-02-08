@@ -1,0 +1,136 @@
+---
+title: "Wikipedia Analysis"
+summary: "URL → scrape → tokenize → top frequent words with visuals."
+role: "Developer"
+tags: ["python", "flask", "nlp", "web"]
+tech: ["Python", "Flask", "BeautifulSoup", "HTML/CSS"]
+challenge: "Quickly summarize long articles."
+solution:
+  - "BeautifulSoup to scrape; tokenization + stopword removal."
+  - "Frequency counts → charts; simple Flask UI."
+impact:
+  - "Minutes to insights; handy for research & notes."
+deepDive:
+  context: "This project emerged from a need to quickly understand the key themes and topics within lengthy Wikipedia articles during research sessions. Rather than reading thousands of words, the goal was to extract meaningful patterns through text analysis—identifying the most frequently used terms to reveal what the article emphasizes. The system needed to handle Wikipedia's complex HTML structure, process large volumes of text efficiently, and present insights visually for rapid comprehension."
+
+  architecture: "The application follows a simple but effective pipeline architecture: a Flask web server receives Wikipedia URLs from users, a scraping layer extracts article content using BeautifulSoup, a text processing engine tokenizes and filters the content, and a visualization layer generates frequency charts. The stateless design allows for fast processing without database overhead, making it ideal for quick exploratory analysis. The frontend uses minimal JavaScript with Chart.js for interactive visualizations, while the backend handles all heavy computational work."
+
+  components:
+    - name: "Web Scraper"
+      description: "BeautifulSoup-based extractor that navigates Wikipedia's DOM structure to isolate article content from navigation, sidebars, and metadata. Handles various Wikipedia page layouts including disambiguation pages, redirect pages, and standard articles."
+
+    - name: "Text Processor"
+      description: "NLP pipeline that performs tokenization, lowercasing, stopword removal, and frequency analysis. Uses NLTK's stopword corpus extended with Wikipedia-specific terms like 'wikipedia', 'reference', 'edit' to filter out noise and focus on content-rich terms."
+
+    - name: "Visualization Engine"
+      description: "Generates bar charts and word clouds showing term frequencies. Uses Chart.js for interactive charts that allow users to hover over bars to see exact counts, making it easy to identify dominant themes at a glance."
+
+    - name: "Flask API"
+      description: "Lightweight REST endpoint that accepts Wikipedia URLs, orchestrates the scraping and analysis pipeline, and returns JSON data containing top terms and their frequencies for frontend rendering."
+
+  dataFlow:
+    - step: "User Input"
+      detail: "User submits Wikipedia article URL through the web interface. URL validation ensures it's a proper Wikipedia domain to prevent scraping arbitrary websites."
+
+    - step: "Content Extraction"
+      detail: "BeautifulSoup fetches the page and parses the HTML, targeting the main content div (#mw-content-text) while excluding infoboxes, reference sections, and navigation elements to get pure article text."
+
+    - step: "Text Normalization"
+      detail: "Raw HTML is converted to plain text, stripped of special characters and numbers. Text is lowercased and split into individual tokens using whitespace and punctuation as delimiters."
+
+    - step: "Filtering & Counting"
+      detail: "Tokens are filtered against an expanded stopword list (common words like 'the', 'is', 'at' plus Wikipedia-specific terms). Remaining tokens are counted using a frequency distribution, with the top 20-30 terms selected for visualization."
+
+    - step: "Visualization Rendering"
+      detail: "Frequency data is passed to Chart.js which renders an interactive bar chart. The chart displays terms on the x-axis and occurrence counts on the y-axis, with colors indicating relative frequency intensity."
+
+  keyDecisions:
+    - decision: "Stateless Processing"
+      rationale: "Chose not to persist analysis results in a database. Each request is processed fresh, eliminating maintenance overhead and allowing the tool to remain lightweight and deployable anywhere. This tradeoff favors simplicity over features like historical analysis."
+
+    - decision: "BeautifulSoup over API"
+      rationale: "Wikipedia offers an official API, but BeautifulSoup on raw HTML provided more control over content extraction—specifically the ability to exclude specific sections like references and external links that would skew frequency analysis with non-article terms."
+
+    - decision: "Extended Stopword List"
+      rationale: "Standard NLTK stopwords weren't sufficient for Wikipedia content. Added domain-specific stopwords like 'wikipedia', 'cite', 'reference', 'retrieved', 'archive' to filter out meta-content that appears frequently but doesn't relate to article topics."
+
+    - decision: "Top-N Frequency Display"
+      rationale: "Limited visualization to top 20-30 terms rather than showing all unique words. This decision focuses attention on the most significant themes while keeping charts readable. Long-tail words (appearing 1-2 times) add noise without insight."
+
+  codeSnippets:
+    - label: "Web Scraping with BeautifulSoup"
+      code: |
+        def scrape_wikipedia(url):
+            response = requests.get(url)
+            soup = BeautifulSoup(response.content, 'html.parser')
+
+            # Extract main content, exclude references and nav
+            content_div = soup.find('div', {'id': 'mw-content-text'})
+
+            # Remove unwanted sections
+            for unwanted in content_div.find_all(['table', 'sup', 'div'], class_=['infobox', 'reference', 'navbox']):
+                unwanted.decompose()
+
+            return content_div.get_text()
+
+    - label: "Text Processing Pipeline"
+      code: |
+        from nltk.corpus import stopwords
+        from nltk.tokenize import word_tokenize
+
+        def process_text(text):
+            # Tokenize and normalize
+            tokens = word_tokenize(text.lower())
+
+            # Extended stopword list
+            stop_words = set(stopwords.words('english'))
+            wiki_stops = {'wikipedia', 'cite', 'reference', 'retrieved', 'archive', 'edit', 'page'}
+            all_stops = stop_words.union(wiki_stops)
+
+            # Filter and count
+            filtered = [t for t in tokens if t.isalpha() and t not in all_stops]
+            freq_dist = FreqDist(filtered)
+
+            return freq_dist.most_common(25)
+
+    - label: "Flask API Endpoint"
+      code: |
+        @app.route('/analyze', methods=['POST'])
+        def analyze():
+            url = request.json.get('url')
+
+            if not is_valid_wikipedia_url(url):
+                return jsonify({'error': 'Invalid Wikipedia URL'}), 400
+
+            try:
+                text = scrape_wikipedia(url)
+                top_words = process_text(text)
+
+                return jsonify({
+                    'success': True,
+                    'data': {
+                        'words': [w[0] for w in top_words],
+                        'frequencies': [w[1] for w in top_words]
+                    }
+                })
+            except Exception as e:
+                return jsonify({'error': str(e)}), 500
+
+  learnings:
+    - lesson: "Domain-Specific Text Processing"
+      insight: "Generic NLP techniques require customization for specific domains. Wikipedia articles contain structural elements (citations, infoboxes, navigation) that must be filtered out. Building domain-aware stopword lists improved result quality dramatically—reducing noise from metadata terms that would otherwise dominate frequency counts."
+
+    - lesson: "HTML Structure Fragility"
+      insight: "Web scraping is brittle. Wikipedia's HTML structure can change, breaking CSS selectors. The scraper needed defensive programming—checking if elements exist before accessing them, handling various page types (disambiguation, redirect, standard), and gracefully degrading when structure doesn't match expectations."
+
+    - lesson: "Insight vs. Accuracy Tradeoff"
+      insight: "Perfect linguistic analysis wasn't the goal—quick insights were. Chose simple tokenization over advanced NLP (stemming, lemmatization, named entity recognition) because speed and simplicity outweighed marginal accuracy gains. Sometimes 80% accuracy in milliseconds beats 95% accuracy in seconds."
+
+    - lesson: "Visualization Drives Understanding"
+      insight: "Raw frequency lists are hard to interpret. Visual charts transformed data into immediate understanding—users could glance at a bar chart and instantly grasp article themes. The visualization layer turned out to be as important as the analysis itself for delivering value."
+
+    - lesson: "Scale Considerations"
+      insight: "Processing individual Wikipedia articles works well, but the architecture doesn't scale to bulk analysis of hundreds of articles. If revisiting this project, I'd add caching, batch processing capabilities, and potentially move to Wikipedia dumps for large-scale corpus analysis rather than real-time scraping."
+---
+# Overview
+URL → scrape → tokenize → top frequent words with visuals.

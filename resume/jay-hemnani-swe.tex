@@ -1,0 +1,159 @@
+%-------------------------
+% Backend/Software Engineer Resume - Jay Hemnani
+%-------------------------
+
+\documentclass[letterpaper,10pt]{article}
+
+\usepackage[empty]{fullpage}
+\usepackage{titlesec}
+\usepackage[usenames,dvipsnames]{color}
+\usepackage{enumitem}
+\usepackage[hidelinks]{hyperref}
+\usepackage{fancyhdr}
+\usepackage[english]{babel}
+\usepackage{tabularx}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot{}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+
+\addtolength{\oddsidemargin}{-0.6in}
+\addtolength{\evensidemargin}{-0.6in}
+\addtolength{\textwidth}{1.2in}
+\addtolength{\topmargin}{-0.6in}
+\addtolength{\textheight}{1.2in}
+
+\urlstyle{same}
+\raggedbottom
+\raggedright
+\setlength{\tabcolsep}{0in}
+
+\titleformat{\section}{
+  \vspace{-6pt}\scshape\raggedright\large\bfseries
+}{}{0em}{}[\color{black}\titlerule \vspace{-6pt}]
+
+\newcommand{\resumeItem}[1]{\item\small{#1 \vspace{-3pt}}}
+\newcommand{\resumeSubheading}[4]{
+  \vspace{-3pt}\item
+    \begin{tabular*}{0.97\textwidth}[t]{l@{\extracolsep{\fill}}r}
+      \textbf{#1} & #2 \\
+      \textit{\small#3} & \textit{\small #4} \\
+    \end{tabular*}\vspace{-8pt}
+}
+\newcommand{\resumeExpHeading}[4]{
+  \vspace{-3pt}\item
+    \begin{tabular*}{0.97\textwidth}[t]{l@{\extracolsep{\fill}}r}
+      \textbf{#1}, \textit{#3} & #2 \\
+    \end{tabular*}\vspace{-8pt}
+}
+\newcommand{\resumeProjectHeading}[2]{
+    \item
+    \begin{tabular*}{0.97\textwidth}{l@{\extracolsep{\fill}}r}
+      \small#1 & #2 \\
+    \end{tabular*}\vspace{-8pt}
+}
+\renewcommand\labelitemii{$\vcenter{\hbox{\tiny$\bullet$}}$}
+\newcommand{\resumeSubHeadingListStart}{\begin{itemize}[leftmargin=0.12in, label={}]}
+\newcommand{\resumeSubHeadingListEnd}{\end{itemize}}
+\newcommand{\resumeItemListStart}{\begin{itemize}[leftmargin=0.15in]}
+\newcommand{\resumeItemListEnd}{\end{itemize}\vspace{-6pt}}
+
+\begin{document}
+
+%----------HEADING----------
+\begin{center}
+    {\Huge \scshape Jay Hemnani} \\ \vspace{2pt}
+    \small jayhemnani992000@gmail.com $|$ GitHub: \href{https://github.com/jayhemnani9910}{github.com/jayhemnani9910} \\
+    San Jose, CA
+\end{center}
+
+%-----------EDUCATION-----------
+\section{Education}
+  \resumeSubHeadingListStart
+    \resumeSubheading
+      {Pandit Deendayal Energy University (PDEU)}{2018 -- 2022 $|$ Gandhinagar, India}
+      {B.Tech in Computer Engineering $|$ GPA: 8.7/10}{}
+      \resumeItemListStart
+        \resumeItem{\textbf{Coursework:} Operating Systems, Computer Networks, Database Systems, Software Development.}
+      \resumeItemListEnd
+  \resumeSubHeadingListEnd
+
+%-----------TECHNICAL SKILLS-----------
+\section{Technical Skills}
+ \begin{itemize}[leftmargin=0.12in, label={}]
+    \small{\item{
+     \textbf{Languages:} Python, Java, Go, JavaScript/TypeScript, C++, SQL \\
+     \textbf{Backend:} Node.js, Express, FastAPI, REST APIs, GraphQL, gRPC, Microservices Architecture \\
+     \textbf{Distributed Systems:} Apache Kafka, Redis, Message Queues, Event-Driven Architecture, Load Balancing \\
+     \textbf{Databases:} PostgreSQL, MySQL, MongoDB, Redis, TimescaleDB, Database Design \\
+     \textbf{Cloud \& DevOps:} AWS (EC2, S3, Lambda, ECS), Azure, Docker, Kubernetes, GitHub Actions, CI/CD \\
+     \textbf{Tools:} Git, Linux, Nginx, JWT, OAuth, API Gateway, Rate Limiting
+    }}
+ \end{itemize}
+ \vspace{-8pt}
+
+%-----------EXPERIENCE-----------
+\section{Experience}
+  \resumeSubHeadingListStart
+
+    \resumeExpHeading
+      {Data Analyst}{Summer 2025 $|$ San Jose, CA}
+      {Elite Hotel Group}{}
+      \resumeItemListStart
+        \resumeItem{Engineered \textbf{automated data pipelines} using Python and SQL, reducing manual processing by \textbf{40\%} and improving system reliability across multi-property workflows.}
+        \resumeItem{Built \textbf{REST APIs} for internal dashboards integrating with Tableau/Power BI for real-time KPI tracking.}
+      \resumeItemListEnd
+
+    \resumeExpHeading
+      {Independent Technical Consultant}{2022 -- 2024 $|$ Remote}
+      {}{}
+      \resumeItemListStart
+        \resumeItem{Provided \textbf{backend development and infrastructure consulting} for small businesses, building APIs and deployment pipelines.}
+      \resumeItemListEnd
+
+    \resumeExpHeading
+      {AI/ML Intern}{Jan -- May 2022 $|$ Gujarat, India}
+      {Amnex}{}
+      \resumeItemListStart
+        \resumeItem{Built \textbf{fraud detection backend} using Python with REST APIs for model serving, achieving \textbf{94\% precision} on transaction classification.}
+        \resumeItem{Developed \textbf{automated reporting services} with scheduled jobs and database integrations for operational analytics.}
+      \resumeItemListEnd
+
+    \resumeExpHeading
+      {Software Engineering Intern}{May -- Nov 2019 $|$ Gujarat, India}
+      {Cactus Creatives}{}
+      \resumeItemListStart
+        \resumeItem{Built \textbf{cloud-native communication platform} for first responders using microservices architecture on Azure, implementing REST APIs for real-time dispatch.}
+        \resumeItem{Configured \textbf{CI/CD pipelines} with automated testing and deployment workflows, reducing deployment time by \textbf{60\%}.}
+      \resumeItemListEnd
+
+  \resumeSubHeadingListEnd
+
+%-----------PROJECTS-----------
+\section{Projects}
+    \resumeSubHeadingListStart
+      \resumeProjectHeading
+          {\textbf{Kayak --- Distributed Travel Platform} $|$ \emph{Node.js, MySQL, MongoDB, Redis, Kafka, Docker}}{}
+          \resumeItemListStart
+            \resumeItem{Engineered \textbf{3-tier distributed architecture} with API Gateway handling JWT authentication, rate limiting, and request routing to independent microservices.}
+            \resumeItem{Designed \textbf{horizontal scaling strategy} with independent User, Search, and Booking services for fault isolation and independent deployment.}
+            \resumeItem{Achieved \textbf{sub-100ms API latency} via Redis caching; implemented \textbf{Kafka event streaming} for real-time inventory sync across services.}
+          \resumeItemListEnd
+      \resumeProjectHeading
+          {\textbf{Stock Data Platform --- Streaming Backend} $|$ \emph{Python, Kafka, Airflow, TimescaleDB, Docker}}{}
+          \resumeItemListStart
+            \resumeItem{Built \textbf{distributed streaming architecture} using Kafka for real-time tick ingestion with idempotent writes and producer buffering.}
+            \resumeItem{Designed \textbf{hybrid storage layer} with TimescaleDB hypertables for time-series data and star schema for analytics queries.}
+            \resumeItem{Implemented \textbf{batch processing pipelines} with Airflow for scheduled ETL, backfills, and data validation.}
+          \resumeItemListEnd
+      \resumeProjectHeading
+          {\textbf{BarcaBrain --- Backend Services} $|$ \emph{Python, FastAPI, FAISS, Redis}}{}
+          \resumeItemListStart
+            \resumeItem{Built \textbf{REST API} for vector similarity search serving 10,000+ player records with \textbf{$<$100ms response time}.}
+            \resumeItem{Implemented \textbf{caching layer} with Redis for frequently queried player comparisons and search results.}
+          \resumeItemListEnd
+    \resumeSubHeadingListEnd
+
+\end{document}
