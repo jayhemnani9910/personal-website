@@ -32,6 +32,14 @@ const LAB_ITEMS = {
             description: "AI-assisted content generation and publishing workflow",
             tags: ["Claude API", "GitHub Actions", "MDX"],
             progress: 20
+        },
+        {
+            id: "webmcp-portfolio",
+            title: "WebMCP Integration",
+            description: "W3C WebMCP standard — making this portfolio AI-agent queryable via Chrome 146+",
+            tags: ["WebMCP", "W3C", "AI Agents", "Chrome 146"],
+            progress: 70,
+            link: "https://jayhemnani.me/projects/webmcp-portfolio"
         }
     ],
     exploring: [
