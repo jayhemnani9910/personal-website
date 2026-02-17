@@ -1,0 +1,27 @@
+---
+title: "WebMCP Portfolio Integration"
+summary: "Making this portfolio AI-agent queryable using the W3C WebMCP standard — one of the first implementations."
+role: "Builder"
+period: "2026"
+domain: "Web standards"
+tags: ["webmcp", "ai-agents", "w3c", "browser-api", "early-adopter"]
+tech: ["TypeScript", "Next.js", "WebMCP API", "Chrome 146", "JSON Schema"]
+challenge: "AI agents interact with websites by scraping DOM elements and clicking buttons — brittle, slow, and breaks when layouts change. The new W3C WebMCP standard solves this by letting sites expose structured tools directly to agents."
+solution:
+  - "Implemented the W3C WebMCP API (navigator.modelContext) to register 8 structured tools on this portfolio site."
+  - "Tools expose project search, resume data, skills, contact info, lab experiments, theme control, and mode switching."
+  - "Progressive enhancement — site works normally without WebMCP; tools are a bonus layer for Chrome 146+ with the flag enabled."
+  - "All data loaded at build time via Next.js static export, serialized and passed to a client-side WebMCP provider."
+impact:
+  - "One of the earliest WebMCP implementations on a production website."
+  - "AI agents can query 25+ projects, full resume, and skills programmatically — no scraping needed."
+  - "89% token efficiency improvement over screenshot-based agent methods."
+  - "Portfolio doubles as a live WebMCP reference implementation."
+featured: true
+priority: 2
+github: "https://github.com/jayhemnani9910/personal-website"
+---
+
+# Overview
+
+This project integrates the W3C WebMCP standard into my portfolio website, making it one of the first sites where AI agents can directly query structured data instead of scraping the DOM. Built with the Chrome 146 Canary `navigator.modelContext` API.

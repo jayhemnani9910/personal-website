@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { ClientLayout } from "@/components/ClientLayout";
 import { ThemeProvider } from "@/context/ThemeContext";
+import { WebMCPLoader } from "@/components/WebMCPLoader";
 import { SITE_CONFIG } from "@/../content/site";
 
 // Offline-friendly fallbacks; replace with next/font when network is available
@@ -96,6 +97,7 @@ export default function RootLayout({
       >
         <ThemeProvider>
           <ClientLayout>{children}</ClientLayout>
+          <WebMCPLoader />
         </ThemeProvider>
       </body>
     </html>
