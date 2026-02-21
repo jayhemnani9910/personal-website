@@ -1,5 +1,5 @@
 %-------------------------
-% Backend/Software Engineer Resume - Jay Hemnani
+% Software Engineer Resume - Jay Hemnani
 %-------------------------
 
 \documentclass[letterpaper,10pt]{article}
@@ -13,12 +13,14 @@
 \usepackage[english]{babel}
 \usepackage{tabularx}
 
+% Page style
 \pagestyle{fancy}
 \fancyhf{}
 \fancyfoot{}
 \renewcommand{\headrulewidth}{0pt}
 \renewcommand{\footrulewidth}{0pt}
 
+% Tighter margins for 1-page fit
 \addtolength{\oddsidemargin}{-0.6in}
 \addtolength{\evensidemargin}{-0.6in}
 \addtolength{\textwidth}{1.2in}
@@ -30,11 +32,16 @@
 \raggedright
 \setlength{\tabcolsep}{0in}
 
+% Section formatting
 \titleformat{\section}{
   \vspace{-6pt}\scshape\raggedright\large\bfseries
 }{}{0em}{}[\color{black}\titlerule \vspace{-6pt}]
 
-\newcommand{\resumeItem}[1]{\item\small{#1 \vspace{-3pt}}}
+% Custom commands
+\newcommand{\resumeItem}[1]{
+  \item\small{#1 \vspace{-3pt}}
+}
+
 \newcommand{\resumeSubheading}[4]{
   \vspace{-3pt}\item
     \begin{tabular*}{0.97\textwidth}[t]{l@{\extracolsep{\fill}}r}
@@ -42,31 +49,38 @@
       \textit{\small#3} & \textit{\small #4} \\
     \end{tabular*}\vspace{-8pt}
 }
+
 \newcommand{\resumeExpHeading}[4]{
   \vspace{-3pt}\item
     \begin{tabular*}{0.97\textwidth}[t]{l@{\extracolsep{\fill}}r}
       \textbf{#1}, \textit{#3} & #2 \\
     \end{tabular*}\vspace{-8pt}
 }
+
 \newcommand{\resumeProjectHeading}[2]{
     \item
     \begin{tabular*}{0.97\textwidth}{l@{\extracolsep{\fill}}r}
       \small#1 & #2 \\
     \end{tabular*}\vspace{-8pt}
 }
+
 \renewcommand\labelitemii{$\vcenter{\hbox{\tiny$\bullet$}}$}
+
 \newcommand{\resumeSubHeadingListStart}{\begin{itemize}[leftmargin=0.12in, label={}]}
 \newcommand{\resumeSubHeadingListEnd}{\end{itemize}}
 \newcommand{\resumeItemListStart}{\begin{itemize}[leftmargin=0.15in]}
 \newcommand{\resumeItemListEnd}{\end{itemize}\vspace{-6pt}}
 
+%-------------------------------------------
+% DOCUMENT START
+%-------------------------------------------
 \begin{document}
 
 %----------HEADING----------
 \begin{center}
     {\Huge \scshape Jay Hemnani} \\ \vspace{2pt}
-    \small jayhemnani992000@gmail.com $|$ GitHub: \href{https://github.com/jayhemnani9910}{github.com/jayhemnani9910} \\
-    San Jose, CA
+    \small jayhemnani992000@gmail.com $|$ GitHub: \href{https://github.com/jayhemnani9910}{github.com/jayhemnani9910} $|$ \href{https://jayhemnani.me}{jayhemnani.me} \\
+    Gujarat, India (Open to Relocate)
 \end{center}
 
 %-----------EDUCATION-----------
@@ -87,9 +101,9 @@
      \textbf{Languages:} Python, Java, Go, JavaScript/TypeScript, C++, SQL \\
      \textbf{Backend:} Node.js, Express, FastAPI, REST APIs, GraphQL, gRPC, Microservices Architecture \\
      \textbf{Distributed Systems:} Apache Kafka, Redis, Message Queues, Event-Driven Architecture, Load Balancing \\
-     \textbf{Databases:} PostgreSQL, MySQL, MongoDB, Redis, TimescaleDB, Database Design \\
+     \textbf{Databases:} PostgreSQL, MySQL, MongoDB, Redis, TimescaleDB, Database Design \& Indexing \\
      \textbf{Cloud \& DevOps:} AWS (EC2, S3, Lambda, ECS), Azure, Docker, Kubernetes, GitHub Actions, CI/CD \\
-     \textbf{Tools:} Git, Linux, Nginx, JWT, OAuth, API Gateway, Rate Limiting
+     \textbf{Tools:} Git, Linux, Nginx, JWT/OAuth, API Gateway, Prometheus, Rate Limiting
     }}
  \end{itemize}
  \vspace{-8pt}
@@ -107,10 +121,10 @@
       \resumeItemListEnd
 
     \resumeExpHeading
-      {Independent Technical Consultant}{2022 -- 2024 $|$ Remote}
+      {Technical Consultant}{2022 -- 2024 $|$ Remote}
       {}{}
       \resumeItemListStart
-        \resumeItem{Provided \textbf{backend development and infrastructure consulting} for small businesses, building APIs and deployment pipelines.}
+        \resumeItem{Provided \textbf{backend development and infrastructure consulting} for small businesses, building APIs, deployment pipelines, and automation solutions.}
       \resumeItemListEnd
 
     \resumeExpHeading
@@ -125,7 +139,7 @@
       {Software Engineering Intern}{May -- Nov 2019 $|$ Gujarat, India}
       {Cactus Creatives}{}
       \resumeItemListStart
-        \resumeItem{Built \textbf{cloud-native communication platform} for first responders using microservices architecture on Azure, implementing REST APIs for real-time dispatch.}
+        \resumeItem{Built \textbf{cloud-native communication platform} for first responders using microservices architecture on Azure with REST APIs for real-time dispatch.}
         \resumeItem{Configured \textbf{CI/CD pipelines} with automated testing and deployment workflows, reducing deployment time by \textbf{60\%}.}
       \resumeItemListEnd
 
@@ -142,18 +156,19 @@
             \resumeItem{Achieved \textbf{sub-100ms API latency} via Redis caching; implemented \textbf{Kafka event streaming} for real-time inventory sync across services.}
           \resumeItemListEnd
       \resumeProjectHeading
-          {\textbf{Stock Data Platform --- Streaming Backend} $|$ \emph{Python, Kafka, Airflow, TimescaleDB, Docker}}{}
+          {\textbf{Airbnb --- Cloud-Native Booking Platform} $|$ \emph{React, Node.js, MongoDB, Kafka, Docker, K8s}}{}
           \resumeItemListStart
-            \resumeItem{Built \textbf{distributed streaming architecture} using Kafka for real-time tick ingestion with idempotent writes and producer buffering.}
-            \resumeItem{Designed \textbf{hybrid storage layer} with TimescaleDB hypertables for time-series data and star schema for analytics queries.}
-            \resumeItem{Implemented \textbf{batch processing pipelines} with Airflow for scheduled ETL, backfills, and data validation.}
+            \resumeItem{Built \textbf{full-stack booking platform} with React frontend and Node.js microservices, deployed on Kubernetes with auto-scaling and health monitoring.}
+            \resumeItem{Implemented \textbf{Kafka-based event bus} for asynchronous communication between booking, search, and notification services.}
+            \resumeItem{Integrated \textbf{AI-powered travel planning} using LangChain agents for personalized recommendations within the booking workflow.}
           \resumeItemListEnd
       \resumeProjectHeading
-          {\textbf{BarcaBrain --- Backend Services} $|$ \emph{Python, FastAPI, FAISS, Redis}}{}
+          {\textbf{CAG Deep Research --- Multi-Agent System} $|$ \emph{Python, LangGraph, FastAPI, PostgreSQL}}{}
           \resumeItemListStart
-            \resumeItem{Built \textbf{REST API} for vector similarity search serving 10,000+ player records with \textbf{$<$100ms response time}.}
-            \resumeItem{Implemented \textbf{caching layer} with Redis for frequently queried player comparisons and search results.}
+            \resumeItem{Architected \textbf{multi-agent orchestration system} with LangGraph, coordinating 5+ specialized AI agents to autonomously synthesize research reports.}
+            \resumeItem{Built \textbf{FastAPI backend} with PostgreSQL persistence, handling concurrent agent workflows with state management and retry logic.}
           \resumeItemListEnd
     \resumeSubHeadingListEnd
 
+%-------------------------------------------
 \end{document}

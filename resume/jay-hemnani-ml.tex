@@ -13,12 +13,14 @@
 \usepackage[english]{babel}
 \usepackage{tabularx}
 
+% Page style
 \pagestyle{fancy}
 \fancyhf{}
 \fancyfoot{}
 \renewcommand{\headrulewidth}{0pt}
 \renewcommand{\footrulewidth}{0pt}
 
+% Tighter margins for 1-page fit
 \addtolength{\oddsidemargin}{-0.6in}
 \addtolength{\evensidemargin}{-0.6in}
 \addtolength{\textwidth}{1.2in}
@@ -30,11 +32,16 @@
 \raggedright
 \setlength{\tabcolsep}{0in}
 
+% Section formatting
 \titleformat{\section}{
   \vspace{-6pt}\scshape\raggedright\large\bfseries
 }{}{0em}{}[\color{black}\titlerule \vspace{-6pt}]
 
-\newcommand{\resumeItem}[1]{\item\small{#1 \vspace{-3pt}}}
+% Custom commands
+\newcommand{\resumeItem}[1]{
+  \item\small{#1 \vspace{-3pt}}
+}
+
 \newcommand{\resumeSubheading}[4]{
   \vspace{-3pt}\item
     \begin{tabular*}{0.97\textwidth}[t]{l@{\extracolsep{\fill}}r}
@@ -42,31 +49,38 @@
       \textit{\small#3} & \textit{\small #4} \\
     \end{tabular*}\vspace{-8pt}
 }
+
 \newcommand{\resumeExpHeading}[4]{
   \vspace{-3pt}\item
     \begin{tabular*}{0.97\textwidth}[t]{l@{\extracolsep{\fill}}r}
       \textbf{#1}, \textit{#3} & #2 \\
     \end{tabular*}\vspace{-8pt}
 }
+
 \newcommand{\resumeProjectHeading}[2]{
     \item
     \begin{tabular*}{0.97\textwidth}{l@{\extracolsep{\fill}}r}
       \small#1 & #2 \\
     \end{tabular*}\vspace{-8pt}
 }
+
 \renewcommand\labelitemii{$\vcenter{\hbox{\tiny$\bullet$}}$}
+
 \newcommand{\resumeSubHeadingListStart}{\begin{itemize}[leftmargin=0.12in, label={}]}
 \newcommand{\resumeSubHeadingListEnd}{\end{itemize}}
 \newcommand{\resumeItemListStart}{\begin{itemize}[leftmargin=0.15in]}
 \newcommand{\resumeItemListEnd}{\end{itemize}\vspace{-6pt}}
 
+%-------------------------------------------
+% DOCUMENT START
+%-------------------------------------------
 \begin{document}
 
 %----------HEADING----------
 \begin{center}
     {\Huge \scshape Jay Hemnani} \\ \vspace{2pt}
-    \small jayhemnani992000@gmail.com $|$ GitHub: \href{https://github.com/jayhemnani9910}{github.com/jayhemnani9910} \\
-    San Jose, CA
+    \small jayhemnani992000@gmail.com $|$ GitHub: \href{https://github.com/jayhemnani9910}{github.com/jayhemnani9910} $|$ \href{https://jayhemnani.me}{jayhemnani.me} \\
+    Gujarat, India (Open to Relocate)
 \end{center}
 
 %-----------EDUCATION-----------
@@ -77,6 +91,7 @@
       {B.Tech in Computer Engineering $|$ GPA: 8.7/10}{}
       \resumeItemListStart
         \resumeItem{\textbf{Coursework:} Computer Vision, Natural Language Processing, Big Data Analytics, Neural Networks.}
+        \resumeItem{\textbf{Publications:} 2 IEEE papers --- Diabetes Prediction (Stacking Classifier), CPU Scheduling Analysis.}
       \resumeItemListEnd
   \resumeSubHeadingListEnd
 
@@ -84,12 +99,12 @@
 \section{Technical Skills}
  \begin{itemize}[leftmargin=0.12in, label={}]
     \small{\item{
-     \textbf{Programming:} Python, SQL, Java, C++, JavaScript \\
-     \textbf{ML/AI Frameworks:} TensorFlow, PyTorch, Scikit-learn, Keras, Hugging Face Transformers \\
-     \textbf{ML Engineering:} FAISS, LangChain, Vector Databases, RAG Pipelines, Model Serving, Feature Engineering \\
+     \textbf{Programming:} Python, SQL, Java, C++, JavaScript/TypeScript \\
+     \textbf{ML/AI Frameworks:} PyTorch, PyTorch Geometric, TensorFlow, Scikit-learn, Hugging Face Transformers, YOLOv8 \\
+     \textbf{ML Engineering:} FAISS, LangChain, LangGraph, Vector Databases (Pinecone, ChromaDB), RAG Pipelines, Feature Engineering \\
      \textbf{Data Processing:} Pandas, NumPy, PySpark, Apache Kafka, Airflow \\
-     \textbf{Cloud \& MLOps:} AWS (SageMaker, Lambda, S3), Docker, Kubernetes, GitHub Actions, MLflow \\
-     \textbf{Databases:} PostgreSQL, MongoDB, Redis, Pinecone, ChromaDB
+     \textbf{Cloud \& MLOps:} AWS (SageMaker, Lambda, S3), Docker, Kubernetes, MLflow, DVC, Weights \& Biases \\
+     \textbf{Databases:} PostgreSQL, MongoDB, Redis, TimescaleDB, ChromaDB, Pinecone
     }}
  \end{itemize}
  \vspace{-8pt}
@@ -107,10 +122,10 @@
       \resumeItemListEnd
 
     \resumeExpHeading
-      {Independent Technical Consultant}{2022 -- 2024 $|$ Remote}
+      {Technical Consultant}{2022 -- 2024 $|$ Remote}
       {}{}
       \resumeItemListStart
-        \resumeItem{Provided \textbf{ML and data analytics consulting} for small businesses, building predictive models and automation solutions.}
+        \resumeItem{Provided \textbf{ML and data analytics consulting} for small businesses, building predictive models, A/B testing frameworks, and automation solutions.}
       \resumeItemListEnd
 
     \resumeExpHeading
@@ -134,25 +149,26 @@
 \section{Projects}
     \resumeSubHeadingListStart
       \resumeProjectHeading
-          {\textbf{BarcaBrain --- Football Intelligence Platform} $|$ \emph{Python, FAISS, LangChain, Streamlit}}{}
+          {\textbf{Soccer Vision Research --- Multi-Model Sports Analytics} $|$ \emph{Python, PyTorch, RF-DETR, SAM2, W\&B}}{}
           \resumeItemListStart
-            \resumeItem{Designed \textbf{vector embedding pipeline} with feature engineering on match events, generating dense embeddings for 10,000+ players using custom feature extraction.}
+            \resumeItem{Built \textbf{modular CV pipeline} combining 4 SOTA models (RF-DETR for detection, SAM2 for segmentation, SigLIP for classification, ByteTrack for tracking) with configurable model swapping.}
+            \resumeItem{Implemented \textbf{experiment tracking} with Weights \& Biases for systematic benchmarking across model configurations and hyperparameter sweeps.}
+            \resumeItem{Designed \textbf{extensible architecture} enabling rapid experimentation --- new model variants integrate via standardized interface without pipeline changes.}
+          \resumeItemListEnd
+      \resumeProjectHeading
+          {\textbf{Nobel Data Intelligence --- Graph Neural Networks} $|$ \emph{Python, PyTorch Geometric, BioPython, RDKit}}{}
+          \resumeItemListStart
+            \resumeItem{Built \textbf{GNN-based molecular property prediction} framework processing 10K+ compounds with PyTorch Geometric for graph-level regression tasks.}
+            \resumeItem{Integrated \textbf{bioinformatics toolkits} (ProDy, BioPython, RDKit) for feature extraction from protein structures and molecular graphs.}
+            \resumeItem{Designed \textbf{extensible data pipeline} converting molecular SMILES to graph representations with configurable node/edge feature engineering.}
+          \resumeItemListEnd
+      \resumeProjectHeading
+          {\textbf{BarcaBrain --- Vector Search Intelligence} $|$ \emph{Python, FAISS, LangChain, Streamlit}}{}
+          \resumeItemListStart
+            \resumeItem{Designed \textbf{vector embedding pipeline} with feature engineering on match events, generating dense embeddings for 10,000+ players.}
             \resumeItem{Implemented \textbf{FAISS k-NN index} for semantic similarity search achieving \textbf{$<$100ms latency} with hybrid filtering for role/league constraints.}
-            \resumeItem{Built \textbf{interactive ML-powered UI} displaying player clusters, similarity scores, and attribute comparisons for recruitment analysis.}
-          \resumeItemListEnd
-      \resumeProjectHeading
-          {\textbf{Kayak --- AI-Powered Travel Platform} $|$ \emph{Node.js, Python, LangChain, Redis, Kafka}}{}
-          \resumeItemListStart
-            \resumeItem{Built \textbf{AI recommendation service} using LangChain agents for personalized travel deals based on user preferences and search history.}
-            \resumeItem{Implemented \textbf{RAG pipeline} for context-aware recommendations, integrating with booking workflows for real-time inference.}
-            \resumeItem{Achieved \textbf{sub-100ms inference latency} via Redis caching and optimized prompt engineering.}
-          \resumeItemListEnd
-      \resumeProjectHeading
-          {\textbf{Stock Data Platform --- ML Analytics} $|$ \emph{Python, Kafka, Airflow, TimescaleDB}}{}
-          \resumeItemListStart
-            \resumeItem{Built \textbf{feature engineering pipelines} for financial indicators (SMA, EMA, RSI) with reproducible data lineage.}
-            \resumeItem{Designed \textbf{real-time streaming architecture} using Kafka for tick data ingestion powering ML model inference.}
           \resumeItemListEnd
     \resumeSubHeadingListEnd
 
+%-------------------------------------------
 \end{document}

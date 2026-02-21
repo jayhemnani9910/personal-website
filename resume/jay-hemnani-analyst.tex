@@ -13,12 +13,14 @@
 \usepackage[english]{babel}
 \usepackage{tabularx}
 
+% Page style
 \pagestyle{fancy}
 \fancyhf{}
 \fancyfoot{}
 \renewcommand{\headrulewidth}{0pt}
 \renewcommand{\footrulewidth}{0pt}
 
+% Tighter margins for 1-page fit
 \addtolength{\oddsidemargin}{-0.6in}
 \addtolength{\evensidemargin}{-0.6in}
 \addtolength{\textwidth}{1.2in}
@@ -30,11 +32,16 @@
 \raggedright
 \setlength{\tabcolsep}{0in}
 
+% Section formatting
 \titleformat{\section}{
   \vspace{-6pt}\scshape\raggedright\large\bfseries
 }{}{0em}{}[\color{black}\titlerule \vspace{-6pt}]
 
-\newcommand{\resumeItem}[1]{\item\small{#1 \vspace{-3pt}}}
+% Custom commands
+\newcommand{\resumeItem}[1]{
+  \item\small{#1 \vspace{-3pt}}
+}
+
 \newcommand{\resumeSubheading}[4]{
   \vspace{-3pt}\item
     \begin{tabular*}{0.97\textwidth}[t]{l@{\extracolsep{\fill}}r}
@@ -42,31 +49,38 @@
       \textit{\small#3} & \textit{\small #4} \\
     \end{tabular*}\vspace{-8pt}
 }
+
 \newcommand{\resumeExpHeading}[4]{
   \vspace{-3pt}\item
     \begin{tabular*}{0.97\textwidth}[t]{l@{\extracolsep{\fill}}r}
       \textbf{#1}, \textit{#3} & #2 \\
     \end{tabular*}\vspace{-8pt}
 }
+
 \newcommand{\resumeProjectHeading}[2]{
     \item
     \begin{tabular*}{0.97\textwidth}{l@{\extracolsep{\fill}}r}
       \small#1 & #2 \\
     \end{tabular*}\vspace{-8pt}
 }
+
 \renewcommand\labelitemii{$\vcenter{\hbox{\tiny$\bullet$}}$}
+
 \newcommand{\resumeSubHeadingListStart}{\begin{itemize}[leftmargin=0.12in, label={}]}
 \newcommand{\resumeSubHeadingListEnd}{\end{itemize}}
 \newcommand{\resumeItemListStart}{\begin{itemize}[leftmargin=0.15in]}
 \newcommand{\resumeItemListEnd}{\end{itemize}\vspace{-6pt}}
 
+%-------------------------------------------
+% DOCUMENT START
+%-------------------------------------------
 \begin{document}
 
 %----------HEADING----------
 \begin{center}
     {\Huge \scshape Jay Hemnani} \\ \vspace{2pt}
-    \small jayhemnani992000@gmail.com $|$ GitHub: \href{https://github.com/jayhemnani9910}{github.com/jayhemnani9910} \\
-    San Jose, CA
+    \small jayhemnani992000@gmail.com $|$ GitHub: \href{https://github.com/jayhemnani9910}{github.com/jayhemnani9910} $|$ \href{https://jayhemnani.me}{jayhemnani.me} \\
+    Gujarat, India (Open to Relocate)
 \end{center}
 
 %-----------EDUCATION-----------
@@ -85,11 +99,11 @@
  \begin{itemize}[leftmargin=0.12in, label={}]
     \small{\item{
      \textbf{Programming:} Python, SQL (Advanced), R, JavaScript \\
-     \textbf{Analytics \& Statistics:} Pandas, NumPy, Scikit-learn, Statistical Analysis, A/B Testing, Hypothesis Testing \\
+     \textbf{Analytics \& Statistics:} Pandas, NumPy, Scikit-learn, Statistical Analysis, A/B Testing, Hypothesis Testing, Regression \\
      \textbf{Visualization \& BI:} Tableau, Power BI, Plotly, Streamlit, Dash, Excel (Advanced), Google Sheets \\
      \textbf{Databases:} PostgreSQL, MySQL, MongoDB, BigQuery, Data Warehousing, Data Modeling \\
-     \textbf{Data Processing:} ETL/ELT Pipelines, Data Cleaning, Data Validation, Apache Airflow \\
-     \textbf{Tools:} Git, Jupyter Notebooks, Google Analytics, Looker, dbt
+     \textbf{Data Processing:} ETL/ELT Pipelines, Data Cleaning, Data Validation, Apache Airflow, dbt \\
+     \textbf{Tools:} Git, Jupyter Notebooks, Google Analytics, Mixpanel, Looker
     }}
  \end{itemize}
  \vspace{-8pt}
@@ -108,10 +122,10 @@
       \resumeItemListEnd
 
     \resumeExpHeading
-      {Independent Technical Consultant}{2022 -- 2024 $|$ Remote}
+      {Technical Consultant}{2022 -- 2024 $|$ Remote}
       {}{}
       \resumeItemListStart
-        \resumeItem{Provided \textbf{data analytics consulting} for small businesses, building dashboards, reports, and automation solutions for business intelligence.}
+        \resumeItem{Provided \textbf{data analytics consulting} for small businesses, building dashboards, A/B testing frameworks, and reporting automation for business intelligence.}
       \resumeItemListEnd
 
     \resumeExpHeading
@@ -142,18 +156,19 @@
             \resumeItem{Created \textbf{star schema data model} (FactPrices + dimensions) optimized for analytical queries and dashboard performance.}
           \resumeItemListEnd
       \resumeProjectHeading
-          {\textbf{BarcaBrain --- Sports Analytics Platform} $|$ \emph{Python, Pandas, Streamlit, SQL}}{}
+          {\textbf{BarcaBrain --- Sports Analytics Platform} $|$ \emph{Python, Pandas, Streamlit, Plotly}}{}
           \resumeItemListStart
             \resumeItem{Designed \textbf{analytics dashboard} for player comparison and scouting, displaying clusters, similarity scores, and attribute deltas for 10,000+ players.}
             \resumeItem{Built \textbf{feature engineering pipeline} transforming raw match events into actionable metrics for recruitment analysis.}
             \resumeItem{Created \textbf{interactive visualizations} enabling rapid like-for-like player discovery with filtering by role, league, and performance metrics.}
           \resumeItemListEnd
       \resumeProjectHeading
-          {\textbf{Kayak --- Travel Analytics} $|$ \emph{Python, SQL, Tableau}}{}
+          {\textbf{Indian Crime Data Analytics} $|$ \emph{Python, SQL, Pandas, Visualization}}{}
           \resumeItemListStart
-            \resumeItem{Built \textbf{booking analytics dashboards} tracking conversion rates, search patterns, and revenue metrics across travel services.}
-            \resumeItem{Analyzed \textbf{user behavior patterns} to identify optimization opportunities for search ranking and recommendation algorithms.}
+            \resumeItem{Built \textbf{analytical pipeline} for pattern mining across crime incident categories, identifying trends and correlations in multi-year datasets.}
+            \resumeItem{Designed \textbf{interactive visualizations} and statistical summaries for incident forecasting and resource allocation recommendations.}
           \resumeItemListEnd
     \resumeSubHeadingListEnd
 
+%-------------------------------------------
 \end{document}

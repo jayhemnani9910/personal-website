@@ -2,48 +2,56 @@ import { Resume } from "@/data/types";
 
 export const RESUME: Resume = {
   name: "Jay Hemnani",
-  tagline: "Data Engineer",
-  summary: "End-to-end builder with production experience in computer vision systems and sports analytics. I ship fast—prototypes to production in days, not weeks—combining deep technical expertise with a relentless focus on user impact and operational excellence.",
-  location: "San Jose, CA",
+  tagline: "Software & Data Engineer",
+  summary: "End-to-end builder across data pipelines, ML systems, and distributed backends. Production experience spanning real-time streaming architectures, computer vision research, and full-stack applications — prototypes to production in days, not weeks.",
+  location: "Gujarat, India (Open to Relocate)",
   contact: {
     email: "jayhemnani992000@gmail.com",
     github: "https://github.com/jayhemnani9910",
     linkedin: "https://linkedin.com/in/jayhemnani",
   },
   coreCompetencies: [
+    "Data pipeline design, ETL/ELT workflows, and streaming architectures",
+    "ML model development, training, and production deployment",
+    "Distributed systems and microservices architecture",
     "SQL & Python for large-scale analysis and automation",
-    "Data modeling, transformation, and pipeline optimization",
-    "Exploratory data analysis & statistical methods",
-    "Interactive dashboards & visualization",
-    "Experimentation & A/B testing design",
-    "Business metrics definition & performance tracking",
-    "ETL/ELT workflows and data quality assurance",
+    "Interactive dashboards, visualization, and BI reporting",
+    "Cloud infrastructure (AWS, GCP, Azure) and containerization",
+    "Experimentation design, A/B testing, and statistical methods",
     "Cross-functional collaboration with product, engineering, and business teams"
   ],
   skills: [
     {
       category: "Languages",
-      items: [{ name: "Python" }, { name: "SQL" }, { name: "Java" }, { name: "Go" }, { name: "JavaScript" }, { name: "TypeScript" }]
+      items: [{ name: "Python" }, { name: "SQL" }, { name: "Java" }, { name: "Go" }, { name: "JavaScript" }, { name: "TypeScript" }, { name: "C++" }]
     },
     {
-      category: "Data",
-      items: [{ name: "PostgreSQL" }, { name: "MySQL" }, { name: "MongoDB" }, { name: "Redis" }, { name: "TimescaleDB" }, { name: "Pandas" }]
+      category: "Backend & APIs",
+      items: [{ name: "Node.js" }, { name: "Express" }, { name: "FastAPI" }, { name: "REST APIs" }, { name: "GraphQL" }, { name: "gRPC" }]
+    },
+    {
+      category: "Data Engineering",
+      items: [{ name: "Kafka" }, { name: "Airflow" }, { name: "PySpark" }, { name: "Pandas" }, { name: "NumPy" }, { name: "dbt" }, { name: "ETL/ELT" }]
     },
     {
       category: "ML/AI",
-      items: [{ name: "PyTorch" }, { name: "PyTorch Geometric" }, { name: "FAISS" }, { name: "LangChain" }, { name: "LangGraph" }, { name: "Scikit-learn" }]
+      items: [{ name: "PyTorch" }, { name: "PyTorch Geometric" }, { name: "TensorFlow" }, { name: "Scikit-learn" }, { name: "FAISS" }, { name: "LangChain" }, { name: "LangGraph" }, { name: "Hugging Face" }, { name: "YOLOv8" }]
+    },
+    {
+      category: "Databases",
+      items: [{ name: "PostgreSQL" }, { name: "MySQL" }, { name: "MongoDB" }, { name: "Redis" }, { name: "TimescaleDB" }, { name: "Pinecone" }, { name: "ChromaDB" }]
+    },
+    {
+      category: "Cloud & DevOps",
+      items: [{ name: "AWS" }, { name: "GCP" }, { name: "Azure" }, { name: "Docker" }, { name: "Kubernetes" }, { name: "GitHub Actions" }, { name: "CI/CD" }]
     },
     {
       category: "MLOps",
-      items: [{ name: "MLflow" }, { name: "DVC" }, { name: "Weights & Biases" }, { name: "Airflow" }]
-    },
-    {
-      category: "Cloud",
-      items: [{ name: "AWS" }, { name: "GCP" }, { name: "Docker" }, { name: "Kubernetes" }, { name: "Kafka" }]
+      items: [{ name: "MLflow" }, { name: "DVC" }, { name: "Weights & Biases" }]
     },
     {
       category: "Visualization",
-      items: [{ name: "Streamlit" }, { name: "Plotly" }, { name: "Tableau" }, { name: "Dash" }]
+      items: [{ name: "Tableau" }, { name: "Power BI" }, { name: "Plotly" }, { name: "Streamlit" }, { name: "Dash" }]
     }
   ],
   experience: [
@@ -56,28 +64,28 @@ export const RESUME: Resume = {
           employmentType: "full-time",
           period: { label: "Summer 2025", start: "2025-05" },
           location: "San Jose, CA",
-          tech: ["Python", "SQL", "Tableau", "Excel", "Power BI", "Airflow"],
+          tech: ["Python", "SQL", "Tableau", "Power BI", "Airflow"],
           bullets: [
-            { text: "Automated reporting pipelines with SQL/Python, reducing manual work and improving data consistency." },
-            { text: "Built dashboards for occupancy and revenue tracking across multiple properties." },
-            { text: "Developed demand forecasting models to support revenue management decisions." }
+            { text: "Engineered automated ETL pipelines using SQL and Python, reducing manual data preparation by 40% and improving data consistency across multi-property analytics." },
+            { text: "Built interactive dashboards in Tableau and Power BI for occupancy, revenue, and KPI tracking across multiple hotel properties." },
+            { text: "Developed demand forecasting models using time-series analysis to support dynamic pricing and revenue management decisions." }
           ]
         }
       ]
     },
     {
-      name: "Freelance / Contract",
+      name: "Independent",
       roles: [
         {
-          title: "Creative Lead",
+          title: "Technical Consultant",
           period: { label: "2022–2024", start: "2022-01", end: "2024-01" },
           employmentType: "contract",
           location: "Remote",
-          tech: ["Figma", "Adobe Creative Suite", "Google Analytics", "Mixpanel"],
-          summary: "Brand systems & measurable campaigns",
+          tech: ["Python", "SQL", "Google Analytics", "Mixpanel", "Tableau", "Figma"],
+          summary: "Data analytics & automation consulting",
           bullets: [
-            { text: "Delivered brand identity systems and marketing assets for clients in tech and hospitality." },
-            { text: "Ran A/B experiments on campaigns and tracked engagement metrics." }
+            { text: "Provided data analytics and pipeline consulting for small businesses, building reporting automation and data infrastructure solutions." },
+            { text: "Designed A/B testing frameworks and tracked engagement metrics to optimize client campaigns and product decisions." }
           ]
         }
       ]
@@ -91,11 +99,11 @@ export const RESUME: Resume = {
           employmentType: "internship",
           period: { label: "Jan–May 2022", start: "2022-01", end: "2022-05" },
           location: "Gujarat, India",
-          tech: ["Python", "Scikit-learn", "TensorFlow", "Pandas", "NumPy"],
-          summary: "Analytics & Modeling",
+          tech: ["Python", "Scikit-learn", "TensorFlow", "Pandas", "NumPy", "XGBoost"],
+          summary: "ML Engineering & Analytics",
           bullets: [
-            { text: "Built credit fraud detection system using ML with techniques for handling class imbalance (SMOTE, ensemble methods)." },
-            { text: "Created data analytics dashboards with statistical models for operational reporting." }
+            { text: "Built credit fraud detection system using ensemble ML (Random Forest, XGBoost) with SMOTE for class imbalance, achieving 94% precision on transaction data." },
+            { text: "Developed automated analytics dashboards with statistical models for operational reporting and anomaly detection." }
           ]
         }
       ]
@@ -110,10 +118,10 @@ export const RESUME: Resume = {
           period: { label: "Jun–Aug 2021", start: "2021-06", end: "2021-08" },
           location: "Gujarat, India",
           tech: ["Swift", "UIKit", "Core Data", "Xcode", "Git"],
-          summary: "Product Engineering",
+          summary: "Mobile Engineering",
           bullets: [
-            { text: "Developed CodeLock, an iOS privacy/security app with encryption and secure local storage." },
-            { text: "Tracked user engagement metrics and iterated on UX based on usage patterns." }
+            { text: "Developed CodeLock, an iOS privacy/security app with AES encryption and secure local storage using Core Data." },
+            { text: "Instrumented user engagement analytics and iterated on UX based on usage patterns and retention data." }
           ]
         }
       ]
@@ -127,11 +135,11 @@ export const RESUME: Resume = {
           employmentType: "internship",
           period: { label: "May–Nov 2019", start: "2019-05", end: "2019-11" },
           location: "Gujarat, India",
-          tech: ["Azure", "CI/CD", "Microservices", "REST APIs"],
+          tech: ["Azure", "CI/CD", "Microservices", "REST APIs", "Docker"],
           summary: "Cloud-Native Development",
           bullets: [
-            { text: "Built a cloud-native communication platform for first responders using microservices on Azure." },
-            { text: "Set up CI/CD pipelines for automated testing and deployment." }
+            { text: "Built cloud-native communication platform for first responders using microservices architecture on Azure with REST APIs." },
+            { text: "Configured CI/CD pipelines for automated testing and deployment, reducing deployment time by 60%." }
           ]
         }
       ]
@@ -146,12 +154,12 @@ export const RESUME: Resume = {
       end: "2022",
       gpa: "8.7/10",
       courses: [
-        "Software Development",
-        "Internet of Things",
-        "Operating Systems",
         "Big Data Analytics",
         "Computer Vision",
-        "Natural Language Processing"
+        "Natural Language Processing",
+        "Operating Systems",
+        "Database Systems",
+        "Software Development"
       ],
       achievements: [
         "Rubik's Cube: 16.7 sec (WCA)",
