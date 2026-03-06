@@ -16,21 +16,7 @@ import ReactFlow, {
 import "reactflow/dist/style.css";
 import { ArchitectureData, ArchitectureNode } from "@/data/types";
 import { useReducedMotion } from "framer-motion";
-
-/**
- * Custom Node Component - styled with Liquid Glass aesthetic
- */
-export const typeColors: Record<ArchitectureNode["type"], string> = {
-    database: "var(--neon-purple)",
-    service: "var(--neon-cyan)",
-    stream: "var(--neon-blue)",
-    client: "#c7d2fe",
-    cache: "#fbbf24",
-    queue: "#22d3ee",
-    ml: "#c084fc",
-    search: "#a855f7",
-    other: "var(--glass-border)"
-};
+import { typeColors } from "./architectureColors";
 
 const CustomNode = ({ data }: { data: { label: string; type?: ArchitectureNode["type"] } }) => {
     const color = data.type ? typeColors[data.type] ?? "var(--glass-border)" : "var(--glass-border)";

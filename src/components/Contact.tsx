@@ -34,6 +34,13 @@ const EMAIL_PHRASES = [
 
 const MESSAGE_PLACEHOLDER = `Hey Jay! I came across your portfolio and was impressed by your data engineering work. I'd love to chat about a potential opportunity...`;
 
+const SOCIAL_ICONS = [
+    { icon: Github, href: SOCIAL_LINKS.github, label: "GitHub", glowColor: "#ffffff" },
+    { icon: Linkedin, href: SOCIAL_LINKS.linkedin, label: "LinkedIn", glowColor: "#0A66C2" },
+    { icon: Youtube, href: SOCIAL_LINKS.youtube, label: "YouTube", glowColor: "#FF0000" },
+    { icon: Twitter, href: SOCIAL_LINKS.twitter, label: "Twitter", glowColor: "#1DA1F2" },
+];
+
 // Social icon with brand-colored glow
 function SocialIcon({ icon: Icon, href, label, glowColor }: {
     icon: typeof Github;
@@ -79,7 +86,6 @@ export function Contact() {
         message: ""
     });
     const [errors, setErrors] = useState<FormErrors>({});
-    const [isSubmitting, setIsSubmitting] = useState(false);
     const [isSent, setIsSent] = useState(false);
     const [toastError, setToastError] = useState<string | null>(null);
 
@@ -133,7 +139,6 @@ export function Contact() {
         e.preventDefault();
         if (!validateForm()) return;
 
-        setIsSubmitting(true);
         setToastError(null);
         setIsSent(false);
 
@@ -149,17 +154,8 @@ export function Contact() {
             setTimeout(() => setIsSent(false), 4000);
         } catch {
             setToastError("Couldn't open your mail app. Email me directly at " + SOCIAL_LINKS.email);
-        } finally {
-            setIsSubmitting(false);
         }
     };
-
-    const socialIcons = [
-        { icon: Github, href: SOCIAL_LINKS.github, label: "GitHub", glowColor: "#ffffff" },
-        { icon: Linkedin, href: SOCIAL_LINKS.linkedin, label: "LinkedIn", glowColor: "#0A66C2" },
-        { icon: Youtube, href: SOCIAL_LINKS.youtube, label: "YouTube", glowColor: "#FF0000" },
-        { icon: Twitter, href: SOCIAL_LINKS.twitter, label: "Twitter", glowColor: "#1DA1F2" }
-    ];
 
     return (
         <section id="contact" className="section-block section-shell scroll-mt-28 md:scroll-mt-32">
@@ -220,7 +216,7 @@ export function Contact() {
                         </a>
 
                         <div className="flex gap-4 mt-4">
-                            {socialIcons.map((social) => (
+                            {SOCIAL_ICONS.map((social) => (
                                 <SocialIcon
                                     key={social.label}
                                     icon={social.icon}
@@ -348,18 +344,9 @@ export function Contact() {
                             <MagneticButton>
                                 <button
                                     type="submit"
-                                    disabled={isSubmitting}
-                                    className="btn btn-primary w-full py-4 disabled:opacity-70 disabled:cursor-not-allowed"
+                                    className="btn btn-primary w-full py-4"
                                 >
-                                    {isSubmitting ? (
-                                        <span className="flex items-center justify-center gap-2">
-                                            <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24">
-                                                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
-                                                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
-                                            </svg>
-                                            Opening mail...
-                                        </span>
-                                    ) : isSent ? (
+                                    {isSent ? (
                                         <span>Check your mail app!</span>
                                     ) : (
                                         <>

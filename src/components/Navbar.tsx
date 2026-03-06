@@ -149,7 +149,7 @@ export function Navbar() {
                                                 layoutId="activeUnderline"
                                                 className="absolute -bottom-1 left-2 right-2 h-0.5 rounded-full"
                                                 style={{
-                                                    background: "linear-gradient(135deg, var(--accent-cyan, #00F5FF) 0%, var(--accent-purple, #A855F7) 100%)",
+                                                    background: "linear-gradient(135deg, var(--neon-cyan) 0%, var(--neon-purple) 100%)",
                                                 }}
                                                 transition={{ type: "spring", stiffness: 380, damping: 30 }}
                                             />

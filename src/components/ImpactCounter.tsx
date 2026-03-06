@@ -30,12 +30,12 @@ export function ImpactCounter({ value, label, suffix = "", prefix = "", duration
 
     return (
         <div ref={ref} className="flex flex-col items-center">
-            <div className="text-4xl md:text-5xl font-bold font-mono text-[var(--color-text-primary)] flex items-baseline">
+            <div className="text-4xl md:text-5xl font-bold font-mono text-[var(--text-primary)] flex items-baseline">
                 {prefix}
                 <motion.span>{displayValue}</motion.span>
                 {suffix}
             </div>
-            <div className="text-sm text-[var(--color-text-muted)] uppercase tracking-wider mt-2">
+            <div className="text-sm text-[var(--text-muted)] uppercase tracking-wider mt-2">
                 {label}
             </div>
         </div>

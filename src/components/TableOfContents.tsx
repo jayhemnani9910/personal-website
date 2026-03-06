@@ -35,7 +35,7 @@ export function TableOfContents({ sections }: TableOfContentsProps) {
 
     return (
         <nav className="hidden lg:block sticky top-32 space-y-4">
-            <h4 className="text-sm font-mono text-[var(--color-text-muted)] uppercase tracking-wider mb-4">
+            <h4 className="text-sm font-mono text-[var(--text-muted)] uppercase tracking-wider mb-4">
                 Contents
             </h4>
             <ul className="space-y-2 border-l border-white/10">
@@ -46,15 +46,15 @@ export function TableOfContents({ sections }: TableOfContentsProps) {
                             {isActive && (
                                 <motion.div
                                     layoutId="active-toc"
-                                    className="absolute left-0 top-0 bottom-0 w-[2px] bg-[var(--color-accent-primary)]"
+                                    className="absolute left-0 top-0 bottom-0 w-[2px] bg-[var(--accent)]"
                                     transition={{ type: "spring", stiffness: 300, damping: 30 }}
                                 />
                             )}
                             <a
                                 href={`#${id}`}
                                 className={`block text-sm transition-colors duration-200 ${isActive
-                                        ? "text-[var(--color-text-primary)] font-medium"
-                                        : "text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]"
+                                        ? "text-[var(--text-primary)] font-medium"
+                                        : "text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
                                     }`}
                                 onClick={(e) => {
                                     e.preventDefault();

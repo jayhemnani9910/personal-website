@@ -38,7 +38,7 @@ export function TransitionLayout({ children }: TransitionLayoutProps) {
   const pathname = usePathname();
 
   return (
-    <AnimatePresence mode="wait" initial={false}>
+    <AnimatePresence mode="popLayout" initial={false}>
       <motion.div
         key={pathname}
         variants={pageVariants}

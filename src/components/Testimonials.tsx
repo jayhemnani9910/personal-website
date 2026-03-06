@@ -78,10 +78,10 @@ export function Testimonials() {
                             className="absolute w-full"
                         >
                             <div className="glass-card p-8 md:p-12 rounded-3xl relative">
-                                <Quote className="absolute top-8 left-8 w-12 h-12 text-[var(--color-accent-primary)] opacity-20" />
+                                <Quote className="absolute top-8 left-8 w-12 h-12 text-[var(--accent)] opacity-20" />
 
                                 <div className="flex flex-col items-center text-center pt-8">
-                                    <p className="text-xl md:text-2xl leading-relaxed text-[var(--color-text-primary)] mb-8 font-light italic">
+                                    <p className="text-xl md:text-2xl leading-relaxed text-[var(--text-primary)] mb-8 font-light italic">
                                         &ldquo;{TESTIMONIALS[activeIndex].text}&rdquo;
                                     </p>
 
@@ -100,10 +100,10 @@ export function Testimonials() {
                                             )}
                                         </div>
                                         <div className="text-left">
-                                            <h4 className="font-bold text-[var(--color-text-primary)]">
+                                            <h4 className="font-bold text-[var(--text-primary)]">
                                                 {TESTIMONIALS[activeIndex].author}
                                             </h4>
-                                            <p className="text-sm text-[var(--color-text-secondary)]">
+                                            <p className="text-sm text-[var(--text-secondary)]">
                                                 {TESTIMONIALS[activeIndex].role}, {TESTIMONIALS[activeIndex].company}
                                             </p>
                                         </div>
@@ -117,7 +117,7 @@ export function Testimonials() {
                 {/* Controls */}
                 <div className="flex justify-center items-center gap-4 mt-8">
                     <MagneticButton onClick={prevTestimonial}>
-                        <button className="p-3 rounded-full bg-[rgba(255,255,255,0.05)] hover:bg-[rgba(255,255,255,0.1)] transition-colors border border-[rgba(255,255,255,0.05)] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]">
+                        <button className="p-3 rounded-full bg-[rgba(255,255,255,0.05)] hover:bg-[rgba(255,255,255,0.1)] transition-colors border border-[rgba(255,255,255,0.05)] text-[var(--text-secondary)] hover:text-[var(--text-primary)]">
                             <ChevronLeft className="w-5 h-5" />
                         </button>
                     </MagneticButton>
@@ -131,7 +131,7 @@ export function Testimonials() {
                                     setActiveIndex(i);
                                 }}
                                 className={`w-2 h-2 rounded-full transition-all duration-300 ${i === activeIndex
-                                    ? "w-8 bg-[var(--color-accent-primary)]"
+                                    ? "w-8 bg-[var(--accent)]"
                                     : "bg-[rgba(255,255,255,0.2)] hover:bg-[rgba(255,255,255,0.4)]"
                                     }`}
                             />
@@ -139,7 +139,7 @@ export function Testimonials() {
                     </div>
 
                     <MagneticButton onClick={nextTestimonial}>
-                        <button className="p-3 rounded-full bg-[rgba(255,255,255,0.05)] hover:bg-[rgba(255,255,255,0.1)] transition-colors border border-[rgba(255,255,255,0.05)] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]">
+                        <button className="p-3 rounded-full bg-[rgba(255,255,255,0.05)] hover:bg-[rgba(255,255,255,0.1)] transition-colors border border-[rgba(255,255,255,0.05)] text-[var(--text-secondary)] hover:text-[var(--text-primary)]">
                             <ChevronRight className="w-5 h-5" />
                         </button>
                     </MagneticButton>
