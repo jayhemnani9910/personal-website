@@ -148,8 +148,11 @@ System
                     setIsPurging(true);
                     newHistory.push({ type: "error", content: "INITIATING SYSTEM PURGE..." });
                     setTimeout(() => {
-                        newHistory.push({ type: "error", content: "CRITICAL ERROR: ACCESS DENIED." });
-                        newHistory.push({ type: "output", content: "Nice try. Security protocols engaged." });
+                        setHistory((prev) => [
+                            ...prev,
+                            { type: "error", content: "CRITICAL ERROR: ACCESS DENIED." },
+                            { type: "output", content: "Nice try. Security protocols engaged." },
+                        ]);
                         setIsPurging(false);
                     }, 3000);
                 } else {

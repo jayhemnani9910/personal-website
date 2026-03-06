@@ -5,9 +5,6 @@ import { ThemeProvider } from "@/context/ThemeContext";
 import { WebMCPLoader } from "@/components/WebMCPLoader";
 import { SITE_CONFIG } from "@/../content/site";
 
-// Offline-friendly fallbacks; replace with next/font when network is available
-const inter = { variable: "" };
-const jetbrainsMono = { variable: "" };
 
 export const viewport: Viewport = {
   themeColor: [
@@ -93,7 +90,7 @@ export default function RootLayout({
         />
       </head>
       <body
-        className={`${inter.variable} ${jetbrainsMono.variable} antialiased`}
+        className="antialiased"
       >
         <ThemeProvider>
           <ClientLayout>{children}</ClientLayout>

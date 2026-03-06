@@ -53,6 +53,14 @@
   /* Hero orbs - more visible on light backgrounds */
   --orb-opacity-1: 0.12;
   --orb-opacity-2: 0.08;
+
+  /* Glass / neon tokens (used by ArchitectureVisualizer, LabSection) */
+  --bg-surface: #f5f5f7;
+  --bg-abyss: #e8e8ed;
+  --glass-border: rgba(0, 0, 0, 0.08);
+  --neon-cyan: #0066ff;
+  --neon-purple: #7c3aed;
+  --neon-blue: #3b82f6;
 }
 
 /* Dark Theme */
@@ -78,6 +86,14 @@
   /* Hero orbs - more prominent on dark backgrounds */
   --orb-opacity-1: 0.25;
   --orb-opacity-2: 0.18;
+
+  /* Glass / neon tokens */
+  --bg-surface: #1c1c1e;
+  --bg-abyss: #0a0a0f;
+  --glass-border: rgba(255, 255, 255, 0.12);
+  --neon-cyan: #22d3ee;
+  --neon-purple: #a855f7;
+  --neon-blue: #818cf8;
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -339,6 +355,26 @@ body {
 }
 
 /* ═══════════════════════════════════════════════════════════════
+   GLASS EFFECTS
+   ═══════════════════════════════════════════════════════════════ */
+
+.glass {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(12px);
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(16px);
+}
+
+.glass-panel {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+}
+
+/* ═══════════════════════════════════════════════════════════════
    ANIMATIONS
    ═══════════════════════════════════════════════════════════════ */
 
@@ -351,6 +387,16 @@ body {
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-4px); }
+  75% { transform: translateX(4px); }
+}
+
+.animate-shake {
+  animation: shake 0.3s ease-in-out infinite;
 }
 
 /* ═══════════════════════════════════════════════════════════════

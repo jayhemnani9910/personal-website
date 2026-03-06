@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useCallback, useContext, useMemo, useState } from "react";
 
 interface TerminalContextType {
     isOpen: boolean;
@@ -13,8 +13,8 @@ const TerminalContext = createContext<TerminalContextType | undefined>(undefined
 export const TerminalProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [isOpen, setIsOpen] = useState(false);
 
-    const toggleTerminal = () => setIsOpen((prev) => !prev);
-    const closeTerminal = () => setIsOpen(false);
+    const toggleTerminal = useCallback(() => setIsOpen((prev) => !prev), []);
+    const closeTerminal = useCallback(() => setIsOpen(false), []);
 
     React.useEffect(() => {
         const down = (e: KeyboardEvent) => {
@@ -26,10 +26,12 @@ export const TerminalProvider: React.FC<{ children: React.ReactNode }> = ({ chil
 
         document.addEventListener("keydown", down);
         return () => document.removeEventListener("keydown", down);
-    }, []);
+    }, [toggleTerminal]);
+
+    const value = useMemo(() => ({ isOpen, toggleTerminal, closeTerminal }), [isOpen, toggleTerminal, closeTerminal]);
 
     return (
-        <TerminalContext.Provider value={{ isOpen, toggleTerminal, closeTerminal }}>
+        <TerminalContext.Provider value={value}>
             {children}
         </TerminalContext.Provider>
     );

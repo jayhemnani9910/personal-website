@@ -2,7 +2,7 @@
 
 import { useRef, useState } from "react";
 import { motion } from "framer-motion";
-import { springMagnetic } from "@/lib/motion";
+import { SPRINGS } from "@/lib/motion";
 
 export default function MagneticButton({
     children,
@@ -39,7 +39,7 @@ export default function MagneticButton({
             animate={{ x, y }}
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
-            transition={springMagnetic}
+            transition={SPRINGS.magnetic}
             onClick={onClick}
             className={className}
         >

@@ -108,6 +108,34 @@ const DeepDiveSchema = z.object({
 });
 
 // ============================================================================
+// ARCHITECTURE SCHEMA (matches ArchitectureData in data/types.ts)
+// ============================================================================
+const ArchitectureNodeSchema = z.object({
+    id: z.string(),
+    label: z.string(),
+    type: z.enum(["service", "database", "stream", "client", "cache", "queue", "ml", "other", "search"]),
+    x: z.number().optional(),
+    y: z.number().optional(),
+});
+
+const ArchitectureEdgeSchema = z.object({
+    source: z.string(),
+    target: z.string(),
+    label: z.string().optional(),
+    animated: z.boolean().optional(),
+});
+
+const ArchitectureDataSchema = z.object({
+    nodes: z.array(ArchitectureNodeSchema),
+    edges: z.array(ArchitectureEdgeSchema),
+    description: z.string().optional(),
+    legend: z.array(z.object({
+        type: ArchitectureNodeSchema.shape.type,
+        label: z.string(),
+    })).optional(),
+});
+
+// ============================================================================
 // PROJECT SCHEMA
 // ============================================================================
 export const ProjectSchema = z.object({
@@ -126,9 +154,7 @@ export const ProjectSchema = z.object({
     priority: z.number().optional(),
     github: z.string().url().optional(),
     links: z.record(z.string(), z.string()).nullable().transform(v => v || undefined).optional(),
-    // Architecture diagram data could be complex, keeping it optional/any for now or defining strict schema later
-    architecture: z.any().optional(),
-    // Progressive disclosure content for technical deep dives
+    architecture: ArchitectureDataSchema.optional(),
     deepDive: DeepDiveSchema.optional(),
 });
 

@@ -11,7 +11,7 @@ export const dynamic = "force-static";
  * https://nextjs.org/docs/app/api-reference/file-conventions/metadata/sitemap
  */
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://jeyhemnani.com";
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://jayhemnani.me";
   
   // Get all projects for dynamic routes
   const projects = await getAllProjects();

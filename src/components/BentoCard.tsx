@@ -12,7 +12,7 @@ interface BentoCardProps {
 }
 
 export function BentoCard({ project, size = "standard", className = "" }: BentoCardProps) {
-    const description = (project as Project & { headline?: string }).headline ?? project.summary;
+    const description = project.summary;
     const isLarge = size === "large";
     const maxTechTags = isLarge ? 5 : 3;
 
@@ -68,7 +68,7 @@ export function BentoCard({ project, size = "standard", className = "" }: BentoC
                             target="_blank"
                             rel="noopener noreferrer"
                             className="inline-flex items-center gap-2 text-sm text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors"
-                            onClick={(e) => e.stopPropagation()}
+
                         >
                             <Github className="w-4 h-4" />
                             <span>Source Code</span>

@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { FlaskConical, Terminal, Cpu, Zap, Brain, type LucideIcon } from "lucide-react";
-import { springSoft, hoverScale, hoverGlow } from "@/lib/motion";
+import { SPRINGS, INTERACTIONS } from "@/lib/motion";
 import { EXPERIMENTS, type Experiment } from "@/../content/lab";
 
 // Map icon names to Lucide components
@@ -21,7 +21,7 @@ export function LabSection() {
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={springSoft}
+                transition={SPRINGS.soft}
                 className="mb-12"
             >
                 <div className="flex items-center gap-3 mb-4">
@@ -44,8 +44,8 @@ export function LabSection() {
                             initial={{ opacity: 0, y: 20 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
-                            transition={{ ...springSoft, delay: i * 0.1 }}
-                            whileHover={{ ...hoverScale, ...hoverGlow }}
+                            transition={{ ...SPRINGS.soft, delay: i * 0.1 }}
+                            whileHover={{ ...INTERACTIONS.hoverScale.whileHover, ...INTERACTIONS.hoverGlow.whileHover }}
                             className="group relative p-6 rounded-xl border border-[var(--glass-border)] bg-[rgba(255,255,255,0.02)] hover:bg-[rgba(255,255,255,0.04)] transition-colors"
                         >
                             <div className="flex justify-between items-start mb-4">

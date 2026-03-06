@@ -3,23 +3,8 @@
 import Link from "next/link";
 import { ArrowLeft, Github, ExternalLink } from "lucide-react";
 import type { Project } from "@/lib/definitions";
-import { StatCard } from "@/components/ui/StatCard";
 
-// Code block component with syntax highlighting styling
-function CodeBlock({ title, language, code }: { title?: string; language: string; code: string }) {
-    return (
-        <div className="rounded-lg overflow-hidden border border-[var(--border)] bg-[#0d1117]">
-            {title && (
-                <div className="px-4 py-2 bg-[var(--bg-tertiary)] border-b border-[var(--border)] text-xs text-[var(--text-muted)] font-mono">
-                    {title}
-                </div>
-            )}
-            <pre className="p-4 overflow-x-auto text-sm">
-                <code className="text-[#e6edf3] font-mono whitespace-pre">{code}</code>
-            </pre>
-        </div>
-    );
-}
+import { CodeBlock } from "@/components/CodeBlock";
 
 // Pipeline stage section
 function PipelineStage({
@@ -51,7 +36,7 @@ function PipelineStage({
             </p>
 
             <div className="grid lg:grid-cols-2 gap-6">
-                <CodeBlock title={codeTitle} language="python" code={code} />
+                <CodeBlock snippet={{ title: codeTitle, language: "python", code }} />
 
                 <div className="space-y-4">
                     <div className="p-4 rounded-lg bg-[var(--bg-secondary)] border border-[var(--border)]">
@@ -312,9 +297,7 @@ Cosine similarity LW-CB: 0.12`}
                     </div>
 
                     <CodeBlock
-                        title="Run the full pipeline"
-                        language="bash"
-                        code={`# Full pipeline execution
+                        snippet={{ title: "Run the full pipeline", language: "bash", code: `# Full pipeline execution
 python -m src.pipeline_full \\
     --video data/raw/barca_vs_real.mp4 \\
     --output-dir outputs/match_analysis \\
@@ -328,7 +311,7 @@ python -m src.pipeline_full \\
 # ├── tracklets.json       # Complete track histories
 # ├── graphs/              # PyG graph objects
 # ├── embeddings.npy       # Player embeddings [N, 64]
-# └── pipeline_summary.json`}
+# └── pipeline_summary.json`}}
                     />
                 </div>
             </section>

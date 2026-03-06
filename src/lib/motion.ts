@@ -309,22 +309,4 @@ export function getViewportProps(
   };
 }
 
-// ============================================================================
-// LEGACY EXPORTS (for backwards compatibility)
-// ============================================================================
-export const springStiff = SPRINGS.stiff;
-export const springSoft = SPRINGS.soft;
-export const springMagnetic = SPRINGS.magnetic;
-export const hoverScale = INTERACTIONS.hoverScale.whileHover;
-export const hoverGlow = INTERACTIONS.hoverGlow.whileHover;
-
-// Re-export for convenience
-export const TRANSITIONS = {
-  spring: SPRINGS.default,
-  smooth: TWEENS.smooth,
-} as const;
-
-export type VariantName = keyof typeof VARIANTS;
-export type SpringName = keyof typeof SPRINGS;
-export type DurationName = keyof typeof DURATIONS;
 

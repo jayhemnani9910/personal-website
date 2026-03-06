@@ -1,13 +1,9 @@
 "use client";
 
-import type { Project, DeepDive, CodeSnippet, Learning, Component, KeyDecision } from "@/lib/definitions";
+import type { Project } from "@/lib/definitions";
 import type { ArchitectureData, ArchitectureNode, ProjectMedia, Metric } from "@/data/types";
-import { UI_COPY } from "@/data/profile";
 import { motion } from "framer-motion";
 import {
-  ExternalLink,
-  Code2,
-  ArrowLeft,
   Activity,
   Network,
   AlertTriangle,
@@ -16,43 +12,21 @@ import {
   GitBranch,
   Target,
   BookOpen,
+  Code2,
   ChartNoAxesCombined
 } from "lucide-react";
-import Link from "next/link";
 import Image from "next/image";
 import dynamic from "next/dynamic";
-import { typeColors as architectureColors } from "./ArchitectureVisualizer";
+import { typeColors as architectureColors } from "./architectureColors";
 import { TableOfContents } from "./TableOfContents";
 import { ProofBlock } from "./ProofBlock";
+import { ProjectHeader } from "./ProjectDetailHeader";
+import { CodeBlock } from "./CodeBlock";
 
 const ArchitectureVisualizer = dynamic(
   () => import("./ArchitectureVisualizer").then((mod) => mod.ArchitectureVisualizer),
   { ssr: false }
 );
-
-// Code block component for technical deep dives
-function CodeBlock({ snippet }: { snippet: CodeSnippet }) {
-  const title = snippet.title || snippet.label || 'Code';
-  const language = snippet.language || snippet.lang || '';
-  const explanation = snippet.explanation || snippet.description;
-
-  return (
-    <div className="rounded-lg overflow-hidden border border-[var(--color-border)] bg-[#0d1117]">
-      <div className="px-4 py-2 bg-[var(--color-bg-tertiary)] border-b border-[var(--color-border)] flex items-center justify-between">
-        <span className="text-xs text-[var(--color-text-muted)] font-mono">{title}</span>
-        {language && <span className="text-xs text-[var(--color-text-muted)] font-mono opacity-60">{language}</span>}
-      </div>
-      <pre className="p-4 overflow-x-auto text-sm">
-        <code className="text-[#e6edf3] font-mono whitespace-pre">{snippet.code}</code>
-      </pre>
-      {explanation && (
-        <div className="px-4 py-3 bg-[var(--color-bg-secondary)] border-t border-[var(--color-border)]">
-          <p className="text-sm text-[var(--color-text-secondary)]">{explanation}</p>
-        </div>
-      )}
-    </div>
-  );
-}
 
 export function ProjectDetail({ project }: { project: Project }) {
   type ProjectWithExtras = Project & {
@@ -60,7 +34,6 @@ export function ProjectDetail({ project }: { project: Project }) {
       description?: string;
       legend?: { label: string; type: ArchitectureNode["type"] }[];
     };
-    headline?: string;
     media?: ProjectMedia[];
     metrics?: Metric[];
   };
@@ -88,9 +61,9 @@ export function ProjectDetail({ project }: { project: Project }) {
   ];
 
   return (
-    <main className="min-h-screen pt-24 px-6 pb-16 relative z-10 bg-[#050505]/90 backdrop-blur-xl">
+    <main className="min-h-screen pt-24 px-6 pb-16 relative z-10 bg-[var(--bg-primary)] backdrop-blur-xl">
       <div className="max-w-7xl mx-auto space-y-16">
-        <Header project={project} />
+        <ProjectHeader project={project} />
 
         <div className="grid lg:grid-cols-[1fr,3fr] gap-12 items-start">
           <aside className="hidden lg:block sticky top-32">
@@ -106,11 +79,11 @@ export function ProjectDetail({ project }: { project: Project }) {
                 transition={{ delay: 0.1 }}
                 className="space-y-6"
               >
-                <h2 className="text-2xl font-bold text-[var(--color-text-primary)] flex items-center gap-3">
-                  <BookOpen className="w-6 h-6 text-[var(--color-accent-primary)]" />
+                <h2 className="text-2xl font-bold text-[var(--text-primary)] flex items-center gap-3">
+                  <BookOpen className="w-6 h-6 text-[var(--accent)]" />
                   Overview
                 </h2>
-                <p className="text-lg text-[var(--color-text-secondary)] leading-relaxed max-w-3xl">
+                <p className="text-lg text-[var(--text-secondary)] leading-relaxed max-w-3xl">
                   {project.summary}
                 </p>
               </motion.div>
@@ -124,18 +97,18 @@ export function ProjectDetail({ project }: { project: Project }) {
                 viewport={{ once: true, margin: "-100px" }}
                 className="space-y-6"
               >
-                <h2 className="text-2xl font-bold text-[var(--color-text-primary)] flex items-center gap-3">
-                  <AlertTriangle className="w-6 h-6 text-[var(--color-accent-primary)]" />
+                <h2 className="text-2xl font-bold text-[var(--text-primary)] flex items-center gap-3">
+                  <AlertTriangle className="w-6 h-6 text-[var(--accent)]" />
                   The Problem
                 </h2>
-                <p className="text-lg text-[var(--color-text-secondary)] leading-relaxed">
+                <p className="text-lg text-[var(--text-secondary)] leading-relaxed">
                   {project.challenge}
                 </p>
 
                 {/* Extended context for deeper understanding */}
                 {deepDive?.context && (
-                  <div className="mt-6 p-6 rounded-xl bg-[var(--color-bg-secondary)] border border-[var(--color-border)]">
-                    <p className="text-[var(--color-text-secondary)] leading-relaxed">
+                  <div className="mt-6 p-6 rounded-xl bg-[var(--bg-secondary)] border border-[var(--border)]">
+                    <p className="text-[var(--text-secondary)] leading-relaxed">
                       {deepDive.context}
                     </p>
                   </div>
@@ -151,7 +124,7 @@ export function ProjectDetail({ project }: { project: Project }) {
                 viewport={{ once: true, margin: "-100px" }}
                 className="space-y-8"
               >
-                <h2 className="text-2xl font-bold text-[var(--color-text-primary)] flex items-center gap-3">
+                <h2 className="text-2xl font-bold text-[var(--text-primary)] flex items-center gap-3">
                   <Network className="w-6 h-6 text-[var(--neon-cyan)]" />
                   How It Works
                 </h2>
@@ -159,8 +132,8 @@ export function ProjectDetail({ project }: { project: Project }) {
                 {/* Solution points */}
                 <ul className="space-y-4">
                   {project.solution.map((item, idx) => (
-                    <li key={idx} className="flex gap-4 text-[var(--color-text-secondary)]">
-                      <span className="flex-shrink-0 w-6 h-6 rounded-full bg-[var(--color-accent-cyan)]/10 text-[var(--color-accent-cyan)] flex items-center justify-center text-sm font-medium">
+                    <li key={idx} className="flex gap-4 text-[var(--text-secondary)]">
+                      <span className="flex-shrink-0 w-6 h-6 rounded-full bg-[var(--neon-cyan)]/10 text-[var(--neon-cyan)] flex items-center justify-center text-sm font-medium">
                         {idx + 1}
                       </span>
                       <span className="leading-relaxed">{item}</span>
@@ -171,8 +144,8 @@ export function ProjectDetail({ project }: { project: Project }) {
                 {/* Architecture description from deepDive */}
                 {deepDive?.architecture && (
                   <div className="mt-8 space-y-4">
-                    <h3 className="text-lg font-semibold text-[var(--color-text-primary)]">Architecture</h3>
-                    <p className="text-[var(--color-text-secondary)] leading-relaxed">
+                    <h3 className="text-lg font-semibold text-[var(--text-primary)]">Architecture</h3>
+                    <p className="text-[var(--text-secondary)] leading-relaxed">
                       {deepDive.architecture}
                     </p>
                   </div>
@@ -181,8 +154,8 @@ export function ProjectDetail({ project }: { project: Project }) {
                 {/* Components list */}
                 {deepDive?.components && (
                   typeof deepDive.components === 'string' ? (
-                    <div className="mt-6 p-4 rounded-lg bg-[var(--color-bg-secondary)] border border-[var(--color-border)]">
-                      <p className="text-sm text-[var(--color-text-secondary)] whitespace-pre-wrap">{deepDive.components}</p>
+                    <div className="mt-6 p-4 rounded-lg bg-[var(--bg-secondary)] border border-[var(--border)]">
+                      <p className="text-sm text-[var(--text-secondary)] whitespace-pre-wrap">{deepDive.components}</p>
                     </div>
                   ) : deepDive.components.length > 0 && (
                     <div className="grid sm:grid-cols-2 gap-3 mt-6">
@@ -191,21 +164,21 @@ export function ProjectDetail({ project }: { project: Project }) {
                         return (
                           <div
                             key={idx}
-                            className="p-4 rounded-lg bg-[var(--color-bg-secondary)] border border-[var(--color-border)]"
+                            className="p-4 rounded-lg bg-[var(--bg-secondary)] border border-[var(--border)]"
                           >
                             {isStructured ? (
                               <div className="space-y-2">
-                                <h4 className="font-semibold text-[var(--color-text-primary)] text-sm">
+                                <h4 className="font-semibold text-[var(--text-primary)] text-sm">
                                   {(component as { name: string }).name}
                                 </h4>
                                 {(component as { purpose?: string }).purpose && (
-                                  <p className="text-sm text-[var(--color-text-secondary)]">
+                                  <p className="text-sm text-[var(--text-secondary)]">
                                     {(component as { purpose?: string }).purpose}
                                   </p>
                                 )}
                               </div>
                             ) : (
-                              <p className="text-sm text-[var(--color-text-secondary)]">{component as string}</p>
+                              <p className="text-sm text-[var(--text-secondary)]">{component as string}</p>
                             )}
                           </div>
                         );
@@ -216,9 +189,9 @@ export function ProjectDetail({ project }: { project: Project }) {
 
                 {/* Data flow */}
                 {deepDive?.dataFlow && (
-                  <div className="mt-8 p-6 rounded-xl bg-gradient-to-r from-[var(--color-bg-secondary)] to-transparent border border-[var(--color-border)]">
-                    <h3 className="text-lg font-semibold text-[var(--color-text-primary)] mb-3 flex items-center gap-2">
-                      <GitBranch className="w-5 h-5 text-[var(--color-accent-cyan)]" />
+                  <div className="mt-8 p-6 rounded-xl bg-gradient-to-r from-[var(--bg-secondary)] to-transparent border border-[var(--border)]">
+                    <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-3 flex items-center gap-2">
+                      <GitBranch className="w-5 h-5 text-[var(--neon-cyan)]" />
                       Data Flow
                     </h3>
                     {Array.isArray(deepDive.dataFlow) ? (
@@ -226,15 +199,15 @@ export function ProjectDetail({ project }: { project: Project }) {
                         {deepDive.dataFlow.map((step, i) => {
                           const isStructured = typeof step === 'object';
                           return (
-                            <li key={i} className="flex gap-3 text-[var(--color-text-secondary)]">
-                              <span className="text-[var(--color-accent-cyan)] font-mono">{i + 1}.</span>
+                            <li key={i} className="flex gap-3 text-[var(--text-secondary)]">
+                              <span className="text-[var(--neon-cyan)] font-mono">{i + 1}.</span>
                               {isStructured ? (
                                 <div>
-                                  <span className="font-medium text-[var(--color-text-primary)]">
+                                  <span className="font-medium text-[var(--text-primary)]">
                                     {(step as { step: string }).step}
                                   </span>
                                   {(step as { detail?: string }).detail && (
-                                    <p className="text-sm mt-1 text-[var(--color-text-muted)]">
+                                    <p className="text-sm mt-1 text-[var(--text-muted)]">
                                       {(step as { detail?: string }).detail}
                                     </p>
                                   )}
@@ -247,7 +220,7 @@ export function ProjectDetail({ project }: { project: Project }) {
                         })}
                       </ul>
                     ) : (
-                      <p className="text-[var(--color-text-secondary)] leading-relaxed">
+                      <p className="text-[var(--text-secondary)] leading-relaxed">
                         {deepDive.dataFlow}
                       </p>
                     )}
@@ -290,18 +263,18 @@ export function ProjectDetail({ project }: { project: Project }) {
                   viewport={{ once: true, margin: "-100px" }}
                   className="space-y-10"
                 >
-                  <h2 className="text-2xl font-bold text-[var(--color-text-primary)] flex items-center gap-3">
-                    <Code2 className="w-6 h-6 text-[var(--color-accent-purple)]" />
+                  <h2 className="text-2xl font-bold text-[var(--text-primary)] flex items-center gap-3">
+                    <Code2 className="w-6 h-6 text-[var(--neon-purple)]" />
                     Technical Deep Dive
                   </h2>
 
                   {/* Key Decisions */}
                   {deepDive?.keyDecisions && (
                     <div className="space-y-6">
-                      <h3 className="text-lg font-semibold text-[var(--color-text-primary)]">Key Decisions & Trade-offs</h3>
+                      <h3 className="text-lg font-semibold text-[var(--text-primary)]">Key Decisions & Trade-offs</h3>
                       {typeof deepDive.keyDecisions === 'string' ? (
-                        <div className="p-5 rounded-xl bg-[var(--color-bg-secondary)] border border-[var(--color-border)]">
-                          <p className="text-sm text-[var(--color-text-secondary)] whitespace-pre-wrap">{deepDive.keyDecisions}</p>
+                        <div className="p-5 rounded-xl bg-[var(--bg-secondary)] border border-[var(--border)]">
+                          <p className="text-sm text-[var(--text-secondary)] whitespace-pre-wrap">{deepDive.keyDecisions}</p>
                         </div>
                       ) : deepDive.keyDecisions.length > 0 && (
                         <div className="space-y-4">
@@ -311,18 +284,18 @@ export function ProjectDetail({ project }: { project: Project }) {
                             return (
                               <div
                                 key={idx}
-                                className="p-5 rounded-xl bg-[var(--color-bg-secondary)] border border-[var(--color-border)] space-y-3"
+                                className="p-5 rounded-xl bg-[var(--bg-secondary)] border border-[var(--border)] space-y-3"
                               >
-                                <h4 className="font-semibold text-[var(--color-text-primary)]">
+                                <h4 className="font-semibold text-[var(--text-primary)]">
                                   {item.decision}
                                 </h4>
                                 {explanation && (
-                                  <p className="text-sm text-[var(--color-text-secondary)] leading-relaxed">
+                                  <p className="text-sm text-[var(--text-secondary)] leading-relaxed">
                                     {explanation}
                                   </p>
                                 )}
                                 {tradeoffText && (
-                                  <p className="text-xs text-[var(--color-text-muted)] italic">
+                                  <p className="text-xs text-[var(--text-muted)] italic">
                                     Trade-off: {tradeoffText}
                                   </p>
                                 )}
@@ -337,9 +310,9 @@ export function ProjectDetail({ project }: { project: Project }) {
                   {/* Code Snippets */}
                   {deepDive?.codeSnippets && (
                     <div className="space-y-6">
-                      <h3 className="text-lg font-semibold text-[var(--color-text-primary)]">Code Highlights</h3>
+                      <h3 className="text-lg font-semibold text-[var(--text-primary)]">Code Highlights</h3>
                       {typeof deepDive.codeSnippets === 'string' ? (
-                        <div className="p-4 rounded-lg bg-[#0d1117] border border-[var(--color-border)]">
+                        <div className="p-4 rounded-lg bg-[#0d1117] border border-[var(--border)]">
                           <pre className="text-sm text-[#e6edf3] whitespace-pre-wrap">{deepDive.codeSnippets}</pre>
                         </div>
                       ) : deepDive.codeSnippets.length > 0 && (
@@ -363,8 +336,8 @@ export function ProjectDetail({ project }: { project: Project }) {
                 viewport={{ once: true, margin: "-100px" }}
                 className="space-y-8"
               >
-                <h2 className="text-2xl font-bold text-[var(--color-text-primary)] flex items-center gap-3">
-                  <Activity className="w-6 h-6 text-[var(--color-accent-purple)]" />
+                <h2 className="text-2xl font-bold text-[var(--text-primary)] flex items-center gap-3">
+                  <Activity className="w-6 h-6 text-[var(--neon-purple)]" />
                   Results & Impact
                 </h2>
 
@@ -373,8 +346,8 @@ export function ProjectDetail({ project }: { project: Project }) {
                   {project.impact.map((item, idx) => (
                     <ProofBlock key={idx} className="h-full">
                       <div className="flex gap-3 h-full">
-                        <Target className="w-5 h-5 text-[var(--color-accent-purple)] flex-shrink-0 mt-0.5" />
-                        <span className="text-[var(--color-text-secondary)]">{item}</span>
+                        <Target className="w-5 h-5 text-[var(--neon-purple)] flex-shrink-0 mt-0.5" />
+                        <span className="text-[var(--text-secondary)]">{item}</span>
                       </div>
                     </ProofBlock>
                   ))}
@@ -383,32 +356,32 @@ export function ProjectDetail({ project }: { project: Project }) {
                 {/* Deep dive metrics with context */}
                 {deepDive?.metrics && (
                   typeof deepDive.metrics === 'string' ? (
-                    <div className="mt-8 p-4 rounded-lg bg-[var(--color-bg-secondary)] border border-[var(--color-border)]">
-                      <p className="text-sm text-[var(--color-text-secondary)] whitespace-pre-wrap">{deepDive.metrics}</p>
+                    <div className="mt-8 p-4 rounded-lg bg-[var(--bg-secondary)] border border-[var(--border)]">
+                      <p className="text-sm text-[var(--text-secondary)] whitespace-pre-wrap">{deepDive.metrics}</p>
                     </div>
                   ) : deepDive.metrics.length > 0 && (
                     // Check if first item is a string (array of strings) or object (structured metrics)
                     typeof deepDive.metrics[0] === 'string' ? (
                       <div className="mt-8 space-y-3">
                         {(deepDive.metrics as string[]).map((metric, i) => (
-                          <div key={i} className="flex gap-3 items-start p-3 rounded-lg bg-[var(--color-bg-secondary)] border border-[var(--color-border)]">
-                            <ChartNoAxesCombined className="w-4 h-4 text-[var(--color-accent-purple)] flex-shrink-0 mt-0.5" />
-                            <span className="text-sm text-[var(--color-text-secondary)]">{metric}</span>
+                          <div key={i} className="flex gap-3 items-start p-3 rounded-lg bg-[var(--bg-secondary)] border border-[var(--border)]">
+                            <ChartNoAxesCombined className="w-4 h-4 text-[var(--neon-purple)] flex-shrink-0 mt-0.5" />
+                            <span className="text-sm text-[var(--text-secondary)]">{metric}</span>
                           </div>
                         ))}
                       </div>
                     ) : (
                       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8">
                         {(deepDive.metrics as { value: string; label: string; context?: string }[]).map((metric, i) => (
-                          <div key={i} className="glass p-4 rounded-xl border border-[var(--color-border)] text-center">
-                            <div className="text-2xl md:text-3xl font-bold text-[var(--color-text-primary)] mb-1">
+                          <div key={i} className="glass p-4 rounded-xl border border-[var(--border)] text-center">
+                            <div className="text-2xl md:text-3xl font-bold text-[var(--text-primary)] mb-1">
                               {metric.value}
                             </div>
-                            <div className="text-xs text-[var(--color-text-muted)] uppercase tracking-wider">
+                            <div className="text-xs text-[var(--text-muted)] uppercase tracking-wider">
                               {metric.label}
                             </div>
                             {metric.context && (
-                              <div className="text-xs text-[var(--color-text-muted)] mt-2 opacity-75">
+                              <div className="text-xs text-[var(--text-muted)] mt-2 opacity-75">
                                 {metric.context}
                               </div>
                             )}
@@ -423,11 +396,11 @@ export function ProjectDetail({ project }: { project: Project }) {
                 {!deepDive?.metrics && metrics && metrics.length > 0 && (
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                     {metrics.map((metric, i) => (
-                      <div key={i} className="glass p-4 rounded-xl border border-[var(--color-border)] text-center">
-                        <div className="text-2xl md:text-3xl font-bold text-[var(--color-text-primary)] mb-1">
+                      <div key={i} className="glass p-4 rounded-xl border border-[var(--border)] text-center">
+                        <div className="text-2xl md:text-3xl font-bold text-[var(--text-primary)] mb-1">
                           {metric.value}
                         </div>
-                        <div className="text-xs text-[var(--color-text-muted)] uppercase tracking-wider">
+                        <div className="text-xs text-[var(--text-muted)] uppercase tracking-wider">
                           {metric.label}
                         </div>
                       </div>
@@ -446,13 +419,13 @@ export function ProjectDetail({ project }: { project: Project }) {
                   viewport={{ once: true, margin: "-100px" }}
                   className="space-y-6"
                 >
-                  <h2 className="text-2xl font-bold text-[var(--color-text-primary)] flex items-center gap-3">
+                  <h2 className="text-2xl font-bold text-[var(--text-primary)] flex items-center gap-3">
                     <Lightbulb className="w-6 h-6 text-yellow-500" />
                     Key Learnings
                   </h2>
                   {typeof deepDive.learnings === 'string' ? (
-                    <div className="p-4 rounded-lg bg-[var(--color-bg-secondary)] border border-[var(--color-border)]">
-                      <p className="text-[var(--color-text-secondary)] whitespace-pre-wrap">{deepDive.learnings}</p>
+                    <div className="p-4 rounded-lg bg-[var(--bg-secondary)] border border-[var(--border)]">
+                      <p className="text-[var(--text-secondary)] whitespace-pre-wrap">{deepDive.learnings}</p>
                     </div>
                   ) : deepDive.learnings.length > 0 && (
                     <div className="space-y-4">
@@ -471,22 +444,22 @@ export function ProjectDetail({ project }: { project: Project }) {
                         return (
                           <div
                             key={idx}
-                            className="flex gap-4 p-4 rounded-lg bg-[var(--color-bg-secondary)] border border-[var(--color-border)]"
+                            className="flex gap-4 p-4 rounded-lg bg-[var(--bg-secondary)] border border-[var(--border)]"
                           >
                             <span className="text-yellow-500 text-lg flex-shrink-0">→</span>
                             {isStructured && title ? (
                               <div className="space-y-2">
-                                <h4 className="font-semibold text-[var(--color-text-primary)]">
+                                <h4 className="font-semibold text-[var(--text-primary)]">
                                   {title}
                                 </h4>
                                 {desc && (
-                                  <p className="text-[var(--color-text-secondary)] leading-relaxed text-sm">
+                                  <p className="text-[var(--text-secondary)] leading-relaxed text-sm">
                                     {desc}
                                   </p>
                                 )}
                               </div>
                             ) : (
-                              <p className="text-[var(--color-text-secondary)] leading-relaxed">{learning as string}</p>
+                              <p className="text-[var(--text-secondary)] leading-relaxed">{learning as string}</p>
                             )}
                           </div>
                         );
@@ -496,14 +469,14 @@ export function ProjectDetail({ project }: { project: Project }) {
 
                   {/* Future work */}
                   {deepDive.futureWork && (
-                    <div className="mt-8 p-6 rounded-xl bg-gradient-to-r from-[var(--color-bg-secondary)] to-transparent border border-[var(--color-border)] border-dashed">
-                      <h3 className="text-lg font-semibold text-[var(--color-text-primary)] mb-4">Future Improvements</h3>
+                    <div className="mt-8 p-6 rounded-xl bg-gradient-to-r from-[var(--bg-secondary)] to-transparent border border-[var(--border)] border-dashed">
+                      <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-4">Future Improvements</h3>
                       {typeof deepDive.futureWork === 'string' ? (
-                        <p className="text-sm text-[var(--color-text-muted)] whitespace-pre-wrap">{deepDive.futureWork}</p>
+                        <p className="text-sm text-[var(--text-muted)] whitespace-pre-wrap">{deepDive.futureWork}</p>
                       ) : deepDive.futureWork.length > 0 && (
                         <ul className="space-y-2">
                           {deepDive.futureWork.map((item, idx) => (
-                            <li key={idx} className="flex gap-2 text-sm text-[var(--color-text-muted)]">
+                            <li key={idx} className="flex gap-2 text-sm text-[var(--text-muted)]">
                               <span>○</span>
                               <span>{item}</span>
                             </li>
@@ -519,14 +492,14 @@ export function ProjectDetail({ project }: { project: Project }) {
             {/* Media */}
             {mediaItems && mediaItems.length > 0 && (
               <section id="media" className="scroll-mt-32 space-y-8">
-                <h2 className="text-2xl font-bold text-[var(--color-text-primary)] flex items-center gap-3">
-                  <Smartphone className="w-6 h-6 text-[var(--color-accent-primary)]" />
+                <h2 className="text-2xl font-bold text-[var(--text-primary)] flex items-center gap-3">
+                  <Smartphone className="w-6 h-6 text-[var(--accent)]" />
                   Screens & Demos
                 </h2>
                 <div className="space-y-8">
                   {mediaItems.map((media, idx) => (
                     <ProofBlock key={idx} title={media.caption}>
-                      <div className="relative aspect-video rounded-lg overflow-hidden bg-[var(--color-bg-tertiary)]">
+                      <div className="relative aspect-video rounded-lg overflow-hidden bg-[var(--bg-tertiary)]">
                         {media.kind === "image" && (
                           <Image
                             src={media.src}
@@ -554,112 +527,5 @@ export function ProjectDetail({ project }: { project: Project }) {
         </div>
       </div>
     </main>
-  );
-}
-
-function Header({ project }: { project: Project }) {
-  const description = (project as Project & { headline?: string }).headline ?? project.summary;
-
-  return (
-    <motion.header
-      initial={{ opacity: 0, y: 16 }}
-      animate={{ opacity: 1, y: 0 }}
-      className="space-y-8 border-b border-white/10 pb-12"
-    >
-      <div className="space-y-4">
-        <Link
-          href="/projects"
-          className="inline-flex items-center gap-2 text-sm text-[var(--color-text-secondary)] hover:text-[var(--color-accent-primary)] transition-colors mb-4"
-        >
-          <ArrowLeft className="w-4 h-4" />
-          {UI_COPY.project.back}
-        </Link>
-
-        <div className="flex flex-wrap items-center gap-3 text-sm font-mono text-[var(--color-text-muted)]">
-          <span className="px-2 py-1 rounded bg-white/5 border border-white/10 text-[var(--color-accent-primary)]">
-            {project.role}
-          </span>
-          {project.period && (
-            <>
-              <span>•</span>
-              <span>{project.period}</span>
-            </>
-          )}
-          {project.domain && (
-            <>
-              <span>•</span>
-              <span>{project.domain}</span>
-            </>
-          )}
-        </div>
-
-        <h1 className="text-4xl md:text-6xl font-bold text-[var(--color-text-primary)] tracking-tight">
-          {project.title}
-        </h1>
-        <p className="text-xl md:text-2xl text-[var(--color-text-secondary)] max-w-3xl leading-relaxed font-light">
-          {description}
-        </p>
-      </div>
-
-      <div className="flex flex-wrap gap-4 items-center justify-between">
-        <div className="flex flex-wrap gap-2">
-          {project.tech.map((tech) => (
-            <span
-              key={tech}
-              className="px-3 py-1 text-xs font-mono rounded-full bg-[var(--color-bg-tertiary)] text-[var(--color-text-secondary)] border border-[var(--color-border)]"
-            >
-              {tech}
-            </span>
-          ))}
-        </div>
-
-        <div className="flex gap-3">
-          {project.github && (
-            <a
-              href={project.github}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[var(--color-bg-tertiary)] border border-[var(--color-border)] hover:border-[var(--color-accent-primary)] text-[var(--color-text-primary)] transition-colors"
-            >
-              <Code2 className="w-4 h-4" />
-              {UI_COPY.project.code}
-            </a>
-          )}
-          {project.links?.demo && (
-            <a
-              href={project.links.demo}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[var(--color-accent-primary)] text-[var(--color-bg-primary)] font-semibold hover:bg-[var(--color-accent-secondary)] transition-colors"
-            >
-              <ExternalLink className="w-4 h-4" />
-              {UI_COPY.project.demo}
-            </a>
-          )}
-          {project.links?.code && !project.github && (
-            <a
-              href={project.links.code}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[var(--color-bg-tertiary)] border border-[var(--color-border)] hover:border-[var(--color-accent-primary)] text-[var(--color-text-primary)] transition-colors"
-            >
-              <Code2 className="w-4 h-4" />
-              {UI_COPY.project.code}
-            </a>
-          )}
-          {project.links?.paper && (
-            <a
-              href={project.links.paper}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[var(--color-bg-tertiary)] border border-[var(--color-border)] hover:border-[var(--color-accent-primary)] text-[var(--color-text-primary)] transition-colors"
-            >
-              <ExternalLink className="w-4 h-4" />
-              {UI_COPY.project.paper}
-            </a>
-          )}
-        </div>
-      </div>
-    </motion.header>
   );
 }

@@ -32,14 +32,14 @@ function GlitchText({ text }: { text: string }) {
       <span className="relative z-10">{glitchText}</span>
       <span
         className="absolute top-0 left-0.5 opacity-70 z-0"
-        style={{ color: "var(--accent-cyan, #00F5FF)" }}
+        style={{ color: "var(--neon-cyan)" }}
         aria-hidden="true"
       >
         {text}
       </span>
       <span
         className="absolute top-0 -left-0.5 opacity-70 z-0"
-        style={{ color: "var(--accent-purple, #A855F7)" }}
+        style={{ color: "var(--neon-purple)" }}
         aria-hidden="true"
       >
         {text}
@@ -81,7 +81,7 @@ export default function NotFound() {
             <p style={{ color: "var(--text-muted)" }}>
               The requested resource does not exist on this server.
             </p>
-            <p style={{ color: "var(--accent-cyan, #00F5FF)" }} className="mt-2">
+            <p style={{ color: "var(--neon-cyan)" }} className="mt-2">
               guest@jey-os:~$ <span className="animate-pulse">_</span>
             </p>
           </motion.div>

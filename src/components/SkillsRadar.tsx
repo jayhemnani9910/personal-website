@@ -63,13 +63,13 @@ export function SkillsRadar({ data }: SkillsRadarProps) {
                     <PolarGrid stroke="rgba(255,255,255,0.1)" />
                     <PolarAngleAxis
                         dataKey="subject"
-                        tick={{ fill: "var(--color-text-secondary)", fontSize: 10 }}
+                        tick={{ fill: "var(--text-secondary)", fontSize: 10 }}
                     />
                     <Radar
                         name="Skills"
                         dataKey="A"
-                        stroke="var(--color-accent-primary)"
-                        fill="var(--color-accent-primary)"
+                        stroke="var(--accent)"
+                        fill="var(--accent)"
                         fillOpacity={0.3}
                     />
                 </RadarChart>
