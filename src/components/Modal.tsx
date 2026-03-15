@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useCallback } from "react";
+import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { useLenis } from "lenis/react";
 import { X } from "lucide-react";
@@ -33,7 +34,11 @@ export function Modal({ isOpen, onClose, children, title }: ModalProps) {
         };
     }, [isOpen, handleEscape, lenis]);
 
-    return (
+    // Portal into document.body to escape TransitionLayout's transform
+    // (CSS transform on ancestors breaks fixed positioning)
+    if (typeof window === "undefined") return null;
+
+    return createPortal(
         <AnimatePresence>
             {isOpen && (
                 <motion.div
@@ -94,6 +99,7 @@ export function Modal({ isOpen, onClose, children, title }: ModalProps) {
                     </motion.div>
                 </motion.div>
             )}
-        </AnimatePresence>
+        </AnimatePresence>,
+        document.body
     );
 }
