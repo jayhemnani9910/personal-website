@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { ArrowLeft, Search, FileText, BarChart3, ArrowRight, Filter, Globe } from "lucide-react";
+import { ArrowLeft, FileText, BarChart3, ArrowRight, Filter, Globe } from "lucide-react";
 import type { Project } from "@/lib/definitions";
 import { StatCard } from "@/components/ui/StatCard";
 
@@ -51,7 +51,7 @@ function PipelineStep({ icon: Icon, title, example, isLast }: { icon: React.Comp
 }
 
 
-export function WikipediaAnalysisPage({ project }: { project: Project }) {
+export function WikipediaAnalysisPage({ project: _project }: { project: Project }) {
     const [url, setUrl] = useState("https://en.wikipedia.org/wiki/Machine_learning");
     const [isAnalyzing, setIsAnalyzing] = useState(false);
     const [showResults, setShowResults] = useState(true);
@@ -84,7 +84,6 @@ export function WikipediaAnalysisPage({ project }: { project: Project }) {
     return (
         <div className="min-h-screen bg-[var(--bg-primary)]">
             <style jsx global>{`
-                @keyframes fadeSlideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
                 @keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
             `}</style>
 
@@ -200,7 +199,7 @@ export function WikipediaAnalysisPage({ project }: { project: Project }) {
                             <h2 className="text-sm font-medium text-[var(--text-muted)] uppercase tracking-wider mb-6">Extended Stopwords</h2>
                             <div className="p-6 rounded-xl border border-[var(--border)] bg-[var(--bg-secondary)]">
                                 <p className="text-sm text-[var(--text-secondary)] mb-4">
-                                    Standard NLTK stopwords aren't enough for Wikipedia. Added domain-specific terms:
+                                    Standard NLTK stopwords aren&apos;t enough for Wikipedia. Added domain-specific terms:
                                 </p>
                                 <div className="flex flex-wrap gap-2">
                                     {['the', 'is', 'at', 'wikipedia', 'cite', 'reference', 'retrieved', 'archive', 'edit', 'page', 'external', 'links'].map((word) => (

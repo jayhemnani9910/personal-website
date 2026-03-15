@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { ArrowLeft, Droplets, Wifi, AlertTriangle, Database, BarChart3, Activity, Cloud, Cpu, ArrowRight } from "lucide-react";
+import { ArrowLeft, Droplets, AlertTriangle, BarChart3, Activity, Cloud, Cpu, ArrowRight } from "lucide-react";
 import type { Project } from "@/lib/definitions";
 import { StatCard } from "@/components/ui/StatCard";
 
@@ -79,7 +79,7 @@ function DataFlowStep({ step, title, desc }: { step: number; title: string; desc
 }
 
 
-export function SmartWaterIoTPage({ project }: { project: Project }) {
+export function SmartWaterIoTPage({ project: _project }: { project: Project }) {
     const [flowRates, setFlowRates] = useState({ main: 2.5, shower: 0, outdoor: 0 });
     const [totalVolume, setTotalVolume] = useState(152.3);
 
@@ -98,7 +98,6 @@ export function SmartWaterIoTPage({ project }: { project: Project }) {
     return (
         <div className="min-h-screen bg-[var(--bg-primary)]">
             <style jsx global>{`
-                @keyframes fadeSlideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
                 @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
             `}</style>
 
@@ -142,7 +141,7 @@ export function SmartWaterIoTPage({ project }: { project: Project }) {
                         <div className="p-6 rounded-xl border border-[var(--border)] bg-[var(--bg-secondary)]">
                             <div className="flex items-center gap-2 mb-4">
                                 <BarChart3 className="w-5 h-5 text-[var(--accent)]" />
-                                <span className="text-sm font-medium text-[var(--text-primary)]">Today's Usage</span>
+                                <span className="text-sm font-medium text-[var(--text-primary)]">Today&apos;s Usage</span>
                             </div>
                             <div className="text-4xl font-bold text-[var(--text-primary)] mb-2">
                                 {totalVolume.toFixed(1)} <span className="text-lg text-[var(--text-muted)]">liters</span>

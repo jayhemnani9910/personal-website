@@ -20,7 +20,7 @@ function AlgorithmCard({ name, desc, pros, cons }: { name: string; desc: string;
     );
 }
 
-export function SchedulingVisualizerPage({ project }: { project: Project }) {
+export function SchedulingVisualizerPage({ project: _project }: { project: Project }) {
     const [isFullscreen, setIsFullscreen] = useState(false);
     const demoUrl = "https://jayhemnani9910.github.io/cpu-scheduling-algorithms/";
 

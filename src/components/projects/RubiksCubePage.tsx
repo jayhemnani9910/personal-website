@@ -18,16 +18,12 @@ function FeatureCard({ icon: Icon, title, desc }: { icon: React.ComponentType<{ 
 }
 
 
-export function RubiksCubePage({ project }: { project: Project }) {
+export function RubiksCubePage({ project: _project }: { project: Project }) {
     const [isFullscreen, setIsFullscreen] = useState(false);
     const demoUrl = "https://jayhemnani9910.github.io/rubiks-cube/";
 
     return (
         <div className="min-h-screen bg-[var(--bg-primary)]">
-            <style jsx global>{`
-                @keyframes fadeSlideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-            `}</style>
-
             {/* Header */}
             <header className="pt-32 pb-8 px-6">
                 <div className="max-w-6xl mx-auto">
@@ -35,7 +31,7 @@ export function RubiksCubePage({ project }: { project: Project }) {
                         <ArrowLeft className="w-4 h-4" />Back to Projects
                     </Link>
                     <h1 className="text-4xl md:text-5xl font-bold text-[var(--text-primary)] mb-4" style={{ animation: 'fadeSlideUp 0.5s ease-out' }}>
-                        Rubik's Cube Timer
+                        Rubik&apos;s Cube Timer
                     </h1>
                     <p className="text-xl text-[var(--text-secondary)] mb-6 max-w-3xl" style={{ animation: 'fadeSlideUp 0.5s ease-out 100ms both' }}>
                         Precision timer with 3D cube visualization and WCA-compliant scrambles.

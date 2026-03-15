@@ -92,13 +92,9 @@ function CanaryViz() {
 }
 
 
-export function PatchingSecurityPage({ project }: { project: Project }) {
+export function PatchingSecurityPage({ project: _project }: { project: Project }) {
     return (
         <div className="min-h-screen bg-[var(--bg-primary)]">
-            <style jsx global>{`
-                @keyframes fadeSlideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-            `}</style>
-
             {/* Header */}
             <header className="pt-32 pb-8 px-6">
                 <div className="max-w-6xl mx-auto">
@@ -243,7 +239,7 @@ export function PatchingSecurityPage({ project }: { project: Project }) {
                 <div className="max-w-4xl mx-auto text-center">
                     <Shield className="w-8 h-8 text-[var(--accent)] mx-auto mb-4" />
                     <blockquote className="text-lg text-[var(--text-secondary)] italic">
-                        "DevSecOps is about speed AND safety. True velocity comes from confidence in your safety systems, not from skipping validation steps."
+                        &quot;DevSecOps is about speed AND safety. True velocity comes from confidence in your safety systems, not from skipping validation steps.&quot;
                     </blockquote>
                 </div>
             </section>

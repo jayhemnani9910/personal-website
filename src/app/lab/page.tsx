@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
@@ -10,7 +11,6 @@ import {
     Rocket,
     Telescope,
     Lightbulb,
-    ExternalLink,
     Github,
     ArrowRight
 } from "lucide-react";
@@ -216,13 +216,13 @@ export default function LabPage() {
                                         Always open to interesting projects and ideas.
                                     </p>
                                 </div>
-                                <a
+                                <Link
                                     href="/#contact"
                                     className="flex items-center gap-2 px-6 py-3 rounded-xl bg-white text-black font-medium hover:bg-white/90 transition-colors"
                                 >
                                     Let&apos;s Talk
                                     <ArrowRight className="w-4 h-4" />
-                                </a>
+                                </Link>
                             </div>
                         </motion.div>
                     </div>

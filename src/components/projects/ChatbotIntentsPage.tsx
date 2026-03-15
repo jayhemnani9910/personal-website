@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { ArrowLeft, Github, MessageSquare, Brain, Zap, FileJson, ArrowRight, CheckCircle } from "lucide-react";
+import { ArrowLeft, Brain, Zap, FileJson, CheckCircle } from "lucide-react";
 import type { Project } from "@/lib/definitions";
 import { StatCard } from "@/components/ui/StatCard";
 
@@ -57,7 +57,7 @@ function IntentCard({ tag, patterns, confidence }: { tag: string; patterns: stri
             </div>
             <div className="space-y-1">
                 {patterns.slice(0, 3).map((p, i) => (
-                    <div key={i} className="text-xs text-[var(--text-secondary)]">"{p}"</div>
+                    <div key={i} className="text-xs text-[var(--text-secondary)]">&quot;{p}&quot;</div>
                 ))}
             </div>
         </div>
@@ -109,7 +109,7 @@ function NeuralNetworkViz() {
 }
 
 
-export function ChatbotIntentsPage({ project }: { project: Project }) {
+export function ChatbotIntentsPage({ project: _project }: { project: Project }) {
     const [messages, setMessages] = useState<Array<{ isBot: boolean; message: string }>>([]);
 
     useEffect(() => {
@@ -129,10 +129,6 @@ export function ChatbotIntentsPage({ project }: { project: Project }) {
 
     return (
         <div className="min-h-screen bg-[var(--bg-primary)]">
-            <style jsx global>{`
-                @keyframes fadeSlideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-            `}</style>
-
             {/* Header */}
             <header className="pt-32 pb-8 px-6">
                 <div className="max-w-6xl mx-auto">
@@ -266,7 +262,7 @@ export function ChatbotIntentsPage({ project }: { project: Project }) {
                                     <Brain className="w-4 h-4 text-purple-500" />
                                     <span className="text-sm font-medium text-[var(--text-primary)]">Confidence Threshold</span>
                                 </div>
-                                <p className="text-xs text-[var(--text-muted)]">Falls back to "I don't understand" when uncertain ({"<"}70%)</p>
+                                <p className="text-xs text-[var(--text-muted)]">Falls back to &quot;I don&apos;t understand&quot; when uncertain ({"<"}70%)</p>
                             </div>
                         </div>
                     </div>
@@ -292,7 +288,7 @@ export function ChatbotIntentsPage({ project }: { project: Project }) {
                         </div>
                         <div className="p-4 rounded-xl border border-[var(--border)] bg-[var(--bg-primary)]">
                             <div className="text-sm font-medium text-[var(--text-primary)] mb-2">Softmax with Threshold</div>
-                            <div className="text-xs text-[var(--text-muted)]">Better to say "I don't know" than confidently return wrong answers.</div>
+                            <div className="text-xs text-[var(--text-muted)]">Better to say &quot;I don&apos;t know&quot; than confidently return wrong answers.</div>
                         </div>
                     </div>
                 </div>
