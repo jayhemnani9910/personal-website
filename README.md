@@ -1,88 +1,68 @@
 <div align="center">
 
-# jayhemnani.me
+# Jay Hemnani
 
-**Data engineer's portfolio — 26 projects, interactive case studies, and a terminal easter egg.**
+**I build things — data pipelines, ML models, web apps, whatever the problem needs.**
 
-[![Live Site](https://img.shields.io/badge/Live-jayhemnani.me-0a84ff?style=for-the-badge&logo=safari&logoColor=white)](https://jayhemnani.me)
-[![Lint](https://img.shields.io/badge/Lint-0_issues-16a34a?style=for-the-badge&logo=eslint&logoColor=white)](#)
-[![Next.js](https://img.shields.io/badge/Next.js_16-black?style=for-the-badge&logo=next.js)](https://nextjs.org)
+[![Open to Work](https://img.shields.io/badge/Open_to_Work-16a34a?style=for-the-badge&logoColor=white)](#connect)
+[![Portfolio](https://img.shields.io/badge/jayhemnani.me-0a84ff?style=for-the-badge&logo=safari&logoColor=white)](https://jayhemnani.me)
+
+![Python](https://img.shields.io/badge/Python-3776AB?style=flat-square&logo=python&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=flat-square&logo=typescript&logoColor=white)
+![Go](https://img.shields.io/badge/Go-00ADD8?style=flat-square&logo=go&logoColor=white)
+![SQL](https://img.shields.io/badge/SQL-4479A1?style=flat-square&logo=postgresql&logoColor=white)
+![Kafka](https://img.shields.io/badge/Kafka-231F20?style=flat-square&logo=apachekafka&logoColor=white)
+![PyTorch](https://img.shields.io/badge/PyTorch-EE4C2C?style=flat-square&logo=pytorch&logoColor=white)
+![AWS](https://img.shields.io/badge/AWS-232F3E?style=flat-square&logo=amazonwebservices&logoColor=white)
+![Docker](https://img.shields.io/badge/Docker-2496ED?style=flat-square&logo=docker&logoColor=white)
 
 </div>
 
 ---
 
-## What's Inside
+### About
 
-| Feature | Description |
-|---------|-------------|
-| **Projects** | 26 projects with custom interactive detail pages — live visualizations, architecture diagrams, animated pipelines |
-| **Lab** | Experiments in progress — what I'm building, exploring, and watching |
-| **Blog** | Technical writing in MDX |
-| **Resume** | 4 role-targeted PDFs (Data Engineer, ML, SWE, Analyst) with inline preview |
-| **Terminal** | Hidden terminal overlay — try `help`, `ls`, `cat skills.json`, or `sudo rm -rf /` |
-| **WebMCP** | AI agents can query this portfolio via the W3C WebMCP API (Chrome 146+) |
+Software & data engineer with an MS from San Jose State. I go end-to-end — from designing streaming architectures and training ML models to shipping the frontend that puts it all in someone's hands. I care about building things that actually work in production, not just in notebooks.
 
-## Tech Stack
-
-| Layer | Tech |
-|-------|------|
-| Framework | Next.js 16 (App Router, static export) |
-| Language | TypeScript, React 19 |
-| Styling | Tailwind CSS 4, CSS custom properties (light/dark) |
-| Animation | Framer Motion (centralized tokens in `lib/motion.ts`) |
-| Content | MDX + gray-matter, validated by Zod schemas |
-| Diagrams | ReactFlow (architecture), Recharts (skills radar) |
-| Hosting | GitHub Pages via GitHub Actions |
-
-## Project Structure
-
-```
-src/
-  app/             Routes — /, /projects, /blog, /lab, /resume
-  components/      40+ UI components
-  components/projects/   25 custom project detail pages
-  context/         Theme + Terminal providers
-  lib/             Content loader, Zod schemas, motion tokens, scroll utils
-  data/            Resume, profile, navigation, timeline, coursework
-content/
-  projects/*.mdx   26 project files (frontmatter + MDX body)
-  blog/*.mdx       Blog posts
-  site.ts          Site-wide config
-docs/
-  *.d2 / *.svg     Architecture diagrams (system, data flow, modules)
-```
-
-## Quick Start
-
-```bash
-npm ci
-npm run dev        # localhost:3000
-npm run build      # Static export to out/
-npm run lint       # ESLint (0 issues)
-npm test -- run    # Vitest
-```
-
-## Architecture
-
-Three D2 diagrams document the system:
-
-- [`docs/architecture.d2`](docs/architecture.d2) — High-level components, contexts, and data flow
-- [`docs/data-flow.d2`](docs/data-flow.d2) — Content pipeline: MDX files → Zod validation → static pages
-- [`docs/modules.d2`](docs/modules.d2) — Module dependency graph across all layers
-
-## How Content Works
-
-1. Write project/blog content as `.mdx` files in `content/`
-2. Frontmatter is validated against Zod schemas at build time
-3. `generateStaticParams()` creates routes for every content file
-4. Custom project pages register in `CUSTOM_PROJECT_PAGES` map for rich, interactive detail views
-5. Static export produces `out/` — pure HTML + JS, no server required
+Based in India, open to relocate. Currently looking for roles where I can build at the intersection of data and product.
 
 ---
 
+### Featured Projects
+
+**[LaLiga Live](https://jayhemnani.me/projects/laliga-live)** — Real-time football analytics platform with live xG curves, player heatmaps, and match event streaming. Built with Kafka, WebSockets, React, and a custom event processing pipeline.
+
+**[Stock Data Platform](https://jayhemnani.me/projects/stock-data-platform)** — Distributed market data pipeline handling real-time OHLC feeds, candlestick charting, and multi-symbol streaming. Kafka + TimescaleDB + React with sub-second latency.
+
+> 26 projects total — from computer vision research to distributed systems to vector search engines.
+> **[See all projects →](https://jayhemnani.me/projects)**
+
+---
+
+### What I Work With
+
+`Data Engineering` · `Machine Learning` · `Full-Stack Web` · `Sports Analytics`
+`Distributed Systems` · `Computer Vision` · `Streaming Pipelines` · `Cloud Infrastructure`
+
+---
+
+### GitHub
+
 <div align="center">
 
-**[jayhemnani.me](https://jayhemnani.me)**
+![Jay's GitHub Stats](https://github-readme-stats.vercel.app/api?username=jayhemnani9910&show_icons=true&theme=tokyonight&hide_border=true&bg_color=00000000&rank_icon=github)
+
+</div>
+
+---
+
+### Connect
+
+<div align="center">
+
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://linkedin.com/in/jayhemnani)
+[![Email](https://img.shields.io/badge/Email-EA4335?style=for-the-badge&logo=gmail&logoColor=white)](mailto:jayhemnani992000@gmail.com)
+[![Portfolio](https://img.shields.io/badge/Portfolio-000000?style=for-the-badge&logo=safari&logoColor=white)](https://jayhemnani.me)
+[![Twitter](https://img.shields.io/badge/Twitter-1DA1F2?style=for-the-badge&logo=twitter&logoColor=white)](https://twitter.com/jayhemnani)
 
 </div>
