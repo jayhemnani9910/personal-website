@@ -72,7 +72,8 @@ export function ChronosBackground() {
 
             // Draw Time (Bottom Left)
             ctx.font = "bold 6vw 'Geist Mono', monospace";
-            ctx.fillStyle = "rgba(255, 255, 255, 0.08)";
+            const isDarkMode = document.documentElement.getAttribute("data-theme") === "dark";
+            ctx.fillStyle = isDarkMode ? "rgba(255, 255, 255, 0.08)" : "rgba(0, 0, 0, 0.04)";
             ctx.textAlign = "left";
             ctx.textBaseline = "bottom";
             ctx.fillText(timeString, 40, canvas.height - 40);
@@ -116,7 +117,8 @@ export function ChronosBackground() {
                 // Draw Particle
                 ctx.beginPath();
                 ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-                ctx.fillStyle = "rgba(0, 240, 255, 0.5)"; // Neon Cyan
+                const isDark = document.documentElement.getAttribute("data-theme") === "dark";
+                ctx.fillStyle = isDark ? "rgba(0, 240, 255, 0.5)" : "rgba(0, 102, 255, 0.3)";
                 ctx.fill();
             });
 
@@ -129,8 +131,10 @@ export function ChronosBackground() {
                     const distance = Math.sqrt(dx * dx + dy * dy);
 
                     if (distance < connectDistance) {
+                        const isDk = document.documentElement.getAttribute("data-theme") === "dark";
+                        const alpha = 0.1 - distance / connectDistance * 0.1;
                         ctx.beginPath();
-                        ctx.strokeStyle = `rgba(0, 240, 255, ${0.1 - distance / connectDistance * 0.1})`;
+                        ctx.strokeStyle = isDk ? `rgba(0, 240, 255, ${alpha})` : `rgba(0, 102, 255, ${alpha * 0.6})`;
                         ctx.lineWidth = 0.5;
                         ctx.moveTo(particles[a].x, particles[a].y);
                         ctx.lineTo(particles[b].x, particles[b].y);
@@ -168,7 +172,7 @@ export function ChronosBackground() {
         <div ref={containerRef} className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
             <canvas ref={canvasRef} className="absolute inset-0 w-full h-full" />
             {/* Vignette for depth */}
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,#000_100%)] opacity-60" />
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,var(--bg-primary)_100%)] opacity-60" />
         </div>
     );
 }

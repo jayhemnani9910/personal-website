@@ -54,3 +54,6 @@ profile-3d-contrib/
 # Private directories
 forjobs/
 resume/
+
+# Local planning docs
+TODO-*.md

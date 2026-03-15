@@ -2,6 +2,7 @@
 
 import { useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useLenis } from "lenis/react";
 import { X } from "lucide-react";
 
 interface ModalProps {
@@ -12,6 +13,8 @@ interface ModalProps {
 }
 
 export function Modal({ isOpen, onClose, children, title }: ModalProps) {
+    const lenis = useLenis();
+
     // Close on escape key
     const handleEscape = useCallback((e: KeyboardEvent) => {
         if (e.key === "Escape") onClose();
@@ -20,13 +23,15 @@ export function Modal({ isOpen, onClose, children, title }: ModalProps) {
     useEffect(() => {
         if (isOpen) {
             document.addEventListener("keydown", handleEscape);
-            document.body.style.overflow = "hidden";
+            if (lenis) lenis.stop();
+            else document.body.style.overflow = "hidden";
         }
         return () => {
             document.removeEventListener("keydown", handleEscape);
-            document.body.style.overflow = "unset";
+            if (lenis) lenis.start();
+            else document.body.style.overflow = "unset";
         };
-    }, [isOpen, handleEscape]);
+    }, [isOpen, handleEscape, lenis]);
 
     return (
         <AnimatePresence>

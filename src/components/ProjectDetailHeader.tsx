@@ -3,8 +3,8 @@
 import type { Project } from "@/lib/definitions";
 import { UI_COPY } from "@/data/profile";
 import { motion } from "framer-motion";
-import { ExternalLink, Code2, ArrowLeft } from "lucide-react";
-import Link from "next/link";
+import { ExternalLink, Code2 } from "lucide-react";
+import { BackButton } from "./BackButton";
 
 export function ProjectHeader({ project }: { project: Project }) {
   const description = project.summary;
@@ -16,13 +16,7 @@ export function ProjectHeader({ project }: { project: Project }) {
       className="space-y-8 border-b border-[var(--border)] pb-12"
     >
       <div className="space-y-4">
-        <Link
-          href="/projects"
-          className="inline-flex items-center gap-2 text-sm text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors mb-4"
-        >
-          <ArrowLeft className="w-4 h-4" />
-          {UI_COPY.project.back}
-        </Link>
+        <BackButton label={UI_COPY.project.back} />
 
         <div className="flex flex-wrap items-center gap-3 text-sm font-mono text-[var(--text-muted)]">
           <span className="px-2 py-1 rounded bg-[var(--bg-tertiary)] border border-[var(--border)] text-[var(--accent)]">

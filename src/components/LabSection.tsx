@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { FlaskConical, Terminal, Cpu, Zap, Brain, type LucideIcon } from "lucide-react";
-import { SPRINGS, INTERACTIONS } from "@/lib/motion";
+import { INTERACTIONS } from "@/lib/motion";
 import { EXPERIMENTS, type Experiment } from "@/../content/lab";
 
 // Map icon names to Lucide components
@@ -18,10 +18,10 @@ export function LabSection() {
     return (
         <section id="extra" className="relative section-block section-shell scroll-mt-28 md:scroll-mt-32">
             <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
+                initial={{ opacity: 0, x: -30 }}
+                whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
-                transition={SPRINGS.soft}
+                transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
                 className="mb-12"
             >
                 <div className="flex items-center gap-3 mb-4">
@@ -41,10 +41,10 @@ export function LabSection() {
                     return (
                         <motion.div
                             key={exp.id}
-                            initial={{ opacity: 0, y: 20 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ ...SPRINGS.soft, delay: i * 0.1 }}
+                            initial={{ opacity: 0, y: 30, scale: 0.97 }}
+                            whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                            viewport={{ once: true, margin: "-50px" }}
+                            transition={{ duration: 0.5, delay: i * 0.08, ease: [0.25, 0.46, 0.45, 0.94] }}
                             whileHover={{ ...INTERACTIONS.hoverScale.whileHover, ...INTERACTIONS.hoverGlow.whileHover }}
                             className="group relative p-6 rounded-xl border border-[var(--glass-border)] bg-[rgba(255,255,255,0.02)] hover:bg-[rgba(255,255,255,0.04)] transition-colors"
                         >

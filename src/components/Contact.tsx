@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Send, Mail, Github, Linkedin, Twitter, Youtube } from "lucide-react";
+import { Send, Mail, Github, Instagram, Youtube } from "lucide-react";
 import MagneticButton from "./MagneticButton";
 import { SOCIAL_LINKS } from "@/data/profile";
 import { useTypewriterPlaceholder } from "@/hooks/useTypewriterPlaceholder";
@@ -34,44 +34,48 @@ const EMAIL_PHRASES = [
 
 const MESSAGE_PLACEHOLDER = `Hey Jay! I came across your portfolio and was impressed by your data engineering work. I'd love to chat about a potential opportunity...`;
 
+// Custom X (formerly Twitter) icon
+function XIcon({ className, style }: { className?: string; style?: React.CSSProperties }) {
+    return (
+        <svg className={className} style={style} viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+        </svg>
+    );
+}
+
 const SOCIAL_ICONS = [
     { icon: Github, href: SOCIAL_LINKS.github, label: "GitHub", glowColor: "#ffffff" },
-    { icon: Linkedin, href: SOCIAL_LINKS.linkedin, label: "LinkedIn", glowColor: "#0A66C2" },
+    { icon: Instagram, href: SOCIAL_LINKS.instagram, label: "Instagram", glowColor: "#E4405F" },
     { icon: Youtube, href: SOCIAL_LINKS.youtube, label: "YouTube", glowColor: "#FF0000" },
-    { icon: Twitter, href: SOCIAL_LINKS.twitter, label: "Twitter", glowColor: "#1DA1F2" },
+    { icon: XIcon, href: SOCIAL_LINKS.x, label: "X", glowColor: "#ffffff" },
 ];
 
-// Social icon with brand-colored glow
+// Social icon with brand-colored glow — hover on full circle area
 function SocialIcon({ icon: Icon, href, label, glowColor }: {
-    icon: typeof Github;
+    icon: React.ComponentType<{ className?: string; style?: React.CSSProperties }>;
     href: string;
     label: string;
     glowColor: string;
 }) {
+    const [hovered, setHovered] = useState(false);
+
     return (
         <MagneticButton>
             <a
                 href={href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group w-12 h-12 rounded-full border flex items-center justify-center transition-all duration-300 hover:-translate-y-1.5"
-                style={{
-                    borderColor: 'var(--border)',
-                }}
+                className="w-12 h-12 rounded-full border flex items-center justify-center transition-all duration-300 hover:-translate-y-1.5"
+                style={{ borderColor: 'var(--border)' }}
                 aria-label={label}
+                onMouseEnter={() => setHovered(true)}
+                onMouseLeave={() => setHovered(false)}
             >
                 <Icon
                     className="w-5 h-5 transition-all duration-300"
                     style={{
-                        color: 'var(--text-secondary)',
-                    }}
-                    onMouseEnter={(e) => {
-                        e.currentTarget.style.color = glowColor;
-                        e.currentTarget.style.filter = `drop-shadow(0 0 8px ${glowColor}) drop-shadow(0 0 16px ${glowColor})`;
-                    }}
-                    onMouseLeave={(e) => {
-                        e.currentTarget.style.color = 'var(--text-secondary)';
-                        e.currentTarget.style.filter = 'none';
+                        color: hovered ? glowColor : 'var(--text-secondary)',
+                        filter: hovered ? `drop-shadow(0 0 8px ${glowColor}) drop-shadow(0 0 16px ${glowColor})` : 'none',
                     }}
                 />
             </a>
@@ -159,18 +163,24 @@ export function Contact() {
 
     return (
         <section id="contact" className="section-block section-shell scroll-mt-28 md:scroll-mt-32">
-            {/* Section Divider */}
+            {/* Animated Divider */}
             <div className="mb-12">
-                <div className="h-px bg-[var(--border)]" />
+                <motion.div
+                    initial={{ scaleX: 0 }}
+                    whileInView={{ scaleX: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
+                    className="h-px bg-[var(--border)] origin-center"
+                />
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24">
                 {/* Left Column: Info & Socials */}
                 <motion.div
-                    initial={{ opacity: 0, x: -20 }}
+                    initial={{ opacity: 0, x: -40 }}
                     whileInView={{ opacity: 1, x: 0 }}
                     viewport={{ once: true }}
-                    transition={{ duration: 0.6 }}
+                    transition={{ duration: 0.7, ease: [0.25, 0.46, 0.45, 0.94] }}
                     className="flex flex-col justify-center"
                 >
                     <h2 className="title-hero mb-8">
@@ -231,7 +241,7 @@ export function Contact() {
 
                 {/* Right Column: Form */}
                 <motion.div
-                    initial={{ opacity: 0, x: 20 }}
+                    initial={{ opacity: 0, x: 40 }}
                     whileInView={{ opacity: 1, x: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.6, delay: 0.2 }}

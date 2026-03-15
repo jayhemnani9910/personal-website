@@ -1,8 +1,8 @@
 "use client";
 
-import Link from "next/link";
 import { motion } from "framer-motion";
-import { ArrowLeft, Github } from "lucide-react";
+import { Github } from "lucide-react";
+import { BackButton } from "@/components/BackButton";
 import { VARIANTS, SPRINGS } from "@/lib/motion";
 
 interface ProjectHeaderProps {
@@ -40,13 +40,7 @@ export function ProjectHeader({
     return (
         <header className="pt-32 pb-8 px-6">
             <div className="max-w-6xl mx-auto">
-                <Link
-                    href="/projects"
-                    className="inline-flex items-center gap-2 text-sm text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors mb-8"
-                >
-                    <ArrowLeft className="w-4 h-4" />
-                    Back to Projects
-                </Link>
+                <BackButton />
 
                 <div className="flex items-center gap-3 mb-4">
                     <motion.h1

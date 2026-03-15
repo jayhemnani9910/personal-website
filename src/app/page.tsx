@@ -4,8 +4,10 @@ import { ResumeTimeline } from "@/components/ResumeTimeline";
 import { AcademicsSection } from "@/components/AcademicsSection";
 import { BentoGrid } from "@/components/BentoGrid";
 import { CourseworkSection } from "@/components/CourseworkSection";
+import { NowSection } from "@/components/NowSection";
 import { Contact } from "@/components/Contact";
 import { Footer } from "@/components/Footer";
+import { ScrollProgress } from "@/components/ScrollProgress";
 
 import { getProjectSummaries } from "@/lib/content";
 
@@ -21,11 +23,13 @@ export default async function Home() {
 
   return (
     <main id="main-content" className="relative min-h-screen flex flex-col">
+      <ScrollProgress />
       <Navbar />
       <Hero stats={stats} />
       <ResumeTimeline />
       <AcademicsSection />
       <BentoGrid projects={projects} />
+      <NowSection />
       <CourseworkSection />
       <Contact />
       <Footer />
