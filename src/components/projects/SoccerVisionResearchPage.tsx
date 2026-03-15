@@ -2,69 +2,10 @@
 
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import { ArrowLeft, Github, ExternalLink, Video, Scan, Layers, Route, MessageSquare, ChevronRight } from "lucide-react";
+import { ArrowLeft, Github, ExternalLink, Video, Scan, Layers, Route, MessageSquare } from "lucide-react";
 import type { Project } from "@/lib/definitions";
 import { StatCard } from "@/components/ui/StatCard";
-
-// Animated pipeline stage
-function PipelineStage({
-    icon: Icon,
-    label,
-    sublabel,
-    delay,
-    isActive
-}: {
-    icon: React.ComponentType<{ className?: string }>;
-    label: string;
-    sublabel: string;
-    delay: number;
-    isActive: boolean;
-}) {
-    return (
-        <div
-            className="flex flex-col items-center group"
-            style={{
-                animation: `fadeSlideUp 0.5s ease-out ${delay}ms both`,
-            }}
-        >
-            <div
-                className={`
-                    w-16 h-16 md:w-20 md:h-20 rounded-2xl flex items-center justify-center
-                    border-2 transition-all duration-300
-                    ${isActive
-                        ? 'bg-[var(--accent)] border-[var(--accent)] text-white scale-110'
-                        : 'bg-[var(--bg-secondary)] border-[var(--border)] text-[var(--text-muted)] group-hover:border-[var(--accent)] group-hover:text-[var(--accent)]'
-                    }
-                `}
-            >
-                <Icon className="w-7 h-7 md:w-8 md:h-8" />
-            </div>
-            <span className="mt-3 text-sm font-medium text-[var(--text-primary)]">{label}</span>
-            <span className="text-xs text-[var(--text-muted)]">{sublabel}</span>
-        </div>
-    );
-}
-
-// Animated arrow between stages
-function PipelineArrow({ delay }: { delay: number }) {
-    return (
-        <div
-            className="flex-shrink-0 hidden md:flex items-center px-2"
-            style={{ animation: `fadeIn 0.3s ease-out ${delay}ms both` }}
-        >
-            <div className="w-8 h-0.5 bg-[var(--border)] relative overflow-hidden">
-                <div
-                    className="absolute inset-0 bg-[var(--accent)]"
-                    style={{
-                        animation: `slideRight 1.5s ease-in-out infinite`,
-                        animationDelay: `${delay}ms`
-                    }}
-                />
-            </div>
-            <ChevronRight className="w-4 h-4 text-[var(--text-muted)] -ml-1" />
-        </div>
-    );
-}
+import { PipelineStage, PipelineArrow } from "@/components/projects/PipelineStage";
 
 // Model card with hover animation
 function ModelCard({
@@ -258,27 +199,6 @@ export function SoccerVisionResearchPage({ project }: { project: Project }) {
     return (
         <div className="min-h-screen bg-[var(--bg-primary)]">
             <style jsx global>{`
-                @keyframes fadeSlideUp {
-                    from {
-                        opacity: 0;
-                        transform: translateY(20px);
-                    }
-                    to {
-                        opacity: 1;
-                        transform: translateY(0);
-                    }
-                }
-
-                @keyframes fadeIn {
-                    from { opacity: 0; }
-                    to { opacity: 1; }
-                }
-
-                @keyframes slideRight {
-                    0%, 100% { transform: translateX(-100%); }
-                    50% { transform: translateX(100%); }
-                }
-
                 @keyframes pulse {
                     0%, 100% { opacity: 1; }
                     50% { opacity: 0.5; }

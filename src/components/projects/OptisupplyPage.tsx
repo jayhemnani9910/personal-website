@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { ArrowLeft, TrendingDown, Package, Truck, Clock, AlertTriangle, BarChart3, Database, ArrowRight } from "lucide-react";
+import { ArrowLeft, Package, Truck, Clock, AlertTriangle, BarChart3, Database, ArrowRight } from "lucide-react";
 import type { Project } from "@/lib/definitions";
 import { StatCard } from "@/components/ui/StatCard";
 
@@ -70,7 +70,7 @@ function RiskTier({ tier, percentage }: { tier: string; percentage: number }) {
 }
 
 
-export function OptisupplyPage({ project }: { project: Project }) {
+export function OptisupplyPage({ project: _project }: { project: Project }) {
     const [animatedPercentages, setAnimatedPercentages] = useState({ low: 0, medium: 0, high: 0 });
 
     useEffect(() => {
@@ -82,10 +82,6 @@ export function OptisupplyPage({ project }: { project: Project }) {
 
     return (
         <div className="min-h-screen bg-[var(--bg-primary)]">
-            <style jsx global>{`
-                @keyframes fadeSlideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-            `}</style>
-
             {/* Header */}
             <header className="pt-32 pb-8 px-6">
                 <div className="max-w-6xl mx-auto">

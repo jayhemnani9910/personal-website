@@ -64,7 +64,7 @@ function ArchitectureLayer({ name, items, color }: { name: string; items: string
     );
 }
 
-export function RevoluIdeaPage({ project }: { project: Project }) {
+export function RevoluIdeaPage({ project: _project }: { project: Project }) {
     const [activeStep, setActiveStep] = useState(0);
 
     useEffect(() => {
@@ -86,7 +86,6 @@ export function RevoluIdeaPage({ project }: { project: Project }) {
     return (
         <div className="min-h-screen bg-[var(--bg-primary)]">
             <style jsx global>{`
-                @keyframes fadeSlideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
                 @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
             `}</style>
 
@@ -229,7 +228,7 @@ export function RevoluIdeaPage({ project }: { project: Project }) {
                 <div className="max-w-4xl mx-auto text-center">
                     <Zap className="w-8 h-8 text-[var(--accent)] mx-auto mb-4" />
                     <blockquote className="text-lg text-[var(--text-secondary)] italic">
-                        "Multi-agent systems excel when tasks have natural decomposition boundaries. Research has clear phases—search, analyze, verify, synthesize—that map perfectly to specialized agents."
+                        &quot;Multi-agent systems excel when tasks have natural decomposition boundaries. Research has clear phases—search, analyze, verify, synthesize—that map perfectly to specialized agents.&quot;
                     </blockquote>
                 </div>
             </section>

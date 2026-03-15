@@ -147,7 +147,7 @@ System
                 if (trimmed === "sudo rm -rf /") {
                     setIsPurging(true);
                     newHistory.push({ type: "error", content: "INITIATING SYSTEM PURGE..." });
-                    setTimeout(() => {
+                    const purgeTimer = window.setTimeout(() => {
                         setHistory((prev) => [
                             ...prev,
                             { type: "error", content: "CRITICAL ERROR: ACCESS DENIED." },
@@ -155,6 +155,7 @@ System
                         ]);
                         setIsPurging(false);
                     }, 3000);
+                    timeoutsRef.current.push(purgeTimer);
                 } else {
                     newHistory.push({ type: "error", content: "User is not in the sudoers file. This incident will be reported." });
                 }

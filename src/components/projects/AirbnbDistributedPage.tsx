@@ -32,13 +32,14 @@ function MicroserviceCard({ name, icon: Icon, color, description, delay }: {
 }
 
 // Kafka message flow visualization
+const messages = [
+    { from: "Booking", to: "Owner", event: "booking.created" },
+    { from: "Owner", to: "Traveler", event: "booking.confirmed" },
+    { from: "Traveler", to: "Property", event: "review.submitted" },
+];
+
 function KafkaFlowViz() {
     const [activeMessage, setActiveMessage] = useState(0);
-    const messages = [
-        { from: "Booking", to: "Owner", event: "booking.created" },
-        { from: "Owner", to: "Traveler", event: "booking.confirmed" },
-        { from: "Traveler", to: "Property", event: "review.submitted" },
-    ];
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -130,13 +131,9 @@ function TechStackViz() {
 }
 
 
-export function AirbnbDistributedPage({ project }: { project: Project }) {
+export function AirbnbDistributedPage({ project: _project }: { project: Project }) {
     return (
         <div className="min-h-screen bg-[var(--bg-primary)]">
-            <style jsx global>{`
-                @keyframes fadeSlideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-            `}</style>
-
             {/* Header */}
             <header className="pt-32 pb-8 px-6">
                 <div className="max-w-6xl mx-auto">

@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { ArrowLeft, Github, Users, Clock, Shield, Activity, Syringe, CheckCircle, AlertTriangle, TrendingUp } from "lucide-react";
+import { ArrowLeft, Users, Clock, Shield, Activity, Syringe, CheckCircle, AlertTriangle, TrendingUp } from "lucide-react";
 import type { Project } from "@/lib/definitions";
 import { StatCard } from "@/components/ui/StatCard";
 
@@ -122,13 +122,9 @@ function ComparisonCard({ algo, pros, cons, isPreferred }: { algo: string; pros:
 }
 
 
-export function VaccineSchedulerPage({ project }: { project: Project }) {
+export function VaccineSchedulerPage({ project: _project }: { project: Project }) {
     return (
         <div className="min-h-screen bg-[var(--bg-primary)]">
-            <style jsx global>{`
-                @keyframes fadeSlideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-            `}</style>
-
             {/* Header */}
             <header className="pt-32 pb-8 px-6">
                 <div className="max-w-6xl mx-auto">
@@ -263,7 +259,7 @@ export function VaccineSchedulerPage({ project }: { project: Project }) {
                 <div className="max-w-4xl mx-auto text-center">
                     <Syringe className="w-8 h-8 text-[var(--accent)] mx-auto mb-4" />
                     <blockquote className="text-lg text-[var(--text-secondary)] italic">
-                        "The aging mechanism from CPU scheduling translates beautifully to real-world queues. Without it, lower-priority citizens could wait indefinitely, undermining public trust in the vaccination program."
+                        &quot;The aging mechanism from CPU scheduling translates beautifully to real-world queues. Without it, lower-priority citizens could wait indefinitely, undermining public trust in the vaccination program.&quot;
                     </blockquote>
                 </div>
             </section>

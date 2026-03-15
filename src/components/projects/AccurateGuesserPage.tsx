@@ -156,7 +156,7 @@ function StateMachine() {
 }
 
 
-export function AccurateGuesserPage({ project }: { project: Project }) {
+export function AccurateGuesserPage({ project: _project }: { project: Project }) {
     return (
         <div className="min-h-screen bg-[var(--bg-primary)]">
             <ProjectHeader
@@ -274,7 +274,7 @@ export function AccurateGuesserPage({ project }: { project: Project }) {
                 <div className="max-w-4xl mx-auto text-center">
                     <Gamepad2 className="w-8 h-8 text-[var(--accent)] mx-auto mb-4" />
                     <blockquote className="text-lg text-[var(--text-secondary)] italic">
-                        "Simple concepts can teach foundational programming principles that scale to complex applications."
+                        &quot;Simple concepts can teach foundational programming principles that scale to complex applications.&quot;
                     </blockquote>
                 </div>
             </section>

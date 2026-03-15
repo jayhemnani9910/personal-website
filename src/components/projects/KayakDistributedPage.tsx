@@ -81,9 +81,10 @@ function ArchitectureDiagram() {
 }
 
 // Event flow animation
+const steps = ["User Action", "Kafka Event", "Service Process", "DB Update", "Response"];
+
 function EventFlowViz() {
     const [step, setStep] = useState(0);
-    const steps = ["User Action", "Kafka Event", "Service Process", "DB Update", "Response"];
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -119,13 +120,9 @@ function EventFlowViz() {
 }
 
 
-export function KayakDistributedPage({ project }: { project: Project }) {
+export function KayakDistributedPage({ project: _project }: { project: Project }) {
     return (
         <div className="min-h-screen bg-[var(--bg-primary)]">
-            <style jsx global>{`
-                @keyframes fadeSlideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-            `}</style>
-
             {/* Header */}
             <header className="pt-32 pb-8 px-6">
                 <div className="max-w-6xl mx-auto">

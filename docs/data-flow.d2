@@ -1,0 +1,111 @@
+title: Content & Data Flow {
+  near: top-center
+  shape: text
+  style.font-size: 24
+  style.bold: true
+}
+
+direction: right
+
+# ─── Source Content ────────────────────────────────
+source: Content Files {
+  style.fill: "#faf5ff"
+  style.stroke: "#7c3aed"
+
+  projects: "content/projects/*.mdx\n(26 MDX files)" {
+    style.fill: "#f3e8ff"
+  }
+  blog: "content/blog/*.mdx" {
+    style.fill: "#f3e8ff"
+  }
+  static-data: "src/data/*.ts\n(resume, profile, nav,\ntimeline, coursework)" {
+    style.fill: "#fff7ed"
+  }
+  site-config: "content/site.ts\n(SITE_CONFIG)" {
+    style.fill: "#fef3c7"
+  }
+}
+
+# ─── Processing ───────────────────────────────────
+processing: Build-Time Processing {
+  style.fill: "#f0fdf4"
+  style.stroke: "#16a34a"
+
+  gray-matter: "gray-matter\n(parse frontmatter)" {
+    style.fill: "#dcfce7"
+  }
+  zod: "Zod Schemas\n(ProjectSchema,\nPostSchema)" {
+    style.fill: "#dcfce7"
+  }
+  content-ts: "content.ts\n(getProject, getAllPosts,\ngetProjectSummaries)" {
+    style.fill: "#bbf7d0"
+    style.stroke: "#16a34a"
+    style.stroke-width: 2
+  }
+  mdx-remote: "next-mdx-remote\n(serialize MDX body)" {
+    style.fill: "#dcfce7"
+  }
+}
+
+# ─── Route Generation ─────────────────────────────
+routes: Static Route Generation {
+  style.fill: "#f0f9ff"
+  style.stroke: "#0066ff"
+
+  gen-params: "generateStaticParams()\n→ 26 project routes\n→ N blog routes" {
+    style.fill: "#dbeafe"
+  }
+  gen-meta: "generateMetadata()\n→ OG tags, titles,\n   descriptions" {
+    style.fill: "#dbeafe"
+  }
+}
+
+# ─── Pages ────────────────────────────────────────
+pages: Rendered Pages {
+  style.fill: "#fef3c7"
+  style.stroke: "#d97706"
+
+  home: "/ (Home)\nstats, featured projects,\ntimeline, contact" {
+    style.fill: "#fef9c3"
+  }
+  project-list: "/projects\nsearchable grid,\nbento layout" {
+    style.fill: "#fef9c3"
+  }
+  project-detail: "/projects/[id]\ncustom or generic page" {
+    style.fill: "#fef9c3"
+  }
+  blog-list: "/blog\npost listing" {
+    style.fill: "#fef9c3"
+  }
+  blog-post: "/blog/[slug]\nfull post content" {
+    style.fill: "#fef9c3"
+  }
+}
+
+# ─── Output ───────────────────────────────────────
+output: "out/\n(static HTML + JS)" {
+  style.fill: "#1c1c1e"
+  style.font-color: "#f5f5f7"
+  shape: cylinder
+}
+
+# ─── Connections ──────────────────────────────────
+source.projects -> processing.gray-matter: "frontmatter\n+ MDX body"
+source.blog -> processing.gray-matter: "frontmatter\n+ MDX body"
+processing.gray-matter -> processing.zod: "parsed data"
+processing.zod -> processing.content-ts: "validated types"
+processing.content-ts -> processing.mdx-remote: "MDX body"
+
+processing.content-ts -> routes.gen-params: "all slugs/IDs"
+processing.content-ts -> routes.gen-meta: "title, summary"
+
+processing.content-ts -> pages.home: "getProjectSummaries()"
+processing.content-ts -> pages.project-list: "getProjectSummaries()"
+processing.content-ts -> pages.project-detail: "getProject(id)"
+processing.content-ts -> pages.blog-list: "getAllPosts()"
+processing.content-ts -> pages.blog-post: "getPost(slug)"
+
+source.static-data -> pages.home: "RESUME, HERO_CONTENT"
+source.site-config -> routes.gen-meta: "site title, URL"
+
+pages -> output: "npm run build\n(static export)"

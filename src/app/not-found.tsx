@@ -12,8 +12,6 @@ function GlitchText({ text }: { text: string }) {
 
   useEffect(() => {
     const glitchChars = "!@#$%^&*()_+-=[]{}|;':\",./<>?";
-    let interval: NodeJS.Timeout;
-
     const glitch = () => {
       const arr = text.split("");
       const randomIndex = Math.floor(Math.random() * arr.length);
@@ -23,7 +21,7 @@ function GlitchText({ text }: { text: string }) {
       setTimeout(() => setGlitchText(text), 100);
     };
 
-    interval = setInterval(glitch, 2000);
+    const interval = setInterval(glitch, 2000);
     return () => clearInterval(interval);
   }, [text]);
 

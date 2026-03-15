@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { ArrowLeft, Wifi, WifiOff, RefreshCw, Database, Cloud, Smartphone, CheckCircle, Clock, AlertTriangle } from "lucide-react";
+import { ArrowLeft, Wifi, WifiOff, RefreshCw, Database, Cloud, Smartphone } from "lucide-react";
 import type { Project } from "@/lib/definitions";
 import { StatCard } from "@/components/ui/StatCard";
 
@@ -128,13 +128,9 @@ function ArchLayer({ name, items, icon: Icon }: { name: string; items: string[];
 }
 
 
-export function MobileConnectPage({ project }: { project: Project }) {
+export function MobileConnectPage({ project: _project }: { project: Project }) {
     return (
         <div className="min-h-screen bg-[var(--bg-primary)]">
-            <style jsx global>{`
-                @keyframes fadeSlideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-            `}</style>
-
             {/* Header */}
             <header className="pt-32 pb-8 px-6">
                 <div className="max-w-6xl mx-auto">
@@ -276,7 +272,7 @@ export function MobileConnectPage({ project }: { project: Project }) {
                 <div className="max-w-4xl mx-auto text-center">
                     <Smartphone className="w-8 h-8 text-[var(--accent)] mx-auto mb-4" />
                     <blockquote className="text-lg text-[var(--text-secondary)] italic">
-                        "Users don't care about network reliability if the app feels responsive. Show users what they want to see immediately, sync in the background."
+                        &quot;Users don&apos;t care about network reliability if the app feels responsive. Show users what they want to see immediately, sync in the background.&quot;
                     </blockquote>
                 </div>
             </section>

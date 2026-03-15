@@ -7,9 +7,10 @@ import { ProjectHeader } from "./ProjectHeader";
 import { StatCard } from "@/components/ui/StatCard";
 
 // Transaction animation
+const steps = ["Login", "Select", "Amount", "Confirm", "Done"];
+
 function TransactionFlow() {
     const [step, setStep] = useState(0);
-    const steps = ["Login", "Select", "Amount", "Confirm", "Done"];
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -72,7 +73,7 @@ function LearningPoint({ title, description }: { title: string; description: str
     );
 }
 
-export function BasicBankingPage({ project }: { project: Project }) {
+export function BasicBankingPage({ project: _project }: { project: Project }) {
     return (
         <div className="min-h-screen bg-[var(--bg-primary)]">
             <ProjectHeader

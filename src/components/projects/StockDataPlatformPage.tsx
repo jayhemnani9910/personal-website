@@ -2,20 +2,21 @@
 
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import { ArrowLeft, Github, ExternalLink, Radio, Database, BarChart3, Workflow, ChevronRight, TrendingUp, TrendingDown } from "lucide-react";
+import { ArrowLeft, Radio, Database, BarChart3, Workflow, TrendingUp, TrendingDown } from "lucide-react";
 import type { Project } from "@/lib/definitions";
 import { StatCard } from "@/components/ui/StatCard";
+import { PipelineStage, PipelineArrow } from "@/components/projects/PipelineStage";
 
 // Live streaming ticker animation
+const symbols = ['AAPL', 'GOOGL', 'MSFT', 'AMZN', 'TSLA', 'META', 'NVDA', 'AMD'];
+const baseprices: Record<string, number> = {
+    AAPL: 178.50, GOOGL: 141.20, MSFT: 378.90, AMZN: 178.25,
+    TSLA: 248.50, META: 505.75, NVDA: 875.30, AMD: 165.40
+};
+
 function StreamingTicker() {
     const [ticks, setTicks] = useState<{ symbol: string; price: number; change: number; time: string }[]>([]);
     const tickerRef = useRef<HTMLDivElement>(null);
-
-    const symbols = ['AAPL', 'GOOGL', 'MSFT', 'AMZN', 'TSLA', 'META', 'NVDA', 'AMD'];
-    const baseprices: Record<string, number> = {
-        AAPL: 178.50, GOOGL: 141.20, MSFT: 378.90, AMZN: 178.25,
-        TSLA: 248.50, META: 505.75, NVDA: 875.30, AMD: 165.40
-    };
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -74,23 +75,22 @@ function StreamingTicker() {
     );
 }
 
+// Pre-computed OHLC data (module-level to avoid impure render)
+const CANDLES = Array.from({ length: 20 }, (_, i) => {
+    const base = 150 + Math.sin(i * 0.5) * 20 + Math.random() * 10;
+    const open = base + (Math.random() - 0.5) * 5;
+    const close = base + (Math.random() - 0.5) * 5;
+    const high = Math.max(open, close) + Math.random() * 3;
+    const low = Math.min(open, close) - Math.random() * 3;
+    return { open, close, high, low, volume: 1000 + Math.random() * 500 };
+});
+const CANDLE_MAX_HIGH = Math.max(...CANDLES.map(c => c.high));
+const CANDLE_MIN_LOW = Math.min(...CANDLES.map(c => c.low));
+const CANDLE_RANGE = CANDLE_MAX_HIGH - CANDLE_MIN_LOW;
+
 // Candlestick chart mockup
 function CandlestickChart() {
-    // Generate some fake OHLC data
-    const candles = Array.from({ length: 20 }, (_, i) => {
-        const base = 150 + Math.sin(i * 0.5) * 20 + Math.random() * 10;
-        const open = base + (Math.random() - 0.5) * 5;
-        const close = base + (Math.random() - 0.5) * 5;
-        const high = Math.max(open, close) + Math.random() * 3;
-        const low = Math.min(open, close) - Math.random() * 3;
-        return { open, close, high, low, volume: 1000 + Math.random() * 500 };
-    });
-
-    const maxHigh = Math.max(...candles.map(c => c.high));
-    const minLow = Math.min(...candles.map(c => c.low));
-    const range = maxHigh - minLow;
-
-    const toY = (price: number) => ((maxHigh - price) / range) * 60 + 10;
+    const toY = (price: number) => ((CANDLE_MAX_HIGH - price) / CANDLE_RANGE) * 60 + 10;
 
     return (
         <div className="rounded-xl border border-[var(--border)] bg-[var(--bg-secondary)] overflow-hidden">
@@ -128,8 +128,8 @@ function CandlestickChart() {
                     ))}
 
                     {/* Candlesticks */}
-                    {candles.map((candle, i) => {
-                        const x = 5 + (i / candles.length) * 90 + 2;
+                    {CANDLES.map((candle, i) => {
+                        const x = 5 + (i / CANDLES.length) * 90 + 2;
                         const isGreen = candle.close >= candle.open;
                         const color = isGreen ? '#22c55e' : '#ef4444';
 
@@ -158,8 +158,8 @@ function CandlestickChart() {
                     })}
 
                     {/* Volume bars */}
-                    {candles.map((candle, i) => {
-                        const x = 5 + (i / candles.length) * 90 + 2;
+                    {CANDLES.map((candle, i) => {
+                        const x = 5 + (i / CANDLES.length) * 90 + 2;
                         const isGreen = candle.close >= candle.open;
                         const height = (candle.volume / 1500) * 8;
 
@@ -182,60 +182,6 @@ function CandlestickChart() {
                     <span className="text-orange-400">EMA(50): 148.90</span>
                 </div>
             </div>
-        </div>
-    );
-}
-
-// Pipeline stage
-function PipelineStage({
-    icon: Icon,
-    label,
-    sublabel,
-    delay,
-    isActive
-}: {
-    icon: React.ComponentType<{ className?: string }>;
-    label: string;
-    sublabel: string;
-    delay: number;
-    isActive: boolean;
-}) {
-    return (
-        <div
-            className="flex flex-col items-center group"
-            style={{ animation: `fadeSlideUp 0.5s ease-out ${delay}ms both` }}
-        >
-            <div
-                className={`
-                    w-16 h-16 md:w-20 md:h-20 rounded-2xl flex items-center justify-center
-                    border-2 transition-all duration-300
-                    ${isActive
-                        ? 'bg-[var(--accent)] border-[var(--accent)] text-white scale-110'
-                        : 'bg-[var(--bg-secondary)] border-[var(--border)] text-[var(--text-muted)] group-hover:border-[var(--accent)] group-hover:text-[var(--accent)]'
-                    }
-                `}
-            >
-                <Icon className="w-7 h-7 md:w-8 md:h-8" />
-            </div>
-            <span className="mt-3 text-sm font-medium text-[var(--text-primary)]">{label}</span>
-            <span className="text-xs text-[var(--text-muted)]">{sublabel}</span>
-        </div>
-    );
-}
-
-function PipelineArrow({ delay }: { delay: number }) {
-    return (
-        <div
-            className="flex-shrink-0 hidden md:flex items-center px-2"
-            style={{ animation: `fadeIn 0.3s ease-out ${delay}ms both` }}
-        >
-            <div className="w-8 h-0.5 bg-[var(--border)] relative overflow-hidden">
-                <div
-                    className="absolute inset-0 bg-[var(--accent)]"
-                    style={{ animation: `slideRight 1.5s ease-in-out infinite`, animationDelay: `${delay}ms` }}
-                />
-            </div>
-            <ChevronRight className="w-4 h-4 text-[var(--text-muted)] -ml-1" />
         </div>
     );
 }
@@ -264,7 +210,7 @@ function ToolCard({ name, purpose, color, delay }: { name: string; purpose: stri
 }
 
 
-export function StockDataPlatformPage({ project }: { project: Project }) {
+export function StockDataPlatformPage({ project: _project }: { project: Project }) {
     const [activeStage, setActiveStage] = useState(0);
 
     useEffect(() => {
@@ -277,18 +223,6 @@ export function StockDataPlatformPage({ project }: { project: Project }) {
     return (
         <div className="min-h-screen bg-[var(--bg-primary)]">
             <style jsx global>{`
-                @keyframes fadeSlideUp {
-                    from { opacity: 0; transform: translateY(20px); }
-                    to { opacity: 1; transform: translateY(0); }
-                }
-                @keyframes fadeIn {
-                    from { opacity: 0; }
-                    to { opacity: 1; }
-                }
-                @keyframes slideRight {
-                    0%, 100% { transform: translateX(-100%); }
-                    50% { transform: translateX(100%); }
-                }
                 @keyframes fadeSlideIn {
                     from { opacity: 0; transform: translateX(-10px); }
                     to { opacity: 1; transform: translateX(0); }

@@ -284,7 +284,7 @@ Cosine similarity LW-CB: 0.12`}
                             { stage: "Tracking", value: "22 unique tracks", detail: "0 ID switches" },
                             { stage: "Graphs", value: "300 frame graphs", detail: "avg 45 edges/frame" },
                             { stage: "Output", value: "Formation: 4-3-3 vs 4-4-2", detail: "Role predictions for all 22 players" }
-                        ].map((item, i) => (
+                        ].map((item) => (
                             <div key={item.stage} className="flex items-center gap-4">
                                 <div className="w-24 text-sm font-medium text-[var(--accent)]">{item.stage}</div>
                                 <div className="flex-1 h-px bg-[var(--border)]" />

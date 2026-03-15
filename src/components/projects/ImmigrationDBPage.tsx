@@ -1,8 +1,7 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import Link from "next/link";
-import { ArrowLeft, Database, Users, FileText, Clock, Key, Link2, Table, ArrowRight } from "lucide-react";
+import { ArrowLeft, Database, Users, FileText, Key, Link2, Table, ArrowRight } from "lucide-react";
 import type { Project } from "@/lib/definitions";
 import { StatCard } from "@/components/ui/StatCard";
 
@@ -48,13 +47,9 @@ function QueryExample({ title, query, description }: { title: string; query: str
 }
 
 
-export function ImmigrationDBPage({ project }: { project: Project }) {
+export function ImmigrationDBPage({ project: _project }: { project: Project }) {
     return (
         <div className="min-h-screen bg-[var(--bg-primary)]">
-            <style jsx global>{`
-                @keyframes fadeSlideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-            `}</style>
-
             {/* Header */}
             <header className="pt-32 pb-8 px-6">
                 <div className="max-w-6xl mx-auto">
@@ -233,7 +228,7 @@ JOIN persons p ON cp.person_id = p.person_id;`}
                 <div className="max-w-4xl mx-auto text-center">
                     <Database className="w-8 h-8 text-[var(--accent)] mx-auto mb-4" />
                     <blockquote className="text-lg text-[var(--text-secondary)] italic">
-                        "For regulated domains, invest in audit infrastructure early. Retrofitting is painful."
+                        &quot;For regulated domains, invest in audit infrastructure early. Retrofitting is painful.&quot;
                     </blockquote>
                 </div>
             </section>

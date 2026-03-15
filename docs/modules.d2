@@ -1,0 +1,215 @@
+title: Module Dependency Graph {
+  near: top-center
+  shape: text
+  style.font-size: 24
+  style.bold: true
+}
+
+direction: down
+
+# ─── App Routes ───────────────────────────────────
+app: "src/app (Routes)" {
+  style.fill: "#f0f9ff"
+  style.stroke: "#0066ff"
+
+  layout: layout.tsx
+  home: page.tsx
+  not-found: not-found.tsx
+  sitemap: sitemap.ts
+  blog-list: blog/page.tsx
+  blog-post: "blog/[slug]/page.tsx"
+  projects-list: projects/page.tsx
+  projects-client: projects/ProjectsClient.tsx
+  project-detail: "projects/[id]/page.tsx"
+  lab: lab/page.tsx
+  resume: resume/page.tsx
+}
+
+# ─── Components ───────────────────────────────────
+components: "src/components" {
+  style.fill: "#fef3c7"
+  style.stroke: "#d97706"
+
+  layout-group: Layout {
+    style.fill: "#fef9c3"
+    client-layout: ClientLayout
+    transition: TransitionLayout
+    navbar: Navbar
+    footer: Footer
+    skip-link: SkipLink
+  }
+
+  home-group: Home Sections {
+    style.fill: "#fef9c3"
+    hero: Hero
+    bento-grid: BentoGrid
+    bento-card: BentoCard
+    contact: Contact
+    testimonials: Testimonials
+    lab-section: LabSection
+  }
+
+  project-group: Project Detail {
+    style.fill: "#fef9c3"
+    project-detail: ProjectDetail
+    project-header: ProjectDetailHeader
+    arch-viz: ArchitectureVisualizer
+    impact: ImpactCounter
+    proof: ProofBlock
+    code-block: CodeBlock
+    toc: TableOfContents
+  }
+
+  resume-group: Resume {
+    style.fill: "#fef9c3"
+    timeline: ResumeTimeline
+    academics: AcademicsSection
+    coursework: CourseworkSection
+    skills-radar: SkillsRadar
+    modal: Modal
+    exp-modal: ExperienceModal
+    edu-modal: EducationModal
+    pub-modal: PublicationModal
+  }
+
+  interactive: Interactive {
+    style.fill: "#fef9c3"
+    chronos: ChronosBackground
+    interaction: Interaction
+    magnetic: MagneticButton
+    terminal: TerminalOverlay
+    webmcp-provider: WebMCPProvider
+    webmcp-loader: WebMCPLoader
+  }
+}
+
+# ─── Project Pages ────────────────────────────────
+project-pages: "src/components/projects (25 custom pages)" {
+  style.fill: "#fce7f3"
+  style.stroke: "#db2777"
+
+  shared: "Shared: ProjectHeader,\nPipelineStage, PipelineArrow,\nStatCard"
+  pages: "25 pages:\nBarcaBrain, LaLigaLive,\nContextBox, WebCrawler,\nStockDataPlatform, ..."
+}
+
+# ─── Context ──────────────────────────────────────
+context: "src/context" {
+  style.fill: "#fce7f3"
+  style.stroke: "#ec4899"
+
+  theme: ThemeContext
+  terminal-ctx: TerminalContext
+}
+
+# ─── Libraries ────────────────────────────────────
+lib: "src/lib" {
+  style.fill: "#f0fdf4"
+  style.stroke: "#16a34a"
+
+  content: content.ts
+  definitions: definitions.ts
+  motion: motion.ts
+  utils: utils.ts
+  scroll: scroll.ts
+  webmcp: webmcp.ts
+}
+
+# ─── Data ─────────────────────────────────────────
+data: "src/data" {
+  style.fill: "#fff7ed"
+  style.stroke: "#ea580c"
+
+  resume: resume.ts
+  types: types.ts
+  profile: profile.ts
+  navigation: navigation.ts
+  timeline: timeline.ts
+  coursework: coursework.ts
+  lab: lab.ts
+}
+
+# ─── Content ──────────────────────────────────────
+content-files: "content/" {
+  style.fill: "#faf5ff"
+  style.stroke: "#7c3aed"
+
+  site: site.ts
+  terminal: terminal.ts
+  testimonials: testimonials.ts
+  lab-content: lab.ts
+  projects-mdx: "projects/*.mdx (26)"
+  blog-mdx: "blog/*.mdx"
+}
+
+# ─── External Deps ────────────────────────────────
+external: "Key External Packages" {
+  style.fill: "#f8fafc"
+  style.stroke: "#94a3b8"
+
+  next: Next.js 16
+  react: React 19
+  framer: Framer Motion
+  reactflow: ReactFlow
+  recharts: Recharts
+  tailwind: Tailwind CSS 4
+  zod: Zod
+  mdx: next-mdx-remote
+  lenis: Lenis
+}
+
+# ─── Connections ──────────────────────────────────
+
+# App → Components
+app.layout -> components.layout-group.client-layout
+app.layout -> components.interactive.webmcp-loader
+app.home -> components.home-group
+app.home -> components.resume-group.timeline
+app.home -> components.resume-group.academics
+app.home -> components.resume-group.coursework
+app.project-detail -> components.project-group.project-detail
+app.project-detail -> project-pages
+app.projects-client -> components.home-group.bento-card
+app.lab -> data.lab
+
+# Components → Context
+components.layout-group.client-layout -> context
+components.layout-group.navbar -> context.theme
+components.layout-group.navbar -> context.terminal-ctx
+components.interactive.terminal -> context.terminal-ctx
+
+# Components → Lib
+components.project-group.project-detail -> lib.definitions
+components.layout-group.navbar -> lib.scroll
+components.home-group -> lib.motion
+components.interactive.webmcp-provider -> lib.webmcp
+
+# Lib internal
+lib.content -> lib.definitions: "validates with"
+lib.content -> content-files.projects-mdx: "reads at build time"
+lib.content -> content-files.blog-mdx: "reads at build time"
+lib.definitions -> external.zod
+
+# App → Lib
+app.home -> lib.content
+app.project-detail -> lib.content
+app.blog-list -> lib.content
+app.blog-post -> lib.content
+
+# App → Data
+app.home -> data.profile
+app.resume -> data.resume
+
+# Components → Data
+components.resume-group -> data.resume
+components.resume-group -> data.timeline
+components.layout-group.navbar -> data.navigation
+components.home-group.hero -> data.profile
+
+# Project Pages → Components
+project-pages -> components.project-group
+
+# Components → External
+components.layout-group.client-layout -> external.lenis
+components.layout-group.transition -> external.framer
+components.project-group.arch-viz -> external.reactflow
+components.resume-group.skills-radar -> external.recharts
