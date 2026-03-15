@@ -17,33 +17,39 @@ export function AcademicsSection() {
             id="academics"
             className="section-block scroll-mt-28 md:scroll-mt-32"
         >
-            {/* Section Divider */}
+            {/* Animated Divider */}
             <div className="section-wide mb-12">
-                <div className="h-px bg-[var(--border)]" />
+                <motion.div
+                    initial={{ scaleX: 0 }}
+                    whileInView={{ scaleX: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
+                    className="h-px bg-[var(--border)] origin-right"
+                />
             </div>
 
             <div className="section-wide">
                 {/* Header */}
                 <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
+                    initial={{ opacity: 0, x: -30 }}
+                    whileInView={{ opacity: 1, x: 0 }}
                     viewport={{ once: true }}
-                    transition={{ duration: 0.5 }}
+                    transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
                     className="mb-12"
                 >
                     <p className="eyebrow mb-3">Background</p>
                     <h2 className="title-xl">Education & Research</h2>
                 </motion.div>
 
-                {/* Education Cards - 2 column grid */}
+                {/* Education Cards */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16">
                     {RESUME.education.map((edu, i) => (
                         <motion.article
                             key={i}
-                            initial={{ opacity: 0, y: 20 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ duration: 0.4, delay: i * 0.05 }}
+                            initial={{ opacity: 0, y: 30, scale: 0.97 }}
+                            whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                            viewport={{ once: true, margin: "-50px" }}
+                            transition={{ duration: 0.5, delay: i * 0.08, ease: [0.25, 0.46, 0.45, 0.94] }}
                             className="card card-interactive p-6"
                         >
                             <h3
@@ -82,10 +88,10 @@ export function AcademicsSection() {
 
                 {/* Publications */}
                 <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
+                    initial={{ opacity: 0, x: 30 }}
+                    whileInView={{ opacity: 1, x: 0 }}
                     viewport={{ once: true }}
-                    transition={{ duration: 0.5 }}
+                    transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
                     className="mb-8"
                 >
                     <h3 className="title-lg flex items-center gap-3">
@@ -98,10 +104,10 @@ export function AcademicsSection() {
                     {(RESUME.publications as PublicationItem[]).map((pub, i) => (
                         <motion.article
                             key={i}
-                            initial={{ opacity: 0, y: 20 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ duration: 0.4, delay: i * 0.05 }}
+                            initial={{ opacity: 0, y: 30, scale: 0.97 }}
+                            whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                            viewport={{ once: true, margin: "-50px" }}
+                            transition={{ duration: 0.5, delay: i * 0.08, ease: [0.25, 0.46, 0.45, 0.94] }}
                             className="card card-interactive p-6"
                         >
                             <h4

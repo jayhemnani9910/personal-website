@@ -4,6 +4,7 @@ import { ReactLenis } from "lenis/react";
 import { TerminalProvider } from "@/context/TerminalContext";
 import { TerminalOverlay } from "@/components/TerminalOverlay";
 import { SkipLink } from "@/components/SkipLink";
+import { ScrollToTop } from "@/components/ScrollToTop";
 import { TransitionLayout } from "@/components/TransitionLayout";
 import { useReducedMotion } from "framer-motion";
 import { usePathname } from "next/navigation";
@@ -24,6 +25,7 @@ export function ClientLayout({ children }: { children: React.ReactNode }) {
 
     return (
         <>
+            <ScrollToTop />
             <SkipLink />
             {prefersReducedMotion || !isLanding ? (
                 content

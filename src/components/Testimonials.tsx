@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import Image from "next/image";
-import { Quote, ChevronLeft, ChevronRight, User } from "lucide-react";
+import { Quote, ChevronLeft, ChevronRight } from "lucide-react";
 import MagneticButton from "./MagneticButton";
 import { TESTIMONIALS } from "@/../content/testimonials";
 
@@ -86,7 +86,7 @@ export function Testimonials() {
                                     </p>
 
                                     <div className="flex items-center gap-4">
-                                        <div className="w-12 h-12 rounded-full overflow-hidden border border-[rgba(255,255,255,0.1)] bg-[rgba(255,255,255,0.05)] flex items-center justify-center">
+                                        <div className="w-12 h-12 rounded-full overflow-hidden border border-[rgba(255,255,255,0.1)] bg-[var(--accent)] flex items-center justify-center">
                                             {TESTIMONIALS[activeIndex].image ? (
                                                 <Image
                                                     src={TESTIMONIALS[activeIndex].image}
@@ -96,7 +96,9 @@ export function Testimonials() {
                                                     className="w-full h-full object-cover"
                                                 />
                                             ) : (
-                                                <User className="w-6 h-6 text-[var(--text-muted)]" />
+                                                <span className="text-lg font-bold text-white">
+                                                    {TESTIMONIALS[activeIndex].author.charAt(0)}
+                                                </span>
                                             )}
                                         </div>
                                         <div className="text-left">
@@ -144,6 +146,11 @@ export function Testimonials() {
                         </button>
                     </MagneticButton>
                 </div>
+
+                {/* Slide Counter */}
+                <p className="text-center mt-3 text-xs" style={{ color: 'var(--text-muted)' }}>
+                    {activeIndex + 1} of {TESTIMONIALS.length}
+                </p>
             </div>
         </section>
     );

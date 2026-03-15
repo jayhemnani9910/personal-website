@@ -13,8 +13,8 @@ export const HERO_CONTENT = {
 export const SOCIAL_LINKS = {
   email: "jayhemnani992000@gmail.com",
   github: "https://github.com/jayhemnani9910",
-  linkedin: "https://linkedin.com/in/jayhemnani",
-  twitter: "https://twitter.com/jayhemnani",
+  instagram: "https://instagram.com/jey_hemnani",
+  x: "https://x.com/jodnani10",
   youtube: "https://youtube.com/@jayhemnani"
 };
 

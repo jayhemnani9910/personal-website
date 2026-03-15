@@ -103,6 +103,7 @@
 html {
   background: var(--bg-primary);
   color: var(--text-primary);
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 body {
@@ -188,10 +189,26 @@ body {
 .title-link {
   cursor: pointer;
   transition: color 0.2s ease;
+  position: relative;
+}
+
+.title-link::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--accent);
+  transition: width 0.3s ease;
 }
 
 .title-link:hover {
   color: var(--accent) !important;
+}
+
+.title-link:hover::after {
+  width: 100%;
 }
 
 .eyebrow {

@@ -1,8 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowLeft, Github, ExternalLink } from "lucide-react";
+import { Github, ExternalLink } from "lucide-react";
 import type { Project } from "@/lib/definitions";
+import { BackButton } from "@/components/BackButton";
 
 import { CodeBlock } from "@/components/CodeBlock";
 
@@ -62,13 +63,7 @@ export function FifaSoccerDSPage({ project }: { project: Project }) {
             {/* Header */}
             <header className="pt-32 pb-12 px-6">
                 <div className="max-w-4xl mx-auto">
-                    <Link
-                        href="/projects"
-                        className="inline-flex items-center gap-2 text-sm text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors mb-8"
-                    >
-                        <ArrowLeft className="w-4 h-4" />
-                        Back to Projects
-                    </Link>
+                    <BackButton />
 
                     <h1 className="text-4xl md:text-5xl font-bold text-[var(--text-primary)] mb-4">
                         FIFA Soccer DS

@@ -169,14 +169,24 @@ export function Navbar() {
                         <span className="text-xs font-mono text-[var(--text-muted)] uppercase tracking-wider">Live</span>
                     </div>
 
-                    {/* Theme Toggle */}
+                    {/* Theme Toggle — animated icon morph */}
                     <MagneticButton>
                         <button
                             onClick={toggleTheme}
                             aria-label="Toggle Theme"
-                            className="theme-toggle"
+                            className="theme-toggle relative overflow-hidden"
                         >
-                            {theme === "dark" ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+                            <AnimatePresence mode="wait" initial={false}>
+                                <motion.div
+                                    key={theme}
+                                    initial={{ rotate: -90, scale: 0, opacity: 0 }}
+                                    animate={{ rotate: 0, scale: 1, opacity: 1 }}
+                                    exit={{ rotate: 90, scale: 0, opacity: 0 }}
+                                    transition={{ duration: 0.25, ease: [0.25, 0.46, 0.45, 0.94] }}
+                                >
+                                    {theme === "dark" ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+                                </motion.div>
+                            </AnimatePresence>
                         </button>
                     </MagneticButton>
 

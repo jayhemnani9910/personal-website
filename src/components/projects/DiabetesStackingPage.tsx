@@ -1,9 +1,9 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Link from "next/link";
-import { ArrowLeft, Layers, GitMerge, BarChart3, CheckCircle } from "lucide-react";
+import { Layers, GitMerge, BarChart3, CheckCircle } from "lucide-react";
 import type { Project } from "@/lib/definitions";
+import { BackButton } from "@/components/BackButton";
 import { StatCard } from "@/components/ui/StatCard";
 import { PipelineStage, PipelineArrow } from "@/components/projects/PipelineStage";
 
@@ -296,9 +296,7 @@ export function DiabetesStackingPage({ project: _project }: { project: Project }
             {/* Header */}
             <header className="pt-32 pb-12 px-6">
                 <div className="max-w-5xl mx-auto">
-                    <Link href="/projects" className="inline-flex items-center gap-2 text-sm text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors mb-8">
-                        <ArrowLeft className="w-4 h-4" />Back to Projects
-                    </Link>
+                    <BackButton />
                     <h1 className="text-4xl md:text-5xl font-bold text-[var(--text-primary)] mb-4" style={{ animation: 'fadeSlideUp 0.5s ease-out' }}>Diabetes Prediction</h1>
                     <p className="text-xl text-[var(--text-secondary)] mb-6 max-w-3xl" style={{ animation: 'fadeSlideUp 0.5s ease-out 100ms both' }}>
                         Stacking ensemble combining 4 base learners with a meta-model.

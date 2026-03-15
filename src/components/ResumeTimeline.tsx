@@ -23,33 +23,39 @@ export function ResumeTimeline() {
             id="experience"
             className="section-block scroll-mt-28 md:scroll-mt-32"
         >
-            {/* Section Divider */}
+            {/* Animated Divider */}
             <div className="section-wide mb-12">
-                <div className="h-px bg-[var(--border)]" />
+                <motion.div
+                    initial={{ scaleX: 0 }}
+                    whileInView={{ scaleX: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
+                    className="h-px bg-[var(--border)] origin-left"
+                />
             </div>
 
             <div className="section-wide">
-                {/* Header */}
+                {/* Header — slide from right */}
                 <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
+                    initial={{ opacity: 0, x: 30 }}
+                    whileInView={{ opacity: 1, x: 0 }}
                     viewport={{ once: true }}
-                    transition={{ duration: 0.5 }}
+                    transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
                     className="mb-12"
                 >
                     <p className="eyebrow mb-3">Career</p>
                     <h2 className="title-xl">{UI_COPY.resume.experience}</h2>
                 </motion.div>
 
-                {/* Experience Cards - 2 column grid */}
+                {/* Experience Cards — staggered entrance */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {allRoles.map((role, i) => (
                         <motion.article
                             key={i}
-                            initial={{ opacity: 0, y: 20 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ duration: 0.4, delay: i * 0.05 }}
+                            initial={{ opacity: 0, y: 30, scale: 0.97 }}
+                            whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                            viewport={{ once: true, margin: "-50px" }}
+                            transition={{ duration: 0.5, delay: i * 0.06, ease: [0.25, 0.46, 0.45, 0.94] }}
                             className="card card-interactive p-6"
                         >
                             <div className="flex justify-between items-start mb-4">

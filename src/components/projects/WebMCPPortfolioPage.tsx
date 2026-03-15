@@ -1,9 +1,9 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Link from "next/link";
-import { ArrowLeft, Github, Terminal, Cpu, Globe, Zap, Code, CheckCircle2, ChevronRight } from "lucide-react";
+import { Github, Terminal, Cpu, Globe, Zap, Code, CheckCircle2, ChevronRight } from "lucide-react";
 import type { Project } from "@/lib/definitions";
+import { BackButton } from "@/components/BackButton";
 import { isWebMCPAvailable } from "@/lib/webmcp";
 
 const TOOLS = [
@@ -105,13 +105,7 @@ export function WebMCPPortfolioPage({ project }: { project: Project }) {
             {/* Header */}
             <div className="border-b border-[var(--border)]">
                 <div className="max-w-5xl mx-auto px-6 py-8">
-                    <Link
-                        href="/projects"
-                        className="inline-flex items-center gap-1.5 text-sm text-[var(--text-muted)] hover:text-[var(--accent)] transition-colors mb-6"
-                    >
-                        <ArrowLeft className="w-4 h-4" />
-                        Back to projects
-                    </Link>
+                    <BackButton />
 
                     <div className="flex flex-col gap-4">
                         <div className="flex items-center gap-3 flex-wrap">

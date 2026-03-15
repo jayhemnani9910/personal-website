@@ -1,24 +1,47 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, useTransform } from "framer-motion";
 import { Wrench } from "lucide-react";
 import { SKILL_DOMAINS } from "@/data/coursework";
+import { use3DTilt } from "@/hooks/use3DTilt";
 
 function SkillDomainCard({ domain, index }: { domain: typeof SKILL_DOMAINS[0]; index: number }) {
     const Icon = domain.icon;
+    const { cardRef, rotateX, rotateY, glowX, glowY, handleMouseMove, handleMouseLeave } = use3DTilt(4);
 
     return (
         <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.4, delay: index * 0.1 }}
-            className="card card-interactive p-6 group"
+            ref={cardRef}
+            onMouseMove={handleMouseMove}
+            onMouseLeave={handleMouseLeave}
+            initial={{ opacity: 0, y: 30, scale: 0.97 }}
+            whileInView={{ opacity: 1, y: 0, scale: 1 }}
+            viewport={{ once: true, margin: "-50px" }}
+            transition={{ duration: 0.5, delay: index * 0.06, ease: [0.25, 0.46, 0.45, 0.94] }}
+            whileHover={{ y: -6, transition: { type: "spring", stiffness: 300, damping: 25 } }}
+            style={{
+                rotateX,
+                rotateY,
+                transformPerspective: 800,
+                transformStyle: "preserve-3d",
+            }}
+            className={`relative card card-interactive p-6 group/card overflow-hidden ${index < 2 ? "md:col-span-2 lg:col-span-1" : ""}`}
         >
+            {/* Glow spot that follows cursor */}
+            <motion.div
+                className="absolute inset-0 opacity-0 group-hover/card:opacity-100 pointer-events-none transition-opacity duration-300"
+                style={{
+                    background: useTransform(
+                        [glowX, glowY],
+                        ([x, y]) => `radial-gradient(circle at ${x}% ${y}%, ${domain.color}15 0%, transparent 60%)`
+                    ),
+                }}
+            />
+
             {/* Icon and Title */}
-            <div className="flex items-start gap-4 mb-4">
+            <div className="flex items-start gap-4 mb-4 relative z-10">
                 <div
-                    className="w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-300 group-hover:scale-110"
+                    className="w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-300 group-hover/card:scale-110"
                     style={{
                         backgroundColor: `${domain.color}15`,
                     }}
@@ -36,7 +59,7 @@ function SkillDomainCard({ domain, index }: { domain: typeof SKILL_DOMAINS[0]; i
             </div>
 
             {/* Skills as chips */}
-            <div className="flex flex-wrap gap-2">
+            <div className="flex flex-wrap gap-2 relative z-10">
                 {domain.skills.map((skill) => (
                     <span
                         key={skill}
@@ -61,18 +84,24 @@ export function CourseworkSection() {
             id="coursework"
             className="section-block scroll-mt-28 md:scroll-mt-32"
         >
-            {/* Section Divider */}
+            {/* Animated Divider */}
             <div className="section-wide mb-12">
-                <div className="h-px bg-[var(--border)]" />
+                <motion.div
+                    initial={{ scaleX: 0 }}
+                    whileInView={{ scaleX: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
+                    className="h-px bg-[var(--border)] origin-left"
+                />
             </div>
 
             <div className="section-wide">
-                {/* Header */}
+                {/* Header — slide from right */}
                 <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
+                    initial={{ opacity: 0, x: 30 }}
+                    whileInView={{ opacity: 1, x: 0 }}
                     viewport={{ once: true }}
-                    transition={{ duration: 0.5 }}
+                    transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
                     className="mb-12"
                 >
                     <p className="eyebrow mb-3 flex items-center gap-2">
