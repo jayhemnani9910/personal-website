@@ -22,7 +22,7 @@
 
 ### About
 
-Software & data engineer with an MS from San Jose State. I go end-to-end — from designing streaming architectures and training ML models to shipping the frontend that puts it all in someone's hands. I care about building things that actually work in production, not just in notebooks.
+Software & data engineer who goes end-to-end — from designing streaming architectures and training ML models to shipping the frontend that puts it all in someone's hands. I care about building things that actually work in production, not just in notebooks.
 
 Based in India, open to relocate. Currently looking for roles where I can build at the intersection of data and product.
 
