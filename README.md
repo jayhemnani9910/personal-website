@@ -35,7 +35,7 @@ Based in India, open to relocate. Currently looking for roles where I can build 
 **[Stock Data Platform](https://jayhemnani.me/projects/stock-data-platform)** — Distributed market data pipeline handling real-time OHLC feeds, candlestick charting, and multi-symbol streaming. Kafka + TimescaleDB + React with sub-second latency.
 
 > 26 projects total — from computer vision research to distributed systems to vector search engines.
-> **###[See all projects →](https://jayhemnani.me/projects)**
+> **[See all projects →](https://jayhemnani.me/projects)**
 
 ---
 
