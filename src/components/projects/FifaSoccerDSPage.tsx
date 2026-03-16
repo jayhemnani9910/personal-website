@@ -687,28 +687,48 @@ python src/pipeline_full.py \\
             </section>
 
             {/* ============================================================= */}
-            {/* LEARNINGS + FUTURE — max-w-3xl (narrowest)                   */}
+            {/* LEARNINGS + FUTURE — Cards                                    */}
             {/* ============================================================= */}
-            <section className="py-16 px-6" style={{ background: "var(--bg-secondary)" }}>
-                <div className="max-w-3xl mx-auto grid md:grid-cols-2 gap-12">
+            <section className="py-20 px-6" style={{ background: "var(--bg-secondary)" }}>
+                <div className="max-w-5xl mx-auto grid md:grid-cols-2 gap-8">
                     <div>
-                        <motion.p initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, ease: EASINGS.apple }} className="eyebrow mb-4">What I Learned</motion.p>
+                        <motion.p initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, ease: EASINGS.apple }} className="eyebrow mb-6">What I Learned</motion.p>
                         <div className="space-y-3">
                             {LEARNINGS.map((item, i) => (
-                                <motion.div key={i} initial={{ opacity: 0, x: -16 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.06, duration: 0.4, ease: EASINGS.apple }} className="flex gap-3 text-sm text-[var(--text-secondary)] leading-relaxed">
-                                    <span className="shrink-0 mt-1" style={{ color: "var(--accent)" }}>▸</span>
-                                    <span>{item}</span>
+                                <motion.div
+                                    key={i}
+                                    initial={{ opacity: 0, y: 12 }}
+                                    whileInView={{ opacity: 1, y: 0 }}
+                                    viewport={{ once: true }}
+                                    transition={{ delay: i * 0.06, duration: 0.4, ease: EASINGS.apple }}
+                                    className="p-4 rounded-lg border transition-colors duration-300 hover:border-[var(--accent)]/40"
+                                    style={{ background: "var(--bg-primary)", borderColor: "var(--border)" }}
+                                >
+                                    <div className="flex gap-3">
+                                        <span className="shrink-0 text-xs font-bold font-mono w-5 h-5 rounded flex items-center justify-center" style={{ background: "rgba(var(--accent-rgb, 10, 132, 255), 0.1)", color: "var(--accent)" }}>{i + 1}</span>
+                                        <span className="text-sm text-[var(--text-secondary)] leading-relaxed">{item}</span>
+                                    </div>
                                 </motion.div>
                             ))}
                         </div>
                     </div>
                     <div>
-                        <motion.p initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, ease: EASINGS.apple }} className="eyebrow mb-4">Future Work</motion.p>
+                        <motion.p initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, ease: EASINGS.apple }} className="eyebrow mb-6">Future Work</motion.p>
                         <div className="space-y-3">
                             {FUTURE_WORK.map((item, i) => (
-                                <motion.div key={i} initial={{ opacity: 0, x: -16 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.06, duration: 0.4, ease: EASINGS.apple }} className="flex gap-3 text-sm text-[var(--text-secondary)] leading-relaxed">
-                                    <span className="shrink-0 mt-1 text-[var(--text-muted)]">◦</span>
-                                    <span>{item}</span>
+                                <motion.div
+                                    key={i}
+                                    initial={{ opacity: 0, y: 12 }}
+                                    whileInView={{ opacity: 1, y: 0 }}
+                                    viewport={{ once: true }}
+                                    transition={{ delay: i * 0.06, duration: 0.4, ease: EASINGS.apple }}
+                                    className="p-4 rounded-lg border transition-colors duration-300 hover:border-[var(--accent)]/40"
+                                    style={{ background: "var(--bg-primary)", borderColor: "var(--border)" }}
+                                >
+                                    <div className="flex gap-3">
+                                        <span className="shrink-0 text-xs font-bold font-mono w-5 h-5 rounded flex items-center justify-center text-[var(--text-muted)]" style={{ background: "var(--bg-tertiary)" }}>{i + 1}</span>
+                                        <span className="text-sm text-[var(--text-secondary)] leading-relaxed">{item}</span>
+                                    </div>
                                 </motion.div>
                             ))}
                         </div>
@@ -717,15 +737,18 @@ python src/pipeline_full.py \\
             </section>
 
             {/* ============================================================= */}
-            {/* RELATED + FOOTER                                              */}
+            {/* RELATED + GITHUB                                              */}
             {/* ============================================================= */}
-            <div className="py-8 px-6 border-t" style={{ borderColor: "var(--border)" }}>
-                <div className="max-w-5xl mx-auto flex flex-wrap items-center justify-between gap-4">
+            <div className="py-12 px-6">
+                <div className="max-w-5xl mx-auto flex flex-col sm:flex-row items-center justify-center gap-4">
                     <a href={project.github} target="_blank" rel="noopener noreferrer"
-                        className="inline-flex items-center gap-2 text-sm text-[var(--text-primary)] hover:text-[var(--accent)] transition-colors">
-                        <Github className="w-4 h-4" /> jayhemnani9910/fifa-soccer-ds <ExternalLink className="w-3 h-3" />
+                        className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg border text-sm font-medium text-[var(--text-primary)] hover:border-[var(--accent)] transition-colors"
+                        style={{ background: "var(--bg-secondary)", borderColor: "var(--border)" }}>
+                        <Github className="w-4 h-4" /> View Source <ExternalLink className="w-3 h-3" />
                     </a>
-                    <Link href="/projects/soccer-vision-research" className="text-sm text-[var(--text-muted)] hover:text-[var(--accent)] transition-colors">
+                    <Link href="/projects/soccer-vision-research"
+                        className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg border text-sm text-[var(--text-secondary)] hover:border-[var(--accent)] hover:text-[var(--text-primary)] transition-colors"
+                        style={{ borderColor: "var(--border)" }}>
                         Related: Soccer Vision Research →
                     </Link>
                 </div>
