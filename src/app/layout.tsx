@@ -3,6 +3,8 @@ import "./globals.css";
 import { ClientLayout } from "@/components/ClientLayout";
 import { ThemeProvider } from "@/context/ThemeContext";
 import { WebMCPLoader } from "@/components/WebMCPLoader";
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import { SITE_CONFIG } from "@/../content/site";
 
 
@@ -95,6 +97,8 @@ export default function RootLayout({
         <ThemeProvider>
           <ClientLayout>{children}</ClientLayout>
           <WebMCPLoader />
+          <Analytics />
+          <SpeedInsights />
         </ThemeProvider>
       </body>
     </html>
