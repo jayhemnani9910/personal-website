@@ -7,7 +7,6 @@ import { Github, ExternalLink, ChevronDown } from "lucide-react";
 import type { Project } from "@/lib/definitions";
 import { BackButton } from "@/components/BackButton";
 import { CodeBlock } from "@/components/CodeBlock";
-import { Footer } from "@/components/Footer";
 import { use3DTilt } from "@/hooks/use3DTilt";
 import { SPRINGS, EASINGS } from "@/lib/motion";
 
@@ -731,7 +730,6 @@ python src/pipeline_full.py \\
                     </Link>
                 </div>
             </div>
-            <Footer />
         </div>
     );
 }
