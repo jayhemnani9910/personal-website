@@ -16,133 +16,144 @@ import { SPRINGS, EASINGS } from "@/lib/motion";
 // =============================================================================
 
 const PIPELINE_STAGES = [
-    { label: "Video Input", desc: "MP4/RTSP", metric: "1080p" },
-    { label: "Frame Extract", desc: "OpenCV", metric: "30 FPS" },
-    { label: "Detection", desc: "YOLOv8", metric: "95%+" },
-    { label: "Tracking", desc: "ByteTrack", metric: "0 switches" },
-    { label: "Graph Build", desc: "Spatial", metric: "47 edges" },
-    { label: "GNN Analysis", desc: "GraphSAGE", metric: "89% F1" },
+    { label: "Video Input", desc: "MP4/RTSP", metric: "1280×720" },
+    { label: "Frame Extract", desc: "OpenCV", metric: "stride 5" },
+    { label: "Detection", desc: "YOLOv8n", metric: "conf 0.25" },
+    { label: "Tracking", desc: "ByteTrack", metric: "Kalman + Hungarian" },
+    { label: "Graph Build", desc: "Spatial", metric: "80px threshold" },
+    { label: "GNN Analysis", desc: "GraphSAGE", metric: "3-class" },
 ];
 
 const DEEP_DIVE_STAGES = [
     {
-        number: 1, title: "Detection — YOLOv8",
-        description: "Each frame is processed through a fine-tuned YOLOv8 model that identifies three object classes: players, ball, and referees. The model runs at 95%+ precision with confidence threshold of 0.35 to balance recall vs false positives for distant players.",
-        codeTitle: "src/detect/inference.py",
+        number: 1, title: "Detection — YOLOv8 Nano",
+        description: "Each frame is processed through YOLOv8n with a confidence threshold of 0.25. The nano variant was chosen for real-time inference speed on consumer GPUs. Detects players, ball, and referees with automatic device selection (CUDA when available).",
+        codeTitle: "src/detect/infer.py",
         code: `from ultralytics import YOLO
 
-model = YOLO("models/yolov8n_soccer.pt")
+@dataclass(slots=True)
+class InferenceConfig:
+    weights: str = "yolov8n.pt"
+    device: str = "cuda_if_available"
+    confidence: float = 0.25
+    max_frames: int = 30
 
-def detect_frame(frame, conf=0.35):
-    results = model(frame, conf=conf, verbose=False)
-    boxes = results[0].boxes
+def load_model(config: InferenceConfig) -> YOLO:
+    device = _resolve_device(config.device)
+    model = YOLO(config.weights)
+    model.to(device)
+    return model
 
-    return {
-        "boxes": boxes.xyxy.cpu().numpy(),
-        "scores": boxes.conf.cpu().numpy(),
-        "classes": boxes.cls.cpu().numpy()
-    }`,
-        example: 'Frame 001 → 22 detections (players: 20, ball: 1, referee: 1)',
-        output: `{
-  "frame_id": 1,
-  "detections": [
-    {"box": [120, 340, 180, 520], "class": "player", "conf": 0.92},
-    {"box": [540, 280, 560, 300], "class": "ball", "conf": 0.87}
-  ]
-}`,
+def run_inference(image_path, config=None, model=None):
+    cfg = config or InferenceConfig()
+    detector = model or load_model(cfg)
+    results = detector.predict(image_path, conf=cfg.confidence, verbose=False)
+    return results[0]`,
+        example: 'Frame → detections with bboxes, scores, and class IDs',
+        output: `[Detection(bbox=[120,340,180,520], score=0.92, class="player"),
+ Detection(bbox=[540,280,560,300], score=0.87, class="ball")]`,
     },
     {
-        number: 2, title: "Tracking — ByteTrack",
-        description: "ByteTrack maintains consistent player IDs across frames using Kalman filter prediction and Hungarian algorithm matching. Handles occlusions with a max_age of 20 frames, allowing track recovery after brief disappearances.",
-        codeTitle: "src/track/bytetrack.py",
-        code: `from src.track.byte_tracker import BYTETracker
+        number: 2, title: "Tracking — ByteTrack Runtime",
+        description: "A Kalman filter-based tracker with Hungarian algorithm matching. Uses distance-based association with a threshold of 80px, and max_age of 15 frames for track persistence. Features ID reuse with delay to prevent collisions.",
+        codeTitle: "src/track/bytetrack_runtime.py",
+        code: `class ByteTrackRuntime:
+    def __init__(
+        self,
+        min_confidence: float = 0.25,
+        distance_threshold: float = 80.0,
+        max_age: int = 15,
+        max_track_id: int = 10000,
+        id_reuse_delay: int = 30,
+    ) -> None:
+        self._tracks: list[_TrackState] = []
+        self._id_pool: deque[int] = deque()
 
-tracker = BYTETracker(
-    track_thresh=0.5,
-    match_thresh=0.8,
-    track_buffer=30,
-    frame_rate=30
-)
-
-def track_frame(detections, frame_id):
-    dets = np.hstack([detections["boxes"],
-                      detections["scores"][:, None]])
-    tracks = tracker.update(dets, frame_id)
-    return tracks`,
-        example: 'Player #7 tracked across 847 frames with 3 occlusion recoveries',
-        output: `{
-  "track_id": 7,
-  "total_frames": 847,
-  "occlusions_recovered": 3
-}`,
+    def update(self, frame_id, detections) -> Tracklets:
+        # Kalman predict → Hungarian match → update tracks
+        predictions = [track.predict() for track in self._tracks]
+        cost_matrix = # distance between predictions and detections
+        track_indices, det_indices = linear_sum_assignment(cost_matrix)
+        # Match, create new tracks, clean up old
+        return Tracklets(frame_id=frame_id, items=outputs)`,
+        example: 'Persistent IDs across frames with Kalman-smoothed bboxes',
+        output: `Tracklets(frame_id=150, items=[
+  Tracklet(track_id=7, bbox=[125,342,185,522], score=0.91),
+  Tracklet(track_id=3, bbox=[400,200,440,380], score=0.88),
+])`,
     },
     {
         number: 3, title: "Graph Construction",
-        description: "For each frame, we build a spatial graph where nodes are tracked players and edges connect players within a distance threshold. This captures tactical structure — who is near whom, potential passing lanes, defensive coverage.",
-        codeTitle: "src/graph/builder.py",
-        code: `import torch
-from torch_geometric.data import Data
+        description: "Builds spatial interaction graphs from tracked detections using windowed frames. Nodes are tracked entities, edges connect those within an 80px distance threshold. Supports both spatial and temporal edges for cross-frame relationships.",
+        codeTitle: "src/graph/build_graph.py",
+        code: `from torch_geometric.data import Data
+from src.track.bytetrack_runtime import Tracklets
 
-def build_frame_graph(tracks, distance_threshold=120.0):
-    positions = get_centroids(tracks)
-    n_players = len(positions)
-    edges = []
-    for i in range(n_players):
-        for j in range(i + 1, n_players):
-            dist = np.linalg.norm(positions[i] - positions[j])
-            if dist < distance_threshold:
-                edges.append([i, j])
-                edges.append([j, i])
+def build_track_graph(
+    track_windows: list[Tracklets],
+    window: int = 30,
+    distance_threshold: float = 80.0,
+    include_temporal_edges: bool = True,
+    max_spatial_edges: int = 1000,
+):
+    # Node features: bbox coordinates [x1, y1, x2, y2]
+    # Edges: spatial proximity + temporal identity links
+    for i, j in combinations(range(num_nodes), 2):
+        dist = torch.linalg.norm(centers[i] - centers[j])
+        if dist <= distance_threshold:
+            edges.append([i, j])
+            edges.append([j, i])
 
-    edge_index = torch.tensor(edges, dtype=torch.long).T
-    x = torch.tensor(positions, dtype=torch.float)
-    return Data(x=x, edge_index=edge_index)`,
-        example: 'Frame 150: 22 nodes, 47 edges (avg degree: 4.3)',
-        output: `Graph(
-  x=[22, 2],
-  edge_index=[2, 94],
+    return Data(x=node_features, edge_index=edge_index)`,
+        example: 'Window of 30 frames → spatial + temporal graph',
+        output: `Data(
+  x=[num_tracks, 4],     # bbox features per track
+  edge_index=[2, N],     # spatial + temporal edges
 )`,
     },
     {
-        number: 4, title: "GraphSAGE Analysis",
-        description: "A 2-layer GraphSAGE model learns 64-dimensional embeddings for each player. Players in similar tactical roles cluster together in embedding space, enabling formation detection and role classification.",
-        codeTitle: "src/models/graphsage.py",
-        code: `from torch_geometric.nn import SAGEConv
-import torch.nn.functional as F
+        number: 4, title: "GraphSAGE Classification",
+        description: "A 2-layer GraphSAGE network classifies player interactions into 3 categories. Uses global mean pooling over node embeddings for graph-level predictions. Trained with the standard PyTorch Geometric DataLoader pipeline.",
+        codeTitle: "src/models/gcn.py",
+        code: `from torch_geometric.nn import SAGEConv, global_mean_pool
 
-class TacticalGNN(torch.nn.Module):
-    def __init__(self, in_dim=2, hidden_dim=32, out_dim=64):
+class GraphSAGENet(nn.Module):
+    def __init__(
+        self, in_channels: int = 4,
+        hidden_channels: int = 64,
+        num_classes: int = 3,
+    ) -> None:
         super().__init__()
-        self.conv1 = SAGEConv(in_dim, hidden_dim)
-        self.conv2 = SAGEConv(hidden_dim, out_dim)
+        self.conv1 = SAGEConv(in_channels, hidden_channels)
+        self.conv2 = SAGEConv(hidden_channels, hidden_channels)
+        self.head = nn.Linear(hidden_channels, num_classes)
 
     def forward(self, data):
-        x, edge_index = data.x, data.edge_index
-        x = self.conv1(x, edge_index)
-        x = F.relu(x)
-        x = F.dropout(x, p=0.2, training=self.training)
-        x = self.conv2(x, edge_index)
-        return x`,
-        example: 'Clustering accuracy: 89% across formations',
-        output: `Cosine similarity:
-  LW ↔ RW: 0.94 (similar roles)
-  LW ↔ CB: 0.12 (different roles)`,
+        x, edge_index, batch = data.x, data.edge_index, data.batch
+        x = self.conv1(x, edge_index).relu()
+        x = self.conv2(x, edge_index).relu()
+        pooled = global_mean_pool(x, batch)
+        return self.head(pooled)`,
+        example: 'Graph-level interaction classification (3 classes)',
+        output: `logits: tensor([[-0.12, 1.45, 0.33]])
+probabilities: tensor([[0.08, 0.72, 0.20]])`,
     },
 ];
 
 const PIPELINE_DEMO_STEPS = [
-    { stage: "Input", value: "10s clip @ 30fps", detail: "300 frames, 1920x1080" },
-    { stage: "Detection", value: "6,600 bounding boxes", detail: "~22 detections/frame" },
-    { stage: "Tracking", value: "22 unique tracks", detail: "0 ID switches" },
-    { stage: "Graphs", value: "300 frame graphs", detail: "avg 45 edges/frame" },
-    { stage: "Output", value: "4-3-3 vs 4-4-2", detail: "Role predictions for all 22" },
+    { stage: "Input", value: "10s clip @ 30fps", detail: "300 frames, 1280×720" },
+    { stage: "Preprocess", value: "60 frames extracted", detail: "stride 5, resized" },
+    { stage: "Detection", value: "YOLOv8n inference", detail: "conf ≥ 0.25" },
+    { stage: "Tracking", value: "Persistent track IDs", detail: "Kalman + Hungarian" },
+    { stage: "Graph", value: "Spatial interaction graph", detail: "80px distance threshold" },
+    { stage: "GNN", value: "3-class predictions", detail: "GraphSAGE embeddings" },
 ];
 
 const KEY_DECISIONS = [
-    { title: "YOLOv8 Medium over Extra-Large", reasoning: "94.8% mAP vs 96.1% for YOLOv8x, but 22 FPS vs 12 FPS. The 1.3% accuracy drop is worth it for real-time performance on consumer GPUs.", alternatives: "Considered YOLOv8x for max accuracy, YOLOv8s for edge deployment. Medium is the sweet spot." },
-    { title: "ByteTrack over DeepSORT", reasoning: "Two-stage matching reduced ID switches from 47/match to 12/match. No separate re-ID model needed, cutting latency by 30%.", alternatives: "Evaluated DeepSORT, FairMOT, BoT-SORT. ByteTrack's simplicity and performance won." },
-    { title: "MLflow + DVC over Managed Platforms", reasoning: "2 hours setup, $15/month vs $200+ for managed. Full reproducibility maintained with open-source stack.", alternatives: "W&B ($50/month), Kubeflow (requires k8s), SageMaker (vendor lock-in)." },
-    { title: "GraphSAGE over Traditional ML", reasoning: "Graph structure naturally represents tactics. Clustering F1 improved from 0.72 (k-means on positions) to 0.89 (GraphSAGE embeddings).", alternatives: "Tried positional features + RF, CNN on heatmaps, LSTM on sequences." },
+    { title: "YOLOv8 Nano for Real-Time Speed", reasoning: "YOLOv8n provides the fastest inference for real-time video processing on consumer GPUs. Nano variant keeps latency low enough for live stream processing while maintaining usable detection accuracy.", alternatives: "Considered YOLOv8s/m/l for better accuracy, but nano was chosen to prioritize throughput and enable consumer GPU deployment." },
+    { title: "ByteTrack over DeepSORT", reasoning: "Kalman filter + Hungarian algorithm matching is simpler and faster than DeepSORT's appearance-based re-ID. Distance threshold of 80px works well for soccer where players have predictable motion patterns.", alternatives: "Evaluated DeepSORT (requires separate ReID model), FairMOT (joint detection-tracking), BoT-SORT (camera motion compensation)." },
+    { title: "MLflow + DVC over Managed Platforms", reasoning: "Lightweight experiment tracking without Kubernetes. MLflow tracks experiments, DVC versions data and orchestrates the 7-stage pipeline. Total cost: S3 storage only.", alternatives: "W&B (better viz but paid), Kubeflow (requires k8s cluster), SageMaker (vendor lock-in)." },
+    { title: "GraphSAGE for Interaction Classification", reasoning: "Graph structure naturally captures spatial relationships between players. SAGEConv layers aggregate neighbor features through message passing, enabling 3-class interaction classification from positional data.", alternatives: "Tried positional features + Random Forest, CNN on position heatmaps. Neither captured spatial relationships between entities." },
 ];
 
 const LEARNINGS = [
@@ -400,50 +411,6 @@ function AnimatedCounter({ value, suffix = "", label, sublabel }: {
     );
 }
 
-function ComparisonBar() {
-    const ref = useRef<HTMLDivElement>(null);
-    const isInView = useInView(ref, { once: true, margin: "-50px" });
-
-    return (
-        <div ref={ref} className="mt-8 max-w-lg mx-auto">
-            <div className="text-xs font-medium text-[var(--text-muted)] uppercase tracking-wider mb-3 text-center">
-                ID Switches per Match
-            </div>
-            <div className="space-y-3">
-                <div>
-                    <div className="flex justify-between text-sm mb-1">
-                        <span className="font-medium" style={{ color: "var(--accent)" }}>ByteTrack</span>
-                        <span className="font-mono text-[var(--text-primary)]">12</span>
-                    </div>
-                    <div className="h-3 rounded-full bg-[var(--bg-tertiary)] overflow-hidden">
-                        <motion.div
-                            initial={{ width: 0 }}
-                            animate={isInView ? { width: `${(12 / 47) * 100}%` } : { width: 0 }}
-                            transition={{ ...SPRINGS.slow, delay: 0.2 }}
-                            className="h-full rounded-full"
-                            style={{ background: "var(--accent)" }}
-                        />
-                    </div>
-                </div>
-                <div>
-                    <div className="flex justify-between text-sm mb-1">
-                        <span className="font-medium text-[var(--text-muted)]">DeepSORT</span>
-                        <span className="font-mono text-[var(--text-muted)]">47</span>
-                    </div>
-                    <div className="h-3 rounded-full bg-[var(--bg-tertiary)] overflow-hidden">
-                        <motion.div
-                            initial={{ width: 0 }}
-                            animate={isInView ? { width: "100%" } : { width: 0 }}
-                            transition={{ ...SPRINGS.slow, delay: 0.4 }}
-                            className="h-full rounded-full bg-[var(--text-muted)]/20"
-                        />
-                    </div>
-                </div>
-            </div>
-        </div>
-    );
-}
-
 function DecisionCard({ decision }: { decision: typeof KEY_DECISIONS[0] }) {
     const [expanded, setExpanded] = useState(false);
     const { cardRef, rotateX, rotateY, glowX, glowY, handleMouseMove, handleMouseLeave } = use3DTilt(3);
@@ -563,7 +530,7 @@ export function FifaSoccerDSPage({ project }: { project: Project }) {
                         transition={{ delay: 0.4, duration: 0.5, ease: EASINGS.apple }}
                         className="text-lg md:text-xl text-[var(--text-secondary)] mb-6 max-w-3xl leading-relaxed"
                     >
-                        End-to-end computer vision pipeline for soccer video analysis. Real-time tracking at 22 FPS with YOLOv8, ByteTrack, and GraphSAGE.
+                        Multi-model computer vision pipeline for soccer video analysis. YOLOv8n detection, ByteTrack persistence, and GraphSAGE neural networks for tactical pattern recognition.
                     </motion.p>
 
                     <motion.div
@@ -587,10 +554,10 @@ export function FifaSoccerDSPage({ project }: { project: Project }) {
                     </motion.div>
 
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                        <MetricCard value="22 FPS" label="Real-time Inference" sublabel="RTX 3070" delay={0} />
-                        <MetricCard value="95.2%" label="Detection Precision" sublabel="@ 0.35 conf" delay={0.06} />
-                        <MetricCard value="12" label="ID Switches/Match" sublabel="vs 47 DeepSORT" delay={0.12} />
-                        <MetricCard value="89%" label="Formation F1" sublabel="4-3-3, 4-4-2, 3-5-2" delay={0.18} />
+                        <MetricCard value="YOLOv8n" label="Detection Model" sublabel="Nano variant" delay={0} />
+                        <MetricCard value="7 Stages" label="DVC Pipeline" sublabel="End-to-end" delay={0.06} />
+                        <MetricCard value="3-Class" label="GNN Classification" sublabel="GraphSAGE" delay={0.12} />
+                        <MetricCard value="50+" label="MLflow Experiments" sublabel="Tracked" delay={0.18} />
                     </div>
                 </div>
             </header>
@@ -644,15 +611,15 @@ export function FifaSoccerDSPage({ project }: { project: Project }) {
                         Performance
                     </motion.p>
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                        <AnimatedCounter value={22} suffix=" FPS" label="Real-time Inference" sublabel="RTX 3070 8GB" />
-                        <AnimatedCounter value={95} suffix="%" label="Detection Precision" sublabel="@ 0.35 confidence" />
-                        <AnimatedCounter value={12} label="ID Switches/Match" sublabel="Down from 47" />
-                        <AnimatedCounter value={89} suffix="%" label="Formation F1" sublabel="3 formations" />
+                        <AnimatedCounter value={7} label="Pipeline Stages" sublabel="DVC orchestrated" />
+                        <AnimatedCounter value={50} suffix="+" label="MLflow Experiments" sublabel="Tracked & versioned" />
+                        <AnimatedCounter value={3} label="GNN Classes" sublabel="Interaction types" />
+                        <AnimatedCounter value={30} label="Frame Window" sublabel="Temporal context" />
                     </div>
-                    <ComparisonBar />
                     <div className="flex justify-center gap-8 mt-8 text-center">
-                        <div><div className="text-lg font-mono font-bold text-[var(--text-primary)]">280ms</div><div className="text-xs text-[var(--text-muted)]">End-to-end latency</div></div>
-                        <div><div className="text-lg font-mono font-bold text-[var(--text-primary)]">50+</div><div className="text-xs text-[var(--text-muted)]">MLflow experiments</div></div>
+                        <div><div className="text-lg font-mono font-bold text-[var(--text-primary)]">YOLOv8n</div><div className="text-xs text-[var(--text-muted)]">Detection backbone</div></div>
+                        <div><div className="text-lg font-mono font-bold text-[var(--text-primary)]">DVC + MLflow</div><div className="text-xs text-[var(--text-muted)]">Pipeline & tracking</div></div>
+                        <div><div className="text-lg font-mono font-bold text-[var(--text-primary)]">Docker</div><div className="text-xs text-[var(--text-muted)]">Containerized</div></div>
                     </div>
                 </div>
             </section>
@@ -691,12 +658,15 @@ export function FifaSoccerDSPage({ project }: { project: Project }) {
                                     </motion.div>
                                 ))}
                             </div>
-                            <CodeBlock snippet={{ title: "Run the full pipeline", language: "bash", code: `python -m src.pipeline_full \\
-    --video data/raw/barca_vs_real.mp4 \\
-    --output-dir outputs/match_analysis \\
-    --confidence 0.35 \\
-    --distance-threshold 120.0 \\
-    --max-age 20` }} />
+                            <CodeBlock snippet={{ title: "Run the full pipeline", language: "bash", code: `# Run the DVC pipeline end-to-end
+dvc repro
+
+# Or run individual stages
+python src/detect/infer.py --weights yolov8n.pt --confidence 0.25
+python src/pipeline_full.py \\
+    --video data/raw/sample.mp4 \\
+    --model build/detection_yolov8n.plan \\
+    --output outputs/tracking_results` }} />
                         </div>
                     </div>
                 </div>
