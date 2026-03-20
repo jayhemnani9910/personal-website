@@ -1,278 +1,356 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { Github, Terminal, Cpu, Globe, Zap, Code, CheckCircle2, ChevronRight } from "lucide-react";
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { ExternalLink, ChevronDown } from "lucide-react";
 import type { Project } from "@/lib/definitions";
 import { BackButton } from "@/components/BackButton";
 import { isWebMCPAvailable } from "@/lib/webmcp";
+import { SPRINGS, EASINGS } from "@/lib/motion";
+
+// =============================================================================
+// DATA
+// =============================================================================
 
 const TOOLS = [
-    { name: "search_projects", description: "Search projects by query, tech, tags, or domain", category: "Content" },
-    { name: "get_project", description: "Get full project details by ID", category: "Content" },
-    { name: "get_resume", description: "Get resume: experience, education, skills", category: "Professional" },
-    { name: "search_skills", description: "Search skills by category or keyword", category: "Professional" },
-    { name: "get_contact", description: "Get contact info and social links", category: "Professional" },
-    { name: "list_experiments", description: "List lab experiments and current work", category: "Content" },
-    { name: "toggle_theme", description: "Toggle light/dark theme", category: "Interactive" },
-    { name: "switch_mode", description: "Switch site presentation mode", category: "Interactive" },
+    { name: "search_projects", desc: "Search by query, tech, tags, or domain", example: '> search_projects({ query: "vision", tech: "Python" })', response: '{ count: 4, projects: [{ id: "fifa-soccer-ds", title: "FIFA Soccer DS", tech: ["Python","YOLOv8"] }, ...] }' },
+    { name: "get_project", desc: "Fetch full project details by slug", example: '> get_project({ id: "rubiks-timer" })', response: '{ title: "Rubik\'s Cube Timer", tech: ["JavaScript","Three.js"], challenge: "...", solution: [...] }' },
+    { name: "get_resume", desc: "Get experience, education, skills", example: '> get_resume({ section: "experience" })', response: '{ experience: [{ company: "Elite Hotel Group", role: "Data Analyst", period: "Summer 2025" }, ...] }' },
+    { name: "search_skills", desc: "Search skills by category or keyword", example: '> search_skills({ category: "ML/AI" })', response: '{ skills: ["PyTorch", "TensorFlow", "Scikit-learn", "YOLO", "Transformers", ...] }' },
+    { name: "get_contact", desc: "Get contact info and social links", example: '> get_contact()', response: '{ name: "Jay Hemnani", email: "...", github: "...", website: "jayhemnani.me" }' },
+    { name: "list_experiments", desc: "List lab experiments and current work", example: '> list_experiments({ search: "webmcp" })', response: '{ experiments: [{ title: "WebMCP Integration", status: "building", progress: 70 }] }' },
+    { name: "toggle_theme", desc: "Toggle or set light/dark theme", example: '> toggle_theme({ theme: "dark" })', response: '{ theme: "dark", changed: true }' },
+    { name: "switch_mode", desc: "Switch site presentation mode", example: '> switch_mode({ mode: "brand" })', response: '{ mode: "brand", description: "Personal brand emphasis" }' },
 ];
 
-const CODE_EXAMPLE = `// How a tool is registered (simplified)
-navigator.modelContext.registerTool({
-  name: "search_projects",
-  description: "Search Jay's projects by query, tech, or tags",
-  inputSchema: {
-    type: "object",
-    properties: {
-      query: { type: "string" },
-      tech: { type: "string" },
-      tag: { type: "string" },
-    },
-  },
-  handler: async ({ query, tech }) => {
-    // Filter projects from pre-loaded data
-    let results = projects.filter(p =>
-      p.title.includes(query) ||
-      p.tech.includes(tech)
-    );
-    return { count: results.length, projects: results };
-  },
-});`;
-
-const ARCHITECTURE_STEPS = [
-    { step: "Build Time", detail: "Next.js loads all project MDX, resume data, and site config via fs" },
-    { step: "Server Component", detail: "WebMCPLoader.tsx serializes data and passes to client component" },
-    { step: "Client Mount", detail: "WebMCPProvider detects navigator.modelContext availability" },
-    { step: "Tool Registration", detail: "8 tools registered with JSON Schema input definitions" },
-    { step: "Agent Interaction", detail: "AI agents call tools as structured functions, get JSON responses" },
+const ARCH_STEPS = [
+    { label: "Build", detail: "Next.js loads MDX projects, resume, lab data via fs" },
+    { label: "Server", detail: "WebMCPLoader serializes SiteData to client" },
+    { label: "Client", detail: "WebMCPProvider detects navigator.modelContext" },
+    { label: "Register", detail: "8 tools + 1 context registered with JSON Schema" },
+    { label: "Query", detail: "AI agents call tools, get structured JSON responses" },
 ];
+
+// =============================================================================
+// COMPONENTS
+// =============================================================================
 
 function StatusBadge() {
-    const [available, setAvailable] = useState<boolean | null>(() => {
-        if (typeof navigator === "undefined") return null;
+    const [available] = useState<boolean | null>(() => {
+        if (typeof window === "undefined") return null;
         return isWebMCPAvailable();
     });
-
-    // Re-check after hydration in case SSR returned null
-    useEffect(() => {
-        if (available === null) {
-            const check = () => setAvailable(isWebMCPAvailable());
-            // Defer to next microtask to avoid sync setState in effect
-            Promise.resolve().then(check);
-        }
-    }, [available]);
 
     if (available === null) return null;
 
     return (
-        <div className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium ${
+        <span className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-mono ${
             available
-                ? "bg-green-500/10 text-green-400 border border-green-500/20"
-                : "bg-amber-500/10 text-amber-400 border border-amber-500/20"
-        }`}>
-            <div className={`w-2 h-2 rounded-full ${available ? "bg-green-400 animate-pulse" : "bg-amber-400"}`} />
-            {available ? "WebMCP Active" : "WebMCP not available — requires Chrome 146 Canary"}
-        </div>
+                ? "text-green-400 border border-green-500/30"
+                : "text-[var(--text-muted)] border border-[var(--border)]"
+        }`} style={{ background: available ? "rgba(34,197,94,0.05)" : "transparent" }}>
+            <span className={`w-1.5 h-1.5 rounded-full ${available ? "bg-green-400 animate-pulse" : "bg-[var(--text-muted)]"}`} />
+            {available ? "ACTIVE" : "UNAVAILABLE"}
+        </span>
     );
 }
 
-function ToolCard({ tool, index }: { tool: typeof TOOLS[0]; index: number }) {
-    const categoryColors: Record<string, string> = {
-        Content: "text-blue-400 bg-blue-500/10 border-blue-500/20",
-        Professional: "text-purple-400 bg-purple-500/10 border-purple-500/20",
-        Interactive: "text-emerald-400 bg-emerald-500/10 border-emerald-500/20",
-    };
+function ToolDemo({ tool, index }: { tool: typeof TOOLS[0]; index: number }) {
+    const [expanded, setExpanded] = useState(false);
 
     return (
-        <div
-            className="p-4 rounded-xl border border-[var(--border)] bg-[var(--bg-secondary)] hover:border-[var(--accent)] transition-colors"
-            style={{ animationDelay: `${index * 50}ms` }}
+        <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: index * 0.04, duration: 0.4, ease: EASINGS.apple }}
         >
-            <div className="flex items-start justify-between mb-2">
-                <code className="text-sm font-mono text-[var(--accent)]">{tool.name}</code>
-                <span className={`px-2 py-0.5 rounded-full text-xs border ${categoryColors[tool.category]}`}>
-                    {tool.category}
-                </span>
-            </div>
-            <p className="text-sm text-[var(--text-secondary)]">{tool.description}</p>
-        </div>
+            <button
+                onClick={() => setExpanded(!expanded)}
+                className="w-full text-left p-3 rounded-lg border transition-colors duration-200 hover:border-[var(--accent)]/40"
+                style={{ background: "var(--bg-secondary)", borderColor: expanded ? "var(--accent)" : "var(--border)" }}
+            >
+                <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3 min-w-0">
+                        <code className="text-sm font-mono shrink-0" style={{ color: "var(--accent)" }}>{tool.name}</code>
+                        <span className="text-xs text-[var(--text-muted)] truncate hidden sm:inline">{tool.desc}</span>
+                    </div>
+                    <motion.div animate={{ rotate: expanded ? 180 : 0 }} transition={{ duration: 0.2 }}>
+                        <ChevronDown className="w-3.5 h-3.5 text-[var(--text-muted)] shrink-0" />
+                    </motion.div>
+                </div>
+            </button>
+            <AnimatePresence>
+                {expanded && (
+                    <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: "auto", opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.25, ease: EASINGS.apple }}
+                        className="overflow-hidden"
+                    >
+                        <div className="mt-1 rounded-lg font-mono text-xs overflow-x-auto" style={{ background: "#0d1117" }}>
+                            <div className="p-4 space-y-2">
+                                <div style={{ color: "var(--accent)" }}>{tool.example}</div>
+                                <div className="text-green-400/80">{tool.response}</div>
+                            </div>
+                        </div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+        </motion.div>
     );
 }
+
+// =============================================================================
+// MAIN
+// =============================================================================
 
 export function WebMCPPortfolioPage({ project }: { project: Project }) {
     return (
-        <main className="min-h-screen" style={{ backgroundColor: "var(--bg-primary)" }}>
-            {/* Header */}
-            <div className="border-b border-[var(--border)]">
-                <div className="max-w-5xl mx-auto px-6 py-8">
+        <div className="min-h-screen" style={{ background: "var(--bg-primary)" }}>
+
+            {/* ============================================================= */}
+            {/* HERO                                                          */}
+            {/* ============================================================= */}
+            <header className="pt-28 pb-12 px-6">
+                <div className="max-w-4xl mx-auto">
                     <BackButton />
 
-                    <div className="flex flex-col gap-4">
-                        <div className="flex items-center gap-3 flex-wrap">
-                            <h1 className="text-3xl md:text-4xl font-bold text-[var(--text-primary)]">
-                                {project.title}
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={SPRINGS.default}
+                        className="mt-4"
+                    >
+                        <div className="flex items-center gap-3 flex-wrap mb-4">
+                            <h1 className="text-3xl md:text-5xl font-bold text-[var(--text-primary)]">
+                                WebMCP
                             </h1>
                             <StatusBadge />
                         </div>
-                        <p className="text-lg text-[var(--text-secondary)] max-w-2xl">
-                            {project.summary}
+
+                        <p className="text-lg text-[var(--text-secondary)] mb-6 max-w-2xl leading-relaxed">
+                            Making this portfolio AI-agent queryable via the W3C WebMCP standard. 8 structured tools registered on <code className="text-[var(--accent)] text-base">navigator.modelContext</code> — no DOM scraping needed.
                         </p>
+                    </motion.div>
+
+                    <motion.div
+                        initial={{ opacity: 0, y: 16 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ ...SPRINGS.default, delay: 0.15 }}
+                        className="flex flex-wrap items-center gap-4 mb-10"
+                    >
                         <div className="flex flex-wrap gap-2">
                             {project.tech.map((t) => (
-                                <span key={t} className="chip">{t}</span>
+                                <span key={t} className="px-2 py-1 text-xs font-mono rounded bg-[var(--accent)]/10 text-[var(--accent)] border border-[var(--accent)]/20">{t}</span>
                             ))}
                         </div>
-                        {project.github && (
-                            <a
-                                href={project.github}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="inline-flex items-center gap-2 text-sm text-[var(--text-muted)] hover:text-[var(--accent)] transition-colors w-fit"
-                            >
-                                <Github className="w-4 h-4" />
-                                View source
-                            </a>
-                        )}
-                    </div>
-                </div>
-            </div>
+                    </motion.div>
 
-            <div className="max-w-5xl mx-auto px-6 py-12 space-y-16">
-                {/* What is WebMCP */}
-                <section>
-                    <h2 className="text-2xl font-bold text-[var(--text-primary)] mb-6 flex items-center gap-2">
-                        <Globe className="w-6 h-6 text-[var(--accent)]" />
-                        What is WebMCP?
-                    </h2>
-                    <div className="grid md:grid-cols-2 gap-6">
-                        <div className="p-6 rounded-xl border border-[var(--border)] bg-[var(--bg-secondary)]">
-                            <h3 className="font-semibold text-[var(--text-primary)] mb-2">Before WebMCP</h3>
-                            <p className="text-sm text-[var(--text-secondary)] mb-3">
-                                AI agents scrape the DOM, click buttons, and parse screenshots. Brittle, slow, breaks when layouts change.
-                            </p>
-                            <div className="text-xs font-mono text-red-400 bg-red-500/5 rounded-lg p-3 border border-red-500/10">
-                                agent.click(&quot;#search-btn&quot;)  // breaks on redesign<br />
-                                agent.scrape(&quot;.result-card&quot;)  // fragile selectors
-                            </div>
-                        </div>
-                        <div className="p-6 rounded-xl border border-[var(--accent)]/30 bg-[var(--accent)]/5">
-                            <h3 className="font-semibold text-[var(--text-primary)] mb-2">With WebMCP</h3>
-                            <p className="text-sm text-[var(--text-secondary)] mb-3">
-                                Sites declare structured tools. Agents call them like functions. JSON in, JSON out. 89% more efficient.
-                            </p>
-                            <div className="text-xs font-mono text-green-400 bg-green-500/5 rounded-lg p-3 border border-green-500/10">
-                                agent.call(&quot;search_projects&quot;, &#123; tech: &quot;Python&quot; &#125;)<br />
-                                {"// → { count: 15, projects: [...] }"}
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                {/* Registered Tools */}
-                <section>
-                    <h2 className="text-2xl font-bold text-[var(--text-primary)] mb-2 flex items-center gap-2">
-                        <Terminal className="w-6 h-6 text-[var(--accent)]" />
-                        Registered Tools
-                    </h2>
-                    <p className="text-sm text-[var(--text-secondary)] mb-6">
-                        {TOOLS.length} tools exposed via <code className="text-[var(--accent)]">navigator.modelContext</code> on every page.
-                    </p>
-                    <div className="grid sm:grid-cols-2 gap-3">
-                        {TOOLS.map((tool, i) => (
-                            <ToolCard key={tool.name} tool={tool} index={i} />
-                        ))}
-                    </div>
-                </section>
-
-                {/* Architecture */}
-                <section>
-                    <h2 className="text-2xl font-bold text-[var(--text-primary)] mb-6 flex items-center gap-2">
-                        <Cpu className="w-6 h-6 text-[var(--accent)]" />
-                        How It Works
-                    </h2>
-                    <div className="space-y-3">
-                        {ARCHITECTURE_STEPS.map((step, i) => (
-                            <div
-                                key={step.step}
-                                className="flex items-start gap-4 p-4 rounded-xl border border-[var(--border)] bg-[var(--bg-secondary)]"
-                            >
-                                <div className="flex-shrink-0 w-8 h-8 rounded-full bg-[var(--accent)]/10 text-[var(--accent)] flex items-center justify-center text-sm font-bold">
-                                    {i + 1}
+                    {/* Architecture flow */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 16 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ ...SPRINGS.default, delay: 0.25 }}
+                        className="flex flex-wrap items-center gap-2 font-mono text-xs"
+                    >
+                        {ARCH_STEPS.map((step, i) => (
+                            <div key={step.label} className="flex items-center gap-2">
+                                <div className="px-3 py-1.5 rounded-lg border" style={{ background: "var(--bg-secondary)", borderColor: "var(--border)" }}>
+                                    <span style={{ color: "var(--accent)" }}>{step.label}</span>
                                 </div>
-                                <div>
-                                    <h3 className="font-semibold text-[var(--text-primary)] text-sm">{step.step}</h3>
-                                    <p className="text-sm text-[var(--text-secondary)]">{step.detail}</p>
-                                </div>
-                                {i < ARCHITECTURE_STEPS.length - 1 && (
-                                    <ChevronRight className="w-4 h-4 text-[var(--text-muted)] flex-shrink-0 mt-2 hidden md:block" />
+                                {i < ARCH_STEPS.length - 1 && (
+                                    <span className="text-[var(--text-muted)]">→</span>
                                 )}
                             </div>
                         ))}
-                    </div>
-                </section>
+                    </motion.div>
+                </div>
+            </header>
 
-                {/* Code Example */}
-                <section>
-                    <h2 className="text-2xl font-bold text-[var(--text-primary)] mb-6 flex items-center gap-2">
-                        <Code className="w-6 h-6 text-[var(--accent)]" />
-                        Implementation
-                    </h2>
-                    <div className="rounded-xl border border-[var(--border)] overflow-hidden">
-                        <div className="bg-[var(--bg-secondary)] px-4 py-2 border-b border-[var(--border)] flex items-center gap-2">
-                            <div className="flex gap-1.5">
-                                <div className="w-3 h-3 rounded-full bg-red-500/60" />
-                                <div className="w-3 h-3 rounded-full bg-yellow-500/60" />
-                                <div className="w-3 h-3 rounded-full bg-green-500/60" />
+            {/* ============================================================= */}
+            {/* BEFORE / AFTER                                                */}
+            {/* ============================================================= */}
+            <section className="py-12 px-6" style={{ background: "var(--bg-secondary)" }}>
+                <div className="max-w-5xl mx-auto">
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        whileInView={{ opacity: 1 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.5 }}
+                    >
+                        <p className="eyebrow mb-6">Why WebMCP</p>
+                        <div className="grid md:grid-cols-2 gap-4">
+                            <div className="rounded-xl overflow-hidden border" style={{ borderColor: "var(--border)" }}>
+                                <div className="flex items-center gap-2 px-4 py-2" style={{ background: "#161b22" }}>
+                                    <div className="flex gap-1.5">
+                                        <div className="w-2.5 h-2.5 rounded-full bg-red-500/70" />
+                                        <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/70" />
+                                        <div className="w-2.5 h-2.5 rounded-full bg-green-500/70" />
+                                    </div>
+                                    <span className="text-xs text-red-400/80 font-mono ml-2">before.js</span>
+                                </div>
+                                <pre className="p-4 text-xs font-mono leading-relaxed overflow-x-auto" style={{ background: "#0d1117", color: "var(--text-muted)" }}>
+{`// DOM scraping — brittle, slow
+agent.click("#search-btn");
+agent.waitFor(".results");
+agent.scrape(".result-card");
+// ❌ Breaks on redesign
+// ❌ Requires screenshots
+// ❌ Layout-dependent`}
+                                </pre>
                             </div>
-                            <span className="text-xs text-[var(--text-muted)] ml-2">src/lib/webmcp.ts</span>
+                            <div className="rounded-xl overflow-hidden border" style={{ borderColor: "rgba(var(--accent-rgb, 10, 132, 255), 0.3)" }}>
+                                <div className="flex items-center gap-2 px-4 py-2" style={{ background: "#161b22" }}>
+                                    <div className="flex gap-1.5">
+                                        <div className="w-2.5 h-2.5 rounded-full bg-red-500/70" />
+                                        <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/70" />
+                                        <div className="w-2.5 h-2.5 rounded-full bg-green-500/70" />
+                                    </div>
+                                    <span className="text-xs font-mono ml-2" style={{ color: "var(--accent)" }}>after.js — WebMCP</span>
+                                </div>
+                                <pre className="p-4 text-xs font-mono leading-relaxed overflow-x-auto" style={{ background: "#0d1117", color: "var(--text-secondary)" }}>
+{`// Structured tools — fast, stable
+const results = await agent.call(
+  "search_projects",
+  { tech: "Python" }
+);
+// ✅ Layout-agnostic
+// ✅ JSON in, JSON out
+// ✅ 89% fewer tokens`}
+                                </pre>
+                            </div>
                         </div>
-                        <pre className="p-4 text-sm font-mono overflow-x-auto" style={{ backgroundColor: "var(--bg-tertiary, var(--bg-secondary))" }}>
-                            <code className="text-[var(--text-secondary)]">{CODE_EXAMPLE}</code>
-                        </pre>
-                    </div>
-                </section>
+                    </motion.div>
+                </div>
+            </section>
 
-                {/* Try It */}
-                <section>
-                    <h2 className="text-2xl font-bold text-[var(--text-primary)] mb-6 flex items-center gap-2">
-                        <Zap className="w-6 h-6 text-[var(--accent)]" />
-                        Try It Yourself
-                    </h2>
-                    <div className="p-6 rounded-xl border border-[var(--border)] bg-[var(--bg-secondary)]">
-                        <ol className="space-y-4">
-                            {[
-                                "Install Chrome 146 Canary (or later)",
-                                'Navigate to chrome://flags and enable "Experimental Web Platform Features"',
-                                "Visit jayhemnani.me",
-                                "Open DevTools Console and run: navigator.modelContext",
-                                "If it returns an object, WebMCP is active with 8 registered tools!",
-                            ].map((step, i) => (
-                                <li key={i} className="flex items-start gap-3">
-                                    <CheckCircle2 className="w-5 h-5 text-[var(--accent)] flex-shrink-0 mt-0.5" />
-                                    <span className="text-sm text-[var(--text-secondary)]">{step}</span>
-                                </li>
-                            ))}
-                        </ol>
-                    </div>
-                </section>
+            {/* ============================================================= */}
+            {/* TOOLS — Terminal Demo                                         */}
+            {/* ============================================================= */}
+            <section className="py-16 px-6">
+                <div className="max-w-4xl mx-auto">
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.5, ease: EASINGS.apple }}
+                        className="mb-6"
+                    >
+                        <p className="eyebrow mb-2">API</p>
+                        <h2 className="text-2xl font-bold text-[var(--text-primary)]">
+                            8 Registered Tools
+                        </h2>
+                        <p className="text-sm text-[var(--text-muted)] mt-1">Click any tool to see its call signature and example response.</p>
+                    </motion.div>
 
-                {/* Impact Stats */}
-                <section>
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div className="space-y-2">
+                        {TOOLS.map((tool, i) => (
+                            <ToolDemo key={tool.name} tool={tool} index={i} />
+                        ))}
+                    </div>
+                </div>
+            </section>
+
+            {/* ============================================================= */}
+            {/* HOW IT WORKS                                                  */}
+            {/* ============================================================= */}
+            <section className="py-16 px-6" style={{ background: "var(--bg-secondary)" }}>
+                <div className="max-w-3xl mx-auto">
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.5, ease: EASINGS.apple }}
+                        className="mb-8"
+                    >
+                        <p className="eyebrow mb-2">Architecture</p>
+                        <h2 className="text-2xl font-bold text-[var(--text-primary)]">How It Works</h2>
+                    </motion.div>
+
+                    <div className="space-y-3">
+                        {ARCH_STEPS.map((step, i) => (
+                            <motion.div
+                                key={step.label}
+                                initial={{ opacity: 0, x: -16 }}
+                                whileInView={{ opacity: 1, x: 0 }}
+                                viewport={{ once: true }}
+                                transition={{ delay: i * 0.08, duration: 0.4, ease: EASINGS.apple }}
+                                className="flex items-start gap-4 p-4 rounded-lg border transition-colors duration-200 hover:border-[var(--accent)]/40"
+                                style={{ background: "var(--bg-primary)", borderColor: "var(--border)" }}
+                            >
+                                <span className="shrink-0 w-7 h-7 rounded flex items-center justify-center text-xs font-bold font-mono" style={{ background: "rgba(var(--accent-rgb, 10, 132, 255), 0.1)", color: "var(--accent)" }}>{i + 1}</span>
+                                <div>
+                                    <span className="text-sm font-semibold text-[var(--text-primary)]">{step.label}</span>
+                                    <p className="text-sm text-[var(--text-secondary)] mt-0.5">{step.detail}</p>
+                                </div>
+                            </motion.div>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
+            {/* ============================================================= */}
+            {/* TRY IT                                                        */}
+            {/* ============================================================= */}
+            <section className="py-16 px-6">
+                <div className="max-w-3xl mx-auto">
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.5, ease: EASINGS.apple }}
+                    >
+                        <p className="eyebrow mb-2">Try It</p>
+                        <h2 className="text-2xl font-bold text-[var(--text-primary)] mb-6">Test in Your Browser</h2>
+
+                        <div className="rounded-xl overflow-hidden border" style={{ borderColor: "var(--border)" }}>
+                            <div className="flex items-center gap-2 px-4 py-2" style={{ background: "#161b22" }}>
+                                <div className="flex gap-1.5">
+                                    <div className="w-2.5 h-2.5 rounded-full bg-red-500/70" />
+                                    <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/70" />
+                                    <div className="w-2.5 h-2.5 rounded-full bg-green-500/70" />
+                                </div>
+                                <span className="text-xs text-[var(--text-muted)] font-mono ml-2">Chrome DevTools Console</span>
+                            </div>
+                            <pre className="p-4 text-xs font-mono leading-loose overflow-x-auto" style={{ background: "#0d1117" }}>
+                                <span className="text-[var(--text-muted)]">{"// 1. Chrome 146 Canary + enable 'Experimental Web Platform Features' flag\n"}</span>
+                                <span className="text-[var(--text-muted)]">{"// 2. Visit jayhemnani.me\n"}</span>
+                                <span className="text-[var(--text-muted)]">{"// 3. Open DevTools Console and run:\n\n"}</span>
+                                <span style={{ color: "var(--accent)" }}>{"navigator.modelContext\n"}</span>
+                                <span className="text-green-400/80">{"// → ModelContext { registerTool, unregisterTool, ... }\n\n"}</span>
+                                <span className="text-[var(--text-muted)]">{"// Tools are registered automatically on page load.\n"}</span>
+                                <span className="text-[var(--text-muted)]">{"// AI agents can now query your portfolio as structured data."}</span>
+                            </pre>
+                        </div>
+                    </motion.div>
+                </div>
+            </section>
+
+            {/* ============================================================= */}
+            {/* STATS + FOOTER                                                */}
+            {/* ============================================================= */}
+            <div className="py-8 px-6 border-t" style={{ borderColor: "var(--border)" }}>
+                <div className="max-w-4xl mx-auto flex flex-wrap items-center justify-between gap-6">
+                    <div className="flex flex-wrap gap-6 text-center">
                         {[
-                            { label: "Tools Registered", value: "8" },
-                            { label: "Projects Queryable", value: "25+" },
-                            { label: "Token Efficiency", value: "89%" },
-                            { label: "Lines of Code", value: "~280" },
-                        ].map((stat) => (
-                            <div key={stat.label} className="text-center p-4 rounded-xl border border-[var(--border)] bg-[var(--bg-secondary)]">
-                                <div className="text-2xl font-bold text-[var(--accent)]">{stat.value}</div>
-                                <div className="text-xs text-[var(--text-muted)] mt-1">{stat.label}</div>
+                            { v: "8", l: "Tools" },
+                            { v: "25+", l: "Projects" },
+                            { v: "~280", l: "LOC" },
+                        ].map((s) => (
+                            <div key={s.l}>
+                                <div className="text-lg font-bold font-mono" style={{ color: "var(--accent)" }}>{s.v}</div>
+                                <div className="text-xs text-[var(--text-muted)]">{s.l}</div>
                             </div>
                         ))}
                     </div>
-                </section>
+                    <a href="https://webmcp.dev" target="_blank" rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 text-sm text-[var(--text-muted)] hover:text-[var(--accent)] transition-colors">
+                        W3C WebMCP Spec <ExternalLink className="w-3 h-3" />
+                    </a>
+                </div>
             </div>
-        </main>
+        </div>
     );
 }
