@@ -1,23 +1,23 @@
 ---
 title: "Stock Data Platform"
-summary: "Batch + streaming platform for market data with minute-level analytics."
-role: "Data/Analytics Engineer"
+summary: "Unified market data warehouse — 10 tickers, 25 years of history, 4 data sources. Kafka streaming, Airflow orchestration, TimescaleDB star schema, Dockerized."
+role: "Data Engineer"
 period: "Personal"
 domain: "Market data"
-tags: ["data-platform", "streaming", "analytics"]
-tech: ["Python", "Kafka", "Airflow", "TimescaleDB/Postgres", "Dash", "SQL"]
-challenge: "Unify real-time ticks and batch OHLC data into a single, query-friendly warehouse with reproducible jobs."
+tags: ["data-platform", "streaming", "analytics", "docker"]
+tech: ["Python", "Kafka", "Airflow", "TimescaleDB", "Dash", "Docker"]
+github: "https://github.com/jayhemnani9910/stock-data-platform"
+challenge: "Build a unified market data warehouse combining real-time streaming with batch historical data from multiple sources."
 solution:
-  - "Kafka topics (ticks, news) for near-real-time ingestion; producers buffer/retry with idempotent writes."
-  - "Airflow schedules batch ingests & backfills, orchestrates validation and dimensional loads."
-  - "TimescaleDB hypertables for ticks; star schema (FactPrices + dimensions) for analytics."
-  - "Dash UI: time-window filters, rolling indicators (SMA/EMA), intraday heatmaps."
+  - "Kafka producers poll 4 data sources (yfinance, SEC EDGAR, FRED, live streams) every 15 seconds."
+  - "~18 Airflow DAGs orchestrate batch ETL, backfills, and aggregations across 10 major tickers."
+  - "8-table star schema in TimescaleDB with dimensional modeling for prices, fundamentals, earnings, SEC filings, and macro data."
 impact:
-  - "Single source of truth for intraday + historical; reproducible backfills."
-  - "Interactive dashboards with smooth time-window slicing."
-  - "Clear lineage for KPIs and derived indicators."
+  - "25 years of historical depth for 10 major US equities (AAPL, NVDA, MSFT, GOOG, AMZN, META, TSLA, JPM, NFLX, DIS)."
+  - "Fully containerized with 7 Docker services — single command deployment."
+  - "Interactive Dash dashboards with SMA/EMA indicators and time-window filtering."
 featured: false
 priority: 24
 ---
 # Overview
-Production-grade platform unifying batch and streaming market data into a single analytical warehouse. Kafka for real-time ticks, Airflow for batch orchestration, TimescaleDB for time-series storage, and Dash for interactive visualization.
+Unified batch + streaming market data warehouse tracking 10 major US equities with 25 years of history. Combines 4 data sources (yfinance prices, SEC EDGAR filings, FRED macro indicators, and live Kafka streams) through ~18 Airflow DAGs into an 8-table star schema on TimescaleDB. Fully containerized with 7 Docker services.
