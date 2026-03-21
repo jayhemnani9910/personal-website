@@ -1,23 +1,23 @@
 ---
 title: "Nobel Data Intelligence"
-summary: "Production ML framework applying graph neural networks to molecular property prediction, processing 10K+ compounds with extensible pipeline integrating PyTorch Geometric and bioinformatics toolkits."
-role: "Builder"
+summary: "Physics-informed deep learning for protein stability and enzyme kinetics. Tri-modal architecture combining ProtT5, GATv2+VDOS, and ChemBERTa with gated attention fusion."
+role: "Researcher"
 period: "2024"
-domain: "Bioinformatics"
-tags: ["gnn", "molecular-biology", "pytorch-geometric", "research"]
-tech: ["Python", "PyTorch Geometric", "ProDy", "BioPython", "RDKit"]
+domain: "Computational Biology"
+tags: ["gnn", "molecular-biology", "pytorch-geometric", "research", "protein"]
+tech: ["Python", "PyTorch Geometric", "ProDy", "BioPython", "RDKit", "Transformers"]
 github: "https://github.com/jayhemnani9910/nobel-dataintelligence"
-challenge: "Build scalable graph neural network pipeline for molecular property prediction and structure analysis, bridging modern deep learning with established bioinformatics workflows."
+challenge: "Build a physics-informed prediction framework that captures protein dynamics — not just static sequence or structure — for stability and enzyme kinetics prediction."
 solution:
-  - "Automated graph construction from molecular structures using RDKit, converting SMILES/PDB to graph representations with node/edge features."
-  - "PyTorch Geometric GNN models (GCN, GAT, GraphSAGE) for property prediction with 85%+ accuracy on benchmark datasets."
-  - "Full integration with biology toolkits: ProDy for protein analysis, BioPython for sequence handling, RDKit for molecular processing."
+  - "Novel VDOS (Vibrational Density of States) features from Normal Mode Analysis capture protein dynamics invisible to static models."
+  - "Tri-modal architecture: ProtT5 sequence encoder, GATv2 structure encoder with VDOS, ChemBERTa chemical encoder with DRFP."
+  - "MM-Drop training (multimodal dropout) ensures robustness when one modality is missing."
 impact:
-  - "Processes 10K+ molecular compounds with batch inference pipeline completing in under 2 hours on single GPU."
-  - "Extensible framework supporting custom GNN architectures, enabling rapid experimentation with novel models."
-  - "Bridged gap between deep learning and bioinformatics: unified pipeline from raw molecular data to property predictions."
+  - "139 unit tests across QDD framework and VibroPredict subsystem."
+  - "8 Jupyter notebooks from quickstart to ablation studies, with Colab training support."
+  - "CLI tools and batch inference pipeline for production-ready predictions."
 featured: true
 priority: 3
 ---
 # Overview
-Production-grade graph neural network framework for molecular biology. Processes 10K+ compounds using PyTorch Geometric models, with end-to-end pipeline from molecular structures to property predictions.
+Physics-informed deep learning framework for protein stability and enzyme kinetics prediction. Uses a novel tri-modal architecture combining ProtT5 sequence embeddings, GATv2 graph attention with Vibrational Density of States from Normal Mode Analysis, and ChemBERTa chemical encodings. Two-phase design: QDD framework (Phase 1-2) for general molecular property prediction and VibroPredict (Phase 3) for enzyme catalytic turnover prediction.
