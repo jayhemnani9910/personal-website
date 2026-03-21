@@ -1,96 +1,47 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Github, Camera, FileText, Cpu, Search, Sparkles } from "lucide-react";
+import { motion } from "framer-motion";
+import { Github, ExternalLink, Search, Camera, FileText, MessageSquare, Database, Download } from "lucide-react";
 import type { Project } from "@/lib/definitions";
 import { BackButton } from "@/components/BackButton";
-import { StatCard } from "@/components/ui/StatCard";
-import { PipelineStage, PipelineArrow } from "@/components/projects/PipelineStage";
+import { SPRINGS, EASINGS } from "@/lib/motion";
 
-// Screenshot to vector visualization
-function ScreenshotToVector() {
-    const [stage, setStage] = useState(0);
+// =============================================================================
+// DATA (verified against actual codebase)
+// =============================================================================
 
-    useEffect(() => {
-        const interval = setInterval(() => setStage((prev) => (prev + 1) % 4), 2000);
-        return () => clearInterval(interval);
-    }, []);
+const CLI_COMMANDS = [
+    { cmd: "contextbox capture", desc: "Screenshot + OCR + store to SQLite", icon: Camera },
+    { cmd: "contextbox search <query>", desc: "Semantic similarity search over stored contexts", icon: Search },
+    { cmd: "contextbox ask <question>", desc: "AI Q&A powered by GitHub Models (GPT-4o)", icon: MessageSquare },
+    { cmd: "contextbox summarize", desc: "AI-generated summaries of captured contexts", icon: FileText },
+    { cmd: "contextbox list", desc: "List all stored contexts with metadata", icon: Database },
+    { cmd: "contextbox export --format json", desc: "Export contexts as JSON or CSV", icon: Download },
+];
 
-    return (
-        <div className="rounded-xl border border-[var(--border)] bg-[var(--bg-secondary)] p-6">
-            <div className="flex items-center justify-between mb-4">
-                <h3 className="text-sm font-medium text-[var(--text-primary)]">Processing Pipeline</h3>
-                <span className="text-xs text-[var(--text-muted)]">Automated</span>
-            </div>
+const TECH = ["Python", "Click", "Rich", "SQLite", "Sentence-Transformers", "Tesseract", "GitHub Models"];
 
-            <svg viewBox="0 0 100 60" className="w-full h-40">
-                {/* Stage 1: Screenshot */}
-                <g className={stage >= 0 ? "opacity-100" : "opacity-30"} style={{ transition: "opacity 0.3s" }}>
-                    <rect x="5" y="15" width="20" height="15" rx="2" fill="var(--bg-primary)" stroke={stage === 0 ? "var(--accent)" : "var(--border)"} strokeWidth={stage === 0 ? "1.5" : "1"} />
-                    <rect x="7" y="17" width="16" height="2" rx="0.5" fill="var(--text-muted)" opacity="0.5" />
-                    <rect x="7" y="20" width="12" height="2" rx="0.5" fill="var(--text-muted)" opacity="0.5" />
-                    <rect x="7" y="23" width="14" height="2" rx="0.5" fill="var(--text-muted)" opacity="0.5" />
-                    <rect x="7" y="26" width="10" height="2" rx="0.5" fill="var(--text-muted)" opacity="0.5" />
-                    <text x="15" y="40" textAnchor="middle" fill="var(--text-muted)" fontSize="3.5">Screenshot</text>
-                </g>
+const FEATURES = [
+    "Cross-platform screenshot capture — Wayland (grim), X11 (scrot, maim), macOS, with graceful fallback",
+    "Tesseract OCR for text extraction from screenshots and images",
+    "Semantic search via sentence-transformers embeddings (all-MiniLM-L6-v2, 384-dim) stored as SQLite BLOBs",
+    "LLM-powered Q&A and summarization via GitHub Models (GPT-4o, Llama, Mistral — free tier)",
+    "Content extractors for URLs, YouTube transcripts, Wikipedia articles, and code files",
+    "Rich terminal UI with formatted tables, progress bars, and colored output",
+];
 
-                {/* Arrow 1 */}
-                <path d="M 28 22 L 35 22" stroke={stage >= 1 ? "var(--accent)" : "var(--border)"} strokeWidth="1" markerEnd="url(#arrowhead)" style={{ transition: "stroke 0.3s" }} />
+const EXTRACTORS = ["URLs", "YouTube transcripts", "Wikipedia", "Code files", "OCR text", "Clipboard"];
 
-                {/* Stage 2: OCR Text */}
-                <g className={stage >= 1 ? "opacity-100" : "opacity-30"} style={{ transition: "opacity 0.3s" }}>
-                    <rect x="38" y="15" width="20" height="15" rx="2" fill="var(--bg-primary)" stroke={stage === 1 ? "var(--accent)" : "var(--border)"} strokeWidth={stage === 1 ? "1.5" : "1"} />
-                    <text x="40" y="21" fill="var(--text-primary)" fontSize="3" fontFamily="monospace">Hello</text>
-                    <text x="40" y="25" fill="var(--text-primary)" fontSize="3" fontFamily="monospace">World</text>
-                    <text x="48" y="40" textAnchor="middle" fill="var(--text-muted)" fontSize="3.5">OCR Text</text>
-                </g>
+// =============================================================================
+// VECTOR SEARCH DEMO (adapted from v1)
+// =============================================================================
 
-                {/* Arrow 2 */}
-                <path d="M 61 22 L 68 22" stroke={stage >= 2 ? "var(--accent)" : "var(--border)"} strokeWidth="1" style={{ transition: "stroke 0.3s" }} />
-
-                {/* Stage 3: Vector */}
-                <g className={stage >= 2 ? "opacity-100" : "opacity-30"} style={{ transition: "opacity 0.3s" }}>
-                    <rect x="71" y="15" width="20" height="15" rx="2" fill="var(--bg-primary)" stroke={stage === 2 ? "var(--accent)" : "var(--border)"} strokeWidth={stage === 2 ? "1.5" : "1"} />
-                    {/* Vector bars */}
-                    {[0, 1, 2, 3, 4, 5].map((i) => (
-                        <rect
-                            key={i}
-                            x={74 + i * 2.5}
-                            y={28 - (5 + Math.sin(i * 1.2) * 5)}
-                            width="1.5"
-                            height={5 + Math.sin(i * 1.2) * 5}
-                            fill={stage === 2 ? "var(--accent)" : "var(--text-muted)"}
-                            rx="0.5"
-                            style={{ transition: "fill 0.3s" }}
-                        />
-                    ))}
-                    <text x="81" y="40" textAnchor="middle" fill="var(--text-muted)" fontSize="3.5">Embedding</text>
-                </g>
-
-                {/* Arrow marker */}
-                <defs>
-                    <marker id="arrowhead" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
-                        <path d="M 0 0 L 6 3 L 0 6 Z" fill="var(--accent)" />
-                    </marker>
-                </defs>
-
-                {/* Stage indicator */}
-                <g className={stage === 3 ? "opacity-100" : "opacity-0"} style={{ transition: "opacity 0.3s" }}>
-                    <text x="50" y="55" textAnchor="middle" fill="var(--accent)" fontSize="4" fontWeight="bold">
-                        → Stored in pgvector
-                    </text>
-                </g>
-            </svg>
-        </div>
-    );
-}
-
-// Vector similarity search visualization
-const sampleQueries = ["authentication code", "React component", "API endpoint"];
-const sampleResults = [
-    { text: "LoginForm.tsx - OAuth flow", similarity: 0.92 },
-    { text: "AuthContext.tsx - session", similarity: 0.87 },
-    { text: "api/auth.py - JWT tokens", similarity: 0.84 },
+const SAMPLE_QUERIES = ["authentication code", "React component", "API endpoint"];
+const SAMPLE_RESULTS = [
+    { text: "LoginForm.tsx — OAuth flow", similarity: 0.92 },
+    { text: "AuthContext.tsx — session mgmt", similarity: 0.87 },
+    { text: "api/auth.py — JWT tokens", similarity: 0.84 },
 ];
 
 function VectorSearchDemo() {
@@ -100,233 +51,178 @@ function VectorSearchDemo() {
 
     useEffect(() => {
         const interval = setInterval(() => {
-            const randomQuery = sampleQueries[Math.floor(Math.random() * sampleQueries.length)];
-            setQuery(randomQuery);
+            const q = SAMPLE_QUERIES[Math.floor(Math.random() * SAMPLE_QUERIES.length)];
+            setQuery(q);
             setSearching(true);
-
             setTimeout(() => {
                 setSearching(false);
-                setResults(sampleResults.map(r => ({
-                    ...r,
-                    similarity: Math.random() * 0.15 + 0.82
-                })));
+                setResults(SAMPLE_RESULTS.map(r => ({ ...r, similarity: Math.random() * 0.12 + 0.82 })));
             }, 800);
         }, 4000);
-
         return () => clearInterval(interval);
     }, []);
 
     return (
-        <div className="rounded-xl border border-[var(--border)] bg-[var(--bg-secondary)] p-6">
-            <div className="flex items-center justify-between mb-4">
-                <h3 className="text-sm font-medium text-[var(--text-primary)]">Semantic Search</h3>
-                <span className="text-xs text-[var(--accent)]">&lt;200ms</span>
+        <div className="rounded-xl overflow-hidden border" style={{ borderColor: "var(--border)" }}>
+            <div className="flex items-center gap-2 px-4 py-2" style={{ background: "#161b22" }}>
+                <div className="flex gap-1.5">
+                    <div className="w-2.5 h-2.5 rounded-full bg-red-500/70" />
+                    <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/70" />
+                    <div className="w-2.5 h-2.5 rounded-full bg-green-500/70" />
+                </div>
+                <span className="text-xs font-mono ml-2" style={{ color: "var(--accent)" }}>contextbox search</span>
             </div>
-
-            {/* Search input */}
-            <div className="relative mb-4">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--text-muted)]" />
-                <div className="w-full pl-10 pr-4 py-2 rounded-lg bg-[var(--bg-primary)] border border-[var(--border)] text-sm text-[var(--text-primary)]">
-                    {query || "Search by concept..."}
-                    {searching && (
-                        <span className="ml-2 inline-block w-4 h-4 border-2 border-[var(--accent)] border-t-transparent rounded-full animate-spin" />
-                    )}
+            <div className="p-4" style={{ background: "#0d1117" }}>
+                <div className="flex items-center gap-2 mb-4">
+                    <Search className="w-4 h-4" style={{ color: "var(--text-muted)" }} />
+                    <span className="text-sm font-mono" style={{ color: "var(--text-primary)" }}>
+                        {query || "Search by concept..."}
+                    </span>
+                    {searching && <span className="w-3 h-3 border-2 border-[var(--accent)] border-t-transparent rounded-full animate-spin" />}
+                </div>
+                <div className="space-y-2">
+                    {results.map((r, i) => (
+                        <div key={i} className="flex items-center justify-between px-3 py-2 rounded font-mono text-sm" style={{ background: "#161b22", opacity: searching ? 0.3 : 1, transition: "opacity 0.3s" }}>
+                            <span style={{ color: "var(--text-secondary)" }}>{r.text}</span>
+                            <span style={{ color: "var(--accent)" }}>{(r.similarity * 100).toFixed(0)}%</span>
+                        </div>
+                    ))}
                 </div>
             </div>
-
-            {/* Results */}
-            <div className="space-y-2">
-                {results.map((result, i) => (
-                    <div
-                        key={i}
-                        className="flex items-center justify-between p-3 rounded-lg bg-[var(--bg-primary)] border border-[var(--border)]"
-                        style={{ animation: searching ? 'none' : `fadeSlideUp 0.3s ease-out ${i * 100}ms both` }}
-                    >
-                        <span className="text-sm text-[var(--text-primary)]">{result.text}</span>
-                        <span className="text-xs font-medium text-[var(--accent)]">
-                            {(result.similarity * 100).toFixed(0)}%
-                        </span>
-                    </div>
-                ))}
-            </div>
         </div>
     );
 }
 
-// Pre-computed decorative dot positions (module-level to avoid impure render)
-const DOT_POSITIONS = Array.from({ length: 15 }, () => ({ cx: 15 + Math.random() * 70, cy: 35 + Math.random() * 50 }));
-
-// Knowledge graph visualization
-function KnowledgeGraph() {
-    const [activeNode, setActiveNode] = useState(0);
-
-    const nodes = [
-        { x: 50, y: 30, label: "Query", type: "query" },
-        { x: 25, y: 55, label: "Doc A", type: "doc" },
-        { x: 50, y: 70, label: "Doc B", type: "doc" },
-        { x: 75, y: 55, label: "Doc C", type: "doc" },
-    ];
-
-    useEffect(() => {
-        const interval = setInterval(() => setActiveNode((prev) => (prev + 1) % nodes.length), 1500);
-        return () => clearInterval(interval);
-    }, [nodes.length]);
-
-    return (
-        <div className="rounded-xl border border-[var(--border)] bg-[var(--bg-secondary)] p-6">
-            <div className="flex items-center justify-between mb-4">
-                <h3 className="text-sm font-medium text-[var(--text-primary)]">Vector Space</h3>
-                <span className="text-xs text-[var(--text-muted)]">100K+ chunks</span>
-            </div>
-
-            <svg viewBox="0 0 100 100" className="w-full h-48">
-                {/* Connection lines */}
-                {nodes.slice(1).map((node, i) => (
-                    <line
-                        key={i}
-                        x1={nodes[0].x}
-                        y1={nodes[0].y}
-                        x2={node.x}
-                        y2={node.y}
-                        stroke={activeNode === i + 1 ? "var(--accent)" : "var(--border)"}
-                        strokeWidth={activeNode === i + 1 ? "1.5" : "0.5"}
-                        strokeDasharray={activeNode === i + 1 ? "0" : "3,3"}
-                        style={{ transition: "all 0.3s ease" }}
-                    />
-                ))}
-
-                {/* Nodes */}
-                {nodes.map((node, i) => (
-                    <g key={i}>
-                        <circle
-                            cx={node.x}
-                            cy={node.y}
-                            r={activeNode === i ? 10 : 8}
-                            fill={node.type === "query" ? "var(--accent)" : "var(--bg-primary)"}
-                            stroke={activeNode === i ? "var(--accent)" : "var(--border)"}
-                            strokeWidth="1.5"
-                            className="transition-all duration-300"
-                        />
-                        <text
-                            x={node.x}
-                            y={node.y + 1}
-                            textAnchor="middle"
-                            dominantBaseline="middle"
-                            fill={node.type === "query" ? "white" : "var(--text-primary)"}
-                            fontSize="4"
-                            fontWeight="500"
-                        >
-                            {node.label}
-                        </text>
-                        {activeNode === i && i > 0 && (
-                            <text x={node.x} y={node.y + 15} textAnchor="middle" fill="var(--accent)" fontSize="3.5">
-                                cosine: 0.{85 + i}
-                            </text>
-                        )}
-                    </g>
-                ))}
-
-                {/* Decorative dots representing other vectors */}
-                {DOT_POSITIONS.map((dot, i) => (
-                    <circle
-                        key={`dot-${i}`}
-                        cx={dot.cx}
-                        cy={dot.cy}
-                        r="1"
-                        fill="var(--text-muted)"
-                        opacity="0.3"
-                    />
-                ))}
-            </svg>
-        </div>
-    );
-}
+// =============================================================================
+// MAIN
+// =============================================================================
 
 export function ContextBoxPage({ project }: { project: Project }) {
-    const [activeStage, setActiveStage] = useState(0);
-
-    useEffect(() => {
-        const interval = setInterval(() => setActiveStage((prev) => (prev + 1) % 4), 2000);
-        return () => clearInterval(interval);
-    }, []);
-
     return (
-        <div className="min-h-screen bg-[var(--bg-primary)]">
-            {/* Header */}
-            <header className="pt-32 pb-12 px-6">
-                <div className="max-w-5xl mx-auto">
+        <div className="min-h-screen" style={{ background: "var(--bg-primary)" }}>
+
+            {/* HERO */}
+            <header className="pt-28 pb-8 px-6">
+                <div className="max-w-4xl mx-auto">
                     <BackButton />
-                    <h1 className="text-4xl md:text-5xl font-bold text-[var(--text-primary)] mb-4" style={{ animation: 'fadeSlideUp 0.5s ease-out' }}>ContextBox</h1>
-                    <p className="text-xl text-[var(--text-secondary)] mb-6 max-w-3xl" style={{ animation: 'fadeSlideUp 0.5s ease-out 100ms both' }}>
-                        Personal knowledge assistant with OCR and semantic search.
-                    </p>
-                    <div className="flex flex-wrap items-center gap-4" style={{ animation: 'fadeSlideUp 0.5s ease-out 200ms both' }}>
+                    <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={SPRINGS.default} className="mt-4">
+                        <p className="eyebrow mb-3">Knowledge Management</p>
+                        <h1 className="text-3xl md:text-5xl font-bold text-[var(--text-primary)] mb-4">ContextBox</h1>
+                        <p className="text-lg text-[var(--text-secondary)] mb-6 max-w-2xl leading-relaxed">
+                            CLI-first personal knowledge assistant. Captures screenshots, extracts text via OCR, embeds with sentence-transformers, and enables semantic search + AI Q&A — all from the terminal.
+                        </p>
+                    </motion.div>
+                    <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ ...SPRINGS.default, delay: 0.15 }} className="flex flex-wrap items-center gap-4">
+                        <a href={project.github} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border text-sm font-medium text-[var(--text-primary)] hover:border-[var(--accent)] transition-colors" style={{ background: "var(--bg-secondary)", borderColor: "var(--border)" }}>
+                            <Github className="w-4 h-4" /> Source
+                        </a>
+                        <a href="https://jayhemnani9910.github.io/contextbox/" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border text-sm font-medium text-[var(--text-secondary)] hover:border-[var(--accent)] transition-colors" style={{ borderColor: "var(--border)" }}>
+                            <ExternalLink className="w-4 h-4" /> Docs
+                        </a>
                         <div className="flex flex-wrap gap-2">
-                            {['Tesseract', 'pgvector', 'LLM', 'FastAPI'].map((tech) => (
-                                <span key={tech} className="px-3 py-1 text-xs font-medium rounded-full bg-[var(--accent)]/10 text-[var(--accent)] border border-[var(--accent)]/20">{tech}</span>
+                            {['Click', 'SQLite', 'Sentence-Transformers', 'Tesseract'].map(t => (
+                                <span key={t} className="px-2 py-1 text-xs font-mono rounded bg-[var(--accent)]/10 text-[var(--accent)] border border-[var(--accent)]/20">{t}</span>
                             ))}
                         </div>
-                        {project.github && (
-                            <a href={project.github} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-sm text-[var(--text-secondary)] hover:text-[var(--accent)]">
-                                <Github className="w-4 h-4" /> View Code
-                            </a>
-                        )}
-                    </div>
+                    </motion.div>
                 </div>
             </header>
 
-            {/* Main Visualizations */}
-            <section className="py-12 px-6">
-                <div className="max-w-5xl mx-auto">
-                    <h2 className="text-sm font-medium text-[var(--text-muted)] uppercase tracking-wider mb-6">Knowledge Pipeline</h2>
-                    <div className="grid md:grid-cols-2 gap-6">
-                        <ScreenshotToVector />
+            {/* VECTOR SEARCH DEMO */}
+            <section className="py-10 px-6">
+                <div className="max-w-4xl mx-auto">
+                    <motion.div initial={{ opacity: 0, scale: 0.98 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} transition={SPRINGS.default}>
                         <VectorSearchDemo />
+                        <p className="text-xs text-center mt-3 italic text-[var(--text-muted)]">
+                            Fig. 1 — Semantic search demo. Queries matched against embedded contexts using cosine similarity.
+                        </p>
+                    </motion.div>
+                </div>
+            </section>
+
+            {/* CLI COMMANDS */}
+            <section className="py-16 px-6" style={{ background: "var(--bg-secondary)" }}>
+                <div className="max-w-4xl mx-auto">
+                    <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, ease: EASINGS.apple }} className="mb-6">
+                        <p className="eyebrow mb-2">CLI</p>
+                        <h2 className="text-2xl font-bold text-[var(--text-primary)]">Commands</h2>
+                    </motion.div>
+                    <div className="space-y-2">
+                        {CLI_COMMANDS.map((cmd, i) => {
+                            const Icon = cmd.icon;
+                            return (
+                                <motion.div
+                                    key={cmd.cmd}
+                                    initial={{ opacity: 0, x: -16 }}
+                                    whileInView={{ opacity: 1, x: 0 }}
+                                    viewport={{ once: true }}
+                                    transition={{ delay: i * 0.05, duration: 0.4, ease: EASINGS.apple }}
+                                    className="flex items-center gap-4 p-3 rounded-lg border transition-colors duration-200 hover:border-[var(--accent)]/40"
+                                    style={{ background: "var(--bg-primary)", borderColor: "var(--border)" }}
+                                >
+                                    <Icon className="w-4 h-4 shrink-0" style={{ color: "var(--accent)" }} />
+                                    <code className="text-sm font-mono shrink-0" style={{ color: "var(--accent)" }}>{cmd.cmd}</code>
+                                    <span className="text-xs text-[var(--text-muted)] hidden sm:inline">— {cmd.desc}</span>
+                                </motion.div>
+                            );
+                        })}
                     </div>
                 </div>
             </section>
 
-            {/* Vector Space */}
-            <section className="py-12 px-6 bg-[var(--bg-secondary)]">
-                <div className="max-w-5xl mx-auto">
-                    <div className="max-w-md mx-auto">
-                        <KnowledgeGraph />
-                    </div>
-                </div>
-            </section>
-
-            {/* Pipeline Flow */}
+            {/* FEATURES */}
             <section className="py-16 px-6">
-                <div className="max-w-5xl mx-auto">
-                    <h2 className="text-sm font-medium text-[var(--text-muted)] uppercase tracking-wider mb-8 text-center">Processing Flow</h2>
-                    <div className="flex flex-wrap md:flex-nowrap items-start justify-center gap-4 md:gap-0">
-                        <PipelineStage icon={Camera} label="Capture" sublabel="Screenshot" delay={0} isActive={activeStage === 0} />
-                        <PipelineArrow delay={100} />
-                        <PipelineStage icon={FileText} label="Extract" sublabel="Tesseract OCR" delay={150} isActive={activeStage === 1} />
-                        <PipelineArrow delay={250} />
-                        <PipelineStage icon={Cpu} label="Embed" sublabel="Transformers" delay={300} isActive={activeStage === 2} />
-                        <PipelineArrow delay={400} />
-                        <PipelineStage icon={Sparkles} label="Retrieve" sublabel="pgvector" delay={450} isActive={activeStage === 3} />
+                <div className="max-w-3xl mx-auto">
+                    <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, ease: EASINGS.apple }} className="mb-8">
+                        <p className="eyebrow mb-2">Capabilities</p>
+                        <h2 className="text-2xl font-bold text-[var(--text-primary)]">What It Does</h2>
+                    </motion.div>
+                    <div className="space-y-3">
+                        {FEATURES.map((item, i) => (
+                            <motion.div key={i} initial={{ opacity: 0, x: -16 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.06, duration: 0.4, ease: EASINGS.apple }} className="flex gap-3 text-sm text-[var(--text-secondary)] leading-relaxed">
+                                <span className="shrink-0 mt-1" style={{ color: "var(--accent)" }}>▸</span>
+                                <span>{item}</span>
+                            </motion.div>
+                        ))}
                     </div>
                 </div>
             </section>
 
-            {/* Stats */}
-            <section className="py-16 px-6 bg-[var(--bg-secondary)]">
-                <div className="max-w-5xl mx-auto">
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 divide-x divide-[var(--border)]">
-                        <StatCard value="1K+" label="Screenshots" delay={0} />
-                        <StatCard value="100K+" label="Chunks Embedded" delay={100} />
-                        <StatCard value="<200ms" label="Search Latency" delay={200} />
-                        <StatCard value="90%+" label="OCR Accuracy" delay={300} />
+            {/* EXTRACTORS + TECH */}
+            <section className="py-16 px-6" style={{ background: "var(--bg-secondary)" }}>
+                <div className="max-w-4xl mx-auto grid md:grid-cols-2 gap-10">
+                    <div>
+                        <motion.p initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="text-xs font-mono uppercase tracking-wider mb-3" style={{ color: "var(--accent)" }}>Content Sources</motion.p>
+                        <div className="flex flex-wrap gap-2">
+                            {EXTRACTORS.map(e => (
+                                <span key={e} className="px-3 py-1.5 text-xs font-mono rounded-lg transition-colors duration-200 hover:border-[var(--accent)]/40" style={{ color: "var(--text-secondary)", border: "1px solid var(--border)", background: "var(--bg-primary)" }}>{e}</span>
+                            ))}
+                        </div>
+                    </div>
+                    <div>
+                        <motion.p initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="text-xs font-mono uppercase tracking-wider mb-3" style={{ color: "var(--accent)" }}>Tech Stack</motion.p>
+                        <div className="flex flex-wrap gap-2">
+                            {TECH.map(t => (
+                                <span key={t} className="px-3 py-1.5 text-xs font-mono rounded-lg transition-colors duration-200 hover:border-[var(--accent)]/40" style={{ color: "var(--text-secondary)", border: "1px solid var(--border)", background: "var(--bg-primary)" }}>{t}</span>
+                            ))}
+                        </div>
                     </div>
                 </div>
             </section>
 
-            {/* Footer */}
-            <footer className="py-12 px-6 border-t border-[var(--border)]">
-                <div className="max-w-5xl mx-auto"><span className="text-[var(--text-muted)]">Your personal searchable memory</span></div>
-            </footer>
+            {/* FOOTER */}
+            <div className="py-8 px-6 border-t" style={{ borderColor: "var(--border)" }}>
+                <div className="max-w-4xl mx-auto flex flex-wrap items-center justify-between gap-4">
+                    <a href={project.github} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-sm text-[var(--text-primary)] hover:text-[var(--accent)] transition-colors">
+                        <Github className="w-4 h-4" /> jayhemnani9910/contextbox <ExternalLink className="w-3 h-3" />
+                    </a>
+                    <div className="flex gap-6 font-mono text-xs">
+                        <span><span style={{ color: "var(--accent)" }}>27</span> <span className="text-[var(--text-muted)]">Modules</span></span>
+                        <span><span style={{ color: "var(--accent)" }}>6</span> <span className="text-[var(--text-muted)]">Extractors</span></span>
+                        <span><span style={{ color: "var(--accent)" }}>MIT</span> <span className="text-[var(--text-muted)]">License</span></span>
+                    </div>
+                </div>
+            </div>
         </div>
     );
 }
