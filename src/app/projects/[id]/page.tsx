@@ -77,10 +77,6 @@ export default async function ProjectPage({ params }: { params: Promise<{ id: st
             <>
                 <Navbar />
                 <CustomPage project={project} />
-                <div className="section-wide py-10 mb-12 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-                    <ReactionBar slug={id} />
-                    <ViewCounter slug={id} />
-                </div>
                 <Footer />
             </>
         );

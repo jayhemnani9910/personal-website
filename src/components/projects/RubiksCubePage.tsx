@@ -8,6 +8,8 @@ import {
 } from "lucide-react";
 import type { Project } from "@/lib/definitions";
 import { BackButton } from "@/components/BackButton";
+import { ReactionBar } from "@/components/ReactionBar";
+import { ViewCounter } from "@/components/ViewCounter";
 import { SPRINGS } from "@/lib/motion";
 
 // =============================================================================
@@ -102,7 +104,7 @@ function FeatureCard({ feature, isExpanded, onToggle, index }: {
 // MAIN
 // =============================================================================
 
-export function RubiksCubePage({ project: _project }: { project: Project }) {
+export function RubiksCubePage({ project }: { project: Project }) {
     const [isFullscreen, setIsFullscreen] = useState(false);
     const [expandedCard, setExpandedCard] = useState<number | null>(null);
     const demoUrl = "https://jayhemnani9910.github.io/rubiks-cube/";
@@ -334,6 +336,10 @@ export function RubiksCubePage({ project: _project }: { project: Project }) {
                         onMouseLeave={(e) => { e.currentTarget.style.color = "var(--text-secondary)"; }}>
                         <ExternalLink className="w-4 h-4" /> Open in New Tab
                     </a>
+                </div>
+                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mt-6 pt-6" style={{ borderTop: `1px solid ${NEON.border}` }}>
+                    <ReactionBar slug={project.id} />
+                    <ViewCounter slug={project.id} />
                 </div>
             </div>
         </div>

@@ -5,6 +5,8 @@ import { motion } from "framer-motion";
 import { TrendingUp, TrendingDown, Radio, Database, BarChart3, Workflow, FileText, Building2, Github, ExternalLink } from "lucide-react";
 import type { Project } from "@/lib/definitions";
 import { BackButton } from "@/components/BackButton";
+import { ReactionBar } from "@/components/ReactionBar";
+import { ViewCounter } from "@/components/ViewCounter";
 import { SPRINGS, EASINGS } from "@/lib/motion";
 
 // =============================================================================
@@ -361,6 +363,10 @@ export function StockDataPlatformPage({ project }: { project: Project }) {
                             </a>
                         )}
                     </div>
+                </div>
+                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mt-6 pt-6" style={{ borderTop: `1px solid ${W.border}` }}>
+                    <ReactionBar slug={project.id} />
+                    <ViewCounter slug={project.id} />
                 </div>
             </div>
         </div>
