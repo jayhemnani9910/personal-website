@@ -5,6 +5,8 @@ import { FileText, BarChart3, ArrowRight, Filter, Globe } from "lucide-react";
 import type { Project } from "@/lib/definitions";
 import { BackButton } from "@/components/BackButton";
 import { StatCard } from "@/components/ui/StatCard";
+import { ReactionBar } from "@/components/ReactionBar";
+import { ViewCounter } from "@/components/ViewCounter";
 
 // Word frequency bar
 function FrequencyBar({ word, count, maxCount, index }: { word: string; count: number; maxCount: number; index: number }) {
@@ -51,7 +53,7 @@ function PipelineStep({ icon: Icon, title, example, isLast }: { icon: React.Comp
 }
 
 
-export function WikipediaAnalysisPage({ project: _project }: { project: Project }) {
+export function WikipediaAnalysisPage({ project }: { project: Project }) {
     const [url, setUrl] = useState("https://en.wikipedia.org/wiki/Machine_learning");
     const [isAnalyzing, setIsAnalyzing] = useState(false);
     const [showResults, setShowResults] = useState(true);
@@ -274,6 +276,10 @@ export function WikipediaAnalysisPage({ project: _project }: { project: Project 
             <footer className="py-12 px-6 border-t border-[var(--border)]">
                 <div className="max-w-6xl mx-auto">
                     <span className="text-[var(--text-muted)]">Quick insights from Wikipedia articles for research & notes</span>
+                    <div className="flex items-center justify-between gap-4 mt-6 pt-6" style={{ borderTop: "1px solid var(--border)" }}>
+                        <ReactionBar slug={project.id} />
+                        <ViewCounter slug={project.id} />
+                    </div>
                 </div>
             </footer>
         </div>

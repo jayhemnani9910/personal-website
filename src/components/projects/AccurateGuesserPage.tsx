@@ -5,6 +5,8 @@ import { Gamepad2, ArrowUp, ArrowDown, CheckCircle, RotateCcw, Play, Trophy } fr
 import type { Project } from "@/lib/definitions";
 import { ProjectHeader } from "./ProjectHeader";
 import { StatCard } from "@/components/ui/StatCard";
+import { ReactionBar } from "@/components/ReactionBar";
+import { ViewCounter } from "@/components/ViewCounter";
 
 // Game simulation
 function GameDemo() {
@@ -156,7 +158,7 @@ function StateMachine() {
 }
 
 
-export function AccurateGuesserPage({ project: _project }: { project: Project }) {
+export function AccurateGuesserPage({ project }: { project: Project }) {
     return (
         <div className="min-h-screen bg-[var(--bg-primary)]">
             <ProjectHeader
@@ -283,6 +285,10 @@ export function AccurateGuesserPage({ project: _project }: { project: Project })
             <footer className="py-12 px-6 border-t border-[var(--border)]">
                 <div className="max-w-6xl mx-auto">
                     <span className="text-[var(--text-muted)]">Lightweight demo of event-driven desktop UI</span>
+                    <div className="flex items-center justify-between gap-4 mt-6 pt-6" style={{ borderTop: "1px solid var(--border)" }}>
+                        <ReactionBar slug={project.id} />
+                        <ViewCounter slug={project.id} />
+                    </div>
                 </div>
             </footer>
         </div>
