@@ -5,6 +5,8 @@ import { Brain, Zap, FileJson, CheckCircle } from "lucide-react";
 import type { Project } from "@/lib/definitions";
 import { BackButton } from "@/components/BackButton";
 import { StatCard } from "@/components/ui/StatCard";
+import { ReactionBar } from "@/components/ReactionBar";
+import { ViewCounter } from "@/components/ViewCounter";
 
 // Chat message component
 function ChatMessage({ isBot, message, delay }: { isBot: boolean; message: string; delay: number }) {
@@ -109,7 +111,7 @@ function NeuralNetworkViz() {
 }
 
 
-export function ChatbotIntentsPage({ project: _project }: { project: Project }) {
+export function ChatbotIntentsPage({ project }: { project: Project }) {
     const [messages, setMessages] = useState<Array<{ isBot: boolean; message: string }>>([]);
 
     useEffect(() => {
@@ -308,6 +310,10 @@ export function ChatbotIntentsPage({ project: _project }: { project: Project }) 
             <footer className="py-12 px-6 border-t border-[var(--border)]">
                 <div className="max-w-6xl mx-auto">
                     <span className="text-[var(--text-muted)]">Lightweight NLP chatbot for FAQs and utilities</span>
+                    <div className="flex items-center justify-between gap-4 mt-6 pt-6" style={{ borderTop: "1px solid var(--border)" }}>
+                        <ReactionBar slug={project.id} />
+                        <ViewCounter slug={project.id} />
+                    </div>
                 </div>
             </footer>
         </div>

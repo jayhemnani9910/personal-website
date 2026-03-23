@@ -4,6 +4,8 @@ import { Database, Users, FileText, Key, Link2, Table, ArrowRight } from "lucide
 import type { Project } from "@/lib/definitions";
 import { BackButton } from "@/components/BackButton";
 import { StatCard } from "@/components/ui/StatCard";
+import { ReactionBar } from "@/components/ReactionBar";
+import { ViewCounter } from "@/components/ViewCounter";
 
 // ERD Table component
 function ERDTable({ name, columns, primaryKey, foreignKeys }: { name: string; columns: string[]; primaryKey: string; foreignKeys?: string[] }) {
@@ -47,7 +49,7 @@ function QueryExample({ title, query, description }: { title: string; query: str
 }
 
 
-export function ImmigrationDBPage({ project: _project }: { project: Project }) {
+export function ImmigrationDBPage({ project }: { project: Project }) {
     return (
         <div className="min-h-screen bg-[var(--bg-primary)]">
             {/* Header */}
@@ -235,6 +237,10 @@ JOIN persons p ON cp.person_id = p.person_id;`}
             <footer className="py-12 px-6 border-t border-[var(--border)]">
                 <div className="max-w-6xl mx-auto">
                     <span className="text-[var(--text-muted)]">Predictable performance & cleaner data model for immigration ops</span>
+                    <div className="flex items-center justify-between gap-4 mt-6 pt-6" style={{ borderTop: "1px solid var(--border)" }}>
+                        <ReactionBar slug={project.id} />
+                        <ViewCounter slug={project.id} />
+                    </div>
                 </div>
             </footer>
         </div>
