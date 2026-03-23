@@ -337,7 +337,7 @@ export function RubiksCubePage({ project }: { project: Project }) {
                         <ExternalLink className="w-4 h-4" /> Open in New Tab
                     </a>
                 </div>
-                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mt-6 pt-6" style={{ borderTop: `1px solid ${NEON.border}` }}>
+                <div className="flex items-center justify-between gap-4 mt-6 pt-6" style={{ borderTop: `1px solid ${NEON.border}` }}>
                     <ReactionBar slug={project.id} />
                     <ViewCounter slug={project.id} />
                 </div>
