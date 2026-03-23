@@ -1,239 +1,262 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Github, Home, User, Calendar, Database, Server, ArrowRight, Brain } from "lucide-react";
+import { motion } from "framer-motion";
+import { Home, Users, Building2, Calendar, MessageSquare, Github, ExternalLink, ArrowRight } from "lucide-react";
 import type { Project } from "@/lib/definitions";
 import { BackButton } from "@/components/BackButton";
-import { StatCard } from "@/components/ui/StatCard";
+import { ReactionBar } from "@/components/ReactionBar";
+import { ViewCounter } from "@/components/ViewCounter";
+import { SPRINGS, EASINGS } from "@/lib/motion";
 
-// Service card with animated icon
-function MicroserviceCard({ name, icon: Icon, color, description, delay }: {
-    name: string;
-    icon: typeof Server;
-    color: string;
-    description: string;
-    delay: number;
-}) {
-    return (
-        <div
-            className="p-5 rounded-xl border border-[var(--border)] bg-[var(--bg-secondary)] hover:border-[var(--accent)] transition-all duration-300 hover:-translate-y-1"
-            style={{ animation: `fadeSlideUp 0.5s ease-out ${delay}ms both` }}
-        >
-            <div
-                className="w-12 h-12 rounded-xl flex items-center justify-center mb-4"
-                style={{ backgroundColor: `${color}15` }}
-            >
-                <Icon className="w-6 h-6" style={{ color }} />
-            </div>
-            <h3 className="text-sm font-semibold text-[var(--text-primary)] mb-1">{name}</h3>
-            <p className="text-xs text-[var(--text-muted)]">{description}</p>
-        </div>
-    );
-}
+// =============================================================================
+// DATA (all verified against actual codebase)
+// =============================================================================
 
-// Kafka message flow visualization
-const messages = [
-    { from: "Booking", to: "Owner", event: "booking.created" },
-    { from: "Owner", to: "Traveler", event: "booking.confirmed" },
-    { from: "Traveler", to: "Property", event: "review.submitted" },
+const SERVICES = [
+    { name: "Traveler Service", desc: "User auth, profiles, favorites management", icon: Users, port: 7001, runtime: "Node.js" },
+    { name: "Owner Service", desc: "Property management, availability control", icon: Building2, port: 7002, runtime: "Node.js" },
+    { name: "Property Service", desc: "Listings CRUD, search, filtering", icon: Home, port: 7003, runtime: "Node.js" },
+    { name: "Booking Service", desc: "Reservations and payment handling", icon: Calendar, port: 7004, runtime: "Node.js" },
+    { name: "AI Agent", desc: "LangChain travel planner with Ollama LLM", icon: MessageSquare, port: 7000, runtime: "Python" },
 ];
 
-function KafkaFlowViz() {
-    const [activeMessage, setActiveMessage] = useState(0);
+const KAFKA_EVENTS = ["booking.created", "booking.confirmed", "review.submitted"];
+
+const INFRA = [
+    { name: "Docker Compose", detail: "10 interconnected services in airbnb_network" },
+    { name: "Kubernetes", detail: "K8s manifests for all services, MongoDB, Kafka" },
+    { name: "MongoDB 7.0", detail: "Shared persistence across all microservices" },
+    { name: "Kafka + Zookeeper", detail: "Event-driven async communication" },
+];
+
+const TECH_LAYERS = [
+    { label: "Frontend", items: ["React 18", "Redux Toolkit", "Vite", "Tailwind"] },
+    { label: "Backend", items: ["Node.js/Express ×4", "Python/FastAPI ×1"] },
+    { label: "Messaging", items: ["Apache Kafka", "Zookeeper"] },
+    { label: "Data", items: ["MongoDB 7.0"] },
+    { label: "Infra", items: ["Docker Compose", "Kubernetes", "Nginx", "Ollama"] },
+];
+
+const FEATURES = [
+    "5 microservices — 4 Node.js/Express + 1 Python/FastAPI AI agent",
+    "Kafka event streaming — booking.created, booking.confirmed, review.submitted topics",
+    "LangChain AI travel planner with local Ollama LLM integration",
+    "Kubernetes manifests with deploy script, secrets, and configmaps",
+    "Redux Toolkit state management with React Router DOM",
+    "Playwright E2E testing framework",
+];
+
+// =============================================================================
+// KAFKA FLOW ANIMATION
+// =============================================================================
+
+function KafkaFlow() {
+    const [active, setActive] = useState(0);
 
     useEffect(() => {
-        const interval = setInterval(() => {
-            setActiveMessage((prev) => (prev + 1) % messages.length);
-        }, 2500);
+        const interval = setInterval(() => setActive((p) => (p + 1) % KAFKA_EVENTS.length), 2000);
         return () => clearInterval(interval);
     }, []);
 
-    const current = messages[activeMessage];
-
     return (
-        <div className="p-6 rounded-xl border border-[var(--border)] bg-[var(--bg-secondary)]">
-            <div className="flex items-center justify-center gap-4 mb-4">
-                <div className={`px-4 py-2 rounded-lg transition-all duration-500 ${
-                    activeMessage >= 0 ? "bg-blue-500/20 text-blue-500 border border-blue-500/30" : "bg-[var(--bg-primary)] text-[var(--text-muted)]"
-                }`}>
-                    {current.from}
-                </div>
-                <div className="flex items-center gap-2">
-                    <div className="h-0.5 w-8 bg-[var(--accent)]" />
-                    <div className="px-3 py-1 rounded-full bg-[var(--accent)]/10 text-[var(--accent)] text-xs font-mono">
-                        {current.event}
-                    </div>
-                    <ArrowRight className="w-4 h-4 text-[var(--accent)]" />
-                </div>
-                <div className={`px-4 py-2 rounded-lg transition-all duration-500 ${
-                    activeMessage >= 0 ? "bg-green-500/20 text-green-500 border border-green-500/30" : "bg-[var(--bg-primary)] text-[var(--text-muted)]"
-                }`}>
-                    {current.to}
-                </div>
-            </div>
-            <div className="flex justify-center gap-2">
-                {messages.map((_, i) => (
-                    <div
-                        key={i}
-                        className={`w-2 h-2 rounded-full transition-all ${
-                            i === activeMessage ? "bg-[var(--accent)] scale-125" : "bg-[var(--border)]"
-                        }`}
-                    />
+        <div className="flex flex-wrap items-center justify-center gap-3 p-5 rounded-xl border" style={{ background: "var(--bg-secondary)", borderColor: "var(--border)" }}>
+            <span className="text-xs font-mono" style={{ color: "var(--text-muted)" }}>Producer</span>
+            <ArrowRight className="w-3.5 h-3.5" style={{ color: "var(--accent)" }} />
+            <div className="flex gap-2">
+                {KAFKA_EVENTS.map((evt, i) => (
+                    <motion.span
+                        key={evt}
+                        animate={{ background: i === active ? "var(--accent)" : "var(--bg-primary)", color: i === active ? "#fff" : "var(--text-muted)" }}
+                        className="px-3 py-1.5 rounded-lg text-xs font-mono border"
+                        style={{ borderColor: i === active ? "var(--accent)" : "var(--border)" }}
+                    >
+                        {evt}
+                    </motion.span>
                 ))}
             </div>
+            <ArrowRight className="w-3.5 h-3.5" style={{ color: "var(--accent)" }} />
+            <span className="text-xs font-mono" style={{ color: "var(--text-muted)" }}>Consumer</span>
         </div>
     );
 }
 
-// Tech stack visualization
-function TechStackViz() {
-    const stacks = [
-        { layer: "Frontend", techs: ["React", "Redux", "TailwindCSS"], color: "#3b82f6" },
-        { layer: "Backend", techs: ["Node.js", "Express", "FastAPI"], color: "#10b981" },
-        { layer: "Message", techs: ["Apache Kafka", "Zookeeper"], color: "#f59e0b" },
-        { layer: "Database", techs: ["MongoDB 7.0"], color: "#8b5cf6" },
-        { layer: "Infra", techs: ["Docker", "Kubernetes"], color: "#ec4899" },
-    ];
+// =============================================================================
+// MAIN
+// =============================================================================
 
+export function AirbnbDistributedPage({ project }: { project: Project }) {
     return (
-        <div className="space-y-3">
-            {stacks.map((stack, i) => (
-                <div
-                    key={stack.layer}
-                    className="flex items-center gap-4"
-                    style={{ animation: `fadeSlideUp 0.4s ease-out ${i * 100}ms both` }}
-                >
-                    <div
-                        className="w-20 text-xs font-medium text-right"
-                        style={{ color: stack.color }}
-                    >
-                        {stack.layer}
-                    </div>
-                    <div className="flex-1 flex gap-2">
-                        {stack.techs.map((tech) => (
-                            <span
-                                key={tech}
-                                className="px-3 py-1.5 text-xs rounded-lg"
-                                style={{
-                                    backgroundColor: `${stack.color}10`,
-                                    color: stack.color,
-                                    border: `1px solid ${stack.color}30`,
-                                }}
-                            >
-                                {tech}
-                            </span>
-                        ))}
-                    </div>
-                </div>
-            ))}
-        </div>
-    );
-}
+        <div className="min-h-screen" style={{ background: "var(--bg-primary)" }}>
 
-
-export function AirbnbDistributedPage({ project: _project }: { project: Project }) {
-    return (
-        <div className="min-h-screen bg-[var(--bg-primary)]">
-            {/* Header */}
-            <header className="pt-32 pb-8 px-6">
-                <div className="max-w-6xl mx-auto">
+            {/* HERO */}
+            <header className="pt-28 pb-8 px-6">
+                <div className="max-w-5xl mx-auto">
                     <BackButton />
-                    <div className="flex items-center gap-3 mb-4">
-                        <h1 className="text-4xl md:text-5xl font-bold text-[var(--text-primary)]" style={{ animation: 'fadeSlideUp 0.5s ease-out' }}>
-                            Airbnb Distributed System
-                        </h1>
-                    </div>
-                    <p className="text-xl text-[var(--text-secondary)] mb-6 max-w-3xl" style={{ animation: 'fadeSlideUp 0.5s ease-out 100ms both' }}>
-                        Cloud-native booking platform with microservices, Kafka messaging, and AI-powered travel planning.
-                    </p>
-                    <div className="flex flex-wrap items-center gap-4" style={{ animation: 'fadeSlideUp 0.5s ease-out 200ms both' }}>
+                    <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={SPRINGS.default} className="mt-4">
+                        <p className="eyebrow mb-3">Distributed Systems</p>
+                        <h1 className="text-3xl md:text-5xl font-bold text-[var(--text-primary)] mb-4">Airbnb Distributed Booking</h1>
+                        <p className="text-lg text-[var(--text-secondary)] mb-6 max-w-2xl leading-relaxed">
+                            Cloud-native Airbnb clone with 5 microservices, Kafka event streaming, Kubernetes orchestration, and an AI travel planner powered by LangChain + Ollama.
+                        </p>
+                    </motion.div>
+                    <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ ...SPRINGS.default, delay: 0.15 }} className="flex flex-wrap items-center gap-4">
+                        <a href={project.github} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border text-sm font-medium text-[var(--text-primary)] hover:border-[var(--accent)] transition-colors" style={{ background: "var(--bg-secondary)", borderColor: "var(--border)" }}>
+                            <Github className="w-4 h-4" /> Source Code
+                        </a>
                         <div className="flex flex-wrap gap-2">
-                            {['React', 'Redux', 'Node.js', 'MongoDB', 'Kafka', 'LangChain', 'Docker', 'K8s'].map((tech) => (
-                                <span key={tech} className="px-3 py-1 text-xs font-medium rounded-full bg-[var(--accent)]/10 text-[var(--accent)] border border-[var(--accent)]/20">{tech}</span>
+                            {['React', 'Node.js', 'Kafka', 'MongoDB', 'Docker', 'K8s', 'LangChain'].map(t => (
+                                <span key={t} className="px-2 py-1 text-xs font-mono rounded bg-[var(--accent)]/10 text-[var(--accent)] border border-[var(--accent)]/20">{t}</span>
                             ))}
                         </div>
-                        <a href="https://github.com/vrushabh05/Lab1_distributed_system" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-sm text-[var(--text-secondary)] hover:text-[var(--accent)]">
-                            <Github className="w-4 h-4" /> View Code
-                        </a>
-                    </div>
+                    </motion.div>
                 </div>
             </header>
 
-            {/* Microservices Grid */}
-            <section className="py-12 px-6">
-                <div className="max-w-6xl mx-auto">
-                    <h2 className="text-sm font-medium text-[var(--text-muted)] uppercase tracking-wider mb-6">Microservices Architecture</h2>
-                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-                        <MicroserviceCard name="Traveler Service" icon={User} color="#3b82f6" description="User auth, profiles, favorites" delay={0} />
-                        <MicroserviceCard name="Owner Service" icon={Home} color="#10b981" description="Property management, availability" delay={100} />
-                        <MicroserviceCard name="Property Service" icon={Database} color="#8b5cf6" description="Listings, search, filters" delay={200} />
-                        <MicroserviceCard name="Booking Service" icon={Calendar} color="#f59e0b" description="Reservations, payments" delay={300} />
-                        <MicroserviceCard name="AI Agent" icon={Brain} color="#ec4899" description="LangChain travel planner" delay={400} />
+            {/* MICROSERVICES */}
+            <section className="py-16 px-6" style={{ background: "var(--bg-secondary)" }}>
+                <div className="max-w-5xl mx-auto">
+                    <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, ease: EASINGS.apple }} className="mb-8">
+                        <p className="eyebrow mb-2">Services</p>
+                        <h2 className="text-2xl font-bold text-[var(--text-primary)]">5 Microservices</h2>
+                        <p className="text-sm text-[var(--text-muted)] mt-1">4 Node.js/Express + 1 Python/FastAPI</p>
+                    </motion.div>
+                    <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                        {SERVICES.map((svc, i) => {
+                            const Icon = svc.icon;
+                            return (
+                                <motion.div
+                                    key={svc.name}
+                                    initial={{ opacity: 0, y: 20 }}
+                                    whileInView={{ opacity: 1, y: 0 }}
+                                    viewport={{ once: true }}
+                                    transition={{ delay: i * 0.06, duration: 0.4, ease: EASINGS.apple }}
+                                    whileHover={{ y: -3, borderColor: "var(--accent)", transition: { type: "spring", stiffness: 300, damping: 25 } }}
+                                    className="p-4 rounded-xl border transition-colors duration-200"
+                                    style={{ background: "var(--bg-primary)", borderColor: "var(--border)" }}
+                                >
+                                    <div className="flex items-center justify-between mb-2">
+                                        <div className="flex items-center gap-3">
+                                            <Icon className="w-5 h-5" style={{ color: "var(--accent)" }} />
+                                            <h3 className="text-sm font-semibold text-[var(--text-primary)]">{svc.name}</h3>
+                                        </div>
+                                        <span className="text-xs font-mono px-2 py-0.5 rounded" style={{ color: "var(--text-muted)", background: "var(--bg-secondary)" }}>{svc.runtime}</span>
+                                    </div>
+                                    <p className="text-xs text-[var(--text-muted)]">{svc.desc}</p>
+                                    <p className="text-xs font-mono mt-2" style={{ color: "var(--accent)" }}>:{svc.port}</p>
+                                </motion.div>
+                            );
+                        })}
                     </div>
                 </div>
             </section>
 
-            {/* Kafka Flow */}
-            <section className="py-12 px-6 bg-[var(--bg-secondary)]">
-                <div className="max-w-6xl mx-auto">
-                    <h2 className="text-sm font-medium text-[var(--text-muted)] uppercase tracking-wider mb-6">Kafka Event Streaming</h2>
-                    <KafkaFlowViz />
-                    <p className="text-xs text-[var(--text-muted)] text-center mt-4">
-                        Asynchronous messaging enables eventual consistency and service decoupling
-                    </p>
+            {/* KAFKA EVENT FLOW */}
+            <section className="py-16 px-6">
+                <div className="max-w-4xl mx-auto">
+                    <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, ease: EASINGS.apple }} className="mb-6">
+                        <p className="eyebrow mb-2">Messaging</p>
+                        <h2 className="text-2xl font-bold text-[var(--text-primary)]">Kafka Event Streaming</h2>
+                    </motion.div>
+                    <KafkaFlow />
+                    <p className="text-xs text-center mt-3 text-[var(--text-muted)]">Async communication between services via event topics</p>
                 </div>
             </section>
 
-            {/* Tech Stack */}
-            <section className="py-12 px-6">
-                <div className="max-w-6xl mx-auto">
-                    <h2 className="text-sm font-medium text-[var(--text-muted)] uppercase tracking-wider mb-6">Tech Stack Layers</h2>
-                    <div className="p-6 rounded-xl border border-[var(--border)] bg-[var(--bg-secondary)]">
-                        <TechStackViz />
-                    </div>
-                </div>
-            </section>
-
-            {/* Key Features */}
-            <section className="py-12 px-6 bg-[var(--bg-secondary)]">
-                <div className="max-w-6xl mx-auto">
-                    <h2 className="text-sm font-medium text-[var(--text-muted)] uppercase tracking-wider mb-6">Key Features</h2>
-                    <div className="grid md:grid-cols-2 gap-4">
-                        {[
-                            { title: "Event-Driven Architecture", desc: "Kafka-based async communication for booking status sync across services" },
-                            { title: "AI Travel Planner", desc: "LangChain agent suggesting properties based on user preferences and history" },
-                            { title: "Container Orchestration", desc: "Docker Compose for dev, Kubernetes manifests for production deployment" },
-                            { title: "State Management", desc: "Redux Toolkit for centralized frontend state with async thunks" },
-                        ].map((item) => (
-                            <div key={item.title} className="p-4 rounded-xl border border-[var(--border)] bg-[var(--bg-primary)]">
-                                <div className="text-sm font-medium text-[var(--text-primary)] mb-2">{item.title}</div>
-                                <div className="text-xs text-[var(--text-muted)]">{item.desc}</div>
-                            </div>
+            {/* TECH STACK LAYERS */}
+            <section className="py-16 px-6" style={{ background: "var(--bg-secondary)" }}>
+                <div className="max-w-4xl mx-auto">
+                    <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, ease: EASINGS.apple }} className="mb-8">
+                        <p className="eyebrow mb-2">Architecture</p>
+                        <h2 className="text-2xl font-bold text-[var(--text-primary)]">Tech Stack</h2>
+                    </motion.div>
+                    <div className="space-y-3">
+                        {TECH_LAYERS.map((layer, i) => (
+                            <motion.div
+                                key={layer.label}
+                                initial={{ opacity: 0, x: -16 }}
+                                whileInView={{ opacity: 1, x: 0 }}
+                                viewport={{ once: true }}
+                                transition={{ delay: i * 0.08, duration: 0.4, ease: EASINGS.apple }}
+                                className="flex items-center gap-4 p-3 rounded-lg border transition-colors duration-200 hover:border-[var(--accent)]/40"
+                                style={{ background: "var(--bg-primary)", borderColor: "var(--border)" }}
+                            >
+                                <span className="shrink-0 w-20 text-xs font-semibold" style={{ color: "var(--accent)" }}>{layer.label}</span>
+                                <div className="flex flex-wrap gap-2">
+                                    {layer.items.map(item => (
+                                        <span key={item} className="px-2 py-1 text-xs font-mono rounded" style={{ color: "var(--text-secondary)", background: "var(--bg-secondary)" }}>{item}</span>
+                                    ))}
+                                </div>
+                            </motion.div>
                         ))}
                     </div>
                 </div>
             </section>
 
-            {/* Stats */}
-            <section className="py-12 px-6">
-                <div className="max-w-6xl mx-auto">
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 divide-x divide-[var(--border)]">
-                        <StatCard value="5" label="Microservices" />
-                        <StatCard value="Kafka" label="Message Broker" />
-                        <StatCard value="K8s" label="Orchestration" />
-                        <StatCard value="AI" label="Recommendations" />
+            {/* INFRASTRUCTURE */}
+            <section className="py-16 px-6">
+                <div className="max-w-5xl mx-auto">
+                    <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, ease: EASINGS.apple }} className="mb-8">
+                        <p className="eyebrow mb-2">Infrastructure</p>
+                        <h2 className="text-2xl font-bold text-[var(--text-primary)]">Container Orchestration</h2>
+                    </motion.div>
+                    <div className="grid sm:grid-cols-2 gap-4">
+                        {INFRA.map((item, i) => (
+                            <motion.div
+                                key={item.name}
+                                initial={{ opacity: 0, y: 16 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true }}
+                                transition={{ delay: i * 0.08, duration: 0.4, ease: EASINGS.apple }}
+                                whileHover={{ y: -3, transition: { type: "spring", stiffness: 300, damping: 25 } }}
+                                className="p-5 rounded-xl border transition-colors duration-200 hover:border-[var(--accent)]/40"
+                                style={{ background: "var(--bg-secondary)", borderColor: "var(--border)" }}
+                            >
+                                <h3 className="text-sm font-bold text-[var(--text-primary)] mb-1">{item.name}</h3>
+                                <p className="text-xs text-[var(--text-muted)]">{item.detail}</p>
+                            </motion.div>
+                        ))}
                     </div>
                 </div>
             </section>
 
-            {/* Footer */}
-            <footer className="py-12 px-6 border-t border-[var(--border)]">
-                <div className="max-w-6xl mx-auto flex items-center justify-end">
-                    <a href="https://github.com/vrushabh05/Lab1_distributed_system" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-sm text-[var(--accent)] hover:underline">
-                        <Github className="w-4 h-4" /> Source Code
-                    </a>
+            {/* KEY FEATURES */}
+            <section className="py-16 px-6" style={{ background: "var(--bg-secondary)" }}>
+                <div className="max-w-3xl mx-auto">
+                    <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, ease: EASINGS.apple }} className="mb-8">
+                        <p className="eyebrow mb-2">Features</p>
+                        <h2 className="text-2xl font-bold text-[var(--text-primary)]">What It Does</h2>
+                    </motion.div>
+                    <div className="space-y-3">
+                        {FEATURES.map((item, i) => (
+                            <motion.div key={i} initial={{ opacity: 0, x: -16 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.06, duration: 0.4, ease: EASINGS.apple }} className="flex gap-3 text-sm text-[var(--text-secondary)] leading-relaxed">
+                                <span className="shrink-0 mt-1" style={{ color: "var(--accent)" }}>▸</span>
+                                <span>{item}</span>
+                            </motion.div>
+                        ))}
+                    </div>
                 </div>
-            </footer>
+            </section>
+
+            {/* FOOTER */}
+            <div className="py-8 px-6 border-t" style={{ borderColor: "var(--border)" }}>
+                <div className="max-w-5xl mx-auto">
+                    <div className="flex flex-wrap items-center justify-between gap-4">
+                        <a href={project.github} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-sm text-[var(--text-primary)] hover:text-[var(--accent)] transition-colors">
+                            <Github className="w-4 h-4" /> Source Code <ExternalLink className="w-3 h-3" />
+                        </a>
+                        <div className="flex gap-6 font-mono text-xs">
+                            <span><span style={{ color: "var(--accent)" }}>5</span> <span className="text-[var(--text-muted)]">Services</span></span>
+                            <span><span style={{ color: "var(--accent)" }}>10</span> <span className="text-[var(--text-muted)]">Containers</span></span>
+                            <span><span style={{ color: "var(--accent)" }}>K8s</span> <span className="text-[var(--text-muted)]">Ready</span></span>
+                        </div>
+                    </div>
+                    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mt-6 pt-6" style={{ borderTop: "1px solid var(--border)" }}>
+                        <ReactionBar slug={project.id} />
+                        <ViewCounter slug={project.id} />
+                    </div>
+                </div>
+            </div>
         </div>
     );
 }
