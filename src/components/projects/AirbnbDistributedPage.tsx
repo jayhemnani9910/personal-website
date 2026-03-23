@@ -142,9 +142,6 @@ export function AirbnbDistributedPage({ project: _project }: { project: Project 
                         <h1 className="text-4xl md:text-5xl font-bold text-[var(--text-primary)]" style={{ animation: 'fadeSlideUp 0.5s ease-out' }}>
                             Airbnb Distributed System
                         </h1>
-                        <span className="px-3 py-1 text-xs font-medium rounded-full bg-purple-500/10 text-purple-500 border border-purple-500/20">
-                            Team Project
-                        </span>
                     </div>
                     <p className="text-xl text-[var(--text-secondary)] mb-6 max-w-3xl" style={{ animation: 'fadeSlideUp 0.5s ease-out 100ms both' }}>
                         Cloud-native booking platform with microservices, Kafka messaging, and AI-powered travel planning.
@@ -231,15 +228,9 @@ export function AirbnbDistributedPage({ project: _project }: { project: Project 
 
             {/* Footer */}
             <footer className="py-12 px-6 border-t border-[var(--border)]">
-                <div className="max-w-6xl mx-auto flex items-center justify-between">
-                    <span className="text-[var(--text-muted)]">Personal Project</span>
-                    <a
-                        href="https://github.com/vrushabh05/Lab1_distributed_system"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-2 text-sm text-[var(--accent)] hover:underline"
-                    >
-                        <Github className="w-4 h-4" /> Team Repository
+                <div className="max-w-6xl mx-auto flex items-center justify-end">
+                    <a href="https://github.com/vrushabh05/Lab1_distributed_system" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-sm text-[var(--accent)] hover:underline">
+                        <Github className="w-4 h-4" /> Source Code
                     </a>
                 </div>
             </footer>
