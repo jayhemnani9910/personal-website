@@ -10,7 +10,6 @@ import { DiabetesStackingPage } from "@/components/projects/DiabetesStackingPage
 import { RubiksCubePage } from "@/components/projects/RubiksCubePage";
 import { SchedulingVisualizerPage } from "@/components/projects/SchedulingVisualizerPage";
 import { RevoluIdeaPage } from "@/components/projects/RevoluIdeaPage";
-import { VaccineSchedulerPage } from "@/components/projects/VaccineSchedulerPage";
 import { ChatbotIntentsPage } from "@/components/projects/ChatbotIntentsPage";
 import { WikipediaAnalysisPage } from "@/components/projects/WikipediaAnalysisPage";
 import { ImmigrationDBPage } from "@/components/projects/ImmigrationDBPage";
@@ -37,7 +36,6 @@ const CUSTOM_PROJECT_PAGES: Record<string, React.ComponentType<{ project: Awaite
     "rubiks-timer": RubiksCubePage,
     "scheduling-visualizer": SchedulingVisualizerPage,
     "revolu-idea": RevoluIdeaPage,
-    "vaccine-scheduler": VaccineSchedulerPage,
     "chatbot-intents": ChatbotIntentsPage,
     "wikipedia-analysis": WikipediaAnalysisPage,
     "immigration-db": ImmigrationDBPage,
