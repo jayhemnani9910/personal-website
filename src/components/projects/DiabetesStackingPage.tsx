@@ -1,368 +1,231 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { Layers, GitMerge, BarChart3, CheckCircle } from "lucide-react";
+import { motion } from "framer-motion";
+import { Github, ExternalLink, FileText } from "lucide-react";
 import type { Project } from "@/lib/definitions";
 import { BackButton } from "@/components/BackButton";
-import { StatCard } from "@/components/ui/StatCard";
-import { PipelineStage, PipelineArrow } from "@/components/projects/PipelineStage";
+import { ReactionBar } from "@/components/ReactionBar";
+import { ViewCounter } from "@/components/ViewCounter";
+import { SPRINGS, EASINGS } from "@/lib/motion";
 
-// Stacking ensemble visualization
-function StackingEnsemble() {
-    const [activeModel, setActiveModel] = useState<number | null>(null);
-    const [metaActive, setMetaActive] = useState(false);
+// =============================================================================
+// DATA (verified against notebook + IEEE paper)
+// =============================================================================
 
-    const baseModels = [
-        { name: "Logistic", accuracy: 78, color: "#3b82f6" },
-        { name: "Random Forest", accuracy: 80, color: "#22c55e" },
-        { name: "Gradient Boost", accuracy: 79, color: "#f97316" },
-        { name: "SVM", accuracy: 77, color: "#8b5cf6" },
-    ];
+const BASE_MODELS = [
+    { name: "Gaussian Naive Bayes", type: "Probabilistic" },
+    { name: "Random Forest", type: "Ensemble" },
+    { name: "Decision Tree", type: "Tree-based" },
+    { name: "Support Vector Machine", type: "Kernel" },
+    { name: "ANN (MLPClassifier)", type: "Neural Network" },
+    { name: "Logistic Regression", type: "Linear" },
+];
 
-    useEffect(() => {
-        const sequence = () => {
-            // Animate through base models
-            for (let i = 0; i < baseModels.length; i++) {
-                setTimeout(() => setActiveModel(i), i * 500);
-            }
-            // Then activate meta-learner
-            setTimeout(() => {
-                setActiveModel(null);
-                setMetaActive(true);
-            }, baseModels.length * 500);
-            // Reset
-            setTimeout(() => {
-                setMetaActive(false);
-            }, baseModels.length * 500 + 1000);
-        };
+const DATASET_FEATURES = [
+    "Pregnancies", "Glucose", "BloodPressure", "SkinThickness",
+    "Insulin", "BMI", "DiabetesPedigreeFunction", "Age",
+];
 
-        sequence();
-        const interval = setInterval(sequence, 4000);
-        return () => clearInterval(interval);
-    }, [baseModels.length]);
+const HIGHLIGHTS = [
+    "6 base classifiers with hyperparameter tuning via cross-validation",
+    "Stacking ensemble — base model predictions become meta-learner features",
+    "PIMA Indians Diabetes Dataset — 768 instances, 8 clinical features",
+    "Mean imputation for zero-value handling + feature scaling",
+    "Published at AIMV 2021 (IEEE Xplore) — 10 citations",
+];
 
+// =============================================================================
+// MAIN
+// =============================================================================
+
+export function DiabetesStackingPage({ project }: { project: Project }) {
     return (
-        <div className="rounded-xl border border-[var(--border)] bg-[var(--bg-secondary)] p-6">
-            <div className="flex items-center justify-between mb-4">
-                <h3 className="text-sm font-medium text-[var(--text-primary)]">Stacking Architecture</h3>
-                <span className="text-xs text-[var(--text-muted)]">2-Layer Ensemble</span>
-            </div>
+        <div className="min-h-screen" style={{ background: "var(--bg-primary)" }}>
 
-            <svg viewBox="0 0 100 80" className="w-full h-56">
-                {/* Base models (Layer 1) */}
-                {baseModels.map((model, i) => {
-                    const x = 15 + i * 22;
-                    const isActive = activeModel === i;
-
-                    return (
-                        <g key={i}>
-                            {/* Connection to meta */}
-                            <line
-                                x1={x}
-                                y1={35}
-                                x2={50}
-                                y2={55}
-                                stroke={isActive || metaActive ? model.color : "var(--border)"}
-                                strokeWidth={isActive || metaActive ? "1.5" : "0.5"}
-                                strokeDasharray={isActive || metaActive ? "0" : "2,2"}
-                                style={{ transition: "all 0.3s ease" }}
-                            />
-
-                            {/* Model box */}
-                            <rect
-                                x={x - 10}
-                                y={15}
-                                width={20}
-                                height={20}
-                                rx={3}
-                                fill={isActive ? model.color : "var(--bg-primary)"}
-                                stroke={model.color}
-                                strokeWidth={isActive ? "2" : "1"}
-                                style={{ transition: "all 0.3s ease" }}
-                            />
-
-                            {/* Model name */}
-                            <text
-                                x={x}
-                                y={26}
-                                textAnchor="middle"
-                                fill={isActive ? "white" : model.color}
-                                fontSize="3.5"
-                                fontWeight="500"
-                            >
-                                {model.name.split(' ')[0]}
-                            </text>
-
-                            {/* Accuracy */}
-                            <text
-                                x={x}
-                                y={42}
-                                textAnchor="middle"
-                                fill="var(--text-muted)"
-                                fontSize="3"
-                            >
-                                {model.accuracy}%
-                            </text>
-                        </g>
-                    );
-                })}
-
-                {/* Meta-learner (Layer 2) */}
-                <g>
-                    <rect
-                        x={35}
-                        y={50}
-                        width={30}
-                        height={18}
-                        rx={4}
-                        fill={metaActive ? "var(--accent)" : "var(--bg-primary)"}
-                        stroke="var(--accent)"
-                        strokeWidth={metaActive ? "2" : "1.5"}
-                        style={{ transition: "all 0.3s ease" }}
-                    />
-                    <text
-                        x={50}
-                        y={60}
-                        textAnchor="middle"
-                        fill={metaActive ? "white" : "var(--accent)"}
-                        fontSize="4"
-                        fontWeight="bold"
-                    >
-                        Meta-Learner
-                    </text>
-
-                    {/* Final accuracy */}
-                    {metaActive && (
-                        <text x={50} y={75} textAnchor="middle" fill="var(--accent)" fontSize="5" fontWeight="bold">
-                            82.68%
-                        </text>
-                    )}
-                </g>
-
-                {/* Layer labels */}
-                <text x={5} y={25} fill="var(--text-muted)" fontSize="3" fontWeight="500">Layer 1</text>
-                <text x={5} y={59} fill="var(--text-muted)" fontSize="3" fontWeight="500">Layer 2</text>
-            </svg>
-        </div>
-    );
-}
-
-// Model comparison chart
-function ModelComparisonChart() {
-    const models = [
-        { name: "Logistic", accuracy: 78, color: "#3b82f6" },
-        { name: "RF", accuracy: 80, color: "#22c55e" },
-        { name: "GBoost", accuracy: 79, color: "#f97316" },
-        { name: "SVM", accuracy: 77, color: "#8b5cf6" },
-        { name: "Stack", accuracy: 82.68, color: "var(--accent)" },
-    ];
-
-    const maxAccuracy = 85;
-    const chartHeight = 50;
-    const barWidth = 12;
-    const startY = 60;
-
-    return (
-        <div className="rounded-xl border border-[var(--border)] bg-[var(--bg-secondary)] p-6">
-            <div className="flex items-center justify-between mb-4">
-                <h3 className="text-sm font-medium text-[var(--text-primary)]">Accuracy Comparison</h3>
-                <span className="text-xs text-[var(--accent)]">+2.68% improvement</span>
-            </div>
-
-            <svg viewBox="0 0 100 70" className="w-full h-44">
-                {/* Horizontal grid lines */}
-                {[75, 80, 85].map((val) => {
-                    const y = startY - ((val - 70) / (maxAccuracy - 70)) * chartHeight;
-                    return (
-                        <g key={val}>
-                            <line x1="15" y1={y} x2="95" y2={y} stroke="var(--border)" strokeWidth="0.3" strokeDasharray="2,2" />
-                            <text x="12" y={y + 1} textAnchor="end" fill="var(--text-muted)" fontSize="3">{val}%</text>
-                        </g>
-                    );
-                })}
-
-                {/* Bars */}
-                {models.map((model, i) => {
-                    const x = 22 + i * 16;
-                    const height = ((model.accuracy - 70) / (maxAccuracy - 70)) * chartHeight;
-                    const y = startY - height;
-                    const isStacking = model.name === "Stack";
-
-                    return (
-                        <g key={i}>
-                            <rect
-                                x={x - barWidth / 2}
-                                y={y}
-                                width={barWidth}
-                                height={height}
-                                rx={2}
-                                fill={model.color}
-                                opacity={isStacking ? 1 : 0.7}
-                                className="transition-all duration-300 hover:opacity-100"
-                            />
-                            {/* Value label */}
-                            <text
-                                x={x}
-                                y={y - 3}
-                                textAnchor="middle"
-                                fill={model.color}
-                                fontSize="3.5"
-                                fontWeight={isStacking ? "bold" : "normal"}
-                            >
-                                {model.accuracy}%
-                            </text>
-                            {/* Model name */}
-                            <text
-                                x={x}
-                                y={startY + 5}
-                                textAnchor="middle"
-                                fill="var(--text-muted)"
-                                fontSize="3"
-                            >
-                                {model.name}
-                            </text>
-                            {/* Highlight winner */}
-                            {isStacking && (
-                                <CheckCircle
-                                    x={x - 3}
-                                    y={startY + 8}
-                                    width={6}
-                                    height={6}
-                                    color="var(--accent)"
-                                />
-                            )}
-                        </g>
-                    );
-                })}
-            </svg>
-        </div>
-    );
-}
-
-// Feature importance visualization
-function FeatureImportance() {
-    const features = [
-        { name: "Glucose", importance: 0.26 },
-        { name: "BMI", importance: 0.18 },
-        { name: "Age", importance: 0.15 },
-        { name: "Pregnancies", importance: 0.12 },
-        { name: "Blood Pressure", importance: 0.10 },
-        { name: "Insulin", importance: 0.08 },
-        { name: "Skin Thickness", importance: 0.06 },
-        { name: "Pedigree", importance: 0.05 },
-    ];
-
-    return (
-        <div className="rounded-xl border border-[var(--border)] bg-[var(--bg-secondary)] p-6">
-            <h3 className="text-sm font-medium text-[var(--text-primary)] mb-4">Feature Importance</h3>
-
-            <div className="space-y-3">
-                {features.map((feature, i) => (
-                    <div key={i} className="flex items-center gap-3">
-                        <span className="text-xs text-[var(--text-muted)] w-24 truncate">{feature.name}</span>
-                        <div className="flex-1 h-2 bg-[var(--bg-primary)] rounded-full overflow-hidden">
-                            <div
-                                className="h-full rounded-full bg-[var(--accent)]"
-                                style={{
-                                    width: `${feature.importance * 100 * 3}%`,
-                                    animation: `slideIn 0.5s ease-out ${i * 50}ms both`
-                                }}
-                            />
-                        </div>
-                        <span className="text-xs font-medium text-[var(--text-primary)] w-10">
-                            {(feature.importance * 100).toFixed(0)}%
-                        </span>
-                    </div>
-                ))}
-            </div>
-        </div>
-    );
-}
-
-export function DiabetesStackingPage({ project: _project }: { project: Project }) {
-    const [activeStage, setActiveStage] = useState(0);
-
-    useEffect(() => {
-        const interval = setInterval(() => setActiveStage((prev) => (prev + 1) % 4), 2000);
-        return () => clearInterval(interval);
-    }, []);
-
-    return (
-        <div className="min-h-screen bg-[var(--bg-primary)]">
-            <style jsx global>{`
-                @keyframes slideIn { from { width: 0; } }
-            `}</style>
-
-            {/* Header */}
-            <header className="pt-32 pb-12 px-6">
-                <div className="max-w-5xl mx-auto">
+            {/* HERO */}
+            <header className="pt-28 pb-8 px-6">
+                <div className="max-w-4xl mx-auto">
                     <BackButton />
-                    <h1 className="text-4xl md:text-5xl font-bold text-[var(--text-primary)] mb-4" style={{ animation: 'fadeSlideUp 0.5s ease-out' }}>Diabetes Prediction</h1>
-                    <p className="text-xl text-[var(--text-secondary)] mb-6 max-w-3xl" style={{ animation: 'fadeSlideUp 0.5s ease-out 100ms both' }}>
-                        Stacking ensemble combining 4 base learners with a meta-model.
-                    </p>
-                    <div className="flex flex-wrap items-center gap-4" style={{ animation: 'fadeSlideUp 0.5s ease-out 200ms both' }}>
+                    <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={SPRINGS.default} className="mt-4">
+                        <div className="flex items-center gap-3 mb-3">
+                            <p className="eyebrow">Machine Learning</p>
+                            <a href="https://ieeexplore.ieee.org/document/9670920" target="_blank" rel="noopener noreferrer"
+                                className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium transition-colors hover:opacity-80"
+                                style={{ background: "rgba(var(--accent-rgb, 10, 132, 255), 0.1)", color: "var(--accent)", border: "1px solid rgba(var(--accent-rgb, 10, 132, 255), 0.2)" }}>
+                                <FileText className="w-3 h-3" /> IEEE Xplore
+                            </a>
+                        </div>
+                        <h1 className="text-3xl md:text-5xl font-bold text-[var(--text-primary)] mb-4">Diabetes Prediction</h1>
+                        <p className="text-lg text-[var(--text-secondary)] mb-6 max-w-2xl leading-relaxed">
+                            Stacking ensemble classifier for early diabetes prediction using 6 base models with cross-validated hyperparameter tuning. Published at AIMV 2021 on IEEE Xplore.
+                        </p>
+                    </motion.div>
+                    <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ ...SPRINGS.default, delay: 0.15 }} className="flex flex-wrap items-center gap-4">
+                        {project.github && (
+                            <a href={project.github} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border text-sm font-medium text-[var(--text-primary)] hover:border-[var(--accent)] transition-colors" style={{ background: "var(--bg-secondary)", borderColor: "var(--border)" }}>
+                                <Github className="w-4 h-4" /> Source Code
+                            </a>
+                        )}
+                        <a href="https://ieeexplore.ieee.org/document/9670920" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border text-sm font-medium text-[var(--text-secondary)] hover:border-[var(--accent)] transition-colors" style={{ borderColor: "var(--border)" }}>
+                            <FileText className="w-4 h-4" /> Read Paper
+                        </a>
                         <div className="flex flex-wrap gap-2">
-                            {['Stacking', 'scikit-learn', 'Cross-Validation', 'IEEE'].map((tech) => (
-                                <span key={tech} className="px-3 py-1 text-xs font-medium rounded-full bg-[var(--accent)]/10 text-[var(--accent)] border border-[var(--accent)]/20">{tech}</span>
+                            {['Python', 'Scikit-learn', 'Pandas', 'NumPy'].map(t => (
+                                <span key={t} className="px-2 py-1 text-xs font-mono rounded bg-[var(--accent)]/10 text-[var(--accent)] border border-[var(--accent)]/20">{t}</span>
                             ))}
                         </div>
-                    </div>
+                    </motion.div>
                 </div>
             </header>
 
-            {/* Main Visualizations */}
-            <section className="py-12 px-6">
+            {/* STACKING ARCHITECTURE */}
+            <section className="py-16 px-6" style={{ background: "var(--bg-secondary)" }}>
                 <div className="max-w-5xl mx-auto">
-                    <h2 className="text-sm font-medium text-[var(--text-muted)] uppercase tracking-wider mb-6">Ensemble Architecture</h2>
-                    <div className="grid md:grid-cols-2 gap-6">
-                        <StackingEnsemble />
-                        <ModelComparisonChart />
+                    <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, ease: EASINGS.apple }} className="mb-8">
+                        <p className="eyebrow mb-2">Architecture</p>
+                        <h2 className="text-2xl font-bold text-[var(--text-primary)]">Stacking Ensemble</h2>
+                        <p className="text-sm text-[var(--text-muted)] mt-1">6 base classifiers → meta-learner</p>
+                    </motion.div>
+
+                    {/* Base models grid */}
+                    <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mb-6">
+                        {BASE_MODELS.map((model, i) => (
+                            <motion.div
+                                key={model.name}
+                                initial={{ opacity: 0, y: 16 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true }}
+                                transition={{ delay: i * 0.06, duration: 0.4, ease: EASINGS.apple }}
+                                whileHover={{ y: -3, borderColor: "var(--accent)", transition: { type: "spring", stiffness: 300, damping: 25 } }}
+                                className="p-4 rounded-xl border transition-colors duration-200"
+                                style={{ background: "var(--bg-primary)", borderColor: "var(--border)" }}
+                            >
+                                <div className="text-sm font-semibold text-[var(--text-primary)]">{model.name}</div>
+                                <div className="text-xs text-[var(--text-muted)] mt-0.5">{model.type}</div>
+                            </motion.div>
+                        ))}
                     </div>
+
+                    {/* Arrow down to meta-learner */}
+                    <div className="flex justify-center mb-4">
+                        <div className="flex flex-col items-center gap-1">
+                            <div className="w-px h-8" style={{ background: "var(--accent)" }} />
+                            <span className="text-xs font-mono" style={{ color: "var(--accent)" }}>predictions as features</span>
+                            <div className="w-px h-8" style={{ background: "var(--accent)" }} />
+                        </div>
+                    </div>
+
+                    {/* Meta-learner */}
+                    <motion.div
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        whileInView={{ opacity: 1, scale: 1 }}
+                        viewport={{ once: true }}
+                        className="p-5 rounded-xl border-2 text-center max-w-xs mx-auto"
+                        style={{ borderColor: "var(--accent)", background: "rgba(var(--accent-rgb, 10, 132, 255), 0.05)" }}
+                    >
+                        <div className="text-base font-bold text-[var(--text-primary)]">Meta-Learner</div>
+                        <div className="text-sm" style={{ color: "var(--accent)" }}>Logistic Regression</div>
+                        <div className="text-xs text-[var(--text-muted)] mt-1">Test accuracy: 74.46%</div>
+                    </motion.div>
                 </div>
             </section>
 
-            {/* Feature Importance */}
-            <section className="py-12 px-6 bg-[var(--bg-secondary)]">
-                <div className="max-w-5xl mx-auto">
-                    <div className="max-w-xl mx-auto">
-                        <FeatureImportance />
-                    </div>
-                </div>
-            </section>
-
-            {/* Pipeline Flow */}
+            {/* DATASET */}
             <section className="py-16 px-6">
-                <div className="max-w-5xl mx-auto">
-                    <h2 className="text-sm font-medium text-[var(--text-muted)] uppercase tracking-wider mb-8 text-center">Training Pipeline</h2>
-                    <div className="flex flex-wrap md:flex-nowrap items-start justify-center gap-4 md:gap-0">
-                        <PipelineStage icon={BarChart3} label="Preprocess" sublabel="Scale + Impute" delay={0} isActive={activeStage === 0} />
-                        <PipelineArrow delay={100} />
-                        <PipelineStage icon={Layers} label="Base Models" sublabel="4 Classifiers" delay={150} isActive={activeStage === 1} />
-                        <PipelineArrow delay={250} />
-                        <PipelineStage icon={GitMerge} label="Meta-Learner" sublabel="Logistic Reg" delay={300} isActive={activeStage === 2} />
-                        <PipelineArrow delay={400} />
-                        <PipelineStage icon={CheckCircle} label="Evaluate" sublabel="5-Fold CV" delay={450} isActive={activeStage === 3} />
+                <div className="max-w-4xl mx-auto">
+                    <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, ease: EASINGS.apple }} className="mb-8">
+                        <p className="eyebrow mb-2">Dataset</p>
+                        <h2 className="text-2xl font-bold text-[var(--text-primary)]">PIMA Indians Diabetes</h2>
+                        <p className="text-sm text-[var(--text-muted)] mt-1">768 instances · 8 clinical features · binary classification</p>
+                    </motion.div>
+                    <div className="flex flex-wrap gap-2">
+                        {DATASET_FEATURES.map((feat, i) => (
+                            <motion.span
+                                key={feat}
+                                initial={{ opacity: 0, y: 8 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true }}
+                                transition={{ delay: i * 0.04, duration: 0.3 }}
+                                className="px-3 py-1.5 text-xs font-mono rounded-lg transition-colors duration-200 hover:border-[var(--accent)]/40"
+                                style={{ color: "var(--text-secondary)", border: "1px solid var(--border)", background: "var(--bg-secondary)" }}
+                            >
+                                {feat}
+                            </motion.span>
+                        ))}
                     </div>
                 </div>
             </section>
 
-            {/* Stats */}
-            <section className="py-16 px-6 bg-[var(--bg-secondary)]">
-                <div className="max-w-5xl mx-auto">
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 divide-x divide-[var(--border)]">
-                        <StatCard value="82.68%" label="Accuracy" delay={0} />
-                        <StatCard value="4" label="Base Models" delay={100} />
-                        <StatCard value="5-Fold" label="Cross-Validation" delay={200} />
-                        <StatCard value="8" label="Features" delay={300} />
+            {/* HIGHLIGHTS */}
+            <section className="py-16 px-6" style={{ background: "var(--bg-secondary)" }}>
+                <div className="max-w-3xl mx-auto">
+                    <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, ease: EASINGS.apple }} className="mb-8">
+                        <p className="eyebrow mb-2">Methodology</p>
+                        <h2 className="text-2xl font-bold text-[var(--text-primary)]">Key Points</h2>
+                    </motion.div>
+                    <div className="space-y-3">
+                        {HIGHLIGHTS.map((item, i) => (
+                            <motion.div key={i} initial={{ opacity: 0, x: -16 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.06, duration: 0.4, ease: EASINGS.apple }} className="flex gap-3 text-sm text-[var(--text-secondary)] leading-relaxed">
+                                <span className="shrink-0 mt-1" style={{ color: "var(--accent)" }}>▸</span>
+                                <span>{item}</span>
+                            </motion.div>
+                        ))}
                     </div>
                 </div>
             </section>
 
-            {/* Footer */}
-            <footer className="py-12 px-6 border-t border-[var(--border)]">
-                <div className="max-w-5xl mx-auto"><span className="text-[var(--text-muted)]">Published in IEEE AIMV-21</span></div>
-            </footer>
+            {/* PUBLICATION */}
+            <section className="py-16 px-6">
+                <div className="max-w-4xl mx-auto">
+                    <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, ease: EASINGS.apple }}>
+                        <p className="eyebrow mb-4">Publication</p>
+                        <div className="p-6 rounded-xl border transition-colors duration-200 hover:border-[var(--accent)]/40" style={{ background: "var(--bg-secondary)", borderColor: "var(--border)" }}>
+                            <h3 className="text-base font-bold text-[var(--text-primary)] mb-2">
+                                &quot;Diabetes Prediction, using Stacking Classifier&quot;
+                            </h3>
+                            <p className="text-sm text-[var(--text-secondary)] mb-3">
+                                V. Khilwani, V. Gondaliya, S. Patel, J. Hemnani, B. Gandhi, S.K. Bharti
+                            </p>
+                            <div className="flex flex-wrap gap-3 text-xs text-[var(--text-muted)]">
+                                <span>AIMV 2021</span>
+                                <span>·</span>
+                                <span>IEEE Xplore</span>
+                                <span>·</span>
+                                <span>DOI: 10.1109/AIMV53313.2021.9670920</span>
+                                <span>·</span>
+                                <span>10 citations</span>
+                            </div>
+                            <a href="https://ieeexplore.ieee.org/document/9670920" target="_blank" rel="noopener noreferrer"
+                                className="inline-flex items-center gap-2 mt-4 text-sm font-medium transition-colors hover:opacity-80"
+                                style={{ color: "var(--accent)" }}>
+                                <FileText className="w-4 h-4" /> Read on IEEE Xplore <ExternalLink className="w-3 h-3" />
+                            </a>
+                        </div>
+                    </motion.div>
+                </div>
+            </section>
+
+            {/* FOOTER */}
+            <div className="py-8 px-6 border-t" style={{ borderColor: "var(--border)" }}>
+                <div className="max-w-5xl mx-auto">
+                    <div className="flex flex-wrap items-center justify-between gap-4">
+                        {project.github && (
+                            <a href={project.github} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-sm text-[var(--text-primary)] hover:text-[var(--accent)] transition-colors">
+                                <Github className="w-4 h-4" /> Source Code <ExternalLink className="w-3 h-3" />
+                            </a>
+                        )}
+                        <div className="flex gap-6 font-mono text-xs">
+                            <span><span style={{ color: "var(--accent)" }}>6</span> <span className="text-[var(--text-muted)]">Models</span></span>
+                            <span><span style={{ color: "var(--accent)" }}>768</span> <span className="text-[var(--text-muted)]">Samples</span></span>
+                            <span><span style={{ color: "var(--accent)" }}>IEEE</span> <span className="text-[var(--text-muted)]">Published</span></span>
+                        </div>
+                    </div>
+                    <div className="flex items-center justify-between gap-4 mt-6 pt-6" style={{ borderTop: "1px solid var(--border)" }}>
+                        <ReactionBar slug={project.id} />
+                        <ViewCounter slug={project.id} />
+                    </div>
+                </div>
+            </div>
         </div>
     );
 }

@@ -1,19 +1,25 @@
 ---
 title: "Diabetes Prediction (Stacking)"
-summary: "Stacking ensemble for diabetes prediction."
-role: "Research"
-period: "AIMV-21 / IEEE Xplore"
-tags: ["ml", "research"]
-tech: ["Python", "scikit-learn"]
+summary: "Stacking ensemble classifier for early diabetes prediction using 6 base models. Published at AIMV 2021 on IEEE Xplore with 10 citations."
+role: "Researcher"
+period: "2021"
+domain: "Machine Learning"
+tags: ["ml", "research", "ensemble", "healthcare"]
+tech: ["Python", "Scikit-learn", "Pandas", "NumPy"]
 github: "https://github.com/jayhemnani9910/diabetes-prediction-stacking"
-challenge: "Improve predictive performance on structured health data."
+links:
+  paper: "https://ieeexplore.ieee.org/document/9670920"
+challenge: "Improve diabetes prediction accuracy by combining multiple classifiers into a stacking ensemble with cross-validated hyperparameter tuning."
 solution:
-  - "Preprocessing & feature scaling; train base learners + meta-model."
-  - "Model selection via cross-validation and error analysis."
+  - "6 base classifiers (Naive Bayes, Random Forest, Decision Tree, SVM, ANN, Logistic Regression) with cross-validated tuning."
+  - "Stacking ensemble — base model predictions become features for a Logistic Regression meta-learner."
+  - "PIMA Indians Diabetes Dataset: 768 instances, 8 clinical features, mean imputation + scaling."
 impact:
-  - "Reported accuracy ≈ 82.68% on the study dataset."
+  - "Published at AIMV 2021 (IEEE Xplore) — DOI: 10.1109/AIMV53313.2021.9670920."
+  - "10 citations on IEEE Xplore."
+  - "Notebook test accuracy: 74.46% on 30% held-out test set."
 featured: false
 priority: 23
 ---
 # Overview
-Stacking ensemble for diabetes prediction.
+Stacking ensemble classifier for early diabetes prediction, published at the 2021 International Conference on Artificial Intelligence and Machine Vision (AIMV). Combines 6 base classifiers with cross-validated hyperparameter tuning and a Logistic Regression meta-learner on the PIMA Indians Diabetes Dataset.
