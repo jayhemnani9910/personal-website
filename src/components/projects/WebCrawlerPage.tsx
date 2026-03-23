@@ -1,264 +1,227 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Github, Globe, Database, Search, Bell, CheckCircle, RefreshCw } from "lucide-react";
+import { motion } from "framer-motion";
+import { Github, ExternalLink, Globe, Search, Shield, Database, ArrowRight } from "lucide-react";
 import type { Project } from "@/lib/definitions";
 import { BackButton } from "@/components/BackButton";
-import { StatCard } from "@/components/ui/StatCard";
-import { PipelineStage, PipelineArrow } from "@/components/projects/PipelineStage";
+import { ReactionBar } from "@/components/ReactionBar";
+import { ViewCounter } from "@/components/ViewCounter";
+import { SPRINGS, EASINGS } from "@/lib/motion";
 
-// Animated network graph showing monitored sites
-function SiteNetworkGraph() {
-    const [activeNode, setActiveNode] = useState(0);
+// =============================================================================
+// DATA (verified against actual codebase — 26 Python modules)
+// =============================================================================
 
-    const sites = [
-        { x: 50, y: 30, label: "Gov" },
-        { x: 25, y: 50, label: "News" },
-        { x: 75, y: 50, label: "Tech" },
-        { x: 35, y: 75, label: "Docs" },
-        { x: 65, y: 75, label: "APIs" },
-    ];
+const PIPELINE = [
+    { label: "Discover", detail: "Sitemap parsing + internal link extraction with robots.txt respect", icon: Globe },
+    { label: "Archive", detail: "ArchiveBox integration with retry logic and conditional GET", icon: Database },
+    { label: "Detect", detail: "SHA-256 content hashing for version comparison and diff tracking", icon: Shield },
+    { label: "Search", detail: "SQLite FTS5 full-text search with faceting by site and date", icon: Search },
+];
 
-    useEffect(() => {
-        const interval = setInterval(() => setActiveNode((prev) => (prev + 1) % sites.length), 1500);
-        return () => clearInterval(interval);
-    }, [sites.length]);
+const FEATURES = [
+    "Automatic sitemap + internal link discovery with configurable depth",
+    "ArchiveBox page archiving with retry logic (up to 3 attempts)",
+    "SHA-256 content hashing — change detection without false positives",
+    "SQLite FTS5 full-text search with faceting and pagination",
+    "Flask web UI for site management, browsing, and search",
+    "APScheduler with configurable 2-hour crawl intervals",
+    "HMAC-SHA256 cryptographic signing for page version integrity",
+    "Prometheus metrics endpoint for monitoring",
+];
 
-    return (
-        <div className="rounded-xl border border-[var(--border)] bg-[var(--bg-secondary)] p-6">
-            <div className="flex items-center justify-between mb-4">
-                <h3 className="text-sm font-medium text-[var(--text-primary)]">Sites Monitored</h3>
-                <span className="text-xs text-[var(--accent)] flex items-center gap-1">
-                    <RefreshCw className="w-3 h-3 animate-spin" style={{ animationDuration: '3s' }} />
-                    Every 2h
-                </span>
-            </div>
+const INFRA = [
+    { name: "Docker Compose", detail: "Multi-service: crawler, Prometheus, Grafana, IPFS" },
+    { name: "Prometheus", detail: "Metrics collection with search request counters" },
+    { name: "Systemd", detail: "Timer units for production auto-restart" },
+    { name: "Crypto", detail: "HMAC-SHA256 signing + Merkle tree scaffolding" },
+];
 
-            <svg viewBox="0 0 100 100" className="w-full h-48">
-                {/* Connection lines */}
-                {sites.map((site, i) => (
-                    <line
-                        key={`line-${i}`}
-                        x1={50}
-                        y1={30}
-                        x2={site.x}
-                        y2={site.y}
-                        stroke="var(--border)"
-                        strokeWidth="0.5"
-                        strokeDasharray={activeNode === i ? "0" : "2,2"}
-                        className={activeNode === i ? "stroke-[var(--accent)]" : ""}
-                        style={{ transition: "all 0.3s ease" }}
-                    />
-                ))}
+const TECH = ["Python", "Flask", "SQLite", "FTS5", "ArchiveBox", "Docker", "Prometheus", "APScheduler"];
 
-                {/* Central hub */}
-                <circle cx={50} cy={50} r={12} fill="var(--bg-primary)" stroke="var(--accent)" strokeWidth="2" />
-                <text x={50} y={52} textAnchor="middle" fill="var(--accent)" fontSize="6" fontWeight="bold">HUB</text>
+// =============================================================================
+// STATUS ANIMATION
+// =============================================================================
 
-                {/* Site nodes */}
-                {sites.map((site, i) => (
-                    <g key={i}>
-                        <circle
-                            cx={site.x}
-                            cy={site.y}
-                            r={activeNode === i ? 10 : 8}
-                            fill={activeNode === i ? "var(--accent)" : "var(--bg-secondary)"}
-                            stroke={activeNode === i ? "var(--accent)" : "var(--border)"}
-                            strokeWidth="1.5"
-                            className="transition-all duration-300"
-                        />
-                        <text
-                            x={site.x}
-                            y={site.y + 1}
-                            textAnchor="middle"
-                            dominantBaseline="middle"
-                            fill={activeNode === i ? "white" : "var(--text-muted)"}
-                            fontSize="4"
-                            fontWeight="500"
-                        >
-                            {site.label}
-                        </text>
-                        {activeNode === i && (
-                            <circle
-                                cx={site.x}
-                                cy={site.y}
-                                r={12}
-                                fill="none"
-                                stroke="var(--accent)"
-                                strokeWidth="0.5"
-                                opacity="0.5"
-                                className="animate-ping"
-                                style={{ animationDuration: '1s' }}
-                            />
-                        )}
-                    </g>
-                ))}
-            </svg>
-
-            <div className="text-center text-xs text-[var(--text-muted)] mt-2">
-                100+ sites • 1,200 daily snapshots
-            </div>
-        </div>
-    );
-}
-
-// Snapshot timeline/feed
-function SnapshotFeed() {
-    const [snapshots, setSnapshots] = useState([
-        { site: "regulations.gov", status: "changed", time: "2m ago" },
-        { site: "docs.api.com", status: "unchanged", time: "5m ago" },
-        { site: "news.site.io", status: "changed", time: "12m ago" },
-        { site: "tech.blog.dev", status: "unchanged", time: "15m ago" },
-    ]);
+function CrawlStatus() {
+    const [active, setActive] = useState(0);
 
     useEffect(() => {
-        const interval = setInterval(() => {
-            setSnapshots((prev) => {
-                const newSnapshot = {
-                    site: ["data.gov", "wiki.org", "api.dev", "blog.io"][Math.floor(Math.random() * 4)],
-                    status: Math.random() > 0.7 ? "changed" : "unchanged",
-                    time: "just now"
-                };
-                return [newSnapshot, ...prev.slice(0, 3)];
-            });
-        }, 4000);
+        const interval = setInterval(() => setActive((p) => (p + 1) % PIPELINE.length), 2000);
         return () => clearInterval(interval);
     }, []);
 
     return (
-        <div className="rounded-xl border border-[var(--border)] bg-[var(--bg-secondary)] p-6">
-            <div className="flex items-center justify-between mb-4">
-                <h3 className="text-sm font-medium text-[var(--text-primary)]">Live Snapshots</h3>
-                <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-            </div>
-
-            <div className="space-y-3">
-                {snapshots.map((snap, i) => (
-                    <div
-                        key={i}
-                        className="flex items-center justify-between p-3 rounded-lg bg-[var(--bg-primary)] border border-[var(--border)]"
-                        style={{ animation: i === 0 ? 'fadeSlideUp 0.3s ease-out' : 'none' }}
-                    >
-                        <div className="flex items-center gap-3">
-                            <Globe className="w-4 h-4 text-[var(--text-muted)]" />
-                            <span className="text-sm text-[var(--text-primary)]">{snap.site}</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                            {snap.status === "changed" ? (
-                                <Bell className="w-4 h-4 text-[var(--accent)]" />
-                            ) : (
-                                <CheckCircle className="w-4 h-4 text-green-500" />
-                            )}
-                            <span className="text-xs text-[var(--text-muted)]">{snap.time}</span>
-                        </div>
+        <div className="flex flex-wrap items-center justify-center gap-2 p-5 rounded-xl border" style={{ background: "var(--bg-secondary)", borderColor: "var(--border)" }}>
+            {PIPELINE.map((step, i) => {
+                const Icon = step.icon;
+                return (
+                    <div key={step.label} className="flex items-center gap-2">
+                        <motion.div
+                            animate={{
+                                background: i === active ? "var(--accent)" : "var(--bg-primary)",
+                                borderColor: i === active ? "var(--accent)" : "var(--border)",
+                            }}
+                            className="flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-medium border transition-all duration-300"
+                        >
+                            <Icon className="w-3.5 h-3.5" style={{ color: i === active ? "#fff" : "var(--text-muted)" }} />
+                            <span style={{ color: i === active ? "#fff" : "var(--text-muted)" }}>{step.label}</span>
+                        </motion.div>
+                        {i < PIPELINE.length - 1 && <ArrowRight className="w-3.5 h-3.5 hidden sm:block" style={{ color: i < active ? "var(--accent)" : "var(--border)" }} />}
                     </div>
-                ))}
-            </div>
+                );
+            })}
         </div>
     );
 }
 
-// Tool cards
-function ToolCard({ name, desc }: { name: string; desc: string }) {
-    return (
-        <div className="p-4 rounded-xl border border-[var(--border)] bg-[var(--bg-secondary)] hover:border-[var(--accent)] transition-colors">
-            <div className="text-sm font-medium text-[var(--text-primary)]">{name}</div>
-            <div className="text-xs text-[var(--text-muted)] mt-1">{desc}</div>
-        </div>
-    );
-}
+// =============================================================================
+// MAIN
+// =============================================================================
 
 export function WebCrawlerPage({ project }: { project: Project }) {
-    const [activeStage, setActiveStage] = useState(0);
-
-    useEffect(() => {
-        const interval = setInterval(() => setActiveStage((prev) => (prev + 1) % 4), 2000);
-        return () => clearInterval(interval);
-    }, []);
-
     return (
-        <div className="min-h-screen bg-[var(--bg-primary)]">
-            {/* Header */}
-            <header className="pt-32 pb-12 px-6">
+        <div className="min-h-screen" style={{ background: "var(--bg-primary)" }}>
+
+            {/* HERO */}
+            <header className="pt-28 pb-8 px-6">
                 <div className="max-w-5xl mx-auto">
                     <BackButton />
-                    <h1 className="text-4xl md:text-5xl font-bold text-[var(--text-primary)] mb-4" style={{ animation: 'fadeSlideUp 0.5s ease-out' }}>Website Watcher</h1>
-                    <p className="text-xl text-[var(--text-secondary)] mb-6 max-w-3xl" style={{ animation: 'fadeSlideUp 0.5s ease-out 100ms both' }}>
-                        Production web archiver with change detection and full-text search.
-                    </p>
-                    <div className="flex flex-wrap items-center gap-4" style={{ animation: 'fadeSlideUp 0.5s ease-out 200ms both' }}>
+                    <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={SPRINGS.default} className="mt-4">
+                        <div className="flex items-center gap-3 mb-3">
+                            <p className="eyebrow">Web Monitoring</p>
+                            <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-xs" style={{ background: "rgba(34,197,94,0.1)", color: "#22c55e", border: "1px solid rgba(34,197,94,0.2)" }}>
+                                <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
+                                Active
+                            </span>
+                        </div>
+                        <h1 className="text-3xl md:text-5xl font-bold text-[var(--text-primary)] mb-4">Website Watcher</h1>
+                        <p className="text-lg text-[var(--text-secondary)] mb-6 max-w-2xl leading-relaxed">
+                            Production web archiver with automated crawling, SHA-256 change detection, full-text search, and cryptographic verification. 26 Python modules with Docker orchestration.
+                        </p>
+                    </motion.div>
+                    <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ ...SPRINGS.default, delay: 0.15 }} className="flex flex-wrap items-center gap-4">
+                        <a href={project.github} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border text-sm font-medium text-[var(--text-primary)] hover:border-[var(--accent)] transition-colors" style={{ background: "var(--bg-secondary)", borderColor: "var(--border)" }}>
+                            <Github className="w-4 h-4" /> Source Code
+                        </a>
                         <div className="flex flex-wrap gap-2">
-                            {['ArchiveBox', 'SQLite FTS5', 'Prometheus', 'Docker'].map((tech) => (
-                                <span key={tech} className="px-3 py-1 text-xs font-medium rounded-full bg-[var(--accent)]/10 text-[var(--accent)] border border-[var(--accent)]/20">{tech}</span>
+                            {TECH.slice(0, 6).map(t => (
+                                <span key={t} className="px-2 py-1 text-xs font-mono rounded bg-[var(--accent)]/10 text-[var(--accent)] border border-[var(--accent)]/20">{t}</span>
                             ))}
                         </div>
-                        {project.github && (
-                            <a href={project.github} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-sm text-[var(--text-secondary)] hover:text-[var(--accent)]">
-                                <Github className="w-4 h-4" /> View Code
-                            </a>
-                        )}
-                    </div>
+                    </motion.div>
                 </div>
             </header>
 
-            {/* Visualizations */}
+            {/* CRAWL PIPELINE */}
             <section className="py-12 px-6">
+                <div className="max-w-4xl mx-auto">
+                    <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ duration: 0.5 }}>
+                        <p className="eyebrow mb-4 text-center">Pipeline</p>
+                        <CrawlStatus />
+                    </motion.div>
+                </div>
+            </section>
+
+            {/* PIPELINE DETAIL CARDS */}
+            <section className="py-16 px-6" style={{ background: "var(--bg-secondary)" }}>
                 <div className="max-w-5xl mx-auto">
-                    <h2 className="text-sm font-medium text-[var(--text-muted)] uppercase tracking-wider mb-6">Live Monitoring</h2>
-                    <div className="grid md:grid-cols-2 gap-6">
-                        <SiteNetworkGraph />
-                        <SnapshotFeed />
+                    <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, ease: EASINGS.apple }} className="mb-8">
+                        <p className="eyebrow mb-2">How It Works</p>
+                        <h2 className="text-2xl font-bold text-[var(--text-primary)]">4-Stage Pipeline</h2>
+                    </motion.div>
+                    <div className="grid sm:grid-cols-2 gap-4">
+                        {PIPELINE.map((step, i) => {
+                            const Icon = step.icon;
+                            return (
+                                <motion.div
+                                    key={step.label}
+                                    initial={{ opacity: 0, y: 20 }}
+                                    whileInView={{ opacity: 1, y: 0 }}
+                                    viewport={{ once: true }}
+                                    transition={{ delay: i * 0.08, duration: 0.4, ease: EASINGS.apple }}
+                                    whileHover={{ y: -3, borderColor: "var(--accent)", transition: { type: "spring", stiffness: 300, damping: 25 } }}
+                                    className="p-5 rounded-xl border transition-colors duration-200"
+                                    style={{ background: "var(--bg-primary)", borderColor: "var(--border)" }}
+                                >
+                                    <div className="flex items-center gap-3 mb-2">
+                                        <span className="w-7 h-7 rounded flex items-center justify-center text-xs font-bold" style={{ background: "rgba(var(--accent-rgb, 10, 132, 255), 0.1)", color: "var(--accent)" }}>{i + 1}</span>
+                                        <Icon className="w-4 h-4" style={{ color: "var(--accent)" }} />
+                                        <h3 className="text-sm font-semibold text-[var(--text-primary)]">{step.label}</h3>
+                                    </div>
+                                    <p className="text-xs text-[var(--text-secondary)] leading-relaxed">{step.detail}</p>
+                                </motion.div>
+                            );
+                        })}
                     </div>
                 </div>
             </section>
 
-            {/* Pipeline Flow */}
-            <section className="py-16 px-6 bg-[var(--bg-secondary)]">
-                <div className="max-w-5xl mx-auto">
-                    <h2 className="text-sm font-medium text-[var(--text-muted)] uppercase tracking-wider mb-8 text-center">Archive Pipeline</h2>
-                    <div className="flex flex-wrap md:flex-nowrap items-start justify-center gap-4 md:gap-0">
-                        <PipelineStage icon={Globe} label="Discover" sublabel="Sitemap + Links" delay={0} isActive={activeStage === 0} />
-                        <PipelineArrow delay={100} />
-                        <PipelineStage icon={Database} label="Archive" sublabel="ArchiveBox" delay={150} isActive={activeStage === 1} />
-                        <PipelineArrow delay={250} />
-                        <PipelineStage icon={Bell} label="Detect" sublabel="SHA-256 Diff" delay={300} isActive={activeStage === 2} />
-                        <PipelineArrow delay={400} />
-                        <PipelineStage icon={Search} label="Search" sublabel="FTS5 Index" delay={450} isActive={activeStage === 3} />
-                    </div>
-                </div>
-            </section>
-
-            {/* Tool Cards */}
-            <section className="py-12 px-6">
-                <div className="max-w-5xl mx-auto">
-                    <h2 className="text-sm font-medium text-[var(--text-muted)] uppercase tracking-wider mb-6">Tech Stack</h2>
-                    <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                        <ToolCard name="ArchiveBox" desc="Multi-format snapshots" />
-                        <ToolCard name="SQLite FTS5" desc="Sub-second search" />
-                        <ToolCard name="SHA-256" desc="Content hashing" />
-                        <ToolCard name="APScheduler" desc="2-hour intervals" />
-                        <ToolCard name="Prometheus" desc="Uptime metrics" />
-                        <ToolCard name="Docker" desc="Zero-downtime deploy" />
-                    </div>
-                </div>
-            </section>
-
-            {/* Stats */}
+            {/* FEATURES */}
             <section className="py-16 px-6">
-                <div className="max-w-5xl mx-auto">
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 divide-x divide-[var(--border)]">
-                        <StatCard value="100+" label="Sites Monitored" delay={0} />
-                        <StatCard value="50K+" label="Snapshots" delay={100} />
-                        <StatCard value="99.8%" label="Uptime" delay={200} />
-                        <StatCard value="<1s" label="Search Latency" delay={300} />
+                <div className="max-w-3xl mx-auto">
+                    <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, ease: EASINGS.apple }} className="mb-8">
+                        <p className="eyebrow mb-2">Capabilities</p>
+                        <h2 className="text-2xl font-bold text-[var(--text-primary)]">What It Does</h2>
+                    </motion.div>
+                    <div className="space-y-3">
+                        {FEATURES.map((item, i) => (
+                            <motion.div key={i} initial={{ opacity: 0, x: -16 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.05, duration: 0.4, ease: EASINGS.apple }} className="flex gap-3 text-sm text-[var(--text-secondary)] leading-relaxed">
+                                <span className="shrink-0 mt-1" style={{ color: "var(--accent)" }}>▸</span>
+                                <span>{item}</span>
+                            </motion.div>
+                        ))}
                     </div>
                 </div>
             </section>
 
-            {/* Footer */}
-            <footer className="py-12 px-6 border-t border-[var(--border)]">
-                <div className="max-w-5xl mx-auto"><span className="text-[var(--text-muted)]">Production deployment with zero manual intervention</span></div>
-            </footer>
+            {/* INFRASTRUCTURE */}
+            <section className="py-16 px-6" style={{ background: "var(--bg-secondary)" }}>
+                <div className="max-w-5xl mx-auto">
+                    <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, ease: EASINGS.apple }} className="mb-8">
+                        <p className="eyebrow mb-2">Infrastructure</p>
+                        <h2 className="text-2xl font-bold text-[var(--text-primary)]">Production Stack</h2>
+                    </motion.div>
+                    <div className="grid sm:grid-cols-2 gap-4">
+                        {INFRA.map((item, i) => (
+                            <motion.div
+                                key={item.name}
+                                initial={{ opacity: 0, y: 16 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true }}
+                                transition={{ delay: i * 0.08, duration: 0.4, ease: EASINGS.apple }}
+                                whileHover={{ y: -3, transition: { type: "spring", stiffness: 300, damping: 25 } }}
+                                className="p-5 rounded-xl border transition-colors duration-200 hover:border-[var(--accent)]/40"
+                                style={{ background: "var(--bg-primary)", borderColor: "var(--border)" }}
+                            >
+                                <h3 className="text-sm font-bold text-[var(--text-primary)] mb-1">{item.name}</h3>
+                                <p className="text-xs text-[var(--text-muted)]">{item.detail}</p>
+                            </motion.div>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
+            {/* FOOTER */}
+            <div className="py-8 px-6 border-t" style={{ borderColor: "var(--border)" }}>
+                <div className="max-w-5xl mx-auto">
+                    <div className="flex flex-wrap items-center justify-between gap-4">
+                        <a href={project.github} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-sm text-[var(--text-primary)] hover:text-[var(--accent)] transition-colors">
+                            <Github className="w-4 h-4" /> jayhemnani9910/webcrawler <ExternalLink className="w-3 h-3" />
+                        </a>
+                        <div className="flex gap-6 font-mono text-xs">
+                            <span><span style={{ color: "var(--accent)" }}>26</span> <span className="text-[var(--text-muted)]">Modules</span></span>
+                            <span><span style={{ color: "var(--accent)" }}>FTS5</span> <span className="text-[var(--text-muted)]">Search</span></span>
+                            <span><span style={{ color: "var(--accent)" }}>SHA-256</span> <span className="text-[var(--text-muted)]">Hashing</span></span>
+                        </div>
+                    </div>
+                    <div className="flex items-center justify-between gap-4 mt-6 pt-6" style={{ borderTop: "1px solid var(--border)" }}>
+                        <ReactionBar slug={project.id} />
+                        <ViewCounter slug={project.id} />
+                    </div>
+                </div>
+            </div>
         </div>
     );
 }
