@@ -6,6 +6,8 @@ import { motion } from "framer-motion";
 import { Github, ExternalLink, Scan, Layers, Eye } from "lucide-react";
 import type { Project } from "@/lib/definitions";
 import { BackButton } from "@/components/BackButton";
+import { ReactionBar } from "@/components/ReactionBar";
+import { ViewCounter } from "@/components/ViewCounter";
 import { SPRINGS, EASINGS } from "@/lib/motion";
 
 // =============================================================================
@@ -302,6 +304,10 @@ export function SoccerVisionResearchPage({ project }: { project: Project }) {
                     <Link href="/projects/fifa-soccer-ds" className="text-sm text-[var(--text-muted)] hover:text-[var(--accent)] transition-colors">
                         Related: FIFA Soccer DS →
                     </Link>
+                </div>
+                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mt-6 pt-6" style={{ borderTop: "1px solid var(--border)" }}>
+                    <ReactionBar slug={project.id} />
+                    <ViewCounter slug={project.id} />
                 </div>
             </div>
         </div>

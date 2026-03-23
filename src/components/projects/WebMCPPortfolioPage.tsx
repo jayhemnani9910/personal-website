@@ -5,6 +5,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ExternalLink, ChevronDown } from "lucide-react";
 import type { Project } from "@/lib/definitions";
 import { BackButton } from "@/components/BackButton";
+import { ReactionBar } from "@/components/ReactionBar";
+import { ViewCounter } from "@/components/ViewCounter";
 import { isWebMCPAvailable } from "@/lib/webmcp";
 import { SPRINGS, EASINGS } from "@/lib/motion";
 
@@ -349,6 +351,10 @@ const results = await agent.call(
                         className="inline-flex items-center gap-2 text-sm text-[var(--text-muted)] hover:text-[var(--accent)] transition-colors">
                         W3C WebMCP Spec <ExternalLink className="w-3 h-3" />
                     </a>
+                </div>
+                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mt-6 pt-6" style={{ borderTop: "1px solid var(--border)" }}>
+                    <ReactionBar slug={project.id} />
+                    <ViewCounter slug={project.id} />
                 </div>
             </div>
         </div>

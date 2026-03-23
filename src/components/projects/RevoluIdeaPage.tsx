@@ -5,6 +5,8 @@ import { motion } from "framer-motion";
 import { Github, ExternalLink, Search, Shield, Scale, FileText, Edit3, Eye } from "lucide-react";
 import type { Project } from "@/lib/definitions";
 import { BackButton } from "@/components/BackButton";
+import { ReactionBar } from "@/components/ReactionBar";
+import { ViewCounter } from "@/components/ViewCounter";
 import { SPRINGS, EASINGS } from "@/lib/motion";
 
 // =============================================================================
@@ -250,6 +252,10 @@ export function RevoluIdeaPage({ project }: { project: Project }) {
                         <span><span style={{ color: "var(--accent)" }}>11+</span> <span className="text-[var(--text-muted)]">LLM Models</span></span>
                         <span><span style={{ color: "var(--accent)" }}>4</span> <span className="text-[var(--text-muted)]">Search APIs</span></span>
                     </div>
+                </div>
+                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mt-6 pt-6" style={{ borderTop: "1px solid var(--border)" }}>
+                    <ReactionBar slug={project.id} />
+                    <ViewCounter slug={project.id} />
                 </div>
             </div>
         </div>

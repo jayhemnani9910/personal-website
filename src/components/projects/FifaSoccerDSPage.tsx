@@ -7,6 +7,8 @@ import { Github, ExternalLink, ChevronDown } from "lucide-react";
 import type { Project } from "@/lib/definitions";
 import { BackButton } from "@/components/BackButton";
 import { CodeBlock } from "@/components/CodeBlock";
+import { ReactionBar } from "@/components/ReactionBar";
+import { ViewCounter } from "@/components/ViewCounter";
 import { use3DTilt } from "@/hooks/use3DTilt";
 import { SPRINGS, EASINGS } from "@/lib/motion";
 
@@ -728,6 +730,10 @@ python src/pipeline_full.py \\
                     <Link href="/projects/soccer-vision-research" className="text-sm text-[var(--text-muted)] hover:text-[var(--accent)] transition-colors">
                         Related: Soccer Vision Research →
                     </Link>
+                </div>
+                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mt-6 pt-6" style={{ borderTop: "1px solid var(--border)" }}>
+                    <ReactionBar slug={project.id} />
+                    <ViewCounter slug={project.id} />
                 </div>
             </div>
         </div>
