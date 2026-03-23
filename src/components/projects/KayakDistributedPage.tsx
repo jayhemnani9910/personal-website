@@ -1,261 +1,257 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Plane, Hotel, Car, Database, Server, Zap, MessageSquare, Users, Github, ArrowRight } from "lucide-react";
-import { StatCard } from "@/components/ui/StatCard";
+import { motion } from "framer-motion";
+import { Plane, Hotel, Car, Database, Server, MessageSquare, Users, Github, ExternalLink, Shield, ArrowRight } from "lucide-react";
 import type { Project } from "@/lib/definitions";
 import { BackButton } from "@/components/BackButton";
+import { ReactionBar } from "@/components/ReactionBar";
+import { ViewCounter } from "@/components/ViewCounter";
+import { SPRINGS, EASINGS } from "@/lib/motion";
 
-// Animated service card
-function ServiceCard({ name, icon: Icon, color, delay }: { name: string; icon: typeof Server; color: string; delay: number }) {
-    return (
-        <div
-            className="p-4 rounded-xl border border-[var(--border)] bg-[var(--bg-secondary)] hover:border-[var(--accent)] transition-all duration-300 hover:-translate-y-1"
-            style={{ animation: `fadeSlideUp 0.5s ease-out ${delay}ms both` }}
-        >
-            <div
-                className="w-10 h-10 rounded-lg flex items-center justify-center mb-3"
-                style={{ backgroundColor: `${color}20` }}
-            >
-                <Icon className="w-5 h-5" style={{ color }} />
-            </div>
-            <span className="text-sm font-medium text-[var(--text-primary)]">{name}</span>
-        </div>
-    );
-}
+// =============================================================================
+// DATA (all verified against actual codebase)
+// =============================================================================
 
-// 3-tier architecture visualization
-function ArchitectureDiagram() {
-    const [activeLayer, setActiveLayer] = useState(0);
+const SERVICES = [
+    { name: "API Gateway", desc: "JWT auth, rate limiting, request routing", icon: Shield, color: "#f59e0b" },
+    { name: "Search Service", desc: "Flight/hotel/car search with Redis caching", icon: Plane, color: "#3b82f6" },
+    { name: "User Service", desc: "Registration, login, profile management", icon: Users, color: "#8b5cf6" },
+    { name: "Booking Service", desc: "Booking workflow with inventory control", icon: Hotel, color: "#10b981" },
+    { name: "Billing Service", desc: "Payment and billing operations", icon: Car, color: "#ec4899" },
+    { name: "Admin Service", desc: "Analytics and admin management", icon: Server, color: "#6366f1" },
+    { name: "AI Concierge", desc: "LangChain agent with 6 MRKL tools (Python/FastAPI)", icon: MessageSquare, color: "#06b6d4" },
+];
 
-    useEffect(() => {
-        const interval = setInterval(() => {
-            setActiveLayer((prev) => (prev + 1) % 3);
-        }, 2000);
-        return () => clearInterval(interval);
-    }, []);
+const DATABASES = [
+    { name: "MySQL 8.0", purpose: "OLTP", desc: "Bookings, users, transactions — ACID-compliant with referential integrity", color: "#3b82f6" },
+    { name: "MongoDB 7.0", purpose: "Analytics", desc: "Search logs, user behavior, recommendation data — flexible schema", color: "#10b981" },
+    { name: "Redis 7", purpose: "Cache", desc: "Search result caching — sub-100ms responses with intelligent invalidation", color: "#ef4444" },
+];
 
-    const tiers = [
-        { name: "Tier 1: Frontend", desc: "React Web App", color: "#3b82f6" },
-        { name: "Tier 2: Middleware", desc: "API Gateway + Services", color: "#10b981" },
-        { name: "Tier 3: Database", desc: "MySQL + MongoDB + Redis", color: "#8b5cf6" },
-    ];
+const FEATURES = [
+    "Kafka event-driven sync — listing, user, and deal events across all services",
+    "JWT authentication with bcrypt password hashing and role-based authorization",
+    "AI concierge with 6 tools: search bundles, price analyzer, watch creator, quote generator, policy lookup, booking confirmer",
+    "Docker Compose orchestration — 9+ containers including Kafka, Zookeeper, and Kafka UI",
+    "Multi-database strategy — MySQL for OLTP, MongoDB for analytics, Redis for caching",
+    "API Gateway with CORS, Helmet security headers, rate limiting, and request timeouts",
+];
 
-    return (
-        <div className="space-y-4">
-            {tiers.map((tier, i) => (
-                <div
-                    key={tier.name}
-                    className={`p-4 rounded-xl border transition-all duration-500 ${
-                        i === activeLayer
-                            ? "border-[var(--accent)] bg-[var(--accent)]/5 scale-[1.02]"
-                            : "border-[var(--border)] bg-[var(--bg-secondary)]"
-                    }`}
-                >
-                    <div className="flex items-center justify-between">
-                        <div>
-                            <div className="text-sm font-medium text-[var(--text-primary)]">{tier.name}</div>
-                            <div className="text-xs text-[var(--text-muted)]">{tier.desc}</div>
-                        </div>
-                        <div
-                            className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                                i === activeLayer ? "scale-125" : ""
-                            }`}
-                            style={{ backgroundColor: tier.color }}
-                        />
-                    </div>
-                </div>
-            ))}
-            <div className="flex justify-center gap-2 pt-2">
-                {tiers.map((_, i) => (
-                    <div
-                        key={i}
-                        className={`w-2 h-2 rounded-full transition-all ${
-                            i === activeLayer ? "bg-[var(--accent)]" : "bg-[var(--border)]"
-                        }`}
-                    />
-                ))}
-            </div>
-        </div>
-    );
-}
+const TIERS = [
+    { label: "Frontend", detail: "React Web App", color: "#3b82f6" },
+    { label: "Middleware", detail: "API Gateway + 6 Node.js Services + 1 Python AI", color: "#10b981" },
+    { label: "Data Layer", detail: "MySQL + MongoDB + Redis + Kafka", color: "#8b5cf6" },
+];
 
-// Event flow animation
-const steps = ["User Action", "Kafka Event", "Service Process", "DB Update", "Response"];
+// =============================================================================
+// EVENT FLOW ANIMATION
+// =============================================================================
 
-function EventFlowViz() {
+const EVENT_STEPS = ["User Action", "API Gateway", "Kafka Event", "Service", "DB Update"];
+
+function EventFlow() {
     const [step, setStep] = useState(0);
 
     useEffect(() => {
-        const interval = setInterval(() => {
-            setStep((prev) => (prev + 1) % steps.length);
-        }, 1200);
+        const interval = setInterval(() => setStep((p) => (p + 1) % EVENT_STEPS.length), 1200);
         return () => clearInterval(interval);
     }, []);
 
     return (
-        <div className="flex items-center justify-between gap-2 p-4 rounded-xl border border-[var(--border)] bg-[var(--bg-secondary)]">
-            {steps.map((s, i) => (
-                <div key={s} className="flex items-center">
-                    <div
-                        className={`px-3 py-2 rounded-lg text-xs font-medium transition-all duration-300 ${
-                            i <= step
-                                ? "bg-[var(--accent)] text-white"
-                                : "bg-[var(--bg-primary)] text-[var(--text-muted)] border border-[var(--border)]"
-                        }`}
+        <div className="flex flex-wrap items-center justify-center gap-2 p-4 rounded-xl border" style={{ background: "var(--bg-secondary)", borderColor: "var(--border)" }}>
+            {EVENT_STEPS.map((s, i) => (
+                <div key={s} className="flex items-center gap-2">
+                    <motion.div
+                        animate={{ background: i <= step ? "var(--accent)" : "var(--bg-primary)", color: i <= step ? "#fff" : "var(--text-muted)" }}
+                        className="px-3 py-2 rounded-lg text-xs font-medium border transition-all duration-300"
+                        style={{ borderColor: i <= step ? "var(--accent)" : "var(--border)" }}
                     >
                         {s}
-                    </div>
-                    {i < steps.length - 1 && (
-                        <ArrowRight
-                            className={`w-4 h-4 mx-1 transition-colors ${
-                                i < step ? "text-[var(--accent)]" : "text-[var(--border)]"
-                            }`}
-                        />
-                    )}
+                    </motion.div>
+                    {i < EVENT_STEPS.length - 1 && <ArrowRight className="w-3.5 h-3.5 hidden sm:block" style={{ color: i < step ? "var(--accent)" : "var(--border)" }} />}
                 </div>
             ))}
         </div>
     );
 }
 
+// =============================================================================
+// MAIN
+// =============================================================================
 
-export function KayakDistributedPage({ project: _project }: { project: Project }) {
+export function KayakDistributedPage({ project }: { project: Project }) {
     return (
-        <div className="min-h-screen bg-[var(--bg-primary)]">
-            {/* Header */}
-            <header className="pt-32 pb-8 px-6">
-                <div className="max-w-6xl mx-auto">
+        <div className="min-h-screen" style={{ background: "var(--bg-primary)" }}>
+
+            {/* HERO */}
+            <header className="pt-28 pb-8 px-6">
+                <div className="max-w-5xl mx-auto">
                     <BackButton />
-                    <div className="flex items-center gap-3 mb-4">
-                        <h1 className="text-4xl md:text-5xl font-bold text-[var(--text-primary)]" style={{ animation: 'fadeSlideUp 0.5s ease-out' }}>
-                            Kayak Travel Platform
-                        </h1>
-                        <span className="px-3 py-1 text-xs font-medium rounded-full bg-purple-500/10 text-purple-500 border border-purple-500/20">
-                            Team Project
-                        </span>
-                    </div>
-                    <p className="text-xl text-[var(--text-secondary)] mb-6 max-w-3xl" style={{ animation: 'fadeSlideUp 0.5s ease-out 100ms both' }}>
-                        3-tier distributed system simulating travel metasearch with microservices and event-driven architecture.
-                    </p>
-                    <div className="flex flex-wrap items-center gap-4" style={{ animation: 'fadeSlideUp 0.5s ease-out 200ms both' }}>
+                    <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={SPRINGS.default} className="mt-4">
+                        <p className="eyebrow mb-3">Distributed Systems</p>
+                        <h1 className="text-3xl md:text-5xl font-bold text-[var(--text-primary)] mb-4">Kayak Travel Platform</h1>
+                        <p className="text-lg text-[var(--text-secondary)] mb-6 max-w-2xl leading-relaxed">
+                            3-tier distributed travel metasearch with 7 microservices, Kafka event streaming, multi-database strategy, and an AI concierge powered by LangChain.
+                        </p>
+                    </motion.div>
+                    <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ ...SPRINGS.default, delay: 0.15 }} className="flex flex-wrap items-center gap-4">
+                        <a href={project.github} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border text-sm font-medium text-[var(--text-primary)] hover:border-[var(--accent)] transition-colors" style={{ background: "var(--bg-secondary)", borderColor: "var(--border)" }}>
+                            <Github className="w-4 h-4" /> Source Code
+                        </a>
                         <div className="flex flex-wrap gap-2">
-                            {['Node.js', 'MySQL', 'MongoDB', 'Redis', 'Kafka', 'Docker'].map((tech) => (
-                                <span key={tech} className="px-3 py-1 text-xs font-medium rounded-full bg-[var(--accent)]/10 text-[var(--accent)] border border-[var(--accent)]/20">{tech}</span>
+                            {['Node.js', 'Kafka', 'MySQL', 'MongoDB', 'Redis', 'Docker', 'LangChain'].map(t => (
+                                <span key={t} className="px-2 py-1 text-xs font-mono rounded bg-[var(--accent)]/10 text-[var(--accent)] border border-[var(--accent)]/20">{t}</span>
                             ))}
                         </div>
-                        <a href="https://github.com/zohebwaghu/Kayak---DATA-236-Final-Project" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-sm text-[var(--text-secondary)] hover:text-[var(--accent)]">
-                            <Github className="w-4 h-4" /> View Code
-                        </a>
-                    </div>
+                    </motion.div>
                 </div>
             </header>
 
-            {/* Services Grid */}
-            <section className="py-12 px-6">
-                <div className="max-w-6xl mx-auto">
-                    <h2 className="text-sm font-medium text-[var(--text-muted)] uppercase tracking-wider mb-6">Microservices</h2>
-                    <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
-                        <ServiceCard name="Flights" icon={Plane} color="#3b82f6" delay={0} />
-                        <ServiceCard name="Hotels" icon={Hotel} color="#10b981" delay={100} />
-                        <ServiceCard name="Cars" icon={Car} color="#f59e0b" delay={200} />
-                        <ServiceCard name="Users" icon={Users} color="#8b5cf6" delay={300} />
-                        <ServiceCard name="Booking" icon={Database} color="#ec4899" delay={400} />
-                        <ServiceCard name="AI Recs" icon={MessageSquare} color="#06b6d4" delay={500} />
-                    </div>
-                </div>
-            </section>
-
-            {/* Architecture */}
-            <section className="py-12 px-6 bg-[var(--bg-secondary)]">
-                <div className="max-w-6xl mx-auto">
-                    <h2 className="text-sm font-medium text-[var(--text-muted)] uppercase tracking-wider mb-6">3-Tier Architecture</h2>
-                    <div className="grid md:grid-cols-2 gap-8">
-                        <ArchitectureDiagram />
-                        <div className="space-y-4">
-                            <div className="p-4 rounded-xl border border-[var(--border)] bg-[var(--bg-primary)]">
-                                <div className="flex items-center gap-2 mb-2">
-                                    <Zap className="w-4 h-4 text-amber-500" />
-                                    <span className="text-sm font-medium text-[var(--text-primary)]">API Gateway</span>
-                                </div>
-                                <p className="text-xs text-[var(--text-muted)]">JWT authentication, rate limiting, request routing to downstream services</p>
-                            </div>
-                            <div className="p-4 rounded-xl border border-[var(--border)] bg-[var(--bg-primary)]">
-                                <div className="flex items-center gap-2 mb-2">
-                                    <Server className="w-4 h-4 text-green-500" />
-                                    <span className="text-sm font-medium text-[var(--text-primary)]">Service Layer</span>
-                                </div>
-                                <p className="text-xs text-[var(--text-muted)]">Independent microservices for search, booking, and user management</p>
-                            </div>
-                            <div className="p-4 rounded-xl border border-[var(--border)] bg-[var(--bg-primary)]">
-                                <div className="flex items-center gap-2 mb-2">
-                                    <Database className="w-4 h-4 text-purple-500" />
-                                    <span className="text-sm font-medium text-[var(--text-primary)]">Data Layer</span>
-                                </div>
-                                <p className="text-xs text-[var(--text-muted)]">MySQL for OLTP, MongoDB for analytics, Redis for caching</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            {/* Event Flow */}
-            <section className="py-12 px-6">
-                <div className="max-w-6xl mx-auto">
-                    <h2 className="text-sm font-medium text-[var(--text-muted)] uppercase tracking-wider mb-6">Kafka Event Flow</h2>
-                    <EventFlowViz />
-                    <p className="text-xs text-[var(--text-muted)] text-center mt-4">
-                        Real-time event streaming for booking confirmations, inventory updates, and user actions
-                    </p>
-                </div>
-            </section>
-
-            {/* Key Features */}
-            <section className="py-12 px-6 bg-[var(--bg-secondary)]">
-                <div className="max-w-6xl mx-auto">
-                    <h2 className="text-sm font-medium text-[var(--text-muted)] uppercase tracking-wider mb-6">Key Features</h2>
-                    <div className="grid md:grid-cols-2 gap-4">
-                        {[
-                            { title: "Transactional Bookings", desc: "ACID-compliant booking flow with inventory control and rollback support" },
-                            { title: "Redis Search Cache", desc: "Sub-100ms search responses with intelligent cache invalidation" },
-                            { title: "AI Recommendations", desc: "LangChain-powered agent suggesting flights, hotels based on preferences" },
-                            { title: "Event Sourcing", desc: "Kafka topics for audit trail and cross-service synchronization" },
-                        ].map((item) => (
-                            <div key={item.title} className="p-4 rounded-xl border border-[var(--border)] bg-[var(--bg-primary)]">
-                                <div className="text-sm font-medium text-[var(--text-primary)] mb-2">{item.title}</div>
-                                <div className="text-xs text-[var(--text-muted)]">{item.desc}</div>
-                            </div>
+            {/* 3-TIER ARCHITECTURE */}
+            <section className="py-16 px-6" style={{ background: "var(--bg-secondary)" }}>
+                <div className="max-w-5xl mx-auto">
+                    <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, ease: EASINGS.apple }} className="mb-8">
+                        <p className="eyebrow mb-2">Architecture</p>
+                        <h2 className="text-2xl font-bold text-[var(--text-primary)]">3-Tier Distributed System</h2>
+                    </motion.div>
+                    <div className="grid md:grid-cols-3 gap-4">
+                        {TIERS.map((tier, i) => (
+                            <motion.div
+                                key={tier.label}
+                                initial={{ opacity: 0, y: 20 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true }}
+                                transition={{ delay: i * 0.1, duration: 0.5, ease: EASINGS.apple }}
+                                whileHover={{ y: -3, transition: { type: "spring", stiffness: 300, damping: 25 } }}
+                                className="p-5 rounded-xl border transition-colors duration-200 hover:border-[var(--accent)]/40"
+                                style={{ background: "var(--bg-primary)", borderColor: "var(--border)" }}
+                            >
+                                <div className="w-3 h-3 rounded-full mb-3" style={{ background: tier.color }} />
+                                <h3 className="text-base font-bold text-[var(--text-primary)] mb-1">Tier {i + 1}: {tier.label}</h3>
+                                <p className="text-sm text-[var(--text-secondary)]">{tier.detail}</p>
+                            </motion.div>
                         ))}
                     </div>
                 </div>
             </section>
 
-            {/* Stats */}
-            <section className="py-12 px-6">
-                <div className="max-w-6xl mx-auto">
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 divide-x divide-[var(--border)]">
-                        <StatCard value="6" label="Microservices" />
-                        <StatCard value="3" label="Databases" />
-                        <StatCard value="<100ms" label="Cached Search" />
-                        <StatCard value="Kafka" label="Event Bus" />
+            {/* MICROSERVICES */}
+            <section className="py-16 px-6">
+                <div className="max-w-5xl mx-auto">
+                    <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, ease: EASINGS.apple }} className="mb-8">
+                        <p className="eyebrow mb-2">Services</p>
+                        <h2 className="text-2xl font-bold text-[var(--text-primary)]">7 Microservices</h2>
+                        <p className="text-sm text-[var(--text-muted)] mt-1">6 Node.js/Express + 1 Python/FastAPI</p>
+                    </motion.div>
+                    <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                        {SERVICES.map((svc, i) => {
+                            const Icon = svc.icon;
+                            return (
+                                <motion.div
+                                    key={svc.name}
+                                    initial={{ opacity: 0, y: 20 }}
+                                    whileInView={{ opacity: 1, y: 0 }}
+                                    viewport={{ once: true }}
+                                    transition={{ delay: i * 0.05, duration: 0.4, ease: EASINGS.apple }}
+                                    whileHover={{ y: -3, borderColor: svc.color, transition: { type: "spring", stiffness: 300, damping: 25 } }}
+                                    className="p-4 rounded-xl border transition-colors duration-200"
+                                    style={{ background: "var(--bg-secondary)", borderColor: "var(--border)" }}
+                                >
+                                    <div className="flex items-center gap-3 mb-2">
+                                        <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: `${svc.color}15` }}>
+                                            <Icon className="w-4 h-4" style={{ color: svc.color }} />
+                                        </div>
+                                        <h3 className="text-sm font-semibold text-[var(--text-primary)]">{svc.name}</h3>
+                                    </div>
+                                    <p className="text-xs text-[var(--text-muted)]">{svc.desc}</p>
+                                </motion.div>
+                            );
+                        })}
                     </div>
                 </div>
             </section>
 
-            {/* Footer */}
-            <footer className="py-12 px-6 border-t border-[var(--border)]">
-                <div className="max-w-6xl mx-auto flex items-center justify-between">
-                    <span className="text-[var(--text-muted)]">Personal Project</span>
-                    <a
-                        href="https://github.com/zohebwaghu/Kayak---DATA-236-Final-Project"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-2 text-sm text-[var(--accent)] hover:underline"
-                    >
-                        <Github className="w-4 h-4" /> Team Repository
-                    </a>
+            {/* DATA LAYER */}
+            <section className="py-16 px-6" style={{ background: "var(--bg-secondary)" }}>
+                <div className="max-w-5xl mx-auto">
+                    <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, ease: EASINGS.apple }} className="mb-8">
+                        <p className="eyebrow mb-2">Data Layer</p>
+                        <h2 className="text-2xl font-bold text-[var(--text-primary)]">Multi-Database Strategy</h2>
+                    </motion.div>
+                    <div className="grid md:grid-cols-3 gap-4">
+                        {DATABASES.map((db, i) => (
+                            <motion.div
+                                key={db.name}
+                                initial={{ opacity: 0, y: 20 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true }}
+                                transition={{ delay: i * 0.1, duration: 0.4, ease: EASINGS.apple }}
+                                whileHover={{ y: -3, transition: { type: "spring", stiffness: 300, damping: 25 } }}
+                                className="p-5 rounded-xl border transition-colors duration-200 hover:border-[var(--accent)]/40"
+                                style={{ background: "var(--bg-primary)", borderColor: "var(--border)" }}
+                            >
+                                <div className="flex items-center gap-2 mb-2">
+                                    <Database className="w-4 h-4" style={{ color: db.color }} />
+                                    <h3 className="text-sm font-bold text-[var(--text-primary)]">{db.name}</h3>
+                                    <span className="text-xs px-2 py-0.5 rounded-full" style={{ background: `${db.color}15`, color: db.color }}>{db.purpose}</span>
+                                </div>
+                                <p className="text-xs text-[var(--text-secondary)] leading-relaxed">{db.desc}</p>
+                            </motion.div>
+                        ))}
+                    </div>
                 </div>
-            </footer>
+            </section>
+
+            {/* EVENT FLOW */}
+            <section className="py-16 px-6">
+                <div className="max-w-4xl mx-auto">
+                    <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, ease: EASINGS.apple }} className="mb-6">
+                        <p className="eyebrow mb-2">Kafka</p>
+                        <h2 className="text-2xl font-bold text-[var(--text-primary)]">Event-Driven Flow</h2>
+                    </motion.div>
+                    <EventFlow />
+                    <p className="text-xs text-center mt-3 text-[var(--text-muted)]">Real-time event streaming for booking confirmations, inventory updates, and user actions</p>
+                </div>
+            </section>
+
+            {/* KEY FEATURES */}
+            <section className="py-16 px-6" style={{ background: "var(--bg-secondary)" }}>
+                <div className="max-w-3xl mx-auto">
+                    <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, ease: EASINGS.apple }} className="mb-8">
+                        <p className="eyebrow mb-2">Features</p>
+                        <h2 className="text-2xl font-bold text-[var(--text-primary)]">What It Does</h2>
+                    </motion.div>
+                    <div className="space-y-3">
+                        {FEATURES.map((item, i) => (
+                            <motion.div key={i} initial={{ opacity: 0, x: -16 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.06, duration: 0.4, ease: EASINGS.apple }} className="flex gap-3 text-sm text-[var(--text-secondary)] leading-relaxed">
+                                <span className="shrink-0 mt-1" style={{ color: "var(--accent)" }}>▸</span>
+                                <span>{item}</span>
+                            </motion.div>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
+            {/* FOOTER */}
+            <div className="py-8 px-6 border-t" style={{ borderColor: "var(--border)" }}>
+                <div className="max-w-5xl mx-auto">
+                    <div className="flex flex-wrap items-center justify-between gap-4">
+                        <a href={project.github} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-sm text-[var(--text-primary)] hover:text-[var(--accent)] transition-colors">
+                            <Github className="w-4 h-4" /> Source Code <ExternalLink className="w-3 h-3" />
+                        </a>
+                        <div className="flex gap-6 font-mono text-xs">
+                            <span><span style={{ color: "var(--accent)" }}>7</span> <span className="text-[var(--text-muted)]">Services</span></span>
+                            <span><span style={{ color: "var(--accent)" }}>3</span> <span className="text-[var(--text-muted)]">Databases</span></span>
+                            <span><span style={{ color: "var(--accent)" }}>9+</span> <span className="text-[var(--text-muted)]">Containers</span></span>
+                        </div>
+                    </div>
+                    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mt-6 pt-6" style={{ borderTop: "1px solid var(--border)" }}>
+                        <ReactionBar slug={project.id} />
+                        <ViewCounter slug={project.id} />
+                    </div>
+                </div>
+            </div>
         </div>
     );
 }
