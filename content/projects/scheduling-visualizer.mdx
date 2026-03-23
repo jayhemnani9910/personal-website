@@ -1,18 +1,26 @@
 ---
-title: "Scheduling Algorithms Visualizer (OS)"
-summary: "Interactive FCFS, SJF, Priority, RR visualizations."
+title: "CPU Scheduling Visualizer"
+summary: "Interactive visualization of 9 CPU scheduling algorithms with Gantt charts and comparative analysis. Applied to vaccine scheduling in a published IEEE paper."
 role: "Developer"
-tags: ["os", "visualization", "desktop"]
-tech: ["HTML/CSS/JS", "Canvas"]
+period: "2021"
+domain: "Operating Systems"
+tags: ["os", "visualization", "algorithms", "research"]
+tech: ["JavaScript", "Google Charts", "Chart.js", "HTML/CSS"]
 github: "https://github.com/jayhemnani9910/cpu-scheduling-algorithms"
-demo: "https://jayhemnani9910.github.io/cpu-scheduling-algorithms/"
-challenge: "Explain CPU scheduling clearly to learners."
+links:
+  demo: "https://jayhemnani9910.github.io/cpu-scheduling-algorithms/"
+  paper: "https://ieeexplore.ieee.org/document/9670986"
+challenge: "Visualize and compare 9 CPU scheduling algorithms interactively, with real-time Gantt charts and performance metrics."
 solution:
-  - "Gantt views; step-through; compare policies on the same set."
+  - "9 algorithms: FCFS, SJF, SRTF, LJF, LRTF, Priority (NP/P), Round Robin, HRRN."
+  - "Gantt chart + timeline visualization with comparative analysis across all algorithms."
+  - "Configurable parameters: context switch time, time quantum, I/O burst, priority preference."
 impact:
-  - "Better intuition for fairness vs throughput trade-offs."
+  - "Applied to real-world vaccine distribution scheduling in published IEEE paper (AIMV 2021)."
+  - "Interactive demo deployed on GitHub Pages — try all 9 algorithms on custom process sets."
+  - "1,105 lines of JavaScript implementing scheduling logic, visualization, and comparative metrics."
 featured: false
 priority: 16
 ---
 # Overview
-Interactive FCFS, SJF, Priority, RR visualizations.
+Interactive CPU scheduling algorithm visualizer implementing 9 algorithms (FCFS, SJF, SRTF, LJF, LRTF, Priority NP/P, Round Robin, HRRN) with Gantt charts, comparative analysis, and configurable parameters. The scheduling concepts were applied to vaccine distribution in a published IEEE paper at AIMV 2021.
