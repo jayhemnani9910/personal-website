@@ -267,7 +267,7 @@ export function NobelDataIntelligencePage({ project }: { project: Project }) {
                         <span><span style={{ color: "var(--accent)" }}>3</span> <span className="text-[var(--text-muted)]">Phases</span></span>
                     </div>
                 </div>
-                <div className="flex items-center justify-between gap-4 mt-6 pt-6" style={{ borderTop: "1px solid var(--border)" }}>
+                <div className="flex items-center justify-center gap-6 mt-6 pt-6" style={{ borderTop: "1px solid var(--border)" }}>
                     <ReactionBar slug={project.id} />
                     <ViewCounter slug={project.id} />
                 </div>
