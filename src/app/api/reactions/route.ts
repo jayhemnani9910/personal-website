@@ -2,21 +2,49 @@ import { NextRequest, NextResponse } from "next/server";
 
 type Emoji = "fire" | "rocket" | "heart" | "mind_blown";
 const VALID_EMOJIS: Emoji[] = ["fire", "rocket", "heart", "mind_blown"];
+const DEFAULT_REACTIONS: Record<Emoji, number> = { fire: 0, rocket: 0, heart: 0, mind_blown: 0 };
 
-// In-memory store (resets on cold start — good enough for MVP)
-const reactions = new Map<string, Record<Emoji, number>>();
+const isKvConfigured = () => !!process.env.KV_REST_API_URL;
 
-function getReactions(slug: string): Record<Emoji, number> {
-    if (!reactions.has(slug)) {
-        reactions.set(slug, { fire: 0, rocket: 0, heart: 0, mind_blown: 0 });
+// Fallback for local dev without KV
+const localReactions = new Map<string, Record<Emoji, number>>();
+
+function getLocalReactions(slug: string): Record<Emoji, number> {
+    if (!localReactions.has(slug)) {
+        localReactions.set(slug, { ...DEFAULT_REACTIONS });
     }
-    return reactions.get(slug)!;
+    return localReactions.get(slug)!;
+}
+
+async function getKv() {
+    const { kv } = await import("@vercel/kv");
+    return kv;
+}
+
+async function getKvReactions(slug: string): Promise<Record<Emoji, number>> {
+    const kv = await getKv();
+    const data = await kv.hgetall<Record<string, number>>(`reactions:${slug}`);
+    if (!data) return { ...DEFAULT_REACTIONS };
+    return {
+        fire: data.fire || 0,
+        rocket: data.rocket || 0,
+        heart: data.heart || 0,
+        mind_blown: data.mind_blown || 0,
+    };
 }
 
 export async function GET(request: NextRequest) {
     const slug = request.nextUrl.searchParams.get("slug");
-    if (!slug) return NextResponse.json({ fire: 0, rocket: 0, heart: 0, mind_blown: 0 });
-    return NextResponse.json(getReactions(slug));
+    if (!slug) return NextResponse.json(DEFAULT_REACTIONS);
+
+    if (isKvConfigured()) {
+        try {
+            return NextResponse.json(await getKvReactions(slug));
+        } catch {
+            return NextResponse.json(DEFAULT_REACTIONS);
+        }
+    }
+    return NextResponse.json(getLocalReactions(slug));
 }
 
 export async function POST(request: NextRequest) {
@@ -25,7 +53,18 @@ export async function POST(request: NextRequest) {
         if (!slug || !emoji || !VALID_EMOJIS.includes(emoji)) {
             return NextResponse.json({ error: "invalid slug or emoji" }, { status: 400 });
         }
-        const data = getReactions(slug);
+
+        if (isKvConfigured()) {
+            try {
+                const kv = await getKv();
+                await kv.hincrby(`reactions:${slug}`, emoji, 1);
+                return NextResponse.json(await getKvReactions(slug));
+            } catch {
+                return NextResponse.json(DEFAULT_REACTIONS);
+            }
+        }
+
+        const data = getLocalReactions(slug);
         data[emoji as Emoji]++;
         return NextResponse.json(data);
     } catch {
