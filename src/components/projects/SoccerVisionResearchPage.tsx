@@ -148,7 +148,10 @@ export function SoccerVisionResearchPage({ project }: { project: Project }) {
                         transition={SPRINGS.default}
                         className="mt-4"
                     >
-                        <p className="eyebrow mb-3">Research</p>
+                        <div className="flex items-center justify-between mb-3">
+                            <p className="eyebrow">Research</p>
+                            <ViewCounter slug={project.id} />
+                        </div>
                         <h1 className="text-3xl md:text-5xl font-bold text-[var(--text-primary)] mb-4">
                             Soccer Vision Research
                         </h1>
@@ -301,13 +304,10 @@ export function SoccerVisionResearchPage({ project }: { project: Project }) {
                         className="inline-flex items-center gap-2 text-sm text-[var(--text-primary)] hover:text-[var(--accent)] transition-colors">
                         <Github className="w-4 h-4" /> jayhemnani9910/soccer-vision-research <ExternalLink className="w-3 h-3" />
                     </a>
+                    <ReactionBar slug={project.id} />
                     <Link href="/projects/fifa-soccer-ds" className="text-sm text-[var(--text-muted)] hover:text-[var(--accent)] transition-colors">
                         Related: FIFA Soccer DS →
                     </Link>
-                </div>
-                <div className="flex items-center justify-center gap-6 mt-6 pt-6" style={{ borderTop: "1px solid var(--border)" }}>
-                    <ReactionBar slug={project.id} />
-                    <ViewCounter slug={project.id} />
                 </div>
             </div>
         </div>

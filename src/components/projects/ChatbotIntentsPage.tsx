@@ -134,7 +134,10 @@ export function ChatbotIntentsPage({ project }: { project: Project }) {
             {/* Header */}
             <header className="pt-32 pb-8 px-6">
                 <div className="max-w-6xl mx-auto">
-                    <BackButton />
+                    <div className="flex items-center justify-between">
+                        <BackButton />
+                        <ViewCounter slug={project.id} />
+                    </div>
                     <h1 className="text-4xl md:text-5xl font-bold text-[var(--text-primary)] mb-4" style={{ animation: 'fadeSlideUp 0.5s ease-out' }}>
                         Intent Classification Bot
                     </h1>
@@ -308,12 +311,9 @@ export function ChatbotIntentsPage({ project }: { project: Project }) {
 
             {/* Footer */}
             <footer className="py-12 px-6 border-t border-[var(--border)]">
-                <div className="max-w-6xl mx-auto">
+                <div className="max-w-6xl mx-auto flex flex-wrap items-center justify-between gap-4">
                     <span className="text-[var(--text-muted)]">Lightweight NLP chatbot for FAQs and utilities</span>
-                    <div className="flex items-center justify-center gap-6 mt-6 pt-6" style={{ borderTop: "1px solid var(--border)" }}>
-                        <ReactionBar slug={project.id} />
-                        <ViewCounter slug={project.id} />
-                    </div>
+                    <ReactionBar slug={project.id} />
                 </div>
             </footer>
         </div>

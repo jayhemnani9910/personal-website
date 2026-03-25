@@ -89,7 +89,10 @@ export function KayakDistributedPage({ project }: { project: Project }) {
                 <div className="max-w-5xl mx-auto">
                     <BackButton />
                     <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={SPRINGS.default} className="mt-4">
-                        <p className="eyebrow mb-3">Distributed Systems</p>
+                        <div className="flex items-center justify-between mb-3">
+                            <p className="eyebrow">Distributed Systems</p>
+                            <ViewCounter slug={project.id} />
+                        </div>
                         <h1 className="text-3xl md:text-5xl font-bold text-[var(--text-primary)] mb-4">Kayak Travel Platform</h1>
                         <p className="text-lg text-[var(--text-secondary)] mb-6 max-w-2xl leading-relaxed">
                             3-tier distributed travel metasearch with 7 microservices, Kafka event streaming, multi-database strategy, and an AI concierge powered by LangChain.
@@ -240,15 +243,12 @@ export function KayakDistributedPage({ project }: { project: Project }) {
                         <a href={project.github} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-sm text-[var(--text-primary)] hover:text-[var(--accent)] transition-colors">
                             <Github className="w-4 h-4" /> Source Code <ExternalLink className="w-3 h-3" />
                         </a>
+                        <ReactionBar slug={project.id} />
                         <div className="flex gap-6 font-mono text-xs">
                             <span><span style={{ color: "var(--accent)" }}>7</span> <span className="text-[var(--text-muted)]">Services</span></span>
                             <span><span style={{ color: "var(--accent)" }}>3</span> <span className="text-[var(--text-muted)]">Databases</span></span>
                             <span><span style={{ color: "var(--accent)" }}>9+</span> <span className="text-[var(--text-muted)]">Containers</span></span>
                         </div>
-                    </div>
-                    <div className="flex items-center justify-center gap-6 mt-6 pt-6" style={{ borderTop: "1px solid var(--border)" }}>
-                        <ReactionBar slug={project.id} />
-                        <ViewCounter slug={project.id} />
                     </div>
                 </div>
             </div>

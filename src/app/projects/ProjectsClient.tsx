@@ -57,7 +57,7 @@ export function ProjectsClient({ projects }: ProjectsClientProps) {
                                 placeholder="Search projects..."
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
-                                className="input pl-12 rounded-full"
+                                className="input pl-12 !rounded-xl"
                             />
                         </div>
                     </motion.div>

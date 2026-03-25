@@ -132,11 +132,15 @@ export function RubiksCubePage({ project }: { project: Project }) {
                 <div className="max-w-5xl mx-auto">
                     <BackButton />
 
+                    <div className="flex items-center justify-end mt-6">
+                        <ViewCounter slug={project.id} />
+                    </div>
+
                     <motion.h1
                         initial={{ opacity: 0, y: 24 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={SPRINGS.default}
-                        className="text-4xl md:text-6xl font-bold mt-6 mb-4"
+                        className="text-4xl md:text-6xl font-bold mb-4"
                         style={{
                             color: "#fff",
                             textShadow: `0 0 10px ${NEON.green}, 0 0 40px ${NEON.green}40`,
@@ -329,6 +333,7 @@ export function RubiksCubePage({ project }: { project: Project }) {
                         onMouseLeave={(e) => { e.currentTarget.style.color = "var(--text-secondary)"; }}>
                         <Github className="w-4 h-4" /> Source Code
                     </a>
+                    <ReactionBar slug={project.id} />
                     <a href={demoUrl} target="_blank" rel="noopener noreferrer"
                         className="inline-flex items-center gap-2 text-sm transition-colors hover:opacity-80"
                         style={{ color: "var(--text-secondary)" }}
@@ -336,10 +341,6 @@ export function RubiksCubePage({ project }: { project: Project }) {
                         onMouseLeave={(e) => { e.currentTarget.style.color = "var(--text-secondary)"; }}>
                         <ExternalLink className="w-4 h-4" /> Open in New Tab
                     </a>
-                </div>
-                <div className="flex items-center justify-center gap-6 mt-6 pt-6" style={{ borderTop: `1px solid ${NEON.border}` }}>
-                    <ReactionBar slug={project.id} />
-                    <ViewCounter slug={project.id} />
                 </div>
             </div>
         </div>

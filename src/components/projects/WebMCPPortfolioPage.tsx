@@ -125,11 +125,14 @@ export function WebMCPPortfolioPage({ project }: { project: Project }) {
                         transition={SPRINGS.default}
                         className="mt-4"
                     >
-                        <div className="flex items-center gap-3 flex-wrap mb-4">
-                            <h1 className="text-3xl md:text-5xl font-bold text-[var(--text-primary)]">
-                                WebMCP
-                            </h1>
-                            <StatusBadge />
+                        <div className="flex items-center justify-between flex-wrap mb-4">
+                            <div className="flex items-center gap-3">
+                                <h1 className="text-3xl md:text-5xl font-bold text-[var(--text-primary)]">
+                                    WebMCP
+                                </h1>
+                                <StatusBadge />
+                            </div>
+                            <ViewCounter slug={project.id} />
                         </div>
 
                         <p className="text-lg text-[var(--text-secondary)] mb-6 max-w-2xl leading-relaxed">
@@ -347,14 +350,11 @@ const results = await agent.call(
                             </div>
                         ))}
                     </div>
+                    <ReactionBar slug={project.id} />
                     <a href="https://webmcp.dev" target="_blank" rel="noopener noreferrer"
                         className="inline-flex items-center gap-2 text-sm text-[var(--text-muted)] hover:text-[var(--accent)] transition-colors">
                         W3C WebMCP Spec <ExternalLink className="w-3 h-3" />
                     </a>
-                </div>
-                <div className="flex items-center justify-center gap-6 mt-6 pt-6" style={{ borderTop: "1px solid var(--border)" }}>
-                    <ReactionBar slug={project.id} />
-                    <ViewCounter slug={project.id} />
                 </div>
             </div>
         </div>

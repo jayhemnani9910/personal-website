@@ -164,11 +164,15 @@ export function StockDataPlatformPage({ project }: { project: Project }) {
                 <div className="max-w-5xl mx-auto">
                     <BackButton />
 
+                    <div className="flex items-center justify-end mt-6">
+                        <ViewCounter slug={project.id} />
+                    </div>
+
                     <motion.h1
                         initial={{ opacity: 0, y: 24 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={SPRINGS.default}
-                        className="text-4xl md:text-6xl font-bold mt-6 mb-4"
+                        className="text-4xl md:text-6xl font-bold mb-4"
                         style={{ color: "#fff", textShadow: `0 0 10px ${W.gold}40, 0 0 40px ${W.gold}20` }}
                     >
                         Stock Data Platform
@@ -355,6 +359,7 @@ export function StockDataPlatformPage({ project }: { project: Project }) {
                             <span key={s.l}><span style={{ color: W.gold }}>{s.v}</span> <span style={{ color: W.muted }}>{s.l}</span></span>
                         ))}
                     </div>
+                    <ReactionBar slug={project.id} />
                     <div className="flex items-center gap-4">
                         {project.github && (
                             <a href={project.github} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-sm transition-colors" style={{ color: W.muted }}
@@ -363,10 +368,6 @@ export function StockDataPlatformPage({ project }: { project: Project }) {
                             </a>
                         )}
                     </div>
-                </div>
-                <div className="flex items-center justify-center gap-6 mt-6 pt-6" style={{ borderTop: `1px solid ${W.border}` }}>
-                    <ReactionBar slug={project.id} />
-                    <ViewCounter slug={project.id} />
                 </div>
             </div>
         </div>
