@@ -60,13 +60,16 @@ export function SchedulingVisualizerPage({ project }: { project: Project }) {
                 <div className="max-w-5xl mx-auto">
                     <BackButton />
                     <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={SPRINGS.default} className="mt-4">
-                        <div className="flex items-center gap-3 mb-3">
-                            <p className="eyebrow">Operating Systems</p>
-                            <a href="https://ieeexplore.ieee.org/document/9670986" target="_blank" rel="noopener noreferrer"
-                                className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium transition-colors hover:opacity-80"
-                                style={{ background: "rgba(var(--accent-rgb, 10, 132, 255), 0.1)", color: "var(--accent)", border: "1px solid rgba(var(--accent-rgb, 10, 132, 255), 0.2)" }}>
-                                <FileText className="w-3 h-3" /> IEEE Xplore
-                            </a>
+                        <div className="flex items-center justify-between mb-3">
+                            <div className="flex items-center gap-3">
+                                <p className="eyebrow">Operating Systems</p>
+                                <a href="https://ieeexplore.ieee.org/document/9670986" target="_blank" rel="noopener noreferrer"
+                                    className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium transition-colors hover:opacity-80"
+                                    style={{ background: "rgba(var(--accent-rgb, 10, 132, 255), 0.1)", color: "var(--accent)", border: "1px solid rgba(var(--accent-rgb, 10, 132, 255), 0.2)" }}>
+                                    <FileText className="w-3 h-3" /> IEEE Xplore
+                                </a>
+                            </div>
+                            <ViewCounter slug={project.id} />
                         </div>
                         <h1 className="text-3xl md:text-5xl font-bold text-[var(--text-primary)] mb-4">CPU Scheduling Visualizer</h1>
                         <p className="text-lg text-[var(--text-secondary)] mb-6 max-w-2xl leading-relaxed">
@@ -214,15 +217,12 @@ export function SchedulingVisualizerPage({ project }: { project: Project }) {
                         <a href={project.github} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-sm text-[var(--text-primary)] hover:text-[var(--accent)] transition-colors">
                             <Github className="w-4 h-4" /> Source Code <ExternalLink className="w-3 h-3" />
                         </a>
+                        <ReactionBar slug={project.id} />
                         <div className="flex gap-6 font-mono text-xs">
                             <span><span style={{ color: "var(--accent)" }}>9</span> <span className="text-[var(--text-muted)]">Algorithms</span></span>
                             <span><span style={{ color: "var(--accent)" }}>1,105</span> <span className="text-[var(--text-muted)]">LOC</span></span>
                             <span><span style={{ color: "var(--accent)" }}>IEEE</span> <span className="text-[var(--text-muted)]">Published</span></span>
                         </div>
-                    </div>
-                    <div className="flex items-center justify-center gap-6 mt-6 pt-6" style={{ borderTop: "1px solid var(--border)" }}>
-                        <ReactionBar slug={project.id} />
-                        <ViewCounter slug={project.id} />
                     </div>
                 </div>
             </div>

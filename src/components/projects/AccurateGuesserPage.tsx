@@ -167,6 +167,10 @@ export function AccurateGuesserPage({ project }: { project: Project }) {
                 techStack={['Java', 'Swing', 'MVC', 'Event-Driven']}
             />
 
+            <div className="max-w-6xl mx-auto px-6 flex justify-end -mt-4 mb-4">
+                <ViewCounter slug={project.id} />
+            </div>
+
             {/* Live Demo */}
             <section className="py-12 px-6">
                 <div className="max-w-6xl mx-auto">
@@ -283,12 +287,9 @@ export function AccurateGuesserPage({ project }: { project: Project }) {
 
             {/* Footer */}
             <footer className="py-12 px-6 border-t border-[var(--border)]">
-                <div className="max-w-6xl mx-auto">
+                <div className="max-w-6xl mx-auto flex flex-wrap items-center justify-between gap-4">
                     <span className="text-[var(--text-muted)]">Lightweight demo of event-driven desktop UI</span>
-                    <div className="flex items-center justify-center gap-6 mt-6 pt-6" style={{ borderTop: "1px solid var(--border)" }}>
-                        <ReactionBar slug={project.id} />
-                        <ViewCounter slug={project.id} />
-                    </div>
+                    <ReactionBar slug={project.id} />
                 </div>
             </footer>
         </div>

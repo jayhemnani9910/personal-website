@@ -108,7 +108,10 @@ export function ContextBoxPage({ project }: { project: Project }) {
                 <div className="max-w-4xl mx-auto">
                     <BackButton />
                     <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={SPRINGS.default} className="mt-4">
-                        <p className="eyebrow mb-3">Knowledge Management</p>
+                        <div className="flex items-center justify-between mb-3">
+                            <p className="eyebrow">Knowledge Management</p>
+                            <ViewCounter slug={project.id} />
+                        </div>
                         <h1 className="text-3xl md:text-5xl font-bold text-[var(--text-primary)] mb-4">ContextBox</h1>
                         <p className="text-lg text-[var(--text-secondary)] mb-6 max-w-2xl leading-relaxed">
                             CLI-first personal knowledge assistant. Captures screenshots, extracts text via OCR, embeds with sentence-transformers, and enables semantic search + AI Q&A — all from the terminal.
@@ -218,15 +221,12 @@ export function ContextBoxPage({ project }: { project: Project }) {
                     <a href={project.github} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-sm text-[var(--text-primary)] hover:text-[var(--accent)] transition-colors">
                         <Github className="w-4 h-4" /> jayhemnani9910/contextbox <ExternalLink className="w-3 h-3" />
                     </a>
+                    <ReactionBar slug={project.id} />
                     <div className="flex gap-6 font-mono text-xs">
                         <span><span style={{ color: "var(--accent)" }}>27</span> <span className="text-[var(--text-muted)]">Modules</span></span>
                         <span><span style={{ color: "var(--accent)" }}>6</span> <span className="text-[var(--text-muted)]">Extractors</span></span>
                         <span><span style={{ color: "var(--accent)" }}>MIT</span> <span className="text-[var(--text-muted)]">License</span></span>
                     </div>
-                </div>
-                <div className="flex items-center justify-center gap-6 mt-6 pt-6" style={{ borderTop: "1px solid var(--border)" }}>
-                    <ReactionBar slug={project.id} />
-                    <ViewCounter slug={project.id} />
                 </div>
             </div>
         </div>

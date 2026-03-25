@@ -509,7 +509,10 @@ export function FifaSoccerDSPage({ project }: { project: Project }) {
                 <div className="relative max-w-5xl mx-auto">
                     <div className="flex items-start justify-between mb-8">
                         <BackButton />
-                        <span className="eyebrow">Computer Vision</span>
+                        <div className="flex items-center gap-4">
+                            <span className="eyebrow">Computer Vision</span>
+                            <ViewCounter slug={project.id} />
+                        </div>
                     </div>
 
                     <h1 className="text-4xl md:text-6xl font-bold text-[var(--text-primary)] mb-4 flex flex-wrap gap-x-4">
@@ -727,13 +730,10 @@ python src/pipeline_full.py \\
                         className="inline-flex items-center gap-2 text-sm text-[var(--text-primary)] hover:text-[var(--accent)] transition-colors">
                         <Github className="w-4 h-4" /> jayhemnani9910/fifa-soccer-ds <ExternalLink className="w-3 h-3" />
                     </a>
+                    <ReactionBar slug={project.id} />
                     <Link href="/projects/soccer-vision-research" className="text-sm text-[var(--text-muted)] hover:text-[var(--accent)] transition-colors">
                         Related: Soccer Vision Research →
                     </Link>
-                </div>
-                <div className="flex items-center justify-center gap-6 mt-6 pt-6" style={{ borderTop: "1px solid var(--border)" }}>
-                    <ReactionBar slug={project.id} />
-                    <ViewCounter slug={project.id} />
                 </div>
             </div>
         </div>
