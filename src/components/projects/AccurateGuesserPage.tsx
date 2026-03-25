@@ -285,7 +285,7 @@ export function AccurateGuesserPage({ project }: { project: Project }) {
             <footer className="py-12 px-6 border-t border-[var(--border)]">
                 <div className="max-w-6xl mx-auto">
                     <span className="text-[var(--text-muted)]">Lightweight demo of event-driven desktop UI</span>
-                    <div className="flex items-center justify-between gap-4 mt-6 pt-6" style={{ borderTop: "1px solid var(--border)" }}>
+                    <div className="flex items-center justify-center gap-6 mt-6 pt-6" style={{ borderTop: "1px solid var(--border)" }}>
                         <ReactionBar slug={project.id} />
                         <ViewCounter slug={project.id} />
                     </div>

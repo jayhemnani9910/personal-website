@@ -364,7 +364,7 @@ export function StockDataPlatformPage({ project }: { project: Project }) {
                         )}
                     </div>
                 </div>
-                <div className="flex items-center justify-between gap-4 mt-6 pt-6" style={{ borderTop: `1px solid ${W.border}` }}>
+                <div className="flex items-center justify-center gap-6 mt-6 pt-6" style={{ borderTop: `1px solid ${W.border}` }}>
                     <ReactionBar slug={project.id} />
                     <ViewCounter slug={project.id} />
                 </div>
