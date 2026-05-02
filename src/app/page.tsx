@@ -11,6 +11,9 @@ import { ScrollProgress } from "@/components/ScrollProgress";
 
 import { getProjectSummaries } from "@/lib/content";
 
+export const dynamic = "force-static";
+export const revalidate = 3600;
+
 export default async function Home() {
   const projects = await getProjectSummaries();
 
