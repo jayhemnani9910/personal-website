@@ -38,7 +38,7 @@ export function ChronosBackground() {
             canvas.height = height;
 
             particles = [];
-            const particleCount = width < 768 ? 60 : 120;
+            const particleCount = width < 768 ? 40 : 80;
 
             for (let i = 0; i < particleCount; i++) {
                 const x = Math.random() * width;
@@ -70,19 +70,25 @@ export function ChronosBackground() {
             if (!ctx) return;
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+            // Cache theme lookup once per frame (was being read N+N² times before)
+            const isDark = document.documentElement.getAttribute("data-theme") === "dark";
+            const particleColor = isDark ? "rgba(0, 240, 255, 0.5)" : "rgba(0, 102, 255, 0.3)";
+            const lineColorBase = isDark ? "0, 240, 255" : "0, 102, 255";
+            const lineAlphaScale = isDark ? 1 : 0.6;
+
             // Draw Time (Bottom Left)
             ctx.font = "bold 6vw 'Geist Mono', monospace";
-            const isDarkMode = document.documentElement.getAttribute("data-theme") === "dark";
-            ctx.fillStyle = isDarkMode ? "rgba(255, 255, 255, 0.08)" : "rgba(0, 0, 0, 0.04)";
+            ctx.fillStyle = isDark ? "rgba(255, 255, 255, 0.08)" : "rgba(0, 0, 0, 0.04)";
             ctx.textAlign = "left";
             ctx.textBaseline = "bottom";
             ctx.fillText(timeString, 40, canvas.height - 40);
 
             // Update and Draw Particles
+            ctx.fillStyle = particleColor;
             particles.forEach((p) => {
                 // Movement
                 if (!prefersReducedMotion) {
-                    p.x += p.vx * 1.5; // Faster movement
+                    p.x += p.vx * 1.5;
                     p.y += p.vy * 1.5;
 
                     // Bounce off edges
@@ -93,53 +99,46 @@ export function ChronosBackground() {
                 // Mouse Interaction (The "Wand" Effect)
                 const dx = mouseRef.current.x - p.x;
                 const dy = mouseRef.current.y - p.y;
-                const distance = Math.sqrt(dx * dx + dy * dy) || 0.0001;
-                const forceDirectionX = dx / distance;
-                const forceDirectionY = dy / distance;
+                const distSq = dx * dx + dy * dy;
                 const maxDistance = 250;
-                const force = (maxDistance - distance) / maxDistance;
+                const maxDistSq = maxDistance * maxDistance;
 
-                if (distance < maxDistance) {
-                    p.x -= forceDirectionX * force * p.density * 0.5;
-                    p.y -= forceDirectionY * force * p.density * 0.5;
+                if (distSq < maxDistSq) {
+                    const distance = Math.sqrt(distSq) || 0.0001;
+                    const force = (maxDistance - distance) / maxDistance;
+                    p.x -= (dx / distance) * force * p.density * 0.5;
+                    p.y -= (dy / distance) * force * p.density * 0.5;
                 } else {
                     // Return to base drift if not disturbed
-                    if (p.x !== p.baseX) {
-                        const dx = p.x - p.baseX;
-                        p.x -= dx * 0.01;
-                    }
-                    if (p.y !== p.baseY) {
-                        const dy = p.y - p.baseY;
-                        p.y -= dy * 0.01;
-                    }
+                    if (p.x !== p.baseX) p.x -= (p.x - p.baseX) * 0.01;
+                    if (p.y !== p.baseY) p.y -= (p.y - p.baseY) * 0.01;
                 }
 
                 // Draw Particle
                 ctx.beginPath();
                 ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-                const isDark = document.documentElement.getAttribute("data-theme") === "dark";
-                ctx.fillStyle = isDark ? "rgba(0, 240, 255, 0.5)" : "rgba(0, 102, 255, 0.3)";
                 ctx.fill();
             });
 
-            // Draw Connections (Voronoi-like)
+            // Draw Connections — squared-distance check avoids sqrt for the majority that fail
             const connectDistance = 120;
+            const connectDistSq = connectDistance * connectDistance;
+            ctx.lineWidth = 0.5;
             for (let a = 0; a < particles.length; a++) {
-                for (let b = a; b < particles.length; b++) {
-                    const dx = particles[a].x - particles[b].x;
-                    const dy = particles[a].y - particles[b].y;
-                    const distance = Math.sqrt(dx * dx + dy * dy);
-
-                    if (distance < connectDistance) {
-                        const isDk = document.documentElement.getAttribute("data-theme") === "dark";
-                        const alpha = 0.1 - distance / connectDistance * 0.1;
-                        ctx.beginPath();
-                        ctx.strokeStyle = isDk ? `rgba(0, 240, 255, ${alpha})` : `rgba(0, 102, 255, ${alpha * 0.6})`;
-                        ctx.lineWidth = 0.5;
-                        ctx.moveTo(particles[a].x, particles[a].y);
-                        ctx.lineTo(particles[b].x, particles[b].y);
-                        ctx.stroke();
-                    }
+                const pa = particles[a];
+                for (let b = a + 1; b < particles.length; b++) {
+                    const pb = particles[b];
+                    const dx = pa.x - pb.x;
+                    const dy = pa.y - pb.y;
+                    const dSq = dx * dx + dy * dy;
+                    if (dSq >= connectDistSq) continue;
+                    const distance = Math.sqrt(dSq);
+                    const alpha = (0.1 - (distance / connectDistance) * 0.1) * lineAlphaScale;
+                    ctx.strokeStyle = `rgba(${lineColorBase}, ${alpha})`;
+                    ctx.beginPath();
+                    ctx.moveTo(pa.x, pa.y);
+                    ctx.lineTo(pb.x, pb.y);
+                    ctx.stroke();
                 }
             }
 

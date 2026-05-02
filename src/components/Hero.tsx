@@ -2,10 +2,15 @@
 
 import { motion, useScroll, useTransform, useReducedMotion, useInView } from "framer-motion";
 import { useRef, useEffect, useState } from "react";
+import dynamic from "next/dynamic";
 import { ChevronDown } from "lucide-react";
 import { useTerminal } from "@/context/TerminalContext";
 import { HERO_CONTENT } from "@/data/profile";
-import { ChronosBackground } from "@/components/ChronosBackground";
+
+const ChronosBackground = dynamic(
+    () => import("@/components/ChronosBackground").then((m) => m.ChronosBackground),
+    { ssr: false }
+);
 
 // ── Animated counter that counts up when in view ──
 function AnimatedStat({ value, label }: { value: number; label: string }) {
@@ -112,6 +117,22 @@ export function Hero({ stats }: HeroProps) {
     const prefersReducedMotion = useReducedMotion();
     const ref = useRef(null);
     const [hasScrolled, setHasScrolled] = useState(false);
+    const [bgReady, setBgReady] = useState(false);
+
+    // Defer canvas background until after first paint so it doesn't block LCP
+    useEffect(() => {
+        if (prefersReducedMotion) return;
+        const w = window as Window & {
+            requestIdleCallback?: (cb: () => void, opts?: { timeout: number }) => number;
+        };
+        const schedule = w.requestIdleCallback ?? ((cb: () => void) => setTimeout(cb, 200));
+        const id = schedule(() => setBgReady(true), { timeout: 1500 });
+        return () => {
+            const cancel = (window as Window & { cancelIdleCallback?: (id: number) => void }).cancelIdleCallback;
+            if (cancel) cancel(id as number);
+            else clearTimeout(id as unknown as number);
+        };
+    }, [prefersReducedMotion]);
 
     const { scrollYProgress } = useScroll({
         target: ref,
@@ -136,8 +157,8 @@ export function Hero({ stats }: HeroProps) {
 
     return (
         <section ref={ref} className="relative min-h-screen flex items-center justify-center overflow-hidden">
-            {/* Particle Background */}
-            {!prefersReducedMotion && <ChronosBackground />}
+            {/* Particle Background — mounts after first paint */}
+            {!prefersReducedMotion && bgReady && <ChronosBackground />}
 
             {/* Parallax Orbs - Layer 1 (slower) */}
             {!prefersReducedMotion && (
@@ -179,7 +200,7 @@ export function Hero({ stats }: HeroProps) {
                     {prefersReducedMotion ? (
                         HERO_CONTENT.title
                     ) : (
-                        <RevealText text={HERO_CONTENT.title} delay={0.2} />
+                        <RevealText text={HERO_CONTENT.title} delay={0.05} />
                     )}
                 </h1>
 
@@ -188,7 +209,7 @@ export function Hero({ stats }: HeroProps) {
                     {prefersReducedMotion ? (
                         HERO_CONTENT.tagline
                     ) : (
-                        <RevealText text={HERO_CONTENT.tagline} delay={0.6} />
+                        <RevealText text={HERO_CONTENT.tagline} delay={0.25} />
                     )}
                 </p>
 
@@ -196,7 +217,7 @@ export function Hero({ stats }: HeroProps) {
                 <motion.p
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    transition={{ duration: 0.8, delay: 1.2 }}
+                    transition={{ duration: 0.5, delay: 0.5 }}
                     className="body-base max-w-xl mx-auto mb-12"
                     style={{ color: "var(--text-muted)" }}
                 >
@@ -207,7 +228,7 @@ export function Hero({ stats }: HeroProps) {
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.6, delay: 1.4 }}
+                    transition={{ duration: 0.4, delay: 0.65 }}
                     className="flex flex-wrap items-center justify-center gap-4"
                 >
                     <button
@@ -227,7 +248,7 @@ export function Hero({ stats }: HeroProps) {
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.6, delay: 1.6 }}
+                        transition={{ duration: 0.5, delay: 0.8 }}
                         className="mt-20"
                     >
                         <div className="grid grid-cols-3 gap-8 md:gap-16 max-w-lg mx-auto">
@@ -247,7 +268,7 @@ export function Hero({ stats }: HeroProps) {
                 <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: hasScrolled ? 0 : 1 }}
-                    transition={{ duration: 0.4, delay: hasScrolled ? 0 : 2.0 }}
+                    transition={{ duration: 0.4, delay: hasScrolled ? 0 : 1.0 }}
                     className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-2"
                 >
                     <span className="text-xs uppercase tracking-widest" style={{ color: 'var(--text-muted)' }}>
