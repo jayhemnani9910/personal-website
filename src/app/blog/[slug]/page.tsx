@@ -3,7 +3,7 @@ import { EditorialMasthead } from "@/components/EditorialMasthead";
 import { EditorialColophon } from "@/components/EditorialColophon";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft, Calendar, Clock, Tag } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import type { Metadata } from "next";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import type { JSX } from "react";
@@ -222,75 +222,50 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
     <main id="main-content" className="editorial min-h-screen" style={{ background: 'var(--bg-primary)' }}>
       <EditorialMasthead active="writing" />
 
-      <article className="pt-40 pb-20 section-shell">
-        <div className="max-w-3xl mx-auto">
-          {/* Back Link */}
-          <Link
-            href="/blog"
-            className="inline-flex items-center gap-2 transition-colors mb-8 hover:text-[var(--accent)]"
-            style={{ color: 'var(--text-muted)' }}
-          >
-            <ArrowLeft className="w-4 h-4" />
-            Back to blog
-          </Link>
+      <article className="post-wrap">
+        {/* Back Link */}
+        <Link href="/blog" className="post-back">
+          <ArrowLeft className="w-3 h-3" />
+          Back to writing
+        </Link>
 
-          {/* Header */}
-          <header className="mb-12">
-            <div className="flex flex-wrap items-center gap-4 text-sm mb-4" style={{ color: 'var(--text-muted)' }}>
-              <div className="flex items-center gap-2">
-                <Calendar className="w-4 h-4" />
-                <time dateTime={post.date}>
-                  {new Date(post.date).toLocaleDateString("en-US", {
-                    year: "numeric",
-                    month: "long",
-                    day: "numeric",
-                  })}
-                </time>
-              </div>
-              {post.readingTime && (
-                <div className="flex items-center gap-2">
-                  <Clock className="w-4 h-4" />
-                  <span>{post.readingTime} min read</span>
-                </div>
-              )}
-            </div>
-
-            <h1 className="title-xl mb-6">{post.title}</h1>
-
-            {post.tags.length > 0 && (
-              <div className="flex flex-wrap gap-2">
-                {post.tags.map((tag) => (
-                  <span
-                    key={tag}
-                    className="chip inline-flex items-center gap-1"
-                  >
-                    <Tag className="w-3 h-3" />
-                    {tag}
-                  </span>
-                ))}
-              </div>
-            )}
-          </header>
-
-          {/* Content */}
-          <div className="card p-8" style={{ maxWidth: "100%" }}>
-            <MDXRemote source={post.content} components={mdxComponents} />
+        {/* Header */}
+        <header className="post-head">
+          <div className="post-meta">
+            <span className="accent-text">Essay · {post.category ?? "Thoughts"}</span>
+            <time dateTime={post.date}>
+              {new Date(post.date).toLocaleDateString("en-US", {
+                year: "numeric",
+                month: "short",
+                day: "numeric",
+              })}
+            </time>
+            {post.readingTime && <span>{post.readingTime} min read</span>}
           </div>
 
-          {/* Post Footer */}
-          <footer className="mt-16 pt-8" style={{ borderTop: '1px solid var(--border)' }}>
-            <div className="flex justify-between items-center">
-              <Link
-                href="/blog"
-                className="inline-flex items-center gap-2 transition-colors hover:opacity-80"
-                style={{ color: 'var(--accent)' }}
-              >
-                <ArrowLeft className="w-4 h-4" />
-                More posts
-              </Link>
-            </div>
-          </footer>
+          <h1 className="post-title">{post.title}</h1>
+
+          {post.tags.length > 0 && (
+            <span className="essay-tags">
+              {post.tags.map((tag) => (
+                <span key={tag}>{tag}</span>
+              ))}
+            </span>
+          )}
+        </header>
+
+        {/* Content */}
+        <div className="post-body">
+          <MDXRemote source={post.content} components={mdxComponents} />
         </div>
+
+        {/* Post Footer */}
+        <footer className="post-foot">
+          <Link href="/blog" className="post-back">
+            <ArrowLeft className="w-3 h-3" />
+            More writing
+          </Link>
+        </footer>
       </article>
 
       <EditorialColophon />
