@@ -1,0 +1,183 @@
+---
+title: "What a Forward Deployed Engineer Actually Does in 2026"
+date: "2026-05-23"
+summary: "An honest explainer on the FDE role: where it came from, what the 2026 version actually requires, how it differs from adjacent titles, and why the interview loop is harder than it looks."
+excerpt: "FDE is one of the fastest-growing titles in tech right now. Here is what the role actually entails, why most adjacent job titles get confused with it, and what the hiring bar looks like in 2026."
+tags: ["forward-deployed-engineer", "ai", "careers", "mcp", "agentic-ai"]
+category: "thoughts"
+featured: true
+draft: false
+---
+
+# What a Forward Deployed Engineer Actually Does in 2026
+
+The term "forward deployed engineer" has gone from niche Palantir jargon to one of the fastest-growing job titles in tech. According to Indeed data shared with Business Insider, US postings grew from 643 in April 2025 to 5,330 in April 2026, a 729% year-over-year increase. In India, TeamLease Digital's data cited through Inc42 puts the growth at roughly 800% over the same period.
+
+That kind of growth always brings title inflation. Some of what is being posted as "FDE" right now matches the role described here. Some of it is sales engineering or professional services with a shinier label. This post tries to explain the difference clearly, and to be honest about where I sit relative to this role as someone who is actively targeting it.
+
+---
+
+## Where the role came from
+
+Palantir is the origin point. In the early 2010s, Palantir built a horizontal data platform (Gotham, then Foundry) and quickly discovered that "general-purpose" does not mean "self-deploying." Every enterprise customer had different data formats, different legacy systems, different internal politics around what counted as a source of truth. Palantir's solution was to embed engineers directly inside customer organizations with a mandate to write production code, not just advise on architecture.
+
+Internally, Palantir called these people "Deltas" and contrasted them with "Devs," who built capabilities intended for all customers. The distinction matters: a Delta enabled many capabilities for a single customer; a Dev built one capability that could eventually reach many customers. FDEs fed field friction back to the Devs. The loop was the whole point.
+
+By 2016, Palantir had more FDEs than software engineers. That ratio is probably not right for every company, but it illustrates how central the role was to their operating model.
+
+The term spread to AI labs and AI-native startups starting around 2024. OpenAI built its FDE team to help enterprise clients use the technology on specific business problems. Anthropic's equivalent posting explicitly asks for people who can ship MCP servers, sub-agents, and agent skills as production artifacts. Google Cloud's 2026 FDE postings describe the job as bridging "frontier AI products and production-grade reality," with multi-agent systems and MCP servers listed as concrete requirements.
+
+---
+
+## The four variants
+
+"FDE" in 2026 is a family of roles, not a single job shape. The four variants that appear consistently across research and job postings:
+
+<svg viewBox="0 0 740 320" width="100%" xmlns="http://www.w3.org/2000/svg" aria-label="Four FDE variants diagram" role="img">
+  
+  <rect x="10" y="10" width="165" height="300" rx="12" fill="none" stroke="currentColor" stroke-opacity="0.15" stroke-width="1.5"/>
+  <rect x="190" y="10" width="165" height="300" rx="12" fill="none" stroke="currentColor" stroke-opacity="0.15" stroke-width="1.5"/>
+  <rect x="370" y="10" width="165" height="300" rx="12" fill="none" stroke="currentColor" stroke-opacity="0.15" stroke-width="1.5"/>
+  <rect x="550" y="10" width="165" height="300" rx="12" fill="none" stroke="currentColor" stroke-opacity="0.15" stroke-width="1.5"/>
+  <rect x="10" y="10" width="165" height="44" rx="12" fill="rgba(0,102,255,0.12)"/>
+  <rect x="190" y="10" width="165" height="44" rx="12" fill="rgba(124,58,237,0.12)"/>
+  <rect x="370" y="10" width="165" height="44" rx="12" fill="rgba(16,185,129,0.12)"/>
+  <rect x="550" y="10" width="165" height="44" rx="12" fill="rgba(245,158,11,0.12)"/>
+  <rect x="10" y="42" width="165" height="12" fill="rgba(0,102,255,0.12)"/>
+  <rect x="190" y="42" width="165" height="12" fill="rgba(124,58,237,0.12)"/>
+  <rect x="370" y="42" width="165" height="12" fill="rgba(16,185,129,0.12)"/>
+  <rect x="550" y="42" width="165" height="12" fill="rgba(245,158,11,0.12)"/>
+  <text x="92" y="37" text-anchor="middle" font-size="13" font-weight="700" fill="rgba(0,102,255,0.9)">Deployment-heavy</text>
+  <text x="272" y="37" text-anchor="middle" font-size="13" font-weight="700" fill="rgba(124,58,237,0.9)">Product-feedback</text>
+  <text x="452" y="37" text-anchor="middle" font-size="13" font-weight="700" fill="rgba(16,185,129,0.9)">Startup founding</text>
+  <text x="632" y="37" text-anchor="middle" font-size="13" font-weight="700" fill="rgba(245,158,11,0.9)">AI-lab</text>
+  <text x="92" y="80" text-anchor="middle" font-size="11" fill="currentColor" opacity="0.6">Palantir · Scale AI</text>
+  <text x="92" y="96" text-anchor="middle" font-size="11" fill="currentColor" opacity="0.6">Databricks</text>
+  <text x="272" y="80" text-anchor="middle" font-size="11" fill="currentColor" opacity="0.6">OpenAI · Cohere</text>
+  <text x="272" y="96" text-anchor="middle" font-size="11" fill="currentColor" opacity="0.6">Anthropic</text>
+  <text x="452" y="80" text-anchor="middle" font-size="11" fill="currentColor" opacity="0.6">Glean · Warp</text>
+  <text x="452" y="96" text-anchor="middle" font-size="11" fill="currentColor" opacity="0.6">Harvey · Luma AI</text>
+  <text x="632" y="80" text-anchor="middle" font-size="11" fill="currentColor" opacity="0.6">Google Cloud</text>
+  <text x="632" y="96" text-anchor="middle" font-size="11" fill="currentColor" opacity="0.6">Salesforce Agentforce</text>
+  <line x1="25" y1="110" x2="160" y2="110" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"/>
+  <line x1="205" y1="110" x2="340" y2="110" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"/>
+  <line x1="385" y1="110" x2="520" y2="110" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"/>
+  <line x1="565" y1="110" x2="700" y2="110" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"/>
+  <text x="92" y="135" text-anchor="middle" font-size="10.5" font-weight="600" fill="currentColor" opacity="0.5">CORE MOTION</text>
+  <text x="272" y="135" text-anchor="middle" font-size="10.5" font-weight="600" fill="currentColor" opacity="0.5">CORE MOTION</text>
+  <text x="452" y="135" text-anchor="middle" font-size="10.5" font-weight="600" fill="currentColor" opacity="0.5">CORE MOTION</text>
+  <text x="632" y="135" text-anchor="middle" font-size="10.5" font-weight="600" fill="currentColor" opacity="0.5">CORE MOTION</text>
+
+  <text x="92" y="155" text-anchor="middle" font-size="11.5" fill="currentColor" opacity="0.8">Embed, integrate,</text>
+  <text x="92" y="171" text-anchor="middle" font-size="11.5" fill="currentColor" opacity="0.8">ship, adopt</text>
+  <text x="272" y="155" text-anchor="middle" font-size="11.5" fill="currentColor" opacity="0.8">Deploy + generalize</text>
+  <text x="272" y="171" text-anchor="middle" font-size="11.5" fill="currentColor" opacity="0.8">field signal to roadmap</text>
+  <text x="452" y="155" text-anchor="middle" font-size="11.5" fill="currentColor" opacity="0.8">Own discovery through</text>
+  <text x="452" y="171" text-anchor="middle" font-size="11.5" fill="currentColor" opacity="0.8">production solo</text>
+  <text x="632" y="155" text-anchor="middle" font-size="11.5" fill="currentColor" opacity="0.8">Agents + evals +</text>
+  <text x="632" y="171" text-anchor="middle" font-size="11.5" fill="currentColor" opacity="0.8">infra tradeoffs</text>
+  <text x="92" y="220" text-anchor="middle" font-size="10.5" font-weight="600" fill="currentColor" opacity="0.5">TRAVEL</text>
+  <text x="272" y="220" text-anchor="middle" font-size="10.5" font-weight="600" fill="currentColor" opacity="0.5">TRAVEL</text>
+  <text x="452" y="220" text-anchor="middle" font-size="10.5" font-weight="600" fill="currentColor" opacity="0.5">TRAVEL</text>
+  <text x="632" y="220" text-anchor="middle" font-size="10.5" font-weight="600" fill="currentColor" opacity="0.5">TRAVEL</text>
+
+  <text x="92" y="240" text-anchor="middle" font-size="11.5" fill="currentColor" opacity="0.8">25-50%</text>
+  <text x="272" y="240" text-anchor="middle" font-size="11.5" fill="currentColor" opacity="0.8">20-50%</text>
+  <text x="452" y="240" text-anchor="middle" font-size="11.5" fill="currentColor" opacity="0.8">10-25%</text>
+  <text x="632" y="240" text-anchor="middle" font-size="11.5" fill="currentColor" opacity="0.8">25-50%</text>
+  <text x="92" y="278" text-anchor="middle" font-size="11.5" fill="rgba(0,102,255,0.85)" font-weight="600">~40% coding</text>
+  <text x="272" y="278" text-anchor="middle" font-size="11.5" fill="rgba(124,58,237,0.85)" font-weight="600">~35% coding</text>
+  <text x="452" y="278" text-anchor="middle" font-size="11.5" fill="rgba(16,185,129,0.85)" font-weight="600">~45% coding</text>
+  <text x="632" y="278" text-anchor="middle" font-size="11.5" fill="rgba(245,158,11,0.85)" font-weight="600">~40% coding</text>
+
+  <text x="92" y="296" text-anchor="middle" font-size="11.5" fill="rgba(0,102,255,0.85)" font-weight="600">~25% customer</text>
+  <text x="272" y="296" text-anchor="middle" font-size="11.5" fill="rgba(124,58,237,0.85)" font-weight="600">~25% customer</text>
+  <text x="452" y="296" text-anchor="middle" font-size="11.5" fill="rgba(16,185,129,0.85)" font-weight="600">~30% customer</text>
+  <text x="632" y="296" text-anchor="middle" font-size="11.5" fill="rgba(245,158,11,0.85)" font-weight="600">~20% customer</text>
+</svg>
+
+**Deployment-heavy** (Palantir, Scale AI, Databricks): the original model. Embedded with a customer, often on-site, building custom integrations and production workflows on top of a platform. Heavy travel. The work is operational, not advisory.
+
+**Product-feedback** (OpenAI, Cohere, Anthropic's closest equivalent): the field-to-product loop is explicitly the job. You deploy frontier models for strategic customers, then feed eval results and failure modes back to research and product teams. OpenAI's posting language is direct: "Share field feedback that helps Research and Product understand where the models succeed and where they can improve."
+
+**Startup founding-FDE** (Glean, Warp, Harvey): the first or early deployment hire, with ownership spanning discovery, scoping, building, and sometimes account management simultaneously. Warp's Founding FDE posting says the person will turn pilots into production, report directly to leadership, and define success criteria from scratch. This variant has the broadest ownership and the most founder-like risk profile.
+
+**AI-lab FDE** (Google Cloud, Salesforce Agentforce, Databricks AI FDE): inside larger platform companies that have shipped AI-native product lines. Google's 2026 FDE posting explicitly asks for "agentic workflows incorporating MCP, tool-calling, and OAuth-based authentication." The technical bar here is the highest of the four.
+
+---
+
+## FDE vs the roles it gets confused with
+
+The single clearest distinction, per multiple 2026 job guides, is that a real FDE writes production code inside the customer's environment. A solutions engineer sells; an implementation consultant configures; a customer success manager manages the relationship. Only the FDE writes code that runs on the client's infrastructure and then generalizes that code back into the product.
+
+<svg viewBox="0 0 700 420" width="100%" xmlns="http://www.w3.org/2000/svg" aria-label="FDE vs adjacent roles on coding vs customer-facing axes" role="img">
+  
+  <rect x="60" y="60" width="580" height="52" rx="6" fill="currentColor" fill-opacity="0.04" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"/>
+  <rect x="60" y="60" width="232" height="52" rx="6" fill="rgba(0,102,255,0.22)" stroke="none"/>
+  <rect x="292" y="60" width="145" height="52" fill="rgba(124,58,237,0.18)" stroke="none"/>
+  <rect x="437" y="60" width="87" height="52" fill="rgba(16,185,129,0.18)" stroke="none"/>
+  <rect x="524" y="60" width="58" height="52" fill="rgba(245,158,11,0.18)" stroke="none"/>
+  <rect x="582" y="60" width="58" height="52" rx="0" fill="rgba(239,68,68,0.16)" stroke="none"/>
+  <rect x="610" y="60" width="30" height="52" rx="6" fill="rgba(239,68,68,0.16)" stroke="none"/>
+  <rect x="582" y="60" width="30" height="52" fill="rgba(239,68,68,0.16)" stroke="none"/>
+  <line x1="292" y1="60" x2="292" y2="112" stroke="currentColor" stroke-opacity="0.15" stroke-width="1"/>
+  <line x1="437" y1="60" x2="437" y2="112" stroke="currentColor" stroke-opacity="0.15" stroke-width="1"/>
+  <line x1="524" y1="60" x2="524" y2="112" stroke="currentColor" stroke-opacity="0.15" stroke-width="1"/>
+  <line x1="582" y1="60" x2="582" y2="112" stroke="currentColor" stroke-opacity="0.15" stroke-width="1"/>
+  <text x="176" y="90" text-anchor="middle" font-size="13" font-weight="700" fill="rgba(0,102,255,0.85)">~40%</text>
+  <text x="364" y="90" text-anchor="middle" font-size="13" font-weight="700" fill="rgba(124,58,237,0.85)">~25%</text>
+  <text x="480" y="90" text-anchor="middle" font-size="11" font-weight="700" fill="rgba(16,185,129,0.85)">~15%</text>
+  <text x="553" y="90" text-anchor="middle" font-size="11" font-weight="700" fill="rgba(245,158,11,0.85)">~10%</text>
+  <text x="611" y="90" text-anchor="middle" font-size="11" font-weight="700" fill="rgba(239,68,68,0.85)">~10%</text>
+  <rect x="60" y="130" width="12" height="12" rx="3" fill="rgba(0,102,255,0.22)"/>
+  <text x="78" y="141" font-size="11" fill="currentColor" opacity="0.7">Writing code / integrations</text>
+
+  <rect x="240" y="130" width="12" height="12" rx="3" fill="rgba(124,58,237,0.18)"/>
+  <text x="258" y="141" font-size="11" fill="currentColor" opacity="0.7">Customer work</text>
+
+  <rect x="380" y="130" width="12" height="12" rx="3" fill="rgba(16,185,129,0.18)"/>
+  <text x="398" y="141" font-size="11" fill="currentColor" opacity="0.7">Product feedback / playbooks</text>
+
+  <rect x="60" y="158" width="12" height="12" rx="3" fill="rgba(245,158,11,0.18)"/>
+  <text x="78" y="169" font-size="11" fill="currentColor" opacity="0.7">Travel</text>
+
+  <rect x="130" y="158" width="12" height="12" rx="3" fill="rgba(239,68,68,0.16)"/>
+  <text x="148" y="169" font-size="11" fill="currentColor" opacity="0.7">Firefighting / incidents</text>
+  <text x="60" y="195" font-size="10" fill="currentColor" opacity="0.35">Splits vary substantially by variant and customer maturity. Travel weeks can flip coding and customer percentages entirely.</text>
+</svg>
+
+The coding share is real. Multiple 2026 job descriptions and first-person accounts (including Rippling FDE Kanav Bhatnagar's public account) explicitly distinguish the role from advisory work. The customer time is also real and not evenly distributed across the week: you can have two days of almost pure code followed by a full day of customer calls during a launch window.
+
+What surprised me reading across all the research: the product feedback and playbook work (the 15%) is the part that most clearly separates a good FDE from a great one. Converting what you learned in a messy customer deployment into a reusable pattern, a new eval metric, or a documented failure mode that improves the product for everyone, that loop is what Palantir built the role around and what AI labs are now trying to replicate.
+
+---
+
+## The market in 2026
+
+The growth numbers are real and corroborated across multiple sources. 729% year-over-year in US postings (Indeed data, via Business Insider). Roughly 800% in India (TeamLease Digital, via Inc42). Around 9,000 global roles created by early 2026 according to Reuters.
+
+The growth is not all a sign of product maturity. Much of it reflects how hard enterprise AI deployment actually is in practice. Companies still struggle to make AI useful inside their organizations, which is exactly what makes strong FDEs valuable, but also what creates the bifurcation between genuine engineering roles and lower-prestige services roles with the same label.
+
+For India specifically, the verified live roles as of late May 2026 include: Sarvam AI (Bengaluru, two seniority levels), Cartesia (India, Founding FDE title), Google Cloud Applied AI (Bengaluru, multiple levels through at least May 31), Adobe (Bangalore, 2-5yr), Salesforce Agentforce (multiple India cities), Resilinc (India remote), HackerRank (Bengaluru hybrid), Databricks AI FDE (remote India), and several YC-backed startups including Peakflo, Deductive AI, and Mem0. Compensation in the India market splits sharply: entry-level or IT-services-adjacent roles tend to run ₹10-20L; AI-startup mid-level roles run ₹25-50L; one outlier (FuturePath AI) listed ₹35-50L for a senior profile.
+
+---
+
+## Where I sit, honestly
+
+I will use this section to be direct about how my background maps to this role, including the parts that are strengths and the part that is a genuine gap.
+
+The technical side aligns well. I built CAG Deep Research, a 5-agent LangGraph research system with hexagonal architecture, verification loops, dual search integration, and report generation, in 10 days from a vague problem statement. The 10-day constraint was real, not a storytelling choice, and the system runs on actual hardware with real retrieval quality constraints. I have also shipped WebMCP integration into this portfolio, making it queryable via the W3C WebMCP protocol, which is an early production implementation of a standard that is now showing up in FDE job descriptions at Google and Anthropic. I merged a PR into the Anthropic MCP Python SDK. I navigate large, unfamiliar codebases regularly (vLLM has 200k+ lines; the MCP SDK is non-trivial to extend without reading the internals). I use Cursor, Claude Code, and Codex daily, not occasionally, and have for over a year.
+
+The data and stakeholder work at Elite Hotel Group was real: defining metrics and SLAs with finance and operations stakeholders, building ETL pipelines, automating reporting across multiple properties. That gives me a genuine story about working in the loop between business requirements and technical delivery, which is closer to FDE motion than a pure SWE background.
+
+The honest gap is external customer deployment. The hotel group work was internal. My agentic systems are personal and portfolio-scale. I have not yet owned a full deployment lifecycle for an external customer from discovery through production with post-launch iteration. The research I read on this role was consistent about naming this gap: "enough if framed narrowly, a stretch if framed broadly."
+
+I am treating that as a concrete thing to close in the next 60 days, not as a reason to avoid targeting the role. The plan is one real external deployment with an actual user, a documented eval result, and a post-launch changelog. The blog posts are part of that too.
+
+---
+
+## Closing thought
+
+The FDE role is unusual in that the people who are best at it tend to dislike both the "pure coding" and "pure customer success" framings. The role suits engineers who find context-switching between code and stakeholders energizing rather than exhausting, who are curious about why something broke in production rather than just how to patch it, and who can hold a strong technical opinion while remaining open to being wrong about the customer's actual problem.
+
+That description fits a specific kind of person. If it fits you, targeting FDE over generic SWE applications is probably the right call, even if the title is newer and noisier than it should be.

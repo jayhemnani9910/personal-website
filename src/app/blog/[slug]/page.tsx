@@ -5,6 +5,182 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, Calendar, Clock, Tag } from "lucide-react";
 import type { Metadata } from "next";
+import { MDXRemote } from "next-mdx-remote/rsc";
+import type { JSX } from "react";
+
+const mdxComponents = {
+  h1: (props: JSX.IntrinsicElements["h1"]) => (
+    <h1
+      {...props}
+      style={{
+        color: "var(--text-primary)",
+        fontSize: "2rem",
+        fontWeight: 700,
+        lineHeight: 1.25,
+        marginTop: "2.5rem",
+        marginBottom: "1rem",
+      }}
+    />
+  ),
+  h2: (props: JSX.IntrinsicElements["h2"]) => (
+    <h2
+      {...props}
+      style={{
+        color: "var(--text-primary)",
+        fontSize: "1.5rem",
+        fontWeight: 600,
+        lineHeight: 1.3,
+        marginTop: "2.5rem",
+        marginBottom: "0.75rem",
+        paddingBottom: "0.4rem",
+        borderBottom: "1px solid var(--border)",
+      }}
+    />
+  ),
+  h3: (props: JSX.IntrinsicElements["h3"]) => (
+    <h3
+      {...props}
+      style={{
+        color: "var(--text-primary)",
+        fontSize: "1.2rem",
+        fontWeight: 600,
+        lineHeight: 1.4,
+        marginTop: "2rem",
+        marginBottom: "0.5rem",
+      }}
+    />
+  ),
+  p: (props: JSX.IntrinsicElements["p"]) => (
+    <p
+      {...props}
+      style={{
+        color: "var(--text-secondary)",
+        fontSize: "1.0625rem",
+        lineHeight: 1.75,
+        marginBottom: "1.25rem",
+      }}
+    />
+  ),
+  ul: (props: JSX.IntrinsicElements["ul"]) => (
+    <ul
+      {...props}
+      style={{
+        color: "var(--text-secondary)",
+        paddingLeft: "1.5rem",
+        marginBottom: "1.25rem",
+        listStyleType: "disc",
+      }}
+    />
+  ),
+  ol: (props: JSX.IntrinsicElements["ol"]) => (
+    <ol
+      {...props}
+      style={{
+        color: "var(--text-secondary)",
+        paddingLeft: "1.5rem",
+        marginBottom: "1.25rem",
+        listStyleType: "decimal",
+      }}
+    />
+  ),
+  li: (props: JSX.IntrinsicElements["li"]) => (
+    <li
+      {...props}
+      style={{
+        color: "var(--text-secondary)",
+        fontSize: "1.0625rem",
+        lineHeight: 1.75,
+        marginBottom: "0.35rem",
+      }}
+    />
+  ),
+  a: (props: JSX.IntrinsicElements["a"]) => (
+    <a
+      {...props}
+      style={{
+        color: "var(--accent)",
+        textDecoration: "underline",
+        textUnderlineOffset: "3px",
+      }}
+    />
+  ),
+  strong: (props: JSX.IntrinsicElements["strong"]) => (
+    <strong
+      {...props}
+      style={{ color: "var(--text-primary)", fontWeight: 600 }}
+    />
+  ),
+  em: (props: JSX.IntrinsicElements["em"]) => (
+    <em {...props} style={{ color: "var(--text-secondary)", fontStyle: "italic" }} />
+  ),
+  code: (props: JSX.IntrinsicElements["code"]) => (
+    <code
+      {...props}
+      style={{
+        fontFamily: "var(--font-mono)",
+        fontSize: "0.875em",
+        background: "var(--bg-secondary)",
+        color: "var(--accent)",
+        padding: "0.15em 0.4em",
+        borderRadius: "4px",
+        border: "1px solid var(--border)",
+      }}
+    />
+  ),
+  pre: (props: JSX.IntrinsicElements["pre"]) => (
+    <pre
+      {...props}
+      style={{
+        fontFamily: "var(--font-mono)",
+        fontSize: "0.875rem",
+        background: "var(--bg-secondary)",
+        border: "1px solid var(--border)",
+        borderRadius: "var(--radius-md)",
+        padding: "1.25rem 1.5rem",
+        overflowX: "auto",
+        marginBottom: "1.5rem",
+        lineHeight: 1.65,
+      }}
+    />
+  ),
+  blockquote: (props: JSX.IntrinsicElements["blockquote"]) => (
+    <blockquote
+      {...props}
+      style={{
+        borderLeft: "3px solid var(--border-strong)",
+        paddingLeft: "1rem",
+        marginLeft: 0,
+        marginBottom: "1.25rem",
+        color: "var(--text-muted)",
+        fontStyle: "italic",
+      }}
+    />
+  ),
+  hr: (props: JSX.IntrinsicElements["hr"]) => (
+    <hr
+      {...props}
+      style={{
+        border: "none",
+        borderTop: "1px solid var(--border)",
+        marginTop: "2rem",
+        marginBottom: "2rem",
+      }}
+    />
+  ),
+  img: (props: JSX.IntrinsicElements["img"]) => (
+    // eslint-disable-next-line @next/next/no-img-element
+    <img
+      {...props}
+      alt={props.alt ?? ""}
+      style={{
+        width: "100%",
+        borderRadius: "var(--radius-md)",
+        marginTop: "1rem",
+        marginBottom: "1rem",
+      }}
+    />
+  ),
+};
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
@@ -97,12 +273,8 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
           </header>
 
           {/* Content */}
-          <div className="card p-8 space-y-4">
-            {post.content.split(/\n\s*\n/).map((block, idx) => (
-              <p key={idx} className="whitespace-pre-wrap" style={{ color: 'var(--text-secondary)' }}>
-                {block.trim()}
-              </p>
-            ))}
+          <div className="card p-8" style={{ maxWidth: "100%" }}>
+            <MDXRemote source={post.content} components={mdxComponents} />
           </div>
 
           {/* Post Footer */}
