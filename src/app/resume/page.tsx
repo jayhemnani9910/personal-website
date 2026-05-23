@@ -1,10 +1,18 @@
 "use client";
 
 import { useState } from "react";
-import { Download, ArrowLeft, Briefcase, Database, Brain, Code } from "lucide-react";
+import { Download, ArrowLeft, Briefcase, Database, Brain, Code, Rocket } from "lucide-react";
 import Link from "next/link";
 
 const RESUME_VERSIONS = [
+  {
+    id: "fde",
+    title: "Forward Deployed Engineer",
+    description: "Agentic systems, MCP, RAG in production, fast 0-to-1 delivery",
+    icon: Rocket,
+    file: "/resume/jay-hemnani-fde.pdf",
+    color: "#06b6d4",
+  },
   {
     id: "de",
     title: "Data Engineer",
