@@ -9,7 +9,7 @@ export type EmploymentType = "full-time" | "contract" | "internship" | "part-tim
 export interface TimelineRange {
     start?: string; // ISO or human label, e.g. "2023-06"
     end?: string;   // allow null for "present" by omitting
-    label?: string; // optional preformatted string, e.g. "2022–2024"
+    label?: string; // optional preformatted string, e.g. "2022-2024"
     location?: string;
 }
 

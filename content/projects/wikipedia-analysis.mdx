@@ -11,7 +11,7 @@ solution:
 impact:
   - "Minutes to insights; handy for research & notes."
 deepDive:
-  context: "This project emerged from a need to quickly understand the key themes and topics within lengthy Wikipedia articles during research sessions. Rather than reading thousands of words, the goal was to extract meaningful patterns through text analysis—identifying the most frequently used terms to reveal what the article emphasizes. The system needed to handle Wikipedia's complex HTML structure, process large volumes of text efficiently, and present insights visually for rapid comprehension."
+  context: "This project emerged from a need to quickly understand the key themes and topics within lengthy Wikipedia articles during research sessions. Rather than reading thousands of words, the goal was to extract meaningful patterns through text analysis, identifying the most frequently used terms to reveal what the article emphasizes. The system needed to handle Wikipedia's complex HTML structure, process large volumes of text efficiently, and present insights visually for rapid comprehension."
 
   architecture: "The application follows a simple but effective pipeline architecture: a Flask web server receives Wikipedia URLs from users, a scraping layer extracts article content using BeautifulSoup, a text processing engine tokenizes and filters the content, and a visualization layer generates frequency charts. The stateless design allows for fast processing without database overhead, making it ideal for quick exploratory analysis. The frontend uses minimal JavaScript with Chart.js for interactive visualizations, while the backend handles all heavy computational work."
 
@@ -49,7 +49,7 @@ deepDive:
       rationale: "Chose not to persist analysis results in a database. Each request is processed fresh, eliminating maintenance overhead and allowing the tool to remain lightweight and deployable anywhere. This tradeoff favors simplicity over features like historical analysis."
 
     - decision: "BeautifulSoup over API"
-      rationale: "Wikipedia offers an official API, but BeautifulSoup on raw HTML provided more control over content extraction—specifically the ability to exclude specific sections like references and external links that would skew frequency analysis with non-article terms."
+      rationale: "Wikipedia offers an official API, but BeautifulSoup on raw HTML provided more control over content extraction, specifically the ability to exclude specific sections like references and external links that would skew frequency analysis with non-article terms."
 
     - decision: "Extended Stopword List"
       rationale: "Standard NLTK stopwords weren't sufficient for Wikipedia content. Added domain-specific stopwords like 'wikipedia', 'cite', 'reference', 'retrieved', 'archive' to filter out meta-content that appears frequently but doesn't relate to article topics."
@@ -118,16 +118,16 @@ deepDive:
 
   learnings:
     - lesson: "Domain-Specific Text Processing"
-      insight: "Generic NLP techniques require customization for specific domains. Wikipedia articles contain structural elements (citations, infoboxes, navigation) that must be filtered out. Building domain-aware stopword lists improved result quality dramatically—reducing noise from metadata terms that would otherwise dominate frequency counts."
+      insight: "Generic NLP techniques require customization for specific domains. Wikipedia articles contain structural elements (citations, infoboxes, navigation) that must be filtered out. Building domain-aware stopword lists improved result quality dramatically, reducing noise from metadata terms that would otherwise dominate frequency counts."
 
     - lesson: "HTML Structure Fragility"
-      insight: "Web scraping is brittle. Wikipedia's HTML structure can change, breaking CSS selectors. The scraper needed defensive programming—checking if elements exist before accessing them, handling various page types (disambiguation, redirect, standard), and gracefully degrading when structure doesn't match expectations."
+      insight: "Web scraping is brittle. Wikipedia's HTML structure can change, breaking CSS selectors. The scraper needed defensive programming, checking if elements exist before accessing them, handling various page types (disambiguation, redirect, standard), and gracefully degrading when structure doesn't match expectations."
 
     - lesson: "Insight vs. Accuracy Tradeoff"
-      insight: "Perfect linguistic analysis wasn't the goal—quick insights were. Chose simple tokenization over advanced NLP (stemming, lemmatization, named entity recognition) because speed and simplicity outweighed marginal accuracy gains. Sometimes 80% accuracy in milliseconds beats 95% accuracy in seconds."
+      insight: "Perfect linguistic analysis wasn't the goal, quick insights were. Chose simple tokenization over advanced NLP (stemming, lemmatization, named entity recognition) because speed and simplicity outweighed marginal accuracy gains. Sometimes 80% accuracy in milliseconds beats 95% accuracy in seconds."
 
     - lesson: "Visualization Drives Understanding"
-      insight: "Raw frequency lists are hard to interpret. Visual charts transformed data into immediate understanding—users could glance at a bar chart and instantly grasp article themes. The visualization layer turned out to be as important as the analysis itself for delivering value."
+      insight: "Raw frequency lists are hard to interpret. Visual charts transformed data into immediate understanding, users could glance at a bar chart and instantly grasp article themes. The visualization layer turned out to be as important as the analysis itself for delivering value."
 
     - lesson: "Scale Considerations"
       insight: "Processing individual Wikipedia articles works well, but the architecture doesn't scale to bulk analysis of hundreds of articles. If revisiting this project, I'd add caching, batch processing capabilities, and potentially move to Wikipedia dumps for large-scale corpus analysis rather than real-time scraping."

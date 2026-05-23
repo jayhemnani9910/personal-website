@@ -12,11 +12,11 @@ impact:
   - "Snappy prototype for FAQs & utilities."
 deepDive:
   context: |
-    Intent classification is the cornerstone of conversational AI systems. When a user sends a message to a chatbot, the system must understand what the user wants to accomplish—their intent—before it can respond appropriately. This project tackles the fundamental challenge of building a lightweight, accurate intent classification system without relying on heavy infrastructure or cloud-based NLP services.
+    Intent classification is the cornerstone of conversational AI systems. When a user sends a message to a chatbot, the system must understand what the user wants to accomplish, their intent, before it can respond appropriately. This project tackles the fundamental challenge of building a lightweight, accurate intent classification system without relying on heavy infrastructure or cloud-based NLP services.
 
     Traditional rule-based chatbots use keyword matching, which breaks down quickly with natural language variation. Modern approaches use machine learning to recognize patterns in language, enabling the bot to understand semantically similar phrases. This project demonstrates how to build an intent-based conversational agent using classical NLP techniques and neural networks, trained on a custom JSON corpus that maps example phrases to specific intents.
 
-    The goal was to create a fast, deployable chatbot prototype suitable for FAQs, customer service automation, and utility functions—all while maintaining low latency and minimal resource requirements.
+    The goal was to create a fast, deployable chatbot prototype suitable for FAQs, customer service automation, and utility functions, all while maintaining low latency and minimal resource requirements.
 
   architecture: |
     The system follows a pipeline architecture from raw text input to predicted intent:
@@ -34,7 +34,7 @@ deepDive:
     The model outputs a probability distribution over all possible intents. The highest-probability intent is selected, and the system retrieves a corresponding response from the JSON corpus. Responses can be randomized from a pool to add variety.
 
     **JSON Corpus Structure:**
-    The training data is organized as intents, each containing example patterns (user inputs) and responses. This modular structure allows rapid updates—adding new intents simply requires extending the JSON file and retraining.
+    The training data is organized as intents, each containing example patterns (user inputs) and responses. This modular structure allows rapid updates, adding new intents simply requires extending the JSON file and retraining.
 
   components:
     - name: "Text Preprocessor"
@@ -263,7 +263,7 @@ deepDive:
 
   learnings:
     - lesson: "Intent classification quality depends heavily on training data diversity"
-      detail: "The model performs well only when training patterns cover the variety of ways users express the same intent. Initially struggled with sparse training data—adding 3-5 more pattern variations per intent improved accuracy by ~20%. Data augmentation through paraphrasing and synonym replacement helped expand coverage without manual labeling."
+      detail: "The model performs well only when training patterns cover the variety of ways users express the same intent. Initially struggled with sparse training data, adding 3-5 more pattern variations per intent improved accuracy by ~20%. Data augmentation through paraphrasing and synonym replacement helped expand coverage without manual labeling."
 
     - lesson: "Preprocessing consistency is critical between training and inference"
       detail: "Early bug: training data was stemmed but inference input wasn't, causing poor predictions. Learned to abstract preprocessing into reusable functions and validate that exact same pipeline runs during both training and deployment. Saved preprocessing configuration alongside model weights."
@@ -272,7 +272,7 @@ deepDive:
       detail: "BoW treats 'not good' and 'good' identically if both words appear, missing negation. For this project scope it was acceptable, but production systems need n-grams or sequential models (RNN/LSTM) to capture context. Identified this as a limitation when testing edge cases."
 
     - lesson: "Confidence thresholding significantly improves user experience"
-      detail: "Without confidence checks, the bot would confidently return wrong answers for out-of-domain queries. Implementing a 0.7 threshold and fallback responses reduced user frustration—better to say 'I don't know' than mislead. Tested threshold values empirically using validation set."
+      detail: "Without confidence checks, the bot would confidently return wrong answers for out-of-domain queries. Implementing a 0.7 threshold and fallback responses reduced user frustration, better to say 'I don't know' than mislead. Tested threshold values empirically using validation set."
 
     - lesson: "Neural networks vs. classical ML for intent classification"
       detail: "Experimented with both neural networks and traditional classifiers (SVM, Naive Bayes). Neural networks handled sparse BoW vectors better and generalized to unseen patterns more effectively, despite being more complex. The non-linear activation functions helped learn subtle pattern combinations that linear models missed."
