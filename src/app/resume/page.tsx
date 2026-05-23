@@ -1,169 +1,296 @@
-"use client";
-
-import { useState } from "react";
-import { Download, ArrowLeft, Briefcase, Database, Brain, Code, Rocket } from "lucide-react";
 import Link from "next/link";
+import type { Metadata } from "next";
+import { RESUME } from "@/data/resume";
+import { EditorialMasthead } from "@/components/EditorialMasthead";
+import { EditorialColophon } from "@/components/EditorialColophon";
 
-const RESUME_VERSIONS = [
+export const metadata: Metadata = {
+  title: "About",
+  description:
+    "Resume, experience, publications, open-source contributions, and a few things worth knowing about Jay Hemnani.",
+};
+
+const RESUME_PDFS = [
+  { label: "Forward-Deployed", file: "/resume/jay-hemnani-fde.pdf" },
+  { label: "Data Engineer", file: "/resume/jay-hemnani-de.pdf" },
+  { label: "ML Engineer", file: "/resume/jay-hemnani-ml.pdf" },
+  { label: "Backend / SWE", file: "/resume/jay-hemnani-swe.pdf" },
+  { label: "Data Analyst", file: "/resume/jay-hemnani-analyst.pdf" },
+];
+
+const OSS = [
   {
-    id: "fde",
-    title: "Forward Deployed Engineer",
-    description: "Agentic systems, MCP, RAG in production, fast 0-to-1 delivery",
-    icon: Rocket,
-    file: "/resume/jay-hemnani-fde.pdf",
-    color: "#06b6d4",
+    pr: "PR #31513",
+    repo: "vllm-project / vllm",
+    title: "Enable LoRA support for tower and connector in LLaVA.",
+    body: "Enabled LoRA training for the LLaVA vision tower and connector inside vLLM, the high-throughput LLM inference engine. Merged 2 January 2026.",
+    url: "https://github.com/vllm-project/vllm/pull/31513",
   },
   {
-    id: "de",
-    title: "Data Engineer",
-    description: "Kafka, Airflow, ETL pipelines, distributed systems",
-    icon: Database,
-    file: "/resume/jay-hemnani-de.pdf",
-    color: "#3b82f6",
+    pr: "PR #1826",
+    repo: "modelcontextprotocol / python-sdk",
+    title: "Add an explicit type annotation for the call_tool decorator.",
+    body: "Fixed a missing type annotation on the call_tool decorator in the Anthropic MCP Python SDK, the SDK that powers MCP-based integrations. Merged 6 January 2026.",
+    url: "https://github.com/modelcontextprotocol/python-sdk/pull/1826",
   },
   {
-    id: "ml",
-    title: "ML Engineer",
-    description: "FAISS, LangChain, RAG pipelines, model serving",
-    icon: Brain,
-    file: "/resume/jay-hemnani-ml.pdf",
-    color: "#8b5cf6",
-  },
-  {
-    id: "swe",
-    title: "Backend / SWE",
-    description: "Microservices, REST APIs, distributed architecture",
-    icon: Code,
-    file: "/resume/jay-hemnani-swe.pdf",
-    color: "#10b981",
-  },
-  {
-    id: "analyst",
-    title: "Data Analyst",
-    description: "Tableau, Power BI, SQL, dashboards & visualization",
-    icon: Briefcase,
-    file: "/resume/jay-hemnani-analyst.pdf",
-    color: "#f59e0b",
+    pr: "PR #407",
+    repo: "google / A2UI",
+    title: "Add .env.example templates for safer secret setup.",
+    body: "Added env templates to Google's A2UI, the open standard for agent-to-user interfaces. A small patch with real surface area. Merged 5 January 2026.",
+    url: "https://github.com/google/A2UI/pull/407",
   },
 ];
 
-export default function ResumePage() {
-  const [selectedVersion, setSelectedVersion] = useState(RESUME_VERSIONS[0]);
+const SKILLS = [
+  {
+    level: "Expert",
+    note: "ship daily, can design from scratch",
+    items: ["Python", "TypeScript", "SQL", "PyTorch", "PostgreSQL", "Docker", "Kafka", "Airflow", "LangChain", "LangGraph", "MCP", "Next.js", "FastAPI", "Node.js / Express"],
+  },
+  {
+    level: "Proficient",
+    note: "ship confidently, may reference docs",
+    items: ["YOLOv8", "ByteTrack", "TimescaleDB", "MongoDB", "Redis", "MLflow", "DVC", "Tableau", "Power BI", "AWS", "Ollama", "vLLM"],
+  },
+  {
+    level: "Working",
+    note: "shipped once or twice, ready to ramp",
+    items: ["Go", "Rust", "Kubernetes", "pgvector", "Pinecone", "Weights & Biases", "GCP", "Azure", "Chrome Extensions", "WebMCP", "Three.js", "C++"],
+  },
+];
 
+const FACTS = [
+  { h: "Two IEEE publications, as an undergraduate.", p: "A research credential without a master's degree." },
+  { h: "Three merged OSS PRs into flagship repositories.", p: "vLLM, the Anthropic MCP SDK, and Google's A2UI. Evidence of landing changes inside unfamiliar large codebases." },
+  { h: "CAG Deep Research, built in ten days.", p: "Five-agent LangGraph system, hexagonal architecture, production-shipped. A signal for speed and ownership." },
+  { h: "Early WebMCP implementation in production.", p: "One of the first sites exposing structured tools via the W3C WebMCP standard. Eight tools, real adoption." },
+  { h: "Cursor, Claude Code, and Codex, daily for over a year.", p: "The honest version: faster ramps on unfamiliar codebases, tighter feedback loops, more time on the interesting work." },
+  { h: "Two production data platforms, two languages.", p: "Stock Data Platform in Python (Kafka, Airflow, TimescaleDB). Indian Stock Platform in Rust (Axum, WASM, Neon, GitHub Actions cron)." },
+  { h: "WCA-registered speedcuber.", p: "Personal best of 16.7 seconds. Not on the resume, true regardless." },
+];
+
+const pad = (n: number) => String(n).padStart(2, "0");
+
+export default function AboutPage() {
   return (
-    <div className="min-h-screen py-12 px-6" style={{ background: 'var(--bg-primary)', color: 'var(--text-primary)' }}>
-      <div className="max-w-4xl mx-auto">
-        {/* Back Button */}
-        <div className="mb-8">
-          <Link
-            href="/"
-            className="inline-flex items-center gap-2 text-sm transition-colors"
-            style={{ color: 'var(--text-muted)' }}
-          >
-            <ArrowLeft size={16} />
-            Back to Home
-          </Link>
-        </div>
+    <main id="main-content" className="editorial min-h-screen" style={{ background: "var(--bg-primary)" }}>
+      <EditorialMasthead active="about" />
 
-        {/* Header */}
-        <header className="mb-12">
-          <h1 className="text-4xl font-bold mb-3" style={{ color: 'var(--text-primary)' }}>
-            Resume
-          </h1>
-          <p style={{ color: 'var(--text-secondary)' }}>
-            Select the version that best matches the role you&apos;re interested in.
-          </p>
-        </header>
-
-        {/* Role Selector Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-          {RESUME_VERSIONS.map((version) => {
-            const Icon = version.icon;
-            const isSelected = selectedVersion.id === version.id;
-            return (
-              <button
-                key={version.id}
-                onClick={() => setSelectedVersion(version)}
-                className="relative p-5 rounded-xl text-left transition-all duration-200"
-                style={{
-                  background: isSelected ? `${version.color}15` : 'var(--bg-secondary)',
-                  border: `2px solid ${isSelected ? version.color : 'var(--border)'}`,
-                }}
-              >
-                <div className="flex items-start gap-4">
-                  <div
-                    className="p-2.5 rounded-lg"
-                    style={{ background: `${version.color}20` }}
-                  >
-                    <Icon size={22} style={{ color: version.color }} />
-                  </div>
-                  <div className="flex-1">
-                    <h3 className="font-semibold mb-1" style={{ color: 'var(--text-primary)' }}>
-                      {version.title}
-                    </h3>
-                    <p className="text-sm" style={{ color: 'var(--text-muted)' }}>
-                      {version.description}
-                    </p>
-                  </div>
-                </div>
-                {isSelected && (
-                  <div
-                    className="absolute top-3 right-3 w-2.5 h-2.5 rounded-full"
-                    style={{ background: version.color }}
-                  />
-                )}
-              </button>
-            );
-          })}
-        </div>
-
-        {/* Preview & Download Section */}
-        <div
-          className="rounded-xl p-6"
-          style={{ background: 'var(--bg-secondary)', border: '1px solid var(--border)' }}
-        >
-          <div className="flex items-center justify-between mb-4">
-            <div>
-              <h2 className="text-xl font-semibold" style={{ color: 'var(--text-primary)' }}>
-                {selectedVersion.title} Resume
-              </h2>
-              <p className="text-sm" style={{ color: 'var(--text-muted)' }}>
-                1-page PDF optimized for {selectedVersion.title.toLowerCase()} roles
-              </p>
+      {/* Hero */}
+      <section className="about-hero shell">
+        <div className="about-hero-grid">
+          <div>
+            <div className="eyebrow"><span className="dot" /><span>Department C · The Particulars</span></div>
+            <h1 className="display about-title"><span>About,</span><br /><span className="italic">in particular.</span></h1>
+          </div>
+          <div className="about-hero-side">
+            <p className="lede">
+              Born in Gujarat. Trained in computer engineering at PDEU. Have spent the last four years moving between data analyst, ML engineer, and full-stack engineer roles, usually because the project demanded it. Two IEEE papers. Three merged OSS patches. A long catalogue of finished things. Available for full-time and freelance.
+            </p>
+            <div className="about-quick">
+              <div><span className="mono xs upper muted">Name</span><br /><b>Jay Hemnani</b></div>
+              <div><span className="mono xs upper muted">Based</span><br /><b>Gujarat, India</b>, open to relocate</div>
+              <div><span className="mono xs upper muted">Status</span><br /><b>Available</b>, full-time and freelance</div>
+              <div><span className="mono xs upper muted">Reach</span><br /><a href="mailto:jayhemnani992000@gmail.com" className="underline-link">jayhemnani992000@gmail.com</a></div>
             </div>
-            <a
-              href={selectedVersion.file}
-              download={`Jay_Hemnani_${selectedVersion.title.replace(/\s+/g, '_')}_Resume.pdf`}
-              className="flex items-center gap-2 px-5 py-2.5 rounded-lg font-medium transition-all"
-              style={{
-                background: selectedVersion.color,
-                color: 'white',
-              }}
-            >
-              <Download size={18} />
-              Download PDF
-            </a>
-          </div>
-
-          {/* PDF Preview */}
-          <div
-            className="rounded-lg overflow-hidden"
-            style={{ border: '1px solid var(--border)' }}
-          >
-            <iframe
-              src={`${selectedVersion.file}#view=FitH`}
-              className="w-full"
-              style={{ height: '600px', background: 'white' }}
-              title={`${selectedVersion.title} Resume Preview`}
-            />
           </div>
         </div>
+      </section>
 
-        {/* Footer Note */}
-        <p className="mt-6 text-center text-sm" style={{ color: 'var(--text-muted)' }}>
-          All resumes are tailored versions highlighting relevant experience for each role type.
+      <hr className="rule thick shell" style={{ marginInline: "var(--margin)" }} />
+
+      {/* Experience */}
+      <section className="experience shell" id="resume">
+        <div className="section-head">
+          <span className="num">§ 01</span>
+          <span className="title">Curriculum vitae.</span>
+          <span className="meta">{RESUME.experience.length} roles</span>
+        </div>
+
+        <div className="cv-list">
+          {RESUME.experience.flatMap((company) =>
+            company.roles.map((role) => (
+              <article className="cv-row" key={`${company.name}-${role.title}`}>
+                <div className="cv-side">
+                  <div className="cv-year mono">{role.period?.label}</div>
+                  <div className="cv-period mono xs upper muted">{role.employmentType}</div>
+                </div>
+                <div className="cv-body">
+                  <header>
+                    <h3>{role.title}</h3>
+                    <span className="cv-company">
+                      {company.name}
+                      {(role.location || company.location) && <em> · {role.location || company.location}</em>}
+                    </span>
+                  </header>
+                  <ul>
+                    {role.bullets.map((b, i) => (
+                      <li key={i}>{b.text}</li>
+                    ))}
+                  </ul>
+                  {role.tech && role.tech.length > 0 && (
+                    <div className="cv-stack mono">{role.tech.join(" · ")}</div>
+                  )}
+                </div>
+              </article>
+            ))
+          )}
+        </div>
+
+        <div className="resume-pdfs">
+          <span className="mono xs upper muted">Download the PDFs</span>
+          {RESUME_PDFS.map((r) => (
+            <a key={r.file} className="pdf" href={r.file} target="_blank" rel="noreferrer">{r.label}</a>
+          ))}
+        </div>
+      </section>
+
+      {/* Education */}
+      <section className="education shell">
+        <div className="section-head">
+          <span className="num">§ 02</span>
+          <span className="title">Education.</span>
+          <span className="meta">one degree</span>
+        </div>
+        {RESUME.education.map((edu) => (
+          <article className="edu-row" key={edu.institution}>
+            <div className="edu-side">
+              <div className="edu-year mono">{edu.start}-{edu.end}</div>
+              {edu.gpa && <div className="edu-gpa mono xs upper">GPA <b>{edu.gpa}</b></div>}
+            </div>
+            <div className="edu-body">
+              <h3>{edu.degree}.</h3>
+              <p className="edu-company">{edu.institution}<em> · {edu.location}</em></p>
+              <p className="edu-deck">Four years of computer engineering, two IEEE papers as an undergrad, and a developing taste for systems that other people end up using.</p>
+              {edu.courses && edu.courses.length > 0 && (
+                <div className="edu-coursework">
+                  <span className="mono xs upper muted">Coursework</span>
+                  {edu.courses.map((c) => <span key={c}>{c}</span>)}
+                </div>
+              )}
+            </div>
+          </article>
+        ))}
+      </section>
+
+      {/* Publications */}
+      <section className="publications shell">
+        <div className="section-head">
+          <span className="num">§ 03</span>
+          <span className="title">Publications.</span>
+          <span className="meta">two IEEE papers</span>
+        </div>
+        <div className="pub-grid">
+          {RESUME.publications.map((pub, i) => (
+            <article className="pub" key={pub.title}>
+              <div className="pub-num">№ {pad(i + 1)}</div>
+              <div className="pub-body">
+                <div className="pub-meta mono xs upper">
+                  <span>{pub.venue}</span><span>·</span><span>{pub.year}</span>
+                </div>
+                <h3>{pub.title}.</h3>
+                <p>{pub.description}</p>
+                <div className="pub-links">
+                  {pub.link && <a href={pub.link} target="_blank" rel="noreferrer">Paper ↗</a>}
+                  {pub.github && <a href={pub.github} target="_blank" rel="noreferrer">Code ↗</a>}
+                </div>
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      {/* Open source */}
+      <section className="oss shell">
+        <div className="section-head">
+          <span className="num">§ 04</span>
+          <span className="title">Open source, three merged.</span>
+          <span className="meta">vLLM · MCP SDK · A2UI</span>
+        </div>
+        <p className="oss-intro lede">
+          Three PRs into ecosystem-critical repositories, each landed by navigating an unfamiliar large codebase, finding the seam, and shipping the change.
         </p>
-      </div>
-    </div>
+        <div className="oss-list">
+          {OSS.map((o) => (
+            <article className="oss-row" key={o.url}>
+              <div className="oss-num mono">{o.pr}</div>
+              <div className="oss-body">
+                <div className="oss-repo mono xs upper">{o.repo}</div>
+                <h3>{o.title}</h3>
+                <p>{o.body}</p>
+                <a href={o.url} target="_blank" rel="noreferrer" className="go">View pull request</a>
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      {/* Skills */}
+      <section className="skills shell">
+        <div className="section-head">
+          <span className="num">§ 05</span>
+          <span className="title">Stack, by honest level.</span>
+          <span className="meta">expert · proficient · working</span>
+        </div>
+        <div className="skill-grid">
+          {SKILLS.map((col) => (
+            <div className="skill-col" key={col.level}>
+              <h4 className="skill-h">{col.level} <span className="muted small">{col.note}</span></h4>
+              <ul>{col.items.map((s) => <li key={s}>{s}</li>)}</ul>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Facts */}
+      <section className="facts shell">
+        <div className="section-head">
+          <span className="num">§ 06</span>
+          <span className="title">A few non-trivial particulars.</span>
+          <span className="meta">numbered, not ranked</span>
+        </div>
+        <ol className="fact-list">
+          {FACTS.map((f, i) => (
+            <li key={f.h}>
+              <span className="fact-num">{pad(i + 1)}</span>
+              <div className="fact-body">
+                <h4>{f.h}</h4>
+                <p>{f.p}</p>
+              </div>
+            </li>
+          ))}
+        </ol>
+      </section>
+
+      {/* Contact */}
+      <section className="contact-cta shell">
+        <div className="section-head">
+          <span className="num">§ 07</span>
+          <span className="title">Get in touch.</span>
+          <span className="meta">responses inside 48h</span>
+        </div>
+        <div className="contact-grid">
+          <div>
+            <h2 className="display contact-h">A note, an offer, or a problem worth solving.</h2>
+            <p className="lede">I am looking for forward-deployed engineering, data engineering, agentic AI, and senior software roles. Staff-shaped problems welcome. India-remote, global-remote, and on-site with relocation all on the table.</p>
+          </div>
+          <div className="contact-side">
+            <a className="cta-button" href="mailto:jayhemnani992000@gmail.com">
+              <span className="mono xs upper muted">Open the line</span>
+              <span className="cta-mail">jayhemnani992000@gmail.com</span>
+            </a>
+            <div className="cta-links">
+              <a href="https://github.com/jayhemnani9910" target="_blank" rel="noreferrer">GitHub ↗</a>
+              <a href="https://linkedin.com/in/jayhemnani" target="_blank" rel="noreferrer">LinkedIn ↗</a>
+              <a href="https://x.com/jeyhemnani9" target="_blank" rel="noreferrer">Twitter ↗</a>
+              <Link href="/projects">Work →</Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <EditorialColophon />
+    </main>
   );
 }
