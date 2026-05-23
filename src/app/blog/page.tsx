@@ -1,6 +1,6 @@
 import { getAllPosts } from "@/lib/content";
-import { Navbar } from "@/components/Navbar";
-import { Footer } from "@/components/Footer";
+import { EditorialMasthead } from "@/components/EditorialMasthead";
+import { EditorialColophon } from "@/components/EditorialColophon";
 import Link from "next/link";
 import type { Metadata } from "next";
 
@@ -13,8 +13,8 @@ export default async function BlogPage() {
   const posts = await getAllPosts();
 
   return (
-    <main id="main-content" className="min-h-screen" style={{ background: 'var(--bg-primary)' }}>
-      <Navbar />
+    <main id="main-content" className="editorial min-h-screen" style={{ background: 'var(--bg-primary)' }}>
+      <EditorialMasthead active="writing" />
 
       <section className="pt-40 pb-20 section-shell">
         <div className="max-w-3xl mx-auto">
@@ -90,7 +90,7 @@ export default async function BlogPage() {
         </div>
       </section>
 
-      <Footer />
+      <EditorialColophon />
     </main>
   );
 }

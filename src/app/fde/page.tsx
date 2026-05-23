@@ -3,8 +3,8 @@
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { ArrowRight, Github, Mail, FileText, BookOpen, ExternalLink } from "lucide-react";
-import { Navbar } from "@/components/Navbar";
-import { Footer } from "@/components/Footer";
+import { EditorialMasthead } from "@/components/EditorialMasthead";
+import { EditorialColophon } from "@/components/EditorialColophon";
 import { VARIANTS, SPRINGS } from "@/lib/motion";
 
 // ─── Evidence cards ──────────────────────────────────────────────────────────
@@ -79,10 +79,10 @@ const PLAN: { week: string; action: string }[] = [
 export default function FDEPage() {
   return (
     <main
-      className="min-h-screen"
+      className="editorial min-h-screen"
       style={{ background: "var(--bg-primary)", color: "var(--text-primary)" }}
     >
-      <Navbar />
+      <EditorialMasthead />
 
       {/* ── Hero ─────────────────────────────────────────────────────────── */}
       <section className="pt-32 pb-16 px-6">
@@ -396,7 +396,7 @@ export default function FDEPage() {
         </div>
       </section>
 
-      <Footer />
+      <EditorialColophon />
     </main>
   );
 }

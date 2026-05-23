@@ -1,6 +1,6 @@
 import { getPost, getAllPosts } from "@/lib/content";
-import { Navbar } from "@/components/Navbar";
-import { Footer } from "@/components/Footer";
+import { EditorialMasthead } from "@/components/EditorialMasthead";
+import { EditorialColophon } from "@/components/EditorialColophon";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, Calendar, Clock, Tag } from "lucide-react";
@@ -219,8 +219,8 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
   }
 
   return (
-    <main id="main-content" className="min-h-screen" style={{ background: 'var(--bg-primary)' }}>
-      <Navbar />
+    <main id="main-content" className="editorial min-h-screen" style={{ background: 'var(--bg-primary)' }}>
+      <EditorialMasthead active="writing" />
 
       <article className="pt-40 pb-20 section-shell">
         <div className="max-w-3xl mx-auto">
@@ -293,7 +293,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
         </div>
       </article>
 
-      <Footer />
+      <EditorialColophon />
     </main>
   );
 }

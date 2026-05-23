@@ -1,0 +1,49 @@
+---
+title: "Biotech Accelerator"
+summary: "Multi-agent AI system for biotech research that routes a query through protein databases, literature, structural analysis, and chemistry, then proposes experiments worth running next."
+role: "Builder"
+period: "2026"
+domain: "AI/ML"
+tags: ["langgraph", "agents", "bioinformatics", "research"]
+tech: ["Python", "LangGraph", "ProDy", "httpx", "Rich", "Docker"]
+github: "https://github.com/jayhemnani9910/biotech-accelerator"
+links:
+  code: "https://github.com/jayhemnani9910/biotech-accelerator"
+  demo: "https://jayhemnani9910.github.io/biotech-accelerator/"
+challenge: "Early-stage biotech research means stitching together protein databases, literature, structural models, and chemistry by hand before anyone can decide which experiment to run. The work is slow, easy to get wrong, and hard to reproduce."
+solution:
+  - "A LangGraph-orchestrated pipeline that parses a research query and routes it through UniProt, PubMed, the PDB, normal-mode analysis (ANM/GNM), and ChEMBL in sequence."
+  - "Each external source sits behind its own agent with a typed interface, so a failed lookup degrades gracefully instead of breaking the run."
+  - "Normal-mode analysis via ProDy adds a structural/dynamics signal on top of sequence and literature evidence, which most query tools skip."
+  - "Packaged in Docker for a reproducible run, with a Rich terminal UI for readable progress and output."
+impact:
+  - "Turns a multi-tool manual research loop into one query that returns a structured list of suggested experiments."
+  - "Cross-references computational evidence with literature so suggestions are grounded, not just generated."
+  - "Reproducible end to end: the same query and container produce the same pipeline, useful for handing results to a collaborator."
+deepDive:
+  context: "Deciding what biotech experiment to run next depends on evidence scattered across separate systems: sequence and function in UniProt, prior findings in PubMed, structures in the PDB, dynamics from normal-mode analysis, and bioactivity in ChEMBL. A researcher normally queries each by hand and holds the synthesis in their head. This project automates that gathering and synthesis with a multi-agent pipeline so the human starts from a structured shortlist instead of a blank page."
+  architecture: "LangGraph drives a staged pipeline. A query parser turns a natural-language research question into structured intent, then the workflow moves through source-specific agents: UniProt for protein identity and function, PubMed for literature, the PDB for structure, ProDy for ANM/GNM normal-mode analysis on those structures, and ChEMBL for chemical and bioactivity context. A final stage synthesizes the collected evidence into suggested experiments. Each agent owns its own HTTP access (httpx) and parsing, communicating through shared pipeline state, which keeps a slow or failing external API from taking down the whole run."
+  components:
+    - "Query Parser: converts a free-text research question into structured targets and constraints for the downstream agents."
+    - "UniProt Agent: resolves the protein, pulls function, domains, and cross-references."
+    - "PubMed Agent: gathers relevant literature and recent findings tied to the target."
+    - "Structure + NMA Agent: fetches PDB structures and runs ANM/GNM normal-mode analysis via ProDy to capture dynamics."
+    - "ChEMBL Agent: adds chemical and bioactivity context for candidate compounds."
+    - "Synthesis stage: combines the evidence into a ranked list of experiments worth running next."
+  dataFlow: "Research query enters the query parser, which produces structured intent. The pipeline then calls UniProt, PubMed, the PDB plus ProDy normal-mode analysis, and ChEMBL, accumulating evidence in shared state at each step. The synthesis stage reads the accumulated evidence and emits a structured set of suggested experiments, surfaced through the Rich terminal UI."
+  keyDecisions:
+    - decision: "Multi-agent pipeline over a single prompt"
+      reasoning: "Each data source has its own access pattern, schema, and failure modes. Giving each source a dedicated agent keeps parsing logic isolated and lets one source fail without aborting the run. A single monolithic prompt would conflate retrieval, parsing, and synthesis and would hallucinate when a lookup came back empty."
+      alternatives: "One long-context LLM call (brittle, no real retrieval), a fixed script with no agent boundaries (hard to extend per source)."
+    - decision: "Add normal-mode analysis as a distinct structural signal"
+      reasoning: "Sequence and literature evidence are common; structural dynamics from ANM/GNM normal-mode analysis are not. Including ProDy-based NMA gives the synthesis stage a signal that distinguishes candidates that look similar on sequence alone."
+      alternatives: "Sequence and literature only (cheaper, less discriminating)."
+  learnings:
+    - "Source-specific agents with typed interfaces make a research pipeline resilient: a flaky external API becomes a degraded result, not a crash."
+    - "A structural-dynamics signal is worth the extra stage. Normal-mode analysis surfaces differences that sequence and literature evidence miss."
+    - "Shipping in Docker from the start made the pipeline reproducible, which matters more than speed when the output is a research recommendation someone else has to trust."
+featured: true
+priority: 6
+---
+# Overview
+Biotech Accelerator is a multi-agent AI system for early-stage biotech research. A LangGraph pipeline parses a research query and routes it through UniProt, PubMed, the PDB with ProDy normal-mode analysis, and ChEMBL, then synthesizes the collected evidence into a structured list of experiments worth running next. It runs in Docker for reproducibility and reports progress through a Rich terminal UI.

@@ -3,8 +3,8 @@
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { Navbar } from "@/components/Navbar";
-import { Footer } from "@/components/Footer";
+import { EditorialMasthead } from "@/components/EditorialMasthead";
+import { EditorialColophon } from "@/components/EditorialColophon";
 
 // Glitch text effect component
 function GlitchText({ text }: { text: string }) {
@@ -48,8 +48,8 @@ function GlitchText({ text }: { text: string }) {
 
 export default function NotFound() {
   return (
-    <main className="relative min-h-screen flex flex-col" style={{ background: "var(--bg-primary)" }}>
-      <Navbar />
+    <main className="editorial relative min-h-screen flex flex-col" style={{ background: "var(--bg-primary)" }}>
+      <EditorialMasthead />
 
       <div className="flex-1 flex items-center justify-center px-6">
         <div className="text-center max-w-2xl">
@@ -101,7 +101,7 @@ export default function NotFound() {
         </div>
       </div>
 
-      <Footer />
+      <EditorialColophon />
     </main>
   );
 }
