@@ -3,7 +3,7 @@ import { Resume } from "@/data/types";
 export const RESUME: Resume = {
   name: "Jay Hemnani",
   tagline: "Software & Data Engineer",
-  summary: "End-to-end builder across data pipelines, ML systems, and distributed backends. Production experience spanning real-time streaming architectures, computer vision research, and full-stack applications — prototypes to production in days, not weeks.",
+  summary: "End-to-end builder across data pipelines, ML systems, and distributed backends. Production experience spanning real-time streaming architectures, computer vision research, and full-stack applications, prototypes to production in days, not weeks.",
   location: "Gujarat, India (Open to Relocate)",
   contact: {
     email: "jayhemnani992000@gmail.com",
@@ -78,7 +78,7 @@ export const RESUME: Resume = {
       roles: [
         {
           title: "Technical Consultant",
-          period: { label: "2022–2024", start: "2022-01", end: "2024-01" },
+          period: { label: "2022-2024", start: "2022-01", end: "2024-01" },
           employmentType: "contract",
           location: "Remote",
           tech: ["Python", "SQL", "Google Analytics", "Mixpanel", "Tableau", "Figma"],
@@ -97,7 +97,7 @@ export const RESUME: Resume = {
         {
           title: "AI/ML Intern",
           employmentType: "internship",
-          period: { label: "Jan–May 2022", start: "2022-01", end: "2022-05" },
+          period: { label: "Jan-May 2022", start: "2022-01", end: "2022-05" },
           location: "Gujarat, India",
           tech: ["Python", "Scikit-learn", "TensorFlow", "Pandas", "NumPy", "XGBoost"],
           summary: "ML Engineering & Analytics",
@@ -115,7 +115,7 @@ export const RESUME: Resume = {
         {
           title: "iOS App Development Intern",
           employmentType: "internship",
-          period: { label: "Jun–Aug 2021", start: "2021-06", end: "2021-08" },
+          period: { label: "Jun-Aug 2021", start: "2021-06", end: "2021-08" },
           location: "Gujarat, India",
           tech: ["Swift", "UIKit", "Core Data", "Xcode", "Git"],
           summary: "Mobile Engineering",
@@ -133,7 +133,7 @@ export const RESUME: Resume = {
         {
           title: "SWE Intern",
           employmentType: "internship",
-          period: { label: "May–Nov 2019", start: "2019-05", end: "2019-11" },
+          period: { label: "May-Nov 2019", start: "2019-05", end: "2019-11" },
           location: "Gujarat, India",
           tech: ["Azure", "CI/CD", "Microservices", "REST APIs", "Docker"],
           summary: "Cloud-Native Development",
