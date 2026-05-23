@@ -4,8 +4,8 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { ProjectSummary } from "@/lib/content";
 import { BentoCard } from "@/components/BentoCard";
-import { Navbar } from "@/components/Navbar";
-import { Footer } from "@/components/Footer";
+import { EditorialMasthead } from "@/components/EditorialMasthead";
+import { EditorialColophon } from "@/components/EditorialColophon";
 import { Search } from "lucide-react";
 
 interface ProjectsClientProps {
@@ -25,8 +25,8 @@ export function ProjectsClient({ projects }: ProjectsClientProps) {
     });
 
     return (
-        <main className="min-h-screen" style={{ background: 'var(--bg-primary)' }}>
-            <Navbar />
+        <main className="editorial min-h-screen" style={{ background: 'var(--bg-primary)' }}>
+            <EditorialMasthead active="work" />
 
             <section className="pt-40 pb-20">
                 <div className="section-wide">
@@ -95,7 +95,7 @@ export function ProjectsClient({ projects }: ProjectsClientProps) {
                 </div>
             </section>
 
-            <Footer />
+            <EditorialColophon />
         </main>
     );
 }
