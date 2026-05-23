@@ -54,14 +54,6 @@ export const metadata: Metadata = {
     description: SITE_CONFIG.description,
     url: SITE_CONFIG.url,
     siteName: SITE_CONFIG.name,
-    images: [
-      {
-        url: SITE_CONFIG.ogImage,
-        width: 1200,
-        height: 630,
-        alt: SITE_CONFIG.title,
-      },
-    ],
     locale: "en_US",
     type: "website",
   },
@@ -70,7 +62,6 @@ export const metadata: Metadata = {
     title: SITE_CONFIG.title,
     description: SITE_CONFIG.description,
     creator: SITE_CONFIG.twitterHandle,
-    images: [SITE_CONFIG.ogImage],
   },
   robots: {
     index: true,
