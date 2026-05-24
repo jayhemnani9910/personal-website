@@ -33,6 +33,11 @@ export type ShowcaseConfig = {
 };
 
 export const SHOWCASE_PROJECTS: Record<string, ShowcaseConfig> = {
+  "receiptlens-minicpm-v46": {
+    // hero: "/projects/receiptlens/ocr.png",  // enable once ocr.png is placed
+    heroTag: "MiniCPM-V · on-device · iOS",
+    // No demo: iOS app, nothing to iframe
+  },
   "voxt": {
     // hero: "/projects/voxt/flow.png",  // enable once flow.png is placed
     heroTag: "Go · Whisper · Wayland+X11",
