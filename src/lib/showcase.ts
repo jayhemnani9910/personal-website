@@ -33,6 +33,11 @@ export type ShowcaseConfig = {
 };
 
 export const SHOWCASE_PROJECTS: Record<string, ShowcaseConfig> = {
+  "unified-search": {
+    // hero: "/projects/unisearch/strategies.png",  // enable once strategies.png is placed
+    heroTag: "5 strategies · turbulent plume",
+    // Demo tab iframes the live in-browser simulator (from MDX links.demo)
+  },
   "longitudinal-mets-validation": {
     // hero: "/projects/mets/pipeline.png",  // enable once pipeline.png is placed
     heroTag: "NHANES · Fine-Gray · external validation",
