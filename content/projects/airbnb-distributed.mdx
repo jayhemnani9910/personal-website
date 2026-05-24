@@ -1,26 +1,121 @@
 ---
 title: "Airbnb - Distributed Booking"
-summary: "Cloud-native Airbnb clone with microservices, Kafka messaging, and AI-powered travel planning."
+summary: "A team-built Airbnb-style booking platform that grew from a monolith into event-driven microservices: a React/Redux frontend over four Node services and a Python AI agent, talking through Kafka with MongoDB, and deployable on Kubernetes."
 role: "Developer"
-period: "Personal"
+period: "2025"
 domain: "Distributed Systems"
 tags: ["distributed-systems", "microservices", "cloud-native"]
-tech: ["React", "Redux", "Node.js", "MongoDB", "Kafka", "LangChain", "Docker", "Kubernetes"]
+tech: ["React", "Redux", "Node.js", "MongoDB", "Kafka", "FastAPI", "Docker", "Kubernetes"]
 github: "https://github.com/vrushabh05/Lab1_distributed_system"
-challenge: "Implement a distributed booking system with asynchronous service communication and container orchestration."
+links:
+  code: "https://github.com/vrushabh05/Lab1_distributed_system"
+challenge: "An Airbnb-style app has clearly separable concerns, travelers, owners, properties, bookings, that fight each other inside a single codebase as it grows. The project's goal was to take a working monolith and re-architect it into independent services that communicate asynchronously, so a slow or failing service degrades the system instead of taking it down, and to make the whole thing deployable on Kubernetes."
 solution:
-  - "React/Redux frontend with TailwindCSS for responsive property browsing."
-  - "4 Node.js microservices: Traveler, Owner, Property, Booking with independent deployments."
-  - "Kafka-based event streaming for booking status sync across services."
-  - "MongoDB collections for users, properties, bookings with optimized indexes."
-  - "Python FastAPI agent with LangChain for AI-powered travel recommendations."
-  - "Docker Compose for local dev, Kubernetes manifests for production deployment."
+  - "A React + Redux + Vite frontend (Tailwind) with feature slices for auth, properties, bookings, favorites, and the owner dashboard, talking to the backend over a small API layer."
+  - "Four Node/Express microservices, traveler, owner, property, and booking, each with its own responsibility and MongoDB data, deployable independently."
+  - "Kafka as the event bus: the booking service consumes booking-request and booking-update topics with consumer groups and retry-on-failure, so booking status stays consistent across services without synchronous coupling."
+  - "A separate Python FastAPI agent service that uses LangChain with a local Ollama model to generate day-by-day travel itineraries as structured JSON."
+  - "Packaged for both local and cluster runs: Docker Compose for development and a full set of Kubernetes manifests, with Playwright end-to-end tests, a Postman collection, and JMeter load testing."
 impact:
-  - "Resilient booking flow with eventual consistency via Kafka."
-  - "AI travel planner suggesting properties based on preferences."
-  - "Container orchestration enabling horizontal scaling."
+  - "Re-architected from a Lab 1 monolith into a Lab 2 event-driven microservices system, the evolution itself is the point: the same product, decomposed and made resilient."
+  - "The booking flow tolerates a missing Kafka broker (it logs and runs degraded) and retries failed messages, so async consistency does not become a single point of failure."
+  - "An AI concierge built as its own service rather than bolted onto the frontend, keeping the LLM dependency isolated behind a clean API."
+deepDive:
+  context: "This was a team distributed-systems project built in two iterations: a monolithic first version (Lab 1) and then a re-architecture into event-driven microservices (Lab 2). The product is an Airbnb-style booking site, travelers search and book properties, owners list and manage them, with an added AI travel-planning concierge. Internally the team called it Voyage. My focus was on the distributed back end: the services, their Kafka communication, and the deployment setup."
+  architecture: "The system is a React/Redux/Vite frontend over four Node/Express microservices, each owning a slice of the domain: traveler (port 3001), owner (3002), booking (3004), and property. Each service has its own MongoDB data and exposes an HTTP API; cross-service workflows go through Kafka rather than direct calls. The booking service, for example, subscribes to booking-request and booking-update topics on a consumer group, so a booking made in one place propagates to the others asynchronously and survives transient failures through Kafka's retry. A separate Python FastAPI agent service wraps a local Ollama LLM through LangChain to generate travel itineraries, isolated so the AI dependency never touches the core booking path. Everything is containerized: Docker Compose for local development and a full set of Kubernetes manifests (services, MongoDB, Kafka, Ollama, config, secrets) for cluster deployment, with Playwright, Postman, and JMeter covering end-to-end, API, and load testing."
+  dataFlow:
+    - step: "Browse and book (frontend)"
+      detail: "React/Redux pages call the service APIs through a small API layer; Redux slices hold auth, properties, bookings, favorites, and dashboard state."
+    - step: "Service handles the request"
+      detail: "The relevant Node service (traveler, owner, property, or booking) processes it against its own MongoDB data."
+    - step: "Publish an event"
+      detail: "A booking action publishes to a Kafka topic (booking-requests / booking-updates) instead of calling other services directly."
+    - step: "Consume and sync"
+      detail: "The booking service consumes those topics on a consumer group, updating state and retrying on failure so status stays consistent across services."
+    - step: "AI concierge (separate path)"
+      detail: "The FastAPI agent service generates a JSON itinerary via LangChain + Ollama, kept isolated from the booking flow."
+  components:
+    - name: "Frontend (React + Redux + Vite)"
+      purpose: "Property search, booking, favorites, and the owner dashboard; Redux slices for auth, properties, bookings, favorites, and dashboard state, styled with Tailwind."
+    - name: "Traveler / Owner / Property / Booking services"
+      purpose: "Four Node/Express microservices, each owning its domain and MongoDB data, deployable independently on their own ports."
+    - name: "Kafka event bus"
+      purpose: "Asynchronous communication between services: booking-request and booking-update topics consumed on consumer groups, with retry on failure."
+    - name: "Agent service (FastAPI + LangChain + Ollama)"
+      purpose: "A separate Python service generating day-by-day travel itineraries as structured JSON from a local LLM, isolated behind its own API."
+    - name: "MongoDB"
+      purpose: "Per-service document storage for users, properties, and bookings."
+    - name: "Docker Compose + Kubernetes manifests"
+      purpose: "Local development via Compose and cluster deployment via a full manifest set (services, MongoDB, Kafka, Ollama, config, secrets), with Playwright, Postman, and JMeter testing."
+  keyDecisions:
+    - decision: "Communicate through Kafka instead of direct service-to-service calls"
+      reasoning: "Synchronous calls between services couple their availability: if one is down, the caller fails. Routing booking events through Kafka topics with consumer groups means a service can be slow or briefly offline and catch up from the log, which is the whole reason to go microservices in the first place."
+      alternatives: "Direct REST calls between services (tight coupling, cascading failures); a shared database (re-couples the services through their data)."
+    - decision: "Isolate the AI concierge as its own service"
+      reasoning: "The LLM dependency (LangChain + a local Ollama model) is heavy and unrelated to booking correctness. Putting it behind its own FastAPI service keeps that dependency out of the core path, so the booking system does not inherit the AI service's footprint or failure modes."
+      alternatives: "Call the LLM from the frontend or a core service (drags the model dependency into the booking path and the client bundle)."
+    - decision: "Degrade gracefully when Kafka is absent"
+      reasoning: "A broker is not always available in local development. The booking service logs a warning and runs without Kafka rather than refusing to start, so developers can work on the rest of the system without standing up the full event bus."
+      alternatives: "Hard-require Kafka at boot (blocks all local work on the service unless a broker is running)."
+  codeSnippets:
+    - title: "The booking service consumes Kafka topics, with retry"
+      language: "javascript"
+      code: |
+        async function setupKafkaConsumer() {
+          const consumer = await kafka.createConsumer('booking-status-sync-group');
+          if (!consumer) {
+            logger.warn('Kafka consumer not created - running without Kafka');
+            return;   // degrade gracefully in local dev
+          }
+
+          await kafka.subscribe('booking-updates', async (updateData) => {
+            // apply the status update to this service's MongoDB
+          });
+
+          await kafka.subscribe('booking-requests', async (bookingData) => {
+            // create the booking; on error, rethrow to trigger Kafka retry
+          });
+
+          await kafka.startConsumer();
+        }
+      explanation: "Cross-service booking consistency runs over two Kafka topics on a consumer group. Handlers rethrow on failure so Kafka retries the message, and if no broker is present the service logs and runs degraded instead of failing to start, the same degrade-gracefully approach used elsewhere in the project."
+    - title: "The AI concierge: LangChain + a local Ollama model"
+      language: "python"
+      code: |
+        from langchain_ollama import ChatOllama
+        from langchain_core.prompts import ChatPromptTemplate
+
+        llm = ChatOllama(
+            base_url=config.OLLAMA_API,
+            model=config.OLLAMA_MODEL,
+            temperature=0.2,   # lower temp -> more deterministic JSON
+        )
+
+        itinerary_prompt = ChatPromptTemplate.from_template("""
+        You are an expert travel agent. Create a day-by-day itinerary for {location}
+        for {duration} days given preferences: {preferences}.
+        Return strictly a JSON array, one object per day, no markdown.
+        """)
+      explanation: "The travel concierge runs a local Ollama model through LangChain, with a low temperature and a strict JSON-only prompt so the itinerary parses reliably. Running the model locally keeps the feature free of an external API key, and isolating it in its own service keeps that choice from leaking into the rest of the system."
+  metrics:
+    - value: "6 services"
+      label: "deployables"
+      context: "4 Node + 1 Python agent + React frontend"
+    - value: "Kafka"
+      label: "event bus"
+      context: "booking topics, consumer groups, retry"
+    - value: "Kubernetes"
+      label: "full manifests"
+      context: "+ Docker Compose, Playwright, JMeter"
+    - value: "Ollama"
+      label: "local LLM agent"
+      context: "LangChain JSON itineraries"
+  learnings:
+    - "Moving from a monolith to microservices is mostly a communication problem: the services are the easy part, deciding what goes over Kafka versus a direct call is where the design actually lives."
+    - "Retry-on-failure plus a graceful no-broker path makes the event bus a resilience feature rather than a new single point of failure."
+    - "Keeping the LLM in its own service paid off: the AI concierge could change models or break entirely without touching the booking flow."
 featured: false
 priority: 9
 ---
 # Overview
-Production-style Airbnb clone demonstrating modern cloud-native development patterns. Features microservices architecture, event-driven communication, and AI-powered recommendations built for DATA 236 Lab 1.
+A team-built Airbnb-style booking platform, internally called Voyage, that evolved from a monolith into an event-driven microservices system. A React/Redux/Vite frontend sits over four Node/Express services (traveler, owner, property, booking), each with its own MongoDB, communicating through Kafka topics with consumer groups and retry rather than direct calls. A separate Python FastAPI service runs a local Ollama model through LangChain to generate JSON travel itineraries, kept isolated from the booking path. The whole system ships with Docker Compose for local runs and a full set of Kubernetes manifests, plus Playwright, Postman, and JMeter for end-to-end, API, and load testing.
