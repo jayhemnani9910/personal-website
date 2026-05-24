@@ -214,6 +214,28 @@ export function ProjectShowcase({ project }: { project: Project }) {
           </div>
         )}
 
+        {active === "demo" && demo?.kind === "report" && (
+          <div className="sw-demo">
+            <p className="sw-report-note mono xs upper muted">{demo.note}</p>
+            <div className="sw-report">
+              <h3 className="ds-h3" style={{ marginTop: 0 }}>{demo.title}</h3>
+              <ul className="sw-findings">
+                {demo.findings.map((f, i) => (
+                  <li key={i} className={`sw-finding v-${f.verdict.toLowerCase()}`}>
+                    <span className="sw-verdict">{f.verdict}</span>
+                    <span className="sw-finding-text">{f.text}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            {demo.sourceUrl && (
+              <a className="sw-btn" href={demo.sourceUrl} target="_blank" rel="noreferrer">
+                Run it yourself on GitHub ↗
+              </a>
+            )}
+          </div>
+        )}
+
         {active === "demo" && demo?.kind === "compare" && (
           <div className="sw-demo">
             <p className="ds-prose" style={{ maxWidth: "62ch" }}>

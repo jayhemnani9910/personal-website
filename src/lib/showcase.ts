@@ -9,6 +9,13 @@ export type ShowcaseDemo =
       kind: "compare";
       pairs: { before: string; after: string; label?: string }[];
       liveUrl?: string;
+    }
+  | {
+      kind: "report";
+      title: string;
+      note: string;
+      findings: { verdict: "VERIFIED" | "CONTESTED" | "UNVERIFIED"; text: string }[];
+      sourceUrl?: string;
     };
 
 export type ShowcaseConfig = {
@@ -43,5 +50,21 @@ export const SHOWCASE_PROJECTS: Record<string, ShowcaseConfig> = {
     hero: "/projects/svr/pipeline.png",
     heroTag: "RF-DETR · SAM2 · SigLIP",
     // Demo tab iframes the live landing page (from MDX links.demo)
+  },
+  "revolu-idea": {
+    hero: "/projects/cag/flow.png",
+    heroTag: "Causal-Adversarial · LangGraph",
+    demo: {
+      kind: "report",
+      title: "Impact of remote work on productivity",
+      note: "Static sample showing the shape of a CAG run, verdict-tagged findings. A real run grounds each claim in web citations and evidence objects.",
+      findings: [
+        { verdict: "VERIFIED", text: "Productivity impact is not uniform; it varies by role, tooling, and meeting load." },
+        { verdict: "CONTESTED", text: "Fully remote always increases productivity compared to hybrid arrangements." },
+        { verdict: "VERIFIED", text: "Strong async practices reduce coordination overhead for distributed teams." },
+        { verdict: "UNVERIFIED", text: "A single policy works well for every team without exceptions." },
+      ],
+      sourceUrl: "https://github.com/jayhemnani9910/revolu-idea",
+    },
   },
 };
