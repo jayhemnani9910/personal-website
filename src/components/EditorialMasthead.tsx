@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useTheme } from "@/context/ThemeContext";
 
-type Section = "cover" | "work" | "writing" | "about";
+type Section = "cover" | "work" | "writing" | "about" | "fde";
 
 export function EditorialMasthead({ active }: { active?: Section }) {
   const { toggleTheme } = useTheme();
@@ -19,6 +19,7 @@ export function EditorialMasthead({ active }: { active?: Section }) {
           <Link href="/projects" className={active === "work" ? "active" : undefined}>Work</Link>
           <Link href="/blog" className={active === "writing" ? "active" : undefined}>Writing</Link>
           <Link href="/resume" className={active === "about" ? "active" : undefined}>About</Link>
+          <Link href="/fde" className={active === "fde" ? "active" : undefined}>FDE</Link>
           <button className="mh-theme" type="button" aria-label="Toggle theme" onClick={toggleTheme} />
         </nav>
       </div>

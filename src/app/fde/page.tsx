@@ -82,7 +82,7 @@ export default function FDEPage() {
       className="editorial min-h-screen"
       style={{ background: "var(--bg-primary)", color: "var(--text-primary)" }}
     >
-      <EditorialMasthead />
+      <EditorialMasthead active="fde" />
 
       {/* ── Hero ─────────────────────────────────────────────────────────── */}
       <section className="pt-32 pb-16 px-6">
