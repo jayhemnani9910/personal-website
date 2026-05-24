@@ -1,26 +1,120 @@
 ---
 title: "CPU Scheduling Visualizer"
-summary: "Interactive visualization of 9 CPU scheduling algorithms with Gantt charts and comparative analysis. Applied to vaccine scheduling in a published IEEE paper."
+summary: "An interactive web visualizer for 9 CPU scheduling algorithms: build a process set with CPU and I/O bursts, run any algorithm, and compare them on a Gantt chart by average completion, turnaround, waiting, and response time."
 role: "Developer"
 period: "2021"
 domain: "Operating Systems"
 tags: ["os", "visualization", "algorithms", "research"]
-tech: ["JavaScript", "Google Charts", "Chart.js", "HTML/CSS"]
+tech: ["JavaScript", "HTML", "CSS", "Node.js"]
 github: "https://github.com/jayhemnani9910/cpu-scheduling-algorithms"
 links:
+  code: "https://github.com/jayhemnani9910/cpu-scheduling-algorithms"
   demo: "https://jayhemnani9910.github.io/cpu-scheduling-algorithms/"
   paper: "https://ieeexplore.ieee.org/document/9670986"
-challenge: "Visualize and compare 9 CPU scheduling algorithms interactively, with real-time Gantt charts and performance metrics."
+challenge: "CPU scheduling algorithms are easy to state and hard to feel: the difference between FCFS, Round Robin, and HRRN only becomes intuitive when you watch the same processes scheduled different ways and compare the numbers. The goal was a browser tool to do exactly that, build a process set, run any of the standard algorithms, and see the schedule and its metrics side by side."
 solution:
-  - "9 algorithms: FCFS, SJF, SRTF, LJF, LRTF, Priority (NP/P), Round Robin, HRRN."
-  - "Gantt chart + timeline visualization with comparative analysis across all algorithms."
-  - "Configurable parameters: context switch time, time quantum, I/O burst, priority preference."
+  - "Implements 9 algorithms, FCFS, SJF, SRTF, LJF, LRTF, Priority (non-preemptive and preemptive), Round Robin, and HRRN, as one discrete-event scheduler driven by a per-tick ready queue."
+  - "Models each process with both CPU and I/O bursts, arrival time, and priority, with configurable context-switch time, time quantum, and a high/low priority preference."
+  - "Renders the resulting schedule as a Gantt and timeline chart and compares all algorithms by average completion, turnaround, waiting, and response time, including a Round Robin sweep across time quanta."
+  - "Extracts the core scheduling logic into a Node-runnable test suite covering all 9 algorithms, so the engine can be verified outside the browser."
 impact:
-  - "Applied to real-world vaccine distribution scheduling in published IEEE paper (AIMV 2021)."
-  - "Interactive demo deployed on GitHub Pages, try all 9 algorithms on custom process sets."
-  - "1,105 lines of JavaScript implementing scheduling logic, visualization, and comparative metrics."
+  - "Runs entirely in the browser on GitHub Pages: define a custom process set and try every algorithm on it with no setup."
+  - "Turns scheduling theory into a side-by-side comparison, making the trade-offs between algorithms visible on the same input."
+  - "Built as the implementation behind a published IEEE paper (AIMV 2021) that applied CPU-scheduling ideas to vaccine-distribution scheduling."
+deepDive:
+  context: "This started as an operating-systems project and became the implementation behind a published IEEE paper (AIMV 2021) on applying scheduling algorithms to vaccine distribution. The visualizer's job is pedagogical and comparative: let someone enter a set of processes with CPU and I/O bursts, pick a scheduling policy, watch the schedule build on a Gantt chart, and then compare every algorithm on the same input by the four metrics that matter, completion, turnaround, waiting, and response time."
+  architecture: "It is a single-page vanilla-JS app, about 1,105 lines, with no framework. Input is a table of processes (arrival time, alternating CPU and I/O bursts, optional priority) plus global settings (algorithm, context-switch time, time quantum, priority preference). A single discrete-event scheduler advances time tick by tick: at each tick it updates a ready queue from processes that have arrived and a block queue for those finishing I/O, picks the next process according to the chosen policy, and records the run on a time log. From that time log the app derives per-process completion, turnaround, waiting, and response times, averages them, and renders a Gantt and timeline chart. The same core logic is extracted into a Node test suite so the 9 algorithms can be tested headlessly."
+  dataFlow:
+    - step: "Define processes"
+      detail: "Enter arrival times, alternating CPU and I/O bursts, and (optionally) priorities, plus global settings like time quantum and context-switch time."
+    - step: "Run the scheduler"
+      detail: "A discrete-event loop advances time, maintaining a ready queue and an I/O block queue, and selects the next process by the chosen algorithm."
+    - step: "Record the time log"
+      detail: "Each scheduling decision is appended to a time log, which is reduced into contiguous Gantt segments."
+    - step: "Compute metrics"
+      detail: "Per-process turnaround (completion minus arrival) and waiting (turnaround minus burst) are derived, then averaged across processes."
+    - step: "Visualize and compare"
+      detail: "The schedule renders as a Gantt and timeline; all algorithms are compared on the same input, with a Round Robin sweep over time quanta."
+  components:
+    - name: "Input / process table"
+      purpose: "Captures the process set, arrival times, CPU and I/O burst pairs, priorities, and the global scheduling settings."
+    - name: "CPUScheduler (discrete-event engine)"
+      purpose: "Advances time tick by tick, maintaining ready and I/O block queues and selecting the next process per the chosen algorithm; emits a time log."
+    - name: "Algorithm selection"
+      purpose: "Dispatches to one of the 9 policies (FCFS, SJF, SRTF, LJF, LRTF, Priority NP/P, Round Robin, HRRN), each preemptive or non-preemptive as appropriate."
+    - name: "Metrics (setOutput / outputAverageTimes)"
+      purpose: "Derives per-process completion, turnaround, waiting, and response times and averages them for cross-algorithm comparison."
+    - name: "Gantt and timeline rendering"
+      purpose: "Reduces the time log into contiguous segments and draws the schedule, with an animated time-log playback."
+    - name: "tests.js (Node test suite)"
+      purpose: "The browser scheduling logic extracted into a headless, Node-runnable suite that tests all 9 algorithms."
+  keyDecisions:
+    - decision: "One discrete-event scheduler, not nine separate implementations"
+      reasoning: "All nine policies differ only in how the next process is chosen at each tick. A single time-stepped engine with a pluggable selection rule keeps the ready-queue, I/O-blocking, and context-switch logic in one place instead of duplicated nine times."
+      alternatives: "A standalone function per algorithm (lots of duplicated queue and I/O handling, easy to drift out of sync)."
+    - decision: "Model I/O bursts, not just CPU bursts"
+      reasoning: "Real processes alternate CPU and I/O. Adding an I/O block queue alongside the ready queue makes the schedules realistic and lets preemptive policies behave as they actually would when a process blocks."
+      alternatives: "CPU bursts only (simpler, but an unrealistic model that hides how scheduling interacts with I/O)."
+    - decision: "Extract the core logic into a Node test suite"
+      reasoning: "Scheduling logic embedded in DOM event handlers is hard to trust. Pulling the engine and the nine algorithms into a plain module that runs under Node makes the results testable headlessly, separate from the UI."
+      alternatives: "Manual checking in the browser (slow, not repeatable, no regression safety)."
+  codeSnippets:
+    - title: "The metrics every scheduler is judged by"
+      language: "javascript"
+      code: |
+        function setOutput(input, output) {
+          const n = input.processId.length;
+          for (let i = 0; i < n; i++) {
+            output.turnAroundTime[i] = output.completionTime[i] - input.arrivalTime[i];
+            output.waitingTime[i]    = output.turnAroundTime[i] - input.totalBurstTime[i];
+          }
+          output.schedule = reduceSchedule(output.schedule);
+          output.averageTimes = outputAverageTimes(output, n);
+        }
+
+        function outputAverageTimes(output, n) {
+          let ct = 0, tat = 0, wt = 0, rt = 0;
+          output.completionTime.forEach(e => ct += e);
+          output.turnAroundTime.forEach(e => tat += e);
+          output.waitingTime.forEach(e => wt += e);
+          output.responseTime.forEach(e => rt += e);
+          return [ct / n, tat / n, wt / n, rt / n];
+        }
+      explanation: "Turnaround is completion minus arrival, waiting is turnaround minus total burst, the textbook definitions. Averaging the four metrics across processes is what makes the cross-algorithm comparison meaningful: every policy is scored on the same numbers from the same input."
+    - title: "A ready queue and an I/O block queue, per tick"
+      language: "javascript"
+      code: |
+        function updateReadyQueue(currentTimeLog) {
+          // processes that have arrived become ready
+          let candidatesRemain = currentTimeLog.remain
+            .filter(e => input.arrivalTime[e] <= currentTimeLog.time);
+          // processes whose I/O has finished come back
+          let candidatesBlock = currentTimeLog.block
+            .filter(e => utility.returnTime[e] <= currentTimeLog.time);
+
+          if (candidatesRemain.length > 0) currentTimeLog.move.push(0);
+          if (candidatesBlock.length > 0) currentTimeLog.move.push(5);
+        }
+      explanation: "At each time step the scheduler refreshes two queues: newly arrived processes joining the ready queue, and processes returning from an I/O block. Modeling the block queue alongside the ready queue is what makes the schedules reflect real CPU/I/O interleaving rather than a CPU-only abstraction."
+  metrics:
+    - value: "9 algorithms"
+      label: "schedulers"
+      context: "FCFS · SJF · SRTF · LJF · LRTF · Priority · RR · HRRN"
+    - value: "4 metrics"
+      label: "compared"
+      context: "completion · turnaround · waiting · response"
+    - value: "1,105 lines"
+      label: "vanilla JS"
+      context: "one engine + a Node test suite"
+    - value: "IEEE 2021"
+      label: "paper implementation"
+      context: "AIMV, applied to vaccine scheduling"
+  learnings:
+    - "Nine algorithms collapse into one engine once you see that they differ only in the next-process selection rule, the queueing and I/O logic is shared."
+    - "Adding an I/O block queue is what separates a toy CPU-only model from schedules that behave the way an OS course actually describes."
+    - "Lifting logic out of DOM handlers into a Node-testable module turned a browser demo into something with a real regression suite behind it."
 featured: false
 priority: 16
 ---
 # Overview
-Interactive CPU scheduling algorithm visualizer implementing 9 algorithms (FCFS, SJF, SRTF, LJF, LRTF, Priority NP/P, Round Robin, HRRN) with Gantt charts, comparative analysis, and configurable parameters. The scheduling concepts were applied to vaccine distribution in a published IEEE paper at AIMV 2021.
+An interactive web visualizer for 9 CPU scheduling algorithms (FCFS, SJF, SRTF, LJF, LRTF, Priority NP/P, Round Robin, HRRN). You build a process set with CPU and I/O bursts, arrival times, and priorities, set the context-switch time and time quantum, then run any algorithm and watch the schedule build on a Gantt chart. All algorithms are compared on the same input by average completion, turnaround, waiting, and response time, with a Round Robin sweep across time quanta. It is a single ~1,105-line vanilla-JS app whose core scheduling logic is also extracted into a Node test suite covering all 9 algorithms, and it is the implementation behind a published IEEE paper (AIMV 2021).
