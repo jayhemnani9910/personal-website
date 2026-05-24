@@ -1,25 +1,134 @@
 ---
 title: "Kayak - Travel Metasearch"
-summary: "3-tier distributed system simulating Kayak's travel booking with microservices, caching, and AI recommendations."
+summary: "A team-built, 3-tier travel metasearch and booking platform: a React client over Node/Express services (API gateway, user, search, booking) backed by MySQL, MongoDB, and Redis, with a separate Python AI service for chat, deal scoring, and bundles."
 role: "Developer"
-period: "Personal"
+period: "2025"
 domain: "Distributed Systems"
 tags: ["distributed-systems", "microservices", "full-stack"]
-tech: ["Node.js", "MySQL", "MongoDB", "Redis", "Kafka", "Docker", "JWT", "AI Agents"]
+tech: ["Node.js", "React", "FastAPI", "MySQL", "MongoDB", "Redis", "Kafka", "Docker"]
 github: "https://github.com/zohebwaghu/Kayak---DATA-236-Final-Project"
-challenge: "Build a production-style 3-tier architecture handling flight, hotel, and car rental bookings with event-driven synchronization."
+links:
+  code: "https://github.com/zohebwaghu/Kayak---DATA-236-Final-Project"
+challenge: "A Kayak-style metasearch site has to serve flights, hotels, and car rentals to clients, keep bookings transactionally correct, run analytics, and layer on AI recommendations, all without those concerns tangling together. The project's goal was a clean 3-tier distributed system: a client tier, a middleware tier of independent services, and a data tier split by job, with an AI service kept off to the side."
 solution:
-  - "API Gateway with JWT auth, rate limiting, and request routing to downstream services."
-  - "Microservices: User, Search, Booking services with independent scaling."
-  - "MySQL for OLTP bookings, MongoDB for analytics/logging, Redis for search caching."
-  - "Kafka for event streaming: booking confirmations, inventory updates, user actions."
-  - "AI-powered recommendation service using LangChain agents."
+  - "A 3-tier architecture: a React client, a middleware tier of Node/Express services, and a data tier of MySQL, MongoDB, and Redis, each chosen for what it is good at."
+  - "Middleware services behind an API gateway that handles JWT auth, rate limiting, and routing: a user service, a search service (MongoDB + Redis caching), and a booking service with transactional inserts and inventory decrements."
+  - "Data split by purpose: MySQL for transactional bookings, billing, and listings; MongoDB for analytics, reviews, and event logs; Redis for caching search results."
+  - "Kafka for event streaming between services, with an in-memory Kafka implementation behind the same interface so the team could develop independently before the real broker existed."
+  - "A separate Python FastAPI AI service: a concierge chat agent, a deals-scoring background worker, plus bundles, price-analysis, watches, and quotes APIs, with a semantic cache for LLM responses and rule-based intent parsing that uses OpenAI only when available."
 impact:
-  - "End-to-end booking flow with transactional integrity and inventory control."
-  - "Sub-100ms search responses via Redis caching layer."
-  - "Real-time event streaming for cross-service synchronization."
+  - "Clean separation of concerns across three tiers, so transactional booking (MySQL), analytics (MongoDB), and caching (Redis) each use the right store instead of forcing one database to do everything."
+  - "A semantic cache that returns a stored answer when a new query is similar enough (cosine > 0.85), cutting repeat LLM calls instead of re-asking the model every time."
+  - "Designed for parallel team development: an interface-based Kafka client lets the system run on an in-memory queue locally and switch to a real broker by config alone."
+deepDive:
+  context: "This was a team final project: a distributed system modeling Kayak's travel metasearch and booking, with flights, hotels, and car rentals, user bookings and payments, admin and analytics, and an agentic AI recommendation layer. It is organized as a textbook 3-tier system, client, middleware, data, with an additional Python AI service. My work centered on the back-end services and the AI layer (the semantic cache, intent parsing, and Kafka integration)."
+  architecture: "Tier 1 is a React client (including AI chat, bundle, price-analysis, and watches components). Tier 2 is a set of Node/Express services behind an API gateway that does JWT authentication, rate limiting, and routing: a user service, a search service backed by MongoDB and cached in Redis, and a booking service that does transactional inserts and inventory decrements. Tier 3 is the data layer, MySQL for OLTP (users, bookings, billing, listings), MongoDB for analytics and event logs, and Redis for caching. Alongside sits a Python FastAPI AI service that runs a concierge chat agent and a background deals-scoring worker, and exposes bundles, price-analysis, watches, and quotes APIs over REST and WebSockets. The AI service has its own supporting pieces: a semantic cache that reuses LLM responses for similar queries, a rule-based intent parser with optional OpenAI enhancement, and a Kafka client that can run in-memory or against a real broker through a shared interface."
+  dataFlow:
+    - step: "Client request"
+      detail: "The React client calls the API gateway, which authenticates (JWT), rate-limits, and routes to the right middleware service."
+    - step: "Search with cache"
+      detail: "The search service checks Redis first; on a miss it queries MongoDB, returns the result, and caches it for repeat queries."
+    - step: "Booking with transactions"
+      detail: "The booking service performs transactional inserts against MySQL and decrements inventory, keeping bookings consistent."
+    - step: "Events over Kafka"
+      detail: "Services publish events (bookings, listings, deals) to Kafka; in local dev an in-memory implementation stands in for the broker."
+    - step: "AI layer"
+      detail: "The FastAPI AI service parses intent, checks the semantic cache, and only calls the LLM on a cache miss, then scores deals and builds bundles."
+  components:
+    - name: "React client (Tier 1)"
+      purpose: "The metasearch UI plus AI components (chat widget, bundle cards, price analysis, watches), talking to the gateway over an API layer."
+    - name: "API gateway"
+      purpose: "Single entry point for the middleware tier: JWT authentication, rate limiting, and routing to the user, search, and booking services."
+    - name: "User / Search / Booking services (Tier 2)"
+      purpose: "Node/Express services: auth and profiles; MongoDB search with Redis caching; transactional bookings with inventory control."
+    - name: "MySQL + MongoDB + Redis (Tier 3)"
+      purpose: "MySQL for OLTP bookings and listings, MongoDB for analytics and event logs, Redis for search caching, each store doing what it is best at."
+    - name: "AI service (FastAPI)"
+      purpose: "Concierge chat, a deals-scoring worker, and bundles/price/watches/quotes APIs over REST and WebSockets, isolated from the booking path."
+    - name: "Semantic cache + intent parser"
+      purpose: "Caches LLM responses by embedding similarity (cosine > 0.85) in Redis, and parses queries with rules plus optional OpenAI, so the model is called less often."
+    - name: "Kafka client (interface-based)"
+      purpose: "A shared interface with both an in-memory implementation (for independent dev) and a real-broker implementation, swappable by config."
+  keyDecisions:
+    - decision: "Split the data tier by workload"
+      reasoning: "Bookings need transactions and joins (MySQL), analytics and logs are append-heavy and schema-flexible (MongoDB), and repeated searches just need to be fast (Redis). Using one database for all three would compromise at least one of those jobs, so each store is matched to its workload."
+      alternatives: "A single database for everything (transactions and analytics and caching all fighting in one engine)."
+    - decision: "Put a semantic cache in front of the LLM"
+      reasoning: "Travel queries repeat with small variations. Embedding each query and returning a cached answer when similarity clears a threshold (0.85) avoids paying for an LLM call on every near-duplicate, which matters for both latency and cost."
+      alternatives: "Exact-match caching (misses paraphrases); no cache (an LLM call for every query, however similar)."
+    - decision: "Hide Kafka behind an interface with an in-memory implementation"
+      reasoning: "On a team, not everyone can stand up a broker on day one. A KafkaInterface with an in-memory queue lets each person develop and test against simulated topics, then switch to the real broker by changing config, with no code changes."
+      alternatives: "Require a real Kafka broker for any local work (blocks teammates and slows iteration)."
+  codeSnippets:
+    - title: "A semantic cache in front of the LLM"
+      language: "python"
+      code: |
+        class SemanticCache:
+            """Semantic cache for LLM responses (cosine similarity > 0.85, Redis-backed)."""
+
+            def __init__(self, redis_client, embedding_service, threshold: float = 0.85,
+                         ttl_days: int = 7):
+                self.redis = redis_client
+                self.embeddings = embedding_service   # embeddings via a local model
+                self.threshold = threshold
+
+            def get(self, query: str):
+                query_embedding = self.embeddings.embed_query(query)
+                cache_keys = self.redis.smembers(self.index_key)
+                # compare against stored embeddings; if cosine similarity > threshold,
+                # return the cached LLM response instead of calling the model again
+                ...
+      explanation: "Each query is embedded and compared against cached embeddings; if a previous query is similar enough (cosine > 0.85) its stored response is returned, so a near-duplicate question never hits the model again. Entries live in Redis with a TTL, so the cache is fast and self-expiring."
+    - title: "Rule-based intent parsing, OpenAI optional"
+      language: "python"
+      code: |
+        try:
+            from openai import OpenAI
+            OPENAI_AVAILABLE = True
+        except ImportError:
+            OPENAI_AVAILABLE = False
+
+        class IntentParser:
+            """Parses natural-language travel queries into structured intents.
+            Uses rule-based parsing with optional LLM enhancement."""
+            def __init__(self):
+                self.airport_codes = {
+                    "san francisco": "SFO", "new york": "JFK",
+                    "mumbai": "BOM", "delhi": "DEL", "bangalore": "BLR",
+                    # ...
+                }
+      explanation: "Intent parsing works without any model: rules and an airport-code map turn a query into structured intent, and OpenAI is used only as an optional enhancement when it is installed. The parser degrades to pure rules rather than failing when the LLM is unavailable."
+    - title: "Kafka behind an interface, with an in-memory stand-in"
+      language: "python"
+      code: |
+        class MemoryKafka(KafkaInterface):
+            """In-memory Kafka for independent development.
+            - Loads test data from JSON files
+            - Uses a Python Queue to simulate topics
+            - Swap to the real Kafka client by changing config
+            """
+            def __init__(self, data_dir: str = "data/mock"):
+                ...
+      explanation: "Both the in-memory and real-broker clients implement the same KafkaInterface, so the rest of the system does not know or care which is running. The team could build and test against simulated topics, then flip to a real broker by config when it was ready."
+  metrics:
+    - value: "3 tiers"
+      label: "client · services · data"
+      context: "gateway + Node services + MySQL/Mongo/Redis"
+    - value: "Semantic cache"
+      label: "for LLM responses"
+      context: "cosine > 0.85, Redis-backed"
+    - value: "3 stores"
+      label: "split by workload"
+      context: "MySQL OLTP · MongoDB analytics · Redis cache"
+    - value: "Kafka"
+      label: "event streaming"
+      context: "in-memory stand-in for local dev"
+  learnings:
+    - "A 3-tier split only pays off if the data tier is split too: matching MySQL, MongoDB, and Redis to transactions, analytics, and caching is most of the design."
+    - "A semantic cache turns an LLM from a per-request cost into something closer to a memoized function for similar queries, which is a cheap, large win on a chat-style feature."
+    - "Hiding infrastructure like Kafka behind an interface with an in-memory implementation is what makes parallel team development actually work."
 featured: false
 priority: 8
 ---
 # Overview
-Full-stack travel metasearch platform built as a DATA 236 final project. Implements 3-tier distributed architecture with microservices, event-driven communication via Kafka, and intelligent caching strategies.
+A team-built, 3-tier travel metasearch and booking platform modeled on Kayak (flights, hotels, car rentals). A React client talks through an API gateway (JWT auth, rate limiting, routing) to Node/Express middleware services, user, search (MongoDB + Redis cache), and booking (transactional, with inventory control), over a data tier that splits work across MySQL (OLTP), MongoDB (analytics and logs), and Redis (caching). A separate Python FastAPI service adds the AI layer: a concierge chat agent, deal scoring, and bundle and price-analysis APIs, fronted by a semantic cache that reuses LLM responses for similar queries and a rule-based intent parser that uses OpenAI only when available. Kafka carries cross-service events, with an interface-based in-memory implementation for local development.
