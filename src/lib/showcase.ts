@@ -60,7 +60,7 @@ export const SHOWCASE_PROJECTS: Record<string, ShowcaseConfig> = {
     // Demo tab iframes the live site (from MDX links.demo)
   },
   "nobel-dataintelligence": {
-    // hero: "/projects/nobel/fusion.png",  // enable once fusion.png is placed
+    hero: "/projects/nobel/fusion.png",
     heroTag: "ProtT5 · VDOS · ChemBERTa",
     // Demo tab iframes the live site (from MDX links.demo)
   },
