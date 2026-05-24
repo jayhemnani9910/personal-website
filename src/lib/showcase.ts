@@ -65,6 +65,11 @@ export const SHOWCASE_PROJECTS: Record<string, ShowcaseConfig> = {
     arch: "/projects/bio/architecture.png",
     // Demo tab iframes the live site (from MDX links.demo)
   },
+  "contextbox": {
+    // hero: "/projects/contextbox/pipeline.png",  // enable once pipeline.png is placed
+    heroTag: "OCR · embeddings · Q&A",
+    // Demo tab iframes the live docs site (from MDX links.demo)
+  },
   "webmcp-portfolio": {
     hero: "/projects/webmcp/handshake.png",
     heroTag: "navigator.modelContext",
