@@ -1,0 +1,22 @@
+---
+title: "Recognize (SAM3 Experiments)"
+summary: "Short experiments running Meta's SAM3 (Segment Anything Model 3) on images with text prompts, plus a small script to visualize the predicted masks."
+role: "Explorer"
+period: "2026"
+domain: "Computer Vision"
+tags: ["computer-vision", "segmentation", "sam", "experiments"]
+tech: ["Python", "PyTorch", "SAM3", "PIL"]
+github: "https://github.com/jayhemnani9910/recognize"
+challenge: "Try Meta's SAM3 for promptable, open-vocabulary segmentation: point it at an image, give it a text prompt, and see what it can segment, as a hands-on way to understand the model rather than a product."
+solution:
+  - "Pulls in Meta's SAM3 as a git submodule and uses its model builder and image processor directly, no reimplementation."
+  - "A short run script builds the SAM3 image model, sets an image, applies a text prompt (for example 'person'), and reads back masks, boxes, and confidence scores."
+  - "A companion script visualizes the predicted masks over the image."
+impact:
+  - "A small, working reference for promptable segmentation with SAM3: prompt an image and get masks, boxes, and scores in a few lines."
+  - "Exploratory by design, this is a learning experiment with Meta's model, not an original system."
+featured: false
+priority: 30
+---
+# Overview
+A small set of experiments with Meta's SAM3 (Segment Anything Model 3) for promptable, open-vocabulary segmentation. SAM3 is included as a git submodule; two short Python scripts use it directly, one builds the image model, sets an image, applies a text prompt, and returns masks, boxes, and scores, and the other visualizes the predicted masks. It is a hands-on exploration of the model rather than an original project.
