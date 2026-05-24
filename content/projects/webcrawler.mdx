@@ -84,7 +84,7 @@ deepDive:
                     if urlparse(u).netloc.endswith(urlparse(root_url).netloc):
                         found.add(u)
             return found
-      explanation: "Discovery prefers the robust robots parser (reppy) but falls back to the standard library when it is not installed, the same degrade-gracefully pattern used throughout. Sitemaps are parsed and links are scoped to the site's own domain."
+      explanation: "Discovery prefers the dedicated robots parser (reppy) but falls back to the standard library when it is not installed, the same degrade-gracefully pattern used throughout. Sitemaps are parsed and links are scoped to the site's own domain."
     - title: "A real Merkle tree over version hashes"
       language: "python"
       code: |

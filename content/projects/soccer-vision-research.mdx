@@ -139,7 +139,7 @@ deepDive:
       context: "schema-validated per model"
   learnings:
     - "For a research harness, the registry and config layer matter more than any single model. Once swapping a detector or fusion rule became a config edit, running experiments got an order of magnitude cheaper."
-    - "Zero-shot identification with SigLIP is a genuinely useful baseline. It will not beat a roster-trained model, but it works on any match with no labelling, which is exactly what you want early in research."
+    - "Zero-shot identification with SigLIP is a useful baseline. It will not beat a roster-trained model, but it works on any match with no labelling, which is exactly what you want early in research."
     - "Fusion is the hard part, not detection. Getting four models to agree (Hungarian alignment across detections, temporal smoothing of identities) was where most of the real engineering went."
     - "Validate config before inference, not during. Schema checks with range constraints turn a class of silent mid-video failures into a fast, obvious error at load time."
   futureWork:

@@ -319,7 +319,7 @@ deepDive:
 
     4. **Enums vs. Foreign Keys Trade-off**
        - Used ENUMs for `status` and `role` fields (limited, stable values) but foreign keys for `case_type` and `document_type` (extensible).
-       - Learning: ENUMs are faster and enforce constraints at the schema level, but they're rigid. Use them only for truly stable domains.
+       - Learning: ENUMs are faster and enforce constraints at the schema level, but they're rigid. Use them only for stable domains.
 
     5. **Audit Trails Are Essential for Compliance**
        - Immigration data has legal implications. The `case_status_history` table proved invaluable for tracking "when did this case move to PENDING?"

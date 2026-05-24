@@ -55,7 +55,7 @@ deepDive:
       tradeoff: "No goalkeeper, referee, or team classes yet, and accuracy is generic rather than soccer-tuned. The soccer checkpoint is a defined next step, with the training pipeline already in the repo."
     - decision: "ByteTrack (via supervision) over DeepSORT"
       reasoning: "ByteTrack's second association pass over low-confidence detections recovers players through brief occlusions without a separate appearance re-identification model, which keeps the tracker light and dependency-free."
-      tradeoff: "Less robust to long occlusions than appearance-based re-ID; tuned here for mostly static broadcast camera angles."
+      tradeoff: "Less reliable under long occlusions than appearance-based re-ID; tuned here for mostly static broadcast camera angles."
     - decision: "GraphSAGE over flat positional features for tactics"
       reasoning: "Soccer tactics are relational: who is near whom, and how that changes over time. A graph where players are nodes and proximity plus time are edges encodes that directly, and an inductive GNN generalizes across variable player counts (substitutions, missed detections)."
       tradeoff: "Needs labelled tactical data to actually train; the classifier currently ships as an inference-ready scaffold rather than trained weights."
