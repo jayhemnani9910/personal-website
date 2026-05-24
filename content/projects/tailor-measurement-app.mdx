@@ -1,0 +1,122 @@
+---
+title: "Tailor Measurement App"
+summary: "A phone-first, offline-capable PWA built for a small tailor shop: record customer measurements, track multi-garment orders, manage garment templates, and queue photos offline. React + Firebase with a strictly layered, unit-tested core, in English and Gujarati."
+role: "Builder"
+period: "2026"
+domain: "Web / PWA"
+tags: ["pwa", "offline-first", "react", "firebase"]
+tech: ["React", "TypeScript", "Firebase", "Zustand", "Vite", "IndexedDB"]
+github: "https://github.com/jayhemnani9910/jhanalytics-app1"
+links:
+  code: "https://github.com/jayhemnani9910/jhanalytics-app1"
+challenge: "A small tailor shop works on phones, often with a weak connection, and needs to capture measurements and track orders without fighting the tool. The app had to be phone-first, keep working offline (including photos), stay free to run, and be usable by staff in their own language, while keeping the code maintainable enough to extend."
+solution:
+  - "An offline-first PWA: Firestore offline persistence for data, an IndexedDB photo queue for deferred uploads, and a Workbox service worker, so the app keeps working with no connection and syncs when it returns."
+  - "A strictly layered codebase: a pure, unit-tested domain layer that never imports React or Firebase, an isolated Firebase infrastructure layer, a Zustand store fed by realtime Firestore listeners, and UI that only reads the store and writes through one repository module."
+  - "The tailor's actual workflow: customer measurements, multi-garment orders, reusable garment templates, and measurement pre-fill from a customer's most recent order."
+  - "Bilingual (English and Gujarati), and deliberately cost-free, a single shared shop login on Firebase's free tier keeps it simple for staff and cheap for the owner."
+impact:
+  - "Works on a phone with a flaky connection: measurements and orders are captured offline and photos queue locally until they can upload."
+  - "The pure domain layer is covered by unit tests (14 test files across domain, photos, i18n, and theme), so the logic that matters is verified independently of Firebase and the UI."
+  - "Built for the people using it: a Gujarati translation alongside English, and a UI shaped around how a tailor actually takes and reuses measurements."
+deepDive:
+  context: "This is a real tool for a small tailor shop, built phone-first because that is the only device the staff use, and offline-first because the connection cannot be relied on. It records customer measurements, tracks orders that can contain several garments, manages reusable garment templates, and handles garment photos that may need to upload later. It is intentionally cheap to run (a single shared login on Firebase's free tier) and bilingual, English and Gujarati, for the people actually using it."
+  architecture: "The app enforces hard boundaries between layers. A domain layer holds pure functions (measurements, money, deadlines, order status, search, templates) that never import React or Firebase and are unit-tested in isolation. A Firebase layer is the only code allowed to touch Firestore, Auth, and Storage, exposing a single repository module for writes. A Zustand store subscribes to realtime Firestore listeners and is the client's single source of truth; UI screens and components read from the store and write only through the repository, never querying Firestore directly. Offline is handled in two places: Firestore's own offline persistence for documents, and an IndexedDB queue (via idb) that stores compressed photo blobs until they can be uploaded to Cloud Storage. A Workbox service worker (vite-plugin-pwa) makes it installable and offline-capable, and an i18n layer provides English and Gujarati."
+  dataFlow:
+    - step: "Capture (offline-safe)"
+      detail: "Staff record measurements and orders on the phone; writes go through the repository to Firestore, which persists them locally first."
+    - step: "Queue photos"
+      detail: "Garment photos are compressed and stored in an IndexedDB queue, ready to upload to Cloud Storage when a connection is available."
+    - step: "Realtime store"
+      detail: "A Zustand store listens to Firestore in realtime and exposes the current customers, orders, and templates to the UI."
+    - step: "Read from the store"
+      detail: "Screens and components render purely from the store; they never query Firestore directly."
+    - step: "Sync when online"
+      detail: "Firestore reconciles offline writes and the photo queue drains its uploads once connectivity returns."
+  components:
+    - name: "src/domain (pure logic)"
+      purpose: "Measurements, money, deadlines, order status, search, and templates as pure, unit-tested functions, with no React or Firebase imports."
+    - name: "src/firebase (infra)"
+      purpose: "The only layer that touches Firestore, Auth, and Storage, exposing a single repository module for all writes."
+    - name: "src/store (Zustand)"
+      purpose: "The client's single source of truth, fed by realtime Firestore listeners and read by the UI."
+    - name: "src/photos (IndexedDB queue)"
+      purpose: "Compresses and queues garment photos in IndexedDB for deferred upload, so capture works offline."
+    - name: "PWA (vite-plugin-pwa / Workbox)"
+      purpose: "Service worker and manifest making the app installable and offline-capable on a phone."
+    - name: "src/i18n (en + gu)"
+      purpose: "English and Gujarati translations, so staff use the app in their own language."
+  keyDecisions:
+    - decision: "Offline-first, not online-with-a-fallback"
+      reasoning: "The shop's connection is unreliable, so the app is designed to work offline by default: Firestore persistence holds data and an IndexedDB queue holds photos, and sync is the thing that happens when the network appears, not a precondition for using the app."
+      alternatives: "An online app with an offline fallback (fails exactly when the shop needs it); a fully local app (loses multi-device sync)."
+    - decision: "A pure domain layer that never imports React or Firebase"
+      reasoning: "Keeping measurement, money, deadline, and status logic in framework-free functions makes the part that must be correct fast to unit-test and impossible to accidentally couple to the UI or the database."
+      alternatives: "Logic inside components or Firestore queries (hard to test, easy to entangle)."
+    - decision: "A single shared shop login on the free tier"
+      reasoning: "For a small shop, per-employee accounts add cost and friction for no real benefit. One shared credential keeps the app free to run on Firebase and simple for staff, an explicit trade of fine-grained identity for simplicity."
+      alternatives: "Per-user accounts and roles (more cost and admin than a single-shop tool needs)."
+  codeSnippets:
+    - title: "Pure domain: pre-fill measurements from the last order"
+      language: "typescript"
+      code: |
+        // No React, no Firebase, just data in and data out.
+        export function prefillRows(orders: Order[], templateId: string,
+                                    template: Template): MeasurementRow[] | null {
+          const matches = orders
+            .flatMap((o) => o.items
+              .filter((i) => i.templateId === templateId)
+              .map((i) => ({ createdAt: o.createdAt, item: i })))
+            .sort((a, b) => b.createdAt - a.createdAt);
+          if (matches.length === 0) return null;
+
+          const prev = matches[0].item.measurements;
+          // Re-key onto the current template so renamed/added fields still line up.
+          return template.fields.map((f) => {
+            const found = prev.find((r) => r.fieldId === f.id);
+            return { fieldId: f.id, label: f.label, value: found?.value ?? '', unit: f.unit };
+          });
+        }
+      explanation: "A returning customer should not be re-measured from scratch. This pure function finds their most recent order on the same template and re-keys those measurements onto the current template fields, so even renamed or added fields line up. Being framework-free, it is trivially unit-tested."
+    - title: "Offline photo queue in IndexedDB"
+      language: "typescript"
+      code: |
+        import { openDB } from 'idb';
+
+        export async function savePhoto(localId: string, blob: Blob): Promise<void> {
+          const db = await getDB();
+          await db.put(STORE_NAME, blob, localId);   // queued locally, uploads later
+        }
+
+        export async function listPhotos(): Promise<string[]> {
+          const db = await getDB();
+          return db.getAllKeys(STORE_NAME) as Promise<string[]>;
+        }
+
+        export async function deletePhoto(localId: string): Promise<void> {
+          const db = await getDB();
+          await db.delete(STORE_NAME, localId);       // drop once uploaded
+        }
+      explanation: "Garment photos are compressed and stored as blobs in IndexedDB keyed by a local id, so capture works with no connection. When the network returns, queued photos upload to Cloud Storage and are deleted from the queue, the deferred-upload half of the offline-first design."
+  metrics:
+    - value: "Offline-first"
+      label: "PWA"
+      context: "Firestore cache + IndexedDB photo queue"
+    - value: "Pure domain"
+      label: "14 test files"
+      context: "core logic free of React and Firebase"
+    - value: "en + gu"
+      label: "bilingual"
+      context: "English and Gujarati"
+    - value: "Free tier"
+      label: "Firebase"
+      context: "Auth · Firestore · Storage, shared login"
+  learnings:
+    - "Offline-first is a design stance, not a feature: deciding that sync is what happens when the network appears (rather than a requirement to use the app) shaped the data layer, the photo handling, and the store."
+    - "A framework-free domain layer is the cheapest insurance for a real app, the logic a shop depends on is unit-tested and cannot drift into the UI or the database."
+    - "Building for the actual users meant a Gujarati translation and a measurement-reuse flow, the things that decide whether a shop tool gets used or abandoned."
+featured: false
+priority: 12
+---
+# Overview
+A phone-first, offline-capable PWA built for a small tailor shop to record customer measurements, track multi-garment orders, manage reusable garment templates, and queue photos offline. It is built with React, Vite, and TypeScript over Firebase (Auth, Firestore with offline persistence, Cloud Storage), with Zustand fed by realtime Firestore listeners and a Workbox service worker. The code is strictly layered, a pure, unit-tested domain core that never touches React or Firebase, an isolated Firebase layer, a store, and UI that only reads the store and writes through one repository, and an IndexedDB queue handles deferred photo uploads. It runs on Firebase's free tier behind a single shared shop login and ships in both English and Gujarati.

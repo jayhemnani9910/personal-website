@@ -33,6 +33,11 @@ export type ShowcaseConfig = {
 };
 
 export const SHOWCASE_PROJECTS: Record<string, ShowcaseConfig> = {
+  "tailor-measurement-app": {
+    // hero: "/projects/tailor/offline.png",  // enable once offline.png is placed
+    heroTag: "offline-first · React · Firebase",
+    // Demo: iframe a live Firebase URL once Jay provides it (set links.demo in MDX)
+  },
   "receiptlens-minicpm-v46": {
     // hero: "/projects/receiptlens/ocr.png",  // enable once ocr.png is placed
     heroTag: "MiniCPM-V · on-device · iOS",
