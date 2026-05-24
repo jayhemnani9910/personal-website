@@ -171,6 +171,7 @@ export function EditorialHome() {
           <article className="feat wide">
             <Link href="/projects/stock-data-platform" className="cardlink">
               <div className="ph small" style={{ aspectRatio: "21 / 9" }}>
+                <Image className="ph-img" src="/featured/stock.png" alt="" fill sizes="(max-width: 860px) 100vw, 66vw" />
                 <span className="ph-tag accent">Data Engineering</span>
                 <div className="ph-label"><span>fig. 04, star schema, 25 yrs of ticks</span><span className="mono">/work/stock</span></div>
               </div>
