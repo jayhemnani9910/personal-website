@@ -1,23 +1,129 @@
 ---
 title: "Rubik's Cube Timer & Visualizer"
-summary: "Keyboard-first speedcubing timer with Three.js 3D visualization, WCA-compliant scrambles for 2x2-7x7, session management, and full PWA support."
+summary: "A keyboard-first speedcubing app in vanilla JS: a Three.js 3D cube, WCA-style scrambles for 2x2 to 7x7, an inspection timer with +2/DNF, full session stats (Ao5/Ao12/Ao100), and a C++ solver compiled to WebAssembly, all offline-capable as a PWA."
 role: "Builder"
-tags: ["javascript", "three-js", "pwa", "speedcubing"]
-tech: ["JavaScript", "Three.js", "Chart.js", "Vite", "PWA"]
+period: "2026"
+domain: "Web / Frontend"
+tags: ["javascript", "three-js", "webassembly", "pwa", "speedcubing"]
+tech: ["JavaScript", "Three.js", "WebAssembly", "Chart.js", "Vite", "PWA"]
 github: "https://github.com/jayhemnani9910/rubiks-cube"
 links:
+  code: "https://github.com/jayhemnani9910/rubiks-cube"
   demo: "https://jayhemnani9910.github.io/rubiks-cube/"
-challenge: "Build a precision speedcubing tool with real-time 3D cube rendering, competition-standard scrambles, and rich statistics, all running in the browser."
+challenge: "A serious speedcubing tool has to do several things at once in the browser: render a cube in 3D, generate correct scrambles for every puzzle size, time solves with inspection and penalties, and keep the running averages cubers actually care about, all fast, keyboard-driven, and usable offline."
 solution:
-  - "18-module ES6 architecture: timer, 3D engine, scramble generator, stats, sessions, charts, PWA."
-  - "Three.js renderer with 60 FPS cube animations and keyboard-driven face moves."
-  - "Full PWA with service worker caching, offline support, and install prompt."
+  - "A vanilla-JS app split into 25 ES modules (timer, 3D cube, scramble, stats, sessions, charts, storage, PWA, and more), with no framework, wired together through a small shared state and storage layer."
+  - "A Three.js 3D cube with keyboard-driven face turns and rotations, a 2D flat view, and scramble generation for 2x2 through 7x7 in WCA-style notation, previewed on the cube before a solve."
+  - "An inspection timer with +2 and DNF penalties and configurable precision, feeding a full stats workflow: best, worst, mean, and rolling Ao5/Ao12/Ao100 per cube and session, with a PB timeline and Chart.js trend and histogram charts."
+  - "A C++ cube routine compiled to WebAssembly for scramble validation and hints, loaded lazily and degrading to a clear message when the WASM module is unavailable."
 impact:
-  - "Sub-millisecond timer precision using performance.now() for competition-grade accuracy."
-  - "Supports all WCA puzzle sizes from 2x2 to 7x7 with proper scramble notation."
-  - "Complete data persistence with session management, JSON/CSV export, and cross-device import."
+  - "Runs entirely in the browser and offline: a service worker caches the app, a manifest makes it installable, and solves, sessions, and settings persist locally with JSON/CSV export and import for moving data across devices."
+  - "Covers the full speedcubing loop, scramble, inspect, solve, review, in one keyboard-first interface, with session management and a leaderboard view."
+  - "Documented with generated architecture, module, and data-flow diagrams, a CI workflow, and the usual issue/PR templates and contribution guides."
+deepDive:
+  context: "Speedcubers want a timer that gets out of the way: hit a key to start inspection, release to solve, and immediately see how this solve moved the averages. Most browser timers cover the timing but skip the cube, the scrambles for larger puzzles, or offline use. This project is an attempt at the whole loop in plain JavaScript, with a 3D cube, correct multi-size scrambles, the standard rolling averages, and a WebAssembly solver, all installable and usable without a network."
+  architecture: "The app is plain ES modules with no framework. A central state module plus a storage module (localStorage) hold the source of truth: settings, sessions, and solves. Input handling maps keyboard events to cube moves and timer controls. A Three.js layer renders the cube and animates face turns, with a separate dynamic-cube module tracking the logical cube state and a 2D preview. Scramble generation builds a move sequence per puzzle size and applies it to both the logical state and the Three.js cube. The timer module runs inspection and solve timing with penalties and writes finished solves to storage, which the stats module reads to compute best, mean, and rolling averages, rendered by a Chart.js charts module. A WebAssembly module (C++ compiled with Emscripten) is loaded lazily for scramble validation and hints. A PWA layer (service worker plus manifest) caches the app for offline use."
+  dataFlow:
+    - step: "Scramble"
+      detail: "A move sequence is generated for the selected puzzle size (2x2 to 7x7) and applied to both the logical cube state and the Three.js cube, with a preview."
+    - step: "Inspect"
+      detail: "Inspection runs with WCA-style +2 and DNF penalties before the solve timer starts."
+    - step: "Solve"
+      detail: "The timer measures the solve at the configured precision; keyboard controls start and stop it."
+    - step: "Persist"
+      detail: "The finished solve is written to the active session in localStorage, alongside settings and session metadata."
+    - step: "Review"
+      detail: "The stats module recomputes best, worst, mean, and rolling Ao5/Ao12/Ao100; Chart.js renders the PB timeline, trend, and histogram."
+  components:
+    - name: "state.js + storage.js"
+      purpose: "Central app state and the localStorage persistence layer holding settings, sessions, and solves, the single source of truth the other modules read and write."
+    - name: "three-cube/ThreeCube.js + cube.js"
+      purpose: "Three.js rendering of the cube with animated face turns and rotations; a dynamic-cube module tracks the logical state and a flat 2D preview."
+    - name: "scramble.js + cubes.js"
+      purpose: "Builds a WCA-style scramble sequence for the chosen puzzle size and applies it to both the logical state and the rendered cube."
+    - name: "timer.js"
+      purpose: "Inspection and solve timing with +2/DNF penalties and configurable precision; emits a finished solve to storage."
+    - name: "stats.js + charts.js"
+      purpose: "Computes best, worst, mean, and rolling Ao5/Ao12/Ao100 per cube and session, and renders PB-timeline, trend, and histogram charts with Chart.js."
+    - name: "solver.js + wasm/solver-loader.js"
+      purpose: "Bridges to a C++ cube routine compiled to WebAssembly for scramble validation and hints, loaded lazily with a graceful fallback."
+    - name: "pwa.js + sw.js"
+      purpose: "Service-worker registration and offline caching plus an install prompt, making the app installable and usable without a network."
+  keyDecisions:
+    - decision: "Vanilla JS in 25 modules, no framework"
+      reasoning: "The app is mostly direct DOM and Three.js work driven by keyboard input and a small shared state. A framework would add weight and indirection without buying much; plain ES modules with one state and one storage module kept it lean and easy to reason about."
+      alternatives: "A React/Vue SPA (heavier, more build complexity for a largely imperative 3D/keyboard app)."
+    - decision: "Compile the cube solver in C++ to WebAssembly"
+      reasoning: "A solver and scramble validator are compute-heavy and already natural to express in C++. Compiling to WebAssembly with Emscripten runs that logic at near-native speed in the browser, and loading it lazily keeps it off the initial path."
+      alternatives: "A pure-JS solver (slower, and a rewrite of logic that already existed in C++); a server-side solver (needs a backend and breaks offline use)."
+    - decision: "Offline-first PWA with local persistence"
+      reasoning: "Cubers use a timer repeatedly, often without caring about a network. A service worker plus localStorage makes the app installable, fast, and fully usable offline, with JSON/CSV export and import to move data between devices instead of a server account."
+      alternatives: "A server-backed app with accounts (network dependency, hosting, and sign-in friction for a single-user tool)."
+  codeSnippets:
+    - title: "Lazy-load the WASM solver, degrade if it is missing"
+      language: "javascript"
+      code: |
+        let wasmModule = null;
+
+        export const loadSolverModule = async () => {
+          if (wasmModule !== null) return wasmModule;
+          try {
+            const moduleFactory = (await import("./solver.js")).default;
+            wasmModule = await moduleFactory();   // Emscripten module factory
+            return wasmModule;
+          } catch (error) {
+            console.warn("WASM solver not available.", error);
+            wasmModule = null;
+            return null;
+          }
+        };
+      explanation: "The C++ solver is compiled to WebAssembly and loaded only when needed. If the module fails to load, the loader returns null and the UI falls back to a clear message instead of breaking, the same degrade-gracefully approach used for optional features."
+    - title: "Call into the C++ solver from JavaScript"
+      language: "javascript"
+      code: |
+        const solverModule = await loadSolverModule();
+
+        if (solverModule?.cwrap) {
+          const validate = solverModule.cwrap("validate_scramble", "number", ["string"]);
+          const ok = validate(scramble);   // runs the compiled C++ routine
+          renderOutput(ok ? "Scramble is valid." : "Scramble is invalid.");
+        } else {
+          renderOutput("Solver unavailable in this browser.");
+        }
+      explanation: "Emscripten's cwrap exposes the compiled C++ function validate_scramble as a callable JavaScript function with typed arguments, so the heavy cube logic runs as WebAssembly while the UI stays in plain JS."
+    - title: "Generate a scramble and apply it to both states"
+      language: "javascript"
+      code: |
+        export const generateScramble = () => {
+          const { cubeType } = getState().settings;
+          const sequence = buildScramble(cubeType);   // per puzzle size
+
+          resetCube();
+          resetCubeState();
+          sequence.forEach((token) => applyMoveToState(token)); // logical state
+          applyScrambleToThreeCube(sequence.filter(t => !t.includes("w"))); // 3D cube
+          syncPreviewFromState();
+        };
+      explanation: "A scramble is generated for the selected puzzle size, then applied to two representations at once: the logical cube state used for validation and previews, and the Three.js cube the user sees. Keeping them in sync is what lets the preview and the 3D view always match the scramble."
+  metrics:
+    - value: "25 modules"
+      label: "vanilla-JS app"
+      context: "timer · 3D · scramble · stats · PWA"
+    - value: "2x2 to 7x7"
+      label: "puzzle sizes"
+      context: "WCA-style scramble notation"
+    - value: "Ao5/12/100"
+      label: "rolling averages"
+      context: "best · mean · PB timeline"
+    - value: "C++ to WASM"
+      label: "scramble solver"
+      context: "lazy-loaded, graceful fallback"
+  learnings:
+    - "A framework is not always the answer: a shared state module plus a storage module was enough structure for an app that is mostly imperative 3D and keyboard handling."
+    - "Compiling existing C++ to WebAssembly is a clean way to reuse heavy logic in the browser, and cwrap makes the JS-to-WASM call site read like an ordinary function."
+    - "Designing for offline from the start (service worker, localStorage, export/import) fits how a timer is actually used, repeatedly and often without a network."
 featured: false
 priority: 15
 ---
 # Overview
-Keyboard-first speedcubing timer with Three.js 3D visualization, WCA-compliant scrambles for all puzzle sizes (2x2-7x7), rich statistics, session management, and full PWA offline support. Built as an 18-module vanilla JavaScript application with the Ember Glass design system.
+A keyboard-first speedcubing app built in vanilla JavaScript as 25 ES modules. It renders a Rubik's Cube in 3D with Three.js, generates WCA-style scrambles for 2x2 through 7x7, times solves with inspection and +2/DNF penalties, and keeps the averages cubers care about, best, mean, and rolling Ao5/Ao12/Ao100, with a PB timeline and Chart.js charts. A C++ cube routine compiled to WebAssembly handles scramble validation and hints, and the whole thing runs offline as an installable PWA with local persistence and JSON/CSV export.
