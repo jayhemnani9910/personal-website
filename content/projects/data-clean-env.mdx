@@ -1,0 +1,123 @@
+---
+title: "Data Clean Env"
+summary: "An OpenEnv-compliant reinforcement-learning environment for tabular data cleaning. An agent fixes messy datasets through a typed action space (convert types, fill missing, dedupe, standardize, parse dates) and is scored per issue resolved. Built for the Meta OpenEnv Hackathon."
+role: "Builder"
+period: "2026"
+domain: "AI/ML"
+tags: ["reinforcement-learning", "data-engineering", "openenv", "agents"]
+tech: ["Python", "FastAPI", "OpenEnv", "Docker", "Pydantic"]
+github: "https://github.com/jayhemnani9910/data-clean-env"
+links:
+  code: "https://github.com/jayhemnani9910/data-clean-env"
+challenge: "Data cleaning is the unglamorous core of data engineering, fixing types, nulls, duplicates, and inconsistent formatting, and it is exactly the kind of structured, checkable task an agent could learn. The problem was framing it as a reinforcement-learning environment: a clean action space, observations an agent can reason over, and a reward that rewards fixing real issues rather than just changing cells."
+solution:
+  - "An OpenEnv-compliant RL environment (built on the OpenEnv Action/Observation base types) so it plugs into the standard tooling rather than inventing its own protocol."
+  - "A typed action space of seven cleaning operations: replace_value, convert_type, fill_missing, remove_duplicates, drop_rows, standardize (case/trim), and parse_date."
+  - "Rich observations: the current data, per-column metadata (dtype, null counts, unique counts), a running quality score in [0, 1], and issues-fixed-versus-total progress, so the agent can see what is still wrong."
+  - "Four graded tasks, from a 5-row type-fixing warm-up to a 15-row full-pipeline mix of every issue, served by a FastAPI app and packaged in Docker for deployment as a Space."
+impact:
+  - "Turns a fuzzy chore into a checkable RL task: each fixed issue is worth a fraction of the score, so the reward tracks real data-quality improvement rather than activity."
+  - "OpenEnv compliance means the environment is interoperable with the standard client and inference tooling instead of being a one-off harness."
+  - "A reference client, inference format, and grader tests ship alongside, so the environment is runnable and verifiable, not just a description."
+deepDive:
+  context: "Built for the Meta OpenEnv Hackathon, this is a reinforcement-learning environment, not a trained agent, whose job is to make tabular data cleaning learnable and scorable. Real datasets arrive with type errors, missing values, duplicates, and inconsistent formatting; a data engineer fixes them with a small repertoire of operations. The environment encodes that repertoire as a typed action space, presents the messy data and its current quality as observations, and scores progress against a fixed set of checks, so an agent can be trained or evaluated on a task that mirrors actual data work."
+  architecture: "The environment follows the OpenEnv contract: a DataCleanAction and DataCleanObservation that subclass OpenEnv's Action and Observation base types. A FastAPI server exposes the environment (reset and step) and is containerized with Docker so it can run as a Space. Each step takes a typed action, applies it to the in-memory dataset through a per-action-type handler, recomputes the quality score and per-column metadata, and returns the updated observation. Tasks are defined as fixtures (a dirty dataset plus the set of checks that define 'clean'), and a grader scores how many of those checks pass. A reference client and an inference module show how an agent connects to and acts in the environment, and a test suite covers the client, the graders, and the inference format."
+  dataFlow:
+    - step: "Reset to a task"
+      detail: "The environment loads one of four tasks: a dirty dataset plus the checks that define a clean result, and returns the initial observation."
+    - step: "Agent observes"
+      detail: "The observation carries the current rows, per-column metadata (dtype, null and unique counts), the score so far, and issues-fixed versus total."
+    - step: "Agent acts"
+      detail: "The agent emits a typed action (one of seven operations) with its fields, for example convert_type on a column or fill_missing with a value."
+    - step: "Environment applies and scores"
+      detail: "The matching handler transforms the data, the quality score and column metadata are recomputed, and a result message is attached."
+    - step: "Repeat to done"
+      detail: "Steps continue until the checks pass or the episode ends; the reward reflects the fraction of checks satisfied."
+  components:
+    - name: "models.py (DataCleanAction / DataCleanObservation)"
+      purpose: "The OpenEnv-typed action and observation: a Literal action_type plus the fields each operation needs, and an observation with data, column metadata, score, and progress."
+    - name: "server/data_clean_environment.py"
+      purpose: "The environment core: applies each action type to the dataset, validates columns, and recomputes column info and the quality score."
+    - name: "tasks/task_data.py"
+      purpose: "The four graded tasks: dirty datasets paired with the checks that define a clean result, from fix_types to full_pipeline."
+    - name: "server/app.py (FastAPI)"
+      purpose: "Serves the environment (reset/step) over HTTP, containerized with Docker to run as a Space."
+    - name: "client.py + inference.py"
+      purpose: "A reference client and inference format showing how an agent connects to the environment and issues actions."
+    - name: "tests/"
+      purpose: "Test suites for the client, the graders, and the inference format, so the environment is verifiable end to end."
+  keyDecisions:
+    - decision: "Build to the OpenEnv spec instead of a custom harness"
+      reasoning: "A one-off environment only works with its own glue code. Subclassing OpenEnv's Action and Observation types makes the environment interoperable with the standard client and inference tooling, which is the whole value of a shared environment standard."
+      alternatives: "A bespoke gym-style API (works in isolation, but not with the OpenEnv ecosystem the hackathon was about)."
+    - decision: "A small typed action space, not free-form edits"
+      reasoning: "Letting an agent write arbitrary transformations is hard to score and easy to game. Seven explicit operations (convert, fill, dedupe, standardize, parse_date, and so on) keep actions checkable and map onto what a data engineer actually does."
+      alternatives: "Free-form code or SQL actions (powerful but unsafe and hard to reward); a single 'clean' action (no learning signal)."
+    - decision: "Score per check passed, not per action taken"
+      reasoning: "Rewarding actions would reward busywork. Tying the score to the fraction of a task's checks that pass means the reward measures actual data-quality improvement, and an agent that thrashes without fixing issues gains nothing."
+      alternatives: "Reward per action (incentivizes noise); all-or-nothing reward at the end (sparse, hard to learn from)."
+  codeSnippets:
+    - title: "An OpenEnv-typed action space"
+      language: "python"
+      code: |
+        from openenv.core.env_server.types import Action, Observation
+
+        class DataCleanAction(Action):
+            action_type: Literal[
+                "replace_value", "convert_type", "fill_missing",
+                "remove_duplicates", "drop_rows", "standardize", "parse_date",
+            ]
+            column: Optional[str] = Field(None, ...)
+            target_type: Optional[Literal["int", "float", "str"]] = Field(None, ...)
+            method: Optional[Literal["lowercase", "trim", "title_case", "uppercase"]] = ...
+            # plus value / old_value / new_value / row_indices / subset_columns
+
+        class DataCleanObservation(Observation):
+            current_data: Optional[List[Dict[str, Any]]] = Field(None, ...)
+            column_info: Optional[Dict[str, Dict[str, Any]]] = Field(None, ...)
+            total_issues: int = 0
+            issues_fixed: int = 0
+            score: float = Field(0.0, description="Current score [0.0-1.0]")
+            done: bool = False
+      explanation: "Action and observation subclass OpenEnv's base types, so the environment speaks the standard protocol. The action space is a closed set of seven typed operations, and the observation gives an agent everything it needs: the data, per-column metadata, progress, and the current score."
+    - title: "The environment applies a typed action"
+      language: "python"
+      code: |
+        def _apply_action(data, action: DataCleanAction):
+            """Apply an action to the data. Returns (new_data, result_message)."""
+            if action.action_type == "convert_type":
+                for row in data:
+                    val = row.get(action.column)
+                    if val is None:
+                        continue
+                    if action.target_type == "int":
+                        row[action.column] = int(float(str(val)))
+                    elif action.target_type == "float":
+                        row[action.column] = float(str(val))
+                    elif action.target_type == "str":
+                        row[action.column] = str(val)
+                return data, f"Converted values in '{action.column}' to {action.target_type}"
+            # ... one branch per action type, each returning a result message
+      explanation: "Each step dispatches on action_type to a handler that transforms the data and returns a human-readable result. After the transform the environment recomputes per-column metadata and the quality score, so the next observation reflects exactly what changed."
+  metrics:
+    - value: "4 tasks"
+      label: "graded scenarios"
+      context: "fix_types → full_pipeline, 5-15 rows"
+    - value: "7 actions"
+      label: "typed action space"
+      context: "convert · fill · dedupe · standardize · parse_date · ..."
+    - value: "OpenEnv"
+      label: "spec-compliant"
+      context: "Meta OpenEnv Hackathon"
+    - value: "score 0-1"
+      label: "per-check reward"
+      context: "issues_fixed / total_issues"
+  learnings:
+    - "Framing data cleaning as a closed, typed action space is what makes it learnable: open-ended edits are powerful but neither safe nor scorable."
+    - "Rewarding checks passed rather than actions taken keeps the signal honest, an agent only scores by actually improving data quality."
+    - "Building to a shared spec like OpenEnv costs a little structure up front and buys interoperability with the standard tooling, which is the entire point of a common environment interface."
+featured: false
+priority: 11
+---
+# Overview
+An OpenEnv-compliant reinforcement-learning environment for tabular data cleaning, built for the Meta OpenEnv Hackathon. An agent fixes messy datasets through a closed, typed action space of seven operations (replace value, convert type, fill missing, remove duplicates, drop rows, standardize, parse date) and is scored on the fraction of each task's checks that pass. The environment subclasses OpenEnv's Action and Observation types, exposes reset/step over a FastAPI server, and ships in Docker to run as a Space, with four graded tasks (from a 5-row type-fixing warm-up to a 15-row full pipeline), a reference client and inference format, and tests for the client, graders, and inference.

@@ -33,6 +33,11 @@ export type ShowcaseConfig = {
 };
 
 export const SHOWCASE_PROJECTS: Record<string, ShowcaseConfig> = {
+  "data-clean-env": {
+    // hero: "/projects/dataclean/loop.png",  // enable once loop.png is placed
+    heroTag: "OpenEnv · RL · data cleaning",
+    // Demo: iframe a live Hugging Face Space once Jay provides the URL (set links.demo in MDX)
+  },
   "travel-booking-platform": {
     // hero: "/projects/travel/mesh.png",  // enable once mesh.png is placed
     heroTag: "14 services · Kafka · k8s",
