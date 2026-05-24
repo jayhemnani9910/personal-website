@@ -1,0 +1,115 @@
+---
+title: "Metabolic Syndrome Risk Validation"
+summary: "An external, longitudinal validation of two metabolic-syndrome risk scores on the US NHANES Linked Mortality File, benchmarked against established clinical equations (Framingham, ACC/AHA PCE, FINDRISC) with survey-weighted competing-risks survival analysis."
+role: "Researcher"
+period: "2026"
+domain: "Biostatistics"
+tags: ["epidemiology", "survival-analysis", "r", "research"]
+tech: ["R", "Python", "survival", "XGBoost", "renv"]
+github: "https://github.com/jayhemnani9910/longitudinal-mets-validation"
+links:
+  code: "https://github.com/jayhemnani9910/longitudinal-mets-validation"
+  demo: "https://jayhemnani9910.github.io/longitudinal-mets-validation/"
+challenge: "Two recently published metabolic-syndrome risk scores were developed and tuned on Korean cohorts. The open question was whether they hold up out of sample: do they predict long-term mortality in a large, survey-sampled US population, and do they add anything over the clinical risk equations doctors already use? Answering that honestly means a pre-registered external validation, not a re-fit on convenient data."
+solution:
+  - "Implements five risk scores from scratch in R, the metabolic-syndrome-derived RMRS (a triangular-areal-similarity method) and a B9 decision tree, plus the ACC/AHA Pooled Cohort Equations, Framingham 2008, and FINDRISC as comparators, each with unit tests."
+  - "Runs them on a NHANES 1999 to 2018 cohort (17,031 adults) linked to the 2019 Mortality File, for all-cause, cardiovascular, and diabetes-related mortality."
+  - "Uses survey-weighted Fine-Gray competing-risks and Cox models, IPCW time-dependent AUC, competing-risks decision-curve analysis, and a 500-replicate PSU-cluster bootstrap for confidence intervals, the inference a clinical journal would expect."
+  - "Diagnoses why a score underperforms: an XGBoost ceiling on the same five inputs and a CART refit on a held-out NHANES split separate 'the signal is weak' from 'the imported splits do not transport'."
+impact:
+  - "An honest, mixed result rather than a flattering one: for cardiovascular and all-cause mortality the established clinical equations dominate (Framingham 2008 reaches AUC 0.858 at 9.5 years for cardiovascular mortality versus 0.660 for RMRS), while for diabetes-related mortality RMRS competes with FINDRISC (AUC 0.752 vs 0.770) and adds modest incremental value (NRI and IDI confidence intervals exclude zero)."
+  - "Localizes the B9 decision tree's weakness to transportability: a CART refit on held-out NHANES data recovers RMRS-level discrimination, so the Korean-calibrated splits, not the tree method, are the problem."
+  - "Pre-registered and fully reproducible: an OSF analysis-plan draft, a 15-step R/Python pipeline, renv-pinned dependencies, and a Makefile that regenerates the cohort and every result table from raw NHANES."
+deepDive:
+  context: "Risk scores are usually celebrated on the data they were built on and rarely tested cleanly somewhere else. This project is an external validation: take two metabolic-syndrome risk scores from recent Korean-cohort papers and ask whether they generalize to a large US survey population followed for mortality, judged against the clinical equations already in use. The work is deliberately pre-registered so the analysis plan is fixed before the results are seen, and the headline is a nuanced, partly negative finding, which for a validation study is the point, not a disappointment."
+  architecture: "The codebase is an R project (with one Python step) organized as a numbered, reproducible pipeline. Early steps download NHANES and the Linked Mortality File, link them, and apply inclusion criteria to assemble the cohort. A scoring layer implements the five risk scores as independent, unit-tested functions. Survival steps fit survey-weighted Fine-Gray competing-risks and Cox models per outcome (all-cause, cardiovascular, diabetes-related), followed by calibration, decision-curve analysis, pairwise score comparisons, an XGBoost sensitivity ceiling, Table 1, subgroup analyses, and a 500-replicate bootstrap for confidence intervals. Utilities handle the NHANES survey design, competing-risks helpers, and decision-curve math. Dependencies are pinned with renv, the cohort and results regenerate from a Makefile, and the manuscript (LaTeX) and OSF pre-registration live in the repo as drafts."
+  dataFlow:
+    - step: "Assemble the cohort"
+      detail: "Download NHANES 1999 to 2018, link the 2019 Mortality File, and apply inclusion criteria to a 17,031-adult cohort."
+    - step: "Compute scores"
+      detail: "Run all five risk scores (RMRS, B9 tree, PCE, Framingham 2008, FINDRISC) on every subject."
+    - step: "Fit survival models"
+      detail: "Survey-weighted Fine-Gray competing-risks and Cox models for all-cause, cardiovascular, and diabetes-related mortality."
+    - step: "Evaluate and compare"
+      detail: "IPCW time-dependent AUC, calibration, competing-risks decision-curve analysis, and pairwise score comparisons."
+    - step: "Quantify uncertainty and diagnose"
+      detail: "A 500-replicate PSU-cluster bootstrap for confidence intervals, plus an XGBoost ceiling and a held-out CART refit to explain underperformance."
+  components:
+    - name: "R/scores (5 implementations)"
+      purpose: "RMRS, the B9 decision tree, ACC/AHA PCE, Framingham 2008, and FINDRISC, each implemented from the source papers as a tested function."
+    - name: "R/utils (survey + survival)"
+      purpose: "NHANES survey-design helpers, competing-risks survival utilities, and decision-curve-analysis math."
+    - name: "scripts/01..15 (pipeline)"
+      purpose: "The numbered, reproducible pipeline: download, link, score, model per outcome, calibrate, DCA, compare, XGBoost sensitivity, subgroups, bootstrap, and B9 refit."
+    - name: "XGBoost sensitivity (Python)"
+      purpose: "A gradient-boosted ceiling on the same five MetS inputs, to test whether the signal or the score form is the limit."
+    - name: "manuscript + prereg"
+      purpose: "A LaTeX manuscript draft and an OSF pre-registration draft, so the analysis plan is fixed and the write-up is versioned with the code."
+    - name: "renv + Makefile"
+      purpose: "Pinned dependencies and a one-command rebuild of the cohort and every result table from raw NHANES, for reproducibility."
+  keyDecisions:
+    - decision: "Pre-register and validate externally, do not re-fit"
+      reasoning: "A score re-fit on new data almost always looks good; that is not validation. Fixing the analysis plan in advance and testing the published scores as-is on an independent population is the only way to learn whether they actually transport."
+      alternatives: "Re-fit the scores on NHANES (inflated, circular); report only the favorable outcome (cherry-picking)."
+    - decision: "Survey-weighted competing-risks survival, not plain Cox on raw data"
+      reasoning: "NHANES is a complex survey, and cause-specific mortality competes with other causes. Survey weights plus Fine-Gray competing-risks models (with IPCW time-dependent AUC and a PSU-cluster bootstrap) are what make the estimates valid for the US population rather than the raw sample."
+      alternatives: "Unweighted Cox (biased for the population, ignores competing risks); logistic regression on an arbitrary horizon (throws away time)."
+    - decision: "Add an XGBoost ceiling and a held-out CART refit to explain failure"
+      reasoning: "Knowing a score underperforms is not enough; the useful question is why. An XGBoost ceiling shows whether the five MetS inputs carry signal at all, and a CART refit on held-out NHANES shows whether the tree method or its imported splits is the problem, separating a weak signal from poor transportability."
+      alternatives: "Report the AUC gap and stop (no mechanism, no actionable conclusion)."
+  codeSnippets:
+    - title: "RMRS: scaling each MetS factor around its diagnostic threshold"
+      language: "r"
+      code: |
+        # Robust Metabolic Syndrome Risk Score (RMRS), Shin et al. 2024 PeerJ CS.
+        # Triangular Areal Similarity over 5 MetS factors.
+
+        # f(x) = 0.5 + 0.5 * x / (1 + |x|);  f(0)=0.5, f(-1)=0.25, f(1)=0.75
+        elliot_sigmoid <- function(x) {
+          0.5 + 0.5 * x / (1 + abs(x))
+        }
+
+        # Each raw measurement is z-scored so its diagnostic threshold maps to 0,
+        # then passed through the Elliot sigmoid so the threshold maps to 0.5.
+        scale_factor <- function(x, factor) {
+          thresholds <- list(glucose = 100, triglycerides = 150, ...)
+          # ... normalize relative to threshold, then elliot_sigmoid(...)
+        }
+      explanation: "RMRS is reimplemented from the source paper rather than approximated: each metabolic-syndrome factor is normalized so its clinical diagnostic threshold sits at 0.5 after an Elliot sigmoid, and the five scaled factors feed the triangular-areal-similarity score. Implementing it faithfully is what makes the external validation fair."
+    - title: "Survey-weighted Fine-Gray competing risks"
+      language: "r"
+      code: |
+        weighted_finegray_hr <- function(df, score, time_col, status_col, ...) {
+          # Geskus weights: survival::finegray() builds the weighted risk set
+          fg <- survival::finegray(
+            survival::Surv(.time, .status_f) ~ .score + .cluster, data = df
+          )
+          # subdistribution hazard via weighted Cox on the Fine-Gray data
+          survival::coxph(
+            survival::Surv(fgstart, fgstop, fgstatus) ~ .score,
+            weights = fgwt, data = fg, ...
+          )
+        }
+      explanation: "Cause-specific mortality competes with other causes of death, so the model estimates a subdistribution hazard the Fine-Gray way: survival::finegray() builds the weighted risk set, then a weighted Cox fit gives the hazard ratio. This is what keeps the comparison honest for competing outcomes in a survey sample."
+  metrics:
+    - value: "17,031 adults"
+      label: "NHANES cohort"
+      context: "1999-2018 + 2019 Linked Mortality File"
+    - value: "5 risk scores"
+      label: "head-to-head"
+      context: "RMRS · B9 · PCE · Framingham · FINDRISC"
+    - value: "Fine-Gray"
+      label: "competing risks"
+      context: "survey-weighted, IPCW AUC, 500-rep bootstrap"
+    - value: "Pre-registered"
+      label: "and reproducible"
+      context: "OSF draft · renv · Makefile rebuild"
+  learnings:
+    - "A clean external validation usually produces a mixed result, and that is the value: here the metabolic-syndrome scores trail the clinical equations for cardiovascular and all-cause mortality but compete for diabetes-related mortality."
+    - "Diagnosing failure beats reporting it: the XGBoost ceiling and held-out CART refit turned 'the B9 tree is worse' into 'the imported splits do not transport', which is an actionable conclusion."
+    - "Pre-registration plus renv and a Makefile means the whole study rebuilds from raw NHANES, which is what makes a negative or mixed finding trustworthy rather than dismissible."
+featured: false
+priority: 10
+---
+# Overview
+An external, pre-registered, longitudinal validation of two metabolic-syndrome risk scores (the triangular-areal-similarity RMRS and a B9 decision tree) on the US NHANES Linked Mortality File, benchmarked against the ACC/AHA Pooled Cohort Equations, Framingham 2008, and FINDRISC. Built in R (with one Python step) as a 15-step reproducible pipeline over a 17,031-adult cohort, it uses survey-weighted Fine-Gray competing-risks and Cox models, IPCW time-dependent AUC, competing-risks decision-curve analysis, and a 500-replicate bootstrap. The finding is nuanced: the clinical equations dominate for cardiovascular and all-cause mortality, while RMRS competes with FINDRISC for diabetes-related mortality, and an XGBoost ceiling plus a held-out CART refit localize the B9 tree's weakness to transportability rather than method. The manuscript and OSF pre-registration are included as drafts.

@@ -33,6 +33,11 @@ export type ShowcaseConfig = {
 };
 
 export const SHOWCASE_PROJECTS: Record<string, ShowcaseConfig> = {
+  "longitudinal-mets-validation": {
+    // hero: "/projects/mets/pipeline.png",  // enable once pipeline.png is placed
+    heroTag: "NHANES · Fine-Gray · external validation",
+    // Demo tab iframes the GitHub Pages landing (from MDX links.demo)
+  },
   "data-clean-env": {
     // hero: "/projects/dataclean/loop.png",  // enable once loop.png is placed
     heroTag: "OpenEnv · RL · data cleaning",
