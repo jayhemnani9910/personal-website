@@ -65,6 +65,11 @@ export const SHOWCASE_PROJECTS: Record<string, ShowcaseConfig> = {
     arch: "/projects/bio/architecture.png",
     // Demo tab iframes the live site (from MDX links.demo)
   },
+  "scheduling-visualizer": {
+    // hero: "/projects/scheduling/gantt.png",  // enable once gantt.png is placed
+    heroTag: "9 algorithms · Gantt",
+    // Demo tab iframes the live app (from MDX links.demo)
+  },
   "rubiks-timer": {
     // hero: "/projects/rubiks/app.png",  // enable once a fresh screenshot is placed
     heroTag: "Three.js · WASM solver",
