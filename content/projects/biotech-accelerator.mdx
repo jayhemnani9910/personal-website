@@ -24,12 +24,20 @@ deepDive:
   context: "Deciding what biotech experiment to run next depends on evidence scattered across separate systems: sequence and function in UniProt, prior findings in PubMed, structures in the PDB, dynamics from normal-mode analysis, and bioactivity in ChEMBL. A researcher normally queries each by hand and holds the synthesis in their head. This project automates that gathering and synthesis with a multi-agent pipeline so the human starts from a structured shortlist instead of a blank page."
   architecture: "LangGraph drives a staged pipeline. A query parser turns a natural-language research question into structured intent, then the workflow moves through source-specific agents: UniProt for protein identity and function, PubMed for literature, the PDB for structure, ProDy for ANM/GNM normal-mode analysis on those structures, and ChEMBL for chemical and bioactivity context. A final stage synthesizes the collected evidence into suggested experiments. Each agent owns its own HTTP access (httpx) and parsing, communicating through shared pipeline state, which keeps a slow or failing external API from taking down the whole run."
   components:
-    - "Query Parser: converts a free-text research question into structured targets and constraints for the downstream agents."
-    - "UniProt Agent: resolves the protein, pulls function, domains, and cross-references."
-    - "PubMed Agent: gathers relevant literature and recent findings tied to the target."
-    - "Structure + NMA Agent: fetches PDB structures and runs ANM/GNM normal-mode analysis via ProDy to capture dynamics."
-    - "ChEMBL Agent: adds chemical and bioactivity context for candidate compounds."
-    - "Synthesis stage: combines the evidence into a ranked list of experiments worth running next."
+    - name: "Query Parser"
+      purpose: "Turns a free-text question into structured targets: PDB IDs via regex, known proteins via a name-to-UniProt map, and a drug-query flag that decides whether the ChEMBL stage runs."
+    - name: "BioLiteratureAgent (+ PubMed)"
+      purpose: "Gathers relevant literature and recent findings tied to the resolved target."
+    - name: "StructureAnalystAgent (+ PDB, NMA)"
+      purpose: "Fetches PDB structures and runs ProDy ANM normal-mode analysis to capture flexibility and hinge regions, the structural-dynamics signal."
+    - name: "DrugBindingAgent (+ ChEMBL)"
+      purpose: "Adds compound and bioactivity context; runs only when the query is drug-related."
+    - name: "SynthesisAgent"
+      purpose: "Combines literature, structural, and chemical evidence into a coherent research report."
+    - name: "ExperimentSuggester"
+      purpose: "Turns the synthesis into a ranked list of experiments worth running next."
+    - name: "Adapters (hexagonal)"
+      purpose: "UniProt, PubMed, RCSB PDB, and ChEMBL behind a shared BaseAdapter, each with its own httpx access, so a failing source degrades gracefully."
   dataFlow: "Research query enters the query parser, which produces structured intent. The pipeline then calls UniProt, PubMed, the PDB plus ProDy normal-mode analysis, and ChEMBL, accumulating evidence in shared state at each step. The synthesis stage reads the accumulated evidence and emits a structured set of suggested experiments, surfaced through the Rich terminal UI."
   keyDecisions:
     - decision: "Multi-agent pipeline over a single prompt"
@@ -38,6 +46,67 @@ deepDive:
     - decision: "Add normal-mode analysis as a distinct structural signal"
       reasoning: "Sequence and literature evidence are common; structural dynamics from ANM/GNM normal-mode analysis are not. Including ProDy-based NMA gives the synthesis stage a signal that distinguishes candidates that look similar on sequence alone."
       alternatives: "Sequence and literature only (cheaper, less discriminating)."
+  codeSnippets:
+    - title: "Query parser: free text to structured targets"
+      language: "python"
+      code: |
+        _PDB_ID_PATTERN = re.compile(r"\b([0-9][A-Z0-9]{3})\b", re.IGNORECASE)
+        _GENE_PATTERN = re.compile(r"\b([A-Z]{2,6})\b")
+
+        # known proteins resolve straight to UniProt accessions
+        PROTEIN_NAME_MAP = {
+            "lysozyme": "P00698", "hemoglobin": "P69905",
+            "insulin": "P01308", "egfr": "P00533", "tp53": "P04637",
+        }
+        # a free-text question -> PDB IDs, gene symbols, and a
+        # has_drug_query flag that decides whether the ChEMBL stage runs
+      explanation: "No model call to start: the parser uses regex for PDB IDs and gene symbols and a name-to-UniProt map for common proteins, then sets a drug-query flag. Cheap, deterministic routing before any expensive lookup."
+    - title: "Normal-mode analysis via ProDy ANM"
+      language: "python"
+      code: |
+        class NMAAnalyzer:
+            """Normal Mode Analysis via ProDy ANM (Anisotropic Network Model)."""
+            def __init__(self, n_modes: int = 100, cutoff: float = 15.0):
+                self.n_modes = n_modes
+                self.cutoff = cutoff          # spring-network cutoff, angstroms
+
+            def analyze(self, pdb_path: Path) -> NMAResult:
+                import prody
+                # model the structure as a spring network, compute the
+                # lowest n_modes -> eigen-spectrum -> per-residue flexibility
+      explanation: "The signal most query tools skip. ANM treats the protein as a network of springs and solves for its low-frequency normal modes, surfacing flexible regions and hinges that sequence and literature evidence alone cannot distinguish. (Reused from Jay's Nobel Data Intelligence project.)"
+    - title: "Every stage degrades, it does not crash"
+      language: "python"
+      code: |
+        async def structure_node(state: BiotechState) -> dict:
+            agent = StructureAnalystAgent()
+            try:
+                return {**await agent(state), "current_phase": "structure_done"}
+            except Exception as e:                     # a flaky API becomes
+                return {                                # a degraded section,
+                    "structure_error": str(e),          # not a dead run
+                    "structure_summary": f"Structure analysis failed: {e}",
+                    "current_phase": "structure_done",
+                }
+            finally:
+                await agent.close()
+
+        # build: parse -> resolve_proteins -> literature -> structure
+        #        -> drugs (conditional) -> synthesis -> END
+      explanation: "Each node wraps its agent in try/except/finally. A failing external source turns into a labelled gap in the report instead of aborting the whole pipeline, and the drug stage is skipped entirely when the query is not drug-related."
+  metrics:
+    - value: "5 agents"
+      label: "in the pipeline"
+      context: "literature · structure · drug · synthesis · experiment-suggester"
+    - value: "4 sources"
+      label: "external APIs"
+      context: "UniProt · PubMed · RCSB PDB · ChEMBL"
+    - value: "100"
+      label: "NMA modes"
+      context: "ProDy ANM, 15A spring-network cutoff"
+    - value: "Hexagonal"
+      label: "ports + adapters"
+      context: "graceful degradation per source"
   learnings:
     - "Source-specific agents with typed interfaces make a research pipeline resilient: a flaky external API becomes a degraded result, not a crash."
     - "A structural-dynamics signal is worth the extra stage. Normal-mode analysis surfaces differences that sequence and literature evidence miss."
