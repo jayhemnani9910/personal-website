@@ -59,6 +59,11 @@ export const SHOWCASE_PROJECTS: Record<string, ShowcaseConfig> = {
     arch: "/projects/bio/architecture.png",
     // Demo tab iframes the live site (from MDX links.demo)
   },
+  "nobel-dataintelligence": {
+    // hero: "/projects/nobel/fusion.png",  // enable once fusion.png is placed
+    heroTag: "ProtT5 · VDOS · ChemBERTa",
+    // Demo tab iframes the live site (from MDX links.demo)
+  },
   "revolu-idea": {
     hero: "/projects/cag/flow.png",
     heroTag: "Causal-Adversarial · LangGraph",

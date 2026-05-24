@@ -1,23 +1,131 @@
 ---
 title: "Nobel Data Intelligence"
-summary: "Physics-informed deep learning for protein stability and enzyme kinetics. Tri-modal architecture combining ProtT5, GATv2+VDOS, and ChemBERTa with gated attention fusion."
+summary: "Physics-informed deep learning for protein stability and enzyme kinetics. A tri-modal architecture fuses ProtT5 sequence embeddings, a VDOS vibrational spectrum from normal mode analysis, and ChemBERTa chemistry through learned gated attention."
 role: "Researcher"
 period: "2024"
 domain: "Computational Biology"
-tags: ["gnn", "molecular-biology", "pytorch-geometric", "research", "protein"]
-tech: ["Python", "PyTorch Geometric", "ProDy", "BioPython", "RDKit", "Transformers"]
+tags: ["deep-learning", "molecular-biology", "pytorch", "research", "protein"]
+tech: ["Python", "PyTorch", "ProDy", "Transformers", "RDKit", "BioPython"]
 github: "https://github.com/jayhemnani9910/nobel-dataintelligence"
-challenge: "Build a physics-informed prediction framework that captures protein dynamics, not just static sequence or structure, for stability and enzyme kinetics prediction."
+links:
+  code: "https://github.com/jayhemnani9910/nobel-dataintelligence"
+  demo: "https://jayhemnani9910.github.io/nobel-dataintelligence/"
+challenge: "Most protein-property models treat a protein as a static sequence or a single frozen structure, ignoring that a protein is a moving object whose vibrations carry information about how it behaves. The goal was a prediction framework for protein stability and enzyme kinetics that adds a physics-based dynamics signal to sequence and chemistry, and that keeps working when one of those inputs is missing."
 solution:
-  - "Novel VDOS (Vibrational Density of States) features from Normal Mode Analysis capture protein dynamics invisible to static models."
-  - "Tri-modal architecture: ProtT5 sequence encoder, GATv2 structure encoder with VDOS, ChemBERTa chemical encoder with DRFP."
-  - "MM-Drop training (multimodal dropout) ensures robustness when one modality is missing."
+  - "A tri-modal architecture that encodes three views of a protein: ProtT5 for sequence, a 1D SpectralCNN over a vibrational density-of-states (VDOS) spectrum for dynamics, and ChemBERTa plus differential reaction fingerprints for substrate chemistry."
+  - "A VDOS spectrum is computed per structure from normal mode analysis (ANM/GNM via ProDy), turning protein vibrations into a 1000-point spectral feature that sequence and chemistry models never see."
+  - "A learned gating network emits softmax attention weights over the three branches, so the model decides how much to trust each modality per prediction instead of concatenating them blindly."
+  - "MM-Drop training randomly masks the spectral branch during training, so the model degrades gracefully at inference when no structure (and therefore no VDOS) is available."
 impact:
-  - "139 unit tests across QDD framework and VibroPredict subsystem."
-  - "8 Jupyter notebooks from quickstart to ablation studies, with Colab training support."
-  - "CLI tools and batch inference pipeline for production-ready predictions."
+  - "Two-phase codebase: a Quantum Data Decoder core for general molecular property prediction, and VibroPredict on top of it for enzyme catalytic-turnover (k_cat) prediction."
+  - "100+ unit tests across both subsystems, eight Jupyter notebooks from quickstart through ablation and SOTA comparison, plus Colab training notebooks."
+  - "CLI entry points and a batch inference pipeline, and an interactive deployed demo that renders the VDOS spectrum live."
+deepDive:
+  context: "Whether a protein is stable, and how fast an enzyme turns over its substrate, depends partly on how the protein moves, not only on its amino-acid sequence or a single static structure. Conformational dynamics are awkward to express as a feature, so most models leave them out. This project tests whether a vibrational signal, derived from normal mode analysis and written as a density-of-states spectrum, adds predictive value when fused with sequence and chemistry. It is built in two phases: the Quantum Data Decoder core (normal mode analysis, spectral generation, the encoders, fusion, and training) and VibroPredict, an enzyme-kinetics model that assembles those pieces for log(k_cat) regression."
+  architecture: "Three encoder branches feed one fusion layer. ProtT5 encodes the amino-acid sequence, a 1D SpectralCNN encodes the VDOS spectrum, and a ChemBERTa-plus-fingerprint encoder handles substrate SMILES. The VDOS spectrum is produced upstream: a structure goes through ANM or GNM normal mode analysis with ProDy, the eigenvalues are converted to vibrational frequencies, and Lorentzian broadening turns the discrete modes into a continuous 1000-point spectrum. TriModalFusion projects all three branches to a shared dimension and combines them with softmax gate weights from a small gating network, so each modality's contribution is learned per sample. A regression head maps the fused vector to log(k_cat), and the gate weights are returned alongside for inspection. The Quantum Data Decoder core also carries graph (GATv2) and CNN encoders and Novozymes/CAFA5 dataset loaders for the stability and function tasks."
+  dataFlow:
+    - step: "Structure to normal mode analysis"
+      detail: "ANM/GNM (ProDy) coarse-grains the protein to a C-alpha spring network and solves for the lowest normal modes."
+    - step: "Modes to VDOS spectrum"
+      detail: "Eigenvalues convert to vibrational frequencies; Lorentzian broadening yields a continuous 1000-point density-of-states spectrum."
+    - step: "Three encoders run in parallel"
+      detail: "ProtT5 on sequence, SpectralCNN on the VDOS spectrum, ChemBERTa + DRFP on substrate SMILES."
+    - step: "Gated tri-modal fusion"
+      detail: "A gating network emits softmax weights over the three branches; each is projected to a shared dimension and combined."
+    - step: "Regression head to log(k_cat)"
+      detail: "The fused vector predicts catalytic turnover; the per-sample gate weights are returned for interpretability."
+  components:
+    - name: "ANMAnalyzer / GNMCalculator"
+      purpose: "Normal mode analysis via ProDy: builds the C-alpha spring network and computes the lowest ~100 modes, the source of the dynamics signal."
+    - name: "VibroEnzymePipeline (VDOS engine)"
+      purpose: "Converts GNM eigenvalues to vibrational frequencies and applies Lorentzian broadening to synthesize the 1000-point VDOS spectrum."
+    - name: "ProtT5Encoder"
+      purpose: "Sequence branch: embeds the amino-acid sequence with the ProtT5 protein language model."
+    - name: "SpectralCNN"
+      purpose: "Spectral branch: a 1D CNN that encodes the VDOS spectrum into a fixed-length embedding."
+    - name: "ChemicalEncoder"
+      purpose: "Chemistry branch: ChemBERTa embeddings of substrate SMILES concatenated with differential reaction fingerprints (DRFP)."
+    - name: "TriModalFusion"
+      purpose: "Learned softmax gating over the three projected branches, producing one fused vector plus per-sample gate weights."
+    - name: "VibroPredictHybrid"
+      purpose: "End-to-end enzyme-kinetics model: the three encoders, the fusion layer, and a regression head for log(k_cat)."
+    - name: "TrainerWithMMDrop"
+      purpose: "Training loop that randomly masks the spectral modality (MM-Drop) so the model stays usable when VDOS is absent."
+  keyDecisions:
+    - decision: "Add a vibrational (VDOS) feature as a third modality"
+      reasoning: "Sequence and chemistry are standard inputs; conformational dynamics are not. Normal mode analysis gives a cheap, structure-derived spectrum that captures flexibility and hinge motion, a signal that static representations cannot express."
+      alternatives: "Sequence and chemistry only (simpler, but blind to dynamics); full molecular dynamics (far too expensive to run per protein at dataset scale)."
+    - decision: "Gated fusion instead of plain concatenation"
+      reasoning: "The three modalities are not equally informative for every protein, and one may be missing entirely. A softmax gating network lets the model weight branches per sample and exposes those weights for interpretation."
+      alternatives: "Concatenate-and-MLP (no per-sample weighting), bilinear fusion (more parameters, harder to read)."
+    - decision: "MM-Drop: randomly drop the spectral branch during training"
+      reasoning: "VDOS needs a structure, which is not always available at inference time. Masking the spectral modality during training forces the sequence and chemistry branches to stay predictive on their own, so a structureless query still returns a prediction."
+      alternatives: "Require all three modalities (brittle in deployment), or train separate single-modality models (loses the benefit of fusion)."
+  codeSnippets:
+    - title: "Gated tri-modal fusion: the model weights each branch per sample"
+      language: "python"
+      code: |
+        concat = torch.cat([h_seq, h_spec, h_chem], dim=-1)
+        gates = torch.softmax(self.gate_net(concat), dim=-1)  # (batch, 3)
+
+        proj_seq = self.proj_seq(h_seq)
+        proj_spec = self.proj_spec(h_spec)
+        proj_chem = self.proj_chem(h_chem)
+
+        fused = (
+            gates[:, 0:1] * proj_seq
+            + gates[:, 1:2] * proj_spec
+            + gates[:, 2:3] * proj_chem
+        )
+        return self.dropout(fused), gates
+      explanation: "A small gating network reads all three embeddings and emits softmax weights over the sequence, spectral, and chemical branches. Each branch is projected to a shared dimension and summed by its gate, so the fusion is a learned per-sample weighting rather than a fixed concatenation. The gates are returned so a prediction can be read for which modality drove it."
+    - title: "VDOS engine: protein vibrations to a spectral feature"
+      language: "python"
+      code: |
+        eigenvalues, _ = self.gnm_calculator.compute_from_pdb(pdb_path)
+
+        # GNM eigenvalues are proportional to omega^2 -> frequencies in cm^-1
+        conversion_factor = 1 / (2 * np.pi * 29979.2458)
+        frequencies = np.sqrt(np.maximum(eigenvalues, 0)) * conversion_factor
+
+        generator = SpectralGenerator(
+            freq_min=0, freq_max=self.freq_max, n_points=self.n_points
+        )
+        vdos = generator.generate_dos(frequencies, broadening=self.broadening)
+        features = generator.extract_spectral_features(vdos)
+      explanation: "The physics signal the other modalities cannot see. GNM normal modes from the structure become vibrational frequencies, and Lorentzian broadening turns those discrete modes into a continuous 1000-point density-of-states spectrum that the SpectralCNN then encodes."
+    - title: "MM-Drop: train so a missing structure does not break inference"
+      language: "python"
+      code: |
+        # Randomly decide whether to drop the spectral modality this batch
+        drop_spectral = bool(np.random.rand() < p_drop)
+
+        logkcat, gates = self.model(
+            sequences, vdos, substrate_smiles, product_smiles, drop_spectral
+        )
+        # inside the model's forward:
+        #   if drop_spectral:
+        #       h_spec = torch.zeros_like(h_spec)
+      explanation: "With probability p_drop (0.25 by default) the spectral embedding is zeroed for a training batch, forcing the sequence and chemistry branches to carry the prediction on their own. A protein with no available structure, and therefore no VDOS, still gets a usable answer at inference."
+  metrics:
+    - value: "3-branch"
+      label: "tri-modal fusion"
+      context: "ProtT5 · VDOS-CNN · ChemBERTa+DRFP, gated"
+    - value: "1000"
+      label: "point VDOS spectrum"
+      context: "GNM modes + Lorentzian broadening"
+    - value: "100+"
+      label: "unit tests"
+      context: "QDD core + VibroPredict"
+    - value: "2 phases"
+      label: "QDD then VibroPredict"
+      context: "property prediction to enzyme kinetics"
+  learnings:
+    - "A physics-derived feature can be cheap: normal mode analysis on a coarse-grained spring network gives a usable dynamics signal without running full molecular dynamics."
+    - "Gated fusion is worth the small extra network: it improves robustness to a missing modality and makes each prediction partly interpretable through its gate weights."
+    - "Designing for missing inputs from the start (MM-Drop) matters more than peak accuracy on paper, because at inference a structure is often unavailable and the model still has to answer."
 featured: true
 priority: 3
 ---
 # Overview
-Physics-informed deep learning framework for protein stability and enzyme kinetics prediction. Uses a novel tri-modal architecture combining ProtT5 sequence embeddings, GATv2 graph attention with Vibrational Density of States from Normal Mode Analysis, and ChemBERTa chemical encodings. Two-phase design: QDD framework (Phase 1-2) for general molecular property prediction and VibroPredict (Phase 3) for enzyme catalytic turnover prediction.
+Nobel Data Intelligence is a physics-informed deep learning framework for protein stability and enzyme kinetics. It encodes a protein through three branches, ProtT5 over the sequence, a SpectralCNN over a VDOS vibrational spectrum derived from normal mode analysis, and ChemBERTa plus reaction fingerprints over substrate chemistry, then combines them with a learned gating layer to predict properties such as catalytic turnover (k_cat). It is built in two phases: a Quantum Data Decoder core for general molecular property prediction and VibroPredict on top for enzyme kinetics, with 100+ tests, eight notebooks, and an interactive demo that renders the VDOS spectrum live.
