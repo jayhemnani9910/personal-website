@@ -1,6 +1,6 @@
 ---
 title: "ContextBox"
-summary: "CLI-first personal knowledge assistant. Captures screenshots with OCR, embeds text with sentence-transformers, and enables semantic search + AI Q&A from the terminal."
+summary: "CLI-first personal knowledge assistant. Captures screenshots with OCR, pulls content from the web, embeds everything with sentence-transformers into SQLite, and answers questions over it from the terminal via GitHub Models."
 role: "Builder"
 period: "2024"
 domain: "AI/ML"
@@ -8,18 +8,126 @@ tags: ["knowledge-management", "ocr", "semantic-search", "cli"]
 tech: ["Python", "Click", "SQLite", "Sentence-Transformers", "Tesseract", "GitHub Models"]
 github: "https://github.com/jayhemnani9910/contextbox"
 links:
+  code: "https://github.com/jayhemnani9910/contextbox"
   demo: "https://jayhemnani9910.github.io/contextbox/"
-challenge: "Build a personal knowledge capture tool that extracts and indexes screen content for instant semantic retrieval, entirely from the command line."
+challenge: "The things you reference while working, a screenshot, a web page, a Wikipedia entry, a YouTube transcript, scatter across apps and are gone the moment you close the tab. The goal was a single command-line tool that captures all of it, indexes it for meaning rather than keywords, and lets you ask questions over everything you have seen, without leaving the terminal."
 solution:
-  - "Cross-platform screenshot capture with Tesseract OCR for text extraction (supports Wayland, X11, macOS)."
-  - "Sentence-transformers embeddings (all-MiniLM-L6-v2) stored as SQLite BLOBs for semantic similarity search."
-  - "GitHub Models integration for AI-powered Q&A and summarization over captured contexts."
+  - "Cross-platform screenshot capture with Tesseract OCR, detecting Wayland, X11, GNOME, or macOS and falling back across gnome-screenshot, scrot, and grim."
+  - "Pluggable content extractors for web pages, Wikipedia, and YouTube transcripts, each behind an availability guard so a missing dependency disables just that extractor."
+  - "Semantic search with sentence-transformers (all-MiniLM-L6-v2) and cosine similarity over captures stored in SQLite, with a keyword fallback when the model is not installed."
+  - "Question-answering over captured content via GitHub Models, with question-type classification, source attribution, and confidence levels, plus a privacy mode that encrypts sensitive captures with Fernet."
 impact:
-  - "27-module Python package with CLI interface (Click + Rich) covering capture, search, and AI analysis."
-  - "6 content extractors: URLs, YouTube transcripts, Wikipedia, code files, OCR text, clipboard."
-  - "Fully open-source (MIT), installable via pip with optional feature groups ([llm], [ocr], [youtube])."
+  - "A 27-module Python package (Click + Rich CLI) covering capture, extraction, semantic search, and AI Q&A, installable via pip with optional feature groups ([llm], [ocr], [youtube])."
+  - "Graceful degradation throughout: heavy dependencies (sentence-transformers, OCR, YouTube) are optional, and each subsystem disables itself cleanly when its dependency is absent."
+  - "Ships with a React documentation site (install, commands, API reference, demo) deployed on GitHub Pages, and is MIT-licensed."
+deepDive:
+  context: "While working you constantly pull in context from different places, a screenshot of an error, a web page, a Wikipedia article, a video transcript, and then lose it. ContextBox is a command-line tool that captures those into one local store, embeds them so they can be searched by meaning, and answers questions over them. It is deliberately CLI-first and local-first: captures live in a SQLite database under your home directory, the embedding model runs locally, and the only external call is the LLM for question-answering."
+  architecture: "The package is organized around a capture-store-retrieve loop. A capture layer (screenshots with OCR, plus extractors for web pages, Wikipedia, and YouTube) writes captures and artifacts into a SQLite database. A semantic-search layer manages sentence-transformer embeddings (all-MiniLM-L6-v2) and ranks captures by cosine similarity, with a keyword fallback if the model is unavailable. An LLM layer wraps GitHub Models for question-answering, with question classification, context building from retrieved captures, source attribution, and confidence scoring. A privacy layer encrypts sensitive data with Fernet. Almost every heavy dependency is optional and guarded by a try/except availability flag, so the tool installs small and grows features as you add the [llm], [ocr], or [youtube] extras."
+  dataFlow:
+    - step: "Capture"
+      detail: "A screenshot (OCR'd with Tesseract) or an extractor (web page, Wikipedia, YouTube transcript) pulls content in; the right screenshot backend is chosen per platform."
+    - step: "Store"
+      detail: "Captures and artifacts are written to a local SQLite database under ~/.contextbox."
+    - step: "Embed"
+      detail: "Text is embedded with sentence-transformers (all-MiniLM-L6-v2) and cached for reuse; without the model, search falls back to keywords."
+    - step: "Search"
+      detail: "A query is embedded and ranked against stored captures by cosine similarity to build the relevant context set."
+    - step: "Answer"
+      detail: "The retrieved context is sent to GitHub Models; the answer comes back classified by question type, with source attribution and a confidence level."
+  components:
+    - name: "ScreenshotCapture (capture.py)"
+      purpose: "Cross-platform screen capture: detects Wayland/GNOME/X11/macOS and falls back across gnome-screenshot, scrot, and grim; stores media under ~/.contextbox/media."
+    - name: "Extractors (web / Wikipedia / YouTube)"
+      purpose: "Pluggable content extractors, each imported behind a try/except availability flag so a missing dependency disables only that extractor, not the package."
+    - name: "EmbeddingManager (semantic_search.py)"
+      purpose: "Loads all-MiniLM-L6-v2, embeds and caches text, and ranks captures by cosine similarity; degrades to basic search when sentence-transformers is absent."
+    - name: "ContextDatabase (database.py)"
+      purpose: "SQLite layer for captures and artifacts: schema management, connections, and CRUD under a configurable db path."
+    - name: "QA system (llm/qa.py)"
+      purpose: "Question-answering over captures: classifies the question (factual, comparative, procedural, and so on), builds context, attributes sources, and scores confidence."
+    - name: "GitHub Models backend (llm/github_models.py)"
+      purpose: "The LLM backend the QA and summarization layers call, kept behind the optional [llm] feature group."
+    - name: "DataEncryption (privacy_mode.py)"
+      purpose: "Privacy mode: derives a key with PBKDF2 and encrypts sensitive captures with Fernet, with redaction helpers."
+  keyDecisions:
+    - decision: "CLI-first and local-first, not a web app"
+      reasoning: "The tool sits next to where the work happens, the terminal, and the data it captures (screenshots, notes) is personal. Keeping captures in a local SQLite store and running the embedding model locally means nothing leaves the machine except the optional LLM call for Q&A."
+      alternatives: "A web app or browser extension (more surface, a server to host, and captured personal data leaving the device)."
+    - decision: "Make every heavy dependency optional behind an availability guard"
+      reasoning: "Sentence-transformers, OCR, and YouTube extraction are large and not everyone needs all of them. Importing each behind a try/except flag and exposing pip extras ([llm], [ocr], [youtube]) keeps a base install small and lets a missing dependency disable just that feature instead of breaking the CLI."
+      alternatives: "Require the full dependency set (heavy install, fails if any piece is missing); split into several packages (more to maintain and coordinate)."
+    - decision: "Semantic search with a keyword fallback"
+      reasoning: "Embedding-based search is the point, but it should not be a hard requirement. Cosine similarity over all-MiniLM-L6-v2 embeddings gives meaning-based retrieval, and a keyword fallback keeps search working when the model is not installed."
+      alternatives: "Embeddings only (search dies without the model); keyword search only (misses semantically related captures)."
+  codeSnippets:
+    - title: "Optional heavy deps, guarded at import"
+      language: "python"
+      code: |
+        try:
+            from sentence_transformers import SentenceTransformer
+            from sklearn.metrics.pairwise import cosine_similarity
+            SENTENCE_TRANSFORMERS_AVAILABLE = True
+        except ImportError:
+            SENTENCE_TRANSFORMERS_AVAILABLE = False
+            logging.warning("Sentence transformers not available - using basic search")
+
+        class EmbeddingManager:
+            def __init__(self, model_name: str = 'all-MiniLM-L6-v2', cache_dir=None):
+                self.model = None
+                if SENTENCE_TRANSFORMERS_AVAILABLE:
+                    self.model = SentenceTransformer(model_name)
+      explanation: "The pattern that runs through the whole package: import the heavy dependency behind a try/except, set an availability flag, and degrade instead of crashing. Semantic search uses all-MiniLM-L6-v2 when present and falls back to basic search when it is not."
+    - title: "Pick a screenshot backend per platform"
+      language: "python"
+      code: |
+        class ScreenshotCapture:
+            def __init__(self, media_dir: str = None):
+                self.media_dir = Path(media_dir) if media_dir else Path.home() / ".contextbox" / "media"
+                self.media_dir.mkdir(parents=True, exist_ok=True)
+
+                available_tools = self.get_available_tools()
+                if not available_tools:
+                    logger.warning(
+                        "No screenshot tools detected. Install 'gnome-screenshot', "
+                        "'scrot', or 'grim' to enable screenshot capture."
+                    )
+
+            def is_wayland(self) -> bool:
+                return os.environ.get('WAYLAND_DISPLAY') is not None
+      explanation: "Capture detects the display server and desktop and chooses an available backend (gnome-screenshot, scrot, grim) rather than assuming one. Media is written under the user's home directory, keeping captures local."
+    - title: "Classify the question before answering it"
+      language: "python"
+      code: |
+        class QuestionType(Enum):
+            FACTUAL = "factual"
+            INFERENTIAL = "inferential"
+            COMPARATIVE = "comparative"
+            PROCEDURAL = "procedural"
+            ANALYTICAL = "analytical"
+            TEMPORAL = "temporal"
+            CAUSAL = "causal"
+            DEFINITION = "definition"
+            # ... plus a confidence level attached to every answer
+      explanation: "Q&A is not a single prompt. The question is classified by type, context is built from the captures retrieved by semantic search, and the answer carries source attribution and a confidence level, so the response is traceable back to what was captured."
+  metrics:
+    - value: "27 modules"
+      label: "Python package"
+      context: "capture · extractors · search · LLM · privacy"
+    - value: "all-MiniLM-L6-v2"
+      label: "embeddings"
+      context: "cosine search, keyword fallback"
+    - value: "3 extras"
+      label: "optional feature groups"
+      context: "[llm] · [ocr] · [youtube]"
+    - value: "Local-first"
+      label: "SQLite store"
+      context: "only the Q&A call leaves the machine"
+  learnings:
+    - "Treating every heavy dependency as optional changes the install story: the base tool stays small, and a missing model or OCR binary disables one feature instead of breaking the whole CLI."
+    - "A keyword fallback behind semantic search is cheap insurance: retrieval keeps working before the embedding model is installed, which matters for a tool people try once from the terminal."
+    - "Question classification plus source attribution makes LLM answers auditable: you can see which captures an answer came from, which is what makes a personal-knowledge tool trustworthy."
 featured: true
 priority: 6
 ---
 # Overview
-CLI-first personal knowledge assistant built with Python. Captures screenshots, extracts text via Tesseract OCR, embeds content with sentence-transformers into SQLite, and enables semantic search + AI-powered Q&A via GitHub Models. 27 Python modules with 6 content extractors, cross-platform support, and a React documentation frontend deployed on GitHub Pages.
+ContextBox is a CLI-first personal knowledge assistant in Python. It captures screenshots (with Tesseract OCR) and web, Wikipedia, and YouTube content into a local SQLite store, embeds everything with sentence-transformers (all-MiniLM-L6-v2) for semantic search, and answers questions over your captures via GitHub Models with question classification, source attribution, and confidence levels. It is a 27-module package with a Click + Rich CLI, optional feature groups so heavy dependencies stay optional, a Fernet-based privacy mode, and a React documentation site on GitHub Pages.
