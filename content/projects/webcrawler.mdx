@@ -1,23 +1,145 @@
 ---
 title: "Website Watcher"
-summary: "Production web archiver with automated crawling, SHA-256 change detection, FTS5 full-text search, and cryptographic verification. 26 Python modules with Docker orchestration."
+summary: "A website archiver and change-detection service: it discovers pages, snapshots them with ArchiveBox, detects content changes by hash, makes every version full-text searchable, and seals versions with Merkle trees and OpenTimestamps anchoring."
 role: "Builder"
 period: "2024"
 domain: "Data Engineering"
 tags: ["web-scraping", "archival", "search", "monitoring"]
-tech: ["Python", "Flask", "SQLite", "ArchiveBox", "Prometheus", "Docker"]
+tech: ["Python", "Flask", "ArchiveBox", "SQLite (FTS5)", "APScheduler", "Docker"]
 github: "https://github.com/jayhemnani9910/webcrawler"
-challenge: "Build a production web archiver that automatically discovers, snapshots, and tracks content changes across websites with full-text search and cryptographic integrity."
+links:
+  code: "https://github.com/jayhemnani9910/webcrawler"
+  demo: "https://jayhemnani9910.github.io/webcrawler/"
+challenge: "Web content changes or disappears, and a plain archive does not prove that a snapshot is genuine or tell you what changed between versions. The goal was a service that discovers and snapshots pages on a schedule, detects content changes by hash, makes every captured version searchable, and can produce a verifiable record that a given version existed at a given time."
 solution:
-  - "4-stage pipeline: sitemap discovery → ArchiveBox archiving → SHA-256 change detection → FTS5 full-text search."
-  - "Flask web UI for site management, page browsing, and search with faceting by site and date."
-  - "HMAC-SHA256 cryptographic signing for page version integrity with Merkle tree scaffolding."
+  - "A four-stage core pipeline: discovery (sitemap parsing and internal-link crawling, robots-compliant) into ArchiveBox snapshots, then SHA-256 content-hash change detection, then SQLite FTS5 full-text search across every archived version."
+  - "A Flask web UI and API (search, health, Prometheus metrics) plus a CLI (add-site, run, web, search, proof-worker, status), with crawls scheduled through APScheduler."
+  - "A verifiable-provenance layer: Merkle trees over page versions, OpenTimestamps anchoring of content hashes, and optional IPFS storage, with a content-hash chain and proof state tracked per version in the database."
+  - "Operational from the start: Docker Compose (with a production profile for Prometheus and Grafana) and systemd timer/service units, with health checks and metrics."
 impact:
-  - "Automated 2-hour crawl intervals via APScheduler with robots.txt compliance."
-  - "Docker Compose orchestration with Prometheus metrics, Grafana dashboards, and systemd integration."
-  - "26 Python modules covering crawling, archiving, search, crypto, and distributed sync."
+  - "Turns ad-hoc archiving into a scheduled, queryable system: every version of a page is captured, hashed for change detection, and searchable by full text, faceted by site and date."
+  - "Provenance integrations degrade gracefully, OpenTimestamps and IPFS use the external tool when present and fall back to a safe local path otherwise, so the service runs without them and gains verifiability when they are available."
+  - "26 Python modules across crawling, archiving, search, Merkle/anchor provenance, and operations, with a test suite covering search, ArchiveBox integration, and Merkle ordering."
+deepDive:
+  context: "A web archive is only useful if you can trust it and query it. This project started from two gaps in plain archiving: there is no record of what changed between two captures of a page, and there is no independent proof that a snapshot is authentic and was taken when it claims. Website Watcher addresses both: it hashes each version for change detection and builds a verifiable-provenance layer (Merkle trees plus OpenTimestamps anchoring) on top of ArchiveBox snapshots, while keeping everything searchable through SQLite FTS5."
+  architecture: "The service is layered. A crawler discovers URLs (sitemap parsing, internal-link crawling, robots compliance) and hands them to an ArchiveBox interface that snapshots each page. Each capture is written to SQLite as a PageVersion with its content text, a SHA-256 content hash, and a content-hash chain; a Changes table records diffs between versions, and an FTS5 virtual table indexes the text for search. On top sits a provenance layer: a Merkle module computes roots and proofs over version hashes (stored in a MerkleForest table), an OpenTimestamps wrapper stamps content hashes through the ots CLI, and an IPFS wrapper can store content, both falling back safely when the external tool is missing. A Flask app exposes search, health, and Prometheus metrics; a CLI drives add-site, scheduled runs, the web server, search, and a proof-upgrade worker; APScheduler runs crawls on an interval. Docker Compose and systemd units package it for deployment. (A zk-proofs module exists only as an explicit placeholder and is not a working feature.)"
+  dataFlow:
+    - step: "Discover"
+      detail: "Parse sitemaps and crawl internal links under robots.txt rules to build the set of URLs to archive for a site."
+    - step: "Snapshot"
+      detail: "Hand each URL to the ArchiveBox interface, which captures the page; the archived HTML and text are pulled back for storage."
+    - step: "Hash and diff"
+      detail: "Compute a SHA-256 content hash and extend a per-version hash chain; compare against the prior version to record a change."
+    - step: "Index"
+      detail: "Write the version to SQLite and into the FTS5 virtual table so its text is full-text searchable, faceted by site and date."
+    - step: "Seal"
+      detail: "Add the version hash to a Merkle forest and (when the ots CLI is present) stamp it with OpenTimestamps, tracking proof state per version."
+  components:
+    - name: "crawler.py (SiteWatcher)"
+      purpose: "Discovery and orchestration: sitemap parsing and link crawling with robots compliance (reppy, with a urllib fallback), driving archiving and version storage."
+    - name: "archivebox_interface.py"
+      purpose: "Wraps ArchiveBox to snapshot a URL and read the archived HTML back for hashing and indexing."
+    - name: "db.py (SQLite + FTS5)"
+      purpose: "Schema and CRUD for Sites, Pages, PageVersions (content hash + hash chain + proof state), Changes, and a MerkleForest; FTS5 virtual table for search, ignored gracefully if FTS5 is unavailable."
+    - name: "merkle.py"
+      purpose: "Deterministic Merkle root, proof generation, and verification over version-hash leaves, the core of the verifiable record."
+    - name: "anchor_ots.py"
+      purpose: "OpenTimestamps wrapper: stamps a content hash through the ots CLI and upgrades proofs, returning safe fallbacks when the CLI is absent."
+    - name: "ipfs_interface.py"
+      purpose: "Optional IPFS storage: tries the HTTP API, then the CLI, then a local SHA-256 fallback for tests."
+    - name: "ui.py (Flask) + main.py (CLI)"
+      purpose: "Flask app for search, health, and Prometheus metrics; CLI for add-site, scheduled run, web server, search, status, and the proof-upgrade worker."
+  keyDecisions:
+    - decision: "Build on ArchiveBox instead of writing a snapshotter"
+      reasoning: "ArchiveBox already captures pages robustly across formats. Wrapping it and focusing the project on what was missing, change detection, search, and verifiable provenance, avoided rebuilding solved work and kept the value where it was novel."
+      alternatives: "A custom snapshot engine (a large, well-trodden problem to redo); save raw HTML only (loses ArchiveBox's multi-format capture)."
+    - decision: "Make provenance integrations optional and degrade gracefully"
+      reasoning: "OpenTimestamps and IPFS depend on external tools (the ots CLI, an IPFS daemon) that will not always be installed. Each wrapper tries the real tool and falls back to a safe local path, so the core archiver runs anywhere and gains verifiability and decentralized storage only when those tools are present."
+      alternatives: "Require the ots CLI and an IPFS daemon (the service fails to run without them); drop provenance entirely (loses the verifiable-record goal)."
+    - decision: "Track change detection with a content hash and a hash chain per version"
+      reasoning: "A SHA-256 hash per version makes change detection exact and cheap, and chaining hashes plus rolling versions into a Merkle forest turns the archive into a tamper-evident sequence rather than a pile of independent snapshots."
+      alternatives: "Byte-level diffing only (heavier, no integrity guarantee); store snapshots without hashing (no fast change detection, no provenance)."
+  codeSnippets:
+    - title: "Discovery: sitemaps and links, robots-aware with a fallback"
+      language: "python"
+      code: |
+        try:
+            from reppy.robots import Robots as ReppyRobots
+            _HAS_REPPY = True
+        except Exception:
+            from urllib.robotparser import RobotFileParser
+            _HAS_REPPY = False
+
+        def parse_sitemap_urls(root_url):
+            candidates = ['/sitemap.xml', '/sitemap_index.xml']
+            found = set()
+            for c in candidates:
+                r = requests.get(urljoin(root_url, c), timeout=10,
+                                 headers={'User-Agent': USER_AGENT})
+                if r.status_code != 200:
+                    continue
+                soup = BeautifulSoup(r.content, 'lxml')
+                for loc in soup.find_all('loc'):
+                    u = loc.text.strip()
+                    if urlparse(u).netloc.endswith(urlparse(root_url).netloc):
+                        found.add(u)
+            return found
+      explanation: "Discovery prefers the robust robots parser (reppy) but falls back to the standard library when it is not installed, the same degrade-gracefully pattern used throughout. Sitemaps are parsed and links are scoped to the site's own domain."
+    - title: "A real Merkle tree over version hashes"
+      language: "python"
+      code: |
+        def merkle_root(leaves: List[bytes]) -> bytes:
+            nodes = [sha256(l) for l in leaves]
+            while len(nodes) > 1:
+                next_nodes = []
+                for i in range(0, len(nodes), 2):
+                    a = nodes[i]
+                    b = nodes[i + 1] if i + 1 < len(nodes) else nodes[i]
+                    next_nodes.append(sha256(a + b))
+                nodes = next_nodes
+            return nodes[0]
+
+        def verify_proof(leaf, proof, root, index) -> bool:
+            h = sha256(leaf)
+            # fold sibling hashes up the tree, order by index parity
+            return h == root
+      explanation: "Version hashes are leaves of a Merkle tree, so a single root commits to many archived versions and a short proof can show that a specific version belongs to it. This is the verifiable-record core, an actual implementation, not a stub."
+    - title: "OpenTimestamps anchoring that works without the tool installed"
+      language: "python"
+      code: |
+        def _has_ots_cli() -> bool:
+            return shutil.which('ots') is not None
+
+        def stamp_hash(content_hash: str, anchor_dir: Path) -> Optional[str]:
+            tf = create_temp_file_for_hash(content_hash, anchor_dir)
+            if _has_ots_cli():
+                res = subprocess.run(['ots', 'stamp', str(tf)],
+                                     capture_output=True, text=True)
+                if res.returncode == 0:
+                    ots_path = tf.with_suffix('.ots')
+                    if ots_path.exists():
+                        return str(ots_path)
+            return None   # no CLI: caller keeps the hash, anchoring is skipped
+      explanation: "A content hash is timestamped through the ots CLI to produce an OpenTimestamps proof. If the CLI is absent the function returns None and the service simply skips anchoring, so verifiability is a bonus when the tool is available rather than a hard dependency."
+  metrics:
+    - value: "26 modules"
+      label: "Python service"
+      context: "crawl · archive · verify · search"
+    - value: "SHA-256"
+      label: "change detection"
+      context: "content hash + chain per version"
+    - value: "FTS5"
+      label: "full-text search"
+      context: "SQLite virtual table, graceful fallback"
+    - value: "every 2h"
+      label: "scheduled crawl"
+      context: "APScheduler, robots-compliant"
+  learnings:
+    - "Wrapping ArchiveBox instead of rebuilding capture kept the project focused on what was actually missing: change detection, search, and provenance."
+    - "Treating provenance tools (OpenTimestamps, IPFS) as optional with safe fallbacks is what makes the service deployable anywhere while still gaining verifiability where the tools exist."
+    - "Hashing versions and rolling them into a Merkle tree turns a collection of snapshots into a tamper-evident sequence, which is the difference between an archive and a verifiable record."
 featured: true
 priority: 4
 ---
 # Overview
-Production website archiver with automated crawling every 2 hours, SHA-256 content hashing for change detection, SQLite FTS5 full-text search, and HMAC-SHA256 cryptographic verification. 26 Python modules with Flask web UI, Docker Compose orchestration, Prometheus monitoring, and systemd production deployment.
+Website Watcher is a website archiver and change-detection service. It discovers pages (sitemap and link crawling, robots-compliant), snapshots them with ArchiveBox, detects content changes with SHA-256 hashing, and indexes every version for SQLite FTS5 full-text search. On top it builds a verifiable-provenance layer, Merkle trees over version hashes plus OpenTimestamps anchoring and optional IPFS storage, each degrading gracefully when the external tool is absent. It ships as a 26-module Python service with a Flask UI and API, an APScheduler-driven CLI, and Docker Compose and systemd deployment with Prometheus metrics.
