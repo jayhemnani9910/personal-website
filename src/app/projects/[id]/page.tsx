@@ -1,5 +1,7 @@
 import { getAllProjects, getProject } from "@/lib/content";
 import { ProjectDetail } from "@/components/ProjectDetail";
+import { ProjectShowcase } from "@/components/ProjectShowcase";
+import { SHOWCASE_PROJECTS } from "@/lib/showcase";
 import { EditorialMasthead } from "@/components/EditorialMasthead";
 import { EditorialColophon } from "@/components/EditorialColophon";
 import { ViewCounter } from "@/components/ViewCounter";
@@ -14,10 +16,12 @@ export default async function ProjectPage({ params }: { params: Promise<{ id: st
         notFound();
     }
 
+    const isShowcase = id in SHOWCASE_PROJECTS;
+
     return (
         <div className="editorial">
             <EditorialMasthead active="work" />
-            <ProjectDetail project={project} />
+            {isShowcase ? <ProjectShowcase project={project} /> : <ProjectDetail project={project} />}
             <div className="section-wide py-10 mb-12 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                 <ReactionBar slug={id} />
                 <ViewCounter slug={id} />
