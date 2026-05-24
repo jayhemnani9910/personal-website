@@ -21,6 +21,7 @@ export type ShowcaseDemo =
 export type ShowcaseConfig = {
   hero?: string;
   heroTag?: string;
+  heroFit?: "cover" | "contain";
   arch?: string;
   demo?: ShowcaseDemo;
 };
@@ -50,6 +51,13 @@ export const SHOWCASE_PROJECTS: Record<string, ShowcaseConfig> = {
     hero: "/projects/svr/pipeline.png",
     heroTag: "RF-DETR · SAM2 · SigLIP",
     // Demo tab iframes the live landing page (from MDX links.demo)
+  },
+  "biotech-accelerator": {
+    hero: "/projects/bio/pipeline.png",
+    heroFit: "contain",
+    heroTag: "LangGraph · UniProt · PDB · ChEMBL",
+    arch: "/projects/bio/architecture.png",
+    // Demo tab iframes the live site (from MDX links.demo)
   },
   "revolu-idea": {
     hero: "/projects/cag/flow.png",

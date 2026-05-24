@@ -84,8 +84,8 @@ export function ProjectShowcase({ project }: { project: Project }) {
         </div>
 
         {cfg.hero && (
-          <div className="sw-hero-media">
-            <Image src={cfg.hero} alt={`${project.title} preview`} fill sizes="(max-width: 980px) 100vw, 52vw" style={{ objectFit: "cover" }} priority />
+          <div className={`sw-hero-media${cfg.heroFit === "contain" ? " contain" : ""}`}>
+            <Image src={cfg.hero} alt={`${project.title} preview`} fill sizes="(max-width: 980px) 100vw, 52vw" style={{ objectFit: cfg.heroFit ?? "cover" }} priority />
             {cfg.heroTag && <span className="ph-tag accent">{cfg.heroTag}</span>}
           </div>
         )}
