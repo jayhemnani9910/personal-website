@@ -6,7 +6,8 @@ import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import type { Project } from "@/lib/definitions";
 import { CodeBlock } from "./CodeBlock";
-import { SHOWCASE_PROJECTS } from "@/lib/showcase";
+import { BeforeAfter } from "./BeforeAfter";
+import { SHOWCASE_PROJECTS, type ShowcaseDemo } from "@/lib/showcase";
 
 type TabKey = "overview" | "architecture" | "code" | "demo";
 
@@ -15,10 +16,11 @@ type ComponentObj = { name: string; purpose?: string };
 type MetricObj = { value: string; label: string; context?: string };
 
 export function ProjectShowcase({ project }: { project: Project }) {
-  const cfg = SHOWCASE_PROJECTS[project.id] ?? { hero: "", arch: undefined };
+  const cfg = SHOWCASE_PROJECTS[project.id] ?? { hero: "" };
   const deep = project.deepDive ?? {};
   const links = project.links ?? {};
-  const demoUrl = links.demo;
+  const demo: ShowcaseDemo | undefined =
+    cfg.demo ?? (links.demo ? { kind: "iframe", url: links.demo } : undefined);
 
   const metrics = Array.isArray(deep.metrics) && typeof deep.metrics[0] === "object"
     ? (deep.metrics as MetricObj[])
@@ -36,7 +38,7 @@ export function ProjectShowcase({ project }: { project: Project }) {
     { key: "overview", label: "Overview" },
     ...(cfg.arch || deep.architecture || flow.length ? [{ key: "architecture" as const, label: "Architecture" }] : []),
     ...(snippets.length ? [{ key: "code" as const, label: "Code" }] : []),
-    ...(demoUrl ? [{ key: "demo" as const, label: "Demo" }] : []),
+    ...(demo ? [{ key: "demo" as const, label: "Demo" }] : []),
   ];
   const [active, setActive] = useState<TabKey>("overview");
 
@@ -65,11 +67,14 @@ export function ProjectShowcase({ project }: { project: Project }) {
           </dl>
 
           <div className="sw-cta">
-            {demoUrl && (
-              <a className="sw-btn primary" href={demoUrl} target="_blank" rel="noreferrer">
-                View live dashboard ↗
-              </a>
-            )}
+            {(() => {
+              const liveUrl = demo?.kind === "iframe" ? demo.url : demo?.kind === "compare" ? demo.liveUrl : undefined;
+              return liveUrl ? (
+                <a className="sw-btn primary" href={liveUrl} target="_blank" rel="noreferrer">
+                  View live demo ↗
+                </a>
+              ) : null;
+            })()}
             {project.github && (
               <a className="sw-btn" href={project.github} target="_blank" rel="noreferrer">
                 GitHub ↗
@@ -80,8 +85,8 @@ export function ProjectShowcase({ project }: { project: Project }) {
 
         {cfg.hero && (
           <div className="sw-hero-media">
-            <Image src={cfg.hero} alt={`${project.title} dashboard`} fill sizes="(max-width: 980px) 100vw, 52vw" style={{ objectFit: "cover" }} priority />
-            <span className="ph-tag accent">Live dashboard</span>
+            <Image src={cfg.hero} alt={`${project.title} preview`} fill sizes="(max-width: 980px) 100vw, 52vw" style={{ objectFit: "cover" }} priority />
+            {cfg.heroTag && <span className="ph-tag accent">{cfg.heroTag}</span>}
           </div>
         )}
       </header>
@@ -195,17 +200,35 @@ export function ProjectShowcase({ project }: { project: Project }) {
           </div>
         )}
 
-        {active === "demo" && demoUrl && (
+        {active === "demo" && demo?.kind === "iframe" && (
           <div className="sw-demo">
             <div className="sw-demo-frame">
-              <iframe src={demoUrl} title={`${project.title} live dashboard`} loading="lazy" />
+              <iframe src={demo.url} title={`${project.title} live demo`} loading="lazy" />
             </div>
-            <a className="sw-btn primary" href={demoUrl} target="_blank" rel="noreferrer">
-              Open the live dashboard ↗
+            <a className="sw-btn primary" href={demo.url} target="_blank" rel="noreferrer">
+              Open the live demo ↗
             </a>
             <p className="sw-demo-note mono xs muted">
               Embedded from the deployed project. If it does not load here, open it in a new tab.
             </p>
+          </div>
+        )}
+
+        {active === "demo" && demo?.kind === "compare" && (
+          <div className="sw-demo">
+            <p className="ds-prose" style={{ maxWidth: "62ch" }}>
+              Drag the slider to compare a raw broadcast frame against the same frame after YOLOv8 detection and ByteTrack ID assignment. Real La Liga footage, run through the pipeline.
+            </p>
+            <div className="sw-compare-grid">
+              {demo.pairs.map((p, i) => (
+                <BeforeAfter key={i} before={p.before} after={p.after} label={p.label} beforeLabel="Raw frame" afterLabel="Detected + tracked" />
+              ))}
+            </div>
+            {demo.liveUrl && (
+              <a className="sw-btn primary" href={demo.liveUrl} target="_blank" rel="noreferrer">
+                Open the live demo ↗
+              </a>
+            )}
           </div>
         )}
       </div>

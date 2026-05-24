@@ -1179,7 +1179,7 @@ html[data-theme="dark"] .editorial .ph::before {
 .editorial .sw-snippet-title { color: var(--ink-mute); margin-bottom: 8px; }
 .editorial .sw-snippet-note { font-size: 14px; color: var(--ink-soft); line-height: 1.6; margin: 10px 0 0; }
 
-.editorial .sw-demo { display: grid; gap: 16px; justify-items: start; }
+.editorial .sw-demo { display: flex; flex-direction: column; align-items: flex-start; gap: 16px; }
 .editorial .sw-demo-frame { width: 100%; aspect-ratio: 16 / 10; border: 1px solid var(--rule); overflow: hidden; background: var(--paper-deep); }
 .editorial .sw-demo-frame iframe { width: 100%; height: 100%; border: 0; display: block; }
 .editorial .sw-demo-note { margin: 0; }
@@ -1193,3 +1193,16 @@ html[data-theme="dark"] .editorial .ph::before {
   .editorial .sw-services { grid-template-columns: 1fr; }
   .editorial .sw-glance { grid-template-columns: 1fr 1fr; }
 }
+
+/* before/after compare slider */
+.editorial .sw-compare-grid { display: grid; width: 100%; grid-template-columns: 1fr 1fr; gap: 18px; margin: 18px 0 8px; }
+.editorial .ba { width: 100%; }
+.editorial .ba-stage { position: relative; width: 100%; aspect-ratio: 16 / 9; overflow: hidden; border: 1px solid var(--rule); background: var(--paper-deep); cursor: ew-resize; touch-action: none; user-select: none; }
+.editorial .ba-before-layer { position: absolute; inset: 0; }
+.editorial .ba-handle { position: absolute; top: 0; bottom: 0; width: 2px; background: var(--paper); transform: translateX(-1px); box-shadow: 0 0 0 1px rgba(0,0,0,0.3); pointer-events: none; }
+.editorial .ba-handle-grip { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 30px; height: 30px; border-radius: 999px; background: var(--accent); color: #fff; display: flex; align-items: center; justify-content: center; font-family: var(--ff-mono); font-size: 13px; }
+.editorial .ba-pill { position: absolute; top: 10px; z-index: 3; font-family: var(--ff-mono); font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; padding: 3px 7px; color: #fff; }
+.editorial .ba-pill-before { left: 10px; background: var(--ink); }
+.editorial .ba-pill-after { right: 10px; background: var(--accent); }
+.editorial .ba-cap { margin-top: 8px; }
+@media (max-width: 760px) { .editorial .sw-compare-grid { grid-template-columns: 1fr; } }
