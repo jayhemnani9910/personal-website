@@ -65,6 +65,11 @@ export const SHOWCASE_PROJECTS: Record<string, ShowcaseConfig> = {
     arch: "/projects/bio/architecture.png",
     // Demo tab iframes the live site (from MDX links.demo)
   },
+  "kayak-distributed": {
+    // hero: "/projects/kayak/tiers.png",  // enable once an ink-line figure is placed
+    heroTag: "3-tier · semantic cache",
+    // No demo: not hosted (local 3-tier app)
+  },
   "airbnb-distributed": {
     // hero: "/projects/airbnb/services.png",  // enable once an ink-line figure is placed
     heroTag: "microservices · Kafka · k8s",
