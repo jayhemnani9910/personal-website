@@ -1,0 +1,118 @@
+---
+title: "Voxt"
+summary: "A voice-to-text clipboard tool for Linux written in Go: press a global hotkey, speak, and the transcription (via Groq's Whisper) lands on your clipboard, with a system tray, desktop notifications, SQLite history, and Wayland and X11 support."
+role: "Builder"
+period: "2026"
+domain: "Developer Tools"
+tags: ["go", "linux", "speech-to-text", "desktop"]
+tech: ["Go", "PortAudio", "Groq Whisper", "SQLite", "GTK"]
+github: "https://github.com/jayhemnani9910/voxt"
+links:
+  code: "https://github.com/jayhemnani9910/voxt"
+challenge: "Dictation on Linux is fiddly: most tools are cloud apps, browser extensions, or desktop-environment-specific. The aim was a small, fast, keyboard-driven utility that works the same on Wayland and X11, press a hotkey anywhere, speak, and have the text waiting on your clipboard, with no window to focus."
+solution:
+  - "A Go desktop app split into focused packages, audio capture (PortAudio), a global hotkey listener, transcription, clipboard, desktop notifications, a system tray, and a SQLite history store."
+  - "Transcription through Groq's Whisper (whisper-large-v3) for speed, with optional formatting of the result through a Groq-hosted Llama model, and retry with backoff on rate limits."
+  - "Press-to-toggle recording on a configurable global hotkey (default F9), with start/stop beeps and a tray icon that reflects the recording state."
+  - "Works on both Wayland and X11, stores every transcription in SQLite, and copies the result straight to the clipboard with a desktop notification when it is ready."
+impact:
+  - "Turns dictation into a single keypress: the tool lives in the tray, and the transcribed text is on the clipboard before you switch back to whatever you were typing in."
+  - "Display-server-agnostic by design, so it behaves the same on a Wayland and an X11 desktop instead of breaking on one of them."
+  - "A clean small-Go-app layout, each concern (audio, hotkey, transcribe, clipboard, notify, tray, db) is its own package wired together in main."
+deepDive:
+  context: "Voxt is a small desktop utility built to scratch a real Linux annoyance: quick dictation that just puts text on the clipboard. It is keyboard-first and runs in the system tray, so the workflow is press the hotkey, speak, paste. Under the hood it records audio, sends it to a fast hosted Whisper model, optionally cleans up the formatting, and notifies you when the text is ready, while keeping a local history of everything transcribed."
+  architecture: "The app is a Go binary organized as a set of single-purpose packages composed in main. An App struct holds the tray, the notifier, an audio recorder, the transcriber, and a global hotkey listener. Pressing the hotkey toggles recording: the audio package captures from the microphone via PortAudio; on stop, the audio is sent to the transcribe package, which posts it to Groq's Whisper endpoint (whisper-large-v3) and can optionally pass the text through a Groq-hosted Llama model for formatting, retrying on rate-limit responses. The result is copied to the clipboard, a desktop notification fires, the tray icon updates, and the transcription is written to a SQLite history. Clipboard, notifications, hotkeys, and the tray are all chosen to work across both Wayland and X11."
+  dataFlow:
+    - step: "Hotkey toggles recording"
+      detail: "A global hotkey listener (default F9) starts and stops recording from anywhere, with start/stop beeps."
+    - step: "Capture audio"
+      detail: "The audio package records from the microphone via PortAudio while recording is active."
+    - step: "Transcribe"
+      detail: "On stop, the audio is posted to Groq's Whisper (whisper-large-v3); rate-limit responses are retried with backoff."
+    - step: "Optional formatting"
+      detail: "The raw transcript can be passed through a Groq-hosted Llama model to clean up formatting."
+    - step: "Deliver and store"
+      detail: "The text is copied to the clipboard, a desktop notification fires, the tray icon updates, and the transcription is saved to SQLite."
+  components:
+    - name: "audio/recorder.go"
+      purpose: "Captures microphone audio via PortAudio while recording is active."
+    - name: "hotkey/hotkey.go"
+      purpose: "A global hotkey listener (default F9) that toggles recording from any application."
+    - name: "transcribe/groq.go"
+      purpose: "Posts audio to Groq's Whisper (whisper-large-v3), optionally formats via a Groq Llama model, and retries on rate limits."
+    - name: "clipboard + notify"
+      purpose: "Copies the transcription to the clipboard and fires a desktop notification when it is ready."
+    - name: "tray/tray.go"
+      purpose: "A system-tray icon that reflects the recording state and hosts the minimal UI."
+    - name: "db/sqlite.go"
+      purpose: "A local SQLite store keeping a history of every transcription."
+  keyDecisions:
+    - decision: "Hosted Whisper (Groq) instead of a local model"
+      reasoning: "Local Whisper is heavy to ship and slow without a GPU. Groq's hosted whisper-large-v3 returns fast, accurate transcripts over an API, which fits a tool meant to feel instant, at the cost of needing an API key and a network call."
+      alternatives: "Bundle a local Whisper (large download, slow on CPU); a smaller local model (faster but less accurate)."
+    - decision: "System tray plus global hotkey, not a window"
+      reasoning: "Dictation should not require focusing an app. A tray presence plus a global hotkey means the tool is always available and never in the way, which is the whole ergonomic point."
+      alternatives: "A focused window or CLI invocation (breaks the press-and-speak flow)."
+    - decision: "Target both Wayland and X11 from the start"
+      reasoning: "Linux desktops are split between the two display servers, and clipboard, hotkeys, and notifications differ across them. Supporting both up front avoids a tool that only works on half of desktops."
+      alternatives: "X11 only (excludes modern Wayland desktops); Wayland only (excludes a large installed base)."
+  codeSnippets:
+    - title: "Transcribe via Groq Whisper, retry on rate limits"
+      language: "go"
+      code: |
+        const (
+            groqAPIEndpoint  = "https://api.groq.com/openai/v1/audio/transcriptions"
+            llamaAPIEndpoint = "https://api.groq.com/openai/v1/chat/completions"
+            whisperModel     = "whisper-large-v3"
+        )
+
+        func (t *Transcriber) doWithRetry(ctx context.Context, req *http.Request,
+            client *http.Client) (*http.Response, error) {
+            // ... on 429 Too Many Requests or 503 Service Unavailable, back off and retry
+            if resp.StatusCode == http.StatusTooManyRequests ||
+                resp.StatusCode == http.StatusServiceUnavailable {
+                // wait, then retry
+            }
+        }
+      explanation: "Audio is posted to Groq's whisper-large-v3 endpoint; an optional second call to a Groq-hosted Llama model cleans up formatting. Because a hosted API can rate-limit, the client retries on 429 and 503 with backoff so a transient limit does not lose a transcription."
+    - title: "Compose the app from single-purpose packages"
+      language: "go"
+      code: |
+        type App struct {
+            tray           *tray.Tray
+            notifier       *notify.Notifier
+            recorder       *audio.Recorder
+            transcriber    *transcribe.Transcriber
+            hotkeyListener *hotkey.HotkeyListener
+        }
+
+        func main() {
+            app := &App{}
+            app.init()                 // wire clipboard, notifier, transcriber, recorder
+            app.tray.Run(func() {      // blocking; hotkey toggles recording
+                log.Println("voxt started - press", app.config.Hotkey, "to toggle recording")
+            })
+        }
+      explanation: "Each concern, audio, hotkey, transcribe, clipboard, notify, tray, history, is its own package, and main just wires them into one App. The tray runs the event loop while the hotkey listener drives the record/transcribe cycle."
+  metrics:
+    - value: "Go"
+      label: "single binary"
+      context: "audio · hotkey · transcribe · tray · db packages"
+    - value: "whisper-large-v3"
+      label: "via Groq"
+      context: "optional Llama formatting, retry on limits"
+    - value: "Wayland + X11"
+      label: "both supported"
+      context: "global hotkey, clipboard, notifications"
+    - value: "SQLite"
+      label: "local history"
+      context: "every transcription stored"
+  learnings:
+    - "A good desktop utility is mostly ergonomics: the tray-plus-global-hotkey design is what makes voice-to-text feel instant rather than like launching an app."
+    - "Targeting Wayland and X11 together is more work up front but avoids the classic Linux trap of a tool that only runs on one half of desktops."
+    - "Splitting a small Go app into single-purpose packages kept the record-transcribe-deliver cycle easy to follow, even with audio, network, and UI all in play."
+featured: false
+priority: 20
+---
+# Overview
+Voxt is a voice-to-text clipboard tool for Linux, written in Go. Press a configurable global hotkey (default F9), speak, and the transcription is copied to your clipboard with a desktop notification. It records audio via PortAudio, transcribes through Groq's Whisper (whisper-large-v3) with optional Llama formatting and retry-on-rate-limit, lives in the system tray, keeps a SQLite history of every transcription, and works on both Wayland and X11. The codebase is a clean small-Go-app layout, each concern (audio, hotkey, transcribe, clipboard, notify, tray, db) is its own package wired together in main.

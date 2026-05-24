@@ -33,6 +33,11 @@ export type ShowcaseConfig = {
 };
 
 export const SHOWCASE_PROJECTS: Record<string, ShowcaseConfig> = {
+  "voxt": {
+    // hero: "/projects/voxt/flow.png",  // enable once flow.png is placed
+    heroTag: "Go · Whisper · Wayland+X11",
+    // No demo: Linux desktop app, nothing to iframe
+  },
   "unified-search": {
     // hero: "/projects/unisearch/strategies.png",  // enable once strategies.png is placed
     heroTag: "5 strategies · turbulent plume",
