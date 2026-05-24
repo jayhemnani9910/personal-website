@@ -12,7 +12,7 @@ export type ShowcaseDemo =
     };
 
 export type ShowcaseConfig = {
-  hero: string;
+  hero?: string;
   heroTag?: string;
   arch?: string;
   demo?: ShowcaseDemo;
@@ -38,5 +38,10 @@ export const SHOWCASE_PROJECTS: Record<string, ShowcaseConfig> = {
         { before: "/projects/fifa/input_15.jpg", after: "/projects/fifa/overlay_15.jpg" },
       ],
     },
+  },
+  "soccer-vision-research": {
+    hero: "/projects/svr/pipeline.png",
+    heroTag: "RF-DETR · SAM2 · SigLIP",
+    // Demo tab iframes the live landing page (from MDX links.demo)
   },
 };
