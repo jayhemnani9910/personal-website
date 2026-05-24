@@ -16,6 +16,12 @@ export type ShowcaseDemo =
       note: string;
       findings: { verdict: "VERIFIED" | "CONTESTED" | "UNVERIFIED"; text: string }[];
       sourceUrl?: string;
+    }
+  | {
+      kind: "tools";
+      note: string;
+      tools: { name: string; kind: "read" | "write"; description: string }[];
+      sample: { tool: string; request: string; response: string };
     };
 
 export type ShowcaseConfig = {
@@ -58,6 +64,50 @@ export const SHOWCASE_PROJECTS: Record<string, ShowcaseConfig> = {
     heroTag: "LangGraph · UniProt · PDB · ChEMBL",
     arch: "/projects/bio/architecture.png",
     // Demo tab iframes the live site (from MDX links.demo)
+  },
+  "webmcp-portfolio": {
+    hero: "/projects/webmcp/handshake.png",
+    heroTag: "navigator.modelContext",
+    demo: {
+      kind: "tools",
+      note: "The 8 tools this site registers with the WebMCP browser API. An agent in Chrome 146+ calls them directly; here is the catalog and one sample call.",
+      tools: [
+        { name: "search_projects", kind: "read", description: "Search projects by query, tech, tag, domain, or featured-only." },
+        { name: "get_project", kind: "read", description: "Full details for one project by ID: challenge, solution, impact, stack." },
+        { name: "get_resume", kind: "read", description: "Resume data by section: experience, education, skills, competencies, contact." },
+        { name: "search_skills", kind: "read", description: "Technical skills by category or keyword." },
+        { name: "get_contact", kind: "read", description: "Contact info and social links." },
+        { name: "list_experiments", kind: "read", description: "What Jay is currently building, exploring, or watching in the lab." },
+        { name: "toggle_theme", kind: "write", description: "Switch the site between light and dark theme." },
+        { name: "switch_mode", kind: "write", description: "Switch presentation mode: portfolio, brand, product, or blog." },
+      ],
+      sample: {
+        tool: "search_projects",
+        request: `{
+  "tool": "search_projects",
+  "arguments": { "query": "protein", "featured_only": true }
+}`,
+        response: `{
+  "count": 2,
+  "projects": [
+    {
+      "id": "nobel-dataintelligence",
+      "title": "Nobel Data Intelligence",
+      "tech": ["Python", "PyTorch", "ProDy", "Transformers"],
+      "domain": "Computational Biology",
+      "url": "https://jayhemnani.me/projects/nobel-dataintelligence"
+    },
+    {
+      "id": "biotech-accelerator",
+      "title": "Biotech Accelerator",
+      "tech": ["Python", "LangGraph", "ProDy", "httpx"],
+      "domain": "AI/ML",
+      "url": "https://jayhemnani.me/projects/biotech-accelerator"
+    }
+  ]
+}`,
+      },
+    },
   },
   "nobel-dataintelligence": {
     hero: "/projects/nobel/fusion.png",

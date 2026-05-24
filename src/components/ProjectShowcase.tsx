@@ -253,6 +253,33 @@ export function ProjectShowcase({ project }: { project: Project }) {
             )}
           </div>
         )}
+
+        {active === "demo" && demo?.kind === "tools" && (
+          <div className="sw-demo">
+            <p className="sw-report-note mono xs upper muted">{demo.note}</p>
+            <div className="sw-tools">
+              {demo.tools.map((t, i) => (
+                <div className="sw-tool" key={i}>
+                  <div className="sw-tool-head">
+                    <code>{t.name}</code>
+                    <span className={`sw-tool-kind k-${t.kind}`}>{t.kind}</span>
+                  </div>
+                  <p>{t.description}</p>
+                </div>
+              ))}
+            </div>
+            <div className="sw-tool-call">
+              <div className="sw-tool-io">
+                <span className="sw-tool-io-label mono xs upper muted">Agent calls <code>{demo.sample.tool}</code></span>
+                <pre className="sw-tool-json"><code>{demo.sample.request}</code></pre>
+              </div>
+              <div className="sw-tool-io">
+                <span className="sw-tool-io-label mono xs upper muted">Site returns</span>
+                <pre className="sw-tool-json"><code>{demo.sample.response}</code></pre>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
 
       <footer className="ds-foot">
