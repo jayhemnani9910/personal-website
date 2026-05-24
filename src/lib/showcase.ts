@@ -65,6 +65,11 @@ export const SHOWCASE_PROJECTS: Record<string, ShowcaseConfig> = {
     arch: "/projects/bio/architecture.png",
     // Demo tab iframes the live site (from MDX links.demo)
   },
+  "diabetes-stacking": {
+    // hero: "/projects/diabetes/stacking.png",  // enable once stacking.png is placed
+    heroTag: "6 base models · RF meta-learner",
+    // No demo: research notebook, no live app
+  },
   "scheduling-visualizer": {
     // hero: "/projects/scheduling/gantt.png",  // enable once gantt.png is placed
     heroTag: "9 algorithms · Gantt",
