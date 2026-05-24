@@ -4,7 +4,19 @@ export const alt = "Jay Hemnani, an engineer who ships agentic systems into prod
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
-export default function OpengraphImage() {
+async function loadGoogleFont(font: string, weight: number, text: string) {
+  const family = `${font.replace(/ /g, "+")}:wght@${weight}`;
+  const url = `https://fonts.googleapis.com/css2?family=${family}&text=${encodeURIComponent(text)}`;
+  const css = await (await fetch(url)).text();
+  const resource = css.match(/src: url\((.+?)\) format\('(opentype|truetype)'\)/);
+  if (!resource) throw new Error(`Failed to load font ${font}`);
+  return await (await fetch(resource[1])).arrayBuffer();
+}
+
+export default async function OpengraphImage() {
+  const title = "Jay Hemnani.";
+  const newsreader = await loadGoogleFont("Newsreader", 600, title);
+
   return new ImageResponse(
     (
       <div
@@ -34,7 +46,15 @@ export default function OpengraphImage() {
         </div>
 
         <div style={{ display: "flex", flexDirection: "column" }}>
-          <div style={{ display: "flex", fontSize: 150, lineHeight: 1, letterSpacing: -5 }}>
+          <div
+            style={{
+              display: "flex",
+              fontSize: 150,
+              lineHeight: 1,
+              letterSpacing: -5,
+              fontFamily: "Newsreader",
+            }}
+          >
             <span>Jay&nbsp;</span>
             <span style={{ color: "#b5471f" }}>Hemnani.</span>
           </div>
@@ -51,6 +71,9 @@ export default function OpengraphImage() {
         </div>
       </div>
     ),
-    { ...size }
+    {
+      ...size,
+      fonts: [{ name: "Newsreader", data: newsreader, style: "normal", weight: 600 }],
+    }
   );
 }
