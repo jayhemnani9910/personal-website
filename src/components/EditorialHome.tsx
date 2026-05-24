@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { useReducedMotion } from "framer-motion";
 import { EditorialMasthead } from "@/components/EditorialMasthead";
 import { EditorialColophon } from "@/components/EditorialColophon";
@@ -111,6 +112,7 @@ export function EditorialHome() {
           <Link href="/projects/fifa-soccer-ds" className="cardlink">
             <div className="feat-media">
               <div className="ph" style={{ aspectRatio: "16 / 9" }}>
+                <Image className="ph-img" src="/featured/fifa.png" alt="" fill sizes="(max-width: 860px) 100vw, 66vw" />
                 <span className="ph-tag accent">Computer Vision · Production</span>
                 <div className="ph-label"><span>fig. 01, tactical interaction graph, 22 fps</span><span className="mono">/work/fifa</span></div>
               </div>
@@ -132,6 +134,7 @@ export function EditorialHome() {
           <article className="feat">
             <Link href="/projects/revolu-idea" className="cardlink">
               <div className="ph small" style={{ aspectRatio: "5 / 3" }}>
+                <Image className="ph-img" src="/featured/cag.png" alt="" fill sizes="(max-width: 860px) 100vw, 33vw" />
                 <span className="ph-tag">Agentic AI</span>
                 <div className="ph-label"><span>fig. 02, LangGraph state diagram</span><span className="mono">/work/cag</span></div>
               </div>
@@ -148,6 +151,7 @@ export function EditorialHome() {
           <article className="feat">
             <Link href="/projects/biotech-accelerator" className="cardlink">
               <div className="ph small alt" style={{ aspectRatio: "5 / 3" }}>
+                <Image className="ph-img" src="/featured/biotech.png" alt="" fill sizes="(max-width: 860px) 100vw, 33vw" />
                 <span className="ph-tag">Multi-Agent</span>
                 <div className="ph-label"><span>fig. 03, protein chain, NMA</span><span className="mono">/work/biotech</span></div>
               </div>
@@ -210,6 +214,7 @@ export function EditorialHome() {
                 <span className="go">Read the dossier</span>
               </div>
               <div className="ph small" style={{ aspectRatio: "4 / 5" }}>
+                <Image className="ph-img" src="/featured/nobel.png" alt="" fill sizes="(max-width: 860px) 100vw, 33vw" />
                 <span className="ph-tag">R² &gt; 0.75</span>
                 <div className="ph-label"><span>fig. 05, VDOS spectrum</span><span className="mono">/work/nobel</span></div>
               </div>

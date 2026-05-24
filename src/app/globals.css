@@ -627,13 +627,19 @@ html[data-theme="dark"] .editorial .mh-theme::after { left: 18px; }
 html[data-theme="dark"] .editorial .ph::before {
   background-image: repeating-linear-gradient(-45deg, transparent 0 14px, rgba(255,255,255,0.04) 14px 15px);
 }
+.editorial .ph-img {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  object-fit: cover; z-index: 1;
+}
 .editorial .ph-label {
+  z-index: 2;
   position: absolute; inset: auto 0 0 0; padding: 10px 14px;
   font-family: var(--ff-mono); font-size: 10px; letter-spacing: 0.10em; text-transform: uppercase;
   color: var(--ink-mute); display: flex; justify-content: space-between;
   background: linear-gradient(to top, var(--paper) 60%, transparent);
 }
 .editorial .ph-tag {
+  z-index: 2;
   position: absolute; top: 12px; left: 12px; background: var(--ink); color: var(--paper);
   padding: 4px 8px; font-family: var(--ff-mono); font-size: 10px; letter-spacing: 0.1em;
   text-transform: uppercase; white-space: nowrap;
