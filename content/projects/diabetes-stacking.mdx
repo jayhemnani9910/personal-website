@@ -1,6 +1,6 @@
 ---
 title: "Diabetes Prediction (Stacking)"
-summary: "Stacking ensemble classifier for early diabetes prediction using 6 base models. Published at AIMV 2021 on IEEE Xplore with 10 citations."
+summary: "A stacking ensemble for early diabetes prediction on the PIMA dataset: six hyperparameter-tuned base classifiers feed a Random Forest meta-learner. Co-authored and published at IEEE AIMV 2021."
 role: "Researcher"
 period: "2021"
 domain: "Machine Learning"
@@ -8,18 +8,103 @@ tags: ["ml", "research", "ensemble", "healthcare"]
 tech: ["Python", "Scikit-learn", "Pandas", "NumPy"]
 github: "https://github.com/jayhemnani9910/diabetes-prediction-stacking"
 links:
+  code: "https://github.com/jayhemnani9910/diabetes-prediction-stacking"
   paper: "https://ieeexplore.ieee.org/document/9670920"
-challenge: "Improve diabetes prediction accuracy by combining multiple classifiers into a stacking ensemble with cross-validated hyperparameter tuning."
+challenge: "Single classifiers on the small PIMA Indians Diabetes dataset trade off against each other: one is better on some patients, another on others. The question this project asked was whether stacking, letting a meta-model learn how to combine several tuned base classifiers, would predict diabetes more reliably than any one model on its own."
 solution:
-  - "6 base classifiers (Naive Bayes, Random Forest, Decision Tree, SVM, ANN, Logistic Regression) with cross-validated tuning."
-  - "Stacking ensemble, base model predictions become features for a Logistic Regression meta-learner."
-  - "PIMA Indians Diabetes Dataset: 768 instances, 8 clinical features, mean imputation + scaling."
+  - "Six base classifiers, Gaussian Naive Bayes, Random Forest, Decision Tree, SVM, an ANN (MLP), and Logistic Regression, each hyperparameter-tuned with randomized search and cross-validation."
+  - "A stacking ensemble where the six base models' predictions become inputs to a Random Forest meta-learner (scikit-learn StackingClassifier, cv=4)."
+  - "Standard preprocessing on the PIMA Indians dataset (768 patients, 8 clinical features) with a 70/30 train/test split."
 impact:
-  - "Published at AIMV 2021 (IEEE Xplore), DOI: 10.1109/AIMV53313.2021.9670920."
-  - "10 citations on IEEE Xplore."
-  - "Notebook test accuracy: 74.46% on 30% held-out test set."
+  - "Co-authored and published at the 2021 International Conference on Artificial Intelligence and Machine Vision (AIMV 2021) on IEEE Xplore (DOI 10.1109/AIMV53313.2021.9670920)."
+  - "The committed notebook reaches 74.46% accuracy on the 30% held-out test set, against 87.9% on the training set, a gap that is itself informative on a dataset this small."
+  - "A single reproducible notebook: data, preprocessing, six tuned base models, the stacking ensemble, and per-model evaluation end to end."
+deepDive:
+  context: "This was a research project that became a co-authored IEEE paper (AIMV 2021) with four collaborators. The dataset is the well-known PIMA Indians Diabetes set: 768 patients, 8 clinical features (glucose, blood pressure, BMI, age, and so on), and a binary diabetes outcome. It is small and noisy, which is exactly the setting where ensembling is supposed to help, so the project tunes several classifiers and then stacks them under a meta-learner to see whether the combination is steadier than any single model."
+  architecture: "The pipeline is a single notebook. After loading and preprocessing the PIMA data, it splits 70/30 (random_state fixed for reproducibility) and trains six base classifiers, each tuned with RandomizedSearchCV over its own hyperparameter grid. Those six tuned models become the level-0 estimators of a scikit-learn StackingClassifier; their out-of-fold predictions (cv=4) feed a Random Forest level-1 meta-learner that produces the final prediction. Every model, the six base classifiers and the stacked ensemble, is evaluated on the same held-out test set so they can be compared directly."
+  dataFlow:
+    - step: "Load and preprocess"
+      detail: "Read the PIMA dataset (768 rows, 8 clinical features) and prepare the feature matrix and binary outcome."
+    - step: "Split"
+      detail: "70/30 train/test split with a fixed random_state for reproducibility (231 test patients)."
+    - step: "Tune base models"
+      detail: "Six classifiers (NB, RF, Decision Tree, SVM, ANN, Logistic Regression), each tuned with RandomizedSearchCV and cross-validation."
+    - step: "Stack"
+      detail: "The six tuned models are the level-0 estimators; a StackingClassifier (cv=4) feeds their predictions to a Random Forest meta-learner."
+    - step: "Evaluate"
+      detail: "Each base model and the stacked ensemble is scored on the same held-out test set for a like-for-like comparison."
+  components:
+    - name: "Preprocessing + split"
+      purpose: "Loads the PIMA dataset, assembles the 8 feature columns and the outcome, and makes a reproducible 70/30 train/test split."
+    - name: "Base classifiers (x6)"
+      purpose: "Gaussian Naive Bayes, Random Forest, Decision Tree, SVM, ANN (MLP), and Logistic Regression, each tuned with RandomizedSearchCV."
+    - name: "StackingClassifier (cv=4)"
+      purpose: "Combines the six tuned base models as level-0 estimators, passing their cross-validated predictions to the meta-learner."
+    - name: "Random Forest meta-learner"
+      purpose: "The level-1 estimator that learns how to weight the base models' predictions into the final diabetes prediction."
+    - name: "Evaluation"
+      purpose: "Scores every model on the same held-out test set (accuracy and a classification report) so base models and the ensemble compare directly."
+  keyDecisions:
+    - decision: "Stacking rather than a single tuned model or simple voting"
+      reasoning: "On a small, noisy dataset different classifiers make different mistakes. Stacking lets a meta-learner learn how to combine them from data, which is more flexible than hard or soft voting and was the hypothesis the paper set out to test."
+      alternatives: "One well-tuned model (simpler, but leaves the complementary strengths of others unused); majority voting (combines models but cannot learn how to weight them)."
+    - decision: "Tune every base model before stacking"
+      reasoning: "A stack is only as good as its members. Running RandomizedSearchCV on each base classifier first means the ensemble combines reasonable models rather than carrying weak defaults, and randomized search keeps tuning cheap across six models."
+      alternatives: "Stack untuned defaults (weaker base learners); exhaustive GridSearchCV (far more expensive across six models for little gain here)."
+    - decision: "Evaluate on a fixed held-out split and report it honestly"
+      reasoning: "With 768 rows the result is sensitive to the split, so fixing the random_state keeps it reproducible. The committed notebook's 74.46% test accuracy (against 87.9% train) is reported as-is, including the train/test gap, rather than rounded up."
+      alternatives: "Report only the best-looking number (misleading on small data); skip a held-out set (no honest generalization estimate)."
+  codeSnippets:
+    - title: "Six tuned base models stacked under a meta-learner"
+      language: "python"
+      code: |
+        from sklearn.ensemble import StackingClassifier, RandomForestClassifier
+
+        level0 = [
+            ('nb',  nb_model),
+            ('rfc', rf_grid_search),
+            ('dt',  dt_grid_search),
+            ('lr',  lr_grid_search),
+            ('svm', svm_grid_search),
+            ('ann', ann_grid_search),
+        ]
+        level1 = RandomForestClassifier()   # meta-learner
+
+        model = StackingClassifier(estimators=level0, final_estimator=level1, cv=4)
+        model.fit(X_train, y_train.ravel())
+      explanation: "The six tuned base classifiers are the level-0 estimators; the StackingClassifier runs them with 4-fold cross-validation and feeds their predictions to a Random Forest level-1 meta-learner that makes the final call. (The committed notebook uses a Random Forest as the meta-learner.)"
+    - title: "A fixed split, so the number is reproducible"
+      language: "python"
+      code: |
+        feature_col_names = ['Pregnancies', 'Glucose', 'BloodPressure',
+                             'SkinThickness', 'Insulin', 'BMI',
+                             'DiabetesPedigreeFunction', 'Age']
+
+        X = data_frame[feature_col_names].values
+        y = data_frame[['Outcome']].values
+
+        X_train, X_test, y_train, y_test = train_test_split(
+            X, y, test_size=0.3, random_state=42)
+      explanation: "Eight clinical features predict the binary outcome. With only 768 patients the score depends on the split, so random_state is fixed: the 30% held-out set is 231 patients, and that is the set every model, base and stacked, is scored on."
+  metrics:
+    - value: "6 + 1"
+      label: "model ensemble"
+      context: "6 tuned base models + RF meta-learner"
+    - value: "74.46%"
+      label: "test accuracy"
+      context: "30% held-out (87.9% train)"
+    - value: "768 x 8"
+      label: "PIMA dataset"
+      context: "patients x clinical features"
+    - value: "IEEE 2021"
+      label: "co-authored paper"
+      context: "AIMV, 5 authors"
+  learnings:
+    - "Stacking helps most when the base models are individually decent and make different errors, so tuning each one before combining them matters more than the choice of meta-learner."
+    - "On a small dataset the train/test gap (87.9% vs 74.46%) is part of the result, not a footnote: it is a reminder of how little headroom 768 rows leaves before overfitting."
+    - "Fixing the split and reporting the held-out number as-is is the honest way to present a result that a different random seed would move."
 featured: false
 priority: 23
 ---
 # Overview
-Stacking ensemble classifier for early diabetes prediction, published at the 2021 International Conference on Artificial Intelligence and Machine Vision (AIMV). Combines 6 base classifiers with cross-validated hyperparameter tuning and a Logistic Regression meta-learner on the PIMA Indians Diabetes Dataset.
+A stacking ensemble for early diabetes prediction on the PIMA Indians dataset (768 patients, 8 clinical features), co-authored and published at IEEE AIMV 2021. Six base classifiers, Gaussian Naive Bayes, Random Forest, Decision Tree, SVM, an ANN, and Logistic Regression, are each tuned with randomized search, then combined as the level-0 estimators of a scikit-learn StackingClassifier (cv=4) whose Random Forest meta-learner makes the final prediction. The committed notebook reaches 74.46% accuracy on a 30% held-out test set (87.9% on training), and the whole pipeline, data through evaluation, lives in one reproducible notebook.
