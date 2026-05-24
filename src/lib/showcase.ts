@@ -33,6 +33,11 @@ export type ShowcaseConfig = {
 };
 
 export const SHOWCASE_PROJECTS: Record<string, ShowcaseConfig> = {
+  "travel-booking-platform": {
+    // hero: "/projects/travel/mesh.png",  // enable once mesh.png is placed
+    heroTag: "14 services · Kafka · k8s",
+    // Demo tab iframes the GitHub Pages docs (from MDX links.demo)
+  },
   "stock-data-platform": {
     hero: "/projects/stock/dashboard.png",
     heroTag: "Live dashboard",

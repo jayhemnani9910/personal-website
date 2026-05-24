@@ -1,0 +1,128 @@
+---
+title: "Travel Booking Platform"
+summary: "A 14-service travel booking platform (flights, hotels, cars, deals, billing) built as a TypeScript monorepo: independently deployable services communicating over Kafka, polyglot storage across MongoDB and MySQL, a React client with i18n, and a Python AI concierge, all orchestrated on Kubernetes."
+role: "Builder"
+period: "2026"
+domain: "Distributed Systems"
+tags: ["distributed-systems", "microservices", "kafka", "kubernetes"]
+tech: ["TypeScript", "Node.js", "Kafka", "MongoDB", "MySQL", "Kubernetes", "React", "Docker"]
+github: "https://github.com/jayhemnani9910/travel-booking-platform"
+links:
+  code: "https://github.com/jayhemnani9910/travel-booking-platform"
+  demo: "https://jayhemnani9910.github.io/travel-booking-platform/"
+challenge: "A travel booking site spans genuinely separate domains, flights, hotels, cars, deals, billing, notifications, that each scale and fail differently. Cramming them into one service couples their deploys and their blast radius. The aim here was to push that separation as far as it sensibly goes: a set of small, independently deployable services that coordinate through events rather than direct calls, and to run the whole thing on Kubernetes."
+solution:
+  - "A TypeScript monorepo of 14 services: an API gateway, domain services for flights, hotels, cars, booking, billing, and users, plus notification, admin/analytics, a deals worker, an airport resolver, external adapters, a Python AI concierge, and a React/Vite client."
+  - "Event-driven coordination over Kafka: services publish and consume domain events (for example deal.events) on consumer groups, so a booking or a deal propagates asynchronously instead of through synchronous service-to-service calls."
+  - "Polyglot persistence, MongoDB and MySQL for different services' needs with Redis for caching, and shared TypeScript types via an internal @kayak/shared package so events and models stay consistent across services."
+  - "Containerized per service with Kubernetes manifests, Nginx, and GitHub Actions for CI, CD, and Pages, with unit, end-to-end, and performance test suites."
+impact:
+  - "Each of the 14 services has its own Dockerfile and can be built, tested, and deployed on its own, so a change to billing never forces a redeploy of flight search."
+  - "Coordinating through Kafka topics rather than direct calls means a slow or offline service catches up from the log instead of failing its callers."
+  - "Shared types and a monorepo keep a 14-service system coherent: one place for the event schemas every service agrees on."
+deepDive:
+  context: "This is the largest of my distributed-systems builds: a full travel booking platform decomposed into fourteen services. It covers the real surface of such a product, searching flights, hotels, and cars, managing bookings and billing, aggregating deals, sending notifications, an admin analytics layer, and an AI concierge, with a React client on top. The point of the exercise was less the features and more the architecture: how to split a domain into services that deploy independently and coordinate through events without turning into a distributed monolith."
+  architecture: "A React/Vite client (with i18n) talks to an Express API gateway that handles routing and auth. Behind it sit domain services, flights, hotels, cars, booking, billing, user, each an independent Express app with its own data and its own Dockerfile. Cross-service workflows go over Kafka: services publish and subscribe to domain events such as deal.events on named consumer groups, so a deal or a booking fans out asynchronously. Supporting services round it out: a notification service, an admin/analytics service, a background deals worker, an airport resolver, external adapters for third-party APIs, and a Python concierge service for AI travel assistance. Persistence is polyglot, MongoDB and MySQL depending on the service, with Redis for caching, and a shared @kayak/shared TypeScript package gives every service the same event and model types. The whole system is containerized per service and deployed with Kubernetes manifests, behind Nginx, with GitHub Actions running CI, CD, and the Pages build, and unit, end-to-end, and performance tests."
+  dataFlow:
+    - step: "Client to gateway"
+      detail: "The React/Vite client calls the Express API gateway, which routes and authenticates the request."
+    - step: "Domain service handles it"
+      detail: "The relevant service (flights, hotels, cars, booking, billing, user) processes the request against its own MongoDB or MySQL data."
+    - step: "Publish a domain event"
+      detail: "State changes (deals, bookings) are published to a Kafka topic such as deal.events rather than pushed to other services directly."
+    - step: "Consumers react"
+      detail: "Interested services subscribe on their own consumer groups (for example cars-deals-consumer) and update their state from the event, filtering by event type."
+    - step: "Supporting services"
+      detail: "Notifications, admin analytics, the deals worker, and the AI concierge run alongside, reading the same event stream or serving their own endpoints."
+  components:
+    - name: "API gateway"
+      purpose: "The single entry point: routes client requests to the domain services and handles authentication."
+    - name: "Domain services (flights / hotels / cars / booking / billing / user)"
+      purpose: "Six independently deployable Express services, each owning its data and exposing its own API, communicating via Kafka."
+    - name: "Kafka event bus"
+      purpose: "Carries domain events (such as deal.events) between services on named consumer groups, decoupling producers from consumers."
+    - name: "Supporting services"
+      purpose: "Notification, admin/analytics, deals worker, airport resolver, and external adapters, each a separate deployable around the core domain."
+    - name: "Concierge service (Python)"
+      purpose: "An AI travel-assistant service, kept in its own runtime and isolated from the booking path."
+    - name: "@kayak/shared"
+      purpose: "An internal TypeScript package of shared event and model types, so all services agree on the same schemas."
+    - name: "Infra (Kubernetes + Docker + CI/CD)"
+      purpose: "Per-service Dockerfiles, Kubernetes manifests, Nginx, and GitHub Actions pipelines for CI, CD, and Pages, with unit/e2e/performance tests."
+  keyDecisions:
+    - decision: "Fourteen services in one monorepo with shared types"
+      reasoning: "Many small services risk drifting apart on event schemas. Keeping them in a monorepo with a shared @kayak/shared types package means the contract between services lives in one place, so independent deployability does not come at the cost of a coherent event model."
+      alternatives: "A repo per service (schema drift, hard cross-cutting changes); a single service (no independent deploys, the problem this set out to avoid)."
+    - decision: "Coordinate over Kafka events, not direct calls"
+      reasoning: "Direct service-to-service HTTP couples availability and creates cascading failures. Publishing domain events to Kafka and letting interested services consume them on their own groups means a consumer can be offline and catch up from the log, which is the core resilience argument for going distributed."
+      alternatives: "Synchronous REST between services (tight coupling); a shared database (re-couples services through their data)."
+    - decision: "Polyglot persistence per service"
+      reasoning: "Different services have different shapes of data, so each uses the store that fits (MongoDB or MySQL) with Redis for caching, rather than forcing one database to serve every access pattern."
+      alternatives: "One database for all services (a shared bottleneck and a coupling point)."
+  codeSnippets:
+    - title: "A service consumes domain events off Kafka"
+      language: "typescript"
+      code: |
+        export class CarDealConsumer {
+          constructor(db: mysql.Connection, redis: any) {
+            this.kafka = new Kafka({
+              clientId: 'cars-svc',
+              brokers: [process.env.KAFKA_BROKERS || 'localhost:9092'],
+            });
+            this.consumer = this.kafka.consumer({ groupId: 'cars-deals-consumer' });
+          }
+
+          async start(): Promise<void> {
+            await this.consumer.connect();
+            await this.consumer.subscribe({ topic: 'deal.events', fromBeginning: false });
+            await this.consumer.run({
+              eachMessage: async ({ message }) => {
+                const event: DealEvent = JSON.parse(message.value?.toString() || '{}');
+                if (event.type === 'car') await this.handleCarDeal(event);
+              },
+            });
+          }
+        }
+      explanation: "Each service is a Kafka consumer on its own group. The cars service subscribes to deal.events, filters for the events it cares about by type, and updates its own store, so the deals worker that publishes never needs to know who is listening."
+    - title: "Every service is an independent Express + Kafka app"
+      language: "typescript"
+      code: |
+        import express from 'express';
+        import { FlightDealConsumer } from './services/kafkaConsumer';
+        import { /* shared event + model types */ } from '@kayak/shared';
+
+        class FlightsService {
+          public app: express.Application;
+          constructor() {
+            this.app = express();
+            this.app.use(express.json());
+            this.initializeKafkaConsumer();   // subscribe to the event stream
+          }
+          start() {
+            this.app.listen(this.port, () =>
+              console.log(`Flights Service listening on port ${this.port}`));
+          }
+        }
+      explanation: "Services follow one shape: an Express app for HTTP plus a Kafka consumer for events, importing shared types from @kayak/shared. Because each is self-contained with its own Dockerfile, it builds, tests, and deploys on its own."
+  metrics:
+    - value: "14 services"
+      label: "independently deployable"
+      context: "13 TypeScript + 1 Python + React client"
+    - value: "Kafka"
+      label: "event bus"
+      context: "domain events, consumer groups"
+    - value: "MongoDB + MySQL"
+      label: "polyglot storage"
+      context: "plus Redis caching"
+    - value: "Kubernetes"
+      label: "orchestrated"
+      context: "per-service Docker, CI/CD, tests"
+  learnings:
+    - "Independent deployability is the whole prize of microservices, and a shared-types package in a monorepo is what keeps fourteen of them from drifting into incompatibility."
+    - "Events over a log beat direct calls for resilience: a consumer that was offline catches up instead of failing, which is hard to get from synchronous REST."
+    - "At fourteen services the operational surface (Docker, Kubernetes, CI/CD) is as much of the project as the code, so building that in from the start mattered."
+featured: false
+priority: 7
+---
+# Overview
+A travel booking platform decomposed into 14 independently deployable services, built as a TypeScript monorepo. An Express API gateway fronts domain services for flights, hotels, cars, booking, billing, and users, with supporting services for notifications, admin analytics, deal aggregation, airport resolution, external adapters, and a Python AI concierge, all behind a React/Vite client with i18n. Services coordinate through Kafka domain events on consumer groups rather than direct calls, persist to MongoDB and MySQL with Redis caching, and share TypeScript event and model types through an internal @kayak/shared package. Everything is containerized per service and deployed with Kubernetes manifests, with GitHub Actions CI/CD and unit, end-to-end, and performance tests.
