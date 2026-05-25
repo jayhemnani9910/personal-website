@@ -2,7 +2,7 @@
 
 # Jay Hemnani
 
-**I build things — data pipelines, ML models, web apps, whatever the problem needs.**
+**I build things: data pipelines, ML models, web apps, whatever the problem needs.**
 
 [![Open to Work](https://img.shields.io/badge/Open_to_Work-16a34a?style=for-the-badge&logoColor=white)](#connect)
 [![Portfolio](https://img.shields.io/badge/jayhemnani.me-0a84ff?style=for-the-badge&logo=safari&logoColor=white)](https://jayhemnani.me)
@@ -22,7 +22,7 @@
 
 ### About
 
-Software & data engineer who goes end-to-end — from designing streaming architectures and training ML models to shipping the frontend that puts it all in someone's hands. I care about building things that actually work in production, not just in notebooks.
+Forward Deployed Engineer who goes end-to-end, from designing streaming architectures and training ML models to shipping the frontend that puts it in someone's hands. I care about building things that work in production, not just in notebooks.
 
 Based in India, open to relocate. Currently looking for roles where I can build at the intersection of data and product.
 
@@ -30,12 +30,13 @@ Based in India, open to relocate. Currently looking for roles where I can build 
 
 ### Featured Projects
 
-**[LaLiga Live](https://jayhemnani.me/projects/laliga-live)** — Real-time football analytics platform with live xG curves, player heatmaps, and match event streaming. Built with Kafka, WebSockets, React, and a custom event processing pipeline.
+**[FIFA Soccer DS](https://jayhemnani.me/projects/fifa-soccer-ds)**: Football tracking pipeline with YOLOv8 detection and ByteTrack multi-object tracking, served over FastAPI with ONNX/TensorRT export and an MLflow + DVC workflow.
 
-**[Stock Data Platform](https://jayhemnani.me/projects/stock-data-platform)** — Distributed market data pipeline handling real-time OHLC feeds, candlestick charting, and multi-symbol streaming. Kafka + TimescaleDB + React with sub-second latency.
+**[Stock Data Platform](https://jayhemnani.me/projects/stock-data-platform)**: Distributed market-data platform with real-time OHLC ingestion, candlestick charting, and multi-symbol streaming behind a live dashboard.
 
-> 26 projects total — from computer vision research to distributed systems to vector search engines.
-> **[See all projects →](https://jayhemnani.me/projects)**
+27 projects total, from computer vision research to distributed systems to on-device ML.
+
+**[See all projects →](https://jayhemnani.me/projects)**
 
 ---
 

@@ -2,6 +2,11 @@ import { NextRequest, NextResponse } from "next/server";
 
 const isKvConfigured = () => !!process.env.KV_REST_API_URL;
 
+// Slugs are content ids/kebab-case; cap charset and length so the value can't
+// be used to create arbitrary KV keys.
+const isValidSlug = (s: unknown): s is string =>
+    typeof s === "string" && /^[a-z0-9-]{1,80}$/.test(s);
+
 // Fallback for local dev without KV
 const localViews = new Map<string, number>();
 
@@ -12,7 +17,7 @@ async function getKv() {
 
 export async function GET(request: NextRequest) {
     const slug = request.nextUrl.searchParams.get("slug");
-    if (!slug) return NextResponse.json({ count: 0 });
+    if (!isValidSlug(slug)) return NextResponse.json({ count: 0 });
 
     if (isKvConfigured()) {
         try {
@@ -29,7 +34,7 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
     try {
         const { slug } = await request.json();
-        if (!slug || typeof slug !== "string") {
+        if (!isValidSlug(slug)) {
             return NextResponse.json({ error: "slug required" }, { status: 400 });
         }
 

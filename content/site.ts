@@ -7,8 +7,8 @@
 
 export const SITE_CONFIG = {
   name: "Jay Hemnani",
-  title: "Jay Hemnani | Data Engineer",
-  description: "Data Engineer specializing in production ML systems, computer vision pipelines, and scalable data infrastructure. Available for full-time roles and freelance projects.",
+  title: "Jay Hemnani | Forward Deployed Engineer",
+  description: "Forward Deployed Engineer who builds end-to-end: data pipelines, ML and computer vision systems, and the full-stack apps that put them in users' hands. Available for full-time roles and freelance projects.",
   url: "https://jayhemnani.me",
   
   // Social/OG
@@ -36,7 +36,7 @@ export const SITE_CONFIG = {
   // Hero content
   hero: {
     title: "Jay Hemnani",
-    role: "Data Engineer",
+    role: "Forward Deployed Engineer",
     tagline: "Shipping production CV systems and end-to-end data platforms.",
     subTagline: "Full-stack builder with sports domain expertise. Fast iteration, production-ready code.",
     highlight: "production",

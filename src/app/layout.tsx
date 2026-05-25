@@ -74,9 +74,6 @@ export const metadata: Metadata = {
       "max-snippet": -1,
     },
   },
-  alternates: {
-    canonical: SITE_CONFIG.url,
-  },
 };
 
 export default function RootLayout({
