@@ -34,37 +34,37 @@ export type ShowcaseConfig = {
 
 export const SHOWCASE_PROJECTS: Record<string, ShowcaseConfig> = {
   "tailor-measurement-app": {
-    // hero: "/projects/tailor/offline.png",  // enable once offline.png is placed
+    hero: "/projects/tailor/offline.png",
     heroTag: "offline-first · React · Firebase",
     // Demo: iframe a live Firebase URL once Jay provides it (set links.demo in MDX)
   },
   "receiptlens-minicpm-v46": {
-    // hero: "/projects/receiptlens/ocr.png",  // enable once ocr.png is placed
+    hero: "/projects/receiptlens/ocr.png",
     heroTag: "MiniCPM-V · on-device · iOS",
     // No demo: iOS app, nothing to iframe
   },
   "voxt": {
-    // hero: "/projects/voxt/flow.png",  // enable once flow.png is placed
+    hero: "/projects/voxt/flow.png",
     heroTag: "Go · Whisper · Wayland+X11",
     // No demo: Linux desktop app, nothing to iframe
   },
   "unified-search": {
-    // hero: "/projects/unisearch/strategies.png",  // enable once strategies.png is placed
+    hero: "/projects/unisearch/strategies.png",
     heroTag: "5 strategies · turbulent plume",
     // Demo tab iframes the live in-browser simulator (from MDX links.demo)
   },
   "longitudinal-mets-validation": {
-    // hero: "/projects/mets/pipeline.png",  // enable once pipeline.png is placed
+    hero: "/projects/mets/pipeline.png",
     heroTag: "NHANES · Fine-Gray · external validation",
     // Demo tab iframes the GitHub Pages landing (from MDX links.demo)
   },
   "data-clean-env": {
-    // hero: "/projects/dataclean/loop.png",  // enable once loop.png is placed
+    hero: "/projects/dataclean/loop.png",
     heroTag: "OpenEnv · RL · data cleaning",
     // Demo: iframe a live Hugging Face Space once Jay provides the URL (set links.demo in MDX)
   },
   "travel-booking-platform": {
-    // hero: "/projects/travel/mesh.png",  // enable once mesh.png is placed
+    hero: "/projects/travel/mesh.png",
     heroTag: "14 services · Kafka · k8s",
     // Demo tab iframes the GitHub Pages docs (from MDX links.demo)
   },
@@ -101,22 +101,22 @@ export const SHOWCASE_PROJECTS: Record<string, ShowcaseConfig> = {
     // Demo tab iframes the live site (from MDX links.demo)
   },
   "kayak-distributed": {
-    // hero: "/projects/kayak/tiers.png",  // enable once an ink-line figure is placed
+    hero: "/projects/kayak/tiers.png",
     heroTag: "3-tier · semantic cache",
     // No demo: not hosted (local 3-tier app)
   },
   "airbnb-distributed": {
-    // hero: "/projects/airbnb/services.png",  // enable once an ink-line figure is placed
+    hero: "/projects/airbnb/services.png",
     heroTag: "microservices · Kafka · k8s",
     // No demo: not hosted (local Docker/k8s app)
   },
   "diabetes-stacking": {
-    // hero: "/projects/diabetes/stacking.png",  // enable once stacking.png is placed
+    hero: "/projects/diabetes/stacking.png",
     heroTag: "6 base models · RF meta-learner",
     // No demo: research notebook, no live app
   },
   "scheduling-visualizer": {
-    // hero: "/projects/scheduling/gantt.png",  // enable once gantt.png is placed
+    hero: "/projects/scheduling/gantt.png",
     heroTag: "9 algorithms · Gantt",
     // Demo tab iframes the live app (from MDX links.demo)
   },
@@ -126,12 +126,12 @@ export const SHOWCASE_PROJECTS: Record<string, ShowcaseConfig> = {
     // Demo tab iframes the live app (from MDX links.demo)
   },
   "webcrawler": {
-    // hero: "/projects/webcrawler/pipeline.png",  // enable once pipeline.png is placed
+    hero: "/projects/webcrawler/pipeline.png",
     heroTag: "ArchiveBox · Merkle · OpenTimestamps",
     // Demo tab iframes the GitHub Pages docs (from MDX links.demo)
   },
   "contextbox": {
-    // hero: "/projects/contextbox/pipeline.png",  // enable once pipeline.png is placed
+    hero: "/projects/contextbox/pipeline.png",
     heroTag: "OCR · embeddings · Q&A",
     // Demo tab iframes the live docs site (from MDX links.demo)
   },
