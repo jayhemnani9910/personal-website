@@ -15,15 +15,6 @@ export const SITE_CONFIG = {
   ogImage: "/og-image.png",
   twitterHandle: "@jayhemnani",
   
-  // Navigation
-  navLinks: [
-    { name: "Home", href: "/" },
-    { name: "Experience", href: "/#experience" },
-    { name: "Projects", href: "/#projects" },
-    { name: "Timeline", href: "/#timeline" },
-    { name: "Extra", href: "/#extra" },
-  ],
-  
   // Social links
   social: {
     email: "jayhemnani992000@gmail.com",
