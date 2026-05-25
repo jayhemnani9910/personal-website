@@ -76,6 +76,33 @@ export const metadata: Metadata = {
   },
 };
 
+const personJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "ProfilePage",
+  mainEntity: {
+    "@type": "Person",
+    name: SITE_CONFIG.name,
+    url: SITE_CONFIG.url,
+    jobTitle: "Forward Deployed Engineer",
+    description: SITE_CONFIG.description,
+    sameAs: [
+      SITE_CONFIG.social.github,
+      SITE_CONFIG.social.linkedin,
+      SITE_CONFIG.social.twitter,
+    ],
+    knowsAbout: [
+      "Forward Deployed Engineering",
+      "AI agents",
+      "Model Context Protocol",
+      "Retrieval-Augmented Generation",
+      "Computer Vision",
+      "Distributed systems",
+      "Full-stack engineering",
+      "Data pipelines",
+    ],
+  },
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -84,6 +111,10 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${newsreader.variable} ${geist.variable} ${jetbrainsMono.variable}`} suppressHydrationWarning>
       <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
+        />
         {/* Inline script to prevent theme flash */}
         <script
           dangerouslySetInnerHTML={{
