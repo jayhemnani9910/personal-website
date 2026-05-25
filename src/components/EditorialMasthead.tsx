@@ -12,7 +12,7 @@ export function EditorialMasthead({ active }: { active?: Section }) {
       <div className="masthead-inner">
         <div className="mh-issue tabular">Vol. IV · №26, May 2026</div>
         <Link className="mh-logo" href="/">
-          <span className="mh-logo-text">Jay Hemnani</span>
+          Jay Hemnani
         </Link>
         <nav className="mh-nav">
           <Link href="/" className={active === "cover" ? "active" : undefined}>Cover</Link>
