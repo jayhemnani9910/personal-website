@@ -22,7 +22,7 @@ const COMMANDS = [
 const DEV_JOKES = [
     "Why do programmers prefer dark mode? Because light attracts bugs.",
     "A SQL query walks into a bar, walks up to two tables and asks... 'Can I join you?'",
-    "!false — It's funny because it's true.",
+    "!false. It's funny because it's true.",
     "A programmer's wife tells him: 'Go to the store and buy a gallon of milk. If they have eggs, buy a dozen.' He comes home with 12 gallons of milk.",
     "There are only 10 types of people in the world: those who understand binary and those who don't.",
     "Why do Java developers wear glasses? Because they can't C#.",
@@ -40,7 +40,7 @@ const ASCII_ART = `
 ╚█████╔╝██║  ██║   ██║
  ╚════╝ ╚═╝  ╚═╝   ╚═╝
 
-  Data Engineer · Builder
+  Forward Deployed Engineer · Builder
   jayhemnani.me
 `;
 

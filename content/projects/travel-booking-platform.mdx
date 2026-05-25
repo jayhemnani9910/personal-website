@@ -10,7 +10,7 @@ github: "https://github.com/jayhemnani9910/travel-booking-platform"
 links:
   code: "https://github.com/jayhemnani9910/travel-booking-platform"
   demo: "https://jayhemnani9910.github.io/travel-booking-platform/"
-challenge: "A travel booking site spans genuinely separate domains, flights, hotels, cars, deals, billing, notifications, that each scale and fail differently. Cramming them into one service couples their deploys and their blast radius. The aim here was to push that separation as far as it sensibly goes: a set of small, independently deployable services that coordinate through events rather than direct calls, and to run the whole thing on Kubernetes."
+challenge: "A travel booking site spans separate domains, flights, hotels, cars, deals, billing, notifications, that each scale and fail differently. Cramming them into one service couples their deploys and their blast radius. The aim here was to push that separation as far as it sensibly goes: a set of small, independently deployable services that coordinate through events rather than direct calls, and to run the whole thing on Kubernetes."
 solution:
   - "A TypeScript monorepo of 14 services: an API gateway, domain services for flights, hotels, cars, booking, billing, and users, plus notification, admin/analytics, a deals worker, an airport resolver, external adapters, a Python AI concierge, and a React/Vite client."
   - "Event-driven coordination over Kafka: services publish and consume domain events (for example deal.events) on consumer groups, so a booking or a deal propagates asynchronously instead of through synchronous service-to-service calls."

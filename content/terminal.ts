@@ -5,7 +5,7 @@
  */
 
 export const TERMINAL_FILES: Record<string, string> = {
-  "about.txt": "Data Engineer & Full Stack Developer. Building resilient systems at scale.",
+  "about.txt": "Forward Deployed Engineer & Full Stack Developer. Building resilient systems at scale.",
   "projects.md": "Type 'projects' to navigate to the projects page.",
   "contact.txt": `Email: jayhemnani992000@gmail.com
 GitHub: github.com/jayhemnani9910

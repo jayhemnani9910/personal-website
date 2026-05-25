@@ -97,8 +97,8 @@ export function registerWebMCPTools(data: SiteData): void {
   // Provide site context
   mc.provideContext({
     name: "site_info",
-    description: "Jay Hemnani's portfolio website — a Data Engineer's personal site",
-    content: `This is Jay Hemnani's portfolio at jayhemnani.me. Jay is a Data Engineer with experience in ML/AI, full-stack development, and data pipelines. The site showcases ${data.projects.length} projects across domains like sports analytics, computer vision, distributed systems, and more.`,
+    description: "Jay Hemnani's portfolio website, a Forward Deployed Engineer's personal site",
+    content: `This is Jay Hemnani's portfolio at jayhemnani.me. Jay is a Forward Deployed Engineer with experience in ML/AI, full-stack development, and data pipelines. The site showcases ${data.projects.length} projects across domains like sports analytics, computer vision, distributed systems, and more.`,
   });
 
   // Tool 1: Search projects

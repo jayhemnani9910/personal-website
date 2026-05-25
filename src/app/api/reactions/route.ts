@@ -6,6 +6,11 @@ const DEFAULT_REACTIONS: Record<Emoji, number> = { fire: 0, rocket: 0, heart: 0,
 
 const isKvConfigured = () => !!process.env.KV_REST_API_URL;
 
+// Slugs are content ids/kebab-case; cap charset and length so the value can't
+// be used to create arbitrary KV keys.
+const isValidSlug = (s: unknown): s is string =>
+    typeof s === "string" && /^[a-z0-9-]{1,80}$/.test(s);
+
 // Fallback for local dev without KV
 const localReactions = new Map<string, Record<Emoji, number>>();
 
@@ -35,7 +40,7 @@ async function getKvReactions(slug: string): Promise<Record<Emoji, number>> {
 
 export async function GET(request: NextRequest) {
     const slug = request.nextUrl.searchParams.get("slug");
-    if (!slug) return NextResponse.json(DEFAULT_REACTIONS);
+    if (!isValidSlug(slug)) return NextResponse.json(DEFAULT_REACTIONS);
 
     if (isKvConfigured()) {
         try {
@@ -50,7 +55,7 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
     try {
         const { slug, emoji } = await request.json();
-        if (!slug || !emoji || !VALID_EMOJIS.includes(emoji)) {
+        if (!isValidSlug(slug) || !emoji || !VALID_EMOJIS.includes(emoji)) {
             return NextResponse.json({ error: "invalid slug or emoji" }, { status: 400 });
         }
 
