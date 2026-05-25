@@ -2,10 +2,14 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { useReducedMotion } from "framer-motion";
 import { EditorialMasthead } from "@/components/EditorialMasthead";
 import { EditorialColophon } from "@/components/EditorialColophon";
+import { StarSchemaFigure } from "@/components/featured/StarSchemaFigure";
+import { TacticalGraphFigure } from "@/components/featured/TacticalGraphFigure";
+import { CausalAdversarialFigure } from "@/components/featured/CausalAdversarialFigure";
+import { ProteinNMAFigure } from "@/components/featured/ProteinNMAFigure";
+import { VDOSSpectrumFigure } from "@/components/featured/VDOSSpectrumFigure";
 
 const ROLES = [
   "forward-deployed engineer",
@@ -112,8 +116,8 @@ export function EditorialHome() {
           <Link href="/projects/fifa-soccer-ds" className="cardlink">
             <div className="feat-media">
               <div className="ph" style={{ aspectRatio: "16 / 9" }}>
-                <Image className="ph-img" src="/featured/fifa.png" alt="" fill sizes="(max-width: 860px) 100vw, 66vw" />
-                <span className="ph-tag accent">Computer Vision · Production</span>
+                <TacticalGraphFigure className="ph-img ph-fig" />
+                <span className="ph-tag accent">Computer Vision · MLOps</span>
                 <div className="ph-label"><span>fig. 01, tactical interaction graph, 22 fps</span><span className="mono">/work/fifa</span></div>
               </div>
             </div>
@@ -121,8 +125,8 @@ export function EditorialHome() {
               <div className="feat-num mono">№ 01</div>
               <div className="eyebrow"><span>Computer Vision · Sport Analytics</span></div>
               <h3 className="card-h">FIFA Soccer DS.</h3>
-              <p className="deck">YOLOv8 detects, ByteTrack persists, GraphSAGE classifies tactical interactions, all wrapped in DVC, MLflow, and a FastAPI shipping container.</p>
-              <p className="feat-body">A production computer-vision pipeline for soccer video, end-to-end and reproducible. Seven-stage DVC pipeline, fifty-plus MLflow runs, twenty-two frames per second on a 3070. The thing actually runs.</p>
+              <p className="deck">YOLOv8 detects, ByteTrack persists, a GraphSAGE scaffold builds the tactical graph, all wrapped in DVC, MLflow, and a FastAPI shipping container.</p>
+              <p className="feat-body">A production-shaped computer-vision pipeline for soccer video, end-to-end and reproducible. Seven-stage DVC pipeline, MLflow experiment tracking, twenty-two frames per second. The thing actually runs.</p>
               <div className="specs"><span>YOLOv8</span><span>ByteTrack</span><span>PyTorch&nbsp;Geometric</span><span>MLflow</span><span>DVC</span><span>FastAPI</span></div>
               <span className="go">Read the dossier</span>
             </div>
@@ -134,15 +138,15 @@ export function EditorialHome() {
           <article className="feat">
             <Link href="/projects/revolu-idea" className="cardlink">
               <div className="ph small" style={{ aspectRatio: "5 / 3" }}>
-                <Image className="ph-img" src="/featured/cag.png" alt="" fill sizes="(max-width: 860px) 100vw, 33vw" />
+                <CausalAdversarialFigure className="ph-img ph-fig" />
                 <span className="ph-tag">Agentic AI</span>
-                <div className="ph-label"><span>fig. 02, LangGraph state diagram</span><span className="mono">/work/cag</span></div>
+                <div className="ph-label"><span>fig. 02, causal-adversarial graph</span><span className="mono">/work/cag</span></div>
               </div>
               <div className="feat-num mono">№ 02</div>
-              <div className="eyebrow"><span>Multi-Agent · 10-Day Build</span></div>
+              <div className="eyebrow"><span>Agentic AI · Causal Reasoning</span></div>
               <h3 className="card-h">CAG Deep Research.</h3>
-              <p className="deck">Five agents in a LangGraph state machine, hexagonal architecture, twenty-page reports out the other end.</p>
-              <p className="feat-body">Search, analyzer, fact-checker, synthesizer, editor. Ollama with a cloud fallback for when the laptop fan refuses. Built in ten days from a blank repository to a published deliverable.</p>
+              <p className="deck">LangGraph plans a causal graph of a question; red and blue agents fight over each edge; a dialectical judge rules.</p>
+              <p className="feat-body">A system built to falsify its own claims. Each causal link is attacked by a paired adversary and supporter before a judge returns verified, falsified, or unclear. Hexagonal architecture, swappable search and LLM providers, Ollama with a Groq fallback.</p>
               <div className="specs"><span>LangGraph</span><span>LangChain</span><span>Ollama</span><span>Groq</span><span>Pydantic</span></div>
               <span className="go">Read the dossier</span>
             </Link>
@@ -151,7 +155,7 @@ export function EditorialHome() {
           <article className="feat">
             <Link href="/projects/biotech-accelerator" className="cardlink">
               <div className="ph small alt" style={{ aspectRatio: "5 / 3" }}>
-                <Image className="ph-img" src="/featured/biotech.png" alt="" fill sizes="(max-width: 860px) 100vw, 33vw" />
+                <ProteinNMAFigure className="ph-img ph-fig" />
                 <span className="ph-tag">Multi-Agent</span>
                 <div className="ph-label"><span>fig. 03, protein chain, NMA</span><span className="mono">/work/biotech</span></div>
               </div>
@@ -171,7 +175,7 @@ export function EditorialHome() {
           <article className="feat wide">
             <Link href="/projects/stock-data-platform" className="cardlink">
               <div className="ph small" style={{ aspectRatio: "21 / 9" }}>
-                <Image className="ph-img" src="/featured/stock.png" alt="" fill sizes="(max-width: 860px) 100vw, 66vw" />
+                <StarSchemaFigure className="ph-img ph-fig" />
                 <span className="ph-tag accent">Data Engineering</span>
                 <div className="ph-label"><span>fig. 04, star schema, 25 yrs of ticks</span><span className="mono">/work/stock</span></div>
               </div>
@@ -191,7 +195,7 @@ export function EditorialHome() {
               <div className="eyebrow"><span>AI-Native Web · WebMCP</span></div>
               <h3 className="card-h">WebMCP, on this very site.</h3>
               <p className="deck">An LLM can browse this portfolio the way humans do, only faster, and without scrolling.</p>
-              <p className="feat-body">Eight structured tools exposed via the W3C WebMCP standard. Project search, resume, skills, contact, lab, theme, all queryable by an agent. Eighty-nine percent token efficiency over screenshot pipelines.</p>
+              <p className="feat-body">Eight structured tools exposed via the WebMCP browser API. Project search, resume, skills, contact, theme, all callable by an agent with JSON Schema inputs and typed results, instead of scraping the DOM.</p>
               <div className="specs"><span>TypeScript</span><span>Next.js&nbsp;16</span><span>WebMCP</span><span>JSON&nbsp;Schema</span></div>
               <span className="go">Read the dossier</span>
               <div className="pull-aside mono xs muted" aria-hidden="true">
@@ -210,13 +214,13 @@ export function EditorialHome() {
                 <div className="eyebrow"><span>Research · Scientific ML</span></div>
                 <h3 className="card-h">Nobel Data Intelligence.</h3>
                 <p className="deck">Tri-modal deep learning for protein stability: sequence, structure, and a vibrational signal nobody else is using.</p>
-                <p className="feat-body">ProtT5 for sequence. GATv2 over structural graphs. VDOS spectra from normal-mode analysis, the novel bit. ChemBERTa for chemistry. R² above 0.75, one hundred thirty-nine unit tests, eight notebooks, Colab-ready.</p>
+                <p className="feat-body">ProtT5 for sequence. GATv2 over structural graphs. VDOS spectra from normal-mode analysis, the novel bit. ChemBERTa for chemistry, fused through learned gated attention. One hundred-plus unit tests, eight notebooks, Colab-ready.</p>
                 <div className="specs"><span>PyTorch&nbsp;Geometric</span><span>ProDy</span><span>BioPython</span><span>RDKit</span><span>Transformers</span></div>
                 <span className="go">Read the dossier</span>
               </div>
               <div className="ph small" style={{ aspectRatio: "4 / 5" }}>
-                <Image className="ph-img" src="/featured/nobel.png" alt="" fill sizes="(max-width: 860px) 100vw, 33vw" />
-                <span className="ph-tag">R² &gt; 0.75</span>
+                <VDOSSpectrumFigure className="ph-img ph-fig" />
+                <span className="ph-tag">Tri-modal</span>
                 <div className="ph-label"><span>fig. 05, VDOS spectrum</span><span className="mono">/work/nobel</span></div>
               </div>
             </div>
