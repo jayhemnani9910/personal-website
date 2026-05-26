@@ -1,402 +1,159 @@
-"use client";
+/* FDE page: server component wrapper. Replaces the old static page.
+   Interactive console is a client island. Static sections (Proofs, Fit, Contact)
+   are plain server JSX. layout.tsx is untouched (provides metadata + JSON-LD). */
 
-import { motion } from "framer-motion";
-import Link from "next/link";
-import { ArrowRight, Github, Mail, FileText, BookOpen, ExternalLink } from "lucide-react";
 import { EditorialMasthead } from "@/components/EditorialMasthead";
 import { EditorialColophon } from "@/components/EditorialColophon";
-import { VARIANTS, SPRINGS } from "@/lib/motion";
+import { FdeConsole } from "@/components/fde/FdeConsole";
+import { PROOFS } from "@/components/fde/fdeData";
 
-// ─── Evidence cards ──────────────────────────────────────────────────────────
-const EVIDENCE: {
-  label: string;
-  headline: string;
-  detail: string;
-  tag: string;
-}[] = [
-  {
-    label: "CAG Deep Research",
-    headline: "Scoping ambiguous problems into working agentic systems",
-    detail:
-      "Built a 5-agent LangGraph research system in 10 days from a vague problem statement. Hexagonal architecture, verification loops, local and cloud LLM fallback. The starting point was a rough idea, not a spec; the output was a system fast enough to run in pilot contexts.",
-    tag: "0-to-1 speed",
-  },
-  {
-    label: "WebMCP Portfolio Integration",
-    headline: "Working in the connective tissue between agents and real tools",
-    detail:
-      "Made jayhemnani.me agent-queryable via the W3C WebMCP standard (8 tools). An early production WebMCP implementation, directly on the surface that Google, Anthropic, and OpenAI FDE postings now name as table-stakes.",
-    tag: "MCP / protocol layer",
-  },
-  {
-    label: "Merged PR: Anthropic MCP Python SDK",
-    headline: "Entering external production codebases and shipping precise fixes",
-    detail:
-      "Contributed a merged PR to the Anthropic MCP Python SDK. Also navigated vLLM (200k+ LOC) for a separate investigation. The muscle FDEs use inside customer and platform environments: read unfamiliar code, find the concrete issue, fix it without breaking the contract.",
-    tag: "upstream contribution",
-  },
-  {
-    label: "Kayak metasearch + Airbnb microservices",
-    headline: "Thinking in services, data flows, contracts, and failure boundaries",
-    detail:
-      "Kayak clone: 3-tier distributed system with Node/Express services behind an API gateway, polyglot persistence (MySQL, MongoDB, Redis), Kafka event streaming, and a Python FastAPI AI layer. Airbnb clone: microservices on Kubernetes. These are the engineering substrates behind FDE deployment work.",
-    tag: "distributed systems",
-  },
-  {
-    label: "Elite Hotel Group (Data Analyst)",
-    headline: "Working in the loop between business stakeholders and technical delivery",
-    detail:
-      "Defined metrics and SLAs with finance and operations stakeholders. ETL across multiple properties, operational reporting, and forecasting. Note: internal stakeholders, not external customers. This is relevant context, not a claim of full FDE-grade customer delivery experience.",
-    tag: "stakeholder delivery",
-  },
-];
-
-// ─── 60-day plan ─────────────────────────────────────────────────────────────
-const PLAN: { week: string; action: string }[] = [
-  {
-    week: "Week 1-2",
-    action:
-      "Add an eval harness to CAG Deep Research: 100 automated tests scoring for hallucination, context adherence, and token cost. Publish results. This proves Day 2 operations thinking, not just shipping.",
-  },
-  {
-    week: "Week 2-4",
-    action:
-      "Ship one real external deployment for a small business, startup, or ops team (unpaid or low-paid is fine). Build with integrations, auth, evals, and a post-launch changelog. Get a written testimonial. This is the most important missing artifact.",
-  },
-  {
-    week: "Week 3-5",
-    action:
-      "Publish two short technical posts: one on MCP in production (what breaks, what does not), one on failure analysis from the multi-agent build. Aligned with the exact FDE discourse in 2026.",
-  },
-  {
-    week: "Week 5-8",
-    action:
-      "Convert one existing project into a deployment case study (not a project page): requirements, architecture diagram, success metrics, eval plan, rollout strategy, and what I would change. FDE hiring managers evaluate judgment, not just repos.",
-  },
-];
-
-// ─── Page ─────────────────────────────────────────────────────────────────────
 export default function FDEPage() {
   return (
-    <main
-      className="editorial min-h-screen"
-      style={{ background: "var(--bg-primary)", color: "var(--text-primary)" }}
-    >
+    <main className="editorial fde-page">
       <EditorialMasthead active="fde" />
 
-      {/* ── Hero ─────────────────────────────────────────────────────────── */}
-      <section className="pt-32 pb-16 px-6">
-        <div className="max-w-4xl mx-auto">
-          <motion.div
-            variants={VARIANTS.staggerContainer}
-            initial="initial"
-            animate="animate"
-          >
-            <motion.p
-              variants={VARIANTS.fadeInUp}
-              transition={{ ...SPRINGS.default, delay: 0 }}
-              className="text-sm font-mono uppercase tracking-widest mb-4"
-              style={{ color: "var(--accent)" }}
-            >
-              Forward Deployed Engineer
-            </motion.p>
+      {/* ── Hero ──────────────────────────────────────────────────────── */}
+      <header className="fde fde-hero">
+        <div className="fde-wrap">
+          <div className="fde-hero-eyebrow">
+            <span className="fde-badge fde-badge-live">
+              <span className="fde-badge-dot" aria-hidden="true" />
+              FDE.SIM.v1 · interactive
+            </span>
+            <span className="fde-badge">2026.05.26 · last_built</span>
+            <span className="fde-badge">remote · gujarat, in · gmt+5:30</span>
+          </div>
 
-            <motion.h1
-              variants={VARIANTS.fadeInUp}
-              transition={{ ...SPRINGS.default, delay: 0.08 }}
-              className="text-4xl md:text-5xl font-bold mb-6 leading-tight"
-              style={{ color: "var(--text-primary)" }}
-            >
-              Engineer targeting<br className="hidden sm:block" /> Forward Deployed roles
-            </motion.h1>
+          <h1 className="fde-h1">
+            Stop reading. <span className="fde-em">Brief me</span>.
+          </h1>
 
-            <motion.p
-              variants={VARIANTS.fadeInUp}
-              transition={{ ...SPRINGS.default, delay: 0.16 }}
-              className="text-lg max-w-2xl leading-relaxed"
-              style={{ color: "var(--text-secondary)" }}
-            >
-              Full-stack and data breadth, agentic systems experience, and a track
-              record of shipping from zero to something-working fast. The gap I am
-              actively closing: external customer-facing deployment. That is what
-              this page is about.
-            </motion.p>
-          </motion.div>
+          <p className="fde-hero-sub">
+            <strong>This page is a working Forward Deployed Engineer simulation.</strong> Give me your real, vague, messy problem. I&apos;ll perform the FDE &quot;decomposition&quot; interview on it live: scope it, draw the architecture, plan the sprint, and call out where it&apos;ll fail. Then map every phase back to projects I&apos;ve actually shipped.
+          </p>
+
+          {/* Client island: textarea + presets + live sim */}
+          <FdeConsole />
         </div>
-      </section>
+      </header>
 
-      {/* ── What an FDE is ───────────────────────────────────────────────── */}
-      <section className="py-12 px-6">
-        <div className="max-w-4xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={SPRINGS.default}
-            className="rounded-2xl p-8"
-            style={{
-              background: "var(--bg-secondary)",
-              border: "1px solid var(--border)",
-            }}
-          >
-            <h2 className="text-xl font-semibold mb-4" style={{ color: "var(--text-primary)" }}>
-              What an FDE actually is
+      {/* ── Proofs ────────────────────────────────────────────────────── */}
+      <section className="fde fde-below">
+        <div className="fde-wrap">
+          <div className="fde-sec-head">
+            <div className="fde-kicker">
+              <span className="fde-kicker-num">§02</span>receipts
+            </div>
+            <h2 className="fde-sec-h2">
+              The simulation above isn&apos;t <span className="fde-em">vibes</span>. Here&apos;s the engineering substrate it runs on.
             </h2>
-            <p className="leading-relaxed mb-3" style={{ color: "var(--text-secondary)" }}>
-              A Forward Deployed Engineer embeds directly with customers or
-              strategic accounts, writes production code in that environment, and
-              feeds field friction back into the product or model team. The role
-              sits between engineering, customer delivery, and product feedback.
-              It is not sales engineering or professional services with a fancier
-              title: the output is deployed, production-grade code that runs in
-              front of users.
-            </p>
-            <p className="leading-relaxed mb-5" style={{ color: "var(--text-secondary)" }}>
-              In 2026, AI labs and startups pushed the role toward agentic
-              deployment, eval design, MCP integration, and measurable ROI, which
-              made it distinct from the earlier Palantir-era framing. The
-              distinguishing question for a given posting is whether the engineer
-              owns a production deployment end-to-end, or just supports one.
-            </p>
-            <Link
-              href="/blog/forward-deployed-engineer"
-              className="inline-flex items-center gap-2 text-sm font-medium transition-colors"
-              style={{ color: "var(--accent)" }}
-            >
-              Read the full breakdown on the blog
-              <ArrowRight className="w-4 h-4" />
-            </Link>
-          </motion.div>
-        </div>
-      </section>
+            <div className="fde-sec-note">
+              four proofs of the engineering breadth FDE work actually needs: agents, protocols, upstream code, distributed substrate.
+            </div>
+          </div>
 
-      {/* ── Why I fit ────────────────────────────────────────────────────── */}
-      <section className="py-12 px-6">
-        <div className="max-w-4xl mx-auto">
-          <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={SPRINGS.default}
-            className="text-2xl font-bold mb-8"
-            style={{ color: "var(--text-primary)" }}
-          >
-            Why I fit, with the actual evidence
-          </motion.h2>
-
-          <div className="flex flex-col gap-5">
-            {EVIDENCE.map((item, i) => (
-              <motion.div
-                key={item.label}
-                initial={{ opacity: 0, y: 24 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ ...SPRINGS.default, delay: i * 0.06 }}
-                className="group rounded-2xl p-6"
-                style={{
-                  background: "var(--bg-secondary)",
-                  border: "1px solid var(--border)",
-                }}
-              >
-                <div className="flex flex-wrap items-start justify-between gap-3 mb-3">
-                  <span
-                    className="text-xs font-mono uppercase tracking-wider px-2.5 py-1 rounded-full"
-                    style={{
-                      background: "rgba(var(--accent-rgb, 0, 240, 255), 0.08)",
-                      color: "var(--accent)",
-                      border: "1px solid rgba(var(--accent-rgb, 0, 240, 255), 0.2)",
-                    }}
-                  >
-                    {item.tag}
-                  </span>
-                  <span
-                    className="text-xs font-medium"
-                    style={{ color: "var(--text-muted)" }}
-                  >
-                    {item.label}
-                  </span>
-                </div>
-                <h3
-                  className="text-base font-semibold mb-2"
-                  style={{ color: "var(--text-primary)" }}
-                >
-                  {item.headline}
+          <div className="fde-proofs-grid">
+            {PROOFS.map(p => (
+              <div key={p.id} className="fde-proof">
+                <div className="fde-pf-num">{p.id}</div>
+                <div className="fde-pf-cat">{p.cat} · {p.project}</div>
+                <h3 className="fde-pf-title">
+                  {p.title.pre}
+                  <span className="fde-em">{p.title.em}</span>
+                  {p.title.post}
                 </h3>
-                <p
-                  className="text-sm leading-relaxed"
-                  style={{ color: "var(--text-secondary)" }}
-                >
-                  {item.detail}
-                </p>
-              </motion.div>
+                <p className="fde-pf-body">{p.body}</p>
+                <div className="fde-pf-stack">
+                  {p.stack.map(s => (
+                    <span key={s} className="fde-pf-chip">{s}</span>
+                  ))}
+                </div>
+                <a className="fde-pf-link" href={p.link.href} target="_blank" rel="noreferrer">
+                  ↗ {p.link.label}
+                </a>
+              </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ── Honest gap + plan ────────────────────────────────────────────── */}
-      <section className="py-12 px-6">
-        <div className="max-w-4xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={SPRINGS.default}
-          >
-            <h2
-              className="text-2xl font-bold mb-3"
-              style={{ color: "var(--text-primary)" }}
-            >
-              The honest gap
-            </h2>
-            <p
-              className="text-base leading-relaxed mb-2"
-              style={{ color: "var(--text-secondary)" }}
-            >
-              External customer-facing deployment is the gap. Every FDE posting at
-              OpenAI, Anthropic, or HeyGen asks for evidence of scoping with
-              external customers, owning a rollout end-to-end, and handling
-              production failures in a client environment. My hotel-group
-              stakeholder work is real (requirements alignment, metric definition,
-              SLA-style delivery), but it was internal, not external customer
-              deployment. I can credibly claim stakeholder-facing delivery; I
-              cannot yet credibly claim the full FDE customer lifecycle.
-            </p>
-            <p
-              className="text-sm mb-10"
-              style={{ color: "var(--text-muted)" }}
-            >
-              The 60-day plan below is specific about how I am closing this.
-            </p>
-
-            <h3
-              className="text-lg font-semibold mb-6"
-              style={{ color: "var(--text-primary)" }}
-            >
-              60-day plan (as of May 2026)
-            </h3>
-
-            <div className="flex flex-col gap-4">
-              {PLAN.map((step, i) => (
-                <motion.div
-                  key={step.week}
-                  initial={{ opacity: 0, x: -16 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ ...SPRINGS.default, delay: i * 0.07 }}
-                  className="flex gap-5 items-start"
-                >
-                  <span
-                    className="shrink-0 text-xs font-mono px-2.5 py-1 rounded-full mt-0.5"
-                    style={{
-                      background: "var(--bg-secondary)",
-                      border: "1px solid var(--border)",
-                      color: "var(--text-muted)",
-                      whiteSpace: "nowrap",
-                    }}
-                  >
-                    {step.week}
-                  </span>
-                  <p
-                    className="text-sm leading-relaxed"
-                    style={{ color: "var(--text-secondary)" }}
-                  >
-                    {step.action}
-                  </p>
-                </motion.div>
-              ))}
+      {/* ── Fit ───────────────────────────────────────────────────────── */}
+      <section className="fde fde-below">
+        <div className="fde-wrap">
+          <div className="fde-sec-head">
+            <div className="fde-kicker">
+              <span className="fde-kicker-num">§03</span>candid
             </div>
-          </motion.div>
+            <h2 className="fde-sec-h2">
+              Notes on <span className="fde-em">fit</span>.
+            </h2>
+            <div className="fde-sec-note">
+              the version where i&apos;m honest about what I can claim, and what I can&apos;t. yet.
+            </div>
+          </div>
+
+          <div className="fde-fit-grid">
+            <div className="fde-fit-col" data-kind="have">
+              <h4>What I can credibly claim</h4>
+              <p>The engineering substrate: agentic systems, protocols, upstream code, distributed services. The decomposition muscle the simulation above demonstrates.</p>
+              <p>Plus real stakeholder-facing delivery experience: requirements alignment, metric and SLA definition with finance and ops at Elite Hotel Group.</p>
+            </div>
+            <div className="fde-fit-col" data-kind="gap">
+              <h4>What I haven&apos;t yet</h4>
+              <p>The full FDE customer lifecycle in an <span className="fde-em">external</span> environment. Internal stakeholder delivery isn&apos;t the same as external customer delivery. I won&apos;t pretend otherwise.</p>
+              <p>I&apos;m actively closing this by shipping one small real deployment, publishing failure analyses, and converting an existing project into a deployment case study. Specifics on request.</p>
+            </div>
+          </div>
         </div>
       </section>
 
-      {/* ── CTA row ──────────────────────────────────────────────────────── */}
-      <section className="py-16 px-6">
-        <div className="max-w-4xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={SPRINGS.default}
-            className="rounded-2xl p-8"
-            style={{
-              background: "var(--bg-secondary)",
-              border: "1px solid var(--border)",
-            }}
-          >
-            <h2
-              className="text-xl font-semibold mb-2"
-              style={{ color: "var(--text-primary)" }}
-            >
-              Get in touch or dig deeper
-            </h2>
-            <p
-              className="text-sm mb-8"
-              style={{ color: "var(--text-muted)" }}
-            >
-              Links to the blog post, resume, GitHub, and email below.
-            </p>
-
-            <div className="flex flex-wrap gap-3">
-              <Link
-                href="/blog/forward-deployed-engineer"
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-medium transition-all duration-200"
-                style={{
-                  background: "var(--accent)",
-                  color: "#000",
-                }}
-              >
-                <BookOpen className="w-4 h-4" />
-                Blog post
-              </Link>
-
-              <Link
-                href="/resume"
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-medium transition-all duration-200"
-                style={{
-                  background: "var(--bg-primary)",
-                  border: "1px solid var(--border)",
-                  color: "var(--text-primary)",
-                }}
-              >
-                <FileText className="w-4 h-4" />
-                Resume
-              </Link>
-
-              <a
-                href="https://github.com/jayhemnani9910"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-medium transition-all duration-200"
-                style={{
-                  background: "var(--bg-primary)",
-                  border: "1px solid var(--border)",
-                  color: "var(--text-primary)",
-                }}
-              >
-                <Github className="w-4 h-4" />
-                GitHub
-                <ExternalLink className="w-3 h-3" style={{ color: "var(--text-muted)" }} />
-              </a>
-
-              <a
-                href="mailto:jayhemnani992000@gmail.com"
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-medium transition-all duration-200"
-                style={{
-                  background: "var(--bg-primary)",
-                  border: "1px solid var(--border)",
-                  color: "var(--text-primary)",
-                }}
-              >
-                <Mail className="w-4 h-4" />
-                Email
-              </a>
-            </div>
-          </motion.div>
-        </div>
-      </section>
+      {/* ── Contact ───────────────────────────────────────────────────── */}
+      <FdeContact />
 
       <EditorialColophon />
     </main>
+  );
+}
+
+// Contact is extracted as a small function to keep the page component readable.
+function FdeContact() {
+  const links = [
+    { lbl: 'email',    val: 'jayhemnani992000@gmail.com',       href: 'mailto:jayhemnani992000@gmail.com', primary: true },
+    { lbl: 'essay',    val: 'what FDE means in 2026',           href: 'https://www.jayhemnani.me/blog/forward-deployed-engineer' },
+    { lbl: 'resume',   val: 'the one-pager',                    href: 'https://www.jayhemnani.me/resume' },
+    { lbl: 'github',   val: 'jayhemnani9910',                   href: 'https://github.com/jayhemnani9910' },
+    { lbl: 'linkedin', val: 'in / jayhemnani',                  href: 'https://linkedin.com/in/jayhemnani' },
+    { lbl: 'twitter',  val: '@jeyhemnani9',                     href: 'https://x.com/jeyhemnani9' },
+  ];
+
+  return (
+    <section className="fde fde-below">
+      <div className="fde-wrap">
+        <div className="fde-contact-grid">
+          <h2 className="fde-contact-h2">
+            If the simulation made you think, <span className="fde-em">say so</span>.
+          </h2>
+          <p className="fde-contact-sub">
+            Fastest path: email. I read every one. If you ran the sim on a real problem and it sparked an idea, send me the brief and I&apos;ll show you what the next 30 minutes of work would look like.
+          </p>
+        </div>
+        <div className="fde-contact-list">
+          {links.map(l => (
+            <a
+              key={l.lbl}
+              className="fde-contact-row"
+              data-primary={l.primary ? '1' : '0'}
+              href={l.href}
+              target="_blank"
+              rel="noreferrer"
+            >
+              <span className="fde-contact-lbl">{l.lbl}</span>
+              <span className="fde-contact-val">{l.val}</span>
+              <span className="fde-contact-arr" aria-hidden="true">↗</span>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
   );
 }
