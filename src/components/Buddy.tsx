@@ -17,13 +17,51 @@ const GLYPHS: Record<Expression, string> = {
   happy:     "[^ ^]",
 };
 
+// Two individual eye chars per expression (for the full-body sprite)
+const EYE_CHARS: Record<Expression, [string, string]> = {
+  rest:      ["o", "o"],
+  blink:     ["-", "-"],
+  left:      ["<", "<"],
+  right:     [">", ">"],
+  up:        ["'", "'"],
+  down:      [".", "."],
+  surprised: ["O", "O"],
+  happy:     ["^", "^"],
+};
+
+// ---- idle frame cycle (arms + legs) ----
+// Frame A: arms "=|_-_|=", legs " /| |\\ "
+// Frame B: arms "-|_-_|-", legs " (| |) "
+const IDLE_FRAMES: Array<{ arms: string; legs: string }> = [
+  { arms: "=|_-_|=", legs: " /| |\\ " },
+  { arms: "-|_-_|-", legs: " (| |) " },
+];
+
 // ---- word pools ----
 const IDLE_WORDS = ["idle", "reading", "still here", "hello", "shipping", "thinking"];
-const IDLE_WORDS_FOOTER = [...IDLE_WORDS, "↑ to top"];
+const IDLE_WORDS_FOOTER = [...IDLE_WORDS, "up to top"];
 const INTERACTION_WORDS_CLICK = ["hi there", "press me", "^_^", "hello"];
 
 function pickRandom<T>(arr: T[]): T {
   return arr[Math.floor(Math.random() * arr.length)];
+}
+
+// Build a rounded speech bubble above the sprite.
+// The sprite is 7 chars wide. The bubble is centered over it.
+// Format (content padded with one space each side):
+//  ╭───────╮
+//  │ hello │
+//  ╰───╥───╯
+function buildBubble(text: string): string {
+  const inner = ` ${text} `;
+  const width = inner.length;       // e.g. " hello " = 7 chars
+  const top    = "╭" + "─".repeat(width) + "╮";
+  const mid    = "│" + inner + "│";
+  const tailPos = Math.floor(width / 2); // center position in the inner content
+  const bottomLeft  = "─".repeat(tailPos);
+  const bottomRight = "─".repeat(width - tailPos - 1);
+  const bot    = "╰" + bottomLeft + "╥" + bottomRight + "╯";
+  return [top, mid, bot].join("\n");
 }
 
 interface BuddyProps {
@@ -45,6 +83,7 @@ export function Buddy({ variant = "mini", className }: BuddyProps) {
   const [expression, setExpression] = useState<Expression>("rest");
   const [word, setWord] = useState<string | null>(null);
   const [bouncing, setBouncing] = useState(false);
+  const [idleFrame, setIdleFrame] = useState(0); // 0 = Frame A, 1 = Frame B
 
   // resting expression: what blink/idle return to (cursor+scroll update this)
   const restingRef = useRef<Expression>("rest");
@@ -75,6 +114,8 @@ export function Buddy({ variant = "mini", className }: BuddyProps) {
   const idleWordClearTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   // blink timer ref
   const blinkTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  // idle frame interval ref
+  const idleFrameIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   // ---- helpers ----
   const setResting = useCallback((expr: Expression) => {
@@ -105,7 +146,6 @@ export function Buddy({ variant = "mini", className }: BuddyProps) {
 
     const interactionWord = theme === "dark" ? "ooh, dark" : "bright!";
 
-    // Use setTimeout(0) so state updates happen outside the effect body
     themeInteractionRef.current = setTimeout(() => {
       setExpression("surprised");
       setWord(null);
@@ -196,7 +236,6 @@ export function Buddy({ variant = "mini", className }: BuddyProps) {
     const scheduleBlink = () => {
       const delay = 4000 + Math.random() * 2000;
       blinkTimerRef.current = setTimeout(() => {
-        // only blink when nothing else is overriding
         if (!scrollActiveRef.current) {
           setExpression("blink");
           blinkTimerRef.current = setTimeout(() => {
@@ -242,6 +281,20 @@ export function Buddy({ variant = "mini", className }: BuddyProps) {
     };
   }, [variant]);
 
+  // ---- idle frame cycle (full variant only) ----
+  useEffect(() => {
+    if (variant !== "full") return;
+    if (reducedMotion.current) return;
+
+    idleFrameIntervalRef.current = setInterval(() => {
+      setIdleFrame((f) => (f === 0 ? 1 : 0));
+    }, 600);
+
+    return () => {
+      if (idleFrameIntervalRef.current) clearInterval(idleFrameIntervalRef.current);
+    };
+  }, [variant]);
+
   // ---- click handler ----
   const handleClick = useCallback(() => {
     clearThemeTimers();
@@ -282,6 +335,42 @@ export function Buddy({ variant = "mini", className }: BuddyProps) {
       : word
     : null;
 
+  if (variant === "full") {
+    const [e1, e2] = EYE_CHARS[expression];
+    const frame = reducedMotion.current ? IDLE_FRAMES[0] : IDLE_FRAMES[idleFrame];
+
+    // Sprite lines (each 7 chars wide)
+    const headLine  = " .---. ";
+    const eyesLine  = ` |${e1} ${e2}| `;
+    const armsLine  = frame.arms;
+    const legsLine  = frame.legs;
+
+    const spriteLines = [headLine, eyesLine, armsLine, legsLine];
+
+    let art: string;
+    if (displayWord) {
+      const bubble = buildBubble(displayWord);
+      // The bubble may be wider than 7 chars; we still center it via text-align on the container
+      art = bubble + "\n" + spriteLines.join("\n");
+    } else {
+      art = spriteLines.join("\n");
+    }
+
+    return (
+      <button
+        ref={buddyRef}
+        type="button"
+        className={cls}
+        onClick={handleClick}
+        aria-hidden="true"
+        tabIndex={0}
+      >
+        <span className="buddy-art">{art}</span>
+      </button>
+    );
+  }
+
+  // mini variant (unchanged)
   return (
     <button
       ref={buddyRef}
@@ -291,7 +380,7 @@ export function Buddy({ variant = "mini", className }: BuddyProps) {
       aria-hidden="true"
       tabIndex={0}
     >
-      <span className="buddy-prompt">❯ </span>
+      <span className="buddy-prompt">&#10095; </span>
       <span className="buddy-face">{face}</span>
       {displayWord && (
         <span className="buddy-word">{displayWord}</span>

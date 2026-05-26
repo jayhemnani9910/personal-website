@@ -28,9 +28,11 @@ export function EditorialColophon() {
           <span className="muted small">Gujarat, India</span>
         </div>
       </div>
+      <div className="colophon-buddy-wrap">
+        <Buddy variant="full" className="colophon-buddy" />
+      </div>
       <div className="colophon-bottom">
         <span>© 2026 Jay Hemnani · All rights reserved, most reserved gently.</span>
-        <Buddy variant="full" className="colophon-buddy" />
       </div>
     </footer>
   );
