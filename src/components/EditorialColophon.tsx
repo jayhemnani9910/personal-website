@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Buddy } from "@/components/Buddy";
 
 export function EditorialColophon() {
   return (
@@ -29,6 +30,7 @@ export function EditorialColophon() {
       </div>
       <div className="colophon-bottom">
         <span>© 2026 Jay Hemnani · All rights reserved, most reserved gently.</span>
+        <Buddy variant="full" className="colophon-buddy" />
         <span className="tabular">№26 · May 2026 · v.1.0</span>
       </div>
     </footer>

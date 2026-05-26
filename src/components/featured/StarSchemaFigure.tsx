@@ -15,15 +15,29 @@ const ROW_H = 18;
 
 const FACT_COLS = ["ts", "open", "high", "low", "close", "volume"];
 
-// 25-year candlestick band along the base. Deterministic so SSR matches.
+// 25-year candlestick band along the base. Coordinates are rounded because
+// Math.sin is not bit-identical between the Node server and the browser, and
+// the raw floats would otherwise serialize differently and break hydration.
+const r2 = (n: number) => Math.round(n * 100) / 100;
 const CANDLES = Array.from({ length: 46 }, (_, i) => {
   const seed = Math.sin(i * 12.9898) * 43758.5453;
-  const r = seed - Math.floor(seed);
-  const r2 = (Math.sin(i * 4.137) * 9123.17) % 1;
-  const mid = 330 + (r - 0.5) * 14;
-  const half = 4 + Math.abs(r2) * 7;
-  const up = i % 3 === 0;
-  return { x: 70 + i * 15.6, top: mid - half, bot: mid + half, wick: half + 4, up };
+  const rand = seed - Math.floor(seed);
+  const rand2 = (Math.sin(i * 4.137) * 9123.17) % 1;
+  const mid = 330 + (rand - 0.5) * 14;
+  const half = 4 + Math.abs(rand2) * 7;
+  const top = r2(mid - half);
+  const bot = r2(mid + half);
+  const cy = r2((top + bot) / 2);
+  const wick = r2(half + 4);
+  return {
+    x: r2(70 + i * 15.6),
+    top,
+    bot,
+    rectH: r2(Math.max(bot - top, 2)),
+    wickTop: r2(cy - wick),
+    wickBot: r2(cy + wick),
+    up: i % 3 === 0,
+  };
 });
 
 function dimHeight(cols: string[]) {
@@ -88,8 +102,8 @@ export function StarSchemaFigure({ className }: { className?: string }) {
       <g>
         {CANDLES.map((c, i) => (
           <g key={i} stroke={c.up ? "var(--accent)" : "var(--ink-mute)"} strokeWidth={1}>
-            <line x1={c.x} y1={(c.top + c.bot) / 2 - c.wick} x2={c.x} y2={(c.top + c.bot) / 2 + c.wick} />
-            <rect x={c.x - 3} y={c.top} width={6} height={Math.max(c.bot - c.top, 2)} fill={c.up ? "var(--accent)" : "var(--paper)"} />
+            <line x1={c.x} y1={c.wickTop} x2={c.x} y2={c.wickBot} />
+            <rect x={r2(c.x - 3)} y={c.top} width={6} height={c.rectH} fill={c.up ? "var(--accent)" : "var(--paper)"} />
           </g>
         ))}
       </g>

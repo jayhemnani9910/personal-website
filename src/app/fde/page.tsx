@@ -39,7 +39,7 @@ const EVIDENCE: {
     label: "Kayak metasearch + Airbnb microservices",
     headline: "Thinking in services, data flows, contracts, and failure boundaries",
     detail:
-      "Kayak clone: Node, Kafka, API gateway, polyglot persistence (14 services). Airbnb clone: microservices on Kubernetes. These are the engineering substrates behind FDE deployment work, not academic exercises.",
+      "Kayak clone: 3-tier distributed system with Node/Express services behind an API gateway, polyglot persistence (MySQL, MongoDB, Redis), Kafka event streaming, and a Python FastAPI AI layer. Airbnb clone: microservices on Kubernetes. These are the engineering substrates behind FDE deployment work.",
     tag: "distributed systems",
   },
   {
@@ -148,8 +148,8 @@ export default function FDEPage() {
               feeds field friction back into the product or model team. The role
               sits between engineering, customer delivery, and product feedback.
               It is not sales engineering or professional services with a fancier
-              title: the output is deployed, production-grade code, not slide decks
-              or architecture diagrams.
+              title: the output is deployed, production-grade code that runs in
+              front of users.
             </p>
             <p className="leading-relaxed mb-5" style={{ color: "var(--text-secondary)" }}>
               In 2026, AI labs and startups pushed the role toward agentic
@@ -273,7 +273,7 @@ export default function FDEPage() {
               className="text-lg font-semibold mb-6"
               style={{ color: "var(--text-primary)" }}
             >
-              60-day plan
+              60-day plan (as of May 2026)
             </h3>
 
             <div className="flex flex-col gap-4">

@@ -10,7 +10,7 @@ solution:
 impact:
   - "Lightweight demo of event-driven UI."
 deepDive:
-  context: "Accurate Guesser is a classic number guessing game built with Java Swing, designed to demonstrate fundamental GUI programming concepts and event-driven architecture. The player tries to guess a randomly generated number within a range, receiving feedback after each attempt. This project showcases clean separation of concerns between UI presentation, game logic, and state management - essential principles for desktop application development."
+  context: "Accurate Guesser is a classic number guessing game built with Java Swing, designed to demonstrate fundamental GUI programming concepts and event-driven architecture. The player tries to guess a randomly generated number within a range, receiving feedback after each attempt. This project showcases clean separation of concerns between UI presentation, game logic, and state management, all essential principles for desktop application development."
 
   architecture: "The application follows a Model-View-Controller (MVC) pattern adapted for Swing's event-driven paradigm. The game state machine manages three primary states: INITIAL (game setup), PLAYING (active guessing), and FINISHED (game over with results). The architecture separates the game logic (random number generation, guess validation, attempt tracking) from the Swing UI components (JFrame, JPanel, JTextField, JButton), connected through ActionListener callbacks. This separation enables easy testing of game logic independently from UI concerns."
 
@@ -155,7 +155,7 @@ deepDive:
       description: "Building with Swing taught the core principles of event-driven programming: loose coupling through listeners, callback-based control flow, and asynchronous user interactions. Understanding how ActionListeners decouple user actions from business logic became foundational knowledge applicable to modern frameworks like React and Vue, where similar event-driven patterns dominate."
 
     - insight: "State Management Complexity"
-      description: "Even a simple game reveals state management challenges. Without explicit state tracking (INITIAL, PLAYING, FINISHED), edge cases emerged: users submitting guesses before initialization, starting multiple games simultaneously, or continuing after winning. This experience highlighted why state management libraries (Redux, MobX) exist in complex applications - manual state tracking doesn't scale."
+      description: "Even a simple game reveals state management challenges. Without explicit state tracking (INITIAL, PLAYING, FINISHED), edge cases emerged: users submitting guesses before initialization, starting multiple games simultaneously, or continuing after winning. This experience highlighted why state management libraries (Redux, MobX) exist in complex applications, because manual state tracking does not scale."
 
     - insight: "Separation of Concerns in Practice"
       description: "Implementing MVC in Swing demonstrated why architectural patterns matter. Initially mixing UI code with game logic created brittle code resistant to changes. Refactoring to separate GameEngine from GameUI made testing trivial, enabled UI redesigns without touching logic, and clarified responsibilities. This lesson applies universally across software development."

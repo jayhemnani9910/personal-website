@@ -13,9 +13,9 @@ export const LAB_ITEMS: Record<"building" | "exploring" | "radar", LabItem[]> = 
       id: "website-v3",
       title: "Portfolio V3",
       description:
-        "This website - visual demo pages, animated components, AI-powered features",
-      tags: ["Next.js 15", "Framer Motion", "Three.js"],
-      progress: 85,
+        "This website - editorial magazine layout, theme-aware SVG figures, AI-queryable via WebMCP",
+      tags: ["Next.js 16", "Framer Motion", "Three.js"],
+      progress: 100,
       link: "https://github.com/jayhemnani9910/personal-website",
     },
     {
@@ -32,7 +32,7 @@ export const LAB_ITEMS: Record<"building" | "exploring" | "radar", LabItem[]> = 
       description:
         "W3C WebMCP standard, making this portfolio AI-agent queryable via Chrome 146+",
       tags: ["WebMCP", "W3C", "AI Agents", "Chrome 146"],
-      progress: 70,
+      progress: 100,
       link: "https://jayhemnani.me/projects/webmcp-portfolio",
     },
   ],
