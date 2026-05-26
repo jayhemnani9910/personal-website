@@ -10,6 +10,7 @@ import { TacticalGraphFigure } from "@/components/featured/TacticalGraphFigure";
 import { CausalAdversarialFigure } from "@/components/featured/CausalAdversarialFigure";
 import { ProteinNMAFigure } from "@/components/featured/ProteinNMAFigure";
 import { VDOSSpectrumFigure } from "@/components/featured/VDOSSpectrumFigure";
+import { WebMCPFigure } from "@/components/featured/WebMCPFigure";
 
 const ROLES = [
   "forward-deployed engineer",
@@ -168,15 +169,17 @@ export function EditorialHome() {
           </article>
         </div>
 
-        {/* Feature 04 + 05 */}
-        <div className="feat-row asymm">
-          <article className="feat wide">
-            <Link href="/projects/stock-data-platform" className="cardlink">
-              <div className="ph small" style={{ aspectRatio: "21 / 9" }}>
+        {/* Feature 04: Stock Data Platform */}
+        <article className="feat feat-lead">
+          <Link href="/projects/stock-data-platform" className="cardlink">
+            <div className="feat-media">
+              <div className="ph" style={{ aspectRatio: "21 / 9" }}>
                 <StarSchemaFigure className="ph-img ph-fig" />
                 <span className="ph-tag accent">Data Engineering</span>
                 <div className="ph-label"><span>fig. 04, star schema, 25 yrs of ticks</span><span className="mono">/work/stock</span></div>
               </div>
+            </div>
+            <div className="feat-text">
               <div className="feat-num mono">№ 04</div>
               <div className="eyebrow"><span>Streaming · Warehouse</span></div>
               <h3 className="card-h">Stock Data Platform.</h3>
@@ -184,24 +187,34 @@ export function EditorialHome() {
               <p className="feat-body">Ten tickers, twenty-five years of history, four upstream sources, a unit test suite, seven services in a single Docker compose. Built the way a production data platform ought to be built, which is to say, with relentless skepticism toward the data.</p>
               <div className="specs"><span>Kafka</span><span>Airflow</span><span>TimescaleDB</span><span>Docker</span><span>Dash</span></div>
               <span className="go">Read the dossier</span>
-            </Link>
-          </article>
+            </div>
+          </Link>
+        </article>
 
-          <article className="feat narrow">
-            <Link href="/projects/webmcp-portfolio" className="cardlink">
-              <div className="feat-num mono">№ 05</div>
-              <div className="eyebrow"><span>AI-Native Web · WebMCP</span></div>
-              <h3 className="card-h">WebMCP, on this very site.</h3>
-              <p className="deck">An LLM can browse this portfolio the way humans do, only faster, and without scrolling.</p>
-              <p className="feat-body">Eight structured tools exposed via the WebMCP browser API. Project search, resume, skills, contact, theme, all callable by an agent with JSON Schema inputs and typed results, instead of scraping the DOM.</p>
-              <div className="specs"><span>TypeScript</span><span>Next.js&nbsp;16</span><span>WebMCP</span><span>JSON&nbsp;Schema</span></div>
-              <span className="go">Read the dossier</span>
-              <div className="pull-aside mono xs muted" aria-hidden="true">
-                <span>↘</span> try asking your browser-agent: <em className="serif italic">&ldquo;find Jay&apos;s CV pipeline projects.&rdquo;</em>
+        {/* Feature 05: WebMCP */}
+        <article className="feat feat-tail">
+          <Link href="/projects/webmcp-portfolio" className="cardlink">
+            <div className="feat-tail-grid">
+              <div className="feat-text">
+                <div className="feat-num mono">№ 05</div>
+                <div className="eyebrow"><span>AI-Native Web · WebMCP</span></div>
+                <h3 className="card-h">WebMCP, on this very site.</h3>
+                <p className="deck">An LLM can browse this portfolio the way humans do, only faster, and without scrolling.</p>
+                <p className="feat-body">Eight structured tools exposed via the WebMCP browser API. Project search, resume, skills, contact, theme, all callable by an agent with JSON Schema inputs and typed results, instead of scraping the DOM.</p>
+                <div className="specs"><span>TypeScript</span><span>Next.js&nbsp;16</span><span>WebMCP</span><span>JSON&nbsp;Schema</span></div>
+                <span className="go">Read the dossier</span>
+                <div className="pull-aside mono xs muted" aria-hidden="true">
+                  <span>↘</span> try asking your browser-agent: <em className="serif italic">&ldquo;find Jay&apos;s CV pipeline projects.&rdquo;</em>
+                </div>
               </div>
-            </Link>
-          </article>
-        </div>
+              <div className="ph" style={{ aspectRatio: "4 / 5" }}>
+                <WebMCPFigure className="ph-img ph-fig" />
+                <span className="ph-tag">AI-Native Web</span>
+                <div className="ph-label"><span>fig. 06, webmcp tool registry</span><span className="mono">/work/webmcp</span></div>
+              </div>
+            </div>
+          </Link>
+        </article>
 
         {/* Feature 06: Nobel */}
         <article className="feat feat-tail">
