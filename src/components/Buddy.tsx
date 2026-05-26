@@ -18,7 +18,7 @@ const GLYPHS: Record<Expression, string> = {
 };
 
 // ---- word pools ----
-const IDLE_WORDS = ["idle", "reading", "vol. iv", "still here", "hello", "shipping", "thinking"];
+const IDLE_WORDS = ["idle", "reading", "still here", "hello", "shipping", "thinking"];
 const IDLE_WORDS_FOOTER = [...IDLE_WORDS, "↑ to top"];
 const INTERACTION_WORDS_CLICK = ["hi there", "press me", "^_^", "hello"];
 

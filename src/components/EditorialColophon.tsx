@@ -6,7 +6,7 @@ export function EditorialColophon() {
     <footer>
       <div className="colophon">
         <div>
-          <p className="imprint">A quarterly-shaped portfolio,<br />set in Newsreader and Geist,<br />printed in Vol. IV.</p>
+          <p className="imprint">A personal portfolio,<br />set in Newsreader and Geist.</p>
         </div>
         <div>
           <h4>Inside</h4>
@@ -31,7 +31,6 @@ export function EditorialColophon() {
       <div className="colophon-bottom">
         <span>© 2026 Jay Hemnani · All rights reserved, most reserved gently.</span>
         <Buddy variant="full" className="colophon-buddy" />
-        <span className="tabular">№26 · May 2026 · v.1.0</span>
       </div>
     </footer>
   );

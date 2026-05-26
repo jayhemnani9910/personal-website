@@ -12,7 +12,6 @@ export function EditorialMasthead({ active }: { active?: Section }) {
     <header className="masthead">
       <div className="masthead-inner">
         <div className="mh-issue tabular">
-          <span className="mh-issue-line">Vol. IV · №26, May 2026</span>
           <Buddy variant="mini" className="mh-buddy" />
         </div>
         <Link className="mh-logo" href="/">
