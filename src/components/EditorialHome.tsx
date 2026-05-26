@@ -191,52 +191,42 @@ export function EditorialHome() {
           </Link>
         </article>
 
-        {/* Feature 05: WebMCP */}
-        <article className="feat feat-tail">
-          <Link href="/projects/webmcp-portfolio" className="cardlink">
-            <div className="feat-tail-grid">
-              <div className="feat-text">
-                <div className="feat-num mono">№ 05</div>
-                <div className="eyebrow"><span>AI-Native Web · WebMCP</span></div>
-                <h3 className="card-h">WebMCP, on this very site.</h3>
-                <p className="deck">An LLM can browse this portfolio the way humans do, only faster, and without scrolling.</p>
-                <p className="feat-body">Eight structured tools exposed via the WebMCP browser API. Project search, resume, skills, contact, theme, all callable by an agent with JSON Schema inputs and typed results, instead of scraping the DOM.</p>
-                <div className="specs"><span>TypeScript</span><span>Next.js&nbsp;16</span><span>WebMCP</span><span>JSON&nbsp;Schema</span></div>
-                <span className="go">Read the dossier</span>
-                <div className="pull-aside mono xs muted" aria-hidden="true">
-                  <span>↘</span> try asking your browser-agent: <em className="serif italic">&ldquo;find Jay&apos;s CV pipeline projects.&rdquo;</em>
-                </div>
-              </div>
-              <div className="ph" style={{ aspectRatio: "4 / 5" }}>
+        {/* Feature 05 + 06 */}
+        <div className="feat-row">
+          <article className="feat">
+            <Link href="/projects/webmcp-portfolio" className="cardlink">
+              <div className="ph small" style={{ aspectRatio: "5 / 3" }}>
                 <WebMCPFigure className="ph-img ph-fig" />
                 <span className="ph-tag">AI-Native Web</span>
-                <div className="ph-label"><span>fig. 06, webmcp tool registry</span><span className="mono">/work/webmcp</span></div>
+                <div className="ph-label"><span>fig. 05, webmcp tool registry</span><span className="mono">/work/webmcp</span></div>
               </div>
-            </div>
-          </Link>
-        </article>
+              <div className="feat-num mono">№ 05</div>
+              <div className="eyebrow"><span>AI-Native Web · WebMCP</span></div>
+              <h3 className="card-h">WebMCP, on this very site.</h3>
+              <p className="deck">An LLM can browse this portfolio the way humans do, only faster, and without scrolling.</p>
+              <p className="feat-body">Eight structured tools exposed via the WebMCP browser API. Project search, resume, skills, contact, theme, all callable by an agent with JSON Schema inputs and typed results, instead of scraping the DOM.</p>
+              <div className="specs"><span>TypeScript</span><span>Next.js&nbsp;16</span><span>WebMCP</span><span>JSON&nbsp;Schema</span></div>
+              <span className="go">Read the dossier</span>
+            </Link>
+          </article>
 
-        {/* Feature 06: Nobel */}
-        <article className="feat feat-tail">
-          <Link href="/projects/nobel-dataintelligence" className="cardlink">
-            <div className="feat-tail-grid">
-              <div className="feat-text">
-                <div className="feat-num mono">№ 06</div>
-                <div className="eyebrow"><span>Research · Scientific ML</span></div>
-                <h3 className="card-h">Nobel Data Intelligence.</h3>
-                <p className="deck">Tri-modal deep learning for protein stability: sequence, structure, and a vibrational signal nobody else is using.</p>
-                <p className="feat-body">ProtT5 for sequence. GATv2 over structural graphs. VDOS spectra from normal-mode analysis, the novel bit. ChemBERTa for chemistry, fused through learned gated attention. Unit-tested across the fusion stack, eight notebooks, Colab-ready.</p>
-                <div className="specs"><span>PyTorch&nbsp;Geometric</span><span>ProDy</span><span>BioPython</span><span>RDKit</span><span>Transformers</span></div>
-                <span className="go">Read the dossier</span>
-              </div>
-              <div className="ph small" style={{ aspectRatio: "4 / 5" }}>
+          <article className="feat">
+            <Link href="/projects/nobel-dataintelligence" className="cardlink">
+              <div className="ph small alt" style={{ aspectRatio: "5 / 3" }}>
                 <VDOSSpectrumFigure className="ph-img ph-fig" />
                 <span className="ph-tag">Tri-modal</span>
-                <div className="ph-label"><span>fig. 05, VDOS spectrum</span><span className="mono">/work/nobel</span></div>
+                <div className="ph-label"><span>fig. 06, vdos spectrum</span><span className="mono">/work/nobel</span></div>
               </div>
-            </div>
-          </Link>
-        </article>
+              <div className="feat-num mono">№ 06</div>
+              <div className="eyebrow"><span>Research · Scientific ML</span></div>
+              <h3 className="card-h">Nobel Data Intelligence.</h3>
+              <p className="deck">Tri-modal deep learning for protein stability: sequence, structure, and a vibrational signal nobody else is using.</p>
+              <p className="feat-body">ProtT5 for sequence. GATv2 over structural graphs. VDOS spectra from normal-mode analysis, the novel bit. ChemBERTa for chemistry, fused through learned gated attention. Unit-tested across the fusion stack, eight notebooks, Colab-ready.</p>
+              <div className="specs"><span>PyTorch&nbsp;Geometric</span><span>ProDy</span><span>BioPython</span><span>RDKit</span><span>Transformers</span></div>
+              <span className="go">Read the dossier</span>
+            </Link>
+          </article>
+        </div>
 
         <div className="more-row">
           <Link href="/projects" className="go" style={{ fontSize: 13 }}>See all 27 projects in the index</Link>

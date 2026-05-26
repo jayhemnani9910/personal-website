@@ -1,51 +1,51 @@
 // WebMCP tool registry: a browser agent calls the MCP hub which fans out
 // to five structured tools (search, resume, skills, contact, theme).
+// Landscape 840x504 (5/3) — all coordinates are plain integer/decimal literals,
+// no runtime math, so server and client serialize identically.
 
 export function WebMCPFigure({ className }: { className?: string }) {
-  // Layout constants — all plain integer literals, no runtime math.
-  // Header chip: centered at top
-  const chipX = 90;
-  const chipY = 24;
+  // ── Header chip ────────────────────────────────────────────────
+  const chipX = 270;
+  const chipY = 22;
   const chipW = 300;
   const chipH = 28;
 
-  // Browser agent node (upper-left)
-  const agentX = 28;
-  const agentY = 100;
-  const agentW = 108;
-  const agentH = 52;
+  // ── Browser / agent node (left) ────────────────────────────────
+  const agentX = 60;
+  const agentY = 200;
+  const agentW = 130;
+  const agentH = 60;
+  const agentCX = agentX + agentW;       // right edge: 190
+  const agentCY = agentY + agentH / 2;  // vertical center: 230
 
-  // MCP hub node (center)
-  const mcpX = 186;
-  const mcpY = 100;
-  const mcpW = 108;
-  const mcpH = 52;
+  // ── MCP hub node (center) ──────────────────────────────────────
+  const mcpX = 330;
+  const mcpY = 196;
+  const mcpW = 130;
+  const mcpH = 68;
+  const mcpLX = mcpX;                    // left edge: 330
+  const mcpRX = mcpX + mcpW;            // right edge: 460
+  const mcpCY = mcpY + mcpH / 2;        // vertical center: 230
 
-  // Tool cards: right column, evenly spaced
-  // Each card: x=356, w=100, h=44
-  const toolX = 356;
-  const toolW = 100;
-  const toolH = 44;
+  // ── Tool cards (right column): two columns, 5 cards ───────────
+  // Column A: x=540, Column B: x=680
+  // Rows: three in col A, two in col B, centered vertically
+  const toolW = 120;
+  const toolH = 46;
+  const colA = 540;
+  const colB = 700;
   const tools = [
-    { name: "search",  y: 72  },
-    { name: "resume",  y: 132 },
-    { name: "skills",  y: 192 },
-    { name: "contact", y: 252 },
-    { name: "theme",   y: 312 },
+    { name: "search",  x: colA, y: 120, accent: true  },
+    { name: "resume",  x: colA, y: 228, accent: false },
+    { name: "skills",  x: colA, y: 336, accent: false },
+    { name: "contact", x: colB, y: 174, accent: false },
+    { name: "theme",   x: colB, y: 282, accent: false },
   ];
-
-  // MCP hub center (for connector lines from hub to tools)
-  const mcpCX = mcpX + mcpW; // right edge of MCP hub = 294
-  const mcpCY = mcpY + mcpH / 2; // vertical center of MCP hub = 126
-
-  // Agent right edge -> MCP left edge
-  const agentRX = agentX + agentW; // 136
-  const agentCY = agentY + agentH / 2; // 126
 
   return (
     <svg
       className={className}
-      viewBox="0 0 480 600"
+      viewBox="0 0 840 504"
       preserveAspectRatio="xMidYMid meet"
       fill="none"
       role="img"
@@ -83,18 +83,18 @@ export function WebMCPFigure({ className }: { className?: string }) {
         WEBMCP · TOOL REGISTRY
       </text>
 
-      {/* Agent → MCP connector line */}
+      {/* Agent → MCP connector */}
       <line
-        x1={agentRX}
+        x1={agentCX}
         y1={agentCY}
-        x2={mcpX}
+        x2={mcpLX}
         y2={mcpCY}
         stroke="var(--accent)"
         strokeWidth={1.5}
         markerEnd="url(#wm-arrow-accent)"
       />
 
-      {/* Browser agent node */}
+      {/* Browser / agent node */}
       <rect
         x={agentX}
         y={agentY}
@@ -105,31 +105,24 @@ export function WebMCPFigure({ className }: { className?: string }) {
         stroke="var(--ink)"
         strokeWidth={1.5}
       />
-      {/* accent prompt glyph */}
-      <text
-        x={agentX + 14}
-        y={agentY + 22}
-        fontSize={13}
-        fill="var(--accent)"
-        fontWeight={700}
-      >
+      <text x={agentX + 14} y={agentY + 26} fontSize={14} fill="var(--accent)" fontWeight={700}>
         ❯
       </text>
       <text
-        x={agentX + agentW / 2 + 4}
-        y={agentY + 22}
+        x={agentX + agentW / 2 + 6}
+        y={agentY + 26}
         textAnchor="middle"
-        fontSize={11}
+        fontSize={12}
         fill="var(--ink)"
         fontWeight={600}
       >
         browser
       </text>
       <text
-        x={agentX + agentW / 2 + 4}
-        y={agentY + 37}
+        x={agentX + agentW / 2 + 6}
+        y={agentY + 43}
         textAnchor="middle"
-        fontSize={9}
+        fontSize={10}
         fill="var(--ink-mute)"
       >
         agent
@@ -148,9 +141,9 @@ export function WebMCPFigure({ className }: { className?: string }) {
       />
       <text
         x={mcpX + mcpW / 2}
-        y={mcpY + 24}
+        y={mcpY + 30}
         textAnchor="middle"
-        fontSize={14}
+        fontSize={16}
         fill="var(--accent)"
         fontWeight={700}
         letterSpacing="0.06em"
@@ -159,71 +152,61 @@ export function WebMCPFigure({ className }: { className?: string }) {
       </text>
       <text
         x={mcpX + mcpW / 2}
-        y={mcpY + 39}
+        y={mcpY + 48}
         textAnchor="middle"
-        fontSize={9}
+        fontSize={10}
         fill="var(--ink-mute)"
       >
         hub
       </text>
 
-      {/* Connector lines: MCP hub right edge → each tool card left edge */}
+      {/* MCP → tool connector lines */}
       {tools.map((tool, i) => {
         const toolCY = tool.y + toolH / 2;
-        const isFirst = i === 0;
+        const isAccent = tool.accent;
         return (
           <line
             key={tool.name}
-            x1={mcpCX}
+            x1={mcpRX}
             y1={mcpCY}
-            x2={toolX}
+            x2={tool.x}
             y2={toolCY}
-            stroke={isFirst ? "var(--accent)" : "var(--ink-mute)"}
-            strokeWidth={isFirst ? 1.5 : 1}
-            strokeDasharray={isFirst ? undefined : "3 2"}
+            stroke={isAccent ? "var(--accent)" : "var(--ink-mute)"}
+            strokeWidth={isAccent ? 1.5 : 1}
+            strokeDasharray={isAccent ? undefined : "3 2"}
             markerEnd="url(#wm-arrow)"
           />
         );
       })}
 
       {/* Tool cards */}
-      {tools.map((tool, i) => {
-        const isFirst = i === 0;
+      {tools.map((tool) => {
+        const isAccent = tool.accent;
         return (
           <g key={tool.name}>
             <rect
-              x={toolX}
+              x={tool.x}
               y={tool.y}
               width={toolW}
               height={toolH}
               rx={4}
               fill="var(--paper)"
-              stroke={isFirst ? "var(--accent)" : "var(--ink)"}
-              strokeWidth={isFirst ? 2 : 1.25}
+              stroke={isAccent ? "var(--accent)" : "var(--ink)"}
+              strokeWidth={isAccent ? 2 : 1.25}
             />
             <text
-              x={toolX + 10}
-              y={tool.y + 17}
-              fontSize={11}
-              fill={isFirst ? "var(--accent)" : "var(--ink)"}
+              x={tool.x + 12}
+              y={tool.y + 20}
+              fontSize={12}
+              fill={isAccent ? "var(--accent)" : "var(--ink)"}
               fontWeight={600}
             >
               {tool.name}
             </text>
-            <text
-              x={toolX + 10}
-              y={tool.y + 31}
-              fontSize={9}
-              fill="var(--ink-mute)"
-            >
+            <text x={tool.x + 12} y={tool.y + 36} fontSize={10} fill="var(--ink-mute)">
               {"{ }"}
             </text>
-            <text
-              x={toolX + 30}
-              y={tool.y + 31}
-              fontSize={8}
-              fill="var(--ink-faint)"
-            >
+            <text x={tool.x + 34} y={tool.y + 36} fontSize={9} fill="var(--ink-faint)">
               JSON
             </text>
           </g>
@@ -232,8 +215,8 @@ export function WebMCPFigure({ className }: { className?: string }) {
 
       {/* Caption */}
       <text
-        x={240}
-        y={392}
+        x={420}
+        y={472}
         textAnchor="middle"
         fontSize={9}
         fill="var(--ink-mute)"
