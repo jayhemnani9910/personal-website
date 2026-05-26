@@ -34,14 +34,13 @@ export default async function OpengraphImage() {
         <div
           style={{
             display: "flex",
-            justifyContent: "space-between",
+            justifyContent: "flex-end",
             fontSize: 24,
             letterSpacing: 2,
             color: "#6e6759",
             textTransform: "uppercase",
           }}
         >
-          <span>Vol. IV · No. 26</span>
           <span>jayhemnani.me</span>
         </div>
 

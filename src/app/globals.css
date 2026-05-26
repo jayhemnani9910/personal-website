@@ -551,7 +551,6 @@ html.lenis {
   letter-spacing: 0.08em; text-transform: uppercase;
 }
 .editorial .mh-issue { color: var(--ink-mute); display: flex; flex-direction: column; gap: 4px; }
-.editorial .mh-issue-line { display: inline-block; }
 
 /* ---- buddy ---- */
 .buddy {
