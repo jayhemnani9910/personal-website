@@ -57,13 +57,13 @@ export const RESUME: Resume = {
   experience: [
     {
       name: "Elite Hotel Group",
-      location: "San Jose, CA",
+      location: "Remote",
       roles: [
         {
           title: "Data Analyst",
           employmentType: "full-time",
           period: { label: "Summer 2025", start: "2025-05" },
-          location: "San Jose, CA",
+          location: "Remote",
           tech: ["Python", "SQL", "Tableau", "Power BI", "Airflow"],
           bullets: [
             { text: "Engineered automated ETL pipelines using SQL and Python, reducing manual data preparation by 40% and improving data consistency across multi-property analytics." },
@@ -163,10 +163,8 @@ export const RESUME: Resume = {
       ],
       achievements: [
         "Rubik's Cube: 16.7 sec (WCA)",
-        "Graphic Design: 2 internships, 1 conference, 1 startup, 3 clubs"
-      ],
-      thesis: "",
-      thesisDescription: ""
+        "Graphic design work spanning two internships, a conference, a startup, and three student clubs"
+      ]
     }
   ],
   publications: [

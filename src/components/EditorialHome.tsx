@@ -13,12 +13,10 @@ import { VDOSSpectrumFigure } from "@/components/featured/VDOSSpectrumFigure";
 
 const ROLES = [
   "forward-deployed engineer",
-  "data engineer",
-  "data analyst",
-  "ML engineer",
   "agentic AI engineer",
-  "software engineer",
-  "full-stack builder",
+  "ML engineer",
+  "data engineer",
+  "full-stack engineer",
 ];
 
 function RoleRotator() {
@@ -93,11 +91,11 @@ export function EditorialHome() {
           <aside className="lede-side">
             <div className="eyebrow"><span>By the numbers</span></div>
             <ul className="stats">
-              <li><b className="tabular">50+</b><span>projects shipped</span></li>
+              <li><b className="tabular">27</b><span>projects in the index</span></li>
               <li><b className="tabular">2</b><span>IEEE publications</span></li>
               <li><b className="tabular">3</b><span>merged OSS PRs <span className="muted xs">vLLM · MCP · A2UI</span></span></li>
               <li><b className="tabular">10d</b><span>to a 5-agent research system</span></li>
-              <li><b className="tabular">18+</b><span>long-form project writeups</span></li>
+              <li><b className="tabular">26</b><span>projects with deep-dives</span></li>
             </ul>
           </aside>
         </div>
@@ -183,7 +181,7 @@ export function EditorialHome() {
               <div className="eyebrow"><span>Streaming · Warehouse</span></div>
               <h3 className="card-h">Stock Data Platform.</h3>
               <p className="deck">Kafka, eighteen Airflow DAGs, a TimescaleDB star schema, and a dashboard that wants to be Bloomberg.</p>
-              <p className="feat-body">Ten tickers, twenty-five years of history, four upstream sources, sixty-two unit tests, seven services in a single Docker compose. Built the way a production data platform ought to be built, which is to say, with relentless skepticism toward the data.</p>
+              <p className="feat-body">Ten tickers, twenty-five years of history, four upstream sources, a unit test suite, seven services in a single Docker compose. Built the way a production data platform ought to be built, which is to say, with relentless skepticism toward the data.</p>
               <div className="specs"><span>Kafka</span><span>Airflow</span><span>TimescaleDB</span><span>Docker</span><span>Dash</span></div>
               <span className="go">Read the dossier</span>
             </Link>
@@ -214,7 +212,7 @@ export function EditorialHome() {
                 <div className="eyebrow"><span>Research · Scientific ML</span></div>
                 <h3 className="card-h">Nobel Data Intelligence.</h3>
                 <p className="deck">Tri-modal deep learning for protein stability: sequence, structure, and a vibrational signal nobody else is using.</p>
-                <p className="feat-body">ProtT5 for sequence. GATv2 over structural graphs. VDOS spectra from normal-mode analysis, the novel bit. ChemBERTa for chemistry, fused through learned gated attention. One hundred-plus unit tests, eight notebooks, Colab-ready.</p>
+                <p className="feat-body">ProtT5 for sequence. GATv2 over structural graphs. VDOS spectra from normal-mode analysis, the novel bit. ChemBERTa for chemistry, fused through learned gated attention. Unit-tested across the fusion stack, eight notebooks, Colab-ready.</p>
                 <div className="specs"><span>PyTorch&nbsp;Geometric</span><span>ProDy</span><span>BioPython</span><span>RDKit</span><span>Transformers</span></div>
                 <span className="go">Read the dossier</span>
               </div>
@@ -228,7 +226,7 @@ export function EditorialHome() {
         </article>
 
         <div className="more-row">
-          <Link href="/projects" className="go" style={{ fontSize: 13 }}>See all 50+ projects in the index</Link>
+          <Link href="/projects" className="go" style={{ fontSize: 13 }}>See all 27 projects in the index</Link>
         </div>
       </section>
 
@@ -244,17 +242,17 @@ export function EditorialHome() {
           <Link className="dept" href="/projects">
             <div className="dept-num mono">A</div>
             <h3 className="dept-h">The Work.</h3>
-            <p className="deck">An index of fifty-plus projects, filterable by stack, shape, and tier.</p>
-            <p className="dept-body">Production data pipelines. Computer-vision research. Agentic AI experiments. A Rust stock platform. A Go voice-to-text tool. The full archive, with deep-dives on the ones that mattered.</p>
-            <div className="dept-foot mono xs upper"><span>50+ entries</span><span className="muted">/work</span></div>
+            <p className="deck">An index of twenty-seven projects, filterable by stack, shape, and tier.</p>
+            <p className="dept-body">Computer-vision pipelines alongside agentic AI research. A Rust stock platform. A Go voice-to-text tool. The full archive, with deep-dives on nearly every project.</p>
+            <div className="dept-foot mono xs upper"><span>27 entries</span><span className="muted">/work</span></div>
           </Link>
 
           <Link className="dept" href="/blog">
             <div className="dept-num mono">B</div>
             <h3 className="dept-h">The Writing.</h3>
             <p className="deck">Notes from the bench: project post-mortems and short essays on building in 2026.</p>
-            <p className="dept-body">Eighteen long-form project writeups with the unflattering details left in. A blog still under construction, in the honest sense of the phrase.</p>
-            <div className="dept-foot mono xs upper"><span>18 deep-dives · 1 essay</span><span className="muted">/writing</span></div>
+            <p className="dept-body">Long-form deep-dives on nearly every project, unflattering details left in. A blog still under construction, in the honest sense of the phrase.</p>
+            <div className="dept-foot mono xs upper"><span>26 deep-dives · the writing</span><span className="muted">/writing</span></div>
           </Link>
 
           <Link className="dept" href="/resume">
@@ -286,7 +284,7 @@ export function EditorialHome() {
           <div>
             <div className="eyebrow"><span className="dot" /><span>Correspondence · 04</span></div>
             <h2 className="display">Hiring? Building? Stuck?</h2>
-            <p className="deck">I am looking for forward-deployed, data-engineering, and senior software roles. Staff-shaped problems welcome.</p>
+            <p className="deck">I am looking for forward-deployed and data-engineering roles, though senior software is also on the table. Staff-shaped problems welcome.</p>
           </div>
           <div className="cta-side">
             <a className="cta-button" href="mailto:jayhemnani992000@gmail.com">

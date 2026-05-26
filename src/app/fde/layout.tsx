@@ -34,14 +34,6 @@ export const metadata: Metadata = {
     url: `${SITE_CONFIG.url}/fde`,
     siteName: SITE_CONFIG.name,
     type: "profile",
-    images: [
-      {
-        url: SITE_CONFIG.ogImage,
-        width: 1200,
-        height: 630,
-        alt: `${SITE_CONFIG.name}, Forward Deployed Engineer`,
-      },
-    ],
     locale: "en_US",
   },
   twitter: {
@@ -49,7 +41,6 @@ export const metadata: Metadata = {
     title: `${FDE_TITLE} | ${SITE_CONFIG.name}`,
     description: FDE_DESCRIPTION,
     creator: SITE_CONFIG.twitterHandle,
-    images: [SITE_CONFIG.ogImage],
   },
 };
 

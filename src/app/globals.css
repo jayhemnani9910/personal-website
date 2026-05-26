@@ -550,19 +550,41 @@ html.lenis {
   font-family: var(--ff-mono); font-size: 11px;
   letter-spacing: 0.08em; text-transform: uppercase;
 }
-.editorial .mh-issue { color: var(--ink-mute); }
-.editorial .mh-issue-rule {
-  display: inline-block; position: relative; padding-bottom: 5px;
+.editorial .mh-issue { color: var(--ink-mute); display: flex; flex-direction: column; gap: 4px; }
+.editorial .mh-issue-line { display: inline-block; }
+
+/* ---- buddy ---- */
+.buddy {
+  display: inline-flex; align-items: center; gap: 0;
+  font-family: var(--ff-mono); line-height: 1;
+  background: none; border: none; padding: 0;
+  color: inherit; cursor: pointer;
+  user-select: none; white-space: nowrap;
+  outline: none;
 }
-.editorial .mh-issue-rule::after {
-  content: ""; position: absolute; left: 0; bottom: 0;
-  width: 100%; height: 2px; background: var(--accent);
-  transform: scaleX(0); transform-origin: left center;
-  animation: mh-rule-sweep 700ms cubic-bezier(.4, 0, .15, 1) 120ms forwards;
+.buddy:focus-visible {
+  outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 2px;
 }
-@keyframes mh-rule-sweep { to { transform: scaleX(1); } }
+.buddy--mini { font-size: 12px; }
+.buddy--full { font-size: 14px; }
+.buddy-prompt { color: var(--accent); }
+.buddy-face { color: var(--ink); }
+.buddy-word {
+  color: var(--ink-mute); font-size: 0.9em;
+  margin-left: 4px; white-space: nowrap;
+}
+.editorial .mh-buddy { text-transform: none; letter-spacing: 0; }
+.editorial .colophon-buddy { text-transform: none; letter-spacing: 0; }
+@keyframes buddy-bounce {
+  0%   { transform: translateY(0); }
+  30%  { transform: translateY(-4px); }
+  60%  { transform: translateY(2px); }
+  80%  { transform: translateY(-2px); }
+  100% { transform: translateY(0); }
+}
+.buddy--bounce { animation: buddy-bounce 280ms cubic-bezier(.3,1.4,.5,1) forwards; }
 @media (prefers-reduced-motion: reduce) {
-  .editorial .mh-issue-rule::after { animation: none; transform: scaleX(1); }
+  .buddy--bounce { animation: none; }
 }
 .editorial .mh-logo {
   font-family: var(--ff-display); font-style: italic; font-weight: 500;
