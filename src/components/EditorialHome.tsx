@@ -233,52 +233,68 @@ export function EditorialHome() {
         </div>
       </section>
 
-      {/* ========== INSIDE THIS ISSUE ========== */}
+      {/* ========== CONTENTS (table of contents spread) ========== */}
       <section className="inside shell">
         <div className="section-head">
           <span className="num">§ 03</span>
-          <span className="title">Also inside this issue.</span>
-          <span className="meta">departments</span>
+          <span className="title">In this issue.</span>
+          <span className="meta">contents</span>
         </div>
 
-        <div className="dept-grid">
-          <Link className="dept" href="/projects">
-            <div className="dept-num mono">A</div>
-            <h3 className="dept-h">The Work.</h3>
-            <p className="deck">An index of twenty-seven projects, filterable by stack, shape, and tier.</p>
-            <p className="dept-body">Computer-vision pipelines alongside agentic AI research. A Rust stock platform. A Go voice-to-text tool. The full archive, with deep-dives on nearly every project.</p>
-            <div className="dept-foot mono xs upper"><span>27 entries</span><span className="muted">/work</span></div>
-          </Link>
+        <p className="toc-standfirst">Everything else on the site, indexed the way a magazine indexes itself.</p>
 
-          <Link className="dept" href="/blog">
-            <div className="dept-num mono">B</div>
-            <h3 className="dept-h">The Writing.</h3>
-            <p className="deck">Notes from the bench: project post-mortems and short essays on building in 2026.</p>
-            <p className="dept-body">Long-form deep-dives on nearly every project, unflattering details left in. A blog still under construction, in the honest sense of the phrase.</p>
-            <div className="dept-foot mono xs upper"><span>26 deep-dives · the writing</span><span className="muted">/writing</span></div>
-          </Link>
+        <ol className="toc">
+          <li>
+            <Link className="toc-row" href="/projects">
+              <span className="toc-folio">A</span>
+              <span className="toc-body">
+                <span className="toc-line">
+                  <span className="toc-title">The Work</span>
+                  <span className="toc-leader" aria-hidden="true" />
+                  <span className="toc-ref mono xs upper">
+                    <span className="toc-stat">27 entries</span>
+                    <span className="toc-go">/work&nbsp;&rarr;</span>
+                  </span>
+                </span>
+                <span className="toc-dek">Computer vision, agentic AI, a Rust stock platform, a Go voice-to-text tool. The full archive, with deep-dives on most of it.</span>
+              </span>
+            </Link>
+          </li>
 
-          <Link className="dept" href="/resume">
-            <div className="dept-num mono">C</div>
-            <h3 className="dept-h">The Particulars.</h3>
-            <p className="deck">Resume, open-source patches, publications, and a few things worth knowing.</p>
-            <p className="dept-body">Four years of experience, two IEEE papers, three merged pull requests into ecosystem-critical repositories, and a Rubik&apos;s cube personal record that will not appear on the resume but is true.</p>
-            <div className="dept-foot mono xs upper"><span>CV · OSS · Pubs</span><span className="muted">/about</span></div>
-          </Link>
-        </div>
-      </section>
+          <li>
+            <Link className="toc-row" href="/blog">
+              <span className="toc-folio">B</span>
+              <span className="toc-body">
+                <span className="toc-line">
+                  <span className="toc-title">The Writing</span>
+                  <span className="toc-leader" aria-hidden="true" />
+                  <span className="toc-ref mono xs upper">
+                    <span className="toc-stat">26 deep-dives</span>
+                    <span className="toc-go">/writing&nbsp;&rarr;</span>
+                  </span>
+                </span>
+                <span className="toc-dek">Project post-mortems and short essays on building in 2026. Unflattering details left in. Still under construction, in the honest sense of the phrase.</span>
+              </span>
+            </Link>
+          </li>
 
-      {/* ========== PULL QUOTE ========== */}
-      <section className="pull-section shell">
-        <hr className="rule" />
-        <blockquote className="pullq">
-          <p className="display italic">
-            &ldquo;The shortest distance between an idea and a production system is somebody who
-            has done it before, on time, and is willing to do it again.&rdquo;
-          </p>
-          <footer className="mono xs upper muted">the working hypothesis</footer>
-        </blockquote>
-        <hr className="rule" />
+          <li>
+            <Link className="toc-row" href="/resume">
+              <span className="toc-folio">C</span>
+              <span className="toc-body">
+                <span className="toc-line">
+                  <span className="toc-title">The Particulars</span>
+                  <span className="toc-leader" aria-hidden="true" />
+                  <span className="toc-ref mono xs upper">
+                    <span className="toc-stat">CV · OSS · Pubs</span>
+                    <span className="toc-go">/about&nbsp;&rarr;</span>
+                  </span>
+                </span>
+                <span className="toc-dek">Four years of work, two IEEE papers, three merged pull requests into ecosystem repositories, and a Rubik&apos;s cube record that will not make the resume.</span>
+              </span>
+            </Link>
+          </li>
+        </ol>
       </section>
 
       {/* ========== CONTACT CTA ========== */}
