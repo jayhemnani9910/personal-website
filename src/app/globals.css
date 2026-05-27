@@ -794,22 +794,43 @@ html[data-theme="dark"] .editorial .ph::before {
 
 /* ---- departments ---- */
 .editorial .inside { padding-top: var(--section-pad); }
-.editorial .dept-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 40px; margin-top: 12px; }
-.editorial .dept {
-  display: block; color: var(--ink); padding: 28px; border: 1px solid var(--rule);
-  background: linear-gradient(180deg, var(--paper) 0%, var(--paper-deep) 100%);
-  position: relative; transition: border-color 240ms, transform 320ms, background 320ms;
-}
-.editorial .dept:hover { border-color: var(--accent); transform: translateY(-3px); }
-.editorial .dept-num { position: absolute; top: 14px; right: 16px; font-size: 36px; color: var(--accent); font-family: var(--ff-display); line-height: 1; font-style: italic; }
-.editorial .dept-h { font-size: 36px; margin: 8px 0 12px; letter-spacing: -0.02em; }
-.editorial .dept-body { font-size: 14.5px; color: var(--ink-soft); line-height: 1.55; margin: 14px 0 24px; }
-.editorial .dept-foot { display: flex; justify-content: space-between; padding-top: 14px; border-top: 1px solid var(--rule); }
 
-/* ---- pull quote ---- */
-.editorial .pull-section { padding-top: var(--section-pad); }
-.editorial .pullq { margin: 0; padding: 56px 0; text-align: center; }
-.editorial .pullq p { font-size: clamp(28px, 4vw, 52px); line-height: 1.18; color: var(--ink); margin: 0 auto 24px; max-width: 22ch; letter-spacing: -0.015em; }
+/* ---- contents / table-of-contents spread ---- */
+.editorial .toc-standfirst {
+  font-family: var(--ff-display); font-style: italic; font-size: clamp(18px, 2.2vw, 24px);
+  color: var(--ink-soft); max-width: 46ch; margin: 4px 0 28px; line-height: 1.4;
+}
+.editorial .toc { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--rule); }
+.editorial .toc li { border-bottom: 1px solid var(--rule); }
+.editorial .toc-row {
+  display: grid; grid-template-columns: 96px 1fr; gap: 0 28px; align-items: start;
+  padding: 30px 8px; color: var(--ink);
+  transition: background 280ms var(--ease, ease), padding 280ms var(--ease, ease);
+}
+.editorial .toc-row:hover { background: var(--paper-deep); padding-left: 20px; }
+.editorial .toc-folio {
+  font-family: var(--ff-display); font-style: italic; font-size: 64px; line-height: 0.82;
+  color: var(--accent); transition: transform 280ms ease;
+}
+.editorial .toc-row:hover .toc-folio { transform: translateY(-2px); }
+.editorial .toc-body { min-width: 0; }
+.editorial .toc-line { display: flex; align-items: baseline; gap: 16px; }
+.editorial .toc-title {
+  font-family: var(--ff-display); font-size: clamp(28px, 3vw, 40px);
+  letter-spacing: -0.02em; white-space: nowrap; flex: 0 0 auto;
+}
+.editorial .toc-leader {
+  flex: 1 1 auto; align-self: flex-end; transform: translateY(-8px);
+  border-bottom: 2px dotted var(--rule); transition: border-color 280ms ease;
+}
+.editorial .toc-row:hover .toc-leader { border-color: var(--accent); }
+.editorial .toc-ref { display: flex; align-items: baseline; gap: 18px; white-space: nowrap; color: var(--ink-mute); flex: 0 0 auto; }
+.editorial .toc-go { color: var(--ink); transition: color 240ms ease; }
+.editorial .toc-row:hover .toc-go { color: var(--accent); }
+.editorial .toc-dek {
+  display: block; margin-top: 12px; font-size: 15px; color: var(--ink-soft);
+  line-height: 1.55; max-width: 64ch;
+}
 
 /* ---- cta ---- */
 .editorial .cta { padding-top: var(--section-pad); }
@@ -835,8 +856,16 @@ html[data-theme="dark"] .editorial .ph::before {
   .editorial .cover-grid, .editorial .cover-lede-grid,
   .editorial .feat-lead .cardlink, .editorial .feat-row, .editorial .feat-row.asymm,
   .editorial .feat-tail .feat-tail-grid,
-  .editorial .dept-grid, .editorial .cta-grid { grid-template-columns: 1fr; gap: 36px; }
+  .editorial .cta-grid { grid-template-columns: 1fr; gap: 36px; }
   .editorial .cover-aside, .editorial .lede-side { border-left: 0; border-top: 1px solid var(--rule); padding: 24px 0 0; }
+
+  /* contents: collapse folio inline, drop leader dots, wrap the ref under the title */
+  .editorial .toc-row { grid-template-columns: 56px 1fr; gap: 0 18px; padding: 24px 4px; }
+  .editorial .toc-row:hover { padding-left: 10px; }
+  .editorial .toc-folio { font-size: 44px; }
+  .editorial .toc-line { flex-wrap: wrap; gap: 6px 14px; }
+  .editorial .toc-leader { display: none; }
+  .editorial .toc-ref { width: 100%; justify-content: space-between; }
 }
 
 
