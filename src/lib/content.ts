@@ -7,11 +7,16 @@ export type ProjectSummary = Pick<Project, "id" | "title" | "summary" | "role" |
 
 const CONTENT_DIR = path.join(process.cwd(), "content");
 
+// Content slugs are kebab-case filenames. Reject anything else so a slug can
+// never be used to build a path outside the content dir (e.g. via "../").
+const isSafeSlug = (slug: string): boolean => /^[a-z0-9-]+$/.test(slug);
+
 // ============================================================================
 // PROJECT CONTENT
 // ============================================================================
 
 export async function getProject(slug: string): Promise<Project | null> {
+    if (!isSafeSlug(slug)) return null;
     const fullPath = path.join(CONTENT_DIR, "projects", `${slug}.mdx`);
 
     if (!fs.existsSync(fullPath)) {
@@ -79,6 +84,7 @@ export interface PostWithContent extends Post {
 }
 
 export async function getPost(slug: string): Promise<PostWithContent | null> {
+    if (!isSafeSlug(slug)) return null;
     const fullPath = path.join(CONTENT_DIR, "blog", `${slug}.mdx`);
 
     if (!fs.existsSync(fullPath)) {
@@ -96,6 +102,11 @@ export async function getPost(slug: string): Promise<PostWithContent | null> {
 
     if (!result.success) {
         console.error(`Invalid frontmatter for post ${slug}:`, result.error);
+        return null;
+    }
+
+    // Drafts are previewable in dev but not publicly reachable in production.
+    if (result.data.draft && process.env.NODE_ENV === "production") {
         return null;
     }
 
@@ -130,14 +141,4 @@ export async function getAllPosts(): Promise<Post[]> {
     return posts
         .filter((p): p is PostListItem => p !== null && !p.draft)
         .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-}
-
-export async function getFeaturedPosts(): Promise<Post[]> {
-    const posts = await getAllPosts();
-    return posts.filter((p) => p.featured).slice(0, 3);
-}
-
-export async function getPostsByCategory(category: Post["category"]): Promise<Post[]> {
-    const posts = await getAllPosts();
-    return posts.filter((p) => p.category === category);
 }
