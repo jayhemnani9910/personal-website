@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { getRedis } from "@/lib/kv";
 
 export const runtime = "nodejs";
 
@@ -50,6 +51,16 @@ interface SimPayload {
     risks: { risk: string; mitigation: string }[];
 }
 
+// Guards against a malformed model response (valid JSON, wrong shape) reaching
+// normalizeCoords and throwing an unhandled error. Only checks the fields the
+// route touches before returning.
+function isSimPayload(p: unknown): p is SimPayload {
+    if (!p || typeof p !== "object") return false;
+    const arch = (p as { architecture?: unknown }).architecture;
+    if (!arch || typeof arch !== "object") return false;
+    return Array.isArray((arch as { components?: unknown }).components);
+}
+
 function normalizeCoords(payload: SimPayload): SimPayload {
     payload.architecture.components = payload.architecture.components.map(
         (c: ArchComponent) => ({
@@ -91,6 +102,22 @@ function extractJson(raw: string): SimPayload {
     }
 }
 
+const RATE_LIMIT = 8;            // max requests
+const RATE_WINDOW_SECONDS = 60;  // per IP, per minute
+
+async function isRateLimited(ip: string): Promise<boolean> {
+    const redis = getRedis();
+    if (!redis) return false; // no store configured -> skip
+    try {
+        const key = `ratelimit:fde-sim:${ip}`;
+        const count = await redis.incr(key);
+        if (count === 1) await redis.expire(key, RATE_WINDOW_SECONDS);
+        return count > RATE_LIMIT;
+    } catch {
+        return false; // fail open on store errors
+    }
+}
+
 export async function POST(request: NextRequest) {
     // Validate input
     let brief: string;
@@ -105,6 +132,18 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ error: "bad-input" }, { status: 400 });
     }
 
+    // Best-effort per-IP rate limit (requires KV; skipped when unconfigured).
+    // Trust the platform-set client IP: x-real-ip, or the right-most (last hop)
+    // x-forwarded-for value. The left-most value is client-supplied and spoofable,
+    // so using it would let an attacker rotate fake IPs to bypass the limit.
+    const ip =
+        request.headers.get("x-real-ip")?.trim() ||
+        request.headers.get("x-forwarded-for")?.split(",").pop()?.trim() ||
+        "anon";
+    if (await isRateLimited(ip)) {
+        return NextResponse.json({ error: "rate-limited" }, { status: 429 });
+    }
+
     // Check for API key
     const apiKey = process.env.GEMINI_API_KEY;
     if (!apiKey) {
@@ -114,13 +153,14 @@ export async function POST(request: NextRequest) {
     const fullPrompt =
         SYSTEM_PROMPT + "\n\nCUSTOMER BRIEF:\n" + brief + "\n\nReturn the JSON now.";
 
-    const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
+    const geminiUrl =
+        "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent";
 
     let raw: string;
     try {
         const res = await fetch(geminiUrl, {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: { "Content-Type": "application/json", "x-goog-api-key": apiKey },
             body: JSON.stringify({
                 contents: [{ role: "user", parts: [{ text: fullPrompt }] }],
                 generationConfig: {
@@ -144,6 +184,10 @@ export async function POST(request: NextRequest) {
     try {
         payload = extractJson(raw);
     } catch {
+        return NextResponse.json({ error: "parse" }, { status: 502 });
+    }
+
+    if (!isSimPayload(payload)) {
         return NextResponse.json({ error: "parse" }, { status: 502 });
     }
 
