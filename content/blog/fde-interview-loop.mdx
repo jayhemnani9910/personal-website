@@ -1,0 +1,146 @@
+---
+title: "The Forward Deployed Engineer Interview Loop, Round by Round"
+date: "2026-05-31"
+summary: "A second look at the FDE role, this time at the hiring gauntlet: the six rounds a 2026 FDE loop usually runs, what each one is actually grading, and the two rounds that screen out strong software engineers."
+excerpt: "In the first post I said the FDE interview loop is harder than it looks and then left it closed. This one opens it, round by round, including the two rounds a pure SWE loop does not have."
+tags: ["forward-deployed-engineer", "ai", "careers", "interviews", "hiring"]
+category: "thoughts"
+featured: false
+draft: false
+---
+
+# The Forward Deployed Engineer Interview Loop, Round by Round
+
+In the first post on this role I said the FDE interview loop is harder than it looks, then left it closed. This post opens it.
+
+A caveat up front, in the same spirit as the last one: I am targeting this loop, not reporting from inside it. What follows is assembled from public interview guides (ElevenLabs, Exponent's 2026 FDE guide, Sundeep Teki's guide), first-person candidate write-ups from 2026, and the hiring language in live FDE postings. Each company orders and weights its rounds differently, and the public primary-source detail is not enough to reconstruct any single company's loop perfectly. The shape below is the part that holds across sources.
+
+---
+
+## The shape
+
+A modern FDE loop runs five to six stages. The thing that separates it from a standard software-engineering loop is not an extra coding round. It is two rounds a pure SWE loop usually does not have: a problem-decomposition round where you write no code, and a customer-simulation round where you are graded on what you say when a deployment is on fire.
+
+<svg viewBox="0 0 760 470" width="100%" xmlns="http://www.w3.org/2000/svg" aria-label="The six rounds of a 2026 FDE interview loop" role="img">
+  <rect x="15" y="12" width="730" height="62" rx="10" fill="rgba(0,102,255,0.08)" stroke="rgba(0,102,255,0.25)" stroke-width="1"/>
+  <rect x="30" y="30" width="26" height="26" rx="7" fill="rgba(0,102,255,0.9)"/>
+  <text x="43" y="48" text-anchor="middle" font-size="13" font-weight="700" fill="#fff">1</text>
+  <text x="70" y="39" font-size="13.5" font-weight="700" fill="currentColor">Recruiter screen</text>
+  <text x="70" y="57" font-size="11.5" fill="currentColor" opacity="0.7">Why FDE not SWE · ownership · travel appetite</text>
+  <text x="733" y="48" text-anchor="end" font-size="11" font-weight="600" fill="rgba(0,102,255,0.85)">30 min</text>
+
+  <rect x="15" y="86" width="668" height="62" rx="10" fill="rgba(124,58,237,0.08)" stroke="rgba(124,58,237,0.25)" stroke-width="1"/>
+  <rect x="30" y="104" width="26" height="26" rx="7" fill="rgba(124,58,237,0.9)"/>
+  <text x="43" y="122" text-anchor="middle" font-size="13" font-weight="700" fill="#fff">2</text>
+  <text x="70" y="113" font-size="13.5" font-weight="700" fill="currentColor">Technical screen</text>
+  <text x="70" y="131" font-size="11.5" fill="currentColor" opacity="0.7">Coding framed as a customer issue, not LeetCode</text>
+  <text x="671" y="122" text-anchor="end" font-size="11" font-weight="600" fill="rgba(124,58,237,0.85)">45-60 min</text>
+
+  <rect x="15" y="160" width="606" height="62" rx="10" fill="rgba(245,158,11,0.16)" stroke="rgba(245,158,11,0.5)" stroke-width="1.5"/>
+  <rect x="30" y="178" width="26" height="26" rx="7" fill="rgba(245,158,11,0.95)"/>
+  <text x="43" y="196" text-anchor="middle" font-size="13" font-weight="700" fill="#fff">3</text>
+  <text x="70" y="187" font-size="13.5" font-weight="700" fill="currentColor">Problem decomposition</text>
+  <text x="70" y="205" font-size="11.5" fill="currentColor" opacity="0.75">Vague customer goal, no code. The FDE-only round.</text>
+  <text x="635" y="184" font-size="10.5" font-weight="700" fill="rgba(245,158,11,0.95)">most strong SWEs</text>
+  <text x="635" y="198" font-size="10.5" font-weight="700" fill="rgba(245,158,11,0.95)">lose it here</text>
+
+  <rect x="15" y="234" width="544" height="62" rx="10" fill="rgba(16,185,129,0.08)" stroke="rgba(16,185,129,0.25)" stroke-width="1"/>
+  <rect x="30" y="252" width="26" height="26" rx="7" fill="rgba(16,185,129,0.9)"/>
+  <text x="43" y="270" text-anchor="middle" font-size="13" font-weight="700" fill="#fff">4</text>
+  <text x="70" y="261" font-size="13.5" font-weight="700" fill="currentColor">System / integration design</text>
+  <text x="70" y="279" font-size="11.5" fill="currentColor" opacity="0.7">RAG / agents / MCP under legacy constraints</text>
+  <text x="547" y="270" text-anchor="end" font-size="11" font-weight="600" fill="rgba(16,185,129,0.85)">60 min</text>
+
+  <rect x="15" y="308" width="482" height="62" rx="10" fill="rgba(6,182,212,0.08)" stroke="rgba(6,182,212,0.25)" stroke-width="1"/>
+  <rect x="30" y="326" width="26" height="26" rx="7" fill="rgba(6,182,212,0.9)"/>
+  <text x="43" y="344" text-anchor="middle" font-size="13" font-weight="700" fill="#fff">5</text>
+  <text x="70" y="335" font-size="13.5" font-weight="700" fill="currentColor">Take-home</text>
+  <text x="70" y="353" font-size="11.5" fill="currentColor" opacity="0.7">Thin AI system + an eval harness</text>
+  <text x="485" y="344" text-anchor="end" font-size="11" font-weight="600" fill="rgba(6,182,212,0.85)">4-5 h</text>
+
+  <rect x="15" y="382" width="420" height="62" rx="10" fill="rgba(239,68,68,0.08)" stroke="rgba(239,68,68,0.25)" stroke-width="1"/>
+  <rect x="30" y="400" width="26" height="26" rx="7" fill="rgba(239,68,68,0.9)"/>
+  <text x="43" y="418" text-anchor="middle" font-size="13" font-weight="700" fill="#fff">6</text>
+  <text x="70" y="409" font-size="13.5" font-weight="700" fill="currentColor">Client simulation</text>
+  <text x="70" y="427" font-size="11.5" fill="currentColor" opacity="0.7">Composure · ownership · exec translation</text>
+</svg>
+
+The narrowing is the point. Each round downstream of the recruiter screen drops people, and the two rounds that drop the most are the ones a candidate coming straight from a SWE pipeline has never practiced.
+
+---
+
+## Round 1: Recruiter screen
+
+Around thirty minutes. It checks motivation, whether you understand what the role is, and whether your past work reads as ownership rather than ticket-taking. The "why FDE instead of SWE" question is doing real work here. A candidate who wants FDE because the SWE market is tight, and says so without a customer-shaped reason, tends not to clear this round. The recruiter is also calibrating appetite for travel and for customer friction, because a meaningful share of FDE attrition is people who took the title without wanting the job.
+
+---
+
+## Round 2: Technical screen
+
+Forty-five to sixty minutes. Coding still happens, so the LeetCode-is-dead framing oversells it. The difference is the framing of the problem. Candidate reports describe algorithms presented as customer issues: a graph traversal arrives as tracking data lineage through a failing pipeline, or you debug a block of Python before extending it into a small design. Some loops run a code-along where you prototype a generative-AI flow in something like LangGraph. Correctness matters, but the round is also watching whether you make sane decisions quickly in a context that looks like a customer's, rather than reaching for the theoretically optimal answer that takes the whole hour.
+
+---
+
+## Round 3: Problem decomposition
+
+Sixty minutes, usually with no code written. This is the round that most clearly separates the FDE loop from a SWE loop, and it is where strong engineers most often lose leverage.
+
+The interviewer hands you a vague customer goal. Reduce 911 response times. Cut this clinic's no-show rate. Make this bank's analysts faster. There is no spec, the constraints are unstated, and you have to turn the goal into something scoped and shippable while the interviewer watches how you think. The failure mode named across every source is the same: jumping to a solution before validating the customer's actual constraints, or sketching an elegant six-month architecture when the round rewards scoping something deliverable in two weeks.
+
+The grading is about judgment. What would you ship first. What would you deliberately not build yet. What data would you ask for before committing to an approach. Where is the real problem likely to be a workflow or policy problem rather than a technical one. Engineers who design for scale and purity get passed over for engineers who scope aggressively and ship a pragmatic, functional slice. The role rewards judgment over correctness, and this round is where that preference is most visible.
+
+---
+
+## Round 4: System / integration design
+
+Sixty minutes. It looks like a normal design round until the constraints arrive. You are asked to design a RAG pipeline, an agent workflow, or an MCP integration, and then it gets bounded by the things that make enterprise deployment hard: legacy SSO, VPC limits, data-residency rules, API rate limits, observability, eval coverage, latency and cost. Google, Anthropic, Glean, Databricks, and Harvey all hire against some version of this pattern in their public postings. The signal the interviewer is looking for is whether you name those constraints yourself, before drawing a single box, the way someone who has deployed into a real customer environment would.
+
+---
+
+## Round 5: Take-home
+
+The shape has moved away from "implement an algorithm" toward "ship a thin but production-shaped AI system and explain the tradeoffs." Two concrete 2026 patterns show up repeatedly.
+
+The first is an OpenAI or Anthropic style task: you build a RAG system over a messy dataset, and the graded deliverable is the evaluation harness that shows the system resists hallucination and prompt injection. The follow-up deep-dive asks you to defend your prompting-versus-fine-tuning tradeoffs.
+
+The second is a Snorkel-style live scenario: you are handed three files, a fictional client brief, a ground-truth CSV, and a set of raw model outputs, and asked to decide what metrics matter, write the code that evaluates the model against ground truth, find the error patterns, and summarize the findings for a non-technical client. A 2026 candidate report from Northslope describes a near-identical exercise built around four clinic datasets.
+
+In both, the eval harness is the artifact that carries the most weight. Building an honest evaluation, one that can show your own system losing, is the transferable skill this round is testing.
+
+---
+
+## Round 6: Client simulation and behavioral
+
+Forty-five to sixty minutes, run under simulated pressure. The questions are unusually specific, and they are consistent enough across sources to prepare for directly:
+
+A deployed AI agent returns inconsistent results in production but worked correctly in staging. Walk me through your exact debugging protocol.
+
+A client calls during a live demonstration. Their system is returning errors on the screen in front of their executive team. What exactly do you say and do.
+
+You are three weeks into a deployment at a bank, and the agent produces outputs that are technically correct but violate internal compliance policies the client never shared with you. What happens next.
+
+Tell me about a deployment you owned that failed to deliver the expected result. An actual failure, not a disguised success.
+
+These reward composure, boundary-setting, and the ability to translate a probabilistic system to executives who do not think in probabilities. The last question is the trap: the disguised-success answer ("my biggest failure was caring too much about quality") reads as someone who has never actually owned a deployment that went wrong.
+
+---
+
+## What gets people screened out
+
+The rejection patterns are consistent across the reports, and they are specific to this loop rather than to engineering loops in general:
+
+- Strong coding but no credible customer-facing example.
+- Architecture talk with no evidence of having shipped to production.
+- AI enthusiasm with no deployment experience behind it.
+- An inability to discuss evals, adoption, reliability, or metrics in concrete terms.
+- The round-3 failure: jumping to solutions, over-engineering, optimizing for elegance over a shippable two-week increment.
+
+There is also a framing fix that the guides keep returning to. STAR answers anchored to a customer outcome beat answers anchored to a technical metric. "I cut query latency by 40 percent" becomes "I cut query latency by 40 percent, which moved the customer's daily reporting from hours to minutes and unblocked the rest of the deployment." Same work, but the second version is the one this loop is built to reward.
+
+---
+
+## Where I sit in this loop
+
+To stay honest about it, the way the first post did. The rounds I would be strongest in are the technical screen, the design round, and the take-home: RAG, agents, MCP, and eval harnesses are the things I have actually built, between the MCP SDK PR, the WebMCP work on this site, the 10-day CAG research system, and a recent validation study whose whole spine was an eval that reported my own hypothesis losing. Those are round-4 and round-5 muscles.
+
+The round I would have to work hardest at is the same gap I named last time. The client-simulation round rewards real external-deployment stories, and mine are still internal or portfolio-scale. The decomposition round sits in between: I can scope a vague problem, but I have done it for internal stakeholders, not across the table from a skeptical external customer with their own politics. So the prep that moves the needle for me is not another pass through algorithm drills. It is one real external deployment to draw round-3 and round-6 answers from, which is exactly the thing I said I was going to go build.
