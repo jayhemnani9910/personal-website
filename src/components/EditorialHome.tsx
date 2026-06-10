@@ -45,7 +45,7 @@ function RoleRotator() {
   );
 }
 
-export function EditorialHome() {
+export function EditorialHome({ projectCount, deepDiveCount, essayCount }: { projectCount: number; deepDiveCount: number; essayCount: number }) {
   return (
     <main id="main-content" className="editorial">
       <EditorialMasthead active="cover" />
@@ -92,11 +92,11 @@ export function EditorialHome() {
           <aside className="lede-side">
             <div className="eyebrow"><span>By the numbers</span></div>
             <ul className="stats">
-              <li><b className="tabular">27</b><span>projects in the index</span></li>
+              <li><b className="tabular">{projectCount}</b><span>projects in the index</span></li>
               <li><b className="tabular">2</b><span>IEEE publications</span></li>
               <li><b className="tabular">3</b><span>merged OSS PRs <span className="muted xs">vLLM · MCP · A2UI</span></span></li>
               <li><b className="tabular">10d</b><span>to a 5-agent research system</span></li>
-              <li><b className="tabular">26</b><span>projects with deep-dives</span></li>
+              <li><b className="tabular">{deepDiveCount}</b><span>projects with deep-dives</span></li>
             </ul>
           </aside>
         </div>
@@ -229,7 +229,7 @@ export function EditorialHome() {
         </div>
 
         <div className="more-row">
-          <Link href="/projects" className="go" style={{ fontSize: 13 }}>See all 27 projects in the index</Link>
+          <Link href="/projects" className="go" style={{ fontSize: 13 }}>See all {projectCount} projects in the index</Link>
         </div>
       </section>
 
@@ -252,7 +252,7 @@ export function EditorialHome() {
                   <span className="toc-title">The Work</span>
                   <span className="toc-leader" aria-hidden="true" />
                   <span className="toc-ref mono xs upper">
-                    <span className="toc-stat">27 entries</span>
+                    <span className="toc-stat">{projectCount} entries</span>
                     <span className="toc-go">/work&nbsp;&rarr;</span>
                   </span>
                 </span>
@@ -269,7 +269,7 @@ export function EditorialHome() {
                   <span className="toc-title">The Writing</span>
                   <span className="toc-leader" aria-hidden="true" />
                   <span className="toc-ref mono xs upper">
-                    <span className="toc-stat">26 deep-dives</span>
+                    <span className="toc-stat">{essayCount} {essayCount === 1 ? "essay" : "essays"} · {projectCount} writeups</span>
                     <span className="toc-go">/writing&nbsp;&rarr;</span>
                   </span>
                 </span>

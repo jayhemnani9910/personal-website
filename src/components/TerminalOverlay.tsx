@@ -266,7 +266,7 @@ System
             case "blog":
                 newHistory.push({
                     type: "output",
-                    content: "Blog posts:\n  → hello-world  (latest)\n\nVisit jayhemnani.me/blog for more.",
+                    content: "Blog posts:\n  → fde-interview-loop  (latest)\n  → forward-deployed-engineer\n\nVisit jayhemnani.me/blog for more.",
                 });
                 break;
             case "history":

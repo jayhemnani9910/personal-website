@@ -25,6 +25,82 @@ STYLE RULES:
 
 CRITICAL: Output ONLY the JSON object. No prose before or after. No markdown fences. Just the JSON.`;
 
+// Constrains Gemini's JSON output to the shape the route expects, which makes the
+// occasional unparseable response far rarer. Mirrors SimPayload loosely (kept
+// permissive on enums so the model is not over-constrained).
+const SIM_RESPONSE_SCHEMA = {
+  type: "object",
+  properties: {
+    scope: {
+      type: "array",
+      items: {
+        type: "object",
+        properties: { q: { type: "string" }, why: { type: "string" } },
+        required: ["q", "why"],
+      },
+    },
+    decomposition: {
+      type: "array",
+      items: {
+        type: "object",
+        properties: { id: { type: "string" }, title: { type: "string" }, why: { type: "string" } },
+        required: ["id", "title", "why"],
+      },
+    },
+    architecture: {
+      type: "object",
+      properties: {
+        components: {
+          type: "array",
+          items: {
+            type: "object",
+            properties: {
+              id: { type: "string" },
+              name: { type: "string" },
+              kind: { type: "string" },
+              col: { type: "integer" },
+              row: { type: "integer" },
+              sub: { type: "string" },
+            },
+            required: ["id", "name", "kind", "sub"],
+          },
+        },
+        edges: {
+          type: "array",
+          items: {
+            type: "object",
+            properties: {
+              from: { type: "string" },
+              to: { type: "string" },
+              label: { type: "string" },
+              dashed: { type: "boolean" },
+            },
+            required: ["from", "to", "label"],
+          },
+        },
+      },
+      required: ["components", "edges"],
+    },
+    sprint: {
+      type: "array",
+      items: {
+        type: "object",
+        properties: { day: { type: "string" }, title: { type: "string" }, deliv: { type: "string" } },
+        required: ["day", "title", "deliv"],
+      },
+    },
+    risks: {
+      type: "array",
+      items: {
+        type: "object",
+        properties: { risk: { type: "string" }, mitigation: { type: "string" } },
+        required: ["risk", "mitigation"],
+      },
+    },
+  },
+  required: ["scope", "decomposition", "architecture", "sprint", "risks"],
+};
+
 interface ArchComponent {
     id: string;
     name: string;
@@ -156,42 +232,42 @@ export async function POST(request: NextRequest) {
     const geminiUrl =
         "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent";
 
-    let raw: string;
-    try {
-        const res = await fetch(geminiUrl, {
-            method: "POST",
-            headers: { "Content-Type": "application/json", "x-goog-api-key": apiKey },
-            body: JSON.stringify({
-                contents: [{ role: "user", parts: [{ text: fullPrompt }] }],
-                generationConfig: {
-                    temperature: 0.7,
-                    responseMimeType: "application/json",
-                },
-            }),
-        });
-
-        if (!res.ok) {
-            return NextResponse.json({ error: "parse" }, { status: 502 });
+    // One call attempt: returns a normalized payload, or null on any failure
+    // (non-200, empty body, unparseable text, or wrong shape).
+    async function generate(): Promise<SimPayload | null> {
+        try {
+            const res = await fetch(geminiUrl, {
+                method: "POST",
+                headers: { "Content-Type": "application/json", "x-goog-api-key": apiKey! },
+                body: JSON.stringify({
+                    contents: [{ role: "user", parts: [{ text: fullPrompt }] }],
+                    generationConfig: {
+                        temperature: 0.7,
+                        responseMimeType: "application/json",
+                        responseSchema: SIM_RESPONSE_SCHEMA,
+                    },
+                }),
+            });
+            if (!res.ok) return null;
+            const data = await res.json();
+            const raw: string = data?.candidates?.[0]?.content?.parts?.[0]?.text ?? "";
+            const parsed = extractJson(raw);
+            return isSimPayload(parsed) ? normalizeCoords(parsed) : null;
+        } catch {
+            return null;
         }
-
-        const data = await res.json();
-        raw = data?.candidates?.[0]?.content?.parts?.[0]?.text ?? "";
-    } catch {
-        return NextResponse.json({ error: "parse" }, { status: 502 });
     }
 
-    let payload: SimPayload;
-    try {
-        payload = extractJson(raw);
-    } catch {
-        return NextResponse.json({ error: "parse" }, { status: 502 });
+    // Retry once: the model occasionally returns unparseable JSON; a second pass
+    // almost always succeeds before we give up with a 502.
+    let payload: SimPayload | null = null;
+    for (let attempt = 0; attempt < 2 && !payload; attempt++) {
+        payload = await generate();
     }
 
-    if (!isSimPayload(payload)) {
+    if (!payload) {
         return NextResponse.json({ error: "parse" }, { status: 502 });
     }
-
-    payload = normalizeCoords(payload);
 
     return NextResponse.json(payload);
 }

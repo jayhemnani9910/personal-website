@@ -35,6 +35,19 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     document.documentElement.setAttribute("data-theme", theme);
   }, [theme]);
 
+  // React to external theme changes: the WebMCP toggle_theme tool dispatches a
+  // synthetic storage event, and genuine cross-tab changes fire a real one.
+  // Without this listener the context desyncs and the next manual toggle is a no-op.
+  useEffect(() => {
+    const onStorage = (e: StorageEvent) => {
+      if (e.key === "theme" && (e.newValue === "dark" || e.newValue === "light")) {
+        setThemeState(e.newValue);
+      }
+    };
+    window.addEventListener("storage", onStorage);
+    return () => window.removeEventListener("storage", onStorage);
+  }, []);
+
   const setTheme = useCallback((newTheme: Theme) => {
     setThemeState(newTheme);
   }, []);

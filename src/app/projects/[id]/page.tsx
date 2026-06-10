@@ -18,14 +18,14 @@ export default async function ProjectPage({ params }: { params: Promise<{ id: st
     const isShowcase = id in SHOWCASE_PROJECTS;
 
     return (
-        <div className="editorial">
+        <main id="main-content" className="editorial">
             <EditorialMasthead active="work" />
             {isShowcase ? <ProjectShowcase project={project} /> : <ProjectDetail project={project} />}
             <div className="section-wide py-10 mb-12 flex items-center justify-end">
                 <ViewCounter slug={id} />
             </div>
             <EditorialColophon />
-        </div>
+        </main>
     );
 }
 
