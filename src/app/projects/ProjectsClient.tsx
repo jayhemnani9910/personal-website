@@ -64,7 +64,7 @@ export function ProjectsClient({ projects }: ProjectsClientProps) {
     const featuredCount = sorted.filter((p) => p.featured).length;
 
     return (
-        <main className="editorial min-h-screen" style={{ background: "var(--bg-primary)" }}>
+        <main id="main-content" className="editorial min-h-screen" style={{ background: "var(--bg-primary)" }}>
             <EditorialMasthead active="work" />
 
             {/* Work hero */}

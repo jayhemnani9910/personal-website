@@ -27,11 +27,17 @@ B.Tech in Computer Engineering | GPA: 8.7/10 | Gujarat, India`,
 **Data Analyst** @ Elite Hotel Group
 - End-to-end data pipelines and analytics
 
-**Creative Lead** @ Freelance (2022-2024)
-- Client projects and creative direction
+**Technical Consultant** @ Independent (2022-2024)
+- Data analytics and automation consulting
 
-**AI/ML Intern** @ Amnex, Cygnus SoftTech, Cactus Creatives
-- Computer vision and ML model development`,
+**AI/ML Intern** @ Amnex
+- Credit fraud detection and analytics
+
+**iOS Dev Intern** @ Cygnus SoftTech
+- Privacy app with on-device encryption
+
+**SWE Intern** @ Cactus Creatives
+- Cloud-native platform on Azure, CI/CD`,
   "secret.log": "ACCESS DENIED. ENCRYPTED. Nice try though!",
 };
 

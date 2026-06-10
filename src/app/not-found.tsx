@@ -48,7 +48,7 @@ function GlitchText({ text }: { text: string }) {
 
 export default function NotFound() {
   return (
-    <main className="editorial relative min-h-screen flex flex-col" style={{ background: "var(--bg-primary)" }}>
+    <main id="main-content" className="editorial relative min-h-screen flex flex-col" style={{ background: "var(--bg-primary)" }}>
       <EditorialMasthead />
 
       <div className="flex-1 flex items-center justify-center px-6">
