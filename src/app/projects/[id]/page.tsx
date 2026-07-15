@@ -18,7 +18,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ id: st
     const isShowcase = id in SHOWCASE_PROJECTS;
 
     return (
-        <main id="main-content" className="editorial">
+        <main id="main-content" className="editorial tr-editorial-scope">
             <EditorialMasthead active="work" />
             {isShowcase ? <ProjectShowcase project={project} /> : <ProjectDetail project={project} />}
             <div className="section-wide py-10 mb-12 flex items-center justify-end">

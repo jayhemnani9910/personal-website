@@ -1,5 +1,12 @@
 @import "tailwindcss";
 
+/* Tailwind v4 auto-detects source files across the project and text-matches raw
+   file content for class candidates. `redesign/` is local-only scaffolding
+   (notes, evidence, the concept mockup) that documents class names in prose, so
+   Tailwind was compiling those prose strings into real utilities and choking on
+   them. It contains no app code, so exclude it. */
+@source not "../../redesign";
+
 /* ═══════════════════════════════════════════════════════════════
    EDITORIAL DESIGN SYSTEM — warm paper, ink black, rust accent
    Newsreader (display) · Geist (body) · JetBrains Mono (labels)
@@ -83,8 +90,6 @@
   --bg-abyss: var(--rule-soft);
   --glass-border: var(--rule);
   --neon-cyan: var(--accent);
-  --neon-purple: #7c3aed;
-  --neon-blue: #3b82f6;
 
   color-scheme: light;
 }
@@ -121,8 +126,6 @@
   --bg-abyss: var(--paper);
   --glass-border: var(--rule);
   --neon-cyan: var(--accent);
-  --neon-purple: #a855f7;
-  --neon-blue: #818cf8;
 
   color-scheme: dark;
 }
@@ -413,6 +416,15 @@ body {
   }
 }
 
+/* Reader mode (WebMCP switch_mode → 'reader'): a calm, static reading view.
+   The motion primitives already drop out via usePrefersReducedMotion; this is
+   the CSS backstop for anything animating purely in CSS. */
+[data-reader="on"] * {
+  animation-duration: 0.01ms !important;
+  transition-duration: 0.01ms !important;
+  scroll-behavior: auto !important;
+}
+
 /* ═══════════════════════════════════════════════════════════════
    GLASS EFFECTS
    ═══════════════════════════════════════════════════════════════ */
@@ -575,15 +587,17 @@ html.lenis {
   color: var(--ink-mute); font-size: 0.9em;
   margin-left: 4px; white-space: nowrap;
 }
-/* full-body sprite art */
-.editorial .buddy--full .buddy-art {
+/* full-body sprite art (not scoped to .editorial: the redesigned home + colophon
+   use the --tr-* classes, not .editorial, so this must apply globally or the
+   {"\n"} newlines collapse and the robot renders as one garbled line) */
+.buddy--full .buddy-art {
   display: block;
   font-family: var(--ff-mono);
   white-space: pre;
   line-height: 1.15;
   font-size: 12px;
   text-align: center;
-  color: var(--ink);
+  color: var(--tr-text-mute);
 }
 /* colophon buddy placement */
 .colophon-buddy-wrap {
@@ -697,7 +711,7 @@ html[data-theme="dark"] .editorial .ph::before {
   padding: 4px 8px; font-family: var(--ff-mono); font-size: 10px; letter-spacing: 0.1em;
   text-transform: uppercase; white-space: nowrap;
 }
-.editorial .ph-tag.accent { background: var(--accent); color: #fff; }
+.editorial .ph-tag.accent { background: var(--accent); color: var(--accent-ink); }
 
 /* ---- section head ---- */
 .editorial .section-head {
@@ -705,7 +719,7 @@ html[data-theme="dark"] .editorial .ph::before {
   padding: 18px 0; border-top: 4px double var(--ink); border-bottom: 1px solid var(--ink); margin-bottom: 48px;
 }
 .editorial .section-head .num { font-family: var(--ff-mono); font-size: 11px; letter-spacing: 0.10em; color: var(--ink-mute); }
-.editorial .section-head .title { font-family: var(--ff-display); font-style: italic; font-size: 28px; letter-spacing: -0.01em; }
+.editorial .section-head .title { font-family: var(--ff-display); font-style: italic; font-size: 28px; letter-spacing: -0.01em; margin: 0; font-weight: inherit; }
 .editorial .section-head .meta { font-family: var(--ff-mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.10em; color: var(--ink-mute); }
 
 /* ---- footer / colophon ---- */
@@ -1225,7 +1239,7 @@ html[data-theme="dark"] .editorial .ph::before {
 .editorial .sw-cta { display: flex; flex-wrap: wrap; gap: 12px; }
 .editorial .sw-btn { font-family: var(--ff-mono); font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; padding: 11px 18px; border: 1px solid var(--ink); color: var(--ink); transition: all 180ms; }
 .editorial .sw-btn:hover { background: var(--ink); color: var(--paper); }
-.editorial .sw-btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+.editorial .sw-btn.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
 .editorial .sw-btn.primary:hover { filter: brightness(1.08); }
 
 .editorial .sw-hero-media { position: relative; aspect-ratio: 16 / 10; border: 1px solid var(--rule); overflow: hidden; background: var(--paper-deep); }
@@ -1324,13 +1338,33 @@ html[data-theme="dark"] .editorial .ph::before {
 
 /* ───── FDE simulation page ─────
    All selectors are prefixed `.fde ` to avoid collisions with existing classes.
-   No prototype hex colors remain: everything uses editorial CSS vars or the two
-   named semantic colors (#3f8f63 agent-green, #7c3aed data-purple).
-   Animations are guarded with prefers-reduced-motion.
+   TWO READERS: this whole block reads through the .fde-page token override above,
+   which remaps the editorial vars to --tr-*. The old agent-green/data-purple node
+   colours were replaced by neutral tiers (ember-only rule). Animations are reduced-motion-guarded.
    ─────────────────────────────── */
 
-/* Page wrapper — just ensures the right background */
+/* TWO READERS restyle (redesign-v3): the ~170 `.fde-*` rules below were written
+   against the old editorial tokens. Rather than edit every one, redefine those
+   tokens to their `--tr-*` equivalents, SCOPED to this page. CSS custom-property
+   inheritance means every `var(--accent)`/`var(--ink)`/... inside `.fde-page`
+   now resolves to the TWO READERS value, and it follows the tr light/dark theme
+   for free. This flips the whole FDE page from warm-editorial to cold cockpit
+   without touching a single `.fde-*` rule or the working simulation logic. */
 .fde-page {
+  --paper: var(--tr-bg);
+  --paper-deep: var(--tr-surface-1);
+  --ink: var(--tr-text);
+  --ink-soft: var(--tr-text);
+  --ink-mute: var(--tr-text-mute);
+  --ink-faint: var(--tr-text-faint);
+  --rule: var(--tr-hairline);
+  --rule-soft: var(--tr-hairline);
+  --accent: var(--tr-ember);
+  --accent-ink: var(--tr-on-ember);
+  --highlight: color-mix(in srgb, var(--tr-ember) 12%, transparent);
+  --ff-display: var(--font-newsreader);
+  --ff-mono: var(--font-jetbrains);
+
   background: var(--paper);
   color: var(--ink);
   min-height: 100vh;
@@ -2042,7 +2076,7 @@ html[data-theme="dark"] .editorial .ph::before {
   margin-bottom: 8px;
   font-weight: 400;
 }
-.fde .fde-risk-mit h5 { color: #3f8f63; }
+.fde .fde-risk-mit h5 { color: var(--accent); }
 .fde .fde-risk-col p {
   font-family: var(--ff-body);
   font-size: 14px;
@@ -2395,6 +2429,10 @@ html[data-theme="dark"] .editorial .ph::before {
   font-family: var(--ff-display);
   font-size: 22px;
   font-weight: 400;
+  /* The email is a long unbreakable string; without these the 1fr grid cell
+     refuses to shrink (min-width:auto) and pushes the row past a 390px viewport. */
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
 .fde .fde-contact-row[data-primary="1"] .fde-contact-val {
   font-style: italic;
@@ -2410,3 +2448,155 @@ html[data-theme="dark"] .editorial .ph::before {
   transform: translate(3px, -3px);
 }
 /* ─────────────────────────────── end FDE simulation page ───── */
+
+/* ═══════════════════════════════════════════════════════════════
+   TWO READERS — token layer (redesign v3, Phase 1)
+
+   New system, added alongside EDITORIAL above — NOT a replacement.
+   Eight pages still render on --paper/--ink/--accent/--rule and the
+   .editorial rules; those are untouched. Every token here is
+   prefixed --tr- so the two systems cannot collide while they
+   coexist. Values are measured, not eyeballed: see
+   redesign/TOKENS.md for the full WCAG contrast table and
+   src/lib/tokens.test.ts for the test that enforces it.
+
+   Dark is canonical: :root IS the dark palette, and
+   [data-theme="light"] overrides it — the inverse of the EDITORIAL
+   block above, where light is the :root default.
+   ═══════════════════════════════════════════════════════════════ */
+
+:root {
+  /* ---- color: dark (canonical) ---- */
+  --tr-bg: #0A0B0D;
+  --tr-surface-1: #101318;
+  --tr-surface-2: #171B21;
+  --tr-hairline: #232A33;
+  --tr-text: #E8ECF1;
+  --tr-text-mute: #8A94A3;
+  --tr-text-faint: #7A8492;
+  --tr-ember: #FF5C2B;
+  --tr-on-ember: #0A0B0D;
+  --tr-glow-text: 0 0 24px rgba(255, 92, 43, .35);
+  --tr-glow-box: 0 0 32px rgba(255, 92, 43, .25);
+
+  /* ---- type scale (fluid, theme-independent) ---- */
+  --tr-t-display: clamp(2.75rem, 7vw, 6.5rem);
+  --tr-t-h2: clamp(1.75rem, 3.5vw, 3rem);
+  --tr-t-h3: clamp(1.25rem, 2vw, 1.75rem);
+  --tr-t-body: clamp(1rem, 1.05vw, 1.125rem);
+  --tr-t-mono: .75rem;
+  --tr-t-mono-sm: .6875rem;
+
+  /* ---- spacing: 4px-based ramp, theme-independent ---- */
+  --tr-s-1: 0.25rem;   /* 4px */
+  --tr-s-2: 0.5rem;    /* 8px */
+  --tr-s-3: 0.75rem;   /* 12px */
+  --tr-s-4: 1rem;      /* 16px */
+  --tr-s-5: 1.5rem;    /* 24px */
+  --tr-s-6: 2rem;      /* 32px */
+  --tr-s-8: 3rem;      /* 48px */
+  --tr-s-10: 4rem;     /* 64px */
+  --tr-s-12: 6rem;     /* 96px */
+  --tr-s-16: 8rem;     /* 128px */
+
+  /* ---- radius: hard-edged concept, no large radii ---- */
+  --tr-r-none: 0;
+  --tr-r-sm: 2px;
+  --tr-r-md: 4px;
+
+  /* ---- z-index ladder (ascending) ---- */
+  --tr-z-base: 0;          /* normal document flow */
+  --tr-z-sticky: 10;       /* in-section sticky elements */
+  --tr-z-masthead: 50;     /* site header, above page content */
+  --tr-z-overlay: 80;      /* modals, drawers, scrims */
+  --tr-z-cursor: 90;       /* custom reticle cursor */
+  --tr-z-preloader: 100;   /* cold-open preloader scrim, above all */
+
+  /* ---- motion: one signature curve everywhere ---- */
+  --tr-ease: cubic-bezier(0.16, 1, 0.3, 1);   /* expo-out: fast departure, long settle */
+  --tr-dur-fast: 150ms;
+  --tr-dur-base: 300ms;
+  --tr-dur-slow: 600ms;    /* entrances must FINISH by here */
+  --tr-stagger: 40ms;
+
+  /* Elevation rule (this concept's dark-UI physics): on a near-black
+     background a drop shadow is invisible, so elevation is a LIGHTER
+     SURFACE plus a 1px hairline on the TOP edge only, as if light is
+     catching a physical seam (border-top: 1px solid var(--tr-hairline)).
+     Never box-shadow for elevation. The only shadow in this system is
+     the ember glow (--tr-glow-text / --tr-glow-box). */
+}
+
+:root[data-theme="light"] {
+  --tr-bg: #F4F5F7;
+  --tr-surface-1: #FFFFFF;
+  --tr-surface-2: #EBEDF0;
+  --tr-hairline: #D3D8DE;
+  --tr-text: #14171C;
+  --tr-text-mute: #4A5A6B;
+  --tr-text-faint: #5C6673;
+  --tr-ember: #B63C1A;
+  --tr-on-ember: #FFFFFF;
+  /* light = the instrument printed in daylight: glow becomes flat fill */
+  --tr-glow-text: none;
+  --tr-glow-box: none;
+}
+
+/* No-JS fallback: layout.tsx's inline script sets data-theme before
+   paint whenever JS runs, so this block only fires for a visitor with
+   JS disabled AND a light system preference. */
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme]) {
+    --tr-bg: #F4F5F7;
+    --tr-surface-1: #FFFFFF;
+    --tr-surface-2: #EBEDF0;
+    --tr-hairline: #D3D8DE;
+    --tr-text: #14171C;
+    --tr-text-mute: #4A5A6B;
+    --tr-text-faint: #5C6673;
+    --tr-ember: #B63C1A;
+    --tr-on-ember: #FFFFFF;
+    --tr-glow-text: none;
+    --tr-glow-box: none;
+  }
+}
+
+/* TWO READERS restyle for the project-detail page (redesign-v3). Same trick as
+   .fde-page: the dossier (ProjectDetail) and showcase (ProjectShowcase) still
+   render through ~128 `.editorial .dossier/.dd-/.sw-/.ds-` rules using editorial
+   tokens. Redefining those tokens to `--tr-*` on the page wrapper flips the whole
+   surface to cold TWO READERS via inheritance, following the tr light/dark theme,
+   without rewriting those rules. Every OTHER page is already migrated off
+   `.editorial`, so this override only affects /projects/[id]. */
+.tr-editorial-scope {
+  --paper: var(--tr-bg);
+  --paper-deep: var(--tr-surface-1);
+  --ink: var(--tr-text);
+  --ink-soft: var(--tr-text);
+  --ink-mute: var(--tr-text-mute);
+  --ink-faint: var(--tr-text-faint);
+  --rule: var(--tr-hairline);
+  --rule-soft: var(--tr-hairline);
+  --accent: var(--tr-ember);
+  --accent-ink: var(--tr-on-ember);
+  --highlight: color-mix(in srgb, var(--tr-ember) 12%, transparent);
+  --ff-display: var(--font-newsreader);
+  --ff-mono: var(--font-jetbrains);
+  background: var(--tr-bg);
+  color: var(--tr-text);
+}
+
+/* Expose color tokens to Tailwind utilities (bg-tr-bg, text-tr-ember, …).
+   "inline" so utilities stay theme-reactive instead of freezing at the
+   :root (dark) default — see Tailwind v4 @theme docs. */
+@theme inline {
+  --color-tr-bg: var(--tr-bg);
+  --color-tr-surface-1: var(--tr-surface-1);
+  --color-tr-surface-2: var(--tr-surface-2);
+  --color-tr-hairline: var(--tr-hairline);
+  --color-tr-text: var(--tr-text);
+  --color-tr-text-mute: var(--tr-text-mute);
+  --color-tr-text-faint: var(--tr-text-faint);
+  --color-tr-ember: var(--tr-ember);
+  --color-tr-on-ember: var(--tr-on-ember);
+}

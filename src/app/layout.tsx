@@ -16,6 +16,8 @@ const newsreader = Newsreader({
   variable: "--font-newsreader",
 });
 
+// TODO(phase-3): drop Geist. Budget is 2 families (Newsreader + JetBrains Mono).
+// Remove once the last .editorial page is migrated.
 const geist = Geist({
   subsets: ["latin"],
   weight: ["300", "400", "500", "600"],

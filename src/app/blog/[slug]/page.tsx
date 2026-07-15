@@ -1,3 +1,4 @@
+import type { CSSProperties, JSX } from "react";
 import { getPost, getAllPosts } from "@/lib/content";
 import { EditorialMasthead } from "@/components/EditorialMasthead";
 import { EditorialColophon } from "@/components/EditorialColophon";
@@ -6,179 +7,159 @@ import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import type { Metadata } from "next";
 import { MDXRemote } from "next-mdx-remote/rsc";
-import type { JSX } from "react";
 
+const mono: CSSProperties = {
+  fontFamily: "var(--font-jetbrains)",
+  letterSpacing: ".08em",
+};
+
+// Machine-channel data (dates, categories, reading time): no forced uppercase
+// or tracking, so natural casing survives. Matches EditorialHome.tsx's
+// `.mono-data` convention.
+const monoData: CSSProperties = {
+  fontFamily: "var(--font-jetbrains)",
+};
+
+const serif: CSSProperties = {
+  fontFamily: "var(--font-newsreader)",
+};
+
+const fmtDate = (d: string) =>
+  new Date(d).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" });
+
+const backLinkClass =
+  "group inline-flex items-center gap-[var(--tr-s-2)] text-[length:var(--tr-t-mono)] uppercase text-tr-text-mute no-underline transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] hover:text-tr-ember";
+
+// Vertical hairline divider between meta chips, matching the stat row on
+// EditorialHome.tsx's hero (PROJECTS · OSS PRS · PAPERS).
+function Divider() {
+  return <span aria-hidden="true" className="mx-[.75em] inline-block h-[.9em] w-px bg-tr-hairline" />;
+}
+
+// Both live posts open their MDX body with a `# Title` line that repeats the
+// frontmatter title verbatim (a pre-existing content quirk, not introduced
+// here — content/blog/*.mdx is out of scope for this pass). Sizing this at
+// h2 scale, one step below the page's own <h1>, keeps that duplication from
+// reading as two stacked hero headlines.
 const mdxComponents = {
   h1: (props: JSX.IntrinsicElements["h1"]) => (
     <h1
       {...props}
-      style={{
-        color: "var(--text-primary)",
-        fontSize: "2rem",
-        fontWeight: 700,
-        lineHeight: 1.25,
-        marginTop: "2.5rem",
-        marginBottom: "1rem",
-      }}
+      className="mt-[var(--tr-s-10)] mb-[var(--tr-s-4)] text-[length:var(--tr-t-h2)] font-light leading-[1.1] text-tr-text"
+      style={serif}
     />
   ),
   h2: (props: JSX.IntrinsicElements["h2"]) => (
     <h2
       {...props}
-      style={{
-        color: "var(--text-primary)",
-        fontSize: "1.5rem",
-        fontWeight: 600,
-        lineHeight: 1.3,
-        marginTop: "2.5rem",
-        marginBottom: "0.75rem",
-        paddingBottom: "0.4rem",
-        borderBottom: "1px solid var(--border)",
-      }}
+      className="mt-[var(--tr-s-8)] mb-[var(--tr-s-3)] text-[length:var(--tr-t-h3)] font-light leading-[1.2] text-tr-text"
+      style={serif}
     />
   ),
   h3: (props: JSX.IntrinsicElements["h3"]) => (
     <h3
       {...props}
-      style={{
-        color: "var(--text-primary)",
-        fontSize: "1.2rem",
-        fontWeight: 600,
-        lineHeight: 1.4,
-        marginTop: "2rem",
-        marginBottom: "0.5rem",
-      }}
+      className="mt-[var(--tr-s-6)] mb-[var(--tr-s-2)] text-[length:var(--tr-t-body)] font-medium text-tr-text"
+      style={serif}
     />
   ),
   p: (props: JSX.IntrinsicElements["p"]) => (
     <p
       {...props}
-      style={{
-        color: "var(--text-secondary)",
-        fontSize: "1.0625rem",
-        lineHeight: 1.75,
-        marginBottom: "1.25rem",
-      }}
+      className="mb-[var(--tr-s-5)] text-[length:var(--tr-t-body)] leading-[1.7] text-tr-text"
+      style={serif}
     />
   ),
   ul: (props: JSX.IntrinsicElements["ul"]) => (
     <ul
       {...props}
-      style={{
-        color: "var(--text-secondary)",
-        paddingLeft: "1.5rem",
-        marginBottom: "1.25rem",
-        listStyleType: "disc",
-      }}
+      className="mb-[var(--tr-s-5)] list-disc space-y-[var(--tr-s-2)] pl-[var(--tr-s-6)] text-[length:var(--tr-t-body)] text-tr-text"
+      style={serif}
     />
   ),
   ol: (props: JSX.IntrinsicElements["ol"]) => (
     <ol
       {...props}
-      style={{
-        color: "var(--text-secondary)",
-        paddingLeft: "1.5rem",
-        marginBottom: "1.25rem",
-        listStyleType: "decimal",
-      }}
+      className="mb-[var(--tr-s-5)] list-decimal space-y-[var(--tr-s-2)] pl-[var(--tr-s-6)] text-[length:var(--tr-t-body)] text-tr-text"
+      style={serif}
     />
   ),
-  li: (props: JSX.IntrinsicElements["li"]) => (
-    <li
-      {...props}
-      style={{
-        color: "var(--text-secondary)",
-        fontSize: "1.0625rem",
-        lineHeight: 1.75,
-        marginBottom: "0.35rem",
-      }}
-    />
-  ),
+  li: (props: JSX.IntrinsicElements["li"]) => <li {...props} className="leading-[1.7]" />,
   a: (props: JSX.IntrinsicElements["a"]) => (
     <a
       {...props}
-      style={{
-        color: "var(--accent)",
-        textDecoration: "underline",
-        textUnderlineOffset: "3px",
-      }}
+      className="text-tr-text underline decoration-transparent underline-offset-[3px] transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] hover:text-tr-ember hover:decoration-tr-ember"
     />
   ),
-  strong: (props: JSX.IntrinsicElements["strong"]) => (
-    <strong
-      {...props}
-      style={{ color: "var(--text-primary)", fontWeight: 600 }}
-    />
-  ),
-  em: (props: JSX.IntrinsicElements["em"]) => (
-    <em {...props} style={{ color: "var(--text-secondary)", fontStyle: "italic" }} />
-  ),
-  code: (props: JSX.IntrinsicElements["code"]) => (
-    <code
-      {...props}
-      style={{
-        fontFamily: "var(--font-mono)",
-        fontSize: "0.875em",
-        background: "var(--bg-secondary)",
-        color: "var(--accent)",
-        padding: "0.15em 0.4em",
-        borderRadius: "4px",
-        border: "1px solid var(--border)",
-      }}
-    />
-  ),
+  strong: (props: JSX.IntrinsicElements["strong"]) => <strong {...props} className="font-semibold text-tr-text" />,
+  em: (props: JSX.IntrinsicElements["em"]) => <em {...props} className="italic text-tr-text" />,
+  code: (props: JSX.IntrinsicElements["code"]) => {
+    // Fenced blocks: MDX puts a `language-xxx` class on the <code> nested
+    // inside <pre>. Leave that one bare — `pre` below already owns the
+    // block's surface, border and mono styling, so decorating both would
+    // double up (a chip-looking <code> inside its own bordered box).
+    const isFenced = typeof props.className === "string" && props.className.includes("language-");
+    if (isFenced) {
+      return <code {...props} />;
+    }
+    return (
+      <code
+        {...props}
+        className={`rounded-[var(--tr-r-sm)] bg-tr-surface-2 px-[.4em] py-[.15em] text-[length:var(--tr-t-mono-sm)] text-tr-text ${props.className ?? ""}`}
+        style={{ fontFamily: "var(--font-jetbrains)" }}
+      />
+    );
+  },
   pre: (props: JSX.IntrinsicElements["pre"]) => (
     <pre
       {...props}
-      style={{
-        fontFamily: "var(--font-mono)",
-        fontSize: "0.875rem",
-        background: "var(--bg-secondary)",
-        border: "1px solid var(--border)",
-        borderRadius: "var(--radius-md)",
-        padding: "1.25rem 1.5rem",
-        overflowX: "auto",
-        marginBottom: "1.5rem",
-        lineHeight: 1.65,
-      }}
+      className="mb-[var(--tr-s-5)] overflow-x-auto border border-tr-hairline bg-tr-surface-1 p-[var(--tr-s-5)] text-[length:var(--tr-t-mono)] leading-[1.6] text-tr-text-mute"
+      style={{ fontFamily: "var(--font-jetbrains)" }}
     />
   ),
   blockquote: (props: JSX.IntrinsicElements["blockquote"]) => (
     <blockquote
       {...props}
-      style={{
-        borderLeft: "3px solid var(--border-strong)",
-        paddingLeft: "1rem",
-        marginLeft: 0,
-        marginBottom: "1.25rem",
-        color: "var(--text-muted)",
-        fontStyle: "italic",
-      }}
+      className="mb-[var(--tr-s-5)] border-l border-tr-hairline pl-[var(--tr-s-5)] text-[length:var(--tr-t-body)] leading-[1.7] text-tr-text-mute"
+      style={serif}
     />
   ),
   hr: (props: JSX.IntrinsicElements["hr"]) => (
-    <hr
-      {...props}
-      style={{
-        border: "none",
-        borderTop: "1px solid var(--border)",
-        marginTop: "2rem",
-        marginBottom: "2rem",
-      }}
-    />
+    <hr {...props} className="my-[var(--tr-s-8)] border-0 border-t border-tr-hairline" />
   ),
   img: (props: JSX.IntrinsicElements["img"]) => (
     // eslint-disable-next-line @next/next/no-img-element
     <img
       {...props}
       alt={props.alt ?? ""}
-      style={{
-        width: "100%",
-        borderRadius: "var(--radius-md)",
-        marginTop: "1rem",
-        marginBottom: "1rem",
-      }}
+      className="my-[var(--tr-s-5)] max-w-full border border-tr-hairline rounded-[var(--tr-r-sm)]"
     />
+  ),
+  table: (props: JSX.IntrinsicElements["table"]) => (
+    // overflow-x-auto wrapper + a min-width floor on the table so a wide
+    // table scrolls internally instead of pushing the page past 390px. The
+    // wrapper is a plain block div (no flex/grid ancestor anywhere up to
+    // <body> on this page), so it does not stretch to fit the oversized
+    // child the way a flex/grid item would — it stays at the prose column's
+    // width and lets the table scroll inside it.
+    <div className="mb-[var(--tr-s-5)] overflow-x-auto">
+      <table
+        {...props}
+        className="w-full min-w-[32rem] border-collapse text-[length:var(--tr-t-body)] text-tr-text"
+        style={serif}
+      />
+    </div>
+  ),
+  thead: (props: JSX.IntrinsicElements["thead"]) => <thead {...props} className="border-b border-tr-hairline" />,
+  th: (props: JSX.IntrinsicElements["th"]) => (
+    <th
+      {...props}
+      className="px-[var(--tr-s-3)] py-[var(--tr-s-2)] text-left text-[length:var(--tr-t-mono-sm)] uppercase text-tr-text-mute"
+      style={mono}
+    />
+  ),
+  td: (props: JSX.IntrinsicElements["td"]) => (
+    <td {...props} className="border-b border-tr-hairline px-[var(--tr-s-3)] py-[var(--tr-s-2)]" />
   ),
 };
 
@@ -221,54 +202,67 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
     notFound();
   }
 
+  const categoryLabel = post.category.charAt(0).toUpperCase() + post.category.slice(1);
+
   return (
-    <main id="main-content" className="editorial min-h-screen" style={{ background: 'var(--bg-primary)' }}>
+    <main id="main-content" className="bg-tr-bg text-tr-text">
       <EditorialMasthead active="writing" />
 
-      <article className="post-wrap">
-        {/* Back Link */}
-        <Link href="/blog" className="post-back">
-          <ArrowLeft className="w-3 h-3" />
-          Back to writing
-        </Link>
+      <article className="px-[clamp(1.25rem,5vw,2rem)] pt-[6.5rem] pb-[var(--tr-s-12)]">
+        <div className="mx-auto max-w-[68ch]">
+          <Link href="/blog" data-cursor="OPEN" className={`${backLinkClass} mb-[var(--tr-s-8)]`}>
+            <ArrowLeft className="h-3 w-3" />
+            Back to writing
+          </Link>
 
-        {/* Header */}
-        <header className="post-head">
-          <div className="post-meta">
-            <span className="accent-text">Essay · {post.category ?? "Thoughts"}</span>
-            <time dateTime={post.date}>
-              {new Date(post.date).toLocaleDateString("en-US", {
-                year: "numeric",
-                month: "short",
-                day: "numeric",
-              })}
-            </time>
-            {post.readingTime && <span>{post.readingTime} min read</span>}
+          <header className="mb-[var(--tr-s-8)] border-b border-tr-hairline pb-[var(--tr-s-6)]">
+            <div
+              className="mb-[var(--tr-s-3)] flex flex-wrap items-center text-[length:var(--tr-t-mono-sm)] text-tr-text-mute"
+              style={monoData}
+            >
+              <span>Essay</span>
+              <Divider />
+              <span>{categoryLabel}</span>
+              <Divider />
+              <time dateTime={post.date}>{fmtDate(post.date)}</time>
+              {post.readingTime && (
+                <>
+                  <Divider />
+                  <span>{post.readingTime} min read</span>
+                </>
+              )}
+            </div>
+
+            <h1
+              className="mb-[var(--tr-s-4)] text-[length:var(--tr-t-h2)] font-light leading-[1.1] text-tr-text"
+              style={serif}
+            >
+              {post.title}
+            </h1>
+
+            {post.tags.length > 0 && (
+              <div
+                className="flex flex-wrap gap-x-[.75em] gap-y-[.3em] text-[length:var(--tr-t-mono-sm)] text-tr-text-faint"
+                style={monoData}
+              >
+                {post.tags.map((tag) => (
+                  <span key={tag}>{tag}</span>
+                ))}
+              </div>
+            )}
+          </header>
+
+          <div>
+            <MDXRemote source={post.content} components={mdxComponents} />
           </div>
 
-          <h1 className="post-title">{post.title}</h1>
-
-          {post.tags.length > 0 && (
-            <span className="essay-tags">
-              {post.tags.map((tag) => (
-                <span key={tag}>{tag}</span>
-              ))}
-            </span>
-          )}
-        </header>
-
-        {/* Content */}
-        <div className="post-body">
-          <MDXRemote source={post.content} components={mdxComponents} />
+          <footer className="mt-[var(--tr-s-10)] border-t border-tr-hairline pt-[var(--tr-s-6)]">
+            <Link href="/blog" data-cursor="OPEN" className={backLinkClass}>
+              <ArrowLeft className="h-3 w-3" />
+              More writing
+            </Link>
+          </footer>
         </div>
-
-        {/* Post Footer */}
-        <footer className="post-foot">
-          <Link href="/blog" className="post-back">
-            <ArrowLeft className="w-3 h-3" />
-            More writing
-          </Link>
-        </footer>
       </article>
 
       <EditorialColophon />

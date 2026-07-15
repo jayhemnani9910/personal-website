@@ -149,7 +149,7 @@ export const SHOWCASE_PROJECTS: Record<string, ShowcaseConfig> = {
         { name: "get_contact", kind: "read", description: "Contact info and social links." },
         { name: "list_experiments", kind: "read", description: "What Jay is currently building, exploring, or watching in the lab." },
         { name: "toggle_theme", kind: "write", description: "Switch the site between light and dark theme." },
-        { name: "switch_mode", kind: "write", description: "Switch presentation mode: portfolio, brand, product, or blog." },
+        { name: "switch_mode", kind: "write", description: "Toggle reader mode: a calm, motion-free reading view, or back to the full site." },
       ],
       sample: {
         tool: "search_projects",

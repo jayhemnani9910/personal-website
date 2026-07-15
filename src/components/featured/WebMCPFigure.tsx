@@ -161,7 +161,7 @@ export function WebMCPFigure({ className }: { className?: string }) {
       </text>
 
       {/* MCP → tool connector lines */}
-      {tools.map((tool, i) => {
+      {tools.map((tool) => {
         const toolCY = tool.y + toolH / 2;
         const isAccent = tool.accent;
         return (

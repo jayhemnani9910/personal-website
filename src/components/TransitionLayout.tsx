@@ -1,56 +1,40 @@
 "use client";
 
-import { motion, AnimatePresence } from "framer-motion";
+import { m, AnimatePresence } from "framer-motion";
 import { usePathname } from "next/navigation";
 import { ReactNode } from "react";
+import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
+import { EASE, DUR } from "@/lib/motion-tokens";
 
 interface TransitionLayoutProps {
   children: ReactNode;
 }
 
+// framer-motion's `ease` wants an exact 4-tuple, not the `number[]` a spread
+// of EASE widens to, so re-tuple it here off the same token values.
+const CUBIC_EASE: [number, number, number, number] = [EASE[0], EASE[1], EASE[2], EASE[3]];
+
 const pageVariants = {
-  initial: {
-    opacity: 0,
-    scale: 0.97,
-    y: 16,
-    filter: "blur(4px)",
-  },
-  enter: {
-    opacity: 1,
-    scale: 1,
-    y: 0,
-    filter: "blur(0px)",
-    transition: {
-      duration: 0.5,
-      ease: [0.25, 0.46, 0.45, 0.94] as const,
-    },
-  },
-  exit: {
-    opacity: 0,
-    scale: 0.97,
-    y: -12,
-    filter: "blur(4px)",
-    transition: {
-      duration: 0.3,
-      ease: [0.25, 0.46, 0.45, 0.94] as const,
-    },
-  },
+  initial: { opacity: 0, y: 12 },
+  enter: { opacity: 1, y: 0, transition: { duration: DUR.slow, ease: CUBIC_EASE } },
+  exit: { opacity: 0, y: -8, transition: { duration: DUR.base, ease: CUBIC_EASE } },
 };
 
 export function TransitionLayout({ children }: TransitionLayoutProps) {
   const pathname = usePathname();
+  const prefersReducedMotion = usePrefersReducedMotion();
+
+  // Bypassed entirely under reduced motion: no wrapper, no AnimatePresence,
+  // nothing to opt out of.
+  if (prefersReducedMotion) {
+    return <>{children}</>;
+  }
 
   return (
     <AnimatePresence mode="popLayout" initial={false}>
-      <motion.div
-        key={pathname}
-        variants={pageVariants}
-        initial="initial"
-        animate="enter"
-        exit="exit"
-      >
+      <m.div key={pathname} variants={pageVariants} initial="initial" animate="enter" exit="exit">
         {children}
-      </motion.div>
+      </m.div>
     </AnimatePresence>
   );
 }

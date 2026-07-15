@@ -354,7 +354,7 @@ export function ProjectDetail({ project }: { project: Project }) {
         <section className="ds-section" key={s.title}>
           <div className="section-head">
             <span className="num">§ {pad(i + 1)}</span>
-            <span className="title">{s.title}</span>
+            <h2 className="title">{s.title}</h2>
             {s.meta && <span className="meta">{s.meta}</span>}
           </div>
           {s.node}

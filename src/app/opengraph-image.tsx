@@ -15,7 +15,14 @@ async function loadGoogleFont(font: string, weight: number, text: string) {
 
 export default async function OpengraphImage() {
   const title = "Jay Hemnani.";
-  const newsreader = await loadGoogleFont("Newsreader", 600, title);
+  const url = "jayhemnani.me";
+  const role = "Forward Deployed Engineer · Data & AI";
+  const tagline = "Agentic systems, shipped into production.";
+
+  const [newsreader, mono] = await Promise.all([
+    loadGoogleFont("Newsreader", 600, title),
+    loadGoogleFont("JetBrains Mono", 500, "Portfolio" + url + role + tagline),
+  ]);
 
   return new ImageResponse(
     (
@@ -26,22 +33,24 @@ export default async function OpengraphImage() {
           display: "flex",
           flexDirection: "column",
           justifyContent: "space-between",
-          background: "#faf7f0",
-          color: "#1a1814",
+          background: "#0A0B0D",
+          color: "#E8ECF1",
           padding: "70px 80px",
+          fontFamily: "JetBrains Mono",
         }}
       >
         <div
           style={{
             display: "flex",
-            justifyContent: "flex-end",
+            justifyContent: "space-between",
             fontSize: 24,
             letterSpacing: 2,
-            color: "#6e6759",
+            color: "#7A8492",
             textTransform: "uppercase",
           }}
         >
-          <span>jayhemnani.me</span>
+          <span>Portfolio</span>
+          <span>{url}</span>
         </div>
 
         <div style={{ display: "flex", flexDirection: "column" }}>
@@ -52,27 +61,30 @@ export default async function OpengraphImage() {
               lineHeight: 1,
               letterSpacing: -5,
               fontFamily: "Newsreader",
+              color: "#E8ECF1",
             }}
           >
-            <span>Jay&nbsp;</span>
-            <span style={{ color: "#b5471f" }}>Hemnani.</span>
+            <span>{title}</span>
           </div>
-          <div style={{ display: "flex", fontSize: 42, marginTop: 28, color: "#2c2924" }}>
-            Forward Deployed Engineer · Data &amp; AI
+          <div style={{ display: "flex", fontSize: 38, marginTop: 30, color: "#8A94A3" }}>
+            {role}
           </div>
         </div>
 
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-          <div style={{ display: "flex", fontSize: 26, color: "#6e6759" }}>
-            Agentic systems, shipped into production.
+          <div style={{ display: "flex", fontSize: 26, color: "#7A8492" }}>
+            {tagline}
           </div>
-          <div style={{ display: "flex", width: 120, height: 8, background: "#b5471f" }} />
+          <div style={{ display: "flex", width: 120, height: 8, background: "#FF5C2B" }} />
         </div>
       </div>
     ),
     {
       ...size,
-      fonts: [{ name: "Newsreader", data: newsreader, style: "normal", weight: 600 }],
+      fonts: [
+        { name: "Newsreader", data: newsreader, style: "normal", weight: 600 },
+        { name: "JetBrains Mono", data: mono, style: "normal", weight: 500 },
+      ],
     }
   );
 }

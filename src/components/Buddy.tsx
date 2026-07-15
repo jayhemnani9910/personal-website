@@ -2,22 +2,14 @@
 
 import { useEffect, useRef, useState, useCallback } from "react";
 import { useTheme } from "@/context/ThemeContext";
+import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
 
 // ---- expression glyph map ----
 type Expression = "rest" | "blink" | "left" | "right" | "up" | "down" | "surprised" | "happy";
 
-const GLYPHS: Record<Expression, string> = {
-  rest:      "[o o]",
-  blink:     "[- -]",
-  left:      "[< <]",
-  right:     "[> >]",
-  up:        "[' ']",
-  down:      "[. .]",
-  surprised: "[O O]",
-  happy:     "[^ ^]",
-};
-
-// Two individual eye chars per expression (for the full-body sprite)
+// Two individual eye chars per expression. Shared by both variants, and
+// kept separate from the surrounding brackets/frame so the eyes can be
+// colored independently (the one "alive" signal Buddy is allowed to carry).
 const EYE_CHARS: Record<Expression, [string, string]> = {
   rest:      ["o", "o"],
   blink:     ["-", "-"],
@@ -72,12 +64,8 @@ interface BuddyProps {
 export function Buddy({ variant = "mini", className }: BuddyProps) {
   const { theme } = useTheme();
 
-  // ---- reduced motion check (done once, stable) ----
-  const reducedMotion = useRef(
-    typeof window !== "undefined"
-      ? window.matchMedia("(prefers-reduced-motion: reduce)").matches
-      : false
-  );
+  // ---- reduced motion preference (SSR-safe, reacts to live changes) ----
+  const prefersReducedMotion = usePrefersReducedMotion();
 
   // ---- state ----
   const [expression, setExpression] = useState<Expression>("rest");
@@ -107,7 +95,7 @@ export function Buddy({ variant = "mini", className }: BuddyProps) {
   const themeInteractionRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // buddy element ref for bounding rect
-  const buddyRef = useRef<HTMLButtonElement>(null);
+  const buddyRef = useRef<HTMLDivElement>(null);
 
   // idle word timer refs
   const idleWordShowTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -134,7 +122,7 @@ export function Buddy({ variant = "mini", className }: BuddyProps) {
 
   // ---- theme reaction ----
   useEffect(() => {
-    if (reducedMotion.current) return;
+    if (prefersReducedMotion) return;
     if (prevThemeRef.current === null) {
       prevThemeRef.current = theme;
       return;
@@ -158,11 +146,11 @@ export function Buddy({ variant = "mini", className }: BuddyProps) {
         }, 900);
       }, 250);
     }, 0);
-  }, [theme, clearThemeTimers]);
+  }, [theme, clearThemeTimers, prefersReducedMotion]);
 
   // ---- cursor tracking ----
   useEffect(() => {
-    if (reducedMotion.current) return;
+    if (prefersReducedMotion) return;
 
     const onMouseMove = (e: MouseEvent) => {
       lastMouseEventRef.current = { x: e.clientX, y: e.clientY };
@@ -193,11 +181,11 @@ export function Buddy({ variant = "mini", className }: BuddyProps) {
 
     window.addEventListener("mousemove", onMouseMove, { passive: true });
     return () => window.removeEventListener("mousemove", onMouseMove);
-  }, [setResting]);
+  }, [setResting, prefersReducedMotion]);
 
   // ---- scroll reaction ----
   useEffect(() => {
-    if (reducedMotion.current) return;
+    if (prefersReducedMotion) return;
 
     lastScrollYRef.current = typeof window !== "undefined" ? window.scrollY : 0;
 
@@ -227,11 +215,11 @@ export function Buddy({ variant = "mini", className }: BuddyProps) {
       window.removeEventListener("scroll", onScroll);
       if (scrollTimerRef.current) clearTimeout(scrollTimerRef.current);
     };
-  }, []);
+  }, [prefersReducedMotion]);
 
   // ---- blink loop ----
   useEffect(() => {
-    if (reducedMotion.current) return;
+    if (prefersReducedMotion) return;
 
     const scheduleBlink = () => {
       const delay = 4000 + Math.random() * 2000;
@@ -254,11 +242,11 @@ export function Buddy({ variant = "mini", className }: BuddyProps) {
       const bt = blinkTimerRef.current;
       if (bt) clearTimeout(bt);
     };
-  }, []);
+  }, [prefersReducedMotion]);
 
   // ---- idle word loop ----
   useEffect(() => {
-    if (reducedMotion.current) return;
+    if (prefersReducedMotion) return;
 
     const pool = variant === "full" ? IDLE_WORDS_FOOTER : IDLE_WORDS;
 
@@ -279,12 +267,12 @@ export function Buddy({ variant = "mini", className }: BuddyProps) {
       if (idleWordShowTimerRef.current) clearTimeout(idleWordShowTimerRef.current);
       if (idleWordClearTimerRef.current) clearTimeout(idleWordClearTimerRef.current);
     };
-  }, [variant]);
+  }, [variant, prefersReducedMotion]);
 
   // ---- idle frame cycle (full variant only) ----
   useEffect(() => {
     if (variant !== "full") return;
-    if (reducedMotion.current) return;
+    if (prefersReducedMotion) return;
 
     idleFrameIntervalRef.current = setInterval(() => {
       setIdleFrame((f) => (f === 0 ? 1 : 0));
@@ -293,7 +281,7 @@ export function Buddy({ variant = "mini", className }: BuddyProps) {
     return () => {
       if (idleFrameIntervalRef.current) clearInterval(idleFrameIntervalRef.current);
     };
-  }, [variant]);
+  }, [variant, prefersReducedMotion]);
 
   // ---- click handler ----
   const handleClick = useCallback(() => {
@@ -305,7 +293,7 @@ export function Buddy({ variant = "mini", className }: BuddyProps) {
     setExpression("surprised");
     setWord(null);
 
-    if (!reducedMotion.current) {
+    if (!prefersReducedMotion) {
       setBouncing(true);
       setTimeout(() => {
         setExpression("happy");
@@ -320,10 +308,27 @@ export function Buddy({ variant = "mini", className }: BuddyProps) {
       setExpression("happy");
       setWord(w);
     }
-  }, [clearThemeTimers]);
+  }, [clearThemeTimers, prefersReducedMotion]);
 
   // ---- render ----
-  const face = GLYPHS[expression];
+  // Buddy is decorative: clicking it triggers a small face/word reaction
+  // with no outcome that matters to someone who can't see it, so it stays
+  // out of the tab order and hidden from assistive tech entirely. A
+  // focusable element marked aria-hidden is an invalid combination (a
+  // screen-reader user could tab to a stop declared invisible to them),
+  // which a <button> is even with no tabIndex set, since buttons are
+  // natively focusable. Rendering a plain div instead removes that
+  // implicit focusability outright; the click handler keeps working for
+  // mouse users, it just leaves the tab order.
+  const [eye1, eye2] = EYE_CHARS[expression];
+  // The one thing allowed to go ember: the eyes, and only while Buddy is
+  // reacting to something real (a click or a theme change), never during
+  // ambient cursor/scroll tracking or the idle blink loop.
+  const isReacting = expression === "surprised" || expression === "happy";
+  const eyeStyle = isReacting
+    ? { color: "var(--tr-ember)", textShadow: "var(--tr-glow-text)" }
+    : undefined;
+
   const variantClass = variant === "full" ? "buddy buddy--full" : "buddy buddy--mini";
   const cls = [variantClass, bouncing ? "buddy--bounce" : "", className ?? ""].filter(Boolean).join(" ");
 
@@ -336,55 +341,48 @@ export function Buddy({ variant = "mini", className }: BuddyProps) {
     : null;
 
   if (variant === "full") {
-    const [e1, e2] = EYE_CHARS[expression];
-    const frame = reducedMotion.current ? IDLE_FRAMES[0] : IDLE_FRAMES[idleFrame];
-
-    // Sprite lines (each 7 chars wide)
-    const headLine  = " .---. ";
-    const eyesLine  = ` |${e1} ${e2}| `;
-    const armsLine  = frame.arms;
-    const legsLine  = frame.legs;
-
-    const spriteLines = [headLine, eyesLine, armsLine, legsLine];
-
-    let art: string;
-    if (displayWord) {
-      const bubble = buildBubble(displayWord);
-      // The bubble may be wider than 7 chars; we still center it via text-align on the container
-      art = bubble + "\n" + spriteLines.join("\n");
-    } else {
-      art = spriteLines.join("\n");
-    }
+    const frame = prefersReducedMotion ? IDLE_FRAMES[0] : IDLE_FRAMES[idleFrame];
+    const bubble = displayWord ? buildBubble(displayWord) : null;
 
     return (
-      <button
-        ref={buddyRef}
-        type="button"
-        className={cls}
-        onClick={handleClick}
-        aria-hidden="true"
-        tabIndex={0}
-      >
-        <span className="buddy-art">{art}</span>
-      </button>
+      <div ref={buddyRef} className={cls} onClick={handleClick} aria-hidden="true">
+        <span className="buddy-art" style={{ color: "var(--tr-text-mute)" }}>
+          {bubble && (
+            <>
+              {bubble}
+              {"\n"}
+            </>
+          )}
+          {" .---. "}
+          {"\n"}
+          {" |"}
+          <span style={eyeStyle}>{eye1}</span>
+          {" "}
+          <span style={eyeStyle}>{eye2}</span>
+          {"| "}
+          {"\n"}
+          {frame.arms}
+          {"\n"}
+          {frame.legs}
+        </span>
+      </div>
     );
   }
 
-  // mini variant (unchanged)
+  // mini variant
   return (
-    <button
-      ref={buddyRef}
-      type="button"
-      className={cls}
-      onClick={handleClick}
-      aria-hidden="true"
-      tabIndex={0}
-    >
-      <span className="buddy-prompt">&#10095; </span>
-      <span className="buddy-face">{face}</span>
+    <div ref={buddyRef} className={cls} onClick={handleClick} aria-hidden="true">
+      <span className="buddy-prompt" style={{ color: "var(--tr-text-mute)" }}>&#10095; </span>
+      <span className="buddy-face" style={{ color: "var(--tr-text-mute)" }}>
+        {"["}
+        <span style={eyeStyle}>{eye1}</span>
+        {" "}
+        <span style={eyeStyle}>{eye2}</span>
+        {"]"}
+      </span>
       {displayWord && (
-        <span className="buddy-word">{displayWord}</span>
+        <span className="buddy-word" style={{ color: "var(--tr-text-mute)" }}>{displayWord}</span>
       )}
-    </button>
+    </div>
   );
 }

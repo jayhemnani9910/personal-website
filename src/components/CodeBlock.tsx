@@ -9,7 +9,7 @@ export function CodeBlock({ snippet }: { snippet: CodeSnippet }) {
     <div className="rounded-lg overflow-hidden border border-[var(--border)] bg-[#0d1117]">
       <div className="px-4 py-2 bg-[var(--bg-tertiary)] border-b border-[var(--border)] flex items-center justify-between">
         <span className="text-xs text-[var(--text-muted)] font-mono">{title}</span>
-        {language && <span className="text-xs text-[var(--text-muted)] font-mono opacity-60">{language}</span>}
+        {language && <span className="text-xs text-[var(--text-muted)] font-mono">{language}</span>}
       </div>
       <pre className="p-4 overflow-x-auto text-sm">
         <code className="text-[#e6edf3] font-mono whitespace-pre">{snippet.code}</code>
