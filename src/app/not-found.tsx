@@ -1,103 +1,58 @@
-"use client";
-
-import { motion } from "framer-motion";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import type { CSSProperties } from "react";
 import { EditorialMasthead } from "@/components/EditorialMasthead";
 import { EditorialColophon } from "@/components/EditorialColophon";
 
-// Glitch text effect component
-function GlitchText({ text }: { text: string }) {
-  const [glitchText, setGlitchText] = useState(text);
+const mono: CSSProperties = {
+  fontFamily: "var(--font-jetbrains)",
+  letterSpacing: ".08em",
+};
 
-  useEffect(() => {
-    const glitchChars = "!@#$%^&*()_+-=[]{}|;':\",./<>?";
-    const glitch = () => {
-      const arr = text.split("");
-      const randomIndex = Math.floor(Math.random() * arr.length);
-      arr[randomIndex] = glitchChars[Math.floor(Math.random() * glitchChars.length)];
-      setGlitchText(arr.join(""));
-
-      setTimeout(() => setGlitchText(text), 100);
-    };
-
-    const interval = setInterval(glitch, 2000);
-    return () => clearInterval(interval);
-  }, [text]);
-
-  return (
-    <span className="relative inline-block">
-      <span className="relative z-10">{glitchText}</span>
-      <span
-        className="absolute top-0 left-0.5 opacity-70 z-0"
-        style={{ color: "var(--neon-cyan)" }}
-        aria-hidden="true"
-      >
-        {text}
-      </span>
-      <span
-        className="absolute top-0 -left-0.5 opacity-70 z-0"
-        style={{ color: "var(--neon-purple)" }}
-        aria-hidden="true"
-      >
-        {text}
-      </span>
-    </span>
-  );
-}
+const serif: CSSProperties = {
+  fontFamily: "var(--font-newsreader)",
+};
 
 export default function NotFound() {
   return (
-    <main id="main-content" className="editorial relative min-h-screen flex flex-col" style={{ background: "var(--bg-primary)" }}>
+    <main id="main-content" className="flex min-h-screen flex-col bg-tr-bg text-tr-text">
       <EditorialMasthead />
 
-      <div className="flex-1 flex items-center justify-center px-6">
-        <div className="text-center max-w-2xl">
-          {/* Glitch 404 */}
-          <motion.h1
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.5 }}
-            className="text-[8rem] md:text-[12rem] font-bold leading-none mb-4 font-mono"
-            style={{ color: "var(--text-primary)" }}
-          >
-            <GlitchText text="404" />
-          </motion.h1>
+      <div className="flex flex-1 items-center px-[clamp(1.25rem,5vw,2rem)] pt-[var(--tr-s-12)] pb-[var(--tr-s-10)]">
+        <div className="mx-auto max-w-[46rem]">
+          <p className="mb-[var(--tr-s-4)] text-[.75rem] uppercase text-tr-text-mute" style={mono}>
+            404 / No route
+          </p>
 
-          {/* Terminal-style message */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2, duration: 0.5 }}
-            className="font-mono text-sm md:text-base mb-8 p-4 rounded-lg text-left"
-            style={{
-              background: "var(--bg-secondary)",
-              border: "1px solid var(--border)"
-            }}
+          <h1
+            className="mb-[var(--tr-s-5)] text-[length:var(--tr-t-display)] font-light leading-[.95] tracking-[-.02em] text-tr-text"
+            style={serif}
           >
-            <p className="text-red-400">ERROR: Page not found</p>
-            <p style={{ color: "var(--text-muted)" }}>
-              The requested resource does not exist on this server.
-            </p>
-            <p style={{ color: "var(--neon-cyan)" }} className="mt-2">
-              guest@jey-os:~$ <span className="animate-pulse">_</span>
-            </p>
-          </motion.div>
+            This page does not exist.
+          </h1>
 
-          {/* Navigation buttons */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4, duration: 0.5 }}
-            className="flex flex-col sm:flex-row gap-4 justify-center"
+          <p
+            className="mb-[var(--tr-s-6)] max-w-[42ch] text-[length:var(--tr-t-body)] leading-relaxed text-tr-text-mute"
+            style={serif}
           >
-            <Link href="/" className="btn btn-primary">
-              Return Home
+            The link was wrong, or the page moved. Either way, nothing is here.
+          </p>
+
+          <div className="flex flex-wrap gap-[var(--tr-s-3)]">
+            <Link
+              href="/"
+              className="inline-flex items-center justify-center border border-transparent bg-tr-ember px-[1.5em] py-[.875em] text-[length:var(--tr-t-mono)] uppercase text-tr-on-ember no-underline shadow-[var(--tr-glow-box)]"
+              style={mono}
+            >
+              Home
             </Link>
-            <Link href="/#projects" className="btn btn-secondary">
-              View Projects
+            <Link
+              href="/projects"
+              className="inline-flex items-center justify-center border border-tr-hairline px-[1.5em] py-[.875em] text-[length:var(--tr-t-mono)] uppercase text-tr-text-mute no-underline transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] hover:text-tr-text"
+              style={mono}
+            >
+              Projects
             </Link>
-          </motion.div>
+          </div>
         </div>
       </div>
 

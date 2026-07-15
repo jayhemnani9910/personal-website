@@ -7,6 +7,7 @@ import { useState, useEffect, useRef } from "react";
 import type { Preset } from "./fdeData";
 import { PHASES, NARRATION, RECEIPTS } from "./fdeData";
 import { FdeArchDiagram } from "./FdeArchDiagram";
+import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
 
 interface Props {
   payload: Preset;
@@ -17,36 +18,39 @@ interface Props {
 
 export function FdeSimulation({ payload, brief, source, onExit }: Props) {
   const [phase, setPhase] = useState(0);
-  const [narrationVisible, setNarrationVisible] = useState(0);
+  const [revealed, setRevealed] = useState(0);
   const sideRef = useRef<HTMLElement>(null);
 
   const currentKey = PHASES[phase].key;
   const narration = NARRATION[currentKey] || [];
 
-  // Reduced-motion check
-  const prefersReducedMotion =
-    typeof window !== 'undefined'
-      ? window.matchMedia('(prefers-reduced-motion: reduce)').matches
-      : false;
+  const prefersReducedMotion = usePrefersReducedMotion();
+
+  // Reset narration reveal progress synchronously during render when the
+  // phase changes, instead of via an unconditional setState in an effect.
+  const [renderedPhase, setRenderedPhase] = useState(phase);
+  if (phase !== renderedPhase) {
+    setRenderedPhase(phase);
+    setRevealed(0);
+  }
+
+  // Under reduced motion every line is visible immediately, with no timers.
+  const narrationVisible = prefersReducedMotion ? narration.length : revealed;
 
   useEffect(() => {
-    setNarrationVisible(0);
-    if (prefersReducedMotion) {
-      setNarrationVisible(narration.length);
-      return;
-    }
+    if (prefersReducedMotion) return; // no timers at all under reduced motion
     const timers: ReturnType<typeof setTimeout>[] = [];
     const reveal = (i: number) => {
       if (i > narration.length) return;
       const t = setTimeout(() => {
-        setNarrationVisible(i);
+        setRevealed(i);
         reveal(i + 1);
       }, 300 + i * 250);
       timers.push(t);
     };
     reveal(1);
     return () => timers.forEach(t => clearTimeout(t));
-  }, [phase]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [phase, prefersReducedMotion, narration.length]);
 
   const next = () => setPhase(p => Math.min(p + 1, PHASES.length - 1));
   const prev = () => setPhase(p => Math.max(p - 1, 0));
@@ -95,7 +99,7 @@ export function FdeSimulation({ payload, brief, source, onExit }: Props) {
           role="tabpanel"
           aria-label={`Phase ${PHASES[phase].title}`}
         >
-          <PhaseContent phase={currentKey} payload={payload} brief={brief} />
+          <PhaseContent phase={currentKey} payload={payload} />
 
           <div className="fde-phase-nav">
             <button
@@ -121,7 +125,7 @@ export function FdeSimulation({ payload, brief, source, onExit }: Props) {
         </div>
 
         <aside className="fde-sim-side" ref={sideRef}>
-          <h4 className="fde-side-label">// Jay, narrating</h4>
+          <h3 className="fde-side-label">{"// Jay, narrating"}</h3>
           {narration.slice(0, narrationVisible).map((n, i) => (
             <div
               key={`${phase}-${i}`}
@@ -134,12 +138,12 @@ export function FdeSimulation({ payload, brief, source, onExit }: Props) {
 
           <hr className="fde-rule" style={{ margin: '24px 0 16px' }} />
 
-          <h4 className="fde-side-label">// Brief</h4>
-          <div className="fde-side-brief">"{brief}"</div>
+          <h3 className="fde-side-label">{"// Brief"}</h3>
+          <div className="fde-side-brief">&quot;{brief}&quot;</div>
 
           <hr className="fde-rule" style={{ margin: '24px 0 16px' }} />
 
-          <h4 className="fde-side-label">// Stack</h4>
+          <h3 className="fde-side-label">{"// Stack"}</h3>
           <div className="fde-side-stack">
             LangGraph · MCP · RAG<br />
             Python · FastAPI · Node<br />
@@ -154,7 +158,7 @@ export function FdeSimulation({ payload, brief, source, onExit }: Props) {
 
 // ─── Phase content ────────────────────────────────────────────────────────────
 
-function PhaseContent({ phase, payload, brief }: { phase: string; payload: Preset; brief: string }) {
+function PhaseContent({ phase, payload }: { phase: string; payload: Preset }) {
   if (!payload) return null;
 
   switch (phase) {
@@ -164,7 +168,7 @@ function PhaseContent({ phase, payload, brief }: { phase: string; payload: Prese
           <h2 className="fde-phase-title">
             First: <span className="fde-em">three questions</span> I need answered.
           </h2>
-          <div className="fde-phase-sub">// scoping. before any building, before any architecture, before anything.</div>
+          <div className="fde-phase-sub">{"// scoping. before any building, before any architecture, before anything."}</div>
           {payload.scope.map((s, i) => (
             <div
               key={i}
@@ -187,7 +191,7 @@ function PhaseContent({ phase, payload, brief }: { phase: string; payload: Prese
           <h2 className="fde-phase-title">
             The <span className="fde-em">subproblems</span>.
           </h2>
-          <div className="fde-phase-sub">// each one has a clean boundary. each one is shippable on its own.</div>
+          <div className="fde-phase-sub">{"// each one has a clean boundary. each one is shippable on its own."}</div>
           <div className="fde-decomp">
             {payload.decomposition.map((d, i) => (
               <div
@@ -212,7 +216,7 @@ function PhaseContent({ phase, payload, brief }: { phase: string; payload: Prese
           <h2 className="fde-phase-title">
             How the <span className="fde-em">system</span> wants to be drawn.
           </h2>
-          <div className="fde-phase-sub">// services · data flows · failure boundaries · where humans are in the loop.</div>
+          <div className="fde-phase-sub">{"// services · data flows · failure boundaries · where humans are in the loop."}</div>
           <FdeArchDiagram architecture={payload.architecture} />
         </div>
       );
@@ -223,7 +227,7 @@ function PhaseContent({ phase, payload, brief }: { phase: string; payload: Prese
           <h2 className="fde-phase-title">
             <span className="fde-em">Fourteen days</span> to something working.
           </h2>
-          <div className="fde-phase-sub">// real deliverables. each row is something a human can observe was done.</div>
+          <div className="fde-phase-sub">{"// real deliverables. each row is something a human can observe was done."}</div>
           <div className="fde-sprint-grid">
             {payload.sprint.map((s, i) => (
               <div
@@ -248,7 +252,7 @@ function PhaseContent({ phase, payload, brief }: { phase: string; payload: Prese
           <h2 className="fde-phase-title">
             What I&apos;m <span className="fde-em">honest about</span>, on day one.
           </h2>
-          <div className="fde-phase-sub">// the failure modes I would name in the SOW. specific to your problem.</div>
+          <div className="fde-phase-sub">{"// the failure modes I would name in the SOW. specific to your problem."}</div>
           <div className="fde-risk-grid">
             {payload.risks.map((r, i) => (
               <div
@@ -276,7 +280,7 @@ function PhaseContent({ phase, payload, brief }: { phase: string; payload: Prese
           <h2 className="fde-phase-title">
             And every phase above: <span className="fde-em">I&apos;ve done that work</span>.
           </h2>
-          <div className="fde-phase-sub">// brief -&gt; receipts. each phase mapped to evidence in production code, shipped systems, or current work.</div>
+          <div className="fde-phase-sub">{"// brief -> receipts. each phase mapped to evidence in production code, shipped systems, or current work."}</div>
           <div className="fde-receipts">
             {RECEIPTS.map((r, i) => (
               <div
@@ -286,7 +290,7 @@ function PhaseContent({ phase, payload, brief }: { phase: string; payload: Prese
               >
                 <div className="fde-receipt-phase">{r.phase}</div>
                 <div className="fde-receipt-project">{r.project}</div>
-                <h4 className="fde-receipt-title">{r.title}</h4>
+                <h3 className="fde-receipt-title">{r.title}</h3>
                 <p className="fde-receipt-desc">{r.desc}</p>
                 {r.note && (
                   <div className="fde-receipt-note">

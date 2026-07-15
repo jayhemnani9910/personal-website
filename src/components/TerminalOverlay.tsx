@@ -1,8 +1,9 @@
 "use client";
 
 import { useState, useEffect, useRef, useCallback } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { m, AnimatePresence } from "framer-motion";
 import { useTerminal } from "@/context/TerminalContext";
+import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
 import { Terminal as TerminalIcon, Cpu, Wifi } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { TERMINAL_FILES, BOOT_SEQUENCE, TERMINAL_CONFIG } from "@/../content/terminal";
@@ -63,6 +64,8 @@ export function TerminalOverlay() {
     const [isBooting, setIsBooting] = useState(true);
     const inputRef = useRef<HTMLInputElement>(null);
     const bottomRef = useRef<HTMLDivElement>(null);
+    const panelRef = useRef<HTMLDivElement>(null);
+    const previouslyFocusedRef = useRef<HTMLElement | null>(null);
     const timeoutsRef = useRef<number[]>([]);
     const router = useRouter();
 
@@ -106,6 +109,50 @@ export function TerminalOverlay() {
 
         return () => clearBootTimeouts();
     }, [isOpen]);
+
+    // Dialog semantics: remember what had focus before opening (to restore
+    // it on close), trap Tab/Shift+Tab inside the panel, and close on
+    // Escape. Re-runs each time the dialog opens or closes.
+    useEffect(() => {
+        if (!isOpen) return;
+        previouslyFocusedRef.current = document.activeElement as HTMLElement | null;
+
+        const getFocusable = () => {
+            if (!panelRef.current) return [];
+            return Array.from(
+                panelRef.current.querySelectorAll<HTMLElement>(
+                    'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+                )
+            ).filter((el) => el.offsetParent !== null);
+        };
+
+        const onKeyDown = (e: KeyboardEvent) => {
+            if (e.key === "Escape") {
+                e.preventDefault();
+                closeTerminal();
+                return;
+            }
+            if (e.key === "Tab") {
+                const focusable = getFocusable();
+                if (focusable.length === 0) return;
+                const first = focusable[0];
+                const last = focusable[focusable.length - 1];
+                if (e.shiftKey && document.activeElement === first) {
+                    e.preventDefault();
+                    last.focus();
+                } else if (!e.shiftKey && document.activeElement === last) {
+                    e.preventDefault();
+                    first.focus();
+                }
+            }
+        };
+
+        document.addEventListener("keydown", onKeyDown);
+        return () => {
+            document.removeEventListener("keydown", onKeyDown);
+            previouslyFocusedRef.current?.focus();
+        };
+    }, [isOpen, closeTerminal]);
 
     useEffect(() => {
         bottomRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -322,37 +369,43 @@ System
     return (
         <AnimatePresence>
             {isOpen && (
-                <motion.div
+                <m.div
                     initial={{ opacity: 0, scale: 0.95 }}
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.95 }}
-                    className={`fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 ${isPurging ? "animate-shake" : ""}`}
+                    className={`fixed inset-0 z-[var(--tr-z-overlay)] flex items-center justify-center bg-tr-bg/80 p-4 ${isPurging ? "animate-shake" : ""}`}
                     onClick={closeTerminal}
                 >
                     <div
-                        className={`w-full max-w-4xl h-[70vh] bg-[#0c0c0c]/95 rounded-xl border border-white/10 shadow-2xl overflow-hidden flex flex-col relative backdrop-blur-xl ${isPurging ? "border-red-500 shadow-red-500/50" : ""}`}
+                        ref={panelRef}
+                        role="dialog"
+                        aria-modal="true"
+                        aria-label="Terminal"
+                        className="w-full max-w-4xl h-[70vh] bg-tr-surface-1 rounded-[var(--tr-r-sm)] border border-tr-hairline overflow-hidden flex flex-col relative"
                         onClick={(e) => e.stopPropagation()}
                     >
-                        {/* CRT Scanline Effect */}
-                        <div className="absolute inset-0 pointer-events-none bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] z-20 bg-[length:100%_2px,3px_100%]" />
-
                         {/* Matrix Rain Overlay */}
                         {showMatrix && <MatrixRain />}
 
                         {/* Window Header */}
-                        <div className="flex items-center justify-between px-4 py-3 border-b border-white/10 bg-white/5">
+                        <div className="flex items-center justify-between px-4 py-3 border-b border-tr-hairline bg-tr-surface-2">
                             <div className="flex items-center gap-4">
                                 <div className="flex gap-2">
-                                    <div className="w-3 h-3 rounded-full bg-red-500/80 cursor-pointer hover:bg-red-500" onClick={closeTerminal} />
-                                    <div className="w-3 h-3 rounded-full bg-yellow-500/80 cursor-pointer hover:bg-yellow-500" />
-                                    <div className="w-3 h-3 rounded-full bg-green-500/80 cursor-pointer hover:bg-green-500" />
+                                    <button
+                                        type="button"
+                                        onClick={closeTerminal}
+                                        aria-label="Close terminal"
+                                        className="w-3 h-3 rounded-full bg-tr-text-faint hover:bg-tr-text-mute cursor-pointer"
+                                    />
+                                    <span aria-hidden="true" className="block w-3 h-3 rounded-full bg-tr-hairline" />
+                                    <span aria-hidden="true" className="block w-3 h-3 rounded-full bg-tr-hairline" />
                                 </div>
-                                <div className="flex items-center gap-2 text-xs text-white/40 font-mono">
+                                <div className="flex items-center gap-2 text-xs text-tr-text-mute font-mono">
                                     <TerminalIcon className="w-3 h-3" />
                                     <span>{TERMINAL_CONFIG.prompt}</span>
                                 </div>
                             </div>
-                            <div className="flex items-center gap-4 text-xs text-white/30 font-mono">
+                            <div className="flex items-center gap-4 text-xs text-tr-text-faint font-mono">
                                 <div className="flex items-center gap-1">
                                     <Cpu className="w-3 h-3" />
                                     <span>CPU: 12%</span>
@@ -365,18 +418,12 @@ System
                         </div>
 
                         {/* Terminal Body */}
-                        <div className="flex-1 p-6 font-mono text-sm overflow-y-auto scrollbar-hide" onClick={() => inputRef.current?.focus()}>
+                        <div className="flex-1 p-6 font-mono text-sm overflow-y-auto scrollbar-hide text-tr-text-mute" onClick={() => inputRef.current?.focus()}>
                             {history.map((entry, i) => (
-                                <div key={i} className={`mb-1 whitespace-pre-wrap ${
-                                    entry.type === "error" ? "text-red-400" :
-                                    entry.type === "system" ? "text-blue-400" :
-                                    entry.type === "success" ? "text-emerald-400" :
-                                    entry.type === "input" ? "text-white/60" :
-                                    isPurging ? "text-red-300" : "text-gray-300"
-                                }`}>
+                                <div key={i} className="mb-1 whitespace-pre-wrap">
                                     {entry.type === "input" ? (
                                         <span className="flex gap-2">
-                                            <span className="text-emerald-500">➜</span>
+                                            <span>➜</span>
                                             <span>{entry.content}</span>
                                         </span>
                                     ) : (
@@ -387,24 +434,25 @@ System
 
                             {!isBooting && (
                                 <div className="flex items-center gap-2 mt-2">
-                                    <span className={isPurging ? "text-red-500" : "text-emerald-500"}>➜</span>
+                                    <span className="text-tr-ember" style={{ textShadow: "var(--tr-glow-text)" }}>➜</span>
                                     <input
                                         ref={inputRef}
                                         type="text"
                                         value={input}
                                         onChange={(e) => setInput(e.target.value)}
                                         onKeyDown={handleKeyDown}
-                                        className={`bg-transparent outline-none flex-1 ${isPurging ? "text-red-400 caret-red-500" : "text-emerald-400 caret-emerald-500"}`}
+                                        className="bg-transparent outline-none flex-1 text-tr-ember caret-tr-ember"
                                         autoFocus
                                         spellCheck={false}
                                         autoComplete="off"
+                                        aria-label="Terminal command input"
                                     />
                                 </div>
                             )}
                             <div ref={bottomRef} />
                         </div>
                     </div>
-                </motion.div>
+                </m.div>
             )}
         </AnimatePresence>
     );
@@ -413,6 +461,7 @@ System
 // ── Matrix Rain Effect ──
 function MatrixRain() {
     const canvasRef = useRef<HTMLCanvasElement>(null);
+    const prefersReducedMotion = usePrefersReducedMotion();
 
     useEffect(() => {
         const canvas = canvasRef.current;
@@ -427,31 +476,62 @@ function MatrixRain() {
         const drops: number[] = Array(columns).fill(1);
         const chars = "アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン0123456789";
 
-        let animId: number;
+        let animId = 0;
         const draw = () => {
-            ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+            // Read the live token values each frame (cheap for a canvas
+            // loop, and keeps this theme-reactive without a separate
+            // theme-change listener): the trail is the machine channel's
+            // quiet ink, and ember marks only the live edge of each
+            // column, consistent with "ember is the only saturated
+            // colour in the system."
+            const tokens = getComputedStyle(document.documentElement);
+            const rain = tokens.getPropertyValue("--tr-text-mute").trim();
+            const live = tokens.getPropertyValue("--tr-ember").trim();
+
+            // The trail fade must be the surface the canvas sits on, not black.
+            // Hardcoding rgba(0,0,0,.05) works on dark and progressively
+            // blackens the terminal on the light theme, where the surface is white.
+            const surface = tokens.getPropertyValue("--tr-surface-1").trim();
+            const [fr, fg, fb] = [1, 3, 5].map((i) => parseInt(surface.slice(i, i + 2), 16));
+            ctx.fillStyle = `rgba(${fr}, ${fg}, ${fb}, 0.05)`;
             ctx.fillRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = "#0f0";
             ctx.font = "12px monospace";
 
             for (let i = 0; i < drops.length; i++) {
+                // Leading glyph: the live edge of the column, ember.
                 const text = chars[Math.floor(Math.random() * chars.length)];
+                ctx.fillStyle = live;
                 ctx.fillText(text, i * 14, drops[i] * 14);
+
+                // The row immediately behind the head drops out of "live"
+                // and joins the falling trail; everything further back
+                // keeps fading via the translucent overlay above.
+                if (drops[i] > 0) {
+                    const trailText = chars[Math.floor(Math.random() * chars.length)];
+                    ctx.fillStyle = rain;
+                    ctx.fillText(trailText, i * 14, (drops[i] - 1) * 14);
+                }
+
                 if (drops[i] * 14 > canvas.height && Math.random() > 0.975) {
                     drops[i] = 0;
                 }
                 drops[i]++;
             }
-            animId = requestAnimationFrame(draw);
+            // Reduced motion: paint a single static frame instead of
+            // scheduling the next one.
+            if (!prefersReducedMotion) {
+                animId = requestAnimationFrame(draw);
+            }
         };
         draw();
 
         return () => cancelAnimationFrame(animId);
-    }, []);
+    }, [prefersReducedMotion]);
 
     return (
         <canvas
             ref={canvasRef}
+            aria-hidden="true"
             className="absolute inset-0 w-full h-full z-30 pointer-events-none opacity-80"
         />
     );

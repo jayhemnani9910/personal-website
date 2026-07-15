@@ -335,37 +335,38 @@ export function registerWebMCPTools(data: SiteData): void {
     },
   });
 
-  // Tool 8: Switch site mode
+  // Tool 8: Toggle reader mode
   mc.registerTool({
     name: "switch_mode",
-    description: "Switch the site's presentation mode between portfolio, brand, product, and blog views.",
+    description:
+      "Toggle reader mode: a calm, high-readability view that turns off the site's motion and cinematic chrome (custom cursor, preloader, smooth-scroll, scroll reveals). Use 'reader' for the accessible reading view, 'default' to restore the full experience. Applies immediately, no reload.",
     inputSchema: {
       type: "object",
       properties: {
         mode: {
           type: "string",
-          enum: ["portfolio", "brand", "product", "blog"],
-          description: "Site mode to switch to",
+          enum: ["reader", "default"],
+          description: "'reader' for the calm, motion-free reading view; 'default' for the full cinematic site",
         },
       },
       required: ["mode"],
     },
     handler: async (args) => {
-      const mode = args.mode as string;
-      const descriptions: Record<string, string> = {
-        portfolio: "Recruiter-focused, resume-heavy view",
-        brand: "Personal brand showcase with motion effects",
-        product: "Landing page, conversion-focused view",
-        blog: "Writing hub, content-focused view",
-      };
+      const on = (args.mode as string) === "reader";
 
-      localStorage.setItem("site-mode", mode);
-      window.dispatchEvent(new StorageEvent("storage", { key: "site-mode", newValue: mode }));
+      localStorage.setItem("reader-mode", on ? "on" : "off");
+      if (on) document.documentElement.dataset.reader = "on";
+      else delete document.documentElement.dataset.reader;
+      // usePrefersReducedMotion listens for this and drops every motion
+      // primitive into its static path (same signal path as the OS setting).
+      window.dispatchEvent(new Event("readermodechange"));
 
       return {
-        mode,
-        description: descriptions[mode] || "Unknown mode",
-        note: "Reload the page to see the full mode change take effect.",
+        mode: on ? "reader" : "default",
+        reader: on,
+        description: on
+          ? "Reader mode on: motion and cinematic chrome disabled for a calm reading view."
+          : "Reader mode off: the full cinematic site is restored.",
       };
     },
   });

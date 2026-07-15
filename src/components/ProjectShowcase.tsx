@@ -120,17 +120,17 @@ export function ProjectShowcase({ project }: { project: Project }) {
         {active === "overview" && (
           <div className="sw-overview">
             <div className="ds-prose">
-              <h3 className="ds-h3">The problem</h3>
+              <h2 className="ds-h3">The problem</h2>
               <p>{project.challenge}</p>
             </div>
             <div>
-              <h3 className="ds-h3">What it does</h3>
+              <h2 className="ds-h3">What it does</h2>
               <ol className="ds-numlist">
                 {project.solution.map((s, i) => <li key={i}>{s}</li>)}
               </ol>
             </div>
             <div>
-              <h3 className="ds-h3">Impact</h3>
+              <h2 className="ds-h3">Impact</h2>
               <ul className="ds-impact">
                 {project.impact.map((s, i) => <li key={i}><span>{s}</span></li>)}
               </ul>
@@ -150,7 +150,7 @@ export function ProjectShowcase({ project }: { project: Project }) {
             )}
             {flow.length > 0 && (
               <>
-                <h3 className="ds-h3">Data flow</h3>
+                <h2 className="ds-h3">Data flow</h2>
                 <ol className="sw-flow">
                   {flow.map((f, i) => (
                     <li key={i}>
@@ -163,7 +163,7 @@ export function ProjectShowcase({ project }: { project: Project }) {
             )}
             {components.length > 0 && (
               <>
-                <h3 className="ds-h3">Containers</h3>
+                <h2 className="ds-h3">Containers</h2>
                 <div className="sw-services">
                   {components.map((c, i) => (
                     <div className="sw-service" key={i}>
@@ -218,7 +218,7 @@ export function ProjectShowcase({ project }: { project: Project }) {
           <div className="sw-demo">
             <p className="sw-report-note mono xs upper muted">{demo.note}</p>
             <div className="sw-report">
-              <h3 className="ds-h3" style={{ marginTop: 0 }}>{demo.title}</h3>
+              <h2 className="ds-h3" style={{ marginTop: 0 }}>{demo.title}</h2>
               <ul className="sw-findings">
                 {demo.findings.map((f, i) => (
                   <li key={i} className={`sw-finding v-${f.verdict.toLowerCase()}`}>

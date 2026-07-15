@@ -9,7 +9,7 @@ import { PROOFS } from "@/components/fde/fdeData";
 
 export default function FDEPage() {
   return (
-    <main className="editorial fde-page">
+    <main id="main-content" className="editorial fde-page">
       <EditorialMasthead active="fde" />
 
       {/* ── Hero ──────────────────────────────────────────────────────── */}
@@ -94,12 +94,12 @@ export default function FDEPage() {
 
           <div className="fde-fit-grid">
             <div className="fde-fit-col" data-kind="have">
-              <h4>What I can credibly claim</h4>
+              <h3>What I can credibly claim</h3>
               <p>The engineering substrate: agentic systems, protocols, upstream code, distributed services. The decomposition muscle the simulation above demonstrates.</p>
               <p>Plus real stakeholder-facing delivery experience: requirements alignment, metric and SLA definition with finance and ops at Elite Hotel Group.</p>
             </div>
             <div className="fde-fit-col" data-kind="gap">
-              <h4>What I haven&apos;t yet</h4>
+              <h3>What I haven&apos;t yet</h3>
               <p>The full FDE customer lifecycle in an <span className="fde-em">external</span> environment. Internal stakeholder delivery isn&apos;t the same as external customer delivery. I won&apos;t pretend otherwise.</p>
               <p>I&apos;m actively closing this by shipping one small real deployment, publishing failure analyses, and converting an existing project into a deployment case study. Specifics on request.</p>
             </div>

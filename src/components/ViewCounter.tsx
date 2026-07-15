@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import { Eye } from "lucide-react";
 
 export function ViewCounter({ slug }: { slug: string }) {
@@ -22,7 +22,7 @@ export function ViewCounter({ slug }: { slug: string }) {
     if (count === null) return null;
 
     return (
-        <motion.div
+        <m.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5, delay: 0.3 }}
@@ -31,6 +31,6 @@ export function ViewCounter({ slug }: { slug: string }) {
         >
             <Eye className="w-4 h-4" />
             <span>{count} {count === 1 ? "view" : "views"}</span>
-        </motion.div>
+        </m.div>
     );
 }

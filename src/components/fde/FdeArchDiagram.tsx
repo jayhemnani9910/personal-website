@@ -13,12 +13,17 @@ const PAD = 30;
 
 // kind -> { stroke (CSS var or named), fill (color-mix) }
 // Fills use inline style color-mix where supported; fallback is a low-opacity solid.
+// TWO READERS: ember is the only saturated colour, so node TYPES are encoded by
+// neutral tier + their mono labels, not by five hues (the old green/purple broke
+// the ember-only rule). UI (the entry the human acts on) is the one ember; the
+// rest step down through the text tiers. On /fde these editorial vars are remapped
+// to --tr-* by the .fde-page scope override in globals.css.
 const KIND_COLORS: Record<string, { stroke: string; fill: string }> = {
-  ui:       { stroke: 'var(--accent)',        fill: 'color-mix(in srgb, var(--accent) 8%, transparent)' },
-  service:  { stroke: 'var(--ink-soft)',      fill: 'color-mix(in srgb, var(--ink-soft) 6%, transparent)' },
-  agent:    { stroke: '#3f8f63',              fill: 'color-mix(in srgb, #3f8f63 8%, transparent)' },
-  data:     { stroke: '#7c3aed',              fill: 'color-mix(in srgb, #7c3aed 8%, transparent)' },
-  external: { stroke: 'var(--ink-mute)',      fill: 'color-mix(in srgb, var(--ink-mute) 6%, transparent)' },
+  ui:       { stroke: 'var(--accent)',   fill: 'color-mix(in srgb, var(--accent) 8%, transparent)' },
+  agent:    { stroke: 'var(--ink)',      fill: 'color-mix(in srgb, var(--ink) 8%, transparent)' },
+  service:  { stroke: 'var(--ink-mute)', fill: 'color-mix(in srgb, var(--ink-mute) 6%, transparent)' },
+  data:     { stroke: 'var(--ink-mute)', fill: 'color-mix(in srgb, var(--ink-mute) 6%, transparent)' },
+  external: { stroke: 'var(--ink-faint)', fill: 'color-mix(in srgb, var(--ink-faint) 6%, transparent)' },
 };
 
 function pathFor(
@@ -237,10 +242,10 @@ export function FdeArchDiagram({ architecture }: Props) {
 
       <div className="fde-arch-legend" aria-label="Architecture legend">
         <span><span className="fde-swatch" style={{ borderColor: 'var(--accent)' }} />UI surface</span>
-        <span><span className="fde-swatch" style={{ borderColor: '#3f8f63' }} />Agent / model</span>
-        <span><span className="fde-swatch" style={{ borderColor: 'var(--ink-soft)' }} />Service</span>
-        <span><span className="fde-swatch" style={{ borderColor: '#7c3aed' }} />Data store</span>
-        <span><span className="fde-swatch" style={{ borderColor: 'var(--ink-mute)' }} />External system</span>
+        <span><span className="fde-swatch" style={{ borderColor: 'var(--ink)' }} />Agent / model</span>
+        <span><span className="fde-swatch" style={{ borderColor: 'var(--ink-mute)' }} />Service</span>
+        <span><span className="fde-swatch" style={{ borderColor: 'var(--ink-mute)' }} />Data store</span>
+        <span><span className="fde-swatch" style={{ borderColor: 'var(--ink-faint)' }} />External system</span>
         <span style={{ marginLeft: 'auto' }}>-- dashed = retrieve / feedback</span>
       </div>
     </div>
