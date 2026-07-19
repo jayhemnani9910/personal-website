@@ -7,7 +7,7 @@ import { useTheme } from "@/context/ThemeContext";
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
 import { EASE, DUR } from "@/lib/motion-tokens";
 
-type Section = "cover" | "work" | "writing" | "about" | "fde";
+type Section = "cover" | "work" | "writing" | "about" | "fde" | "channel";
 
 // `as const` keeps each href a string literal (e.g. "/projects") rather than
 // widened to `string`, which next.config.ts's typedRoutes requires for <Link>.
@@ -17,6 +17,7 @@ const NAV_LINKS = [
   { href: "/blog", label: "Writing", section: "writing" },
   { href: "/resume", label: "About", section: "about" },
   { href: "/fde", label: "FDE", section: "fde" },
+  { href: "/youtube", label: "Channel", section: "channel" },
 ] as const;
 
 const mono: CSSProperties = {
