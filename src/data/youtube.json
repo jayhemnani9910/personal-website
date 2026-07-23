@@ -1,5 +1,5 @@
 {
-  "fetchedAt": "2026-07-19T08:02:57.662Z",
+  "fetchedAt": "2026-07-23T02:30:06.312Z",
   "channels": [
     {
       "id": "UCSf0pNIEkJgXhH7WzIsFnpw",
@@ -7,8 +7,8 @@
       "handle": "@jhanalytics2.0",
       "url": "https://www.youtube.com/@jhanalytics2.0",
       "stats": {
-        "subscribers": 16,
-        "views": 5790,
+        "subscribers": 17,
+        "views": 5826,
         "videos": 41
       },
       "videos": [
@@ -17,7 +17,7 @@
           "title": "Down 3-6, Won 8-7 in the 89th Minute | FC 26 Rivals Comeback #fc26 #eafc26 #ultimateteam #fifa26",
           "publishedAt": "2026-07-04T03:45:38Z",
           "durationSec": 278,
-          "views": 45,
+          "views": 49,
           "thumb": "https://i.ytimg.com/vi/tCKIQN5twog/hqdefault.jpg"
         },
         {
@@ -51,7 +51,7 @@
           "title": "Memory poisoning: the prompt injection that survives the session #ai  #promptinjection",
           "publishedAt": "2026-07-12T05:45:02Z",
           "durationSec": 77,
-          "views": 119,
+          "views": 124,
           "thumb": "https://i.ytimg.com/vi/UcZ8GgIVaY0/oardefault.jpg"
         },
         {
@@ -59,7 +59,7 @@
           "title": "Down 3-6, Won 8-7 in the 89th Minute | FC 26 Rivals Comeback #eafc26  #easportsfc  #ultimateteam",
           "publishedAt": "2026-07-03T17:00:02Z",
           "durationSec": 39,
-          "views": 630,
+          "views": 631,
           "thumb": "https://i.ytimg.com/vi/xECY__i8LTQ/oardefault.jpg"
         },
         {
@@ -107,7 +107,7 @@
           "title": "The two holes in LeCun's world-model bet #aiforanalysts #crypto #dataanlysis #llm #trading",
           "publishedAt": "2026-05-25T04:45:03Z",
           "durationSec": 57,
-          "views": 73,
+          "views": 74,
           "thumb": "https://i.ytimg.com/vi/VZ1lJd4nPGk/oardefault.jpg"
         },
         {
@@ -115,7 +115,7 @@
           "title": "Why your AI agent hallucinates dropped columns #aiagents #llm  #dataengineering #ai",
           "publishedAt": "2026-05-23T10:15:12Z",
           "durationSec": 56,
-          "views": 912,
+          "views": 913,
           "thumb": "https://i.ytimg.com/vi/0KLjPAwYp6Y/oardefault.jpg"
         },
         {
@@ -123,7 +123,7 @@
           "title": "Why this 1.3B vision model uses 40x fewer tokens #llm #aiforanalysts #dataengineering #ai #aiagents",
           "publishedAt": "2026-05-22T12:58:43Z",
           "durationSec": 70,
-          "views": 99,
+          "views": 100,
           "thumb": "https://i.ytimg.com/vi/6kB9WI7Wseo/oardefault.jpg"
         },
         {
@@ -131,7 +131,7 @@
           "title": "The training recipe behind LeCun's JEPA bet #llm #aiforanalysts #dataengineering #ai #aiagents #jepa",
           "publishedAt": "2026-05-22T06:12:43Z",
           "durationSec": 63,
-          "views": 127,
+          "views": 128,
           "thumb": "https://i.ytimg.com/vi/uJ94M0gLgIg/oardefault.jpg"
         },
         {
@@ -139,11 +139,20 @@
           "title": "Why Gemini Flash now beats last year's Pro  #llm #aiforanalysts #dataengineering #ai #aiagents #jepa",
           "publishedAt": "2026-05-21T13:45:10Z",
           "durationSec": 64,
-          "views": 62,
+          "views": 65,
           "thumb": "https://i.ytimg.com/vi/ays0ChS1970/oardefault.jpg"
         }
       ],
       "live": [
+        {
+          "id": "24wua2TeA_E",
+          "title": "JH-Analytics | 2.0 Live Stream",
+          "publishedAt": "2026-07-21T13:40:11Z",
+          "durationSec": 0,
+          "views": 0,
+          "thumb": "https://i.ytimg.com/vi/24wua2TeA_E/hqdefault.jpg",
+          "status": "upcoming"
+        },
         {
           "id": "Wgw6ALdq5lI",
           "title": "Pushing to Division 3 in FC25 Ultimate Team! Watch me grind through Division 7. ⚽🔥",
@@ -231,26 +240,18 @@
           "durationSec": 3011,
           "views": 1,
           "thumb": "https://i.ytimg.com/vi/1fnpU95tLWI/hqdefault.jpg"
-        },
-        {
-          "id": "1Xglgzev0o0",
-          "title": "Fc24\nUltimate team\nRank push div5",
-          "publishedAt": "2024-07-18T01:27:19Z",
-          "durationSec": 4365,
-          "views": 0,
-          "thumb": "https://i.ytimg.com/vi/1Xglgzev0o0/hqdefault.jpg"
         }
       ]
     },
     {
       "id": "UCRAV0VDSxngptEo5SY4nKcw",
-      "title": "JH-Analytics",
-      "handle": "@jhanalytics",
-      "url": "https://www.youtube.com/@jhanalytics",
+      "title": "JodnaniPlays",
+      "handle": "@jodnaniplays",
+      "url": "https://www.youtube.com/@jodnaniplays",
       "stats": {
         "subscribers": 32,
-        "views": 54110,
-        "videos": 200
+        "views": 54176,
+        "videos": 201
       },
       "videos": [
         {
@@ -450,20 +451,28 @@
       ],
       "live": [
         {
-          "id": "Io9PsvEzkeA",
-          "title": "FC 26 New Penalty Event + Rivals Grind | Ultimate Team Live #fc26 #eafc26",
-          "publishedAt": "2026-07-15T16:47:54Z",
+          "id": "vepq_92KWtE",
+          "title": "JH-Analytics Live Stream",
+          "publishedAt": "2026-07-21T13:43:16Z",
           "durationSec": 0,
           "views": 0,
-          "thumb": "https://i.ytimg.com/vi/Io9PsvEzkeA/hqdefault.jpg",
+          "thumb": "https://i.ytimg.com/vi/vepq_92KWtE/hqdefault.jpg",
           "status": "upcoming"
+        },
+        {
+          "id": "COyVljbmhDY",
+          "title": "FC 26 New Penalty Event + Rivals Grind | Ultimate Team Live #fc26 #eafc26",
+          "publishedAt": "2026-07-21T05:55:15Z",
+          "durationSec": 6181,
+          "views": 33,
+          "thumb": "https://i.ytimg.com/vi/COyVljbmhDY/hqdefault.jpg"
         },
         {
           "id": "PkLCAPixPGc",
           "title": "FC 26 New Penalty Event + Rivals Grind | Ultimate Team Live #fc26 #eafc26",
           "publishedAt": "2026-07-19T06:48:49Z",
           "durationSec": 5660,
-          "views": 22,
+          "views": 27,
           "thumb": "https://i.ytimg.com/vi/PkLCAPixPGc/hqdefault.jpg"
         },
         {
@@ -537,14 +546,6 @@
           "durationSec": 2853,
           "views": 16,
           "thumb": "https://i.ytimg.com/vi/N1359CH3BL8/hqdefault.jpg"
-        },
-        {
-          "id": "qve8EeIWJXg",
-          "title": "Live | FC26 ULTIMATE TEAM | RIVALS",
-          "publishedAt": "2026-05-01T19:59:36Z",
-          "durationSec": 3161,
-          "views": 8,
-          "thumb": "https://i.ytimg.com/vi/qve8EeIWJXg/hqdefault.jpg"
         }
       ]
     }
