@@ -1,35 +1,22 @@
 "use client";
 
 import type { Project } from "@/lib/definitions";
-import type { ArchitectureData, ArchitectureNode, ProjectMedia, Metric } from "@/data/types";
+import type { ProjectMedia, Metric } from "@/data/types";
 import Image from "next/image";
 import Link from "next/link";
-import dynamic from "next/dynamic";
 import { ArrowLeft } from "lucide-react";
-import { typeColors as architectureColors } from "./architectureColors";
 import { CodeBlock } from "./CodeBlock";
-
-const ArchitectureVisualizer = dynamic(
-  () => import("./ArchitectureVisualizer").then((mod) => mod.ArchitectureVisualizer),
-  { ssr: false }
-);
 
 const pad = (n: number) => String(n).padStart(2, "0");
 
 export function ProjectDetail({ project }: { project: Project }) {
   type ProjectWithExtras = Project & {
-    architecture?: ArchitectureData & {
-      description?: string;
-      legend?: { label: string; type: ArchitectureNode["type"] }[];
-    };
     media?: ProjectMedia[];
     metrics?: Metric[];
   };
 
   const richProject = project as ProjectWithExtras;
   const deepDive = project.deepDive;
-  const architecture = richProject.architecture;
-  const legendItems = architecture?.legend;
   const mediaItems = richProject.media;
   const metrics = richProject.metrics;
 
@@ -118,32 +105,6 @@ export function ProjectDetail({ project }: { project: Project }) {
           </>
         )}
 
-        {architecture?.nodes?.length ? (
-          <>
-            <h3 className="ds-h3">System architecture</h3>
-            {architecture.description && (
-              <div className="ds-prose"><p>{architecture.description}</p></div>
-            )}
-            <div className="ds-arch">
-              <ArchitectureVisualizer data={architecture} />
-            </div>
-            {legendItems && (
-              <div className="specs" style={{ marginTop: 14 }}>
-                {legendItems.map((item) => (
-                  <span key={item.label}>
-                    <span
-                      style={{
-                        display: "inline-block", width: 8, height: 8, borderRadius: 999, marginRight: 6,
-                        background: architectureColors[item.type as keyof typeof architectureColors] ?? "var(--accent)",
-                      }}
-                    />
-                    {item.label}
-                  </span>
-                ))}
-              </div>
-            )}
-          </>
-        ) : null}
       </>
     ),
   });

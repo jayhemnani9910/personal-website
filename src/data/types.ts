@@ -178,32 +178,9 @@ export interface Project {
     solution: string[];           // bullet solution narrative
     impact: string[];             // bullet impact/results
     metrics?: Metric[];
-    diagram?: string;             // legacy textual diagram; prefer architecture
+    diagram?: string;             // legacy textual diagram
     media?: ProjectMedia[];
     links?: ProjectLinks;
     featured?: boolean;           // Show in Selected Works
     priority?: number;            // Lower = higher on the grid
-    architecture?: ArchitectureData;
-}
-
-export interface ArchitectureNode {
-    id: string;
-    label: string;
-    type: "service" | "database" | "stream" | "client" | "cache" | "queue" | "ml" | "other" | "search";
-    x?: number; // Optional relative grid position (0-100)
-    y?: number; // Optional relative grid position (0-100)
-}
-
-export interface ArchitectureEdge {
-    source: string;
-    target: string;
-    label?: string;
-    animated?: boolean;
-}
-
-export interface ArchitectureData {
-    nodes: ArchitectureNode[];
-    edges: ArchitectureEdge[];
-    description?: string;
-    legend?: { type: ArchitectureNode["type"]; label: string }[];
 }
