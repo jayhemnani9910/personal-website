@@ -160,7 +160,7 @@ export default function AboutPage() {
               className="border-b border-tr-hairline px-[var(--tr-s-5)] py-[var(--tr-s-3)] text-[length:var(--tr-t-mono-sm)] uppercase text-tr-text-faint"
               style={mono}
             >
-              // the case, read first
+              {"// the case, read first"}
             </p>
             <dl className="grid grid-cols-1 gap-px bg-tr-hairline sm:grid-cols-2">
               {PROOF.map((p) => (
