@@ -170,19 +170,19 @@ export const RESUME: Resume = {
   publications: [
     {
       title: "Diabetes Prediction using Stacking Classifier",
-      venue: "IEEE International Conference on Machine Learning & Data Science",
-      year: "2022",
-      description: "Six-model stack achieving ~82.68% accuracy on PIMA dataset.",
-      abstract: "This paper presents a novel stacking ensemble approach for diabetes prediction combining six base classifiers (Random Forest, SVM, KNN, Logistic Regression, Decision Tree, and Naive Bayes) with a meta-learner. The proposed method achieves 82.68% accuracy on the PIMA Indians Diabetes dataset, outperforming individual classifiers by 5-8%. We demonstrate the effectiveness of feature engineering and hyperparameter optimization in improving prediction reliability for early diabetes detection.",
+      venue: "IEEE International Conference on Artificial Intelligence and Machine Vision (AIMV)",
+      year: "2021",
+      description: "Six-model stack, 82.68% accuracy as published; the committed notebook reproduces 74.46% on a 30% held-out test set.",
+      abstract: "This paper presents a stacking ensemble approach for diabetes prediction combining six hyperparameter-tuned base classifiers (Gaussian Naive Bayes, Random Forest, Decision Tree, SVM, an ANN/MLP, and Logistic Regression) under a Random Forest meta-learner. The published accuracy on the PIMA Indians Diabetes dataset is 82.68%. The committed notebook, which fixes random_state for reproducibility, reaches 74.46% on the 30% held-out test set against 87.9% on the training set, a gap worth stating plainly on a dataset this small.",
       coAuthors: [],
       link: "https://ieeexplore.ieee.org/document/9670920",
       github: "https://github.com/jayhemnani9910/diabetes-prediction-stacking"
     },
     {
       title: "CPU Scheduling Algorithms Analysis",
-      venue: "IEEE International Conference",
+      venue: "IEEE International Conference on Artificial Intelligence and Machine Vision (AIMV)",
       year: "2021",
-      description: "Comparative analysis of CPU scheduling algorithms with priority queue optimization.",
+      description: "Applied CPU-scheduling ideas to vaccine-distribution scheduling; the implementation is the 9-algorithm visualizer.",
       abstract: "This paper presents a comparative study of various CPU scheduling algorithms including FCFS, SJF, Priority, and Round Robin. We analyze their performance metrics and propose optimizations using priority queue data structures for improved throughput and reduced waiting times.",
       coAuthors: [],
       link: "https://ieeexplore.ieee.org/document/9670986",
