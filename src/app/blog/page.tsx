@@ -9,6 +9,7 @@ import { Reveal } from "@/components/motion/Reveal";
 export const metadata: Metadata = {
   title: "Writing",
   description: "Essays and long-form project writeups by Jay Hemnani.",
+  alternates: { canonical: "/blog" },
 };
 
 // Mono UI chrome: section markers, statuses. Uppercase + wide tracking,
