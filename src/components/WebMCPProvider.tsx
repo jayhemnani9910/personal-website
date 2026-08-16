@@ -20,7 +20,6 @@ export function WebMCPProvider({ data }: WebMCPProviderProps) {
     if (!isWebMCPAvailable()) return;
 
     registerWebMCPTools(data);
-    console.log("[WebMCP] Registered 8 tools for AI agents");
 
     return () => {
       unregisterWebMCPTools();
