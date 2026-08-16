@@ -129,9 +129,12 @@ export function registerWebMCPTools(data: SiteData): void {
       type: "object",
       properties: {
         query: { type: "string", description: "Free-text search across title, summary, and tech stack" },
-        tech: { type: "string", description: "Filter by technology (e.g. 'Python', 'React', 'FAISS')" },
-        tag: { type: "string", description: "Filter by tag (e.g. 'analytics', 'ml', 'sports')" },
-        domain: { type: "string", description: "Filter by domain (e.g. 'Sports analytics', 'Computer vision')" },
+        // Examples must be values that actually match something, or an agent
+        // burns a call on a filter that returns nothing. Checked against
+        // content/projects/*.mdx.
+        tech: { type: "string", description: "Filter by technology (e.g. 'Python', 'Docker', 'FastAPI')" },
+        tag: { type: "string", description: "Filter by tag (e.g. 'research', 'agents', 'distributed-systems')" },
+        domain: { type: "string", description: "Filter by domain (e.g. 'AI/ML', 'Computer Vision')" },
         featured_only: { type: "boolean", description: "Only return featured projects" },
       },
     },
@@ -185,7 +188,7 @@ export function registerWebMCPTools(data: SiteData): void {
     inputSchema: {
       type: "object",
       properties: {
-        id: { type: "string", description: "Project ID (slug), e.g. 'barcabrain', 'laliga-live'" },
+        id: { type: "string", description: "Project ID (slug), e.g. 'contextbox', 'fifa-soccer-ds'" },
       },
       required: ["id"],
     },
