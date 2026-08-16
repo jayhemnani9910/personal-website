@@ -386,7 +386,7 @@ export function EditorialHome({
                     {"],\n"}
                     {'  "tools_registered": 8,\n'}
                     {'  "url": '}
-                    <span className="text-tr-text">{'"https://jayhemnani.me/projects/webmcp-portfolio"'}</span>
+                    <span className="text-tr-text">{'"https://www.jayhemnani.me/projects/webmcp-portfolio"'}</span>
                     {"\n}"}
                   </code>
                 </pre>

@@ -150,7 +150,7 @@ export const RECEIPTS: Receipt[] = [
     title: 'Shipping zero-to-something-working fast.',
     project: 'WEBMCP PORTFOLIO + ANTHROPIC SDK PR',
     desc: `Made jayhemnani.me agent-queryable via the W3C WebMCP standard: ${WEBMCP_TOOL_COUNT} tools, in production, on the surface FDE postings now call table-stakes. Separately: a merged PR into the Anthropic MCP Python SDK. Both are about shipping precise work fast in unfamiliar code.`,
-    link: { label: 'try jayhemnani.me with any MCP client', href: 'https://jayhemnani.me' },
+    link: { label: 'try jayhemnani.me with any MCP client', href: 'https://www.jayhemnani.me' },
   },
   {
     phase: 'PHASE 05 · RISKS + EVALS',
@@ -457,7 +457,7 @@ export const PROOFS: ProofItem[] = [
     title: { pre: 'Made my own site ', em: 'agent-queryable', post: ' via W3C WebMCP.' },
     body: `${WEBMCP_TOOL_COUNT} tools in production. Early implementation on the exact surface OpenAI / Anthropic / Google FDE postings now call table-stakes.`,
     stack: ['W3C WebMCP', `${WEBMCP_TOOL_COUNT} tools`, 'production'],
-    link: { label: 'try with any MCP client', href: 'https://jayhemnani.me' },
+    link: { label: 'try with any MCP client', href: 'https://www.jayhemnani.me' },
   },
   {
     id: 'III',
