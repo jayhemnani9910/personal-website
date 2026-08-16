@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useCallback, useEffect, useRef, useState, type CSSProperties } from "react";
 import { m, AnimatePresence } from "framer-motion";
 import { useTheme } from "@/context/ThemeContext";
+import { WEBMCP_TOOL_COUNT } from "@/lib/webmcp";
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
 import { EASE, DUR } from "@/lib/motion-tokens";
 
@@ -235,7 +236,7 @@ export function EditorialMasthead({ active }: { active?: Section }) {
                   : { duration: MCP_DOT_DURATION, repeat: Infinity, ease: CUBIC_EASE }
               }
             />
-            MCP: 8 tools
+            MCP: {WEBMCP_TOOL_COUNT} tools
           </span>
 
           <button

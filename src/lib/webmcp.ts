@@ -84,6 +84,26 @@ export interface SiteData {
   experiments: { id: string; title: string; description: string; tags: string[]; progress?: number }[];
 }
 
+/**
+ * The tools registered below, in registration order. Single source of truth:
+ * unregisterWebMCPTools walks this list, and every place in the UI that quotes
+ * a tool count reads WEBMCP_TOOL_COUNT rather than typing a number. The count
+ * is asserted against the actual registerTool calls in webmcp.test.ts, so this
+ * array cannot silently drift from what the site really registers.
+ */
+export const WEBMCP_TOOL_NAMES = [
+  "search_projects",
+  "get_project",
+  "get_resume",
+  "search_skills",
+  "get_contact",
+  "list_experiments",
+  "toggle_theme",
+  "switch_mode",
+] as const;
+
+export const WEBMCP_TOOL_COUNT = WEBMCP_TOOL_NAMES.length;
+
 /** Check if WebMCP is available in the browser */
 export function isWebMCPAvailable(): boolean {
   return typeof navigator !== "undefined" && "modelContext" in navigator && navigator.modelContext !== undefined;
@@ -377,17 +397,6 @@ export function unregisterWebMCPTools(): void {
   const mc = navigator.modelContext;
   if (!mc) return;
 
-  const toolNames = [
-    "search_projects",
-    "get_project",
-    "get_resume",
-    "search_skills",
-    "get_contact",
-    "list_experiments",
-    "toggle_theme",
-    "switch_mode",
-  ];
-
-  toolNames.forEach((name) => mc.unregisterTool(name));
+  WEBMCP_TOOL_NAMES.forEach((name) => mc.unregisterTool(name));
   mc.clearContext("site_info");
 }

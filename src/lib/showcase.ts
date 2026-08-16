@@ -3,6 +3,8 @@
 // "use client") so server components can read it without RSC turning it into
 // a client reference.
 
+import { WEBMCP_TOOL_COUNT } from "@/lib/webmcp";
+
 export type ShowcaseDemo =
   | { kind: "iframe"; url: string }
   | {
@@ -140,7 +142,7 @@ export const SHOWCASE_PROJECTS: Record<string, ShowcaseConfig> = {
     heroTag: "navigator.modelContext",
     demo: {
       kind: "tools",
-      note: "The 8 tools this site registers with the WebMCP browser API. An agent in Chrome 146+ calls them directly; here is the catalog and one sample call.",
+      note: `The ${WEBMCP_TOOL_COUNT} tools this site registers with the WebMCP browser API. An agent in Chrome 146+ calls them directly; here is the catalog and one sample call.`,
       tools: [
         { name: "search_projects", kind: "read", description: "Search projects by query, tech, tag, domain, or featured-only." },
         { name: "get_project", kind: "read", description: "Full details for one project by ID: challenge, solution, impact, stack." },
