@@ -1,28 +1,22 @@
 import { NextRequest, NextResponse } from "next/server";
-
-const isKvConfigured = () => !!process.env.KV_REST_API_URL;
+import { getRedis } from "@/lib/kv";
 
 // Slugs are content ids/kebab-case; cap charset and length so the value can't
 // be used to create arbitrary KV keys.
 const isValidSlug = (s: unknown): s is string =>
     typeof s === "string" && /^[a-z0-9-]{1,80}$/.test(s);
 
-// Fallback for local dev without KV
+// Fallback for local dev without a store configured
 const localViews = new Map<string, number>();
-
-async function getKv() {
-    const { kv } = await import("@vercel/kv");
-    return kv;
-}
 
 export async function GET(request: NextRequest) {
     const slug = request.nextUrl.searchParams.get("slug");
     if (!isValidSlug(slug)) return NextResponse.json({ count: 0 });
 
-    if (isKvConfigured()) {
+    const redis = getRedis();
+    if (redis) {
         try {
-            const kv = await getKv();
-            const count = (await kv.get<number>(`views:${slug}`)) || 0;
+            const count = (await redis.get<number>(`views:${slug}`)) || 0;
             return NextResponse.json({ count });
         } catch {
             return NextResponse.json({ count: 0 });
@@ -38,10 +32,10 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ error: "slug required" }, { status: 400 });
         }
 
-        if (isKvConfigured()) {
+        const redis = getRedis();
+        if (redis) {
             try {
-                const kv = await getKv();
-                const count = await kv.incr(`views:${slug}`);
+                const count = await redis.incr(`views:${slug}`);
                 return NextResponse.json({ count });
             } catch {
                 return NextResponse.json({ count: 0 });
