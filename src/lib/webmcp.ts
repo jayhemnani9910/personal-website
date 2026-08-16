@@ -175,7 +175,7 @@ export function registerWebMCPTools(data: SiteData): void {
           tech: p.tech,
           tags: p.tags,
           domain: p.domain,
-          url: `https://jayhemnani.me/projects/${p.id}`,
+          url: `https://www.jayhemnani.me/projects/${p.id}`,
         })),
       };
     },
@@ -199,7 +199,7 @@ export function registerWebMCPTools(data: SiteData): void {
       }
       return {
         ...project,
-        url: `https://jayhemnani.me/projects/${project.id}`,
+        url: `https://www.jayhemnani.me/projects/${project.id}`,
         github: project.github || null,
       };
     },
@@ -295,7 +295,7 @@ export function registerWebMCPTools(data: SiteData): void {
         name: data.resume.name,
         email: data.resume.contact.email,
         social: data.social,
-        website: "https://jayhemnani.me",
+        website: "https://www.jayhemnani.me",
       };
     },
   });
