@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Newsreader, Geist, JetBrains_Mono } from "next/font/google";
+import { Newsreader, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { ClientLayout } from "@/components/ClientLayout";
 import { ThemeProvider } from "@/context/ThemeContext";
@@ -14,15 +14,6 @@ const newsreader = Newsreader({
   weight: ["400", "500", "600"],
   display: "swap",
   variable: "--font-newsreader",
-});
-
-// TODO(phase-3): drop Geist. Budget is 2 families (Newsreader + JetBrains Mono).
-// Remove once the last .editorial page is migrated.
-const geist = Geist({
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "600"],
-  display: "swap",
-  variable: "--font-geist",
 });
 
 const jetbrainsMono = JetBrains_Mono({
@@ -111,7 +102,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${newsreader.variable} ${geist.variable} ${jetbrainsMono.variable}`} suppressHydrationWarning>
+    <html lang="en" className={`${newsreader.variable} ${jetbrainsMono.variable}`} suppressHydrationWarning>
       <head>
         <script
           type="application/ld+json"
