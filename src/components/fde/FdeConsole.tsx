@@ -52,23 +52,22 @@ export function FdeConsole() {
       });
 
       if (res.status === 503) {
-        const body = await res.json().catch(() => ({}));
-        if (body?.error === 'no-runtime') {
-          setError("The live agent needs a runtime (this only works on the hosted preview). Try one of the preset scenarios above: they're fully prepared.");
-        } else {
-          setError("The live agent needs a runtime. Try one of the preset scenarios above: they're fully prepared.");
-        }
+        setError("The live agent needs a runtime (this only works on the hosted preview). Try one of the preset scenarios above: they're fully prepared.");
+        setLoading(false);
+        return;
+      }
+
+      // The limit is 8 per minute per IP. Telling someone their brief failed to
+      // parse when they were actually throttled sends them off rewriting a brief
+      // that was fine.
+      if (res.status === 429) {
+        setError("That's a few too many runs in a minute. Give it about a minute, or pick a preset scenario in the meantime.");
         setLoading(false);
         return;
       }
 
       if (!res.ok) {
-        const body = await res.json().catch(() => ({}));
-        if (body?.error === 'parse') {
-          setError("The agent had trouble parsing. Try a more specific brief, or pick a preset.");
-        } else {
-          setError("The agent had trouble parsing. Try a more specific brief, or pick a preset.");
-        }
+        setError("The agent had trouble parsing. Try a more specific brief, or pick a preset.");
         setLoading(false);
         return;
       }
