@@ -9,10 +9,6 @@ const token = process.env.UPSTASH_REDIS_REST_TOKEN || process.env.KV_REST_API_TO
 
 let client: Redis | null = null;
 
-export function isKvConfigured(): boolean {
-  return Boolean(url && token);
-}
-
 export function getRedis(): Redis | null {
   if (!url || !token) return null;
   if (!client) client = new Redis({ url, token });
