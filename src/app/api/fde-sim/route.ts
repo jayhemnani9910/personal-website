@@ -189,8 +189,11 @@ async function isRateLimited(ip: string): Promise<boolean> {
         const count = await redis.incr(key);
         if (count === 1) await redis.expire(key, RATE_WINDOW_SECONDS);
         return count > RATE_LIMIT;
-    } catch {
-        return false; // fail open on store errors
+    } catch (err) {
+        // Fail open: a store outage should not take the feature down. Log it,
+        // because while this is firing the route has no rate limit at all.
+        console.error("[fde-sim] rate-limit store unavailable, failing open:", err instanceof Error ? err.message : err);
+        return false;
     }
 }
 
@@ -223,6 +226,7 @@ export async function POST(request: NextRequest) {
     // Check for API key
     const apiKey = process.env.GEMINI_API_KEY;
     if (!apiKey) {
+        console.error("[fde-sim] GEMINI_API_KEY is not set; live simulation is disabled");
         return NextResponse.json({ error: "no-runtime" }, { status: 503 });
     }
 
@@ -233,8 +237,12 @@ export async function POST(request: NextRequest) {
         "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent";
 
     // One call attempt: returns a normalized payload, or null on any failure
-    // (non-200, empty body, unparseable text, or wrong shape).
-    async function generate(): Promise<SimPayload | null> {
+    // (non-200, empty body, unparseable text, or wrong shape). Each failure logs
+    // its own cause to stderr, which Vercel collects as runtime logs: without it
+    // every one of these surfaces to the caller as an indistinguishable 502 and
+    // there is no way to tell an expired key from a model that rambled.
+    // Never log the prompt, the brief, or the key.
+    async function generate(attempt: number): Promise<SimPayload | null> {
         try {
             const res = await fetch(geminiUrl, {
                 method: "POST",
@@ -248,12 +256,29 @@ export async function POST(request: NextRequest) {
                     },
                 }),
             });
-            if (!res.ok) return null;
+            if (!res.ok) {
+                console.error(`[fde-sim] gemini http ${res.status} ${res.statusText} (attempt ${attempt})`);
+                return null;
+            }
             const data = await res.json();
-            const raw: string = data?.candidates?.[0]?.content?.parts?.[0]?.text ?? "";
+            const candidate = data?.candidates?.[0];
+            const raw: string = candidate?.content?.parts?.[0]?.text ?? "";
+            if (!raw) {
+                console.error(
+                    `[fde-sim] gemini returned no text (attempt ${attempt}, finishReason=${candidate?.finishReason ?? "none"})`
+                );
+                return null;
+            }
             const parsed = extractJson(raw);
-            return isSimPayload(parsed) ? normalizeCoords(parsed) : null;
-        } catch {
+            if (!isSimPayload(parsed)) {
+                console.error(`[fde-sim] response failed shape check (attempt ${attempt}, ${raw.length} chars)`);
+                return null;
+            }
+            return normalizeCoords(parsed);
+        } catch (err) {
+            const detail = err instanceof Error ? err.message : String(err);
+            const what = detail === "unparseable" ? "could not extract JSON from response" : "request failed";
+            console.error(`[fde-sim] ${what} (attempt ${attempt}): ${detail}`);
             return null;
         }
     }
@@ -261,11 +286,12 @@ export async function POST(request: NextRequest) {
     // Retry once: the model occasionally returns unparseable JSON; a second pass
     // almost always succeeds before we give up with a 502.
     let payload: SimPayload | null = null;
-    for (let attempt = 0; attempt < 2 && !payload; attempt++) {
-        payload = await generate();
+    for (let attempt = 1; attempt <= 2 && !payload; attempt++) {
+        payload = await generate(attempt);
     }
 
     if (!payload) {
+        console.error(`[fde-sim] giving up after 2 attempts (brief ${brief.length} chars)`);
         return NextResponse.json({ error: "parse" }, { status: 502 });
     }
 
