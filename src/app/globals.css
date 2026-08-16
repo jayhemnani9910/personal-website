@@ -9,7 +9,8 @@
 
 /* ═══════════════════════════════════════════════════════════════
    EDITORIAL DESIGN SYSTEM — warm paper, ink black, rust accent
-   Newsreader (display) · Geist (body) · JetBrains Mono (labels)
+   Two families, per TWO READERS: Newsreader (display + body, what Jay says)
+   and JetBrains Mono (labels, what the machine sees)
    ═══════════════════════════════════════════════════════════════ */
 
 :root {
@@ -45,7 +46,11 @@
 
   /* Typography */
   --ff-display: var(--font-newsreader), "Source Serif 4", Georgia, serif;
-  --ff-body: var(--font-geist), -apple-system, BlinkMacSystemFont, sans-serif;
+  /* TWO READERS runs on two families: Newsreader for what Jay says, JetBrains
+     Mono for what the machine sees. Body prose is Newsreader, which is what
+     every tr-* page already sets per element. This used to be Geist, a third
+     family loaded at four weights purely as the body/fallback default. */
+  --ff-body: var(--font-newsreader), Georgia, serif;
   --ff-mono: var(--font-jetbrains), "IBM Plex Mono", ui-monospace, monospace;
   --font-sans: var(--ff-body);
   --font-mono: var(--ff-mono);
@@ -1364,6 +1369,10 @@ html[data-theme="dark"] .editorial .ph::before {
   --highlight: color-mix(in srgb, var(--tr-ember) 12%, transparent);
   --ff-display: var(--font-newsreader);
   --ff-mono: var(--font-jetbrains);
+  /* Body prose is Newsreader here, same as every tr-* page. This block already
+     remapped display and mono; --ff-body was the one left pointing at Geist,
+     which is the only thing keeping a third font family in the build. */
+  --ff-body: var(--font-newsreader), Georgia, serif;
 
   background: var(--paper);
   color: var(--ink);
@@ -2582,6 +2591,10 @@ html[data-theme="dark"] .editorial .ph::before {
   --highlight: color-mix(in srgb, var(--tr-ember) 12%, transparent);
   --ff-display: var(--font-newsreader);
   --ff-mono: var(--font-jetbrains);
+  /* Same omission as .fde-page had: display and mono were remapped, --ff-body
+     was not, so it fell through to the global Geist definition. Newsreader here
+     matches every tr-* page and is what retires the third font family. */
+  --ff-body: var(--font-newsreader), Georgia, serif;
   background: var(--tr-bg);
   color: var(--tr-text);
 }
