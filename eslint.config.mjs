@@ -19,6 +19,9 @@ const eslintConfig = defineConfig([
     "next-env.d.ts",
     "v1-old-site/**",
     "docs/**",
+    // Scratch files written by the remember plugin, at the repo root and
+    // inside the practice-problem folders. Not ours, and not code.
+    "**/.remember/**",
   ]),
 ]);
 
