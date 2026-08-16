@@ -1,6 +1,8 @@
 /* FDE Simulation data: ported from the prototype (presets.jsx + sim.jsx + app.jsx).
    Verbatim copy of the content; no em-dashes introduced. */
 
+import { WEBMCP_TOOL_COUNT } from '@/lib/webmcp';
+
 // ─── Types ───────────────────────────────────────────────────────────────────
 
 export interface ScopeQuestion {
@@ -147,7 +149,7 @@ export const RECEIPTS: Receipt[] = [
     phase: 'PHASE 04 · PLAN',
     title: 'Shipping zero-to-something-working fast.',
     project: 'WEBMCP PORTFOLIO + ANTHROPIC SDK PR',
-    desc: "Made jayhemnani.me agent-queryable via the W3C WebMCP standard: 8 tools, in production, on the surface FDE postings now call table-stakes. Separately: a merged PR into the Anthropic MCP Python SDK. Both are about shipping precise work fast in unfamiliar code.",
+    desc: `Made jayhemnani.me agent-queryable via the W3C WebMCP standard: ${WEBMCP_TOOL_COUNT} tools, in production, on the surface FDE postings now call table-stakes. Separately: a merged PR into the Anthropic MCP Python SDK. Both are about shipping precise work fast in unfamiliar code.`,
     link: { label: 'try jayhemnani.me with any MCP client', href: 'https://jayhemnani.me' },
   },
   {
@@ -453,8 +455,8 @@ export const PROOFS: ProofItem[] = [
     cat: 'Protocols / connective tissue',
     project: 'WebMCP Portfolio',
     title: { pre: 'Made my own site ', em: 'agent-queryable', post: ' via W3C WebMCP.' },
-    body: 'Eight tools in production. Early implementation on the exact surface OpenAI / Anthropic / Google FDE postings now call table-stakes.',
-    stack: ['W3C WebMCP', '8 tools', 'production'],
+    body: `${WEBMCP_TOOL_COUNT} tools in production. Early implementation on the exact surface OpenAI / Anthropic / Google FDE postings now call table-stakes.`,
+    stack: ['W3C WebMCP', `${WEBMCP_TOOL_COUNT} tools`, 'production'],
     link: { label: 'try with any MCP client', href: 'https://jayhemnani.me' },
   },
   {

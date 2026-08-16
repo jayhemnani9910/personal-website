@@ -1,5 +1,8 @@
-// WebMCP tool registry: a browser agent calls the MCP hub which fans out
-// to five structured tools (search, resume, skills, contact, theme).
+// WebMCP tool registry: a browser agent calls the MCP hub which fans out to the
+// structured tools in WEBMCP_TOOL_NAMES (search, project, resume, skills,
+// contact, experiments, theme, mode). The caption reads WEBMCP_TOOL_COUNT so it
+// cannot drift from what src/lib/webmcp.ts actually registers.
+import { WEBMCP_TOOL_COUNT } from "@/lib/webmcp";
 // Landscape 840x504 (5/3) — all coordinates are plain integer/decimal literals,
 // no runtime math, so server and client serialize identically.
 
@@ -222,7 +225,7 @@ export function WebMCPFigure({ className }: { className?: string }) {
         fill="var(--ink-mute)"
         letterSpacing="0.04em"
       >
-        8 tools · JSON Schema in, typed results out
+        {WEBMCP_TOOL_COUNT} tools · JSON Schema in, typed results out
       </text>
     </svg>
   );
