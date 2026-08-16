@@ -9,6 +9,7 @@ export const metadata: Metadata = {
   title: "About",
   description:
     "Resume, experience, publications, open-source contributions, and a few things worth knowing about Jay Hemnani.",
+  alternates: { canonical: "/resume" },
 };
 
 // Mono UI chrome: labels, kickers, buttons. Uppercase + wide tracking.

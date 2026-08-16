@@ -9,6 +9,7 @@ export const metadata: Metadata = {
   title: "Channel",
   description:
     "Jay Hemnani on YouTube: AI news translated for data people on JH-Analytics 2.0, plus FC gaming lives on the original JH-Analytics.",
+  alternates: { canonical: "/youtube" },
 };
 
 const mono: CSSProperties = {
