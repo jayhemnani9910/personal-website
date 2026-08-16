@@ -1,0 +1,10 @@
+# Keep the knowledge graph scoped to the website.
+# Competitive-programming practice is real code but unrelated to the site, and
+# at 46 files it was 37% of the graph: it hijacked 3 of 10 detected communities
+# and produced most of the false "dead code" hits (deliberate solve_brute_force
+# alternates, plus duplicate symbols across test3/test5/test5_clean).
+leetcode/
+codeforces/
+
+# Archived previous version of the site. Never modified, never deployed.
+v1-old-site/
