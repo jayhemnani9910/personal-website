@@ -7,6 +7,27 @@
    them. It contains no app code, so exclude it. */
 @source not "../../redesign";
 
+/* Same reason as above: docs/ holds prose ABOUT the class names (plans, specs,
+   audits), including the malformed `text-[length:var(--tr-t-*)]` written as an
+   example. Tailwind was compiling that literal into a real rule, which is where
+   the build's "Unexpected token Delim('*')" CSS warnings came from. Prose about
+   utilities is not a usage of them. */
+@source not "../../docs";
+
+/* Tailwind v4's automatic source detection skips anything .gitignore matches.
+   .gitignore line 56 is a bare `resume/`, meant for the private resume/ folder
+   at the repo root, but a bare pattern matches a directory of that name at ANY
+   depth, so src/app/resume/ was silently excluded from scanning. Every utility
+   used ONLY by the About page (max-w-[54rem], max-w-[72rem], its paddings and
+   measures) was therefore missing from the compiled CSS, in production as well
+   as locally, and the page rendered without its layout constraints. Nothing
+   failed: not the build, not lint, not the type checker.
+   Re-including the path explicitly overrides the ignore rule. Fixing it in
+   .gitignore instead would un-ignore public/resume/ and start surfacing the
+   resume PDFs, which is a separate decision.
+   src/lib/tokens.test.ts guards against another directory falling into this. */
+@source "../app/resume";
+
 /* ═══════════════════════════════════════════════════════════════
    EDITORIAL DESIGN SYSTEM — warm paper, ink black, rust accent
    Two families, per TWO READERS: Newsreader (display + body, what Jay says)
@@ -2484,6 +2505,10 @@ html[data-theme="dark"] .editorial .ph::before {
   --tr-text-mute: #8A94A3;
   --tr-text-faint: #7A8492;
   --tr-ember: #FF5C2B;
+  /* Hover fill for the one filled control in the system. Dark goes LIGHTER
+     (the ember is a light source on near-black, so hover = lit), which also
+     raises on-ember contrast from 6.39:1 to 7.64:1. tokens.test.ts asserts it. */
+  --tr-ember-hover: #FF7A4F;
   --tr-on-ember: #0A0B0D;
   --tr-glow-text: 0 0 24px rgba(255, 92, 43, .35);
   --tr-glow-box: 0 0 32px rgba(255, 92, 43, .25);
@@ -2495,6 +2520,19 @@ html[data-theme="dark"] .editorial .ph::before {
   --tr-t-body: clamp(1rem, 1.05vw, 1.125rem);
   --tr-t-mono: .75rem;
   --tr-t-mono-sm: .6875rem;
+
+  /* ---- line height (paired with the sizes above, theme-independent) ----
+     The scale had sizes but no leading, so leading was written inline and
+     drifted: 14 distinct raw values across 44 call sites, including body prose
+     set at 1.5 in one place and 1.6 in another. Ratios get tighter as type gets
+     larger, which is the standard relationship. tokens.test.ts fails the build
+     on a raw `leading-[1.55]`-style value so this cannot drift again. */
+  --tr-lh-numeral: .85;   /* single-glyph stats (the proof ledger figures) */
+  --tr-lh-display: .95;   /* display type, 44-104px */
+  --tr-lh-h2: 1.05;       /* section headings, 28-48px */
+  --tr-lh-h3: 1.2;        /* sub-headings and card titles, 20-28px */
+  --tr-lh-body: 1.6;      /* body prose and code */
+  --tr-lh-prose: 1.7;     /* long-form reading: blog post bodies */
 
   /* ---- spacing: 4px-based ramp, theme-independent ---- */
   --tr-s-1: 0.25rem;   /* 4px */
@@ -2545,6 +2583,9 @@ html[data-theme="dark"] .editorial .ph::before {
   --tr-text-mute: #4A5A6B;
   --tr-text-faint: #5C6673;
   --tr-ember: #B63C1A;
+  /* Light inverts the direction: ink on paper gets DARKER under the cursor,
+     not brighter. 5.75:1 -> 7.64:1 against white. */
+  --tr-ember-hover: #982F12;
   --tr-on-ember: #FFFFFF;
   /* light = the instrument printed in daylight: glow becomes flat fill */
   --tr-glow-text: none;
@@ -2564,6 +2605,7 @@ html[data-theme="dark"] .editorial .ph::before {
     --tr-text-mute: #4A5A6B;
     --tr-text-faint: #5C6673;
     --tr-ember: #B63C1A;
+    --tr-ember-hover: #982F12;
     --tr-on-ember: #FFFFFF;
     --tr-glow-text: none;
     --tr-glow-box: none;
@@ -2599,6 +2641,44 @@ html[data-theme="dark"] .editorial .ph::before {
   color: var(--tr-text);
 }
 
+/* The one filled control in the system, with the full state set the design
+   previously left undefined: the ember CTA had no hover, pressed or focus
+   treatment while the outlined button sitting next to it did, so the least
+   important control on the page responded to the cursor and the most
+   important one did not.
+   - hover:  --tr-ember-hover (lighter in dark, darker in light)
+   - active: back to base ember, so the press reads as settling
+   - focus-visible: an ember ring offset off the fill, for keyboard users
+   Applied as a class rather than repeated utility strings because the same
+   button appears on the home page, /resume and not-found. */
+.tr-cta {
+  background: var(--tr-ember);
+  color: var(--tr-on-ember);
+  box-shadow: var(--tr-glow-box);
+  transition: background-color var(--tr-dur-base) var(--tr-ease);
+}
+
+@media (hover: hover) {
+  .tr-cta:hover {
+    background: var(--tr-ember-hover);
+  }
+}
+
+.tr-cta:active {
+  background: var(--tr-ember);
+}
+
+.tr-cta:focus-visible {
+  outline: 2px solid var(--tr-ember);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tr-cta {
+    transition: none;
+  }
+}
+
 /* Expose color tokens to Tailwind utilities (bg-tr-bg, text-tr-ember, …).
    "inline" so utilities stay theme-reactive instead of freezing at the
    :root (dark) default — see Tailwind v4 @theme docs. */
@@ -2611,5 +2691,6 @@ html[data-theme="dark"] .editorial .ph::before {
   --color-tr-text-mute: var(--tr-text-mute);
   --color-tr-text-faint: var(--tr-text-faint);
   --color-tr-ember: var(--tr-ember);
+  --color-tr-ember-hover: var(--tr-ember-hover);
   --color-tr-on-ember: var(--tr-on-ember);
 }
