@@ -10,6 +10,7 @@ import {
   type YouTubeData,
   type YouTubeItem,
 } from "@/lib/youtube";
+import { CHANNEL_COPY } from "@/lib/youtube-copy";
 
 type TabKey = "videos" | "shorts" | "live";
 
@@ -38,21 +39,6 @@ const monoData: CSSProperties = {
 
 const serif: CSSProperties = {
   fontFamily: "var(--font-newsreader)",
-};
-
-// Authored copy lives here, not in the generated JSON, so the daily refresh
-// script can never overwrite Jay's words. Keyed by channel handle.
-const CHANNEL_COPY: Record<string, { tagline: string; about: string }> = {
-  "@jhanalytics2.0": {
-    tagline: "AI news, translated for data people.",
-    about:
-      "A faceless shorts channel that takes what just happened in AI and pulls out the one mechanism that matters: the failure mode, the cost math, the benchmark that holds up. One claim per video, under 90 seconds, no hype. The current run is the Failure Report series: what broke, why, and the fix.",
-  },
-  "@jhanalytics": {
-    tagline: "Analytics, football, and the grind in between.",
-    about:
-      "The original channel: FC Ultimate Team lives and match clips next to analytics experiments. Two hundred uploads of figuring out what works on camera before the second channel got serious about AI.",
-  },
 };
 
 function StatBlock({ label, value }: { label: string; value: string }) {
@@ -101,7 +87,7 @@ function VideoCard({ item }: { item: YouTubeItem }) {
       </div>
       <div className="flex flex-1 flex-col gap-[var(--tr-s-2)] p-[var(--tr-s-4)]">
         <h3
-          className="line-clamp-2 text-[length:var(--tr-t-h3)] font-light leading-[1.2] text-tr-text"
+          className="line-clamp-2 text-[length:var(--tr-t-h3)] font-light leading-[var(--tr-lh-h3)] text-tr-text"
           style={serif}
         >
           {item.title}
@@ -133,7 +119,7 @@ function ShortCard({ item }: { item: YouTubeItem }) {
       </div>
       <div className="flex flex-col gap-[var(--tr-s-1)] p-[var(--tr-s-3)]">
         <h3
-          className="line-clamp-2 text-[length:var(--tr-t-body)] font-light leading-[1.3] text-tr-text"
+          className="line-clamp-2 text-[length:var(--tr-t-body)] leading-[var(--tr-lh-h3)] text-tr-text"
           style={serif}
         >
           {item.title}
@@ -182,7 +168,9 @@ export function YouTubeShowcase({ data }: { data: YouTubeData }) {
   const tabRefs = useRef<Array<HTMLButtonElement | null>>([]);
 
   const channel = data.channels[channelIdx];
-  const copy = CHANNEL_COPY[channel.handle];
+  // Guarded: a missing entry now drops the tagline and blurb instead of throwing
+  // mid-render. The test is what keeps the entry from going missing in the first place.
+  const copy = CHANNEL_COPY[channel.id];
   const panels: Record<TabKey, YouTubeItem[]> = {
     videos: channel.videos,
     shorts: channel.shorts,
@@ -217,14 +205,16 @@ export function YouTubeShowcase({ data }: { data: YouTubeData }) {
             {channel.handle}
           </p>
           <h2
-            className="mt-[var(--tr-s-3)] text-[length:var(--tr-t-h2)] font-light leading-[1.05] text-tr-text"
+            className="mt-[var(--tr-s-3)] text-[length:var(--tr-t-h2)] font-light leading-[var(--tr-lh-h2)] text-tr-text"
             style={serif}
           >
-            {copy.tagline}
+            {copy?.tagline ?? channel.title}
           </h2>
-          <p className="mt-[var(--tr-s-4)] text-[length:var(--tr-t-body)] leading-[1.6] text-tr-text-mute" style={serif}>
-            {copy.about}
-          </p>
+          {copy ? (
+            <p className="mt-[var(--tr-s-4)] text-[length:var(--tr-t-body)] leading-[var(--tr-lh-body)] text-tr-text-mute" style={serif}>
+              {copy.about}
+            </p>
+          ) : null}
         </div>
 
         <div className="flex min-w-0 flex-wrap gap-[var(--tr-s-6)]">
