@@ -100,6 +100,48 @@ async function isRateLimited(ip: string): Promise<boolean> {
     }
 }
 
+// Level-1 exact-match cache. A Gemini call is the slowest and only metered part
+// of this route, and the same brief gets submitted more than once: Jay demoing
+// the page, a recruiter pasting the same scenario, anyone hitting retry. Redis
+// is already wired up on the line above for rate limiting.
+//
+// Normalised so trivial differences (case, padding, internal whitespace) share
+// an entry. The key is a hash rather than the brief itself, both to bound the
+// key length and to keep visitor text out of the keyspace.
+const CACHE_TTL_SECONDS = 60 * 60 * 24 * 30; // 30 days
+
+async function cacheKey(brief: string): Promise<string> {
+    const normalised = brief.toLowerCase().replace(/\s+/g, " ").trim();
+    const digest = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(normalised));
+    const hex = Array.from(new Uint8Array(digest))
+        .map((b) => b.toString(16).padStart(2, "0"))
+        .join("");
+    return `simcache:fde-sim:${hex}`;
+}
+
+async function readCache(key: string): Promise<SimPayload | null> {
+    const redis = getRedis();
+    if (!redis) return null;
+    try {
+        const hit = await redis.get<SimPayload>(key);
+        return hit && isSimPayload(hit) ? hit : null;
+    } catch (err) {
+        // A cache miss and a cache outage are the same thing to the caller.
+        console.error("[fde-sim] cache read failed:", err instanceof Error ? err.message : err);
+        return null;
+    }
+}
+
+async function writeCache(key: string, payload: SimPayload): Promise<void> {
+    const redis = getRedis();
+    if (!redis) return;
+    try {
+        await redis.set(key, payload, { ex: CACHE_TTL_SECONDS });
+    } catch (err) {
+        console.error("[fde-sim] cache write failed:", err instanceof Error ? err.message : err);
+    }
+}
+
 export async function POST(request: NextRequest) {
     // Validate input
     let brief: string;
@@ -124,6 +166,15 @@ export async function POST(request: NextRequest) {
         "anon";
     if (await isRateLimited(ip)) {
         return NextResponse.json({ error: "rate-limited" }, { status: 429 });
+    }
+
+    // Cache lookup sits after the rate limit (a cheap response is still a
+    // response worth bounding) but before the key check, so a previously
+    // answered brief still resolves even if the model is unreachable.
+    const key = await cacheKey(brief);
+    const cached = await readCache(key);
+    if (cached) {
+        return NextResponse.json(cached, { headers: { "x-sim-cache": "hit" } });
     }
 
     // Check for API key
@@ -197,5 +248,6 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ error: "parse" }, { status: 502 });
     }
 
-    return NextResponse.json(payload);
+    await writeCache(key, payload);
+    return NextResponse.json(payload, { headers: { "x-sim-cache": "miss" } });
 }

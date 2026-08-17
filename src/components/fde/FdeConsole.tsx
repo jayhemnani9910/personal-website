@@ -40,6 +40,30 @@ export function FdeConsole() {
     scrollToSim();
   };
 
+  // Last fallback tier. When the model is unreachable the page currently dead-ends
+  // on an error telling the visitor to go and find a preset themselves; this picks
+  // the nearest one for them. It is deliberately NOT presented as an answer to
+  // their brief: the run is loaded with source 'preset', which FdeSimulation
+  // labels "◆ DEMO" rather than "* LIVE".
+  const closestPreset = (brief: string): Preset => {
+    const words = new Set(
+      brief.toLowerCase().split(/\W+/).filter((w) => w.length > 3)
+    );
+    let best = PRESETS[0];
+    let bestScore = -1;
+    for (const p of PRESETS) {
+      const score = p.brief
+        .toLowerCase()
+        .split(/\W+/)
+        .filter((w) => words.has(w)).length;
+      if (score > bestScore) {
+        bestScore = score;
+        best = p;
+      }
+    }
+    return best;
+  };
+
   const startCustom = async () => {
     if (!briefInput.trim() || loading) return;
     setError(null);
@@ -167,6 +191,15 @@ export function FdeConsole() {
             <div className="fde-error-block" role="alert">
               <span className="fde-error-label">ERROR · </span>
               {error}
+              <div className="fde-error-actions">
+                <button
+                  className="fde-preset-btn"
+                  type="button"
+                  onClick={() => startPreset(closestPreset(briefInput))}
+                >
+                  show the closest prepared example
+                </button>
+              </div>
             </div>
           )}
         </div>

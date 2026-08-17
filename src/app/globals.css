@@ -1742,6 +1742,12 @@ html[data-theme="dark"] .editorial .ph::before {
   animation: fde-spin 0.7s linear infinite;
   flex-shrink: 0;
 }
+/* Final fallback tier: when the model is unreachable, the error carries an
+   action rather than dead-ending. The run it loads is labelled DEMO, not LIVE. */
+.fde .fde-error-actions {
+  margin-top: 10px;
+}
+
 .fde .fde-error-block {
   margin-top: 16px;
   padding: 12px 14px;
