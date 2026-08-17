@@ -66,20 +66,25 @@ const OSS = [
 
 const PUBLICATIONS = RESUME.publications;
 
+// Grouped by what Jay actually does with each tool, not by a self-assigned
+// mastery level. The previous top tier was labelled "Expert" across fourteen
+// technologies, which is the claim a senior reviewer will open an interview by
+// testing, and it buys nothing the behaviour underneath does not already say.
+// The notes were always the honest part; they are now the heading.
 const SKILLS = [
   {
-    level: "Expert",
-    note: "ship daily, design from scratch",
+    level: "Ship daily",
+    note: "design from scratch, no docs open",
     items: ["Python", "TypeScript", "SQL", "PyTorch", "PostgreSQL", "Docker", "Kafka", "Airflow", "LangChain", "LangGraph", "MCP", "Next.js", "FastAPI", "Node.js / Express"],
   },
   {
-    level: "Proficient",
-    note: "ship confidently, may reference docs",
+    level: "Ship confidently",
+    note: "reach for the docs on the edges",
     items: ["YOLOv8", "ByteTrack", "TimescaleDB", "MongoDB", "Redis", "MLflow", "DVC", "Tableau", "Power BI", "AWS", "Ollama", "vLLM"],
   },
   {
-    level: "Working",
-    note: "shipped once or twice, ready to ramp",
+    level: "Shipped once or twice",
+    note: "enough to be useful, ready to ramp",
     items: ["Go", "Rust", "Kubernetes", "pgvector", "Pinecone", "Weights & Biases", "GCP", "Azure", "Chrome Extensions", "WebMCP", "Three.js", "C++"],
   },
 ];
@@ -110,7 +115,7 @@ function SectionHead({ label, meta, title }: { label: string; meta?: string; tit
         ) : null}
       </div>
       <h2
-        className="mt-[var(--tr-s-3)] text-[length:var(--tr-t-h2)] font-light leading-[1.02] tracking-[-.015em] text-tr-text"
+        className="mt-[var(--tr-s-3)] text-[length:var(--tr-t-h2)] font-light leading-[var(--tr-lh-h2)] tracking-[-.015em] text-tr-text"
         style={serif}
       >
         {title}
@@ -132,19 +137,19 @@ export default function AboutPage() {
               Forward Deployed Engineer · Gujarat, India (open to relocate)
             </p>
             <h1
-              className="mb-[var(--tr-s-5)] text-[length:var(--tr-t-display)] font-light leading-[.92] tracking-[-.02em] text-tr-text"
+              className="mb-[var(--tr-s-5)] text-[length:var(--tr-t-display)] font-light leading-[var(--tr-lh-display)] tracking-[-.02em] text-tr-text"
               style={serif}
             >
               Jay Hemnani.
             </h1>
             <p
-              className="max-w-[44ch] text-[length:var(--tr-t-h3)] font-light leading-[1.25] text-tr-text"
+              className="max-w-[44ch] text-[length:var(--tr-t-h3)] font-light leading-[var(--tr-lh-h3)] text-tr-text"
               style={serif}
             >
               Four years of finished things: production data platforms, computer-vision research, and
               merged code in repositories I did not own.
             </p>
-            <p className="mt-[var(--tr-s-5)] max-w-[62ch] text-[length:var(--tr-t-body)] leading-[1.6] text-tr-text-mute" style={serif}>
+            <p className="mt-[var(--tr-s-5)] max-w-[60ch] text-[length:var(--tr-t-body)] leading-[var(--tr-lh-body)] text-tr-text-mute" style={serif}>
               Trained in computer engineering at PDEU. I have moved between data-analyst, ML-engineer, and
               full-stack roles, usually because the project demanded it, and I take prototypes to production
               quickly. Available for full-time and freelance.
@@ -171,7 +176,7 @@ export default function AboutPage() {
                 >
                   <dd className="flex items-baseline gap-[.15em]">
                     <span
-                      className="text-[length:var(--tr-t-display)] font-light leading-[.85] tracking-[-.03em] text-tr-text"
+                      className="text-[length:var(--tr-t-display)] font-light leading-[var(--tr-lh-numeral)] tracking-[-.03em] text-tr-text"
                       style={serif}
                     >
                       {p.n}
@@ -225,7 +230,7 @@ export default function AboutPage() {
       <section className={`${SHELL} py-[var(--tr-s-9)]`}>
         <div className={WRAP}>
           <SectionHead label="// evidence · open source" meta="3 merged" title="Merged into repos I don't own." />
-          <p className="mb-[var(--tr-s-6)] max-w-[60ch] text-[length:var(--tr-t-body)] leading-[1.6] text-tr-text-mute" style={serif}>
+          <p className="mb-[var(--tr-s-6)] max-w-[60ch] text-[length:var(--tr-t-body)] leading-[var(--tr-lh-body)] text-tr-text-mute" style={serif}>
             Landing a change inside an unfamiliar large codebase is the whole forward-deployed skill in
             miniature: read the seam, respect the conventions, ship the patch.
           </p>
@@ -239,10 +244,10 @@ export default function AboutPage() {
                 <p className="mt-[var(--tr-s-1)] break-words text-[length:var(--tr-t-mono-sm)] text-tr-text-faint" style={monoData}>
                   {o.repo}
                 </p>
-                <h3 className="mt-[var(--tr-s-4)] text-[length:var(--tr-t-h3)] font-light leading-[1.15] text-tr-text" style={serif}>
+                <h3 className="mt-[var(--tr-s-4)] text-[length:var(--tr-t-h3)] font-light leading-[var(--tr-lh-h3)] text-tr-text" style={serif}>
                   {o.title}
                 </h3>
-                <p className="mt-[var(--tr-s-3)] flex-1 text-[length:var(--tr-t-body)] leading-[1.55] text-tr-text-mute" style={serif}>
+                <p className="mt-[var(--tr-s-3)] flex-1 text-[length:var(--tr-t-body)] leading-[var(--tr-lh-body)] text-tr-text-mute" style={serif}>
                   {o.body}
                 </p>
                 <a
@@ -272,13 +277,13 @@ export default function AboutPage() {
                     №{pad(i + 1)}
                   </div>
                   <div className="min-w-0">
-                    <h3 className="text-[length:var(--tr-t-h3)] font-light leading-[1.15] text-tr-text" style={serif}>
+                    <h3 className="text-[length:var(--tr-t-h3)] font-light leading-[var(--tr-lh-h3)] text-tr-text" style={serif}>
                       {pub.title}.
                     </h3>
                     <p className="mt-[var(--tr-s-1)] text-[length:var(--tr-t-mono-sm)] uppercase text-tr-text-mute" style={mono}>
                       {pub.venue} · {pub.year}
                     </p>
-                    <p className="mt-[var(--tr-s-3)] max-w-[64ch] text-[length:var(--tr-t-body)] leading-[1.6] text-tr-text-mute" style={serif}>
+                    <p className="mt-[var(--tr-s-3)] max-w-[60ch] text-[length:var(--tr-t-body)] leading-[var(--tr-lh-body)] text-tr-text-mute" style={serif}>
                       {pub.description}
                     </p>
                     <div className="mt-[var(--tr-s-3)] flex flex-wrap gap-x-[var(--tr-s-5)] gap-y-[var(--tr-s-2)] text-[length:var(--tr-t-mono-sm)] uppercase text-tr-text-mute" style={mono}>
@@ -304,7 +309,7 @@ export default function AboutPage() {
       {/* ========== STACK — matrix ========== */}
       <section className={`${SHELL} py-[var(--tr-s-9)]`}>
         <div className={WRAP}>
-          <SectionHead label="// stack" meta="by honest level" title="What I reach for." />
+          <SectionHead label="// stack" meta="grouped by how I use them" title="What I reach for." />
           <div className="grid gap-px overflow-hidden border border-tr-hairline bg-tr-hairline lg:grid-cols-3">
             {SKILLS.map((col) => (
               <div key={col.level} className="min-w-0 bg-tr-bg p-[var(--tr-s-5)]">
@@ -346,9 +351,9 @@ export default function AboutPage() {
                             {company.name}{place ? ` · ${place}` : ""}
                           </p>
                         </div>
-                        <ul className="mt-[var(--tr-s-3)] max-w-[64ch] list-disc space-y-[var(--tr-s-2)] pl-[1.15em] marker:text-tr-text-faint">
+                        <ul className="mt-[var(--tr-s-3)] max-w-[60ch] list-disc space-y-[var(--tr-s-2)] pl-[1.15em] marker:text-tr-text-faint">
                           {role.bullets.map((b, i) => (
-                            <li key={i} className="text-[length:var(--tr-t-body)] leading-[1.55] text-tr-text-mute" style={serif}>
+                            <li key={i} className="text-[length:var(--tr-t-body)] leading-[var(--tr-lh-body)] text-tr-text-mute" style={serif}>
                               {b.text}
                             </li>
                           ))}
@@ -395,7 +400,7 @@ export default function AboutPage() {
               <SectionHead label="// off the resume" meta="true regardless" title="A few particulars." />
               <ul className="list-none space-y-[var(--tr-s-4)]">
                 {OFF_RESUME.map((f) => (
-                  <li key={f} className="flex gap-[var(--tr-s-3)] text-[length:var(--tr-t-body)] leading-[1.55] text-tr-text-mute" style={serif}>
+                  <li key={f} className="flex gap-[var(--tr-s-3)] text-[length:var(--tr-t-body)] leading-[var(--tr-lh-body)] text-tr-text-mute" style={serif}>
                     <span aria-hidden="true" className="mt-[.55em] h-[1px] w-[1.1em] shrink-0 bg-tr-ember" />
                     <span className="min-w-0">{f}</span>
                   </li>
@@ -412,10 +417,10 @@ export default function AboutPage() {
           <SectionHead label="// correspondence" meta="responses inside 48h" title="Get in touch." />
           <div className="grid gap-[var(--tr-s-8)] lg:grid-cols-2 lg:items-end">
             <div>
-              <p className="max-w-[26ch] text-[length:var(--tr-t-h2)] font-light leading-[1.1] text-tr-text" style={serif}>
+              <p className="max-w-[26ch] text-[length:var(--tr-t-h2)] font-light leading-[var(--tr-lh-h2)] text-tr-text" style={serif}>
                 A note, an offer, or a problem worth solving.
               </p>
-              <p className="mt-[var(--tr-s-4)] max-w-[52ch] text-[length:var(--tr-t-body)] leading-[1.6] text-tr-text-mute" style={serif}>
+              <p className="mt-[var(--tr-s-4)] max-w-[52ch] text-[length:var(--tr-t-body)] leading-[var(--tr-lh-body)] text-tr-text-mute" style={serif}>
                 I am looking for forward-deployed engineering, data engineering, agentic AI, and senior
                 software roles. Staff-shaped problems welcome. India-remote, global-remote, and on-site with
                 relocation all on the table.
@@ -425,10 +430,10 @@ export default function AboutPage() {
               <a
                 href="mailto:jayhemnani992000@gmail.com"
                 data-cursor="OPEN"
-                className="flex max-w-full flex-col border border-transparent bg-tr-ember px-[var(--tr-s-5)] py-[var(--tr-s-4)] no-underline shadow-[var(--tr-glow-box)]"
+                className="tr-cta flex max-w-full flex-col border border-transparent px-[var(--tr-s-5)] py-[var(--tr-s-4)] no-underline"
               >
-                <span className="text-[length:var(--tr-t-mono-sm)] uppercase text-tr-on-ember" style={mono}>Open the line</span>
-                <span className="mt-[var(--tr-s-1)] break-words text-[length:var(--tr-t-body)] text-tr-on-ember" style={monoData}>
+                <span className="text-[length:var(--tr-t-mono-sm)] uppercase" style={mono}>Open the line</span>
+                <span className="mt-[var(--tr-s-1)] break-words text-[length:var(--tr-t-body)]" style={monoData}>
                   jayhemnani992000@gmail.com
                 </span>
               </a>
