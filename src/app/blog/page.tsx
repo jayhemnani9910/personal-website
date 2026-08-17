@@ -85,13 +85,13 @@ export default async function WritingPage() {
             </p>
 
             <h1
-              className="mb-[var(--tr-s-5)] text-[length:var(--tr-t-display)] font-light leading-[.95] tracking-[-.02em] text-tr-text"
+              className="mb-[var(--tr-s-5)] text-[length:var(--tr-t-display)] font-light leading-[var(--tr-lh-display)] tracking-[-.02em] text-tr-text"
               style={serif}
             >
               Notes from <span className="italic">the bench.</span>
             </h1>
 
-            <p className="max-w-[52ch] text-[length:var(--tr-t-body)] leading-[1.5] text-tr-text-mute" style={serif}>
+            <p className="max-w-[52ch] text-[length:var(--tr-t-body)] leading-[var(--tr-lh-body)] text-tr-text-mute" style={serif}>
               Long-form project post-mortems, an essay on the role I am currently targeting, and a few
               drafts left in plain sight as a form of public accountability.
             </p>
