@@ -41,7 +41,7 @@ function paletteFor(selector: string): Record<string, string> {
 const DARK = paletteFor(":root"); // dark is canonical, so it is the base
 const LIGHT = paletteFor(':root[data-theme="light"]');
 
-const REQUIRED = ["bg", "surface-1", "surface-2", "text", "text-mute", "text-faint", "ember", "on-ember"] as const;
+const REQUIRED = ["bg", "surface-1", "surface-2", "text", "text-mute", "text-faint", "ember", "ember-hover", "on-ember"] as const;
 const SURFACES = ["bg", "surface-1", "surface-2"] as const;
 const TEXT_TOKENS = ["text", "text-mute", "text-faint", "ember"] as const;
 const AA_MIN = 4.5;
@@ -128,6 +128,71 @@ describe("type scale is actually applied (Tailwind silently drops the un-hinted 
       `These use the un-hinted form, which Tailwind drops. Add the "length:" hint:\n  ${offenders.join("\n  ")}`,
     ).toEqual([]);
   });
+
+  // The type scale shipped with sizes but no line heights, so leading was
+  // written inline and drifted into 14 distinct raw values across 44 call
+  // sites: body prose at 1.5 in one component and 1.6 in another, h2 at 1.02,
+  // 1.05 and 1.1. Nothing catches that, because every one of them is valid CSS.
+  // Named Tailwind steps (leading-none/tight/relaxed) are still allowed; this
+  // only forbids the arbitrary numeric form.
+  // Tailwind v4's automatic source detection skips anything .gitignore matches,
+  // and a .gitignore pattern without a leading slash matches at ANY depth. A
+  // bare `resume/` (for the private folder at the repo root) therefore also
+  // matched src/app/resume/, so that route was never scanned and every utility
+  // used only by the About page was missing from the compiled CSS in production.
+  // The build, lint and type check were all green throughout.
+  //
+  // Fails when a directory under src/ is caught by such a pattern unless
+  // globals.css explicitly re-includes it with @source.
+  it("no source directory is hidden from Tailwind by a bare .gitignore pattern", () => {
+    const ROOT = resolve(SRC, "..");
+    const ignoreFile = join(ROOT, ".gitignore");
+
+    const bareDirPatterns = readFileSync(ignoreFile, "utf8")
+      .split("\n")
+      .map((l) => l.trim())
+      .filter((l) => l && !l.startsWith("#") && !l.startsWith("!") && !l.startsWith("/"))
+      .map((l) => l.replace(/\/$/, ""))
+      .filter((l) => !l.includes("/") && !l.includes("*"));
+
+    function dirsUnder(dir: string): string[] {
+      return readdirSync(dir, { withFileTypes: true }).flatMap((e) =>
+        e.isDirectory() ? [join(dir, e.name), ...dirsUnder(join(dir, e.name))] : [],
+      );
+    }
+
+    // `CSS` has comments stripped, so this only sees real @source directives.
+    const reIncluded = CSS.match(/@source\s+"[^"]+"/g) ?? [];
+
+    const offenders = dirsUnder(SRC)
+      .filter((d) => bareDirPatterns.includes(d.split("/").pop()!))
+      .filter((d) => {
+        const rel = d.slice(SRC.length + 1); // e.g. "app/resume"
+        return !reIncluded.some((s) => s.includes(rel));
+      })
+      .map((d) => d.replace(ROOT, "."));
+
+    expect(
+      offenders,
+      `These are excluded from Tailwind's scan by a bare .gitignore pattern, so their\n` +
+        `classes will be missing from the CSS. Add an @source re-include in globals.css:\n  ${offenders.join("\n  ")}`,
+    ).toEqual([]);
+  });
+
+  it("no file hardcodes a numeric line height instead of using a --tr-lh-* token", () => {
+    const offenders: string[] = [];
+    for (const file of walk(SRC)) {
+      const src = readFileSync(file, "utf8");
+      src.split("\n").forEach((line, i) => {
+        const hit = line.match(/leading-\[[0-9.]+\]/);
+        if (hit) offenders.push(`${file.replace(SRC, "src")}:${i + 1}  ${hit[0]}`);
+      });
+    }
+    expect(
+      offenders,
+      `Use a --tr-lh-* token (numeral/display/h2/h3/body/prose) rather than a raw value:\n  ${offenders.join("\n  ")}`,
+    ).toEqual([]);
+  });
 });
 
 interface Case {
@@ -146,6 +211,10 @@ for (const [theme, palette] of [["dark", DARK], ["light", LIGHT]] as const) {
   // important pair on the site: white on the dark ember measures 3.08:1 and
   // fails, which is why --tr-on-ember is near-black rather than white.
   cases.push({ theme, fg: "on-ember", bg: "ember", palette });
+  // The same label once the cursor is on it. A hover fill is still a surface
+  // carrying text, so it has to clear AA too, in both directions: dark hover
+  // lightens the ember, light hover darkens it.
+  cases.push({ theme, fg: "on-ember", bg: "ember-hover", palette });
 }
 
 describe("Two Readers token contrast (WCAG AA, 4.5:1 minimum)", () => {
