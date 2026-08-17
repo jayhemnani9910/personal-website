@@ -8,14 +8,37 @@ export function ViewCounter({ slug }: { slug: string }) {
     const [count, setCount] = useState<number | null>(null);
 
     useEffect(() => {
-        // Increment view on mount
-        fetch("/api/views", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ slug }),
+        // Client-side half of the dedup. The server is the authority (it keys on
+        // IP for a day), but this stops the obvious case cheaply: navigating back
+        // to the same project inside one session used to fire another POST every
+        // time the component mounted.
+        let seen = false;
+        try {
+            seen = sessionStorage.getItem(`viewed:${slug}`) === "1";
+        } catch {
+            // Private mode or storage disabled: fall through and let the server decide.
+        }
+
+        // A repeat view still reads the total so the number renders; only a first
+        // view asks for it to be counted.
+        fetch(seen ? `/api/views?slug=${encodeURIComponent(slug)}` : "/api/views", {
+            method: seen ? "GET" : "POST",
+            ...(seen
+                ? {}
+                : {
+                      headers: { "Content-Type": "application/json" },
+                      body: JSON.stringify({ slug }),
+                  }),
         })
             .then((res) => res.json())
-            .then((data) => setCount(data.count))
+            .then((data) => {
+                setCount(data.count);
+                try {
+                    sessionStorage.setItem(`viewed:${slug}`, "1");
+                } catch {
+                    // Nothing to do: the server-side dedup still holds.
+                }
+            })
             .catch(() => {});
     }, [slug]);
 
