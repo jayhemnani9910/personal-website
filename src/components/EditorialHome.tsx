@@ -12,6 +12,7 @@ import { ProteinNMAFigure } from "@/components/featured/ProteinNMAFigure";
 import { StarSchemaFigure } from "@/components/featured/StarSchemaFigure";
 import { WebMCPFigure } from "@/components/featured/WebMCPFigure";
 import { VDOSSpectrumFigure } from "@/components/featured/VDOSSpectrumFigure";
+import { WEBMCP_TOOL_COUNT } from "@/lib/webmcp";
 
 // Mono UI chrome: labels, kickers, buttons. Uppercase + wide tracking, matching
 // the mockup's `.mono-label` (redesign/concepts/two-readers.html ~line 262).
@@ -144,7 +145,7 @@ export function EditorialHome({
             </p>
 
             <h1
-              className="mb-[var(--tr-s-5)] text-[length:var(--tr-t-display)] font-light leading-[.95] tracking-[-.02em] text-tr-text"
+              className="mb-[var(--tr-s-5)] text-[length:var(--tr-t-display)] font-light leading-[var(--tr-lh-display)] tracking-[-.02em] text-tr-text"
               style={serif}
             >
               I take vague, broken problems and{" "}
@@ -154,7 +155,7 @@ export function EditorialHome({
             </h1>
 
             <p
-              className="mb-[var(--tr-s-6)] max-w-[52ch] text-[length:var(--tr-t-body)] leading-[1.5] text-tr-text-mute"
+              className="mb-[var(--tr-s-6)] max-w-[52ch] text-[length:var(--tr-t-body)] leading-[var(--tr-lh-body)] text-tr-text-mute"
               style={serif}
             >
               Four years building agentic AI systems, data pipelines and distributed backends. I go into the
@@ -189,7 +190,7 @@ export function EditorialHome({
                 <Link
                   href="/fde"
                   data-cursor="RUN"
-                  className="inline-flex items-center justify-center border border-transparent bg-tr-ember px-[1.5em] py-[.875em] text-[length:var(--tr-t-mono)] uppercase text-tr-on-ember no-underline shadow-[var(--tr-glow-box)]"
+                  className="tr-cta inline-flex items-center justify-center border border-transparent px-[1.5em] py-[.875em] text-[length:var(--tr-t-mono)] uppercase no-underline"
                   style={mono}
                 >
                   Run the simulation
@@ -211,6 +212,73 @@ export function EditorialHome({
       {/* ========== DECOMPOSITION SCENE ========== */}
       <DecompositionScene />
 
+      {/* ========== ABOUT ==========
+          Sits this high on purpose. A screener gives a portfolio 30 to 60
+          seconds, and the hero above is positioning copy that any strong
+          candidate could write. Every fact below is drawn from
+          forjobs/MASTER_PROFILE.md and src/data/resume.ts; nothing here is
+          decorative. */}
+      <Reveal>
+        <section className={`${SHELL} py-[var(--tr-s-12)]`}>
+          <div className={WRAP}>
+            <p
+              className="mb-[var(--tr-s-3)] text-[length:var(--tr-t-mono-sm)] uppercase tracking-[.08em] text-tr-text-mute"
+              style={mono}
+            >
+              § 02 / who you are talking to
+            </p>
+            <h2
+              className="mb-[var(--tr-s-6)] text-[length:var(--tr-t-h2)] font-light leading-[var(--tr-lh-h2)] text-tr-text"
+              style={serif}
+            >
+              I came to this from design.
+            </h2>
+
+            <div className="grid gap-[var(--tr-s-6)] lg:grid-cols-2 lg:gap-[var(--tr-s-10)]">
+              <div className="min-w-0 max-w-[60ch] space-y-[var(--tr-s-4)]">
+                <p
+                  className="text-[length:var(--tr-t-body)] leading-[var(--tr-lh-body)] text-tr-text"
+                  style={serif}
+                >
+                  Before I wrote anything that shipped I was doing graphic design: two internships, a
+                  conference, a startup, and three student clubs that all needed something laid out by Friday.
+                  I started computer engineering at PDEU in 2018 assuming that was a phase I would grow out of.
+                </p>
+                <p
+                  className="text-[length:var(--tr-t-body)] leading-[var(--tr-lh-body)] text-tr-text-mute"
+                  style={serif}
+                >
+                  It turned out to be the part that kept getting used. Over four years I have moved between iOS
+                  builds, fraud models, consulting work, and reporting pipelines that the finance team depended
+                  on, usually because a project needed someone willing to sit in the messy part of it for a
+                  while and come back with something that ran.
+                </p>
+              </div>
+
+              <div className="min-w-0 max-w-[60ch] space-y-[var(--tr-s-4)]">
+                <p
+                  className="text-[length:var(--tr-t-body)] leading-[var(--tr-lh-body)] text-tr-text-mute"
+                  style={serif}
+                >
+                  This site is that same habit turned on itself. The two-channel typography, the diagrams, and
+                  the {WEBMCP_TOOL_COUNT} tools an LLM can call to read the page are here because I wanted to
+                  know whether a portfolio could be read by a machine as easily as by a person, and the only
+                  way to find out was to build it and check.
+                </p>
+                <p
+                  className="text-[length:var(--tr-t-body)] leading-[var(--tr-lh-body)] text-tr-text-mute"
+                  style={serif}
+                >
+                  Away from a keyboard I solve Rubik&rsquo;s cubes competitively. My best is 16.7 seconds,
+                  which is nowhere near the people who take it seriously, and I have written the timer I
+                  practise with.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+      </Reveal>
+
       {/* ========== FEATURED WORK ==========
           One dominant lead (Reveal) + a secondary grid (Stagger), as
           SIBLINGS rather than nesting Stagger inside Reveal. Nesting would
@@ -227,7 +295,7 @@ export function EditorialHome({
                 className="mb-[var(--tr-s-6)] text-[length:var(--tr-t-mono-sm)] uppercase tracking-[.08em] text-tr-text-mute"
                 style={mono}
               >
-                § 02 / featured work
+                § 03 / featured work
               </p>
 
               <Link href="/projects/fifa-soccer-ds" data-cursor="OPEN" className="group block no-underline">
@@ -333,10 +401,10 @@ export function EditorialHome({
               className="mb-[var(--tr-s-3)] text-[length:var(--tr-t-mono-sm)] uppercase tracking-[.08em] text-tr-text-mute"
               style={mono}
             >
-              § 03 / two readers
+              § 04 / two readers
             </p>
             <h2
-              className="mb-[var(--tr-s-3)] text-[length:var(--tr-t-h2)] font-light leading-[1.1] text-tr-text"
+              className="mb-[var(--tr-s-3)] text-[length:var(--tr-t-h2)] font-light leading-[var(--tr-lh-h2)] text-tr-text"
               style={serif}
             >
               Two readers.
@@ -353,14 +421,14 @@ export function EditorialHome({
                 wide whitespace-pre JSON would otherwise blow the page past 390px and
                 the pre's own overflow-x-auto would never engage. */}
             <div className="grid gap-[var(--tr-s-6)] lg:grid-cols-2 lg:items-start [&>*]:min-w-0">
-              <p className="text-[length:var(--tr-t-body)] leading-[1.6] text-tr-text" style={serif}>
-                An LLM can read this portfolio the way you do, only faster, through eight tools it calls
-                directly instead of scraping the page.
+              <p className="text-[length:var(--tr-t-body)] leading-[var(--tr-lh-body)] text-tr-text" style={serif}>
+                An LLM can read this portfolio the way you do, only faster, through {WEBMCP_TOOL_COUNT} tools
+                it calls directly instead of scraping the page.
               </p>
 
               <div className="border border-tr-hairline bg-tr-surface-1 p-[var(--tr-s-5)]">
                 <pre
-                  className="overflow-x-auto whitespace-pre text-[length:var(--tr-t-mono-sm)] leading-[1.6] text-tr-text-mute"
+                  className="overflow-x-auto whitespace-pre text-[length:var(--tr-t-mono-sm)] leading-[var(--tr-lh-body)] text-tr-text-mute"
                   style={monoData}
                 >
                   <code>
@@ -384,7 +452,7 @@ export function EditorialHome({
                     {", "}
                     <span className="text-tr-text">{'"WebMCP"'}</span>
                     {"],\n"}
-                    {'  "tools_registered": 8,\n'}
+                    {`  "tools_registered": ${WEBMCP_TOOL_COUNT},\n`}
                     {'  "url": '}
                     <span className="text-tr-text">{'"https://www.jayhemnani.me/projects/webmcp-portfolio"'}</span>
                     {"\n}"}
@@ -404,7 +472,7 @@ export function EditorialHome({
               className="mb-[var(--tr-s-3)] text-[length:var(--tr-t-mono-sm)] uppercase tracking-[.08em] text-tr-text-mute"
               style={mono}
             >
-              § 04 / in this issue
+              § 05 / in this issue
             </p>
             <h2 className="mb-[var(--tr-s-6)] text-[length:var(--tr-t-h2)] font-light text-tr-text" style={serif}>
               In this issue.
@@ -459,10 +527,10 @@ export function EditorialHome({
                 className="mb-[var(--tr-s-3)] text-[length:var(--tr-t-mono-sm)] uppercase tracking-[.08em] text-tr-text-mute"
                 style={mono}
               >
-                § 05 / correspondence
+                § 06 / correspondence
               </p>
               <h2
-                className="mb-[var(--tr-s-4)] text-[length:var(--tr-t-h2)] font-light leading-[1.05] text-tr-text"
+                className="mb-[var(--tr-s-4)] text-[length:var(--tr-t-h2)] font-light leading-[var(--tr-lh-h2)] text-tr-text"
                 style={serif}
               >
                 Hiring? Building? Stuck?
