@@ -26,8 +26,7 @@ export function ViewCounter({ slug }: { slug: string }) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5, delay: 0.3 }}
-            className="flex items-center gap-1.5 text-sm"
-            style={{ color: 'var(--text-muted)' }}
+            className="flex items-center gap-1.5 text-[length:var(--tr-t-mono-sm)] text-tr-text-mute"
         >
             <Eye className="w-4 h-4" />
             <span>{count} {count === 1 ? "view" : "views"}</span>

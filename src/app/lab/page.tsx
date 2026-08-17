@@ -70,7 +70,7 @@ function LabCard({ item, tab }: { item: LabItem; tab: TabKey }) {
         {item.title}
       </h3>
 
-      <p className="text-[length:var(--tr-t-body)] leading-[1.5] text-tr-text-mute" style={serif}>
+      <p className="text-[length:var(--tr-t-body)] leading-[var(--tr-lh-body)] text-tr-text-mute" style={serif}>
         {item.description}
       </p>
 
@@ -138,13 +138,13 @@ export default function LabPage() {
                 The Lab / Work in progress
               </p>
               <h1
-                className="mb-[var(--tr-s-5)] text-[length:var(--tr-t-display)] font-light leading-[.95] tracking-[-.02em] text-tr-text"
+                className="mb-[var(--tr-s-5)] text-[length:var(--tr-t-display)] font-light leading-[var(--tr-lh-display)] tracking-[-.02em] text-tr-text"
                 style={serif}
               >
                 Experiments, <em className="italic">in progress.</em>
               </h1>
               <p
-                className="max-w-[52ch] text-[length:var(--tr-t-body)] leading-[1.5] text-tr-text-mute"
+                className="max-w-[52ch] text-[length:var(--tr-t-body)] leading-[var(--tr-lh-body)] text-tr-text-mute"
                 style={serif}
               >
                 Things I am building, exploring, and keeping an eye on. Half-finished on purpose, shown anyway.
@@ -232,7 +232,7 @@ export default function LabPage() {
             <div className="flex flex-col gap-[var(--tr-s-5)] border-t border-tr-hairline pt-[var(--tr-s-8)] sm:flex-row sm:items-end sm:justify-between">
               <div>
                 <h2
-                  className="mb-[var(--tr-s-2)] text-[length:var(--tr-t-h2)] font-light leading-[1.05] text-tr-text"
+                  className="mb-[var(--tr-s-2)] text-[length:var(--tr-t-h2)] font-light leading-[var(--tr-lh-h2)] text-tr-text"
                   style={serif}
                 >
                   Want to collaborate?

@@ -42,13 +42,13 @@ export default function YouTubePage() {
                 Channel / Two feeds, one operator
               </p>
               <h1
-                className="mb-[var(--tr-s-5)] text-[length:var(--tr-t-display)] font-light leading-[.95] tracking-[-.02em] text-tr-text"
+                className="mb-[var(--tr-s-5)] text-[length:var(--tr-t-display)] font-light leading-[var(--tr-lh-display)] tracking-[-.02em] text-tr-text"
                 style={serif}
               >
                 Two channels, one camera-shy operator.
               </h1>
               <p
-                className="max-w-[52ch] text-[length:var(--tr-t-body)] leading-[1.5] text-tr-text-mute"
+                className="max-w-[52ch] text-[length:var(--tr-t-body)] leading-[var(--tr-lh-body)] text-tr-text-mute"
                 style={serif}
               >
                 AI news broken into single claims, and the original channel where the analytics and FC gaming

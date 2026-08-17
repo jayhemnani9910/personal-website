@@ -24,7 +24,7 @@ export default function NotFound() {
           </p>
 
           <h1
-            className="mb-[var(--tr-s-5)] text-[length:var(--tr-t-display)] font-light leading-[.95] tracking-[-.02em] text-tr-text"
+            className="mb-[var(--tr-s-5)] text-[length:var(--tr-t-display)] font-light leading-[var(--tr-lh-display)] tracking-[-.02em] text-tr-text"
             style={serif}
           >
             This page does not exist.
@@ -40,7 +40,7 @@ export default function NotFound() {
           <div className="flex flex-wrap gap-[var(--tr-s-3)]">
             <Link
               href="/"
-              className="inline-flex items-center justify-center border border-transparent bg-tr-ember px-[1.5em] py-[.875em] text-[length:var(--tr-t-mono)] uppercase text-tr-on-ember no-underline shadow-[var(--tr-glow-box)]"
+              className="tr-cta inline-flex items-center justify-center border border-transparent px-[1.5em] py-[.875em] text-[length:var(--tr-t-mono)] uppercase no-underline"
               style={mono}
             >
               Home

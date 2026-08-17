@@ -45,14 +45,14 @@ const mdxComponents = {
   h1: (props: JSX.IntrinsicElements["h1"]) => (
     <h1
       {...props}
-      className="mt-[var(--tr-s-10)] mb-[var(--tr-s-4)] text-[length:var(--tr-t-h2)] font-light leading-[1.1] text-tr-text"
+      className="mt-[var(--tr-s-10)] mb-[var(--tr-s-4)] text-[length:var(--tr-t-h2)] font-light leading-[var(--tr-lh-h2)] text-tr-text"
       style={serif}
     />
   ),
   h2: (props: JSX.IntrinsicElements["h2"]) => (
     <h2
       {...props}
-      className="mt-[var(--tr-s-8)] mb-[var(--tr-s-3)] text-[length:var(--tr-t-h3)] font-light leading-[1.2] text-tr-text"
+      className="mt-[var(--tr-s-8)] mb-[var(--tr-s-3)] text-[length:var(--tr-t-h3)] font-light leading-[var(--tr-lh-h3)] text-tr-text"
       style={serif}
     />
   ),
@@ -66,7 +66,7 @@ const mdxComponents = {
   p: (props: JSX.IntrinsicElements["p"]) => (
     <p
       {...props}
-      className="mb-[var(--tr-s-5)] text-[length:var(--tr-t-body)] leading-[1.7] text-tr-text"
+      className="mb-[var(--tr-s-5)] text-[length:var(--tr-t-body)] leading-[var(--tr-lh-prose)] text-tr-text"
       style={serif}
     />
   ),
@@ -84,7 +84,7 @@ const mdxComponents = {
       style={serif}
     />
   ),
-  li: (props: JSX.IntrinsicElements["li"]) => <li {...props} className="leading-[1.7]" />,
+  li: (props: JSX.IntrinsicElements["li"]) => <li {...props} className="leading-[var(--tr-lh-prose)]" />,
   a: (props: JSX.IntrinsicElements["a"]) => (
     <a
       {...props}
@@ -113,14 +113,14 @@ const mdxComponents = {
   pre: (props: JSX.IntrinsicElements["pre"]) => (
     <pre
       {...props}
-      className="mb-[var(--tr-s-5)] overflow-x-auto border border-tr-hairline bg-tr-surface-1 p-[var(--tr-s-5)] text-[length:var(--tr-t-mono)] leading-[1.6] text-tr-text-mute"
+      className="mb-[var(--tr-s-5)] overflow-x-auto border border-tr-hairline bg-tr-surface-1 p-[var(--tr-s-5)] text-[length:var(--tr-t-mono)] leading-[var(--tr-lh-body)] text-tr-text-mute"
       style={{ fontFamily: "var(--font-jetbrains)" }}
     />
   ),
   blockquote: (props: JSX.IntrinsicElements["blockquote"]) => (
     <blockquote
       {...props}
-      className="mb-[var(--tr-s-5)] border-l border-tr-hairline pl-[var(--tr-s-5)] text-[length:var(--tr-t-body)] leading-[1.7] text-tr-text-mute"
+      className="mb-[var(--tr-s-5)] border-l border-tr-hairline pl-[var(--tr-s-5)] text-[length:var(--tr-t-body)] leading-[var(--tr-lh-prose)] text-tr-text-mute"
       style={serif}
     />
   ),
@@ -209,7 +209,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
       <EditorialMasthead active="writing" />
 
       <article className="px-[clamp(1.25rem,5vw,2rem)] pt-[6.5rem] pb-[var(--tr-s-12)]">
-        <div className="mx-auto max-w-[68ch]">
+        <div className="mx-auto max-w-[66ch]">
           <Link href="/blog" data-cursor="OPEN" className={`${backLinkClass} mb-[var(--tr-s-8)]`}>
             <ArrowLeft className="h-3 w-3" />
             Back to writing
@@ -234,7 +234,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
             </div>
 
             <h1
-              className="mb-[var(--tr-s-4)] text-[length:var(--tr-t-h2)] font-light leading-[1.1] text-tr-text"
+              className="mb-[var(--tr-s-4)] text-[length:var(--tr-t-h2)] font-light leading-[var(--tr-lh-h2)] text-tr-text"
               style={serif}
             >
               {post.title}
