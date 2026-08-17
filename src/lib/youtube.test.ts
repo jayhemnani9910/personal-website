@@ -1,14 +1,37 @@
 import { describe, expect, it } from "vitest";
 import { formatDuration, formatViews } from "./youtube";
 import { getYouTubeData } from "./youtube-data";
+import { CHANNEL_COPY } from "./youtube-copy";
+
+// Channel IDs, matching CHANNEL_IDS in scripts/fetch-youtube.mjs. Asserted here
+// rather than the handles: a handle is a display name the owner can rename at
+// will (@jhanalytics became @jodnaniplays), and pinning the renameable value is
+// what made this suite fail while the data was correct.
+const AI_CHANNEL = "UCSf0pNIEkJgXhH7WzIsFnpw";      // JH-Analytics | 2.0
+const GAMING_CHANNEL = "UCRAV0VDSxngptEo5SY4nKcw";  // JodnaniPlays
 
 describe("youtube.json contract", () => {
     const data = getYouTubeData(); // throws (failing the suite) if file missing or schema-invalid
 
     it("has exactly two channels, AI channel first", () => {
         expect(data.channels).toHaveLength(2);
-        expect(data.channels[0].handle).toBe("@jhanalytics2.0");
-        expect(data.channels[1].handle).toBe("@jhanalytics");
+        expect(data.channels[0].id).toBe(AI_CHANNEL);
+        expect(data.channels[1].id).toBe(GAMING_CHANNEL);
+    });
+
+    it("every channel has a handle the page can print", () => {
+        for (const ch of data.channels) {
+            expect(ch.handle).toMatch(/^@[\w.-]+$/);
+        }
+    });
+
+    // The bug this guards: CHANNEL_COPY used to be keyed by handle, so renaming a
+    // channel on YouTube made the lookup miss and YouTubeShowcase threw on
+    // `copy.tagline` the moment that channel was selected.
+    it("every channel has authored copy", () => {
+        for (const ch of data.channels) {
+            expect(CHANNEL_COPY[ch.id], `no CHANNEL_COPY entry for ${ch.id} (${ch.handle})`).toBeDefined();
+        }
     });
 
     it("uses ytimg thumbnails on every item", () => {
