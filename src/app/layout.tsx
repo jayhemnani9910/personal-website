@@ -8,10 +8,16 @@ import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { SITE_CONFIG } from "@/../content/site";
 
+// No `weight` array on purpose. Newsreader is a variable font, and listing
+// explicit weights makes next/font ship static instances instead: the previous
+// ["400","500","600"] x ["normal","italic"] meant six files and, more to the
+// point, no weight 300. The display type across the site is authored with
+// `font-light` (39 occurrences), which had no face to resolve to and silently
+// rendered at 400. Omitting `weight` loads the variable face, so the full
+// 200-800 range is available in two files.
 const newsreader = Newsreader({
   subsets: ["latin"],
   style: ["normal", "italic"],
-  weight: ["400", "500", "600"],
   display: "swap",
   variable: "--font-newsreader",
 });
