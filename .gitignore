@@ -57,3 +57,10 @@ resume/
 
 # Local planning docs
 TODO-*.md
+
+# Local-only practice work. Removed from the repo in abb235d and kept on disk.
+# Anchored with a leading slash on purpose: a bare `leetcode/` would match a
+# directory of that name at ANY depth, which is exactly the trap `resume/` on
+# line 56 fell into (it silently hid src/app/resume/ from Tailwind's scanner
+# and shipped the About page without its CSS).
+/leetcode/
