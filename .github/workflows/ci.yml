@@ -1,0 +1,62 @@
+name: CI
+
+# Why this exists: on 17 Aug 2026 a commit reached main carrying a failing test
+# (youtube.test.ts pinned a channel handle the committed data no longer used),
+# and that failing test was pointing at a live crash on /youtube. Nothing caught
+# it, because nothing ran. Vercel builds on push, but a Vercel build does not run
+# vitest, so a red suite deploys just as happily as a green one.
+#
+# Several guards in this repo only pay off if something runs them:
+#   tokens.test.ts      WCAG contrast against the real globals.css, no hardcoded
+#                       line heights, no source dir hidden from Tailwind by .gitignore
+#   webmcp.test.ts      tool-name array matches the real registerTool calls
+#   showcase.test.ts    every enabled hero image path resolves
+#   fde-prompt.test.ts  system prompt and visitor brief stay in separate channels
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      # ci, not install: fails if package-lock.json and package.json disagree.
+      - name: Install
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      # next build type-checks too, but running tsc separately reports a type
+      # error as a type error rather than as a build failure a minute later.
+      - name: Typecheck
+        run: npx tsc --noEmit
+
+      - name: Test
+        run: npm run test:run
+
+      # Last, because it is slowest. Empty placeholders keep the build honest
+      # without exposing anything: the API routes read these at request time,
+      # not at build time.
+      - name: Build
+        run: npm run build
+        env:
+          UPSTASH_REDIS_REST_URL: ""
+          UPSTASH_REDIS_REST_TOKEN: ""
+          GEMINI_API_KEY: ""
