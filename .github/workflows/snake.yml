@@ -1,11 +1,21 @@
 name: Generate Snake
 
+# Renders the contribution-graph snake for the GitHub profile README and pushes
+# the SVGs to the `output` branch. Unrelated to the website itself; it lives
+# here because the profile README points at this repo's output branch.
+#
+# Was disabled by hand in May because the output branch triggered failing Vercel
+# preview builds (that branch holds two SVGs and no app/). vercel.json fixed the
+# real problem in 8cecf76 with git.deploymentEnabled.output = false, so the
+# workflow is safe to run again.
+
 on:
   schedule:
     - cron: "0 0 * * *"
   workflow_dispatch:
-  push:
-    branches: [main]
+  # No push trigger on purpose. The contribution graph changes at most once a
+  # day, so regenerating on every push to main burned a run per commit and
+  # pushed an identical SVG.
 
 permissions:
   contents: write
@@ -18,9 +28,14 @@ jobs:
         uses: Platane/snk@v3
         with:
           github_user_name: jayhemnani9910
+          # TWO READERS palette, matching the site: ember is the only saturated
+          # colour and the ramp climbs through the real surface tokens. The
+          # previous cyan (#00f0ff on near-black) came from the neon design that
+          # was retired in the July redesign, so the snake had been advertising
+          # a palette the site no longer uses.
           outputs: |
-            dist/github-snake.svg?color_snake=#00f0ff&color_dots=#0A0A0F,#131318,#1a3a4a,#00a0aa,#00f0ff
-            dist/github-snake-dark.svg?color_snake=#00f0ff&color_dots=#030305,#0A0A0F,#1a3a4a,#00a0aa,#00f0ff
+            dist/github-snake.svg?color_snake=#B63C1A&color_dots=#F4F5F7,#EBEDF0,#D3D8DE,#D2703F,#B63C1A
+            dist/github-snake-dark.svg?color_snake=#FF5C2B&color_dots=#0A0B0D,#171B21,#232A33,#B63C1A,#FF5C2B
 
       - name: Push to output branch
         uses: crazy-max/ghaction-github-pages@v4
