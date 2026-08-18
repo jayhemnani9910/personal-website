@@ -14,19 +14,6 @@
    utilities is not a usage of them. */
 @source not "../../docs";
 
-/* Tailwind v4's automatic source detection skips anything .gitignore matches.
-   .gitignore line 56 is a bare `resume/`, meant for the private resume/ folder
-   at the repo root, but a bare pattern matches a directory of that name at ANY
-   depth, so src/app/resume/ was silently excluded from scanning. Every utility
-   used ONLY by the About page (max-w-[54rem], max-w-[72rem], its paddings and
-   measures) was therefore missing from the compiled CSS, in production as well
-   as locally, and the page rendered without its layout constraints. Nothing
-   failed: not the build, not lint, not the type checker.
-   Re-including the path explicitly overrides the ignore rule. Fixing it in
-   .gitignore instead would un-ignore public/resume/ and start surfacing the
-   resume PDFs, which is a separate decision.
-   src/lib/tokens.test.ts guards against another directory falling into this. */
-@source "../app/resume";
 
 /* ═══════════════════════════════════════════════════════════════
    EDITORIAL DESIGN SYSTEM — warm paper, ink black, rust accent

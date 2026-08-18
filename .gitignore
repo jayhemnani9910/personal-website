@@ -53,7 +53,7 @@ profile-3d-contrib/
 
 # Private directories
 forjobs/
-resume/
+/resume/
 
 # Local planning docs
 TODO-*.md
@@ -64,3 +64,16 @@ TODO-*.md
 # line 56 fell into (it silently hid src/app/resume/ from Tailwind's scanner
 # and shipped the About page without its CSS).
 /leetcode/
+
+# ---- Local-only working material ----
+# None of this is part of the website. Kept on disk, out of the repo.
+# Anchored with a leading slash so a directory of the same name nested under
+# src/ can never be swallowed (see /leetcode/ above for why that matters).
+/PORTFOLIO.md
+/HERO_IMAGE_PROMPTS.md
+/REDESIGN_PROMPT.md
+/docs/audits/
+/docs/superpowers/
+/codeforces/
+/sync/
+
