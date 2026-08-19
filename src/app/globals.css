@@ -691,7 +691,7 @@ html[data-theme="dark"] .editorial .ph::before {
   padding: 4px 8px; border: 1px solid var(--tr-hairline); color: var(--tr-text-mute); border-radius: 999px;
 }
 .editorial .feat .ph.small { margin-bottom: 18px; }
-.editorial .feat .ph.alt { background: radial-gradient(at 30% 30%, rgba(181,71,31,0.10), transparent 60%), var(--tr-surface-1); }
+.editorial .feat .ph.alt { background: radial-gradient(at 30% 30%, color-mix(in srgb, var(--tr-ember) 10%, transparent), transparent 60%), var(--tr-surface-1); }
 
 /* ---- departments ---- */
 .editorial .inside { padding-top: var(--section-pad); }
