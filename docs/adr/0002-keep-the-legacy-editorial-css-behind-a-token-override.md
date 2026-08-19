@@ -1,9 +1,9 @@
 # 0002. Keep the legacy editorial CSS behind a scoped token override
 
 - **Status:** Accepted
-- **Date:** 2026-07-16, amended 2026-08-19
+- **Date:** 2026-07-16, amended 2026-08-19 (twice: the prune, then the coverage)
 - **Commits:** `60cc059` (the override), `6f49183` (deleting the dead half)
-- **Related:** ADR 0001
+- **Related:** ADR 0001, ADR 0006
 
 ## Context
 
@@ -96,21 +96,27 @@ on the two most detailed pages on the site is exactly the kind of thing eyes
 miss.
 
 So: visual regression snapshots first, then the port, then delete the legacy
-palette and both override blocks. Until the snapshots exist, this record stays
-Accepted and the two systems stay.
+palette and both override blocks.
+
+**As of 2026-08-19 the snapshots exist** (ADR 0006), so the precondition is met
+and the port is unblocked. This record stays Accepted until the port lands, at
+which point it gets superseded rather than edited.
 
 ## Compliance
 
-Nothing enforces this automatically, and that is a real gap.
+`npm run test:visual` (ADR 0006) baselines both routes in both themes at
+`maxDiffPixels: 0`, and its tab sweep asserts the five runtime-composed class
+names are present in the DOM. That covers the rendered result, which is what the
+port puts at risk.
 
-No test asserts that new routes avoid `.editorial`, that the override blocks
-still cover every editorial token, or that the legacy rule count is going down
-rather than up. The `--ff-body` token was omitted from both override blocks
-originally and fell through to the global Geist definition, which is precisely
-the kind of drift a test would have caught and review did not.
+`src/lib/tokens.test.ts` asserts the `--tr-*` layer the override blocks read
+from stays intact.
 
-The only related guard is in `src/lib/tokens.test.ts`, which asserts the
-`--tr-*` layer itself stays intact.
+Two gaps remain, and neither is covered by anything above. No test asserts that a
+new route avoids `.editorial`, and no test asserts the override blocks cover
+every editorial token. `--ff-body` was omitted from both blocks originally and
+fell through to the global Geist definition, which is the kind of drift a test
+would catch and review did not.
 
 ## Notes
 

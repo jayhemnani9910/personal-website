@@ -11,5 +11,9 @@ export default defineConfig({
   test: {
     environment: 'jsdom',
     setupFiles: ['./vitest.setup.ts'],
+    // Scoped to src/ on purpose. Vitest's default include would also collect
+    // tests/visual/*.spec.ts, which are Playwright specs importing a `test`
+    // export that is not this one, and the run would fail on import.
+    include: ['src/**/*.{test,spec}.{ts,tsx}'],
   },
 });

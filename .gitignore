@@ -77,3 +77,10 @@ TODO-*.md
 /codeforces/
 /sync/
 
+
+# Playwright visual regression. The baselines under tests/visual/__snapshots__
+# ARE committed (they are the reference); these are per-run artefacts.
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
