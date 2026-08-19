@@ -40,11 +40,12 @@ there.
 | # | Title | Status | Date |
 |---|-------|--------|------|
 | [0001](0001-two-readers-as-the-single-design-concept.md) | TWO READERS as the single design concept | Accepted | 2026-07-16 |
-| [0002](0002-keep-the-legacy-editorial-css-behind-a-token-override.md) | Keep the legacy editorial CSS behind a scoped token override | Accepted | 2026-07-16 |
+| [0002](0002-keep-the-legacy-editorial-css-behind-a-token-override.md) | Keep the legacy editorial CSS behind a scoped token override | Superseded by 0007 | 2026-07-16 |
 | [0003](0003-replace-the-four-presentation-modes-with-reader-mode.md) | Replace the four presentation modes with reader mode | Accepted | 2026-07-16 |
 | [0004](0004-retire-the-reactflow-architecture-visualiser.md) | Retire the ReactFlow architecture visualiser | Accepted | 2026-08-16 |
 | [0005](0005-require-node-24.md) | Require Node 24 | Accepted | 2026-08-16 |
 | [0006](0006-pixel-exact-visual-regression-for-the-legacy-routes.md) | Pixel-exact visual regression for the legacy routes | Accepted | 2026-08-19 |
+| [0007](0007-one-palette-legacy-rules-read-tr-tokens-directly.md) | One palette: the legacy rules read `--tr-*` directly | Accepted | 2026-08-19 |
 
 ## Adding one
 
