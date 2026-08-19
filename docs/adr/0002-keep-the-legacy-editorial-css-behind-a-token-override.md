@@ -1,6 +1,7 @@
 # 0002. Keep the legacy editorial CSS behind a scoped token override
 
-- **Status:** Accepted
+- **Status:** Superseded
+- **Superseded by:** [ADR 0007](0007-one-palette-legacy-rules-read-tr-tokens-directly.md)
 - **Date:** 2026-07-16, amended 2026-08-19 (twice: the prune, then the coverage)
 - **Commits:** `60cc059` (the override), `6f49183` (deleting the dead half)
 - **Related:** ADR 0001, ADR 0006
@@ -98,9 +99,12 @@ miss.
 So: visual regression snapshots first, then the port, then delete the legacy
 palette and both override blocks.
 
-**As of 2026-08-19 the snapshots exist** (ADR 0006), so the precondition is met
-and the port is unblocked. This record stays Accepted until the port lands, at
-which point it gets superseded rather than edited.
+**As of 2026-08-19 the snapshots exist** (ADR 0006), the precondition was met,
+and the port landed the same day. See
+[ADR 0007](0007-one-palette-legacy-rules-read-tr-tokens-directly.md), which
+supersedes this record and also corrects it: the legacy palette was never
+confined to these two routes, and the wrapper-override trick could not reach
+properties that `:root` had already resolved.
 
 ## Compliance
 
