@@ -46,6 +46,7 @@ there.
 | [0005](0005-require-node-24.md) | Require Node 24 | Accepted | 2026-08-16 |
 | [0006](0006-pixel-exact-visual-regression-for-the-legacy-routes.md) | Pixel-exact visual regression for the legacy routes | Accepted | 2026-08-19 |
 | [0007](0007-one-palette-legacy-rules-read-tr-tokens-directly.md) | One palette: the legacy rules read `--tr-*` directly | Accepted | 2026-08-19 |
+| [0008](0008-a-performance-budget-that-can-fail-a-merge.md) | A performance budget that can fail a merge | Accepted | 2026-08-19 |
 
 ## Adding one
 

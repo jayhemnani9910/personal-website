@@ -12,8 +12,10 @@
     "lint": "eslint",
     "test": "vitest",
     "test:run": "vitest run",
-    "test:visual": "next build && playwright test",
-    "test:visual:update": "next build && playwright test --update-snapshots"
+    "test:visual": "next build && playwright test --project=dark --project=light",
+    "test:visual:update": "next build && playwright test --project=dark --project=light --update-snapshots",
+    "test:perf": "next build && playwright test --project=perf",
+    "test:perf:ci": "playwright test --project=perf"
   },
   "dependencies": {
     "@upstash/redis": "^1.38.2",

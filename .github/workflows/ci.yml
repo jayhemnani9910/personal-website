@@ -12,6 +12,8 @@ name: CI
 #   webmcp.test.ts      tool-name array matches the real registerTool calls
 #   showcase.test.ts    every enabled hero image path resolves
 #   fde-prompt.test.ts  system prompt and visitor brief stay in separate channels
+#   adr.test.ts         the decision records stay well-formed and indexed
+#   perf budget         JS, CSS and font-file counts for the home route (ADR 0008)
 
 on:
   push:
@@ -56,6 +58,23 @@ jobs:
       # not at build time.
       - name: Build
         run: npm run build
+        env:
+          UPSTASH_REDIS_REST_URL: ""
+          UPSTASH_REDIS_REST_TOKEN: ""
+          GEMINI_API_KEY: ""
+
+      # Browser only, no system deps: the runner already has what Chromium needs
+      # and --with-deps costs an apt update for nothing here.
+      - name: Install Chromium
+        run: npx playwright install chromium
+
+      # Serves the build just made and measures it. The byte counts are exact
+      # and machine-independent, which is why they can gate a merge; the LCP
+      # assertion skips itself under CI, because on a shared runner it measures
+      # the runner. The visual suite deliberately does NOT run here, see
+      # playwright.config.ts.
+      - name: Performance budget
+        run: npm run test:perf:ci
         env:
           UPSTASH_REDIS_REST_URL: ""
           UPSTASH_REDIS_REST_TOKEN: ""

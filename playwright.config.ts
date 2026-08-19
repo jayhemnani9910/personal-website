@@ -12,7 +12,7 @@ const PORT = 3100; // not 3000: a dev server on the default port must not be
 const BASE_URL = `http://127.0.0.1:${PORT}`;
 
 export default defineConfig({
-  testDir: "./tests/visual",
+  testDir: "./tests",
   snapshotPathTemplate: "{testDir}/__snapshots__/{projectName}/{arg}{ext}",
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
@@ -64,8 +64,11 @@ export default defineConfig({
   // palette by custom-property inheritance through a wrapper class (ADR 0002),
   // which is exactly the mechanism a port would disturb. One project each.
   projects: [
-    { name: "dark", use: { colorScheme: "dark" } },
-    { name: "light", use: { colorScheme: "light" } },
+    { name: "dark", testDir: "./tests/visual", use: { colorScheme: "dark" } },
+    { name: "light", testDir: "./tests/visual", use: { colorScheme: "light" } },
+    // The budget measures bytes, which do not have a theme. Running it twice
+    // would double the wall clock and assert the same numbers.
+    { name: "perf", testDir: "./tests/perf", use: { colorScheme: "dark" } },
   ],
 
   webServer: {
