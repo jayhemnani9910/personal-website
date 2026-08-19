@@ -53,17 +53,17 @@ export function StarSchemaFigure({ className }: { className?: string }) {
       fill="none"
       role="img"
       aria-label="Star schema: a central ticks fact table joined to symbol, date, source, and exchange dimensions, over a 25-year candlestick band."
-      style={{ fontFamily: "var(--ff-mono)" }}
+      style={{ fontFamily: "var(--font-jetbrains)" }}
     >
       {/* connectors fact -> dims */}
-      <g stroke="var(--ink-mute)" strokeWidth={1.25}>
+      <g stroke="var(--tr-text-mute)" strokeWidth={1.25}>
         {DIMS.map((d) => {
           const dcx = d.x + DIM_W / 2;
           const dcy = d.y + dimHeight(d.cols) / 2;
           return <line key={d.label} x1={FACT_CX} y1={FACT_CY} x2={dcx} y2={dcy} />;
         })}
       </g>
-      <g fill="var(--accent)">
+      <g fill="var(--tr-ember)">
         {DIMS.map((d) => {
           const dcx = d.x + DIM_W / 2;
           const dcy = d.y + dimHeight(d.cols) / 2;
@@ -77,12 +77,12 @@ export function StarSchemaFigure({ className }: { className?: string }) {
         const h = dimHeight(d.cols);
         return (
           <g key={d.label}>
-            <rect x={d.x} y={d.y} width={DIM_W} height={h} rx={3} fill="var(--paper)" stroke="var(--ink)" strokeWidth={1.25} />
-            <rect x={d.x} y={d.y} width={DIM_W} height={ROW_H} fill="var(--rule-soft)" />
-            <line x1={d.x} y1={d.y + ROW_H} x2={d.x + DIM_W} y2={d.y + ROW_H} stroke="var(--ink)" strokeWidth={1.25} />
-            <text x={d.x + 8} y={d.y + 13} fontSize={10} fill="var(--ink)" fontWeight={600} letterSpacing="0.04em">{d.label}</text>
+            <rect x={d.x} y={d.y} width={DIM_W} height={h} rx={3} fill="var(--tr-bg)" stroke="var(--tr-text)" strokeWidth={1.25} />
+            <rect x={d.x} y={d.y} width={DIM_W} height={ROW_H} fill="var(--tr-hairline)" />
+            <line x1={d.x} y1={d.y + ROW_H} x2={d.x + DIM_W} y2={d.y + ROW_H} stroke="var(--tr-text)" strokeWidth={1.25} />
+            <text x={d.x + 8} y={d.y + 13} fontSize={10} fill="var(--tr-text)" fontWeight={600} letterSpacing="0.04em">{d.label}</text>
             {d.cols.map((c, i) => (
-              <text key={c} x={d.x + 8} y={d.y + ROW_H + 14 + i * ROW_H} fontSize={9} fill="var(--ink-mute)">{c}</text>
+              <text key={c} x={d.x + 8} y={d.y + ROW_H + 14 + i * ROW_H} fontSize={9} fill="var(--tr-text-mute)">{c}</text>
             ))}
           </g>
         );
@@ -90,20 +90,20 @@ export function StarSchemaFigure({ className }: { className?: string }) {
 
       {/* fact table */}
       <g>
-        <rect x={FACT.x} y={FACT.y} width={FACT.w} height={FACT.h} rx={3} fill="var(--paper)" stroke="var(--accent)" strokeWidth={1.75} />
-        <rect x={FACT.x} y={FACT.y} width={FACT.w} height={ROW_H + 2} fill="var(--accent)" />
-        <text x={FACT.x + 10} y={FACT.y + 14} fontSize={11} fill="var(--accent-ink)" fontWeight={600} letterSpacing="0.04em">FCT_TICKS</text>
+        <rect x={FACT.x} y={FACT.y} width={FACT.w} height={FACT.h} rx={3} fill="var(--tr-bg)" stroke="var(--tr-ember)" strokeWidth={1.75} />
+        <rect x={FACT.x} y={FACT.y} width={FACT.w} height={ROW_H + 2} fill="var(--tr-ember)" />
+        <text x={FACT.x + 10} y={FACT.y + 14} fontSize={11} fill="var(--tr-on-ember)" fontWeight={600} letterSpacing="0.04em">FCT_TICKS</text>
         {FACT_COLS.map((c, i) => (
-          <text key={c} x={FACT.x + 10} y={FACT.y + ROW_H + 18 + i * ROW_H} fontSize={9.5} fill="var(--ink)">{c}</text>
+          <text key={c} x={FACT.x + 10} y={FACT.y + ROW_H + 18 + i * ROW_H} fontSize={9.5} fill="var(--tr-text)">{c}</text>
         ))}
       </g>
 
       {/* candlestick band */}
       <g>
         {CANDLES.map((c, i) => (
-          <g key={i} stroke={c.up ? "var(--accent)" : "var(--ink-mute)"} strokeWidth={1}>
+          <g key={i} stroke={c.up ? "var(--tr-ember)" : "var(--tr-text-mute)"} strokeWidth={1}>
             <line x1={c.x} y1={c.wickTop} x2={c.x} y2={c.wickBot} />
-            <rect x={r2(c.x - 3)} y={c.top} width={6} height={c.rectH} fill={c.up ? "var(--accent)" : "var(--paper)"} />
+            <rect x={r2(c.x - 3)} y={c.top} width={6} height={c.rectH} fill={c.up ? "var(--tr-ember)" : "var(--tr-bg)"} />
           </g>
         ))}
       </g>

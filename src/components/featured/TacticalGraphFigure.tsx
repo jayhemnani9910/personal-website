@@ -29,10 +29,10 @@ export function TacticalGraphFigure({ className }: { className?: string }) {
       fill="none"
       role="img"
       aria-label="A soccer tactical interaction graph: tracked player nodes joined by passing edges, with the ball highlighted, over a faint pitch."
-      style={{ fontFamily: "var(--ff-mono)" }}
+      style={{ fontFamily: "var(--font-jetbrains)" }}
     >
       {/* pitch */}
-      <g stroke="var(--rule)" strokeWidth={1}>
+      <g stroke="var(--tr-hairline)" strokeWidth={1}>
         <rect x={40} y={40} width={720} height={370} />
         <line x1={400} y1={40} x2={400} y2={410} />
         <circle cx={400} cy={225} r={56} fill="none" />
@@ -41,42 +41,42 @@ export function TacticalGraphFigure({ className }: { className?: string }) {
       </g>
 
       {/* interaction edges (team A) */}
-      <g stroke="var(--ink-mute)" strokeWidth={1.25}>
+      <g stroke="var(--tr-text-mute)" strokeWidth={1.25}>
         {EDGES_A.map(([a, b], i) => (
           <line key={i} x1={TEAM_A[a].x} y1={TEAM_A[a].y} x2={TEAM_A[b].x} y2={TEAM_A[b].y} />
         ))}
       </g>
       {/* ball link to forward */}
-      <line x1={TEAM_A[6].x} y1={TEAM_A[6].y} x2={BALL.x} y2={BALL.y} stroke="var(--accent)" strokeWidth={1.5} strokeDasharray="4 3" />
+      <line x1={TEAM_A[6].x} y1={TEAM_A[6].y} x2={BALL.x} y2={BALL.y} stroke="var(--tr-ember)" strokeWidth={1.5} strokeDasharray="4 3" />
 
       {/* velocity vectors (tracking) */}
-      <g stroke="var(--ink)" strokeWidth={1.25}>
+      <g stroke="var(--tr-text)" strokeWidth={1.25}>
         <line x1={310} y1={165} x2={345} y2={150} />
-        <polygon points="345,150 337,148 341,156" fill="var(--ink)" stroke="none" />
+        <polygon points="345,150 337,148 341,156" fill="var(--tr-text)" stroke="none" />
         <line x1={445} y1={235} x2={478} y2={246} />
-        <polygon points="478,246 470,242 471,250" fill="var(--ink)" stroke="none" />
+        <polygon points="478,246 470,242 471,250" fill="var(--tr-text)" stroke="none" />
       </g>
 
       {/* team B nodes (opponent, outline) */}
-      <g fill="var(--paper)" stroke="var(--ink-mute)" strokeWidth={1.5}>
+      <g fill="var(--tr-bg)" stroke="var(--tr-text-mute)" strokeWidth={1.5}>
         {TEAM_B.map((p, i) => <circle key={i} cx={p.x} cy={p.y} r={9} />)}
       </g>
 
       {/* team A nodes (tracked, filled) */}
-      <g fill="var(--ink)" stroke="var(--paper)" strokeWidth={1.5}>
+      <g fill="var(--tr-text)" stroke="var(--tr-bg)" strokeWidth={1.5}>
         {TEAM_A.map((p, i) => <circle key={i} cx={p.x} cy={p.y} r={10} />)}
       </g>
 
       {/* ball */}
-      <circle cx={BALL.x} cy={BALL.y} r={7} fill="var(--accent)" />
-      <circle cx={BALL.x} cy={BALL.y} r={13} fill="none" stroke="var(--accent)" strokeWidth={1.25} />
+      <circle cx={BALL.x} cy={BALL.y} r={7} fill="var(--tr-ember)" />
+      <circle cx={BALL.x} cy={BALL.y} r={13} fill="none" stroke="var(--tr-ember)" strokeWidth={1.25} />
 
       {/* id labels */}
-      <g fontSize={10} fill="var(--ink-mute)" letterSpacing="0.04em">
+      <g fontSize={10} fill="var(--tr-text-mute)" letterSpacing="0.04em">
         {TEAM_A.filter((p) => p.id).map((p) => (
           <text key={p.id} x={p.x + 14} y={p.y - 10}>ID {p.id}</text>
         ))}
-        <text x={BALL.x + 16} y={BALL.y + 4} fill="var(--accent)">BALL</text>
+        <text x={BALL.x + 16} y={BALL.y + 4} fill="var(--tr-ember)">BALL</text>
       </g>
     </svg>
   );

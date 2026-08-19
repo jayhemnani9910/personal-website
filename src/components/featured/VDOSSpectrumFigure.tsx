@@ -76,24 +76,24 @@ export function VDOSSpectrumFigure({ className }: { className?: string }) {
       fill="none"
       role="img"
       aria-label="A VDOS vibrational spectrum with one dominant peak, a residue contact graph, and a small-molecule skeleton arranged left to right."
-      style={{ fontFamily: "var(--ff-mono)" }}
+      style={{ fontFamily: "var(--font-jetbrains)" }}
     >
       {/* ── Left panel: VDOS spectrum ────────────────────────────── */}
-      <text x={SX0} y={80} fontSize={10} fill="var(--ink-mute)" letterSpacing="0.08em">
+      <text x={SX0} y={80} fontSize={10} fill="var(--tr-text-mute)" letterSpacing="0.08em">
         VDOS SPECTRUM
       </text>
 
       {/* axes */}
-      <g stroke="var(--rule)" strokeWidth={1}>
+      <g stroke="var(--tr-hairline)" strokeWidth={1}>
         <line x1={SX0} y1={SBASE} x2={SX1 + 8} y2={SBASE} />
         <line x1={SX0} y1={100} x2={SX0} y2={SBASE} />
       </g>
 
       {/* dominant peak fill */}
-      <path d={PEAK_FILL} fill="var(--accent)" opacity={0.16} />
+      <path d={PEAK_FILL} fill="var(--tr-ember)" opacity={0.16} />
 
       {/* spectrum curve */}
-      <path d={CURVE} stroke="var(--ink)" strokeWidth={2} strokeLinejoin="round" />
+      <path d={CURVE} stroke="var(--tr-text)" strokeWidth={2} strokeLinejoin="round" />
 
       {/* peak highlight: dashed vertical + dot */}
       <line
@@ -101,23 +101,23 @@ export function VDOSSpectrumFigure({ className }: { className?: string }) {
         y1={sy(PEAK_GX)}
         x2={PEAK_GX}
         y2={SBASE}
-        stroke="var(--accent)"
+        stroke="var(--tr-ember)"
         strokeWidth={1.25}
         strokeDasharray="3 3"
       />
-      <circle cx={PEAK_GX} cy={sy(PEAK_GX)} r={3.5} fill="var(--accent)" />
+      <circle cx={PEAK_GX} cy={sy(PEAK_GX)} r={3.5} fill="var(--tr-ember)" />
 
       {/* axis label */}
-      <text x={SX1 - 4} y={SBASE + 18} fontSize={9} fill="var(--ink-faint)" textAnchor="end">
+      <text x={SX1 - 4} y={SBASE + 18} fontSize={9} fill="var(--tr-text-faint)" textAnchor="end">
         ω →
       </text>
 
       {/* ── Center panel: residue contact graph ──────────────────── */}
-      <text x={395} y={80} fontSize={10} fill="var(--ink-mute)" letterSpacing="0.08em" textAnchor="middle">
+      <text x={395} y={80} fontSize={10} fill="var(--tr-text-mute)" letterSpacing="0.08em" textAnchor="middle">
         CONTACT GRAPH
       </text>
 
-      <g stroke="var(--ink-mute)" strokeWidth={1.25}>
+      <g stroke="var(--tr-text-mute)" strokeWidth={1.25}>
         {GRAPH_EDGES.map(([a, b], i) => (
           <line
             key={i}
@@ -128,18 +128,18 @@ export function VDOSSpectrumFigure({ className }: { className?: string }) {
           />
         ))}
       </g>
-      <g fill="var(--paper)" stroke="var(--ink)" strokeWidth={1.5}>
+      <g fill="var(--tr-bg)" stroke="var(--tr-text)" strokeWidth={1.5}>
         {GRAPH_NODES.map((p, i) => (
           <circle key={i} cx={p[0]} cy={p[1]} r={6} />
         ))}
       </g>
 
       {/* ── Right panel: small-molecule skeleton ─────────────────── */}
-      <text x={715} y={80} fontSize={9} fill="var(--ink-faint)" letterSpacing="0.06em" textAnchor="middle">
+      <text x={715} y={80} fontSize={9} fill="var(--tr-text-faint)" letterSpacing="0.06em" textAnchor="middle">
         ChemBERTa · ligand
       </text>
 
-      <g stroke="var(--ink)" strokeWidth={1.5} strokeLinejoin="round">
+      <g stroke="var(--tr-text)" strokeWidth={1.5} strokeLinejoin="round">
         {/* ring */}
         <path d={RING.map((p, i) => `${i === 0 ? "M" : "L"} ${p[0]} ${p[1]}`).join(" ") + " Z"} />
         {/* chain */}
@@ -148,15 +148,15 @@ export function VDOSSpectrumFigure({ className }: { className?: string }) {
         <line x1={BOND1[0]} y1={BOND1[1]} x2={BOND1[2]} y2={BOND1[3]} />
         <line x1={BOND2[0]} y1={BOND2[1]} x2={BOND2[2]} y2={BOND2[3]} />
       </g>
-      <g fill="var(--paper)" stroke="var(--ink)" strokeWidth={1.25}>
+      <g fill="var(--tr-bg)" stroke="var(--tr-text)" strokeWidth={1.25}>
         {[...RING, ...CHAIN.slice(1)].map((p, i) => (
           <circle key={i} cx={p[0]} cy={p[1]} r={4} />
         ))}
       </g>
 
       {/* ── Panel dividers ───────────────────────────────────────── */}
-      <line x1={295} y1={60} x2={295} y2={430} stroke="var(--rule)" strokeWidth={1} strokeDasharray="4 4" />
-      <line x1={575} y1={60} x2={575} y2={430} stroke="var(--rule)" strokeWidth={1} strokeDasharray="4 4" />
+      <line x1={295} y1={60} x2={295} y2={430} stroke="var(--tr-hairline)" strokeWidth={1} strokeDasharray="4 4" />
+      <line x1={575} y1={60} x2={575} y2={430} stroke="var(--tr-hairline)" strokeWidth={1} strokeDasharray="4 4" />
     </svg>
   );
 }

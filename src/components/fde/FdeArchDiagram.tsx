@@ -19,11 +19,11 @@ const PAD = 30;
 // rest step down through the text tiers. On /fde these editorial vars are remapped
 // to --tr-* by the .fde-page scope override in globals.css.
 const KIND_COLORS: Record<string, { stroke: string; fill: string }> = {
-  ui:       { stroke: 'var(--accent)',   fill: 'color-mix(in srgb, var(--accent) 8%, transparent)' },
-  agent:    { stroke: 'var(--ink)',      fill: 'color-mix(in srgb, var(--ink) 8%, transparent)' },
-  service:  { stroke: 'var(--ink-mute)', fill: 'color-mix(in srgb, var(--ink-mute) 6%, transparent)' },
-  data:     { stroke: 'var(--ink-mute)', fill: 'color-mix(in srgb, var(--ink-mute) 6%, transparent)' },
-  external: { stroke: 'var(--ink-faint)', fill: 'color-mix(in srgb, var(--ink-faint) 6%, transparent)' },
+  ui:       { stroke: 'var(--tr-ember)',   fill: 'color-mix(in srgb, var(--tr-ember) 8%, transparent)' },
+  agent:    { stroke: 'var(--tr-text)',      fill: 'color-mix(in srgb, var(--tr-text) 8%, transparent)' },
+  service:  { stroke: 'var(--tr-text-mute)', fill: 'color-mix(in srgb, var(--tr-text-mute) 6%, transparent)' },
+  data:     { stroke: 'var(--tr-text-mute)', fill: 'color-mix(in srgb, var(--tr-text-mute) 6%, transparent)' },
+  external: { stroke: 'var(--tr-text-faint)', fill: 'color-mix(in srgb, var(--tr-text-faint) 6%, transparent)' },
 };
 
 function pathFor(
@@ -92,11 +92,11 @@ export function FdeArchDiagram({ architecture }: Props) {
         <defs>
           {/* Arrowhead for solid edges */}
           <marker id="fde-arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
-            <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--ink-faint)" />
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--tr-text-faint)" />
           </marker>
           {/* Arrowhead for dashed (retrieval/feedback) edges */}
           <marker id="fde-arr-d" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
-            <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--accent)" />
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--tr-ember)" />
           </marker>
         </defs>
 
@@ -112,7 +112,7 @@ export function FdeArchDiagram({ architecture }: Props) {
               <path
                 d={d}
                 fill="none"
-                stroke={isDashed ? 'var(--accent)' : 'var(--ink-faint)'}
+                stroke={isDashed ? 'var(--tr-ember)' : 'var(--tr-text-faint)'}
                 strokeOpacity={isDashed ? 0.7 : 0.5}
                 strokeWidth={1.4}
                 strokeDasharray={isDashed ? '5 4' : undefined}
@@ -126,15 +126,15 @@ export function FdeArchDiagram({ architecture }: Props) {
                     y={labelY - 8}
                     width={e.label.length * 6.8 + 12}
                     height={16}
-                    fill="var(--paper)"
+                    fill="var(--tr-bg)"
                     rx={2}
                   />
                   <text
                     x={labelX}
                     y={labelY + 3.5}
-                    fontFamily="var(--ff-mono)"
+                    fontFamily="var(--font-jetbrains)"
                     fontSize="10"
-                    fill="var(--ink-mute)"
+                    fill="var(--tr-text-mute)"
                     textAnchor="middle"
                   >
                     {e.label}
@@ -184,7 +184,7 @@ export function FdeArchDiagram({ architecture }: Props) {
               <text
                 x={c.x + 9}
                 y={c.y + 11.5}
-                fontFamily="var(--ff-mono)"
+                fontFamily="var(--font-jetbrains)"
                 fontSize="9"
                 fill={col.stroke}
                 letterSpacing="0.14em"
@@ -195,10 +195,10 @@ export function FdeArchDiagram({ architecture }: Props) {
               <text
                 x={c.x + BOX_W / 2}
                 y={c.y + 38}
-                fontFamily="var(--ff-body)"
+                fontFamily="var(--font-newsreader)"
                 fontSize="14"
                 fontWeight="500"
-                fill="var(--ink)"
+                fill="var(--tr-text)"
                 textAnchor="middle"
               >
                 {c.name}
@@ -208,9 +208,9 @@ export function FdeArchDiagram({ architecture }: Props) {
                 <text
                   x={c.x + BOX_W / 2}
                   y={c.y + 56}
-                  fontFamily="var(--ff-mono)"
+                  fontFamily="var(--font-jetbrains)"
                   fontSize="10"
-                  fill="var(--ink-mute)"
+                  fill="var(--tr-text-mute)"
                   textAnchor="middle"
                 >
                   {c.sub}
@@ -241,11 +241,11 @@ export function FdeArchDiagram({ architecture }: Props) {
       </svg>
 
       <div className="fde-arch-legend" aria-label="Architecture legend">
-        <span><span className="fde-swatch" style={{ borderColor: 'var(--accent)' }} />UI surface</span>
-        <span><span className="fde-swatch" style={{ borderColor: 'var(--ink)' }} />Agent / model</span>
-        <span><span className="fde-swatch" style={{ borderColor: 'var(--ink-mute)' }} />Service</span>
-        <span><span className="fde-swatch" style={{ borderColor: 'var(--ink-mute)' }} />Data store</span>
-        <span><span className="fde-swatch" style={{ borderColor: 'var(--ink-faint)' }} />External system</span>
+        <span><span className="fde-swatch" style={{ borderColor: 'var(--tr-ember)' }} />UI surface</span>
+        <span><span className="fde-swatch" style={{ borderColor: 'var(--tr-text)' }} />Agent / model</span>
+        <span><span className="fde-swatch" style={{ borderColor: 'var(--tr-text-mute)' }} />Service</span>
+        <span><span className="fde-swatch" style={{ borderColor: 'var(--tr-text-mute)' }} />Data store</span>
+        <span><span className="fde-swatch" style={{ borderColor: 'var(--tr-text-faint)' }} />External system</span>
         <span style={{ marginLeft: 'auto' }}>-- dashed = retrieve / feedback</span>
       </div>
     </div>

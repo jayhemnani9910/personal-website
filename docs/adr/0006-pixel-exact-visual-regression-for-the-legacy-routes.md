@@ -26,10 +26,17 @@ even in principle.
 
 Add `@playwright/test` as a dev dependency and baseline the two legacy routes.
 
-Scope is deliberately narrow. The suite covers six routes plus a tab sweep, and
-each entry names in a comment which legacy rules it protects. A route that does
-not render through `.editorial` or `.fde` does not belong here: it costs a
-baseline and guards nothing this decision is about.
+Scope started deliberately narrow: six routes plus a tab sweep, each naming in a
+comment which legacy rules it protects.
+
+It was widened on the same day, in `tests/visual/token-routes.spec.ts`, and the
+original reasoning is why. Retiring the legacy palette means deleting custom
+properties declared at `:root`, and every page inherits from there. A change
+meant to be invisible outside `/projects/[id]` and `/fde` needs the pages outside
+them under test before it can be called invisible. The home page earns its place
+twice over: its six featured figures are SVG drawn with custom properties inline
+rather than with classes, which makes them the part most likely to move and the
+least likely to be noticed.
 
 Three coverage choices are load-bearing:
 
@@ -47,15 +54,24 @@ Three coverage choices are load-bearing:
   their palette by custom-property inheritance through a wrapper class, and that
   is the precise mechanism a port would disturb.
 
-**The threshold is `maxDiffPixels: 0`**, and that number is measured. Two
-consecutive runs of the same build differ by zero pixels across all 18 tests, so
-there is no antialiasing noise to leave slack for.
+**The two sensitivity numbers are `threshold: 0` and `maxDiffPixels: 20`**, and
+both are measured. Each was wrong once first, in opposite directions.
 
-The first attempt used `maxDiffPixelRatio: 0.001` and was worse than nothing. A
+`maxDiffPixelRatio: 0.001` was the first attempt and was worse than nothing. A
 ratio scales with page height, so the 6489px-tall dossier was granted about 8300
 pixels of slack while a real regression stays a fixed size. Moving one legacy
 rule's padding by 2px changed roughly 1000 pixels and the entire suite passed.
-The same perturbation against an absolute threshold fails 15 of 18 tests.
+
+Leaving `threshold` at its default of 0.2 was the second mistake, and a worse one
+given what this suite is for. That number is per-pixel colour sensitivity in YIQ
+space, and a palette migration is exactly the change it hides: the stale
+editorial rust `#b5471f` sits close enough to ember `#FF5C2B` that recolouring
+every figure on the home page registered as 41 changed pixels. The same recolour
+measured at `threshold: 0` is about 52,000 pixels.
+
+At `threshold: 0` the run-to-run noise floor is 4 pixels, on light theme only.
+`maxDiffPixels: 20` sits five times above that floor and roughly fifty times
+below the smallest real regression tested.
 
 Determinism comes from four things: `reducedMotion: "reduce"` (which turns off
 the preloader, the reticle cursor, every reveal and stagger, and Lenis, because
