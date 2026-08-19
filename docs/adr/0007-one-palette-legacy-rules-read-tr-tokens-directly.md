@@ -60,6 +60,15 @@ silently moved six usages onto the system mono stack.
 **One palette.** No legacy colour token is defined or referenced anywhere in
 `src/`, asserted by a scan over `globals.css` and every `.ts`/`.tsx` file.
 
+One literal survived that scan and was caught later, from the deployed CSS
+rather than the source: `.editorial .feat .ph.alt` had the rust written as
+`rgba(181,71,31,0.10)` inside a gradient. The migration looked for `var()`
+references and hex literals, and an rgba literal is neither. The rule is
+unreachable (no markup uses `.feat`), so nothing rendered wrong, but the sweep
+was incomplete and a sweep that reports zero while missing a case is the thing
+worth recording. A colour-space-aware scan over every `rgb()`/`rgba()` literal
+found exactly one warm value left, now `color-mix` on `--tr-ember`.
+
 **A class of bug is gone rather than fixed.** The `:root` freeze was invisible,
 survived a redesign and an audit, and would have recurred with any new alias.
 There is no longer an inherited-property override for it to defeat.
