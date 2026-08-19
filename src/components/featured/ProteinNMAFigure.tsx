@@ -41,38 +41,38 @@ export function ProteinNMAFigure({ className }: { className?: string }) {
       fill="none"
       role="img"
       aria-label="A folded protein backbone with normal-mode analysis vibration vectors and tertiary residue contacts."
-      style={{ fontFamily: "var(--ff-mono)" }}
+      style={{ fontFamily: "var(--font-jetbrains)" }}
     >
       {/* tertiary contacts */}
-      <g stroke="var(--ink-faint)" strokeWidth={1} strokeDasharray="3 3">
+      <g stroke="var(--tr-text-faint)" strokeWidth={1} strokeDasharray="3 3">
         {CONTACTS.map(([a, b], i) => (
           <line key={i} x1={BACKBONE[a][0]} y1={BACKBONE[a][1]} x2={BACKBONE[b][0]} y2={BACKBONE[b][1]} />
         ))}
       </g>
 
       {/* backbone */}
-      <path d={path} stroke="var(--ink)" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round" />
+      <path d={path} stroke="var(--tr-text)" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round" />
 
       {/* residue nodes */}
-      <g fill="var(--paper)" stroke="var(--ink)" strokeWidth={1.5}>
+      <g fill="var(--tr-bg)" stroke="var(--tr-text)" strokeWidth={1.5}>
         {BACKBONE.map((p, i) => <circle key={i} cx={p[0]} cy={p[1]} r={5.5} />)}
       </g>
 
       {/* normal-mode vectors */}
-      <g stroke="var(--accent)" strokeWidth={1.5}>
+      <g stroke="var(--tr-ember)" strokeWidth={1.5}>
         {MODES.map((m, idx) => {
           const a = arrow(BACKBONE[m.i][0], BACKBONE[m.i][1], m.dx, m.dy);
           return (
             <g key={idx}>
               <line x1={a.line.x1} y1={a.line.y1} x2={a.line.x2} y2={a.line.y2} />
-              <polygon points={a.head} fill="var(--accent)" stroke="none" />
+              <polygon points={a.head} fill="var(--tr-ember)" stroke="none" />
             </g>
           );
         })}
       </g>
 
-      <text x={60} y={300} fontSize={10} fill="var(--ink-mute)" letterSpacing="0.08em">NMA · NORMAL MODES</text>
-      <text x={60} y={318} fontSize={9} fill="var(--ink-faint)" letterSpacing="0.06em">backbone + tertiary contacts</text>
+      <text x={60} y={300} fontSize={10} fill="var(--tr-text-mute)" letterSpacing="0.08em">NMA · NORMAL MODES</text>
+      <text x={60} y={318} fontSize={9} fill="var(--tr-text-faint)" letterSpacing="0.06em">backbone + tertiary contacts</text>
     </svg>
   );
 }

@@ -22,16 +22,25 @@ export default defineConfig({
 
   expect: {
     toHaveScreenshot: {
-      // Zero, and that is measured rather than optimistic. Two consecutive runs
-      // of the same build differ by 0 pixels across all 18 tests, so there is no
-      // antialiasing noise here to leave slack for.
+      // Both numbers are measured, not guessed, and they were each wrong once.
       //
-      // The first version of this used maxDiffPixelRatio: 0.001, which was worse
-      // than useless: a ratio scales with page height, so the 6489px-tall dossier
-      // got 8300 pixels of slack while a real regression is a fixed size. Moving
-      // one legacy rule's padding by 2px produced ~1000 differing pixels and the
-      // whole suite passed. An absolute count cannot drift that way.
-      maxDiffPixels: 0,
+      // `threshold` is per-pixel colour sensitivity in YIQ space. Its default of
+      // 0.2 is far too loose for this suite, whose entire subject is a palette
+      // migration: the stale editorial rust (#b5471f) sits close enough to ember
+      // (#FF5C2B) that recolouring every figure on the home page registered as 41
+      // changed pixels. The same recolour at threshold 0 is ~52,000 pixels.
+      //
+      // `maxDiffPixels` is how many such pixels are tolerated. An earlier version
+      // used maxDiffPixelRatio: 0.001, which was worse than useless: a ratio
+      // scales with page height, so the 6489px dossier got ~8300 pixels of slack
+      // while a regression stays a fixed size. Moving one legacy rule's padding by
+      // 2px changed ~1000 pixels and the whole suite passed.
+      //
+      // At threshold 0 the measured run-to-run noise floor is 4 pixels, on light
+      // theme only. 20 sits five times above that floor and roughly fifty times
+      // below the smallest real regression tested.
+      threshold: 0,
+      maxDiffPixels: 20,
       animations: "disabled",
       caret: "hide",
       scale: "css",

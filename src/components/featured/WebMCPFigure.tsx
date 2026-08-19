@@ -53,14 +53,14 @@ export function WebMCPFigure({ className }: { className?: string }) {
       fill="none"
       role="img"
       aria-label="An AI browser agent calling the site's WebMCP tool registry: search, resume, skills, contact, and theme, each with JSON Schema inputs and typed results."
-      style={{ fontFamily: "var(--ff-mono)" }}
+      style={{ fontFamily: "var(--font-jetbrains)" }}
     >
       <defs>
         <marker id="wm-arrow" markerWidth="7" markerHeight="7" refX="5.5" refY="3" orient="auto">
-          <path d="M0,0 L6,3 L0,6 Z" fill="var(--ink-mute)" />
+          <path d="M0,0 L6,3 L0,6 Z" fill="var(--tr-text-mute)" />
         </marker>
         <marker id="wm-arrow-accent" markerWidth="7" markerHeight="7" refX="5.5" refY="3" orient="auto">
-          <path d="M0,0 L6,3 L0,6 Z" fill="var(--accent)" />
+          <path d="M0,0 L6,3 L0,6 Z" fill="var(--tr-ember)" />
         </marker>
       </defs>
 
@@ -71,8 +71,8 @@ export function WebMCPFigure({ className }: { className?: string }) {
         width={chipW}
         height={chipH}
         rx={14}
-        fill="var(--rule-soft)"
-        stroke="var(--rule)"
+        fill="var(--tr-hairline)"
+        stroke="var(--tr-hairline)"
         strokeWidth={1}
       />
       <text
@@ -80,7 +80,7 @@ export function WebMCPFigure({ className }: { className?: string }) {
         y={chipY + 18}
         textAnchor="middle"
         fontSize={10}
-        fill="var(--ink)"
+        fill="var(--tr-text)"
         letterSpacing="0.08em"
       >
         WEBMCP · TOOL REGISTRY
@@ -92,7 +92,7 @@ export function WebMCPFigure({ className }: { className?: string }) {
         y1={agentCY}
         x2={mcpLX}
         y2={mcpCY}
-        stroke="var(--accent)"
+        stroke="var(--tr-ember)"
         strokeWidth={1.5}
         markerEnd="url(#wm-arrow-accent)"
       />
@@ -104,11 +104,11 @@ export function WebMCPFigure({ className }: { className?: string }) {
         width={agentW}
         height={agentH}
         rx={5}
-        fill="var(--paper)"
-        stroke="var(--ink)"
+        fill="var(--tr-bg)"
+        stroke="var(--tr-text)"
         strokeWidth={1.5}
       />
-      <text x={agentX + 14} y={agentY + 26} fontSize={14} fill="var(--accent)" fontWeight={700}>
+      <text x={agentX + 14} y={agentY + 26} fontSize={14} fill="var(--tr-ember)" fontWeight={700}>
         ❯
       </text>
       <text
@@ -116,7 +116,7 @@ export function WebMCPFigure({ className }: { className?: string }) {
         y={agentY + 26}
         textAnchor="middle"
         fontSize={12}
-        fill="var(--ink)"
+        fill="var(--tr-text)"
         fontWeight={600}
       >
         browser
@@ -126,7 +126,7 @@ export function WebMCPFigure({ className }: { className?: string }) {
         y={agentY + 43}
         textAnchor="middle"
         fontSize={10}
-        fill="var(--ink-mute)"
+        fill="var(--tr-text-mute)"
       >
         agent
       </text>
@@ -138,8 +138,8 @@ export function WebMCPFigure({ className }: { className?: string }) {
         width={mcpW}
         height={mcpH}
         rx={5}
-        fill="var(--paper)"
-        stroke="var(--accent)"
+        fill="var(--tr-bg)"
+        stroke="var(--tr-ember)"
         strokeWidth={2}
       />
       <text
@@ -147,7 +147,7 @@ export function WebMCPFigure({ className }: { className?: string }) {
         y={mcpY + 30}
         textAnchor="middle"
         fontSize={16}
-        fill="var(--accent)"
+        fill="var(--tr-ember)"
         fontWeight={700}
         letterSpacing="0.06em"
       >
@@ -158,7 +158,7 @@ export function WebMCPFigure({ className }: { className?: string }) {
         y={mcpY + 48}
         textAnchor="middle"
         fontSize={10}
-        fill="var(--ink-mute)"
+        fill="var(--tr-text-mute)"
       >
         hub
       </text>
@@ -174,7 +174,7 @@ export function WebMCPFigure({ className }: { className?: string }) {
             y1={mcpCY}
             x2={tool.x}
             y2={toolCY}
-            stroke={isAccent ? "var(--accent)" : "var(--ink-mute)"}
+            stroke={isAccent ? "var(--tr-ember)" : "var(--tr-text-mute)"}
             strokeWidth={isAccent ? 1.5 : 1}
             strokeDasharray={isAccent ? undefined : "3 2"}
             markerEnd="url(#wm-arrow)"
@@ -193,23 +193,23 @@ export function WebMCPFigure({ className }: { className?: string }) {
               width={toolW}
               height={toolH}
               rx={4}
-              fill="var(--paper)"
-              stroke={isAccent ? "var(--accent)" : "var(--ink)"}
+              fill="var(--tr-bg)"
+              stroke={isAccent ? "var(--tr-ember)" : "var(--tr-text)"}
               strokeWidth={isAccent ? 2 : 1.25}
             />
             <text
               x={tool.x + 12}
               y={tool.y + 20}
               fontSize={12}
-              fill={isAccent ? "var(--accent)" : "var(--ink)"}
+              fill={isAccent ? "var(--tr-ember)" : "var(--tr-text)"}
               fontWeight={600}
             >
               {tool.name}
             </text>
-            <text x={tool.x + 12} y={tool.y + 36} fontSize={10} fill="var(--ink-mute)">
+            <text x={tool.x + 12} y={tool.y + 36} fontSize={10} fill="var(--tr-text-mute)">
               {"{ }"}
             </text>
-            <text x={tool.x + 34} y={tool.y + 36} fontSize={9} fill="var(--ink-faint)">
+            <text x={tool.x + 34} y={tool.y + 36} fontSize={9} fill="var(--tr-text-faint)">
               JSON
             </text>
           </g>
@@ -222,7 +222,7 @@ export function WebMCPFigure({ className }: { className?: string }) {
         y={472}
         textAnchor="middle"
         fontSize={9}
-        fill="var(--ink-mute)"
+        fill="var(--tr-text-mute)"
         letterSpacing="0.04em"
       >
         {WEBMCP_TOOL_COUNT} tools · JSON Schema in, typed results out
