@@ -44,6 +44,7 @@ there.
 | [0003](0003-replace-the-four-presentation-modes-with-reader-mode.md) | Replace the four presentation modes with reader mode | Accepted | 2026-07-16 |
 | [0004](0004-retire-the-reactflow-architecture-visualiser.md) | Retire the ReactFlow architecture visualiser | Accepted | 2026-08-16 |
 | [0005](0005-require-node-24.md) | Require Node 24 | Accepted | 2026-08-16 |
+| [0006](0006-pixel-exact-visual-regression-for-the-legacy-routes.md) | Pixel-exact visual regression for the legacy routes | Accepted | 2026-08-19 |
 
 ## Adding one
 
