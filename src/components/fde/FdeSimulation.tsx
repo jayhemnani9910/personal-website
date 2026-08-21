@@ -10,13 +10,36 @@ import { FdeArchDiagram } from "./FdeArchDiagram";
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
 
 interface Props {
-  payload: Preset;
+  /** Partial while a live run streams. Presets and cache hits arrive complete. */
+  payload: Partial<Preset>;
   brief: string;
   source: 'preset' | 'live';
   onExit: () => void;
+  /** True while sections are still arriving. Presets and cache hits are never streaming. */
+  streaming?: boolean;
 }
 
-export function FdeSimulation({ payload, brief, source, onExit }: Props) {
+const SECTION_KEYS: (keyof Preset)[] = ['scope', 'decomposition', 'architecture', 'sprint', 'risks'];
+
+// Which payload key each phase tab needs before it has anything to show.
+// `receipts` is the closing summary, so it waits for the whole answer.
+const PHASE_SECTION: Record<string, keyof Preset | null> = {
+  scope: 'scope',
+  decomp: 'decomposition',
+  arch: 'architecture',
+  plan: 'sprint',
+  risks: 'risks',
+  receipts: null,
+};
+
+function sectionReady(payload: Partial<Preset>, phaseKey: string): boolean {
+  const section = PHASE_SECTION[phaseKey];
+  if (section === null) return SECTION_KEYS.every((k) => payload[k] != null);
+  return payload[section] != null;
+}
+
+
+export function FdeSimulation({ payload, brief, source, onExit, streaming = false }: Props) {
   const [phase, setPhase] = useState(0);
   const [revealed, setRevealed] = useState(0);
   const sideRef = useRef<HTMLElement>(null);
@@ -72,6 +95,7 @@ export function FdeSimulation({ payload, brief, source, onExit }: Props) {
       {/* Phase tabs */}
       <div className="fde-phasetabs" role="tablist" aria-label="Simulation phases">
         {PHASES.map((p, i) => {
+          const ready = sectionReady(payload, p.key);
           const state = i === phase ? 'active' : (i < phase ? 'done' : 'pending');
           return (
             <button
@@ -83,8 +107,13 @@ export function FdeSimulation({ payload, brief, source, onExit }: Props) {
               aria-controls={`fde-panel-${p.key}`}
               onClick={() => setPhase(i)}
               type="button"
+              // Opening a tab whose section has not arrived would show an empty
+              // panel, so it stays shut until there is something behind it.
+              disabled={!ready}
+              aria-disabled={!ready}
+              title={ready ? undefined : 'still generating'}
             >
-              <span className="fde-tab-num">{state === 'done' ? '✓ ' : ''}{p.num}</span>
+              <span className="fde-tab-num">{state === 'done' && ready ? '✓ ' : ''}{p.num}</span>
               <span className="fde-tab-title">{p.title}</span>
             </button>
           );
@@ -99,7 +128,7 @@ export function FdeSimulation({ payload, brief, source, onExit }: Props) {
           role="tabpanel"
           aria-label={`Phase ${PHASES[phase].title}`}
         >
-          <PhaseContent phase={currentKey} payload={payload} />
+          <PhaseContent phase={currentKey} payload={payload} streaming={streaming} />
 
           <div className="fde-phase-nav">
             <button
@@ -158,7 +187,27 @@ export function FdeSimulation({ payload, brief, source, onExit }: Props) {
 
 // ─── Phase content ────────────────────────────────────────────────────────────
 
-function PhaseContent({ phase, payload }: { phase: string; payload: Preset }) {
+/** Shown in the panel for a section that has not arrived yet. */
+function AwaitingSection({ title }: { title: string }) {
+  return (
+    <div className="fde-loading" aria-live="polite">
+      <span className="fde-spinner" aria-hidden="true" />
+      <span>generating {title.toLowerCase()}<span className="fde-dots" aria-hidden="true" /></span>
+    </div>
+  );
+}
+
+function PhaseContent({
+  phase,
+  payload,
+  streaming,
+}: { phase: string; payload: Partial<Preset>; streaming: boolean }) {
+  // Every branch below indexes into a section. While streaming, one may not be
+  // there yet, and an unguarded .map on undefined takes the whole page down.
+  if (!sectionReady(payload, phase)) {
+    const title = PHASES.find((p) => p.key === phase)?.title ?? 'this section';
+    return streaming ? <AwaitingSection title={title} /> : null;
+  }
   if (!payload) return null;
 
   switch (phase) {
@@ -169,7 +218,7 @@ function PhaseContent({ phase, payload }: { phase: string; payload: Preset }) {
             First: <span className="fde-em">three questions</span> I need answered.
           </h2>
           <div className="fde-phase-sub">{"// scoping. before any building, before any architecture, before anything."}</div>
-          {payload.scope.map((s, i) => (
+          {(payload.scope ?? []).map((s, i) => (
             <div
               key={i}
               className="fde-scope-q"
@@ -193,7 +242,7 @@ function PhaseContent({ phase, payload }: { phase: string; payload: Preset }) {
           </h2>
           <div className="fde-phase-sub">{"// each one has a clean boundary. each one is shippable on its own."}</div>
           <div className="fde-decomp">
-            {payload.decomposition.map((d, i) => (
+            {(payload.decomposition ?? []).map((d, i) => (
               <div
                 key={d.id}
                 className="fde-decomp-row"
@@ -229,7 +278,7 @@ function PhaseContent({ phase, payload }: { phase: string; payload: Preset }) {
           </h2>
           <div className="fde-phase-sub">{"// real deliverables. each row is something a human can observe was done."}</div>
           <div className="fde-sprint-grid">
-            {payload.sprint.map((s, i) => (
+            {(payload.sprint ?? []).map((s, i) => (
               <div
                 key={i}
                 className="fde-sprint-row"
@@ -254,7 +303,7 @@ function PhaseContent({ phase, payload }: { phase: string; payload: Preset }) {
           </h2>
           <div className="fde-phase-sub">{"// the failure modes I would name in the SOW. specific to your problem."}</div>
           <div className="fde-risk-grid">
-            {payload.risks.map((r, i) => (
+            {(payload.risks ?? []).map((r, i) => (
               <div
                 key={i}
                 className="fde-risk-row"

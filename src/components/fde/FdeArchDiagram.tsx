@@ -4,7 +4,7 @@
 import type { Architecture } from "./fdeData";
 
 interface Props {
-  architecture: Architecture;
+  architecture?: Architecture | undefined;
 }
 
 const BOX_W = 168;
