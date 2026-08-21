@@ -76,6 +76,10 @@ export function FdeSimulation({ payload, brief, source, onExit, streaming = fals
   }, [phase, prefersReducedMotion, narration.length]);
 
   const next = () => setPhase(p => Math.min(p + 1, PHASES.length - 1));
+  // The tab for an unfinished section is disabled, so the nav button that walks
+  // onto it has to be too. Without this the two controls disagree and one of
+  // them lands the reader on a spinner.
+  const nextReady = phase < PHASES.length - 1 && sectionReady(payload, PHASES[phase + 1].key);
   const prev = () => setPhase(p => Math.max(p - 1, 0));
 
   return (
@@ -145,7 +149,7 @@ export function FdeSimulation({ payload, brief, source, onExit, streaming = fals
             <button
               className="fde-navbtn fde-navbtn-primary"
               onClick={next}
-              disabled={phase === PHASES.length - 1}
+              disabled={phase === PHASES.length - 1 || !nextReady}
               type="button"
             >
               {phase === PHASES.length - 2 ? 'see the receipts →' : 'continue →'}
