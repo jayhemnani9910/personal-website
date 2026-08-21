@@ -51,6 +51,8 @@ export const keys = {
   outcome: (o: SimOutcome) => `${PREFIX}:outcome:${o}`,
   failure: (f: SimFailure) => `${PREFIX}:failure:${f}`,
   latency: `${PREFIX}:latency`,
+  /** Time to first section on the streaming path. The book's "time to first token". */
+  ttfs: `${PREFIX}:ttfs`,
   promptTokens: `${PREFIX}:tokens:prompt`,
   outputTokens: `${PREFIX}:tokens:output`,
 };
@@ -61,6 +63,12 @@ export interface SimEvent {
   failures?: SimFailure[];
   /** Wall-clock ms for the upstream call(s). Omitted when none was made. */
   latencyMs?: number;
+  /**
+   * Ms until the first section reached the visitor. Streaming path only, so the
+   * two windows answer different questions: how long the whole answer took, and
+   * how long before there was anything to read.
+   */
+  ttfsMs?: number;
   promptTokens?: number;
   outputTokens?: number;
 }
@@ -90,6 +98,10 @@ export async function recordSim(redis: Redis | null, event: SimEvent): Promise<b
     if (typeof event.latencyMs === "number" && event.latencyMs >= 0) {
       pipe.lpush(keys.latency, event.latencyMs);
       pipe.ltrim(keys.latency, 0, LATENCY_WINDOW - 1);
+    }
+    if (typeof event.ttfsMs === "number" && event.ttfsMs >= 0) {
+      pipe.lpush(keys.ttfs, event.ttfsMs);
+      pipe.ltrim(keys.ttfs, 0, LATENCY_WINDOW - 1);
     }
     if (event.promptTokens) pipe.incrby(keys.promptTokens, event.promptTokens);
     if (event.outputTokens) pipe.incrby(keys.outputTokens, event.outputTokens);
@@ -125,6 +137,8 @@ export interface SimMetrics {
     upstreamFailures: number;
   };
   latencyMs: { samples: number; p50: number | null; p95: number | null; p99: number | null };
+  /** Streaming path only. Empty until something streams. */
+  timeToFirstSectionMs: { samples: number; p50: number | null; p95: number | null; p99: number | null };
   tokens: { prompt: number; output: number; perAnsweredCall: number | null };
 }
 
@@ -138,9 +152,10 @@ export async function readSimMetrics(redis: Redis | null): Promise<SimMetrics | 
   const outcomeKeys = OUTCOMES.map(keys.outcome);
   const failureKeys = FAILURES.map(keys.failure);
 
-  const [counts, samples, promptTokens, outputTokens] = await Promise.all([
+  const [counts, samples, ttfsSamples, promptTokens, outputTokens] = await Promise.all([
     redis.mget<(number | null)[]>(...outcomeKeys, ...failureKeys),
     redis.lrange<number>(keys.latency, 0, LATENCY_WINDOW - 1),
+    redis.lrange<number>(keys.ttfs, 0, LATENCY_WINDOW - 1),
     redis.get<number>(keys.promptTokens),
     redis.get<number>(keys.outputTokens),
   ]);
@@ -153,6 +168,7 @@ export async function readSimMetrics(redis: Redis | null): Promise<SimMetrics | 
   const served = outcomes.ok + outcomes.cache_hit;
   // Numbers stored as strings by some clients; coerce before arithmetic.
   const ms = (samples ?? []).map(Number).filter((n) => Number.isFinite(n));
+  const ttfs = (ttfsSamples ?? []).map(Number).filter((n) => Number.isFinite(n));
 
   return {
     outcomes,
@@ -167,6 +183,12 @@ export async function readSimMetrics(redis: Redis | null): Promise<SimMetrics | 
       p50: percentile(ms, 50),
       p95: percentile(ms, 95),
       p99: percentile(ms, 99),
+    },
+    timeToFirstSectionMs: {
+      samples: ttfs.length,
+      p50: percentile(ttfs, 50),
+      p95: percentile(ttfs, 95),
+      p99: percentile(ttfs, 99),
     },
     tokens: {
       prompt: num(promptTokens),
