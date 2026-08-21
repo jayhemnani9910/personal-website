@@ -154,6 +154,17 @@ describe("FdeConsole streaming", () => {
   });
 
   // Frames do not arrive aligned to chunk boundaries.
+  // The tab and the nav button are two ways to reach the same panel, so they
+  // have to agree about whether it is reachable.
+  it("keeps the continue button in step with the tabs", async () => {
+    mockStream([frame("section", { key: "scope", value: SCOPE })]);
+    render(<FdeConsole />);
+    submit("a support team drowning in tickets");
+
+    await waitFor(() => expect(screen.getByText(SCOPE[0].q)).toBeDefined());
+    expect(screen.getByRole("button", { name: /continue/i })).toHaveProperty("disabled", true);
+  });
+
   it("reassembles frames split across chunks", async () => {
     const wire = frame("section", { key: "scope", value: SCOPE }) + frame("done", {});
     mockStream(wire.match(/[\s\S]{1,7}/g)!);
