@@ -12,8 +12,13 @@ import { FdeSimulation } from "./FdeSimulation";
 interface SimState {
   active: boolean;
   brief: string;
-  payload: Preset | null;
+  /**
+   * Partial while a live run is still arriving. Presets and cache hits are
+   * complete from the first render.
+   */
+  payload: Partial<Preset> | null;
   source: 'preset' | 'live' | null;
+  streaming: boolean;
 }
 
 export function FdeConsole() {
@@ -23,6 +28,7 @@ export function FdeConsole() {
     brief: '',
     payload: null,
     source: null,
+    streaming: false,
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -36,7 +42,7 @@ export function FdeConsole() {
 
   const startPreset = (preset: Preset) => {
     setError(null);
-    setSimState({ active: true, brief: preset.brief, payload: preset, source: 'preset' });
+    setSimState({ active: true, brief: preset.brief, payload: preset, source: 'preset', streaming: false });
     scrollToSim();
   };
 
@@ -64,22 +70,23 @@ export function FdeConsole() {
     return best;
   };
 
+  const PARSE_ERROR = "The agent had trouble parsing. Try a more specific brief, or pick a preset.";
+  const NO_RUNTIME_ERROR = "The live agent needs a runtime (this only works on the hosted preview). Try one of the preset scenarios above: they're fully prepared.";
+
   const startCustom = async () => {
     if (!briefInput.trim() || loading) return;
     setError(null);
     setLoading(true);
     try {
-      const res = await fetch('/api/fde-sim', {
+      // ?stream=1 asks for sections as they finish rather than the whole object
+      // at the end. Measured on production, the first section lands around 13s
+      // where the complete answer takes about 21s, so this is the difference
+      // between reading and watching a spinner.
+      const res = await fetch('/api/fde-sim?stream=1', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ brief: briefInput }),
       });
-
-      if (res.status === 503) {
-        setError("The live agent needs a runtime (this only works on the hosted preview). Try one of the preset scenarios above: they're fully prepared.");
-        setLoading(false);
-        return;
-      }
 
       // The limit is 8 per minute per IP. Telling someone their brief failed to
       // parse when they were actually throttled sends them off rewriting a brief
@@ -90,23 +97,78 @@ export function FdeConsole() {
         return;
       }
 
-      if (!res.ok) {
-        setError("The agent had trouble parsing. Try a more specific brief, or pick a preset.");
+      if (!res.ok || !res.body) {
+        // The streaming path reports a missing runtime as a 200 carrying an
+        // error event, but a non-streaming failure still answers with JSON, and
+        // "no runtime" must not be reported as "your brief was bad".
+        const code = await res.json().then((b) => b?.error).catch(() => null);
+        setError(code === 'no-runtime' ? NO_RUNTIME_ERROR : PARSE_ERROR);
         setLoading(false);
         return;
       }
 
-      const payload = await res.json();
-      setSimState({ active: true, brief: briefInput, payload, source: 'live' });
-      scrollToSim();
+      const reader = res.body.pipeThrough(new TextDecoderStream()).getReader();
+      let buffer = '';
+      let started = false;
+      let failed: string | null = null;
+
+      for (;;) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        buffer += value;
+
+        // Frames are separated by a blank line; a trailing partial frame waits
+        // for the next chunk.
+        let sep: number;
+        while ((sep = buffer.indexOf('\n\n')) !== -1) {
+          const frame = buffer.slice(0, sep);
+          buffer = buffer.slice(sep + 2);
+          const type = frame.match(/^event: (.+)$/m)?.[1];
+          const data = frame.match(/^data: (.+)$/m)?.[1];
+          if (!type || !data) continue;
+          const parsed = JSON.parse(data);
+
+          if (type === 'error') {
+            failed = parsed.error === 'no-runtime' ? NO_RUNTIME_ERROR : PARSE_ERROR;
+            continue;
+          }
+
+          if (type === 'section') {
+            setSimState((prev) => ({
+              active: true,
+              brief: briefInput,
+              payload: { ...(prev.active ? prev.payload : null), [parsed.key]: parsed.value },
+              source: 'live',
+              streaming: true,
+            }));
+            // Reveal on the FIRST section, not the last: waiting for `done`
+            // would keep the spinner up for the whole run and waste the point.
+            if (!started) {
+              started = true;
+              setLoading(false);
+              scrollToSim();
+            }
+          }
+
+          if (type === 'done') {
+            setSimState((prev) => ({ ...prev, streaming: false }));
+          }
+        }
+      }
+
+      if (failed) {
+        setError(failed);
+        // A run that produced nothing should not leave a half-built panel behind.
+        if (!started) setSimState({ active: false, brief: '', payload: null, source: null, streaming: false });
+      }
     } catch {
-      setError("The agent had trouble parsing. Try a more specific brief, or pick a preset.");
+      setError(PARSE_ERROR);
     }
     setLoading(false);
   };
 
   const exitSim = () =>
-    setSimState({ active: false, brief: '', payload: null, source: null });
+    setSimState({ active: false, brief: '', payload: null, source: null, streaming: false });
 
   return (
     <div className="fde">
@@ -213,6 +275,7 @@ export function FdeConsole() {
             brief={simState.brief}
             source={simState.source as 'preset' | 'live'}
             onExit={exitSim}
+            streaming={simState.streaming}
           />
         </div>
       )}
