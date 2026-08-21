@@ -1,0 +1,288 @@
+{
+  "scope": [
+    {
+      "q": "What specific data points or characteristics define the 'patterns' the fraud team is currently identifying, and how are these patterns currently being surfaced or communicated?",
+      "why": "Understanding the precise nature of the 'signal' and its current manual processing is critical for designing effective data ingestion and automation."
+    },
+    {
+      "q": "What is the target timeframe for intervention once a potential fraudulent pattern is detected, and what are the precise actions the system should be able to initiate or recommend?",
+      "why": "Defining 'fast enough' and the specific actions (e.g., block, flag, review) quantifies the performance requirements and the system's operational output."
+    },
+    {
+      "q": "What is the acceptable false positive rate for any automated fraud prevention action, considering the potential impact on legitimate customer transactions and experience?",
+      "why": "This directly quantifies the risk tolerance and informs model design, thresholding, and the critical balance between fraud prevention and user friction."
+    }
+  ],
+  "decomposition": [
+    {
+      "id": "D1",
+      "title": "Data Ingestion & Feature Store Development",
+      "why": "We need to reliably collect, clean, and transform raw transaction and user data into a consistent, usable format for detection models."
+    },
+    {
+      "id": "D2",
+      "title": "Real-time Pattern Detection Service",
+      "why": "This core component will host and execute the fraud detection logic, identifying suspicious activities based on ingested features and trained models."
+    },
+    {
+      "id": "D3",
+      "title": "Action Orchestration & Workflow Integration",
+      "why": "The system needs to translate detection events into concrete, configurable actions that integrate with existing fraud team processes and external systems."
+    },
+    {
+      "id": "D4",
+      "title": "Feedback Loop & Model Retraining Pipeline",
+      "why": "Continuous improvement requires capturing outcomes of actions and human analyst feedback, then using this to automatically retrain and update detection models."
+    },
+    {
+      "id": "D5",
+      "title": "Fraud Analyst User Interface",
+      "why": "Analysts require a dedicated tool to review alerts, investigate cases, provide feedback, and manage model configurations and rules."
+    }
+  ],
+  "architecture": {
+    "components": [
+      {
+        "id": "FraudUI",
+        "name": "Fraud Analyst UI",
+        "kind": "ui",
+        "sub": "Interface for alert review, case management, and feedback",
+        "col": 0,
+        "row": 0,
+        "x": 60,
+        "y": 50
+      },
+      {
+        "id": "SourceData",
+        "name": "Source Data Systems",
+        "kind": "data",
+        "sub": "Raw transaction, user, and historical data sources",
+        "col": 0,
+        "row": 1,
+        "x": 60,
+        "y": 190
+      },
+      {
+        "id": "DataIngest",
+        "name": "Data Ingestion Service",
+        "kind": "service",
+        "sub": "Collects, cleans, and normalizes raw data streams",
+        "col": 1,
+        "row": 1,
+        "x": 280,
+        "y": 190
+      },
+      {
+        "id": "FeatureStore",
+        "name": "Feature Store",
+        "kind": "data",
+        "sub": "Centralized repository for pre-computed, real-time features",
+        "col": 2,
+        "row": 1,
+        "x": 500,
+        "y": 190
+      },
+      {
+        "id": "DetectionSvc",
+        "name": "Detection Service",
+        "kind": "service",
+        "sub": "Real-time fraud pattern identification using ML models/rules",
+        "col": 3,
+        "row": 1,
+        "x": 720,
+        "y": 190
+      },
+      {
+        "id": "ActionOrch",
+        "name": "Action Orchestration",
+        "kind": "service",
+        "sub": "Routes and executes automated or semi-automated actions",
+        "col": 3,
+        "row": 2,
+        "x": 720,
+        "y": 330
+      },
+      {
+        "id": "ExtSystems",
+        "name": "External Action Systems",
+        "kind": "external",
+        "sub": "Payment gateways, CRM, customer support tools for action",
+        "col": 3,
+        "row": 0,
+        "x": 720,
+        "y": 50
+      },
+      {
+        "id": "FeedbackDB",
+        "name": "Feedback Database",
+        "kind": "data",
+        "sub": "Stores outcomes of actions and analyst feedback for models",
+        "col": 1,
+        "row": 2,
+        "x": 280,
+        "y": 330
+      },
+      {
+        "id": "ModelTrain",
+        "name": "Model Training Pipeline",
+        "kind": "agent",
+        "sub": "Automated pipeline for training and validating detection models",
+        "col": 2,
+        "row": 0,
+        "x": 500,
+        "y": 50
+      },
+      {
+        "id": "ModelRegistry",
+        "name": "ML Model Registry",
+        "kind": "data",
+        "sub": "Versioned repository for trained and deployed ML models",
+        "col": 2,
+        "row": 2,
+        "x": 500,
+        "y": 330
+      }
+    ],
+    "edges": [
+      {
+        "from": "SourceData",
+        "to": "DataIngest",
+        "label": "Raw Data Stream",
+        "dashed": false
+      },
+      {
+        "from": "DataIngest",
+        "to": "FeatureStore",
+        "label": "Processed Features",
+        "dashed": false
+      },
+      {
+        "from": "FeatureStore",
+        "to": "DetectionSvc",
+        "label": "Feature Lookups",
+        "dashed": false
+      },
+      {
+        "from": "DetectionSvc",
+        "to": "ActionOrch",
+        "label": "Fraud Alert",
+        "dashed": false
+      },
+      {
+        "from": "ActionOrch",
+        "to": "ExtSystems",
+        "label": "Execute Action",
+        "dashed": false
+      },
+      {
+        "from": "ActionOrch",
+        "to": "FeedbackDB",
+        "label": "Log Action Outcome",
+        "dashed": false
+      },
+      {
+        "from": "FraudUI",
+        "to": "DetectionSvc",
+        "label": "Review Alerts",
+        "dashed": false
+      },
+      {
+        "from": "FraudUI",
+        "to": "ActionOrch",
+        "label": "Manual Action",
+        "dashed": false
+      },
+      {
+        "from": "FraudUI",
+        "to": "FeedbackDB",
+        "label": "Provide Feedback",
+        "dashed": false
+      },
+      {
+        "from": "FeatureStore",
+        "to": "ModelTrain",
+        "label": "Training Data",
+        "dashed": false
+      },
+      {
+        "from": "FeedbackDB",
+        "to": "ModelTrain",
+        "label": "Labeled Data",
+        "dashed": false
+      },
+      {
+        "from": "ModelTrain",
+        "to": "ModelRegistry",
+        "label": "New Model Version",
+        "dashed": false
+      },
+      {
+        "from": "ModelRegistry",
+        "to": "DetectionSvc",
+        "label": "Deploy Model",
+        "dashed": false
+      },
+      {
+        "from": "FraudUI",
+        "to": "ModelTrain",
+        "label": "Model Configuration",
+        "dashed": true
+      }
+    ]
+  },
+  "sprint": [
+    {
+      "day": "Day 1-2",
+      "title": "Data Source Integration & Staging",
+      "deliv": "Working pipeline ingesting raw transaction data from a primary source into a staging database."
+    },
+    {
+      "day": "Day 3-4",
+      "title": "Core Feature Engineering & Feature Store",
+      "deliv": "Initial set of 5-10 calculated features (e.g., transaction velocity, amount variance) from raw data, stored in a basic feature store."
+    },
+    {
+      "day": "Day 5-6",
+      "title": "Basic Rule-Based Detection Service",
+      "deliv": "A service that applies 2-3 predefined, simple fraud rules on features and logs detected alerts to a temporary store."
+    },
+    {
+      "day": "Day 7-8",
+      "title": "Action Orchestration MVP",
+      "deliv": "A service that receives a rule-based alert and can trigger a configurable external API call (e.g., log to an internal communication tool like Slack or Jira)."
+    },
+    {
+      "day": "Day 9-10",
+      "title": "Fraud Analyst UI Stub",
+      "deliv": "A basic web interface showing a list of triggered alerts from the detection service with minimal transaction details."
+    },
+    {
+      "day": "Day 11-12",
+      "title": "Feedback Loop & Data Capture",
+      "deliv": "Mechanism within the UI for analysts to mark alerts as 'true fraud' or 'false positive', storing this feedback in a database."
+    },
+    {
+      "day": "Day 13-14",
+      "title": "Model Training Proof-of-Concept",
+      "deliv": "An offline script demonstrating training a simple ML model (e.g., Logistic Regression) using historical features and captured feedback data."
+    }
+  ],
+  "risks": [
+    {
+      "risk": "Incomplete or inconsistent historical transaction data leads to poor model training and unreliable feature generation.",
+      "mitigation": "Conduct a thorough data audit with the fraud team in week 1, establishing clear data ownership and defining data quality gates for ingestion pipelines."
+    },
+    {
+      "risk": "High false positive rate from automated detection leads to legitimate customer transactions being blocked, causing revenue loss and customer dissatisfaction.",
+      "mitigation": "Implement A/B testing or shadow mode deployment for new detection models, allowing performance monitoring against actual fraud team decisions before full activation, and setting clear, adjustable confidence thresholds."
+    },
+    {
+      "risk": "Integration with various legacy external systems (e.g., payment gateways, CRM) for taking action proves more complex and time-consuming than anticipated.",
+      "mitigation": "Prioritize integration with the single most impactful action system first, building a generic action orchestration layer that abstracts specific API calls, and plan for phased rollout of additional integrations."
+    },
+    {
+      "risk": "Fraudsters adapt quickly, rendering static detection patterns or models obsolete, leading to a resurgence in chargebacks.",
+      "mitigation": "Establish a continuous feedback loop and automated model retraining pipeline (e.g., weekly or bi-weekly), incorporating analyst feedback and new fraud patterns, with robust model versioning and monitoring for performance degradation."
+    }
+  ]
+}

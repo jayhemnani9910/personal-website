@@ -1,0 +1,86 @@
+{
+  "endpoint": "https://www.jayhemnani.me/api/fde-sim",
+  "recordedAt": "2026-08-21",
+  "model": "gemini-2.5-flash",
+  "totals": {
+    "passed": 169,
+    "total": 170
+  },
+  "briefs": [
+    {
+      "id": "support-tickets",
+      "cached": true,
+      "passed": 17,
+      "total": 17,
+      "failed": []
+    },
+    {
+      "id": "contract-review",
+      "cached": true,
+      "passed": 17,
+      "total": 17,
+      "failed": []
+    },
+    {
+      "id": "warehouse-picking",
+      "cached": true,
+      "passed": 17,
+      "total": 17,
+      "failed": []
+    },
+    {
+      "id": "clinical-notes",
+      "cached": true,
+      "passed": 17,
+      "total": 17,
+      "failed": []
+    },
+    {
+      "id": "fraud-signals",
+      "cached": true,
+      "passed": 17,
+      "total": 17,
+      "failed": []
+    },
+    {
+      "id": "internal-search",
+      "cached": true,
+      "passed": 17,
+      "total": 17,
+      "failed": []
+    },
+    {
+      "id": "churn-early-warning",
+      "cached": true,
+      "passed": 17,
+      "total": 17,
+      "failed": []
+    },
+    {
+      "id": "field-technician",
+      "cached": true,
+      "passed": 17,
+      "total": 17,
+      "failed": []
+    },
+    {
+      "id": "grant-compliance",
+      "cached": true,
+      "passed": 17,
+      "total": 17,
+      "failed": []
+    },
+    {
+      "id": "onboarding-drop-off",
+      "cached": true,
+      "passed": 16,
+      "total": 17,
+      "failed": [
+        {
+          "id": "arch.grid-bounds",
+          "detail": "2 components outside the grid"
+        }
+      ]
+    }
+  ]
+}

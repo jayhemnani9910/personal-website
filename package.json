@@ -15,7 +15,9 @@
     "test:visual": "next build && playwright test --project=dark --project=light",
     "test:visual:update": "next build && playwright test --project=dark --project=light --update-snapshots",
     "test:perf": "next build && playwright test --project=perf",
-    "test:perf:ci": "playwright test --project=perf"
+    "test:perf:ci": "playwright test --project=perf",
+    "eval:fde": "FDE_EVAL_LIVE=1 vitest run src/lib/fde-eval.live.test.ts",
+    "eval:fde:update": "FDE_EVAL_LIVE=1 FDE_EVAL_UPDATE=1 vitest run src/lib/fde-eval.live.test.ts"
   },
   "dependencies": {
     "@upstash/redis": "^1.38.2",

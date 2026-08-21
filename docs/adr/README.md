@@ -47,6 +47,7 @@ there.
 | [0006](0006-pixel-exact-visual-regression-for-the-legacy-routes.md) | Pixel-exact visual regression for the legacy routes | Accepted | 2026-08-19 |
 | [0007](0007-one-palette-legacy-rules-read-tr-tokens-directly.md) | One palette: the legacy rules read `--tr-*` directly | Accepted | 2026-08-19 |
 | [0008](0008-a-performance-budget-that-can-fail-a-merge.md) | A performance budget that can fail a merge | Accepted | 2026-08-19 |
+| [0009](0009-a-golden-set-and-grader-for-the-fde-simulation.md) | A golden set and grader for the FDE simulation | Accepted | 2026-08-21 |
 
 ## Adding one
 
