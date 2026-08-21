@@ -48,6 +48,7 @@ there.
 | [0007](0007-one-palette-legacy-rules-read-tr-tokens-directly.md) | One palette: the legacy rules read `--tr-*` directly | Accepted | 2026-08-19 |
 | [0008](0008-a-performance-budget-that-can-fail-a-merge.md) | A performance budget that can fail a merge | Accepted | 2026-08-19 |
 | [0009](0009-a-golden-set-and-grader-for-the-fde-simulation.md) | A golden set and grader for the FDE simulation | Accepted | 2026-08-21 |
+| [0010](0010-operational-counters-for-the-llm-route.md) | Operational counters for the LLM route | Accepted | 2026-08-21 |
 
 ## Adding one
 

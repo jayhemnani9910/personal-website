@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getRedis } from "@/lib/kv";
 import { PROMPT_LEAK_MARKERS, buildGeminiBody } from "@/lib/fde-prompt";
+import { classifyStatus, readSimMetrics, recordSim, type SimFailure } from "@/lib/fde-metrics";
 
 export const runtime = "nodejs";
 
@@ -165,6 +166,7 @@ export async function POST(request: NextRequest) {
         request.headers.get("x-forwarded-for")?.split(",").pop()?.trim() ||
         "anon";
     if (await isRateLimited(ip)) {
+        await recordSim(getRedis(), { outcome: "rate_limited" });
         return NextResponse.json({ error: "rate-limited" }, { status: 429 });
     }
 
@@ -174,6 +176,7 @@ export async function POST(request: NextRequest) {
     const key = await cacheKey(brief);
     const cached = await readCache(key);
     if (cached) {
+        await recordSim(getRedis(), { outcome: "cache_hit" });
         return NextResponse.json(cached, { headers: { "x-sim-cache": "hit" } });
     }
 
@@ -181,11 +184,17 @@ export async function POST(request: NextRequest) {
     const apiKey = process.env.GEMINI_API_KEY;
     if (!apiKey) {
         console.error("[fde-sim] GEMINI_API_KEY is not set; live simulation is disabled");
+        await recordSim(getRedis(), { outcome: "no_runtime" });
         return NextResponse.json({ error: "no-runtime" }, { status: 503 });
     }
 
     const geminiUrl =
         "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent";
+
+    // Filled in as attempts run, then written once at whichever exit is reached.
+    const failures: SimFailure[] = [];
+    let promptTokens = 0;
+    let outputTokens = 0;
 
     // One call attempt: returns a normalized payload, or null on any failure
     // (non-200, empty body, unparseable text, or wrong shape). Each failure logs
@@ -202,15 +211,21 @@ export async function POST(request: NextRequest) {
             });
             if (!res.ok) {
                 console.error(`[fde-sim] gemini http ${res.status} ${res.statusText} (attempt ${attempt})`);
+                failures.push(classifyStatus(res.status));
                 return null;
             }
             const data = await res.json();
+            // Reported by Gemini on every answered call, including ones whose
+            // body we then reject: those cost tokens too.
+            promptTokens += Number(data?.usageMetadata?.promptTokenCount ?? 0);
+            outputTokens += Number(data?.usageMetadata?.candidatesTokenCount ?? 0);
             const candidate = data?.candidates?.[0];
             const raw: string = candidate?.content?.parts?.[0]?.text ?? "";
             if (!raw) {
                 console.error(
                     `[fde-sim] gemini returned no text (attempt ${attempt}, finishReason=${candidate?.finishReason ?? "none"})`
                 );
+                failures.push("empty");
                 return null;
             }
             // Output filtering. The schema already makes a leak unlikely, but a
@@ -219,12 +234,14 @@ export async function POST(request: NextRequest) {
             const leaked = PROMPT_LEAK_MARKERS.find((m) => raw.includes(m));
             if (leaked) {
                 console.error(`[fde-sim] response echoed prompt text (attempt ${attempt}, marker=${leaked})`);
+                failures.push("leak");
                 return null;
             }
 
             const parsed = extractJson(raw);
             if (!isSimPayload(parsed)) {
                 console.error(`[fde-sim] response failed shape check (attempt ${attempt}, ${raw.length} chars)`);
+                failures.push("shape");
                 return null;
             }
             return normalizeCoords(parsed);
@@ -232,6 +249,7 @@ export async function POST(request: NextRequest) {
             const detail = err instanceof Error ? err.message : String(err);
             const what = detail === "unparseable" ? "could not extract JSON from response" : "request failed";
             console.error(`[fde-sim] ${what} (attempt ${attempt}): ${detail}`);
+            failures.push(detail === "unparseable" ? "unparseable" : "network");
             return null;
         }
     }
@@ -239,15 +257,38 @@ export async function POST(request: NextRequest) {
     // Retry once: the model occasionally returns unparseable JSON; a second pass
     // almost always succeeds before we give up with a 502.
     let payload: SimPayload | null = null;
+    // Measured across every attempt, because a retry is latency the visitor
+    // waited through. Timing only the successful call would report the fast half.
+    const startedAt = Date.now();
     for (let attempt = 1; attempt <= 2 && !payload; attempt++) {
         payload = await generate(attempt);
     }
+    const latencyMs = Date.now() - startedAt;
 
     if (!payload) {
         console.error(`[fde-sim] giving up after 2 attempts (brief ${brief.length} chars)`);
+        await recordSim(getRedis(), { outcome: "gave_up", failures, latencyMs, promptTokens, outputTokens });
         return NextResponse.json({ error: "parse" }, { status: 502 });
     }
 
     await writeCache(key, payload);
+    await recordSim(getRedis(), { outcome: "ok", failures, latencyMs, promptTokens, outputTokens });
     return NextResponse.json(payload, { headers: { "x-sim-cache": "miss" } });
+}
+
+/**
+ * Operational counters for this route. Aggregates only: no briefs, no IPs, no
+ * keys, nothing about an individual visitor. Public on purpose, on a site whose
+ * own copy says it publishes load-bearing numbers rather than vanity ones, and
+ * because a counter nobody can read is not observability. Returns 503 when no
+ * store is configured, which is also the local-dev answer.
+ */
+export async function GET() {
+    const metrics = await readSimMetrics(getRedis());
+    if (!metrics) {
+        return NextResponse.json({ error: "no-store" }, { status: 503 });
+    }
+    return NextResponse.json(metrics, {
+        headers: { "cache-control": "public, max-age=60" },
+    });
 }
