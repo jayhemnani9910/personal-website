@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { getRedis } from "@/lib/kv";
 import { PROMPT_LEAK_MARKERS, buildGeminiBody } from "@/lib/fde-prompt";
 import { classifyStatus, readSimMetrics, recordSim, type SimFailure } from "@/lib/fde-metrics";
+import { JsonSectionExtractor } from "@/lib/json-sections";
+import { SseDecoder, encodeSse, geminiChunkText, geminiChunkUsage, type SimStreamEvent } from "@/lib/fde-stream";
 
 export const runtime = "nodejs";
 
@@ -41,14 +43,22 @@ function isSimPayload(p: unknown): p is SimPayload {
     return Array.isArray((arch as { components?: unknown }).components);
 }
 
-function normalizeCoords(payload: SimPayload): SimPayload {
-    payload.architecture.components = payload.architecture.components.map(
-        (c: ArchComponent) => ({
+// Extracted so the streaming path can normalise the architecture section on its
+// own, as it arrives, rather than only once the whole payload exists.
+// FdeArchDiagram reads c.x/c.y, so a section emitted without them draws nothing.
+function normalizeArchitecture(arch: SimPayload["architecture"]): SimPayload["architecture"] {
+    return {
+        ...arch,
+        components: arch.components.map((c: ArchComponent) => ({
             ...c,
             x: 60 + (c.col ?? 0) * 220,
             y: 50 + (c.row ?? 0) * 140,
-        })
-    );
+        })),
+    };
+}
+
+function normalizeCoords(payload: SimPayload): SimPayload {
+    payload.architecture = normalizeArchitecture(payload.architecture);
     return payload;
 }
 
@@ -143,6 +153,131 @@ async function writeCache(key: string, payload: SimPayload): Promise<void> {
     }
 }
 
+/** The order SIM_RESPONSE_SCHEMA declares, which is the order they complete in. */
+const SECTION_ORDER = ["scope", "decomposition", "architecture", "sprint", "risks"] as const;
+
+/**
+ * Wrap a producer in a server-sent-events response.
+ *
+ * no-transform matters as much as no-cache: without it a proxy is free to buffer
+ * the body, which would deliver every section at the end and undo the point.
+ */
+function sseResponse(
+    produce: (send: (e: SimStreamEvent) => void) => void | Promise<void>,
+    cacheState?: string,
+): Response {
+    const encoder = new TextEncoder();
+    const stream = new ReadableStream<Uint8Array>({
+        async start(controller) {
+            const send = (e: SimStreamEvent) => controller.enqueue(encoder.encode(encodeSse(e)));
+            try {
+                await produce(send);
+            } catch (err) {
+                console.error(`[fde-sim] stream producer threw: ${err instanceof Error ? err.message : String(err)}`);
+                send({ type: "error", error: "parse" });
+            } finally {
+                controller.close();
+            }
+        },
+    });
+
+    return new Response(stream, {
+        headers: {
+            "content-type": "text/event-stream; charset=utf-8",
+            "cache-control": "no-cache, no-transform",
+            connection: "keep-alive",
+            ...(cacheState ? { "x-sim-cache": cacheState } : {}),
+        },
+    });
+}
+
+/**
+ * Stream one generation, emitting each section as it closes.
+ *
+ * Same prompt, same schema, same model as the buffered path: the only
+ * difference is `streamGenerateContent?alt=sse` and reading the body as it
+ * arrives. Returns the assembled payload, or null if anything failed, matching
+ * generate()'s contract so callers treat both the same.
+ *
+ * `onSection` is called before the payload is complete, so anything that must
+ * not reach a visitor has to be checked here rather than at the end. The leak
+ * filter therefore runs per section, on the serialized value, before emit.
+ */
+async function streamGenerate(
+    apiKey: string,
+    brief: string,
+    onSection: (key: string, value: unknown) => void,
+    failures: SimFailure[],
+): Promise<{ payload: SimPayload | null; promptTokens: number; outputTokens: number }> {
+    let promptTokens = 0;
+    let outputTokens = 0;
+
+    try {
+        const res = await fetch(
+            "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:streamGenerateContent?alt=sse",
+            {
+                method: "POST",
+                headers: { "Content-Type": "application/json", "x-goog-api-key": apiKey },
+                body: JSON.stringify(buildGeminiBody(brief)),
+            },
+        );
+
+        if (!res.ok || !res.body) {
+            console.error(`[fde-sim] gemini stream http ${res.status} ${res.statusText}`);
+            failures.push(classifyStatus(res.status));
+            return { payload: null, promptTokens, outputTokens };
+        }
+
+        const decoder = new SseDecoder();
+        const sections = new JsonSectionExtractor();
+        const reader = res.body.pipeThrough(new TextDecoderStream()).getReader();
+
+        for (;;) {
+            const { done, value } = await reader.read();
+            if (done) break;
+            for (const payload of decoder.push(value)) {
+                const usage = geminiChunkUsage(payload);
+                if (usage) {
+                    promptTokens = usage.prompt;
+                    outputTokens = usage.output;
+                }
+                for (const section of sections.push(geminiChunkText(payload))) {
+                    // Fails closed, per section, because by the time the whole
+                    // object exists this content has already been sent.
+                    if (PROMPT_LEAK_MARKERS.some((m) => JSON.stringify(section.value).includes(m))) {
+                        console.error(`[fde-sim] stream section echoed prompt text (${section.key})`);
+                        failures.push("leak");
+                        return { payload: null, promptTokens, outputTokens };
+                    }
+                    if (section.key === "architecture") {
+                        const arch = section.value as SimPayload["architecture"];
+                        if (!arch || !Array.isArray(arch.components)) {
+                            failures.push("shape");
+                            return { payload: null, promptTokens, outputTokens };
+                        }
+                        onSection(section.key, normalizeArchitecture(arch));
+                    } else {
+                        onSection(section.key, section.value);
+                    }
+                }
+            }
+        }
+
+        const parsed = extractJson(sections.text);
+        if (!isSimPayload(parsed)) {
+            console.error(`[fde-sim] streamed response failed shape check (${sections.text.length} chars)`);
+            failures.push("shape");
+            return { payload: null, promptTokens, outputTokens };
+        }
+        return { payload: normalizeCoords(parsed), promptTokens, outputTokens };
+    } catch (err) {
+        const detail = err instanceof Error ? err.message : String(err);
+        console.error(`[fde-sim] stream failed: ${detail}`);
+        failures.push(detail === "unparseable" ? "unparseable" : "network");
+        return { payload: null, promptTokens, outputTokens };
+    }
+}
+
 export async function POST(request: NextRequest) {
     // Validate input
     let brief: string;
@@ -156,6 +291,10 @@ export async function POST(request: NextRequest) {
     if (!brief || brief.length > 2000) {
         return NextResponse.json({ error: "bad-input" }, { status: 400 });
     }
+
+    // Opt-in, so the buffered response stays the default. The eval harness, and
+    // anything else that just wants the object, is unaffected by this existing.
+    const wantsStream = request.nextUrl.searchParams.get("stream") === "1";
 
     // Best-effort per-IP rate limit (requires KV; skipped when unconfigured).
     // Trust the platform-set client IP: x-real-ip, or the right-most (last hop)
@@ -177,6 +316,16 @@ export async function POST(request: NextRequest) {
     const cached = await readCache(key);
     if (cached) {
         await recordSim(getRedis(), { outcome: "cache_hit" });
+        if (wantsStream) {
+            // A cache hit still speaks the streaming protocol, so the client has
+            // one code path rather than two. It simply arrives all at once.
+            return sseResponse((send) => {
+                for (const key of SECTION_ORDER) {
+                    send({ type: "section", key, value: cached[key] });
+                }
+                send({ type: "done" });
+            }, "hit");
+        }
         return NextResponse.json(cached, { headers: { "x-sim-cache": "hit" } });
     }
 
@@ -185,6 +334,9 @@ export async function POST(request: NextRequest) {
     if (!apiKey) {
         console.error("[fde-sim] GEMINI_API_KEY is not set; live simulation is disabled");
         await recordSim(getRedis(), { outcome: "no_runtime" });
+        if (wantsStream) {
+            return sseResponse((send) => send({ type: "error", error: "no-runtime" }));
+        }
         return NextResponse.json({ error: "no-runtime" }, { status: 503 });
     }
 
@@ -256,6 +408,50 @@ export async function POST(request: NextRequest) {
 
     // Retry once: the model occasionally returns unparseable JSON; a second pass
     // almost always succeeds before we give up with a 502.
+    if (wantsStream) {
+        const startedAt = Date.now();
+        let firstSectionAt = 0;
+
+        return sseResponse(async (send) => {
+            const result = await streamGenerate(
+                apiKey,
+                brief,
+                (key, value) => {
+                    if (!firstSectionAt) firstSectionAt = Date.now();
+                    send({ type: "section", key, value });
+                },
+                failures,
+            );
+
+            const latencyMs = Date.now() - startedAt;
+            const ttfsMs = firstSectionAt ? firstSectionAt - startedAt : undefined;
+
+            if (!result.payload) {
+                send({ type: "error", error: "parse" });
+                await recordSim(getRedis(), {
+                    outcome: "gave_up",
+                    failures,
+                    latencyMs,
+                    ttfsMs,
+                    promptTokens: result.promptTokens,
+                    outputTokens: result.outputTokens,
+                });
+                return;
+            }
+
+            send({ type: "done" });
+            await writeCache(key, result.payload);
+            await recordSim(getRedis(), {
+                outcome: "ok",
+                failures,
+                latencyMs,
+                ttfsMs,
+                promptTokens: result.promptTokens,
+                outputTokens: result.outputTokens,
+            });
+        }, "miss");
+    }
+
     let payload: SimPayload | null = null;
     // Measured across every attempt, because a retry is latency the visitor
     // waited through. Timing only the successful call would report the fast half.

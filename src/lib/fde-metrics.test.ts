@@ -95,6 +95,14 @@ describe("recordSim", () => {
     expect(calls).toContainEqual(["incrby", keys.outputTokens, 1500]);
   });
 
+  it("keeps the two latency windows separate", async () => {
+    const { redis, calls } = fakeRedis();
+    await recordSim(redis, { outcome: "ok", latencyMs: 9000, ttfsMs: 700 });
+    expect(calls).toContainEqual(["lpush", keys.latency, 9000]);
+    expect(calls).toContainEqual(["lpush", keys.ttfs, 700]);
+    expect(calls.filter((c) => c[0] === "ltrim")).toHaveLength(2);
+  });
+
   it("keeps the sample window bounded on every write", async () => {
     const { redis, calls } = fakeRedis();
     await recordSim(redis, { outcome: "ok", latencyMs: 10 });
@@ -124,10 +132,17 @@ describe("readSimMetrics", () => {
   const OUTCOME_COUNT = 5;  // ok, cache_hit, rate_limited, no_runtime, gave_up
   const FAILURE_COUNT = 8;
 
-  function reader(outcomes: number[], failures: number[], samples: number[], tokens: [number, number]) {
+  function reader(
+    outcomes: number[],
+    failures: number[],
+    samples: number[],
+    tokens: [number, number],
+    ttfs: number[] = [],
+  ) {
     return {
       mget: async () => [...outcomes, ...failures],
-      lrange: async () => samples,
+      // Keyed, so the two latency windows cannot be confused for each other.
+      lrange: async (k: string) => (k === keys.ttfs ? ttfs : samples),
       get: async (k: string) => (k === keys.promptTokens ? tokens[0] : tokens[1]),
     } as unknown as Redis;
   }
@@ -154,6 +169,17 @@ describe("readSimMetrics", () => {
     expect(m.totals.cacheHitRate).toBe(0.4);
     expect(m.latencyMs).toMatchObject({ samples: 5, p50: 300, p99: 500 });
     expect(m.tokens.perAnsweredCall).toBe(2500);
+    // Nothing has streamed in this fixture, so the second window is empty
+    // rather than a copy of the first.
+    expect(m.timeToFirstSectionMs).toMatchObject({ samples: 0, p50: null });
+  });
+
+  it("reads time to first section from its own window", async () => {
+    const m = (await readSimMetrics(
+      reader([1, 0, 0, 0, 0], Array(FAILURE_COUNT).fill(0), [9000], [0, 0], [400, 800, 1200]),
+    ))!;
+    expect(m.latencyMs.p50).toBe(9000);
+    expect(m.timeToFirstSectionMs).toMatchObject({ samples: 3, p50: 800 });
   });
 
   it("reports nulls rather than zeros on an untouched store", async () => {
@@ -163,6 +189,7 @@ describe("readSimMetrics", () => {
     expect(m.totals.requests).toBe(0);
     expect(m.totals.cacheHitRate).toBeNull();
     expect(m.latencyMs.p99).toBeNull();
+    expect(m.timeToFirstSectionMs.p99).toBeNull();
     expect(m.tokens.perAnsweredCall).toBeNull();
   });
 
