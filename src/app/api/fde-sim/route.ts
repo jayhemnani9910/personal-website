@@ -1,11 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getRedis } from "@/lib/kv";
-import { PROMPT_LEAK_MARKERS, buildGeminiBody } from "@/lib/fde-prompt";
+import { PROMPT_LEAK_MARKERS, buildGeminiBody, simCacheKey } from "@/lib/fde-prompt";
 import { classifyStatus, readSimMetrics, recordSim, type SimFailure } from "@/lib/fde-metrics";
 import { JsonSectionExtractor } from "@/lib/json-sections";
 import { SseDecoder, encodeSse, geminiChunkText, geminiChunkUsage, type SimStreamEvent } from "@/lib/fde-stream";
 
 export const runtime = "nodejs";
+
+/** Named once: the cache fingerprint has to see the same value the calls use. */
+const GEMINI_MODEL = "gemini-2.5-flash";
 
 interface ArchComponent {
     id: string;
@@ -121,14 +124,14 @@ async function isRateLimited(ip: string): Promise<boolean> {
 // key length and to keep visitor text out of the keyspace.
 const CACHE_TTL_SECONDS = 60 * 60 * 24 * 30; // 30 days
 
-async function cacheKey(brief: string): Promise<string> {
-    const normalised = brief.toLowerCase().replace(/\s+/g, " ").trim();
-    const digest = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(normalised));
-    const hex = Array.from(new Uint8Array(digest))
-        .map((b) => b.toString(16).padStart(2, "0"))
-        .join("");
-    return `simcache:fde-sim:${hex}`;
-}
+/**
+ * The recipe this instance is running: model, prompt, schema, generation config.
+ * Built once with an empty brief, so it captures the configuration and nothing
+ * about any visitor. See simCacheKey for why it is part of the key.
+ */
+const RECIPE = { model: GEMINI_MODEL, body: buildGeminiBody("") };
+
+const cacheKey = (brief: string) => simCacheKey(brief, RECIPE);
 
 async function readCache(key: string): Promise<SimPayload | null> {
     const redis = getRedis();
@@ -214,7 +217,7 @@ async function streamGenerate(
 
     try {
         const res = await fetch(
-            "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:streamGenerateContent?alt=sse",
+            `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:streamGenerateContent?alt=sse`,
             {
                 method: "POST",
                 headers: { "Content-Type": "application/json", "x-goog-api-key": apiKey },
@@ -341,7 +344,7 @@ export async function POST(request: NextRequest) {
     }
 
     const geminiUrl =
-        "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent";
+        `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`;
 
     // Filled in as attempts run, then written once at whichever exit is reached.
     const failures: SimFailure[] = [];
