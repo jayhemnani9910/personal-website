@@ -288,7 +288,14 @@ export async function GET() {
     if (!metrics) {
         return NextResponse.json({ error: "no-store" }, { status: 503 });
     }
+    // Ten seconds, and both directions were wrong first. At 60 the CDN served a
+    // minute-old body, which is exactly the wrong answer when the question is
+    // "did the call I just made get counted": it cost a debugging session that
+    // concluded the writes were broken when they were not. At 0, an
+    // unauthenticated GET doing four Redis reads has nothing bounding how often
+    // it can be asked. Ten is fresh enough to answer that question and caps the
+    // read rate at six a minute per region.
     return NextResponse.json(metrics, {
-        headers: { "cache-control": "public, max-age=60" },
+        headers: { "cache-control": "public, max-age=10" },
     });
 }

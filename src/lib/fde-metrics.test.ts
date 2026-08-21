@@ -1,3 +1,6 @@
+import { readFileSync } from "node:fs";
+import { dirname, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
 import { describe, expect, it, vi } from "vitest";
 import type { Redis } from "@upstash/redis";
 import {
@@ -184,5 +187,35 @@ describe("readSimMetrics", () => {
     } as unknown as Redis;
     const m = (await readSimMetrics(redis))!;
     expect(m.totals.requests).toBe(0);
+  });
+});
+
+// The route is where these are actually written, and nothing above proves it
+// calls recordSim at all. This is the same shape of guard as webmcp.test.ts:
+// read the real source and check the two lists have not drifted apart. It
+// cannot prove the call sites are correct, only that every name the module
+// defines is one the route mentions, which catches the case of adding an
+// outcome and never recording it.
+describe("the route records every outcome this module defines", () => {
+  const route = readFileSync(
+    resolve(dirname(fileURLToPath(import.meta.url)), "../app/api/fde-sim/route.ts"),
+    "utf8",
+  );
+
+  it.each(["ok", "cache_hit", "rate_limited", "no_runtime", "gave_up"])(
+    "route.ts records the %s outcome",
+    (outcome) => {
+      expect(route).toContain(`outcome: "${outcome}"`);
+    },
+  );
+
+  it("reads the counters back through the shared helper", () => {
+    expect(route).toContain("readSimMetrics(getRedis())");
+  });
+
+  // Counting this would run before the rate limiter, see the comment on
+  // SimOutcome. If it ever appears, that reasoning needs revisiting first.
+  it("does not count malformed input", () => {
+    expect(route).not.toContain('outcome: "bad_input"');
   });
 });
