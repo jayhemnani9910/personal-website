@@ -134,3 +134,34 @@ export function buildGeminiBody(brief: string) {
     },
   };
 }
+
+async function sha256Hex(input: string): Promise<string> {
+  const digest = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(input));
+  return Array.from(new Uint8Array(digest))
+    .map((b) => b.toString(16).padStart(2, "0"))
+    .join("");
+}
+
+/**
+ * Cache key for one brief under one recipe.
+ *
+ * `recipe` is everything that decides what an answer looks like: the model, the
+ * system prompt, the response schema and the generation config. It is part of
+ * the key because it has to be. The key used to be the brief alone, which meant
+ * that editing the prompt, changing the schema or moving to a new model left
+ * every previously-seen brief returning an answer from a configuration that no
+ * longer existed, for the full 30 days of the TTL. It also defeated the golden
+ * eval, which would have graded those stale answers and reported the old
+ * quality as current.
+ *
+ * The brief is normalised for case and whitespace so trivially different
+ * phrasings of the same question share an answer.
+ */
+export async function simCacheKey(brief: string, recipe: unknown): Promise<string> {
+  const normalised = brief.toLowerCase().replace(/\s+/g, " ").trim();
+  const [recipeHash, briefHash] = await Promise.all([
+    sha256Hex(JSON.stringify(recipe)).then((h) => h.slice(0, 12)),
+    sha256Hex(normalised),
+  ]);
+  return `simcache:fde-sim:${recipeHash}:${briefHash}`;
+}
