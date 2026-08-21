@@ -62,6 +62,13 @@ configuration that has to exist before the endpoint does anything, and the site'
 own copy says it publishes load-bearing numbers. It returns 503 when no store is
 configured, which is also the local development answer.
 
+It is cached for ten seconds, and both directions of that were wrong first. At
+sixty the CDN served a minute-old body, which is the wrong answer to the only
+question this endpoint gets asked, namely whether the call just made was
+counted: it cost a debugging session that concluded the writes were broken when
+they were not. At zero, an unauthenticated GET doing four Redis reads has
+nothing bounding how often it can be asked.
+
 ## Consequences
 
 **One extra Redis round trip per request**, pipelined into a single call rather
@@ -90,8 +97,12 @@ empty window returning null rather than zero, the 429/5xx/4xx split, one round
 trip per request, the sample window staying bounded, string-shaped values from
 Upstash being coerced before arithmetic, and both throw paths returning false.
 
-Nothing asserts that the route calls `recordSim` at every exit. That is a
-reading of the route, not a test, and it is the obvious gap here.
+A source-level guard reads the real `route.ts` and checks that every outcome
+this module defines is one the route actually records, the same shape as
+`webmcp.test.ts`. It cannot prove a call site is in the right place; it does
+catch the case of adding an outcome and never writing it, and the case of
+`bad_input` reappearing after the reasoning above. Verified by renaming one
+outcome in the route and watching it fail.
 
 ## Notes
 
