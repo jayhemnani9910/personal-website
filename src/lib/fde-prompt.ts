@@ -131,6 +131,15 @@ export function buildGeminiBody(brief: string) {
       temperature: 0.7,
       responseMimeType: "application/json",
       responseSchema: SIM_RESPONSE_SCHEMA,
+      // gemini-2.5-flash thinks before emitting any output, and that happens
+      // ahead of the first token rather than during the stream. Measured on
+      // production, time to first section was 13.0s against 21.5s for the whole
+      // answer, so most of the wait a visitor sees is this, not generation.
+      //
+      // Turning it off is only defensible with evidence that the answers stay
+      // good, which is what the golden set exists for. See ADR 0012 for the
+      // before and after scores.
+      thinkingConfig: { thinkingBudget: 0 },
     },
   };
 }
