@@ -1,0 +1,282 @@
+{
+  "scope": [
+    {
+      "q": "What is the required fidelity of access control enforcement, specifically regarding group-based permissions from each source, and how should conflicts be resolved?",
+      "why": "Access control is critical for enterprise search to prevent unauthorized data exposure, and reconciling disparate permission models is a complex engineering challenge."
+    },
+    {
+      "q": "Beyond simple keyword search, what advanced query capabilities are essential, e.g., filtering by document type, author, date range, or content within specific channels?",
+      "why": "This defines the complexity of the search engine and user interface, determining if we need basic full-text search or a more sophisticated faceted search experience."
+    },
+    {
+      "q": "What is the expected real-time latency for new content to become searchable across all sources, especially for ephemeral platforms like Slack where information decay is rapid?",
+      "why": "Real-time indexing is a significant engineering challenge, particularly across multiple diverse sources, and directly impacts the perceived freshness and utility of search results."
+    }
+  ],
+  "decomposition": [
+    {
+      "id": "D1",
+      "title": "Source Data Connectors & Ingestion Pipelines",
+      "why": "Each distinct data source (Confluence, Drive, Slack, Wiki) requires a dedicated mechanism to extract, transform, and load its content into a unified system."
+    },
+    {
+      "id": "D2",
+      "title": "Unified Indexing & Search Engine Core",
+      "why": "A central, optimized index is required to store all ingested data and power fast, relevant search queries across all sources."
+    },
+    {
+      "id": "D3",
+      "title": "Access Control & Permissions Synchronization",
+      "why": "Ensuring users only see content they are authorized for, consistent with original source permissions, is a fundamental and complex security requirement."
+    },
+    {
+      "id": "D4",
+      "title": "Search User Interface & API Gateway",
+      "why": "Users need a single, intuitive interface to interact with the search system, backed by a robust API for query processing and result presentation."
+    },
+    {
+      "id": "D5",
+      "title": "Relevance Ranking & User Feedback Loop",
+      "why": "Initial search results will likely be suboptimal without mechanisms to tune relevance and incorporate user behavior for continuous improvement."
+    }
+  ],
+  "architecture": {
+    "components": [
+      {
+        "id": "confluence_agent",
+        "name": "Confluence Ingestion Agent",
+        "kind": "agent",
+        "sub": "Extracts and transforms data from Confluence.",
+        "col": 0,
+        "row": 0,
+        "x": 60,
+        "y": 50
+      },
+      {
+        "id": "drive_agent",
+        "name": "Drive Ingestion Agent",
+        "kind": "agent",
+        "sub": "Extracts and transforms data from Google Drive.",
+        "col": 1,
+        "row": 0,
+        "x": 280,
+        "y": 50
+      },
+      {
+        "id": "slack_agent",
+        "name": "Slack Ingestion Agent",
+        "kind": "agent",
+        "sub": "Extracts and transforms data from Slack.",
+        "col": 2,
+        "row": 0,
+        "x": 500,
+        "y": 50
+      },
+      {
+        "id": "wiki_agent",
+        "name": "Wiki Ingestion Agent",
+        "kind": "agent",
+        "sub": "Scrapes or extracts content from the legacy wiki.",
+        "col": 3,
+        "row": 0,
+        "x": 720,
+        "y": 50
+      },
+      {
+        "id": "search_ui",
+        "name": "Search UI",
+        "kind": "ui",
+        "sub": "User-facing application to query results.",
+        "col": 0,
+        "row": 1,
+        "x": 60,
+        "y": 190
+      },
+      {
+        "id": "api_gw",
+        "name": "API Gateway",
+        "kind": "service",
+        "sub": "Entry point for all search requests and data ingestion triggers.",
+        "col": 1,
+        "row": 1,
+        "x": 280,
+        "y": 190
+      },
+      {
+        "id": "search_orchestrator",
+        "name": "Search Orchestration Service",
+        "kind": "service",
+        "sub": "Coordinates queries, ranking, and result assembly.",
+        "col": 2,
+        "row": 1,
+        "x": 500,
+        "y": 190
+      },
+      {
+        "id": "unified_index",
+        "name": "Unified Search Index",
+        "kind": "data",
+        "sub": "Stores all indexed content and metadata.",
+        "col": 3,
+        "row": 1,
+        "x": 720,
+        "y": 190
+      },
+      {
+        "id": "idp",
+        "name": "Identity Provider",
+        "kind": "external",
+        "sub": "Manages user authentication and group memberships.",
+        "col": 0,
+        "row": 2,
+        "x": 60,
+        "y": 330
+      },
+      {
+        "id": "authz_svc",
+        "name": "Authorization Service",
+        "kind": "service",
+        "sub": "Centralized permission checking and mapping.",
+        "col": 1,
+        "row": 2,
+        "x": 280,
+        "y": 330
+      }
+    ],
+    "edges": [
+      {
+        "from": "confluence_agent",
+        "to": "api_gw",
+        "label": "Ingest Data",
+        "dashed": false
+      },
+      {
+        "from": "drive_agent",
+        "to": "api_gw",
+        "label": "Ingest Data",
+        "dashed": false
+      },
+      {
+        "from": "slack_agent",
+        "to": "api_gw",
+        "label": "Ingest Data",
+        "dashed": false
+      },
+      {
+        "from": "wiki_agent",
+        "to": "api_gw",
+        "label": "Ingest Data",
+        "dashed": false
+      },
+      {
+        "from": "api_gw",
+        "to": "unified_index",
+        "label": "Index Write",
+        "dashed": false
+      },
+      {
+        "from": "api_gw",
+        "to": "authz_svc",
+        "label": "Ingest Permissions",
+        "dashed": false
+      },
+      {
+        "from": "search_ui",
+        "to": "api_gw",
+        "label": "User Query",
+        "dashed": false
+      },
+      {
+        "from": "api_gw",
+        "to": "search_orchestrator",
+        "label": "Forward Query",
+        "dashed": false
+      },
+      {
+        "from": "search_orchestrator",
+        "to": "unified_index",
+        "label": "Search Query",
+        "dashed": false
+      },
+      {
+        "from": "unified_index",
+        "to": "search_orchestrator",
+        "label": "Search Results",
+        "dashed": false
+      },
+      {
+        "from": "search_orchestrator",
+        "to": "authz_svc",
+        "label": "Permission Check",
+        "dashed": false
+      },
+      {
+        "from": "authz_svc",
+        "to": "idp",
+        "label": "User Group Lookup",
+        "dashed": true
+      },
+      {
+        "from": "idp",
+        "to": "authz_svc",
+        "label": "Sync User Roles",
+        "dashed": true
+      }
+    ]
+  },
+  "sprint": [
+    {
+      "day": "Day 1-2",
+      "title": "Core Platform Setup & Basic Search API",
+      "deliv": "Deployed search service endpoint returning static test data, with basic authentication implemented."
+    },
+    {
+      "day": "Day 3-4",
+      "title": "Confluence Ingestion MVP",
+      "deliv": "Confluence content successfully indexed and searchable via API, demonstrating full-text search capability for one source."
+    },
+    {
+      "day": "Day 5-6",
+      "title": "Google Drive Ingestion MVP",
+      "deliv": "Google Drive content indexed and searchable via API, alongside Confluence, including basic document metadata."
+    },
+    {
+      "day": "Day 7-8",
+      "title": "Slack Ingestion MVP & Real-time Hooks",
+      "deliv": "Recent Slack messages indexed via API, with a proof-of-concept for real-time updates using webhooks."
+    },
+    {
+      "day": "Day 9-10",
+      "title": "Basic Search UI & Integration",
+      "deliv": "Functional web UI allowing keyword search across all indexed sources, displaying results with basic metadata."
+    },
+    {
+      "day": "Day 11-12",
+      "title": "Wiki Content Extraction & Indexing",
+      "deliv": "Initial batch of legacy wiki content successfully ingested and searchable, addressing the most critical sections."
+    },
+    {
+      "day": "Day 13-14",
+      "title": "Basic Access Control & Demo Prep",
+      "deliv": "Search results filtered based on simple user permissions for one source (e.g., Confluence), ready for an internal stakeholder demo."
+    }
+  ],
+  "risks": [
+    {
+      "risk": "Unforeseen complexities or lack of API access for the 'very old wiki,' making content ingestion difficult or impossible.",
+      "mitigation": "Prioritize an initial manual export/ingestion for critical wiki content; explore specialized web scraping tools with human oversight for remaining content if no API exists."
+    },
+    {
+      "risk": "Maintaining real-time or near real-time synchronization across all data sources, especially for dynamic platforms like Slack, leading to stale search results.",
+      "mitigation": "Implement webhook-driven updates for sources supporting them (e.g., Slack); for others, develop robust incremental sync mechanisms with clear refresh intervals and monitoring."
+    },
+    {
+      "risk": "Inconsistent or conflicting access control policies across different source systems, resulting in unauthorized data exposure or blocked legitimate access.",
+      "mitigation": "Design a centralized permission mapping service; conduct thorough security audits and user acceptance testing with diverse user roles against real data sets."
+    },
+    {
+      "risk": "Poor search relevance due to diverse content formats, lack of metadata, or user query ambiguity, leading to continued user frustration.",
+      "mitigation": "Implement initial NLP techniques for content enrichment; establish a user feedback mechanism within the UI to collect relevance signals, and track query analytics to identify common search failures."
+    }
+  ]
+}

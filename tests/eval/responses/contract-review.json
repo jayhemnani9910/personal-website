@@ -1,0 +1,282 @@
+{
+  "scope": [
+    {
+      "q": "What specific actions does the legal team take when 'reviewing by hand' a liability clause, and what is their current definition of a 'wrong' assessment?",
+      "why": "Understanding the precise manual process and the acceptable error tolerance is critical for defining success and building a system that integrates effectively."
+    },
+    {
+      "q": "Beyond 'speeding up', what is the desired output for a reviewed contract (e.g., redline, summary, flagged issues, compliance score) and how will that integrate into existing workflows?",
+      "why": "The output format dictates the system's final deliverable and ensures it provides tangible value to the legal team's existing operational rhythm."
+    },
+    {
+      "q": "Are there existing internal playbooks, standard clauses, or historical examples of 'good' and 'bad' liability clauses that can be leveraged to define compliance rules?",
+      "why": "Leveraging existing legal knowledge is crucial for bootstrapping the system's intelligence and reducing the effort required to define compliance criteria."
+    }
+  ],
+  "decomposition": [
+    {
+      "id": "D1",
+      "title": "Contract Ingestion & Text Normalization",
+      "why": "Before any analysis, contracts must be reliably ingested from various formats and converted into a consistent, machine-readable text representation."
+    },
+    {
+      "id": "D2",
+      "title": "Liability Clause Identification & Extraction",
+      "why": "This core subproblem focuses on accurately locating and extracting only the specific textual segments that constitute liability clauses within a contract."
+    },
+    {
+      "id": "D3",
+      "title": "Legal Compliance Rule Engine",
+      "why": "To determine correctness, we need a system that can evaluate extracted clauses against a defined set of legal standards, rules, or reference clauses."
+    },
+    {
+      "id": "D4",
+      "title": "Human-in-the-Loop Review & Feedback System",
+      "why": "Given the 'cannot be wrong' constraint, a robust mechanism for legal professionals to review, correct, and provide feedback on AI outputs is non-negotiable."
+    },
+    {
+      "id": "D5",
+      "title": "Reporting & Output Generation",
+      "why": "The system must present its findings in a clear, actionable format that the legal team can use directly for decision-making or further processing."
+    }
+  ],
+  "architecture": {
+    "components": [
+      {
+        "id": "ext_src",
+        "name": "Vendor Contract Source",
+        "kind": "external",
+        "sub": "External systems or manual uploads of contracts",
+        "col": 0,
+        "row": 1,
+        "x": 60,
+        "y": 190
+      },
+      {
+        "id": "ingest_svc",
+        "name": "Ingestion Service",
+        "kind": "service",
+        "sub": "Handles document upload, format conversion, and initial storage",
+        "col": 1,
+        "row": 0,
+        "x": 280,
+        "y": 50
+      },
+      {
+        "id": "doc_store",
+        "name": "Document Store",
+        "kind": "data",
+        "sub": "Stores raw and processed contract files and metadata",
+        "col": 1,
+        "row": 1,
+        "x": 280,
+        "y": 190
+      },
+      {
+        "id": "text_extract",
+        "name": "Text Extraction Service",
+        "kind": "service",
+        "sub": "Performs OCR and text normalization on documents",
+        "col": 1,
+        "row": 2,
+        "x": 280,
+        "y": 330
+      },
+      {
+        "id": "clause_agent",
+        "name": "Clause Extraction Agent",
+        "kind": "agent",
+        "sub": "Identifies and extracts liability clauses using NLP/ML",
+        "col": 2,
+        "row": 0,
+        "x": 500,
+        "y": 50
+      },
+      {
+        "id": "comp_engine",
+        "name": "Compliance Rule Engine",
+        "kind": "agent",
+        "sub": "Evaluates extracted clauses against defined legal standards",
+        "col": 2,
+        "row": 1,
+        "x": 500,
+        "y": 190
+      },
+      {
+        "id": "kb",
+        "name": "Legal Knowledge Base",
+        "kind": "data",
+        "sub": "Stores compliance rules, standard clauses, and historical decisions",
+        "col": 2,
+        "row": 2,
+        "x": 500,
+        "y": 330
+      },
+      {
+        "id": "review_ui",
+        "name": "Legal Review UI",
+        "kind": "ui",
+        "sub": "Interface for legal team to review, annotate, and approve findings",
+        "col": 3,
+        "row": 0,
+        "x": 720,
+        "y": 50
+      },
+      {
+        "id": "feedback_svc",
+        "name": "Feedback Loop Service",
+        "kind": "service",
+        "sub": "Captures human corrections and feedback for model/rule improvement",
+        "col": 3,
+        "row": 1,
+        "x": 720,
+        "y": 190
+      },
+      {
+        "id": "report_svc",
+        "name": "Reporting Service",
+        "kind": "service",
+        "sub": "Generates final compliance reports or redlined documents",
+        "col": 3,
+        "row": 2,
+        "x": 720,
+        "y": 330
+      }
+    ],
+    "edges": [
+      {
+        "from": "ext_src",
+        "to": "ingest_svc",
+        "label": "Submit Contract",
+        "dashed": false
+      },
+      {
+        "from": "ingest_svc",
+        "to": "doc_store",
+        "label": "Store Raw Doc",
+        "dashed": false
+      },
+      {
+        "from": "doc_store",
+        "to": "text_extract",
+        "label": "Fetch Doc",
+        "dashed": false
+      },
+      {
+        "from": "text_extract",
+        "to": "clause_agent",
+        "label": "Provide Text",
+        "dashed": false
+      },
+      {
+        "from": "clause_agent",
+        "to": "comp_engine",
+        "label": "Pass Clauses",
+        "dashed": false
+      },
+      {
+        "from": "comp_engine",
+        "to": "kb",
+        "label": "Consult Rules",
+        "dashed": false
+      },
+      {
+        "from": "kb",
+        "to": "comp_engine",
+        "label": "Return Rules",
+        "dashed": false
+      },
+      {
+        "from": "comp_engine",
+        "to": "review_ui",
+        "label": "Display Findings",
+        "dashed": false
+      },
+      {
+        "from": "review_ui",
+        "to": "feedback_svc",
+        "label": "Submit Feedback",
+        "dashed": false
+      },
+      {
+        "from": "feedback_svc",
+        "to": "kb",
+        "label": "Update Rules",
+        "dashed": true
+      },
+      {
+        "from": "feedback_svc",
+        "to": "clause_agent",
+        "label": "Retrain Model",
+        "dashed": true
+      },
+      {
+        "from": "review_ui",
+        "to": "report_svc",
+        "label": "Generate Report",
+        "dashed": false
+      },
+      {
+        "from": "report_svc",
+        "to": "ext_src",
+        "label": "Deliver Analysis",
+        "dashed": true
+      }
+    ]
+  },
+  "sprint": [
+    {
+      "day": "Day 1-2",
+      "title": "Core Ingestion Pipeline & Document Storage",
+      "deliv": "System ingests PDF/DOCX contracts, extracts raw text, and stores them in a persistent data store, accessible via API."
+    },
+    {
+      "day": "Day 3-4",
+      "title": "Initial Clause Identification & Text Normalization",
+      "deliv": "A service that performs robust text extraction (including OCR for images) and a basic NLP model that identifies potential liability clause sections."
+    },
+    {
+      "day": "Day 5-6",
+      "title": "Legal Knowledge Base & Rule Definition API",
+      "deliv": "A data model and API for defining and querying compliance rules for liability clauses, populated with 5 initial critical rules from customer input."
+    },
+    {
+      "day": "Day 7-8",
+      "title": "Automated Compliance Check Integration",
+      "deliv": "The system can process an ingested contract, identify liability clauses, evaluate them against defined rules, and output a structured JSON of flagged issues."
+    },
+    {
+      "day": "Day 9-10",
+      "title": "Interactive Legal Review Interface (MVP)",
+      "deliv": "A web UI allowing legal users to view flagged clauses, adjust classifications (compliant/non-compliant), add comments, and persist their decisions."
+    },
+    {
+      "day": "Day 11-12",
+      "title": "Draft Reporting & Feedback-driven Refinement",
+      "deliv": "A basic report (e.g., PDF) summarizing contract findings. Initial feedback from legal team is used to refine clause identification model or compliance rules."
+    },
+    {
+      "day": "Day 13-14",
+      "title": "End-to-End Testing & Error Handling",
+      "deliv": "All core system components are integrated and tested end-to-end, with basic error handling implemented and a user guide drafted for the legal team."
+    }
+  ],
+  "risks": [
+    {
+      "risk": "Misidentification or misinterpretation of critical liability clauses, leading to severe legal and financial repercussions if uncorrected.",
+      "mitigation": "Implement a mandatory human-in-the-loop validation step for all identified liability clauses, starting with a high-recall AI model and allowing legal experts to filter false positives and correct false negatives. Develop a 'confidence score' for AI output to prioritize human review."
+    },
+    {
+      "risk": "Difficulty in codifying the nuances of legal interpretation into explicit rules or training data, resulting in a system that performs poorly on edge cases.",
+      "mitigation": "Conduct deep-dive sessions with legal experts to extract and formalize implicit knowledge into structured rules and high-quality labeled examples. Start with a rule-based system for critical clauses, augmenting with ML, and continuously gather feedback to refine both."
+    },
+    {
+      "risk": "Low adoption or outright rejection by the legal team due to perceived threat, lack of trust, or a cumbersome user experience.",
+      "mitigation": "Involve legal stakeholders from day one in design and testing, framing the tool as an 'AI assistant' that augments their capabilities. Prioritize a transparent, intuitive UI that clearly shows AI reasoning and allows easy overrides and feedback submission."
+    },
+    {
+      "risk": "Performance degradation over time as new contract types or legal precedents emerge, causing the system's rules or models to become outdated.",
+      "mitigation": "Establish a clear process for the legal team to update compliance rules in the Legal Knowledge Base and provide new labeled data. Implement regular model retraining schedules and performance monitoring to detect drift and trigger updates proactively."
+    }
+  ]
+}

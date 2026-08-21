@@ -1,0 +1,265 @@
+{
+  "scope": [
+    {
+      "q": "What is the typical output format and required data granularity for these grant reports, and for which external stakeholders are they primarily intended?",
+      "why": "Understanding the precise output specifications (e.g., PDF, Excel, specific tables) and target audience is critical to defining the reporting engine's requirements and validation criteria."
+    },
+    {
+      "q": "Are the 'different reporting rules' mostly structured and quantitative (e.g., spending categories, deadlines) or do they involve significant qualitative interpretation and narrative generation?",
+      "why": "This determines the technical approach; highly structured rules can be codified directly, while subjective rules might require advanced NLP or human-in-the-loop workflows."
+    },
+    {
+      "q": "What is the current volume of active grants, the average reporting frequency, and how often do new reporting rule sets or changes to existing ones typically occur?",
+      "why": "Quantifying the scale and volatility helps assess the necessary system robustness, scalability, and the effort required for ongoing rule maintenance."
+    }
+  ],
+  "decomposition": [
+    {
+      "id": "D1",
+      "title": "Current State Analysis & Knowledge Formalization",
+      "why": "This piece is about extracting and structuring the implicit knowledge currently held by the single person and the spreadsheet into an explicit, shareable format."
+    },
+    {
+      "id": "D2",
+      "title": "Structured Rule Definition & Storage",
+      "why": "We need a robust way to define, store, and manage the diverse reporting rules so they can be programmatically applied, moving beyond a single person's understanding."
+    },
+    {
+      "id": "D3",
+      "title": "Grant Data Ingestion & Harmonization",
+      "why": "The existing spreadsheet data needs to be systematically ingested, validated, and transformed into a normalized, queryable data model suitable for automated processing."
+    },
+    {
+      "id": "D4",
+      "title": "Dynamic Report Generation Engine",
+      "why": "This is the core logic that applies the defined reporting rules to the harmonized grant data to produce compliant and accurate reports for various grants."
+    },
+    {
+      "id": "D5",
+      "title": "Reporting Workflow & User Interface",
+      "why": "Users need an intuitive way to request reports, view status, and potentially manage rules, ensuring ease of use and reducing reliance on manual intervention."
+    },
+    {
+      "id": "D6",
+      "title": "Output & Auditability Framework",
+      "why": "Ensuring the generated reports are accurate, verifiable, and delivered in the correct format is crucial for trust and compliance, requiring robust validation and logging."
+    }
+  ],
+  "architecture": {
+    "components": [
+      {
+        "id": "ui_portal",
+        "name": "Grant Reporting Portal",
+        "kind": "ui",
+        "sub": "User interface for report requests and rule management",
+        "col": 0,
+        "row": 0,
+        "x": 60,
+        "y": 50
+      },
+      {
+        "id": "legacy_sheet",
+        "name": "Legacy Grant Spreadsheet",
+        "kind": "external",
+        "sub": "Existing single source of truth for grant data",
+        "col": 0,
+        "row": 1,
+        "x": 60,
+        "y": 190
+      },
+      {
+        "id": "data_ingest_svc",
+        "name": "Grant Data Ingestion Service",
+        "kind": "service",
+        "sub": "Parses, validates, and loads grant data",
+        "col": 1,
+        "row": 1,
+        "x": 280,
+        "y": 190
+      },
+      {
+        "id": "rule_mgmt_svc",
+        "name": "Reporting Rule Management Service",
+        "kind": "service",
+        "sub": "Defines, stores, and retrieves reporting rules",
+        "col": 1,
+        "row": 0,
+        "x": 280,
+        "y": 50
+      },
+      {
+        "id": "grant_db",
+        "name": "Structured Grant Data Store",
+        "kind": "data",
+        "sub": "Normalized database for all grant-related information",
+        "col": 2,
+        "row": 1,
+        "x": 500,
+        "y": 190
+      },
+      {
+        "id": "rule_db",
+        "name": "Reporting Rules Database",
+        "kind": "data",
+        "sub": "Structured storage for all defined reporting rules",
+        "col": 2,
+        "row": 0,
+        "x": 500,
+        "y": 50
+      },
+      {
+        "id": "report_gen_engine",
+        "name": "Report Generation Engine",
+        "kind": "service",
+        "sub": "Applies rules to data to generate reports",
+        "col": 3,
+        "row": 1,
+        "x": 720,
+        "y": 190
+      },
+      {
+        "id": "report_output_store",
+        "name": "Generated Reports Storage",
+        "kind": "data",
+        "sub": "Repository for all produced reports",
+        "col": 3,
+        "row": 0,
+        "x": 720,
+        "y": 50
+      },
+      {
+        "id": "audit_log",
+        "name": "Audit & Validation Log",
+        "kind": "data",
+        "sub": "Records report generation process and data lineage",
+        "col": 3,
+        "row": 2,
+        "x": 720,
+        "y": 330
+      }
+    ],
+    "edges": [
+      {
+        "from": "ui_portal",
+        "to": "rule_mgmt_svc",
+        "label": "Manage Rules",
+        "dashed": false
+      },
+      {
+        "from": "ui_portal",
+        "to": "report_gen_engine",
+        "label": "Request Report",
+        "dashed": false
+      },
+      {
+        "from": "legacy_sheet",
+        "to": "data_ingest_svc",
+        "label": "Extract Grant Data",
+        "dashed": false
+      },
+      {
+        "from": "data_ingest_svc",
+        "to": "grant_db",
+        "label": "Store Normalized Data",
+        "dashed": false
+      },
+      {
+        "from": "rule_mgmt_svc",
+        "to": "rule_db",
+        "label": "Store/Retrieve Rules",
+        "dashed": false
+      },
+      {
+        "from": "report_gen_engine",
+        "to": "grant_db",
+        "label": "Query Grant Data",
+        "dashed": false
+      },
+      {
+        "from": "report_gen_engine",
+        "to": "rule_db",
+        "label": "Fetch Reporting Rules",
+        "dashed": false
+      },
+      {
+        "from": "report_gen_engine",
+        "to": "report_output_store",
+        "label": "Save Report",
+        "dashed": false
+      },
+      {
+        "from": "report_gen_engine",
+        "to": "audit_log",
+        "label": "Log Generation Details",
+        "dashed": false
+      },
+      {
+        "from": "report_output_store",
+        "to": "ui_portal",
+        "label": "Display Report",
+        "dashed": false
+      },
+      {
+        "from": "audit_log",
+        "to": "ui_portal",
+        "label": "View Audit Trail",
+        "dashed": true
+      }
+    ]
+  },
+  "sprint": [
+    {
+      "day": "Day 1-2",
+      "title": "Kickoff & Initial Rule/Data Schema Design",
+      "deliv": "Documented schema for a generic grant data model and a draft structure for defining one specific type of reporting rule."
+    },
+    {
+      "day": "Day 3-4",
+      "title": "Spreadsheet Data Ingestion MVP",
+      "deliv": "Python script or service that extracts data from the existing spreadsheet and loads it into a temporary structured database for one grant type."
+    },
+    {
+      "day": "Day 5-6",
+      "title": "Rule Management Service & Storage PoC",
+      "deliv": "CRUD API endpoints for defining and retrieving a single, simple reporting rule, backed by a persistent database."
+    },
+    {
+      "day": "Day 7-8",
+      "title": "Core Report Generation Logic (Single Rule)",
+      "deliv": "Service that can take a specific grant ID and a single rule ID, fetch data, apply the rule, and output a basic, structured report (e.g., JSON)."
+    },
+    {
+      "day": "Day 9-10",
+      "title": "Basic UI for Report Request & Display",
+      "deliv": "Web interface allowing a user to select a grant and rule, trigger report generation, and view the raw output from the core logic."
+    },
+    {
+      "day": "Day 11-12",
+      "title": "End-to-End Pilot with One Grant Type",
+      "deliv": "Fully functional system capable of ingesting data for one specific grant, applying its primary reporting rule, and generating a validated report via the UI."
+    },
+    {
+      "day": "Day 13-14",
+      "title": "Validation, Feedback, & Planning",
+      "deliv": "Detailed walk-through with the 'one person' to validate the pilot report, gather feedback, and outline the next set of rules to implement."
+    }
+  ],
+  "risks": [
+    {
+      "risk": "The 'one person's' undocumented knowledge about reporting rules is more complex or contradictory than anticipated, making formalization difficult.",
+      "mitigation": "Conduct intensive, structured interviews with the subject matter expert, recording edge cases and ambiguities, then prioritize explicit rule definition over implicit interpretation."
+    },
+    {
+      "risk": "The existing spreadsheet data has significant quality issues (inconsistencies, missing values, unstructured fields) that hinder automated processing.",
+      "mitigation": "Implement a robust data validation and cleansing pipeline during ingestion, with clear error reporting and a feedback loop to the data source owner for correction."
+    },
+    {
+      "risk": "New grant agreements introduce novel reporting requirements that don't fit the established rule definition framework, requiring frequent system re-engineering.",
+      "mitigation": "Design the rule definition framework with extensibility in mind (e.g., pluggable rule types, configurable parameters) and conduct regular reviews of new grant requirements to anticipate changes."
+    },
+    {
+      "risk": "Stakeholders distrust automated reports due to a lack of transparency or an inability to audit how specific figures were derived.",
+      "mitigation": "Build in clear audit trails for each report, detailing which rules were applied and which data points were used, potentially allowing drill-down into source data and rule logic directly from the report."
+    }
+  ]
+}

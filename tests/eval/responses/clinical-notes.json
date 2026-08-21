@@ -1,0 +1,266 @@
+{
+  "scope": [
+    {
+      "q": "What specific types of clinical notes (e.g., SOAP, progress notes, discharge summaries) are currently consuming the most evening time, and what is their typical structure?",
+      "why": "Understanding the note types and their required structure directly informs the data extraction and generation model's complexity and output format."
+    },
+    {
+      "q": "What are the primary input modalities currently used for note creation (e.g., dictation, free-text typing, structured templates, in-person scribes), and what systems capture this data?",
+      "why": "Knowing the current input methods is critical for designing the initial data capture mechanism and integrating with existing clinical workflows."
+    },
+    {
+      "q": "What is the exact workflow for 'clinician approval,' including the average time spent on review, common types of edits made, and the current method for final sign-off into the EHR?",
+      "why": "Defining the approval process precisely is essential for building an efficient human-in-the-loop system that actually saves time and ensures data integrity."
+    }
+  ],
+  "decomposition": [
+    {
+      "id": "D1",
+      "title": "Clinical Encounter Data Capture",
+      "why": "This subproblem focuses on reliably acquiring the raw, unstructured information from patient interactions that forms the basis of the notes."
+    },
+    {
+      "id": "D2",
+      "title": "Clinical Information Extraction & Structuring",
+      "why": "This involves transforming raw data into structured, machine-readable clinical concepts and relationships, which is crucial for accurate note generation."
+    },
+    {
+      "id": "D3",
+      "title": "Automated Note Drafting Engine",
+      "why": "This component is responsible for generating a comprehensive, contextually relevant draft note from the structured clinical information."
+    },
+    {
+      "id": "D4",
+      "title": "Clinician Review & Approval Workflow",
+      "why": "This subproblem designs and implements the user interface and backend logic for doctors to efficiently review, edit, and formally approve the drafted notes."
+    },
+    {
+      "id": "D5",
+      "title": "EHR Read/Write Integration",
+      "why": "Seamlessly exchanging patient context and approved notes with the existing Electronic Health Record system is fundamental for utility and compliance."
+    }
+  ],
+  "architecture": {
+    "components": [
+      {
+        "id": "AUDIO_CAP",
+        "name": "Audio Capture",
+        "kind": "external",
+        "sub": "Microphone/device to record consultations",
+        "col": 0,
+        "row": 0,
+        "x": 60,
+        "y": 50
+      },
+      {
+        "id": "TRANS_SVC",
+        "name": "Transcription Service",
+        "kind": "service",
+        "sub": "Converts audio to raw text transcripts",
+        "col": 1,
+        "row": 0,
+        "x": 280,
+        "y": 50
+      },
+      {
+        "id": "NLP_EXTRACT",
+        "name": "NLP Extraction Service",
+        "kind": "service",
+        "sub": "Extracts clinical entities, events, and relations",
+        "col": 1,
+        "row": 1,
+        "x": 280,
+        "y": 190
+      },
+      {
+        "id": "EHR_ADAPTER",
+        "name": "EHR Integration Adapter",
+        "kind": "service",
+        "sub": "Manages data exchange with the EHR system",
+        "col": 0,
+        "row": 2,
+        "x": 60,
+        "y": 330
+      },
+      {
+        "id": "PATIENT_CTX_DB",
+        "name": "Patient Context DB",
+        "kind": "data",
+        "sub": "Stores relevant patient history for note generation",
+        "col": 1,
+        "row": 2,
+        "x": 280,
+        "y": 330
+      },
+      {
+        "id": "NOTE_GEN_AGENT",
+        "name": "Note Generation Agent",
+        "kind": "agent",
+        "sub": "LLM-powered agent to draft clinical notes",
+        "col": 2,
+        "row": 1,
+        "x": 500,
+        "y": 190
+      },
+      {
+        "id": "DOC_UI",
+        "name": "Doctor Review UI",
+        "kind": "ui",
+        "sub": "Web application for review, editing, and approval",
+        "col": 3,
+        "row": 1,
+        "x": 720,
+        "y": 190
+      },
+      {
+        "id": "AUTH_SVC",
+        "name": "Authentication Service",
+        "kind": "service",
+        "sub": "Handles user login and authorization",
+        "col": 0,
+        "row": 1,
+        "x": 60,
+        "y": 190
+      },
+      {
+        "id": "AUDIT_LOG",
+        "name": "Audit Logging Service",
+        "kind": "data",
+        "sub": "Records all system actions for compliance",
+        "col": 2,
+        "row": 2,
+        "x": 500,
+        "y": 330
+      }
+    ],
+    "edges": [
+      {
+        "from": "AUDIO_CAP",
+        "to": "TRANS_SVC",
+        "label": "Raw Audio",
+        "dashed": false
+      },
+      {
+        "from": "TRANS_SVC",
+        "to": "NLP_EXTRACT",
+        "label": "Transcript",
+        "dashed": false
+      },
+      {
+        "from": "NLP_EXTRACT",
+        "to": "NOTE_GEN_AGENT",
+        "label": "Structured Data",
+        "dashed": false
+      },
+      {
+        "from": "EHR_ADAPTER",
+        "to": "PATIENT_CTX_DB",
+        "label": "Patient History Sync",
+        "dashed": false
+      },
+      {
+        "from": "PATIENT_CTX_DB",
+        "to": "NOTE_GEN_AGENT",
+        "label": "Patient Context",
+        "dashed": false
+      },
+      {
+        "from": "NOTE_GEN_AGENT",
+        "to": "DOC_UI",
+        "label": "Draft Note",
+        "dashed": false
+      },
+      {
+        "from": "DOC_UI",
+        "to": "NOTE_GEN_AGENT",
+        "label": "Edit Suggestions",
+        "dashed": true
+      },
+      {
+        "from": "DOC_UI",
+        "to": "EHR_ADAPTER",
+        "label": "Approved Note",
+        "dashed": false
+      },
+      {
+        "from": "AUTH_SVC",
+        "to": "DOC_UI",
+        "label": "User Auth",
+        "dashed": false
+      },
+      {
+        "from": "DOC_UI",
+        "to": "AUDIT_LOG",
+        "label": "Approval Event",
+        "dashed": false
+      },
+      {
+        "from": "NOTE_GEN_AGENT",
+        "to": "AUDIT_LOG",
+        "label": "Draft Event",
+        "dashed": false
+      },
+      {
+        "from": "NLP_EXTRACT",
+        "to": "AUDIT_LOG",
+        "label": "Extraction Event",
+        "dashed": false
+      }
+    ]
+  },
+  "sprint": [
+    {
+      "day": "Day 1-2",
+      "title": "Core Data Ingestion & Basic Draft",
+      "deliv": "A system that ingests an audio file, transcribes it, extracts basic entities, and outputs a raw, unstructured text draft."
+    },
+    {
+      "day": "Day 3-4",
+      "title": "Structured Note Generation & Display",
+      "deliv": "The system generates a structured draft note (e.g., SOAP format) from extracted data, displayed in a basic web UI."
+    },
+    {
+      "day": "Day 5-6",
+      "title": "Clinician Review & Edit MVP",
+      "deliv": "A functional UI where a doctor can view a draft note, make direct text edits, and mark it as 'Approved' (without EHR write-back)."
+    },
+    {
+      "day": "Day 7-8",
+      "title": "EHR Read Integration for Context",
+      "deliv": "The note generation agent can fetch and incorporate specific patient history (e.g., allergies, past diagnoses) from the EHR into the draft."
+    },
+    {
+      "day": "Day 9-10",
+      "title": "EHR Write-Back & Audit Trail",
+      "deliv": "Approved notes can be successfully written back into the EHR system, and all major actions are logged for auditability."
+    },
+    {
+      "day": "Day 11-12",
+      "title": "Error Handling & Robustness",
+      "deliv": "Key error scenarios (e.g., transcription failure, EHR write-back error) are handled gracefully with user notifications and retry mechanisms."
+    },
+    {
+      "day": "Day 13-14",
+      "title": "Pilot User Acceptance Testing",
+      "deliv": "A small group of doctors has successfully used the system end-to-end to generate, approve, and submit at least 10 real clinical notes."
+    }
+  ],
+  "risks": [
+    {
+      "risk": "AI-generated notes contain clinically inaccurate or 'hallucinated' information that could lead to medical errors if not caught by the clinician.",
+      "mitigation": "Implement robust confidence scoring for generated statements, highlight areas of uncertainty for clinician review, and ensure all generated facts are traceable to source data (transcript/EHR)."
+    },
+    {
+      "risk": "Integration with the existing EHR system proves more complex or restrictive than anticipated, preventing seamless data exchange.",
+      "mitigation": "Initiate early technical discussions with the EHR vendor/IT team to understand APIs and data models. Prioritize a minimal viable integration (e.g., direct text entry or simpler HL7/FHIR profiles) for initial deployment."
+    },
+    {
+      "risk": "Clinicians find the review and editing interface cumbersome, or the AI's drafts are consistently poor, leading to increased review time rather than time savings.",
+      "mitigation": "Involve target clinicians in UI/UX design from the outset, conduct iterative user testing, and implement feedback mechanisms to continuously improve note generation quality and UI efficiency."
+    },
+    {
+      "risk": "Non-compliance with HIPAA or other data privacy regulations due to improper handling, storage, or processing of Protected Health Information (PHI).",
+      "mitigation": "Architect the solution with PHI security and privacy by design, including end-to-end encryption, strict access controls, regular security audits, and formal compliance reviews with legal counsel."
+    }
+  ]
+}
