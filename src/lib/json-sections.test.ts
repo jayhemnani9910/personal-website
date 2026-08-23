@@ -142,3 +142,33 @@ describe("against a recorded model response", () => {
     expect(firstAt / json.length).toBeLessThan(0.5);
   });
 });
+
+// A bare scalar closed by the object's own brace used to be dropped: the scanner
+// took `depth` to -1 and called itself done without flushing the open value. The
+// current SIM_RESPONSE_SCHEMA has no top-level scalar, so nothing was visibly
+// broken; adding one would have silently lost that field.
+describe("bare scalars at the end of the object", () => {
+  it("emits a scalar closed by the object brace", () => {
+    expect(run('{"a": 1}')).toEqual([{ key: "a", value: 1 }]);
+  });
+
+  it("emits every field when the last one is a scalar", () => {
+    expect(run('{"a": [1], "b": true}').map((s) => s.key)).toEqual(["a", "b"]);
+  });
+
+  it("handles tab and carriage return as scalar terminators", () => {
+    expect(run('{"a": 1\t, "b": 2\r\n, "c": [3]}').map((s) => s.key)).toEqual(["a", "b", "c"]);
+    expect(run('{"a": 1\t, "b": 2\r\n, "c": [3]}').map((s) => s.value)).toEqual([1, 2, [3]]);
+  });
+
+  it("survives scalar-tailed objects at every chunk boundary", () => {
+    for (const size of [1, 2, 3, 5, 64]) {
+      expect(run('{"a": [1], "b": null}', size).map((s) => s.key)).toEqual(["a", "b"]);
+    }
+  });
+
+  // Trailing content after the closing brace must not start a new section.
+  it("ignores a second object in the same chunk", () => {
+    expect(run('{"a": [1]}{"b": [2]}').map((s) => s.key)).toEqual(["a"]);
+  });
+});

@@ -49,6 +49,12 @@ export class JsonSectionExtractor {
       const i = this.buf.length;
       this.buf += ch;
 
+      // `done` can be set part-way through a chunk. Keep buffering, because the
+      // final whole-object parse reads `text`, but stop scanning: a second
+      // object in the same chunk would otherwise start emitting its keys as
+      // though they belonged to the first.
+      if (this.done) continue;
+
       // Inside a string, only the closing quote and escapes matter. Doing this
       // first is what stops a brace inside a value's text from moving `depth`.
       if (this.inString) {
@@ -113,11 +119,19 @@ export class JsonSectionExtractor {
           if (ch === '"') this.inString = true;
           else if (ch === "{" || ch === "[") this.depth++;
           else if (ch === "}" || ch === "]") {
-            this.depth--;
-            if (this.depth === 0) out.push(this.finishValue(i + 1));
-            else if (this.depth < 0) this.done = true; // closing } of the object
-          } else if (this.depth === 0 && (ch === "," || ch === " " || ch === "\n")) {
-            // End of a bare scalar.
+            if (this.depth === 0) {
+              // The object's own closing brace, reached while a bare scalar is
+              // still open: `{"a": 1}`. Flush it before stopping. Decrementing
+              // to -1 and calling it done, which is what this did, dropped the
+              // final field without a trace.
+              out.push(this.finishValue(i));
+              this.done = true;
+            } else if (--this.depth === 0) {
+              out.push(this.finishValue(i + 1));
+            }
+          } else if (this.depth === 0 && (ch === "," || ch === " " || ch === "\n" || ch === "\r" || ch === "\t")) {
+            // End of a bare scalar. All four whitespace characters JSON allows,
+            // matching what expect-value already skips.
             out.push(this.finishValue(i));
           }
           break;
