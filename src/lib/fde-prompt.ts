@@ -137,8 +137,10 @@ export function buildGeminiBody(brief: string) {
       // answer, so most of the wait a visitor sees is this, not generation.
       //
       // Turning it off is only defensible with evidence that the answers stay
-      // good, which is what the golden set exists for. See ADR 0012 for the
-      // before and after scores.
+      // good, which is what the golden set exists for. ADR 0012 records the
+      // decision and the thinking-on baseline; the thinking-off run needs a live
+      // key, so until `npm run eval:fde` has been run against this config the
+      // quality half of the claim is untested.
       thinkingConfig: { thinkingBudget: 0 },
     },
   };
