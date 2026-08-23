@@ -45,9 +45,14 @@ serialized value, before emit, and fails closed.
 for the same reason: `FdeArchDiagram` reads `c.x`/`c.y`, so a section emitted
 without them draws nothing.
 
-**No retry on the stream path.** The buffered path retries once, which it can
-because nothing has been sent. Retrying mid-stream would mean a client that has
-already rendered `scope` suddenly being handed a different `scope`.
+**A retry on the stream path only while nothing has been sent.** The buffered
+path retries once, which it can because nothing has left the server. Retrying
+mid-stream would mean a client that has already rendered `scope` suddenly being
+handed a different `scope`, so the retry is conditional on nothing having been
+emitted yet. This was originally written as "no retry at all", which quietly cost
+the streaming path a recovery the buffered path still had, on the failures that
+strand a run before any output (non-200, network, empty body). Those are the
+common ones, and `?stream=1` is the only path the page uses. See ADR 0013.
 
 **A cache hit still speaks the streaming protocol**, arriving all at once, so
 the client has one code path rather than two.

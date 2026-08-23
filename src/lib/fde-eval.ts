@@ -8,10 +8,10 @@
 // of the shape: SYSTEM_PROMPT states a precise contract (exactly 3 scope
 // questions, 4 to 6 decomposition items, 6 to 10 components with distinct ids
 // and a `kind` from a fixed set, edges that resolve, a sprint covering about 14
-// days, exactly 4 risks) and the route's isSimPayload only verifies that
-// architecture.components is an array. Every rule the prompt states is graded
-// here, so "the model stopped following the prompt" is a detectable event rather
-// than something to notice by eye.
+// days, exactly 4 risks) and isSimPayload only verifies that each section is
+// present and is the right kind of container. Every rule the prompt states is
+// graded here, so "the model stopped following the prompt" is a detectable event
+// rather than something to notice by eye.
 //
 // Nothing in this file makes a network call. The live runner is
 // scripts/eval-fde.mjs; these functions grade whatever it brings back, which is

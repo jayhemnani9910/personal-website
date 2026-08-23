@@ -4,47 +4,12 @@ import { PROMPT_LEAK_MARKERS, buildGeminiBody, simCacheKey } from "@/lib/fde-pro
 import { classifyStatus, readSimMetrics, recordSim, type SimFailure } from "@/lib/fde-metrics";
 import { JsonSectionExtractor } from "@/lib/json-sections";
 import { SseDecoder, encodeSse, geminiChunkText, geminiChunkUsage, type SimStreamEvent } from "@/lib/fde-stream";
+import { SECTION_ORDER, isSimPayload, type ArchComponent, type SimPayload } from "@/lib/fde-payload";
 
 export const runtime = "nodejs";
 
 /** Named once: the cache fingerprint has to see the same value the calls use. */
 const GEMINI_MODEL = "gemini-2.5-flash";
-
-interface ArchComponent {
-    id: string;
-    name: string;
-    kind: "ui" | "service" | "agent" | "data" | "external";
-    col?: number;
-    row?: number;
-    sub: string;
-    x?: number;
-    y?: number;
-}
-
-interface ArchEdge {
-    from: string;
-    to: string;
-    label: string;
-    dashed: boolean;
-}
-
-interface SimPayload {
-    scope: { q: string; why: string }[];
-    decomposition: { id: string; title: string; why: string }[];
-    architecture: { components: ArchComponent[]; edges: ArchEdge[] };
-    sprint: { day: string; title: string; deliv: string }[];
-    risks: { risk: string; mitigation: string }[];
-}
-
-// Guards against a malformed model response (valid JSON, wrong shape) reaching
-// normalizeCoords and throwing an unhandled error. Only checks the fields the
-// route touches before returning.
-function isSimPayload(p: unknown): p is SimPayload {
-    if (!p || typeof p !== "object") return false;
-    const arch = (p as { architecture?: unknown }).architecture;
-    if (!arch || typeof arch !== "object") return false;
-    return Array.isArray((arch as { components?: unknown }).components);
-}
 
 // Extracted so the streaming path can normalise the architecture section on its
 // own, as it arrives, rather than only once the whole payload exists.
@@ -104,8 +69,27 @@ async function isRateLimited(ip: string): Promise<boolean> {
     try {
         const key = `ratelimit:fde-sim:${ip}`;
         const count = await redis.incr(key);
-        if (count === 1) await redis.expire(key, RATE_WINDOW_SECONDS);
-        return count > RATE_LIMIT;
+        if (count === 1) {
+            await redis.expire(key, RATE_WINDOW_SECONDS);
+            return false;
+        }
+        if (count > RATE_LIMIT) {
+            // Only the first hit of a window sets the TTL, so an `expire` that
+            // failed back then leaves a key that counts up forever and never
+            // resets: that IP is throttled permanently. Checking here rather
+            // than on every request keeps the extra round trip on the path
+            // that is already being rejected. A missing TTL (-1) means the key
+            // is stranded, so repair it and let this request through instead of
+            // enforcing a window that has no end.
+            const ttl = await redis.ttl(key);
+            if (ttl < 0) {
+                await redis.expire(key, RATE_WINDOW_SECONDS);
+                console.error(`[fde-sim] rate-limit key had no TTL; window repaired`);
+                return false;
+            }
+            return true;
+        }
+        return false;
     } catch (err) {
         // Fail open: a store outage should not take the feature down. Log it,
         // because while this is firing the route has no rate limit at all.
@@ -156,9 +140,6 @@ async function writeCache(key: string, payload: SimPayload): Promise<void> {
     }
 }
 
-/** The order SIM_RESPONSE_SCHEMA declares, which is the order they complete in. */
-const SECTION_ORDER = ["scope", "decomposition", "architecture", "sprint", "risks"] as const;
-
 /**
  * Wrap a producer in a server-sent-events response.
  *
@@ -172,14 +153,32 @@ function sseResponse(
     const encoder = new TextEncoder();
     const stream = new ReadableStream<Uint8Array>({
         async start(controller) {
-            const send = (e: SimStreamEvent) => controller.enqueue(encoder.encode(encodeSse(e)));
+            // Once the visitor navigates away, enqueue throws. That used to
+            // happen inside the catch below as well, which threw a second time
+            // out of start() and took the close with it, turning a normal
+            // disconnect into an unhandled rejection in the logs.
+            let closed = false;
+            const send = (e: SimStreamEvent) => {
+                if (closed) return;
+                try {
+                    controller.enqueue(encoder.encode(encodeSse(e)));
+                } catch {
+                    closed = true;
+                }
+            };
             try {
                 await produce(send);
             } catch (err) {
                 console.error(`[fde-sim] stream producer threw: ${err instanceof Error ? err.message : String(err)}`);
                 send({ type: "error", error: "parse" });
             } finally {
-                controller.close();
+                if (!closed) {
+                    try {
+                        controller.close();
+                    } catch {
+                        // Already closed or errored by the runtime.
+                    }
+                }
             }
         },
     });
@@ -409,22 +408,43 @@ export async function POST(request: NextRequest) {
         }
     }
 
-    // Retry once: the model occasionally returns unparseable JSON; a second pass
-    // almost always succeeds before we give up with a 502.
     if (wantsStream) {
         const startedAt = Date.now();
         let firstSectionAt = 0;
 
         return sseResponse(async (send) => {
-            const result = await streamGenerate(
-                apiKey,
-                brief,
-                (key, value) => {
-                    if (!firstSectionAt) firstSectionAt = Date.now();
-                    send({ type: "section", key, value });
-                },
-                failures,
-            );
+            let emitted = 0;
+            let result: Awaited<ReturnType<typeof streamGenerate>> = {
+                payload: null,
+                promptTokens: 0,
+                outputTokens: 0,
+            };
+
+            // The same two attempts the buffered path gets, with one extra
+            // condition. A retry is only safe while nothing has reached the
+            // browser: once a section has been sent the client has merged it
+            // into its payload, and a second run would interleave sections from
+            // two different answers. Failures that strand a run before any
+            // output (non-200, network, empty body) are the common ones, and
+            // those retry exactly as they always did on the buffered path.
+            for (let attempt = 1; attempt <= 2; attempt++) {
+                result = await streamGenerate(
+                    apiKey,
+                    brief,
+                    (key, value) => {
+                        emitted++;
+                        if (!firstSectionAt) firstSectionAt = Date.now();
+                        send({ type: "section", key, value });
+                    },
+                    failures,
+                );
+                // Counted across attempts: a retry costs tokens the visitor paid
+                // for, and reporting only the last call would undercount them.
+                promptTokens += result.promptTokens;
+                outputTokens += result.outputTokens;
+                if (result.payload || emitted) break;
+                console.error(`[fde-sim] stream attempt ${attempt} produced nothing; retrying`);
+            }
 
             const latencyMs = Date.now() - startedAt;
             const ttfsMs = firstSectionAt ? firstSectionAt - startedAt : undefined;
@@ -436,8 +456,8 @@ export async function POST(request: NextRequest) {
                     failures,
                     latencyMs,
                     ttfsMs,
-                    promptTokens: result.promptTokens,
-                    outputTokens: result.outputTokens,
+                    promptTokens,
+                    outputTokens,
                 });
                 return;
             }
@@ -449,11 +469,14 @@ export async function POST(request: NextRequest) {
                 failures,
                 latencyMs,
                 ttfsMs,
-                promptTokens: result.promptTokens,
-                outputTokens: result.outputTokens,
+                promptTokens,
+                outputTokens,
             });
         }, "miss");
     }
+
+    // Retry once: the model occasionally returns unparseable JSON; a second pass
+    // almost always succeeds before we give up with a 502.
 
     let payload: SimPayload | null = null;
     // Measured across every attempt, because a retry is latency the visitor
