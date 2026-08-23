@@ -21,32 +21,51 @@ ADR 0009 to find out whether the answers get worse.
 
 Set `thinkingConfig: { thinkingBudget: 0 }` in `buildGeminiBody`.
 
-This is filed as **Proposed**, not Accepted, and the distinction is the point.
-The configuration is live, because the only way to measure the latency half is
-to run it. The quality half is not measured yet: `npm run eval:fde` needs
-`GEMINI_API_KEY`, which exists in production and not locally, so the thinking-off
-scores do not exist at the time of writing.
+This stays **Proposed**, and the reason has changed. It was Proposed because the
+quality half was unmeasured. It has now been measured, and the result does not
+decide the question on its own.
 
-The recorded thinking-on baseline is the comparison point:
-
-| | model | date | golden-set checks passed |
+| | date | golden-set checks passed | p50 latency |
 |---|---|---|---|
-| thinking on | `gemini-2.5-flash` | 2026-08-21 | 169 / 170 |
+| thinking on | 2026-08-21 | 169 / 170 | ~21.0s |
+| thinking off | 2026-08-23 | 169 / 170 | ~10.5s |
 
-`tests/eval/baseline.json` holds that run.
+The totals match. They are not the same 169.
+
+- **Fixed:** `onboarding-drop-off:arch.grid-bounds`, which the baseline carries as
+  a known failure, now passes.
+- **Broken:** `grant-compliance:tone.risks-specific` now fails, on a risk that
+  reads "data quality issues". The grader calls that generic, and the prompt
+  asks for risks specific to the brief rather than "AI might be inaccurate".
+
+So the score is a wash and the composition moved. `npm run eval:fde` gates on
+regressions rather than on the total, so it exits red on that one check.
+
+The run was live rather than cached: the route's counters went from `ok=6` to
+`ok=16` with `cache_hit` unchanged at 3, so all ten briefs were generated under
+this configuration.
 
 ## Consequences
 
 **This record exists because a source comment pointed at it before it did.**
 `fde-prompt.ts` said "See ADR 0012 for the before and after scores" while
 `docs/adr/` stopped at 0011. A reader following that reference found nothing,
-and the numbers it promised had never been produced. The comment now says what
-is actually true: the baseline is recorded, the thinking-off run is not.
+and the numbers it promised had never been produced. They exist now, and they
+are in the table above rather than in a comment.
 
-**Accepting or reverting this needs one command.** Run `npm run eval:fde` with a
-key present. If the score holds near 169/170, move this record to Accepted and
-write the after column into the table above. If it drops, delete the
-`thinkingConfig` line; nothing else depends on it.
+**Latency roughly halved.** The route's p50 fell from 20,973ms to 10,532ms over
+18 samples. That is the largest single improvement to this route so far, and much
+bigger than the 38 percent that streaming bought in ADR 0011.
+
+**The open question is one generic risk on one of ten briefs.** Taking it costs a
+measurably worse answer on `grant-compliance`; refusing it costs about ten
+seconds on every run. Reverting is deleting the `thinkingConfig` line, and
+nothing else depends on it. Accepting means re-recording the baseline with
+`npm run eval:fde:update` so the gate goes green on the new composition, which
+also means accepting `tone.risks-specific` as a known failure in its place.
+
+Not deciding is itself a choice, because the configuration is already live. That
+is the state this record is in: measured, deployed, and not yet ratified.
 
 **The cache key already covers this.** `simCacheKey` hashes the whole recipe,
 including `generationConfig`, so turning thinking off did not leave a single
