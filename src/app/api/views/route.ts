@@ -10,8 +10,29 @@ const isValidSlug = (s: unknown): s is string =>
 // semantics below, including the dedup, so behaviour observed locally is the
 // behaviour that ships. A fallback that counts differently from production is a
 // fallback that makes local testing lie.
-const localViews = new Map<string, number>();
+const localViews = new Map<string, number>(); // slug -> count, bounded by the content dir
 const localSeen = new Map<string, number>(); // dedup key -> expiry epoch ms
+
+// localSeen is keyed by slug *and* client IP, so unlike localViews it has no
+// natural ceiling: on a long-lived instance with no store configured it grows
+// for every visitor that ever loads a project. Swept on write rather than on a
+// timer, because there is nothing else to hang a timer off in a serverless
+// handler.
+const MAX_LOCAL_SEEN = 10_000;
+
+function pruneLocalSeen(now: number): void {
+    if (localSeen.size < MAX_LOCAL_SEEN) return;
+    for (const [key, expiry] of localSeen) {
+        if (expiry <= now) localSeen.delete(key);
+    }
+    // Still full means every entry is inside its 24h window. Map iterates in
+    // insertion order, so dropping from the front evicts the oldest first.
+    while (localSeen.size >= MAX_LOCAL_SEEN) {
+        const oldest = localSeen.keys().next().value;
+        if (oldest === undefined) break;
+        localSeen.delete(oldest);
+    }
+}
 
 // One view per visitor per project per day. Without this the counter measured
 // endpoint hits rather than readers: a reload incremented it, client-side
@@ -83,6 +104,7 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ count: localViews.get(slug) || 0, counted: false });
         }
 
+        pruneLocalSeen(now);
         localSeen.set(seenKey, now + DEDUP_WINDOW_SECONDS * 1000);
         const current = localViews.get(slug) || 0;
         localViews.set(slug, current + 1);
