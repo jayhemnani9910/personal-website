@@ -15,7 +15,19 @@ const isSafeSlug = (slug: string): boolean => /^[a-z0-9-]+$/.test(slug);
 // PROJECT CONTENT
 // ============================================================================
 
-export async function getProject(slug: string): Promise<Project | null> {
+export interface ProjectWithContent extends Project {
+    /**
+     * The MDX body: a short overview of the project in prose.
+     *
+     * This used to be read and thrown away. `matter()` was destructured as
+     * `{ data }` only, so twenty-eight files' worth of overview text was
+     * written, reviewed and maintained without ever reaching a page. It is
+     * rendered now, by the project route, above the numbered sections.
+     */
+    content: string;
+}
+
+export async function getProject(slug: string): Promise<ProjectWithContent | null> {
     if (!isSafeSlug(slug)) return null;
     const fullPath = path.join(CONTENT_DIR, "projects", `${slug}.mdx`);
 
@@ -24,7 +36,7 @@ export async function getProject(slug: string): Promise<Project | null> {
     }
 
     const fileContents = await fs.promises.readFile(fullPath, "utf8");
-    const { data } = matter(fileContents);
+    const { data, content } = matter(fileContents);
 
     // Validate frontmatter
     const result = ProjectSchema.safeParse({ ...data, id: slug });
@@ -34,7 +46,7 @@ export async function getProject(slug: string): Promise<Project | null> {
         return null;
     }
 
-    return result.data;
+    return { ...result.data, content };
 }
 
 export async function getAllProjects(): Promise<Project[]> {
@@ -50,11 +62,26 @@ export async function getAllProjects(): Promise<Project[]> {
             .filter((name) => name.endsWith(".mdx"))
             .map(async (name) => {
                 const slug = name.replace(/\.mdx$/, "");
-                return getProject(slug);
+                const project = await getProject(slug);
+                // List views never render the body, and carrying it would ship
+                // every project's prose into the payload of every grid page.
+                if (project) {
+                    const { content, ...meta } = project;
+                    void content; // explicit omit to satisfy lint
+                    return meta;
+                }
+                return null;
             })
     );
 
-    return projects.filter((p): p is Project => p !== null).sort((a, b) => (a.priority ?? 99) - (b.priority ?? 99));
+    // Sorted by priority, then by id. Most projects declare no priority, so
+    // without the tiebreak they all compare equal and Array.sort leaves them in
+    // readdirSync order, which the filesystem does not promise to keep stable.
+    // The grid could therefore come out in a different order on a different
+    // machine, or after an unrelated file was touched.
+    return projects
+        .filter((p): p is Project => p !== null)
+        .sort((a, b) => (a.priority ?? 99) - (b.priority ?? 99) || a.id.localeCompare(b.id));
 }
 
 export async function getProjectSummaries(): Promise<ProjectSummary[]> {

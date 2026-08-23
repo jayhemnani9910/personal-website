@@ -15,7 +15,14 @@ type DataFlowStep = { step: string; detail?: string };
 type ComponentObj = { name: string; purpose?: string };
 type MetricObj = { value: string; label: string; context?: string };
 
-export function ProjectShowcase({ project }: { project: Project }) {
+export function ProjectShowcase({
+  project,
+  overview,
+}: {
+  project: Project;
+  /** The rendered MDX body, built by the route because MDXRemote is server-only. */
+  overview?: React.ReactNode;
+}) {
   const cfg = SHOWCASE_PROJECTS[project.id] ?? { hero: "" };
   const deep = project.deepDive ?? {};
   const links = project.links ?? {};
@@ -119,6 +126,12 @@ export function ProjectShowcase({ project }: { project: Project }) {
       <div className="sw-panel">
         {active === "overview" && (
           <div className="sw-overview">
+            {overview && (
+              <div className="ds-prose">
+                <h2 className="ds-h3">In short</h2>
+                {overview}
+              </div>
+            )}
             <div className="ds-prose">
               <h2 className="ds-h3">The problem</h2>
               <p>{project.challenge}</p>

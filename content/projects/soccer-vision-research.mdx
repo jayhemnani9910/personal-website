@@ -147,5 +147,4 @@ deepDive:
     - "Train a roster-specific jersey/identity head and compare it head-to-head against the SigLIP zero-shot baseline."
     - "Promote the landing page to a hosted demo that runs an actual clip through the pipeline and shows the fused output."
 ---
-# Overview
 A modular research framework that orchestrates four pretrained vision models for soccer analysis: RF-DETR detection, SAM2 segmentation with temporal tracking, SigLIP zero-shot identification, and ResNet jersey classification. A ModelPipeline runs them sequentially, in parallel, or adaptively; a ResultFusion layer reconciles their outputs under seven selectable strategies; and a schema-validated YAML config system with a model registry makes every model swappable by configuration. It is a composition and experimentation harness, built so model combinations can be A/B tested without rewriting code.

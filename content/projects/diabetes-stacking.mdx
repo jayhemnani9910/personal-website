@@ -106,5 +106,4 @@ deepDive:
 featured: false
 priority: 23
 ---
-# Overview
 A stacking ensemble for early diabetes prediction on the PIMA Indians dataset (768 patients, 8 clinical features), co-authored and published at IEEE AIMV 2021. Six base classifiers, Gaussian Naive Bayes, Random Forest, Decision Tree, SVM, an ANN, and Logistic Regression, are each tuned with randomized search, then combined as the level-0 estimators of a scikit-learn StackingClassifier (cv=4) whose Random Forest meta-learner makes the final prediction. The committed notebook reaches 74.46% accuracy on a 30% held-out test set (87.9% on training), and the whole pipeline, data through evaluation, lives in one reproducible notebook.

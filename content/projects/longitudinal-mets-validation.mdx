@@ -111,5 +111,4 @@ deepDive:
 featured: false
 priority: 10
 ---
-# Overview
 An external, pre-registered, longitudinal validation of two metabolic-syndrome risk scores (the triangular-areal-similarity RMRS and a B9 decision tree) on the US NHANES Linked Mortality File, benchmarked against the ACC/AHA Pooled Cohort Equations, Framingham 2008, and FINDRISC. Built in R (with one Python step) as a 15-step reproducible pipeline over a 17,031-adult cohort, it uses survey-weighted Fine-Gray competing-risks and Cox models, IPCW time-dependent AUC, competing-risks decision-curve analysis, and a 500-replicate bootstrap. The finding is nuanced: the clinical equations dominate for cardiovascular and all-cause mortality, while RMRS competes with FINDRISC for diabetes-related mortality, and an XGBoost ceiling plus a held-out CART refit localize the B9 tree's weakness to transportability rather than method. The manuscript and OSF pre-registration are included as drafts.

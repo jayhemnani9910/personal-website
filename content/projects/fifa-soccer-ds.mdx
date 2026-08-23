@@ -171,5 +171,4 @@ deepDive:
     - "Team classification by jersey colour to split tracks into home and away before graph construction."
     - "Edge deployment with INT8 quantization and ONNX Runtime for sideline analysis on tablets."
 ---
-# Overview
 Production-shaped computer-vision pipeline for soccer video. YOLOv8n (stock COCO) handles detection, ByteTrack with Kalman filtering persists player identities, and a spatial-temporal graph feeds a GraphSAGE position-classifier scaffold. Wrapped in real MLOps: a DVC-declared pipeline, MLflow tracking, FastAPI endpoints with a live RTSP path, ONNX and TensorRT export, and Docker. Detection and tracking run on real La Liga footage at 22 FPS; the tactical GNN is wired and waiting on trained weights.

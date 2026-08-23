@@ -124,5 +124,4 @@ deepDive:
 featured: false
 priority: 7
 ---
-# Overview
 A travel booking platform decomposed into 14 independently deployable services, built as a TypeScript monorepo. An Express API gateway fronts domain services for flights, hotels, cars, booking, billing, and users, with supporting services for notifications, admin analytics, deal aggregation, airport resolution, external adapters, and a Python AI concierge, all behind a React/Vite client with i18n. Services coordinate through Kafka domain events on consumer groups rather than direct calls, persist to MongoDB and MySQL with Redis caching, and share TypeScript event and model types through an internal @kayak/shared package. Everything is containerized per service and deployed with Kubernetes manifests, with GitHub Actions CI/CD and unit, end-to-end, and performance tests.

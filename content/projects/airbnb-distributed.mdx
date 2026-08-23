@@ -117,5 +117,4 @@ deepDive:
 featured: false
 priority: 9
 ---
-# Overview
 A team-built Airbnb-style booking platform, internally called Voyage, that evolved from a monolith into an event-driven microservices system. A React/Redux/Vite frontend sits over four Node/Express services (traveler, owner, property, booking), each with its own MongoDB, communicating through Kafka topics with consumer groups and retry rather than direct calls. A separate Python FastAPI service runs a local Ollama model through LangChain to generate JSON travel itineraries, kept isolated from the booking path. The whole system ships with Docker Compose for local runs and a full set of Kubernetes manifests, plus Playwright, Postman, and JMeter for end-to-end, API, and load testing.

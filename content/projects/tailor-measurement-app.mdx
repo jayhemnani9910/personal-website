@@ -118,5 +118,4 @@ deepDive:
 featured: false
 priority: 12
 ---
-# Overview
 A phone-first, offline-capable PWA built for a small tailor shop to record customer measurements, track multi-garment orders, manage reusable garment templates, and queue photos offline. It is built with React, Vite, and TypeScript over Firebase (Auth, Firestore with offline persistence, Cloud Storage), with Zustand fed by realtime Firestore listeners and a Workbox service worker. The code is strictly layered, a pure, unit-tested domain core that never touches React or Firebase, an isolated Firebase layer, a store, and UI that only reads the store and writes through one repository, and an IndexedDB queue handles deferred photo uploads. It runs on Firebase's free tier behind a single shared shop login and ships in both English and Gujarati.

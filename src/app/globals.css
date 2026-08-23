@@ -827,7 +827,7 @@ html[data-theme="dark"] .editorial .ph::before {
 .editorial .ds-learnings { list-style: none; margin: 8px 0 0; padding: 0; }
 .editorial .ds-learnings li { display: grid; grid-template-columns: 28px 1fr; gap: 14px; padding: 18px 0; border-top: 1px solid var(--tr-hairline); }
 .editorial .ds-learnings li::before { content: "\2192"; color: var(--tr-ember); font-family: var(--ff-mono); }
-.editorial .ds-learnings h4 { font-family: var(--ff-display); font-size: 18px; margin: 0 0 6px; }
+.editorial .ds-learnings h3 { font-family: var(--ff-display); font-size: 18px; margin: 0 0 6px; }
 .editorial .ds-learnings p, .editorial .ds-learnings .ds-learn-text { font-size: 14.5px; color: var(--tr-text); line-height: 1.6; margin: 0; }
 
 .editorial .ds-figure { margin-top: 20px; border: 1px solid var(--tr-hairline); background: var(--tr-surface-1); }

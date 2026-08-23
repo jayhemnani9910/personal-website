@@ -141,5 +141,4 @@ deepDive:
 featured: true
 priority: 4
 ---
-# Overview
 Website Watcher is a website archiver and change-detection service. It discovers pages (sitemap and link crawling, robots-compliant), snapshots them with ArchiveBox, detects content changes with SHA-256 hashing, and indexes every version for SQLite FTS5 full-text search. On top it builds a verifiable-provenance layer, Merkle trees over version hashes plus OpenTimestamps anchoring and optional IPFS storage, each degrading gracefully when the external tool is absent. It ships as a 26-module Python service with a Flask UI and API, an APScheduler-driven CLI, and Docker Compose and systemd deployment with Prometheus metrics.

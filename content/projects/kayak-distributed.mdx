@@ -130,5 +130,4 @@ deepDive:
 featured: false
 priority: 8
 ---
-# Overview
 A team-built, 3-tier travel metasearch and booking platform modeled on Kayak (flights, hotels, car rentals). A React client talks through an API gateway (JWT auth, rate limiting, routing) to Node/Express middleware services, user, search (MongoDB + Redis cache), and booking (transactional, with inventory control), over a data tier that splits work across MySQL (OLTP), MongoDB (analytics and logs), and Redis (caching). A separate Python FastAPI service adds the AI layer: a concierge chat agent, deal scoring, and bundle and price-analysis APIs, fronted by a semantic cache that reuses LLM responses for similar queries and a rule-based intent parser that uses OpenAI only when available. Kafka carries cross-service events, with an interface-based in-memory implementation for local development.

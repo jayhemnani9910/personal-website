@@ -134,7 +134,4 @@ deepDive:
 featured: true
 priority: 2
 ---
-
-# Overview
-
 This portfolio registers structured tools through the WebMCP browser API (`navigator.modelContext`), so an AI agent can query it directly instead of scraping the DOM. Eight tools let an agent search every project, read the full resume, list skills and lab experiments, and even change the site's theme or presentation mode, each with a JSON Schema for inputs and typed JSON results. The site works normally for everyone; the tools register only when the browser exposes the API (Chrome 146+ with the WebMCP flag) and unregister on cleanup. Site data is gathered server-side and handed to a client component that does the registration in the browser.

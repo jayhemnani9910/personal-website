@@ -9,7 +9,14 @@ import { CodeBlock } from "./CodeBlock";
 
 const pad = (n: number) => String(n).padStart(2, "0");
 
-export function ProjectDetail({ project }: { project: Project }) {
+export function ProjectDetail({
+  project,
+  overview,
+}: {
+  project: Project;
+  /** The rendered MDX body, built by the route because MDXRemote is server-only. */
+  overview?: React.ReactNode;
+}) {
   type ProjectWithExtras = Project & {
     media?: ProjectMedia[];
     metrics?: Metric[];
@@ -24,6 +31,15 @@ export function ProjectDetail({ project }: { project: Project }) {
 
   // Collect present sections so numbering stays sequential.
   const sections: { title: string; meta?: string; node: React.ReactNode }[] = [];
+
+  // Overview, from the MDX body. First, because it is the plain-English version
+  // of everything below it.
+  if (overview) {
+    sections.push({
+      title: "Overview.",
+      node: <div className="ds-prose">{overview}</div>,
+    });
+  }
 
   // The Problem
   sections.push({
@@ -222,7 +238,10 @@ export function ProjectDetail({ project }: { project: Project }) {
                   <li key={idx}>
                     {structured && title ? (
                       <div>
-                        <h4>{title}</h4>
+                        {/* h3, not h4: the section heading above is an h2, and a
+                            jump to h4 skips a level. Everywhere else in this
+                            dossier an h4 sits under an h3 that introduces it. */}
+                        <h3>{title}</h3>
                         {desc && <p>{desc}</p>}
                       </div>
                     ) : (

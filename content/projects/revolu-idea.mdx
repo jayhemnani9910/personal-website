@@ -150,5 +150,4 @@ deepDive:
     - "Wire the live demo to real runs with grounded citations; the current published sample is a static shape preview."
     - "Add a calibration pass that checks whether judge confidence scores track real-world correctness."
 ---
-# Overview
 CAG (Causal-Adversarial Graph) is a deep-research engine built as a Popperian falsification loop. A LangGraph workflow turns a question into a causal graph, then investigates each causal edge with a red team (adversary) and blue team (supporter) running in parallel; a dialectical judge weighs both and returns a verdict (VERIFIED / FALSIFIED / UNCLEAR) with confidence, while an auditor enforces depth caps and loop detection and the writer synthesises a verdict-tagged report. It is built on a hexagonal architecture, so search engines (DuckDuckGo, Tavily, Exa) and LLM providers (Ollama, Groq, GitHub Models) are swappable by configuration.

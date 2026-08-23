@@ -120,5 +120,4 @@ deepDive:
 featured: false
 priority: 11
 ---
-# Overview
 An OpenEnv-compliant reinforcement-learning environment for tabular data cleaning, built for the Meta OpenEnv Hackathon. An agent fixes messy datasets through a closed, typed action space of seven operations (replace value, convert type, fill missing, remove duplicates, drop rows, standardize, parse date) and is scored on the fraction of each task's checks that pass. The environment subclasses OpenEnv's Action and Observation types, exposes reset/step over a FastAPI server, and ships in Docker to run as a Space, with four graded tasks (from a 5-row type-fixing warm-up to a 15-row full pipeline), a reference client and inference format, and tests for the client, graders, and inference.
