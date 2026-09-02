@@ -10,10 +10,10 @@ export interface LabItem {
 export const LAB_ITEMS: Record<"building" | "exploring" | "radar", LabItem[]> = {
   building: [
     {
-      id: "website-v3",
-      title: "Portfolio V3",
+      id: "website-v4",
+      title: "Portfolio V4",
       description:
-        "This website - editorial magazine layout, theme-aware SVG figures, AI-queryable via WebMCP",
+        "This website - sans and mono on a yellow accent, a live brief decomposer on the home page, AI-queryable via WebMCP",
       tags: ["Next.js 16", "Framer Motion", "Three.js"],
       progress: 100,
       link: "https://github.com/jayhemnani9910/personal-website",

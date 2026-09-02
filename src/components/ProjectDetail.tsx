@@ -151,8 +151,17 @@ export function ProjectDetail({
           </div>
 
           <dl className="grid grid-cols-2 gap-px overflow-hidden rounded-[var(--tr-r-md)] border border-tr-hairline bg-tr-hairline">
-            {factCells.map((c) => (
-              <div key={c.label} className="bg-tr-surface-1 p-[.8rem_1rem]">
+            {/* The grid lines are gap-px over a hairline background, so an odd
+                number of cells leaves the last half-row showing that background
+                as an empty bordered box. Projects with no demo link hit this.
+                Letting the final cell span both columns fills the row instead. */}
+            {factCells.map((c, i) => (
+              <div
+                key={c.label}
+                className={`bg-tr-surface-1 p-[.8rem_1rem] ${
+                  factCells.length % 2 === 1 && i === factCells.length - 1 ? "col-span-2" : ""
+                }`}
+              >
                 <dt className={LABEL}>{c.label}</dt>
                 <dd className="mt-1 text-[length:var(--tr-t-body)] text-tr-text">{c.value}</dd>
               </div>

@@ -5,6 +5,7 @@ import { useLenis } from "lenis/react";
 import { useState, type MouseEvent } from "react";
 import type { NavItem } from "@/data/home";
 import { useTheme } from "@/context/ThemeContext";
+import { ThemeGlyph } from "@/components/ThemeGlyph";
 import { useTerminal } from "@/context/TerminalContext";
 import { scrollToTarget } from "@/lib/scroll";
 import { useScrollState } from "./useScrollState";
@@ -16,7 +17,7 @@ const ROW_CLASS =
 
 export function HomeHeader({ nav }: { nav: NavItem[] }) {
   const { scrolled, progress } = useScrollState();
-  const { theme, toggleTheme } = useTheme();
+  const { toggleTheme } = useTheme();
   const { toggleTerminal } = useTerminal();
   const lenis = useLenis();
   const [pill, setPill] = useState<Pill>(null);
@@ -107,11 +108,9 @@ export function HomeHeader({ nav }: { nav: NavItem[] }) {
             aria-label="Toggle theme"
             data-cursor="FLIP"
             onClick={toggleTheme}
-            className={`h-[30px] w-[30px] rounded-[var(--tr-r-md)] border border-tr-hairline text-tr-text-mute transition-[transform,color,border-color] duration-500 ease-[var(--tr-ease)] hover:border-tr-accent hover:text-tr-text ${
-              theme === "light" ? "rotate-180" : ""
-            }`}
+            className="h-[30px] w-[30px] rounded-[var(--tr-r-md)] border border-tr-hairline text-tr-text-mute transition-[transform,color,border-color] duration-500 ease-[var(--tr-ease)] hover:border-tr-accent hover:text-tr-text [[data-theme=light]_&]:rotate-180"
           >
-            {theme === "dark" ? "◐" : "◑"}
+            <ThemeGlyph />
           </button>
         </div>
       </div>

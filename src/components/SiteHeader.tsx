@@ -4,6 +4,7 @@ import Link from "next/link";
 import type { Route } from "next";
 import { usePathname } from "next/navigation";
 import { useTheme } from "@/context/ThemeContext";
+import { ThemeGlyph } from "@/components/ThemeGlyph";
 
 // The chrome every route except the home page wears, taken from the v4 design
 // screens (docs/design: Work Index, Writing, About, Channel and Project Detail
@@ -21,10 +22,15 @@ const NAV: { label: string; href: Route }[] = [
 
 const MONO = "font-[family-name:var(--ff-mono)] text-[length:var(--tr-t-mono)]";
 
+// Driven by the attribute rather than by state, for the same reason ThemeGlyph
+// is: the server cannot know the theme, so a state-driven transform mismatched
+// on hydration for every light-theme visitor.
+const ROTATE_IN_LIGHT = "[[data-theme=light]_&]:rotate-180";
+
 /** `meta` is the page's own count line, shown to the left of the theme toggle. */
 export function SiteHeader({ meta }: { meta?: string }) {
   const pathname = usePathname();
-  const { theme, toggleTheme } = useTheme();
+  const { toggleTheme } = useTheme();
 
   // usePathname is typed as string but returns null outside an app-router
   // context, which is how every component test renders this. Nothing is
@@ -66,10 +72,9 @@ export function SiteHeader({ meta }: { meta?: string }) {
             onClick={toggleTheme}
             aria-label="Toggle theme"
             data-cursor="FLIP"
-            className="h-[30px] w-[30px] rounded-[var(--tr-r-md)] border border-tr-hairline text-tr-text-mute transition-[transform,color,border-color] duration-500 ease-[var(--tr-ease)] hover:border-tr-accent hover:text-tr-text"
-            style={{ transform: theme === "dark" ? "rotate(0deg)" : "rotate(180deg)" }}
+            className={`h-[30px] w-[30px] rounded-[var(--tr-r-md)] border border-tr-hairline text-tr-text-mute transition-[transform,color,border-color] duration-500 ease-[var(--tr-ease)] hover:border-tr-accent hover:text-tr-text ${ROTATE_IN_LIGHT}`}
           >
-            {theme === "dark" ? "◐" : "◑"}
+            <ThemeGlyph />
           </button>
         </div>
       </div>
