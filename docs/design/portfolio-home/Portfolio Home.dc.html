@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wdth,wght@0,75..100,400..700;1,75..100,400..700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0B0C0F;--sf:#111319;--sf2:#181B22;--ln:#23272F;--tx:#EDEFF3;--mu:#98A0AC;--fa:#5F6673;--ac:#F4D53A;--on:#0B0C0F;--ok:#6BE19A;--acs:rgba(244,213,58,.12)}
+html[data-theme="light"]{--bg:#F5F5F2;--sf:#FFFFFF;--sf2:#ECECE7;--ln:#DADAD3;--tx:#111318;--mu:#5A606B;--fa:#8B919B;--ac:#B08F00;--on:#111318;--ok:#1E8A50;--acs:rgba(176,143,0,.14)}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--tx);-webkit-font-smoothing:antialiased;scroll-behavior:smooth;overflow-x:clip}
+*{box-sizing:border-box}
+a{color:inherit;text-decoration:none}a:hover{color:var(--ac)}
+::selection{background:var(--ac);color:var(--on)}
+textarea::placeholder,input::placeholder{color:var(--fa)}
+@keyframes caret{50%,100%{opacity:0}}
+@keyframes lineIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+@keyframes cubeIdle{from{transform:rotateX(-24deg) rotateY(0deg)}to{transform:rotateX(-24deg) rotateY(360deg)}}
+@keyframes wiggle{0%,100%{transform:rotate(0)}25%{transform:rotate(-6deg)}75%{transform:rotate(6deg)}}
+</style>
+</helmet>
+<main ref="{{ mainRef }}" onMouseMove="{{ onMove }}" data-screen-label="Home" style="position:relative;min-height:100vh;background:var(--bg);color:var(--tx);font-family:'Instrument Sans',system-ui,sans-serif;font-size:15px;line-height:1.5;cursor:{{ pageCursor }}">
+  <canvas ref="{{ glRef }}" aria-hidden="true" style="position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:0"></canvas>
+
+  <div ref="{{ curRef }}" aria-hidden="true" style="position:fixed;left:0;top:0;z-index:100;pointer-events:none;transform:translate(-100px,-100px);will-change:transform;display:{{ cur.display }}">
+    <div style="position:absolute;left:0;top:0;width:{{ cur.size }};height:{{ cur.size }};margin-left:calc({{ cur.size }} / -2);margin-top:calc({{ cur.size }} / -2);border-radius:50%;border:1.5px solid {{ cur.ring }};background:{{ cur.fill }};transition:width .2s cubic-bezier(.16,1,.3,1),height .2s cubic-bezier(.16,1,.3,1),margin .2s cubic-bezier(.16,1,.3,1),background .2s,border-color .2s;mix-blend-mode:{{ cur.blend }}"></div>
+    <div style="position:absolute;left:0;top:0;width:4px;height:4px;margin:-2px;border-radius:50%;background:var(--ac)"></div>
+    <span style="position:absolute;left:18px;top:14px;white-space:nowrap;font-family:'Geist Mono',ui-monospace,monospace;font-size:10px;letter-spacing:.12em;padding:3px 7px;border-radius:4px;background:var(--tx);color:var(--bg);opacity:{{ cur.labelO }};transform:translateY({{ cur.labelY }});transition:opacity .2s,transform .2s">{{ cur.label }}</span>
+  </div>
+
+  <header style="position:sticky;top:0;z-index:40;background:color-mix(in srgb,var(--bg) 82%,transparent);backdrop-filter:blur(14px)">
+    <div style="max-width:1280px;margin:0 auto;padding:0 clamp(1rem,4vw,2rem);height:{{ headH }};transition:height .4s cubic-bezier(.16,1,.3,1);display:flex;align-items:center;justify-content:space-between;gap:1rem;min-width:0">
+      <a href="#brief" onMouseEnter="{{ brandIn }}" onMouseLeave="{{ brandOut }}" style="position:relative;display:block;height:20px;overflow:hidden;font-size:13px;font-weight:600;letter-spacing:-.01em;min-width:11ch">
+        <span style="display:block;line-height:20px;transform:translateY({{ brandY }});transition:transform .45s cubic-bezier(.16,1,.3,1)">Jay Hemnani</span>
+        <span style="display:block;line-height:20px;font-family:'Geist Mono',ui-monospace,monospace;font-weight:400;color:var(--ac);transform:translateY({{ brandY }});transition:transform .45s cubic-bezier(.16,1,.3,1)">jay@hemnani ~ <span style="animation:caret 1s steps(1) infinite">▌</span></span>
+      </a>
+      <nav ref="{{ navRef }}" onMouseLeave="{{ navLeave }}" style="position:relative;display:{{ navDisplay }};align-items:center;gap:.25rem;font-size:13px">
+        <span aria-hidden="true" style="position:absolute;top:0;bottom:0;left:{{ pill.x }};width:{{ pill.w }};border-radius:999px;background:var(--sf2);opacity:{{ pill.o }};transition:left .35s cubic-bezier(.16,1,.3,1),width .35s cubic-bezier(.16,1,.3,1),opacity .25s;pointer-events:none"></span>
+        <sc-for list="{{ navItems }}" as="n" hint-placeholder-count="4">
+          <a href="{{ n.href }}" onMouseEnter="{{ n.enter }}" style="position:relative;display:block;height:30px;padding:0 .8rem;overflow:hidden;color:{{ n.color }};z-index:1">
+            <span style="display:block;line-height:30px;transform:translateY({{ n.y }});transition:transform .4s cubic-bezier(.16,1,.3,1)">{{ n.label }}</span>
+            <span style="display:block;line-height:30px;font-family:'Geist Mono',ui-monospace,monospace;font-size:11px;letter-spacing:.06em;color:var(--ac);transform:translateY({{ n.y }});transition:transform .4s cubic-bezier(.16,1,.3,1)">{{ n.alt }}</span>
+          </a>
+        </sc-for>
+      </nav>
+      <div style="display:flex;align-items:center;gap:.5rem;font-family:'Geist Mono',ui-monospace,monospace;font-size:11px;flex-shrink:0">
+        <button type="button" onClick="{{ openShell }}" onMouseEnter="{{ hoverRun }}" onMouseLeave="{{ hoverNone }}" style="display:inline-flex;align-items:center;gap:.5rem;height:30px;padding:0 .7rem;border:1px solid var(--ln);border-radius:6px;background:transparent;color:var(--mu);font:inherit;cursor:none" style-hover="border-color:var(--ac);color:var(--tx)">shell <kbd style="font:inherit;padding:0 4px;border:1px solid var(--ln);border-radius:3px;color:var(--fa)">`</kbd></button>
+        <button type="button" onClick="{{ toggleTheme }}" onMouseEnter="{{ hoverFlip }}" onMouseLeave="{{ hoverNone }}" aria-label="Toggle theme" style="height:30px;width:30px;border:1px solid var(--ln);border-radius:6px;background:transparent;color:var(--mu);font:inherit;cursor:none;transform:rotate({{ themeRot }});transition:transform .5s cubic-bezier(.16,1,.3,1)" style-hover="border-color:var(--ac);color:var(--tx)">{{ themeGlyph }}</button>
+      </div>
+    </div>
+    <div aria-hidden="true" style="height:1px;background:var(--ln);position:relative"><span style="position:absolute;left:0;top:0;height:1px;width:{{ progress }};background:var(--ac);transition:width .1s linear"></span></div>
+  </header>
+
+  <ol aria-label="Sections" style="position:fixed;right:clamp(.75rem,2vw,1.5rem);top:50%;z-index:35;list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:.9rem;transform:translate(0,-50%) translateX({{ railX }});opacity:{{ railO }};transition:transform .5s cubic-bezier(.16,1,.3,1),opacity .4s;pointer-events:{{ railEvents }}">
+    <sc-for list="{{ steps }}" as="s" hint-placeholder-count="5">
+      <li><a href="{{ s.href }}" onMouseEnter="{{ hoverJump }}" onMouseLeave="{{ hoverNone }}" style="display:flex;align-items:center;justify-content:flex-end;gap:.6rem;font-family:'Geist Mono',ui-monospace,monospace;font-size:10.5px;letter-spacing:.08em;color:{{ s.color }}"><span style="opacity:{{ s.labelO }};transition:opacity .3s">{{ s.n }} {{ s.label }}</span><span style="width:{{ s.w }};height:2px;border-radius:2px;background:{{ s.dot }};transition:width .35s cubic-bezier(.16,1,.3,1),background .3s"></span></a></li>
+    </sc-for>
+  </ol>
+
+  <section id="brief" ref="{{ ref0 }}" style="position:relative;z-index:1;max-width:1280px;margin:0 auto;padding:clamp(3rem,7vw,6rem) clamp(1rem,4vw,2rem) clamp(3rem,6vw,5rem)">
+    <p style="margin:0 0 2rem;font-family:'Geist Mono',ui-monospace,monospace;font-size:11.5px;letter-spacing:.06em;color:var(--mu);display:flex;flex-wrap:wrap;gap:.5rem 1.25rem"><span>FORWARD DEPLOYED ENGINEER</span><span style="color:var(--fa)">GUJARAT, IN → RELOCATING</span><span style="color:var(--fa)">4 YRS</span><span style="display:inline-flex;align-items:center;gap:.4rem;color:var(--ok)"><span style="width:6px;height:6px;border-radius:50%;background:var(--ok)"></span>OPEN TO WORK</span></p>
+    <div style="display:grid;grid-template-columns:{{ heroCols }};gap:clamp(2rem,5vw,5rem);align-items:start">
+      <div>
+        <h1 style="margin:0;font-size:clamp(2.6rem,5.2vw,5rem);line-height:.98;letter-spacing:-.035em;font-weight:500;text-wrap:balance">Give me the vague version.</h1>
+        <p style="margin:1.5rem 0 0;max-width:36ch;font-size:clamp(1.05rem,1.3vw,1.25rem);line-height:1.45;color:var(--mu);text-wrap:pretty">Briefs never arrive clean. Paste one the way it actually shows up and watch how I take it apart — then see what I've already shipped that looks like it.</p>
+        <p style="margin:1.5rem 0 0;font-family:'Geist Mono',ui-monospace,monospace;font-size:11.5px;line-height:1.8;color:var(--fa)">// this is the job. the rest of the page is the evidence.<br>// yes, it actually runs. no, it won't judge your typos.</p>
+      </div>
+
+      <div style="border:1px solid var(--ln);border-radius:10px;background:var(--sf);overflow:hidden;box-shadow:0 30px 80px -50px rgba(0,0,0,.8)">
+        <div style="display:flex;align-items:center;gap:.75rem;height:40px;padding:0 1rem;border-bottom:1px solid var(--ln);font-family:'Geist Mono',ui-monospace,monospace;font-size:11px;color:var(--mu)"><span style="color:var(--ac)">◆</span>decompose <span style="color:var(--fa)">— incoming brief</span><span style="margin-left:auto;color:{{ engineColor }}">{{ engineLabel }}</span></div>
+        <div style="padding:1rem">
+          <textarea ref="{{ briefRef }}" value="{{ brief }}" onChange="{{ onBrief }}" onKeyDown="{{ onBriefKey }}" rows="3" placeholder="e.g. our support team is drowning in tickets and nobody knows which ones matter" style="width:100%;resize:none;border:0;outline:0;background:transparent;color:var(--tx);font-family:'Instrument Sans',system-ui,sans-serif;font-size:17px;line-height:1.45;padding:0;cursor:text"></textarea>
+          <div style="display:flex;flex-wrap:wrap;align-items:center;gap:.5rem;margin-top:.75rem">
+            <sc-for list="{{ presets }}" as="p" hint-placeholder-count="3"><button type="button" onClick="{{ p.pick }}" onMouseEnter="{{ hoverRun }}" onMouseLeave="{{ hoverNone }}" style="height:28px;padding:0 .7rem;border:1px solid var(--ln);border-radius:999px;background:transparent;color:var(--mu);font:inherit;font-size:12px;cursor:none" style-hover="border-color:var(--ac);color:var(--tx)">{{ p.short }}</button></sc-for>
+            <button type="button" onClick="{{ runBrief }}" onMouseEnter="{{ hoverRun }}" onMouseLeave="{{ hoverNone }}" style="margin-left:auto;display:inline-flex;align-items:center;gap:.5rem;height:34px;padding:0 1rem;border:0;border-radius:6px;background:var(--ac);color:var(--on);font:inherit;font-size:12.5px;font-weight:600;cursor:none;transition:transform .2s" style-hover="filter:brightness(1.08);transform:translateY(-1px)">Run <span style="font-family:'Geist Mono',ui-monospace,monospace;font-weight:400;opacity:.7">⌘↵</span></button>
+          </div>
+        </div>
+        <div style="border-top:1px solid var(--ln);background:var(--bg);min-height:220px;display:{{ outDisplay }}">
+          <div style="display:grid;grid-template-columns:{{ outCols }};gap:1px;background:var(--ln)">
+            <sc-for list="{{ cols }}" as="c" hint-placeholder-count="4">
+              <div style="padding:1rem;background:var(--bg);min-height:200px">
+                <p style="margin:0 0 .75rem;font-family:'Geist Mono',ui-monospace,monospace;font-size:10.5px;letter-spacing:.1em;color:{{ c.color }}">{{ c.n }} {{ c.label }}</p>
+                <ol style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:.55rem">
+                  <sc-for list="{{ c.items }}" as="it" hint-placeholder-count="3"><li style="font-size:13px;line-height:1.4;color:var(--tx);animation:lineIn .4s cubic-bezier(.16,1,.3,1) both">{{ it }}</li></sc-for>
+                </ol>
+                <span style="display:{{ c.caret }};width:8px;height:14px;background:var(--ac);animation:caret .9s steps(1) infinite"></span>
+              </div>
+            </sc-for>
+          </div>
+          <div style="display:{{ matchDisplay }};align-items:baseline;gap:1rem;padding:.9rem 1rem;border-top:1px solid var(--ln);font-size:13px;flex-wrap:wrap">
+            <span style="font-family:'Geist Mono',ui-monospace,monospace;font-size:10.5px;letter-spacing:.1em;color:var(--fa)">SHIPPED BEFORE</span>
+            <sc-for list="{{ matches }}" as="m" hint-placeholder-count="2"><a href="{{ m.href }}" onMouseEnter="{{ hoverOpen }}" onMouseLeave="{{ hoverNone }}" style="border-bottom:1px solid var(--ln);padding-bottom:1px" style-hover="border-color:var(--ac)">{{ m.title }} <span style="color:var(--fa)">↗</span></a></sc-for>
+          </div>
+        </div>
+        <div style="display:{{ noteDisplay }};border-top:1px solid var(--ln);padding:.7rem 1rem;font-family:'Geist Mono',ui-monospace,monospace;font-size:11px;color:var(--ac)">// offline: this is the closest preset, not a reading of your brief. the live version calls a model.</div>
+        <div style="display:{{ idleDisplay }};border-top:1px solid var(--ln);padding:.9rem 1rem;font-family:'Geist Mono',ui-monospace,monospace;font-size:11px;color:var(--fa)">// output lands here: scope / architecture / plan / risks — plus the projects that prove it</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="proof" ref="{{ ref1 }}" style="position:relative;z-index:1;border-top:1px solid var(--ln);opacity:{{ rv1.o }};transform:translateY({{ rv1.y }});transition:opacity .8s cubic-bezier(.16,1,.3,1),transform .8s cubic-bezier(.16,1,.3,1)">
+    <div style="max-width:1280px;margin:0 auto;padding:clamp(3rem,6vw,5rem) clamp(1rem,4vw,2rem)">
+      <div style="display:flex;justify-content:space-between;align-items:baseline;gap:2rem;margin-bottom:1.5rem;flex-wrap:wrap">
+        <h2 style="margin:0;font-size:clamp(1.6rem,2.6vw,2.4rem);letter-spacing:-.025em;font-weight:500">Numbers with receipts.</h2>
+        <p style="margin:0;font-family:'Geist Mono',ui-monospace,monospace;font-size:11px;color:var(--fa)">// numbers without sources are just fonts. click one.</p>
+      </div>
+      <div style="display:grid;grid-template-columns:{{ recCols }};gap:1px;background:var(--ln);border:1px solid var(--ln);border-radius:10px;overflow:hidden">
+        <sc-for list="{{ receipts }}" as="r" hint-placeholder-count="6">
+          <button type="button" onClick="{{ r.open }}" onMouseEnter="{{ hoverProof }}" onMouseLeave="{{ hoverNone }}" style="text-align:left;padding:1.25rem 1.1rem;border:0;background:{{ r.bg }};color:var(--tx);font:inherit;cursor:none;display:flex;flex-direction:column;gap:.9rem;transition:background .25s;opacity:{{ r.o }};transform:translateY({{ r.y }});transition-property:background,opacity,transform;transition-duration:.25s,.7s,.7s;transition-delay:0s,{{ r.d }},{{ r.d }};transition-timing-function:ease,cubic-bezier(.16,1,.3,1),cubic-bezier(.16,1,.3,1)" style-hover="background:var(--sf2)">
+            <span style="font-size:clamp(1.8rem,2.8vw,2.6rem);line-height:1;letter-spacing:-.04em;font-weight:500;font-variant-numeric:tabular-nums;color:{{ r.numColor }}">{{ r.n }}</span>
+            <span style="font-size:12.5px;line-height:1.35;color:var(--mu)">{{ r.label }}</span>
+            <span style="margin-top:auto;font-family:'Geist Mono',ui-monospace,monospace;font-size:10.5px;color:{{ r.numColor }}">{{ r.cta }}</span>
+          </button>
+        </sc-for>
+      </div>
+      <div style="display:{{ receiptDisplay }};grid-template-columns:{{ twoCol }};gap:2rem;margin-top:1px;padding:1.5rem;border:1px solid var(--ln);border-top:0;border-radius:0 0 10px 10px;background:var(--sf)">
+        <div>
+          <p style="margin:0 0 .5rem;font-family:'Geist Mono',ui-monospace,monospace;font-size:10.5px;letter-spacing:.1em;color:var(--fa)">RECEIPT · {{ receipt.n }}</p>
+          <p style="margin:0;font-size:17px;font-weight:500;letter-spacing:-.01em">{{ receipt.title }}</p>
+          <p style="margin:.5rem 0 0;font-size:13.5px;color:var(--mu);line-height:1.5">{{ receipt.note }}</p>
+        </div>
+        <ul style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column">
+          <sc-for list="{{ receipt.lines }}" as="l" hint-placeholder-count="3">
+            <li style="display:grid;grid-template-columns:minmax(0,1fr) auto;gap:1rem;padding:.6rem 0;border-top:1px solid var(--ln);font-size:13.5px"><a href="{{ l.href }}" onMouseEnter="{{ hoverOpen }}" onMouseLeave="{{ hoverNone }}" style="display:flex;align-items:baseline;gap:.6rem"><span style="color:var(--ok);font-family:'Geist Mono',ui-monospace,monospace;font-size:11px">✓</span>{{ l.text }}</a><span style="font-family:'Geist Mono',ui-monospace,monospace;font-size:11px;color:var(--fa)">{{ l.meta }}</span></li>
+          </sc-for>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="work" ref="{{ ref2 }}" style="position:relative;z-index:1;border-top:1px solid var(--ln);opacity:{{ rv2.o }};transform:translateY({{ rv2.y }});transition:opacity .8s cubic-bezier(.16,1,.3,1),transform .8s cubic-bezier(.16,1,.3,1)">
+    <div style="max-width:1280px;margin:0 auto;padding:clamp(3rem,6vw,5rem) clamp(1rem,4vw,2rem)">
+      <div style="display:grid;grid-template-columns:{{ heroCols }};gap:clamp(2rem,5vw,5rem);align-items:end;margin-bottom:2rem">
+        <h2 style="margin:0;font-size:clamp(1.6rem,2.6vw,2.4rem);letter-spacing:-.025em;font-weight:500">Six of twenty-seven.</h2>
+        <p style="margin:0;max-width:56ch;color:var(--mu);text-wrap:pretty">Each one is written the same way on purpose: the problem as it arrived, what I actually did, what changed. If a line here can't be checked, it isn't here.</p>
+      </div>
+      <div style="display:{{ tableHead }};grid-template-columns:3rem minmax(0,1.1fr) minmax(0,1fr) minmax(0,1fr) minmax(0,.8fr);gap:1.5rem;padding:0 0 .6rem;border-bottom:1px solid var(--ln);font-family:'Geist Mono',ui-monospace,monospace;font-size:10.5px;letter-spacing:.1em;color:var(--fa)"><span>#</span><span>PROJECT</span><span>ARRIVED AS</span><span>WHAT I DID</span><span>WHAT CHANGED</span></div>
+      <ol style="list-style:none;margin:0;padding:0">
+        <sc-for list="{{ projects }}" as="p" hint-placeholder-count="6">
+          <li style="border-bottom:1px solid var(--ln);position:relative">
+            <span aria-hidden="true" style="position:absolute;left:-1rem;top:0;bottom:0;width:2px;background:var(--ac);transform:scaleY({{ p.bar }});transition:transform .3s cubic-bezier(.16,1,.3,1)"></span>
+            <a href="{{ p.href }}" onMouseEnter="{{ p.enter }}" onMouseLeave="{{ p.leave }}" style="display:grid;grid-template-columns:{{ workCols }};gap:{{ workGap }};padding:1.35rem 0;color:inherit;align-items:start" style-hover="color:inherit">
+              <span style="font-family:'Geist Mono',ui-monospace,monospace;font-size:11px;color:{{ p.numColor }};padding-top:4px">{{ p.num }}</span>
+              <span style="transform:translateX({{ p.shift }});transition:transform .35s cubic-bezier(.16,1,.3,1)"><span style="display:block;font-size:clamp(1.15rem,1.5vw,1.4rem);letter-spacing:-.02em;font-weight:500;line-height:1.15">{{ p.title }}</span><span style="display:flex;flex-wrap:wrap;gap:.35rem;margin-top:.6rem"><sc-for list="{{ p.tech }}" as="t" hint-placeholder-count="4"><span style="font-family:'Geist Mono',ui-monospace,monospace;font-size:10.5px;padding:2px 6px;border:1px solid var(--ln);border-radius:4px;color:var(--mu)">{{ t }}</span></sc-for></span></span>
+              <span style="font-size:13.5px;line-height:1.45;color:var(--mu)"><span style="display:{{ cellLabel }};font-family:'Geist Mono',ui-monospace,monospace;font-size:10px;letter-spacing:.1em;color:var(--fa);margin-bottom:2px">ARRIVED AS</span>{{ p.arrived }}</span>
+              <span style="font-size:13.5px;line-height:1.45"><span style="display:{{ cellLabel }};font-family:'Geist Mono',ui-monospace,monospace;font-size:10px;letter-spacing:.1em;color:var(--fa);margin-bottom:2px">WHAT I DID</span>{{ p.did }}</span>
+              <span style="font-size:13.5px;line-height:1.45;color:{{ p.resultColor }};transition:color .3s"><span style="display:{{ cellLabel }};font-family:'Geist Mono',ui-monospace,monospace;font-size:10px;letter-spacing:.1em;color:var(--fa);margin-bottom:2px">WHAT CHANGED</span>{{ p.changed }}</span>
+            </a>
+          </li>
+        </sc-for>
+      </ol>
+      <a href="Work Index.dc.html" onMouseEnter="{{ hoverOpen }}" onMouseLeave="{{ hoverNone }}" style="display:inline-flex;align-items:center;gap:.6rem;margin-top:1.5rem;font-size:13.5px;border-bottom:1px solid var(--ln);padding-bottom:2px" style-hover="border-color:var(--ac)">The other twenty-one, with filters <span style="font-family:'Geist Mono',ui-monospace,monospace;color:var(--fa)">→</span></a>
+    </div>
+  </section>
+
+  <section id="method" ref="{{ ref3 }}" style="position:relative;z-index:1;border-top:1px solid var(--ln);background:color-mix(in srgb,var(--sf) 85%,transparent);opacity:{{ rv3.o }};transform:translateY({{ rv3.y }});transition:opacity .8s cubic-bezier(.16,1,.3,1),transform .8s cubic-bezier(.16,1,.3,1)">
+    <div style="max-width:1280px;margin:0 auto;padding:clamp(3rem,6vw,5rem) clamp(1rem,4vw,2rem);display:grid;grid-template-columns:{{ heroCols }};gap:clamp(2rem,5vw,5rem)">
+      <div>
+        <h2 style="margin:0;font-size:clamp(1.6rem,2.6vw,2.4rem);letter-spacing:-.025em;font-weight:500">How I work,<br>with the project that taught me.</h2>
+        <p style="margin:1.25rem 0 0;max-width:40ch;color:var(--mu);text-wrap:pretty">Principles are cheap. Each of these is attached to the place it cost me something.</p>
+        <div onClick="{{ scramble }}" onMouseEnter="{{ hoverCube }}" onMouseLeave="{{ hoverNone }}" style="margin-top:2rem;padding:1.25rem;border:1px solid var(--ln);border-radius:8px;background:var(--bg);display:grid;grid-template-columns:auto minmax(0,1fr);gap:1.5rem;align-items:center;cursor:none">
+          <div style="width:96px;height:96px;perspective:600px;display:grid;place-items:center">
+            <div style="position:relative;width:54px;height:54px;transform-style:preserve-3d;animation:cubeIdle {{ cubeSpeed }} linear infinite">
+              <sc-for list="{{ faces }}" as="f" hint-placeholder-count="6">
+                <div style="position:absolute;inset:0;transform:{{ f.t }};display:grid;grid-template-columns:repeat(3,1fr);gap:2px;padding:2px;background:var(--ln);border-radius:3px">
+                  <sc-for list="{{ f.cells }}" as="c" hint-placeholder-count="9"><span style="background:{{ c }};border-radius:1.5px;transition:background .3s"></span></sc-for>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+          <div>
+            <p style="margin:0 0 .3rem;font-family:'Geist Mono',ui-monospace,monospace;font-size:10.5px;letter-spacing:.1em;color:var(--fa)">OFF THE CLOCK · WCA</p>
+            <p style="margin:0;font-size:1.6rem;letter-spacing:-.03em;font-weight:500;font-variant-numeric:tabular-nums;line-height:1">{{ cubeTime }}<span style="font-size:.9rem;color:var(--mu)"> s</span></p>
+            <p style="margin:.4rem 0 0;font-size:12.5px;line-height:1.45;color:var(--mu)">{{ cubeNote }}</p>
+          </div>
+        </div>
+      </div>
+      <ol style="list-style:none;margin:0;padding:0;display:grid;grid-template-columns:{{ methodCols }};gap:1px;background:var(--ln);border:1px solid var(--ln);border-radius:10px;overflow:hidden">
+        <sc-for list="{{ method }}" as="m" hint-placeholder-count="4">
+          <li onMouseEnter="{{ m.enter }}" onMouseLeave="{{ m.leave }}" style="padding:1.5rem;background:{{ m.bg }};display:flex;flex-direction:column;gap:1rem;min-height:210px;transition:background .3s">
+            <span style="font-family:'Geist Mono',ui-monospace,monospace;font-size:10.5px;letter-spacing:.1em;color:var(--ac)">{{ m.n }}</span>
+            <p style="margin:0;font-size:clamp(1.1rem,1.4vw,1.3rem);letter-spacing:-.015em;font-weight:500;line-height:1.25">{{ m.rule }}</p>
+            <p style="margin:0;font-size:13.5px;line-height:1.5;color:var(--mu)">{{ m.why }}</p>
+            <a href="{{ m.href }}" onMouseEnter="{{ hoverOpen }}" onMouseLeave="{{ hoverNone }}" style="margin-top:auto;font-family:'Geist Mono',ui-monospace,monospace;font-size:11px;color:var(--fa);transform:translateX({{ m.shift }});transition:transform .35s cubic-bezier(.16,1,.3,1)" style-hover="color:var(--ac)">← {{ m.from }}</a>
+          </li>
+        </sc-for>
+      </ol>
+    </div>
+  </section>
+
+  <section ref="{{ ref4 }}" style="position:relative;z-index:1;border-top:1px solid var(--ln);opacity:{{ rv4.o }};transform:translateY({{ rv4.y }});transition:opacity .8s cubic-bezier(.16,1,.3,1),transform .8s cubic-bezier(.16,1,.3,1)">
+    <div style="max-width:1280px;margin:0 auto;padding:clamp(3rem,6vw,5rem) clamp(1rem,4vw,2rem);display:grid;grid-template-columns:{{ heroCols }};gap:clamp(2rem,5vw,5rem)">
+      <div>
+        <h2 style="margin:0;font-size:clamp(1.6rem,2.6vw,2.4rem);letter-spacing:-.025em;font-weight:500">The log.</h2>
+        <p style="margin:1.25rem 0 0;max-width:40ch;color:var(--mu)">Five roles, one habit: whichever part nobody wanted, I took it.</p>
+        <p style="margin:1rem 0 0;font-family:'Geist Mono',ui-monospace,monospace;font-size:11px;color:var(--fa)">// git log --oneline, but for a person</p>
+      </div>
+      <ol style="list-style:none;margin:0;padding:0">
+        <sc-for list="{{ log }}" as="e" hint-placeholder-count="5">
+          <li style="display:grid;grid-template-columns:6rem minmax(0,1fr);gap:1.5rem;padding:1rem 0;border-top:1px solid var(--ln)">
+            <span style="font-family:'Geist Mono',ui-monospace,monospace;font-size:11px;color:var(--fa);padding-top:3px">{{ e.when }}</span>
+            <div>
+              <p style="margin:0;font-weight:500;letter-spacing:-.01em">{{ e.role }} <span style="color:var(--mu);font-weight:400">· {{ e.org }}</span></p>
+              <p style="margin:.3rem 0 0;font-size:13.5px;line-height:1.5;color:var(--mu)">{{ e.what }}</p>
+            </div>
+          </li>
+        </sc-for>
+      </ol>
+    </div>
+  </section>
+
+  <section id="contact" ref="{{ ref5 }}" style="position:relative;z-index:1;border-top:1px solid var(--ln);opacity:{{ rv5.o }};transform:translateY({{ rv5.y }});transition:opacity .8s cubic-bezier(.16,1,.3,1),transform .8s cubic-bezier(.16,1,.3,1)">
+    <div style="max-width:1280px;margin:0 auto;padding:clamp(4rem,8vw,7rem) clamp(1rem,4vw,2rem);display:grid;grid-template-columns:{{ contactCols }};gap:clamp(2rem,5vw,5rem);align-items:end">
+      <div style="min-width:0">
+        <p style="margin:0 0 1rem;font-family:'Geist Mono',ui-monospace,monospace;font-size:11px;letter-spacing:.1em;color:var(--fa)">ONE INBOX</p>
+        <a href="mailto:jayhemnani992000@gmail.com" onMouseEnter="{{ hoverMail }}" onMouseLeave="{{ hoverNone }}" style="display:block;font-size:clamp(1.5rem,3.2vw,3rem);letter-spacing:-.035em;font-weight:500;line-height:1.05;word-break:normal;overflow-wrap:anywhere">jayhemnani992000<wbr>@gmail.com</a>
+        <p style="margin:1.5rem 0 0;max-width:52ch;color:var(--mu);text-wrap:pretty">Looking for forward-deployed and data-engineering roles. Senior software is on the table. Send the vague version — that's the point.</p>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:.4rem;font-family:'Geist Mono',ui-monospace,monospace;font-size:12px;color:var(--mu)">
+        <a href="https://github.com/jayhemnani9910" onMouseEnter="{{ hoverOpen }}" onMouseLeave="{{ hoverNone }}" style="display:flex;justify-content:space-between;padding:.6rem 0;border-top:1px solid var(--ln)">github<span style="color:var(--fa)">jayhemnani9910 ↗</span></a>
+        <a href="https://linkedin.com/in/jayhemnani" onMouseEnter="{{ hoverOpen }}" onMouseLeave="{{ hoverNone }}" style="display:flex;justify-content:space-between;padding:.6rem 0;border-top:1px solid var(--ln)">linkedin<span style="color:var(--fa)">/in/jayhemnani ↗</span></a>
+        <a href="https://x.com/jeyhemnani9" onMouseEnter="{{ hoverOpen }}" onMouseLeave="{{ hoverNone }}" style="display:flex;justify-content:space-between;padding:.6rem 0;border-top:1px solid var(--ln)">x<span style="color:var(--fa)">@jeyhemnani9 ↗</span></a>
+        <a href="https://youtube.com/@jayhemnani" onMouseEnter="{{ hoverOpen }}" onMouseLeave="{{ hoverNone }}" style="display:flex;justify-content:space-between;padding:.6rem 0;border-top:1px solid var(--ln);border-bottom:1px solid var(--ln)">youtube<span style="color:var(--fa)">@jayhemnani ↗</span></a>
+      </div>
+    </div>
+  </section>
+
+  <footer style="position:relative;z-index:1;border-top:1px solid var(--ln);background:var(--sf)">
+    <div style="max-width:1280px;margin:0 auto;padding:1.5rem clamp(1rem,4vw,2rem);display:grid;grid-template-columns:{{ footCols }};align-items:center;gap:1rem;font-family:'Geist Mono',ui-monospace,monospace;font-size:11px;color:var(--fa)">
+      <span>© 2026 Jay Hemnani · set in Instrument Sans + Geist Mono · readable by people and by 8 MCP tools</span>
+      <pre onClick="{{ pokeBuddy }}" onMouseEnter="{{ hoverBuddy }}" onMouseLeave="{{ hoverNone }}" aria-hidden="true" style="margin:0;font:inherit;line-height:1.2;cursor:none;text-align:left;color:var(--mu);animation:{{ buddyAnim }}">{{ buddyBubble }} .---. 
+ |<span style="font:inherit;color:{{ buddyEye }}">{{ eye }}</span> <span style="font:inherit;color:{{ buddyEye }}">{{ eye }}</span>| 
+{{ buddyArms }}
+{{ buddyLegs }}</pre>
+      <span style="text-align:right">// you scrolled all the way. respect. <a href="#brief">top ↑</a></span>
+    </div>
+  </footer>
+
+  <div style="position:fixed;inset:0;z-index:60;display:grid;place-items:end center;padding:0 clamp(1rem,4vw,2rem) 1.5rem;background:rgba(0,0,0,{{ shellScrim }});pointer-events:{{ shellEvents }};transition:background .3s" onClick="{{ closeShell }}">
+    <div onClick="{{ stop }}" style="width:min(880px,100%);border:1px solid var(--ln);border-radius:12px;background:var(--sf);box-shadow:0 40px 100px -30px rgba(0,0,0,.7);transform:translateY({{ shellY }});opacity:{{ shellO }};transition:transform .35s cubic-bezier(.16,1,.3,1),opacity .3s;overflow:hidden;cursor:auto">
+      <div style="display:flex;align-items:center;gap:.75rem;height:44px;padding:0 1rem;border-bottom:1px solid var(--ln);font-family:'Geist Mono',ui-monospace,monospace;font-size:11.5px;color:var(--mu)">
+        <span style="display:flex;gap:5px"><i style="width:9px;height:9px;border-radius:50%;background:#FF5F57"></i><i style="width:9px;height:9px;border-radius:50%;background:#FEBC2E"></i><i style="width:9px;height:9px;border-radius:50%;background:#28C840"></i></span>
+        <span style="color:var(--tx)">jay's shell</span><span style="color:var(--fa)">— no sudo required</span>
+        <button type="button" onClick="{{ closeShell }}" style="margin-left:auto;background:none;border:0;color:var(--mu);font:inherit;cursor:pointer" style-hover="color:var(--ac)">esc ✕</button>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;gap:.4rem;padding:.75rem 1rem;border-bottom:1px solid var(--ln);background:var(--bg)">
+        <sc-for list="{{ chips }}" as="c" hint-placeholder-count="6"><button type="button" onClick="{{ c.run }}" style="height:26px;padding:0 .65rem;border:1px solid var(--ln);border-radius:999px;background:var(--sf);color:var(--mu);font-family:'Geist Mono',ui-monospace,monospace;font-size:11px;cursor:pointer" style-hover="border-color:var(--ac);color:var(--tx)">{{ c.label }}</button></sc-for>
+      </div>
+      <div ref="{{ shellBodyRef }}" style="height:280px;overflow:auto;padding:1rem;font-family:'Geist Mono',ui-monospace,monospace;font-size:12.5px;line-height:1.75">
+        <sc-for list="{{ shellLines }}" as="ln" hint-placeholder-count="2"><div style="display:grid;grid-template-columns:1.4rem minmax(0,1fr);gap:.4rem;white-space:pre-wrap;color:{{ ln.color }}"><span style="color:{{ ln.iconColor }}">{{ ln.icon }}</span><span>{{ ln.text }}</span></div></sc-for>
+        <div style="display:grid;grid-template-columns:1.4rem minmax(0,1fr);gap:.4rem;align-items:center"><span style="color:var(--ac)">❯</span><input ref="{{ shellInputRef }}" value="{{ shellInput }}" onChange="{{ onShellInput }}" onKeyDown="{{ onShellKey }}" placeholder="type something, or hit a chip above" spellCheck="{{ false }}" autoComplete="off" style="background:none;border:0;outline:0;color:var(--tx);font:inherit;padding:0"></div>
+      </div>
+    </div>
+  </div>
+</main>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { theme: "dark", vw: 1280, fine: true, reduce: false, active: 0, seen: {}, scrollY: 0, progress: 0, mx: -100, my: -100, curLabel: "", curKind: "", brandHover: false, navHover: -1, pill: null, brief: "", running: false, out: null, shown: 0, engine: "idle", receipt: -1, hover: -1, mhover: -1, cube: null, cubeTime: "16.7", cubeNote: "Personal best, official. Click to scramble — I promise I'm faster than this animation.", cubeSpeed: "14s", shell: false, shellInput: "", shellLines: [{ icon: "☺", iconColor: "var(--ac)", text: "hey. this is a real shell, minus the part where you can break anything.", color: "var(--tx)" }, { icon: " ", text: "try a chip above, or type `brief we have data nobody trusts`", color: "var(--mu)" }], frame: 0, eye: "o", word: "", bounce: false };
+  refs = [0, 1, 2, 3, 4, 5].map(() => React.createRef()); mainRef = React.createRef(); curRef = React.createRef(); glRef = React.createRef(); navRef = React.createRef(); briefRef = React.createRef(); shellBodyRef = React.createRef(); shellInputRef = React.createRef();
+  PROJECTS = [
+    { id: "fifa-soccer-ds", num: "01", title: "FIFA Soccer DS", tags: ["vision", "video", "pipeline", "ml"], tech: ["YOLOv8", "ByteTrack", "DVC", "MLflow", "FastAPI"], arrived: "Match footage and a question: can we track every player and turn it into tactics?", did: "Detection → multi-object tracking → tactical graph, wired as a 7-stage DVC pipeline with MLflow tracking and a FastAPI service.", changed: "22 fps end to end. Reproducible from raw video with one command." },
+    { id: "revolu-idea", num: "02", title: "CAG Deep Research", tags: ["agents", "llm", "research"], tech: ["LangGraph", "LangChain", "Ollama", "Groq"], arrived: "Research agents that confidently agree with themselves.", did: "Planned a causal graph per question; paired adversary and supporter agents per edge; a judge rules and loops back through an auditor.", changed: "Every claim exits tagged VERIFIED, CONTESTED or UNVERIFIED — with the evidence." },
+    { id: "stock-data-platform", num: "03", title: "Stock Data Platform", tags: ["data", "streaming", "warehouse", "dashboard"], tech: ["Kafka", "Airflow", "TimescaleDB", "Dash"], arrived: "Tick data nobody could query and a dashboard everyone wanted.", did: "Kafka ingestion, 18 Airflow DAGs, a TimescaleDB star schema, live candlesticks.", changed: "Real-time multi-symbol OHLC from tick to chart; a warehouse a BI tool can join." },
+    { id: "webmcp-portfolio", num: "04", title: "WebMCP, on this site", tags: ["web", "agents", "standards"], tech: ["TypeScript", "Next.js 16", "WebMCP"], arrived: "Could a portfolio be read by a machine as easily as by a person?", did: "Registered 8 tools on navigator.modelContext: search, résumé, skills, contact, experiments, theme, mode.", changed: "An agent in Chrome 146+ reads this site without scraping it." },
+    { id: "biotech-accelerator", num: "05", title: "Biotech Accelerator", tags: ["agents", "bio", "research", "llm"], tech: ["LangGraph", "ProDy", "httpx", "Docker"], arrived: "A week of tab-hopping across UniProt, PDB and ChEMBL for every hypothesis.", did: "A LangGraph pipeline that queries the databases, runs normal-mode analysis and writes a cited report.", changed: "Question in, ranked candidates and citations out, in minutes." },
+    { id: "nobel-dataintelligence", num: "06", title: "Nobel Data Intelligence", tags: ["ml", "bio", "deep-learning"], tech: ["PyTorch Geometric", "ProDy", "RDKit", "Transformers"], arrived: "Protein stability prediction stuck on sequence alone.", did: "Fused sequence (ProtT5), structure (graph) and a vibrational VDOS signal into one head.", changed: "The vibrational channel is the part that moves the number." },
+  ];
+  PRESETS = [
+    { short: "support tickets", text: "our support team is drowning in tickets and nobody knows which ones actually matter", out: { scope: ["Triage first: what does 'matters' mean to the team — SLA breach, churn risk, revenue?", "Pull 90 days of tickets, outcomes, and who touched them.", "Define a scored queue as the deliverable, not a model."], architecture: ["Ingest tickets → normalise → urgency score → route to queue.", "Start with rules + embeddings; a model only if the rules plateau.", "Log every score with its inputs so drift is visible."], plan: ["Week 1: scored queue on historical data, reviewed with two agents.", "Week 2: live, shadow mode, compare against human triage.", "Week 3: switch the queue; keep the human override."], risks: ["Labels encode who was loud, not what mattered.", "Priority inflation once people learn the score.", "Silent drift when product changes the ticket form."], match: ["revolu-idea", "stock-data-platform"] } },
+    { short: "untrusted numbers", text: "we have plenty of data but nobody trusts the numbers in the dashboards", out: { scope: ["Find the three numbers people argue about most.", "Trace each one back to its source table and its owner.", "Make agreement the deliverable, not a prettier chart."], architecture: ["One warehouse with declared grain per table.", "Star schema for the contested metrics; tests on every join.", "Dashboards read only from certified marts."], plan: ["Week 1: lineage for the three metrics, documented.", "Week 2: rebuild them once, with tests, side by side with the old.", "Week 3: retire the old; publish the definitions."], risks: ["Two teams have two correct definitions.", "Upstream schema changes with no contract.", "The fix is political, not technical — say so early."], match: ["stock-data-platform", "fifa-soccer-ds"] } },
+    { short: "notebook → product", text: "our ML model works in a notebook and we need it in front of customers next month", out: { scope: ["Define 'works': on which data, at what latency, judged by whom?", "Pick the smallest surface a customer can touch.", "Reproducibility before performance."], architecture: ["Versioned data + model (DVC), tracked runs (MLflow).", "Inference behind a FastAPI service with a typed contract.", "Export path (ONNX) decided now, not later."], plan: ["Week 1: pipeline re-runs from raw data, end to end.", "Week 2: service + one screen, internal users.", "Week 3–4: shadow with real traffic; ship."], risks: ["The notebook depends on one laptop's state.", "Latency budget was never written down.", "Nobody owns the model after launch."], match: ["fifa-soccer-ds", "nobel-dataintelligence"] } },
+  ];
+  RECEIPTS = [
+    { n: "27", label: "projects in the archive, each with a write-up", cta: "open index", title: "The archive", note: "Computer vision, agentic AI, data platforms, on-device ML, a Go voice tool. Sorted by priority, then id.", lines: [{ text: "Work index, filterable by domain and stack", meta: "/work", href: "Work Index.dc.html" }, { text: "Every entry has challenge · solution · impact", meta: "content/projects/*.mdx", href: "https://github.com/jayhemnani9910/personal-website/tree/main/content/projects" }] },
+    { n: "3", label: "pull requests merged into ecosystem repositories", cta: "show PRs", title: "Merged upstream", note: "Small changes in large repos. Listed by repo and number so you can read the diff yourself.", lines: [{ text: "vllm-project/vllm", meta: "#31513", href: "https://github.com/vllm-project/vllm/pull/31513" }, { text: "modelcontextprotocol", meta: "#1826", href: "https://github.com/search?q=org%3Amodelcontextprotocol+is%3Apr+1826+author%3Ajayhemnani9910&type=pullrequests" }, { text: "A2UI", meta: "#407", href: "https://github.com/search?q=A2UI+is%3Apr+407+author%3Ajayhemnani9910&type=pullrequests" }, { text: "All merged PRs by author, on GitHub", meta: "search", href: "https://github.com/pulls?q=is%3Apr+author%3Ajayhemnani9910+is%3Amerged" }] },
+    { n: "2", label: "peer-reviewed IEEE papers, 2021", cta: "show papers", title: "IEEE AIMV 2021", note: "Both include the honest gap between the published number and the reproducible notebook.", lines: [{ text: "Diabetes Prediction using Stacking Classifier", meta: "ieeexplore 9670920", href: "https://ieeexplore.ieee.org/document/9670920" }, { text: "CPU Scheduling Algorithms Analysis", meta: "ieeexplore 9670986", href: "https://ieeexplore.ieee.org/document/9670986" }] },
+    { n: "22", label: "frames per second, soccer tracking, end to end", cta: "show pipeline", title: "FIFA Soccer DS", note: "YOLOv8 detection, ByteTrack persistence, GraphSAGE scaffold. Seven DVC stages you can re-run.", lines: [{ text: "Project write-up and demo", meta: "/projects/fifa-soccer-ds", href: "Project Detail.dc.html" }, { text: "Live before/after overlay", meta: "github.io", href: "https://jayhemnani9910.github.io/fifa-soccer-ds/" }] },
+    { n: "94%", label: "precision, credit-fraud ensemble on live transaction data", cta: "show role", title: "Amnex, 2022", note: "Random Forest + XGBoost with SMOTE for imbalance. Internship, but it ran on real transactions.", lines: [{ text: "AI/ML Intern · Amnex · Gujarat", meta: "Jan–May 2022", href: "About.dc.html" }] },
+    { n: "8", label: "MCP tools an agent can call on this page right now", cta: "list tools", title: "navigator.modelContext", note: "Registered in webmcp.ts and asserted by a test, so the count can't drift from the code.", lines: [{ text: "search_projects · get_project · get_resume · search_skills", meta: "read", href: "https://github.com/jayhemnani9910/personal-website/blob/main/src/lib/webmcp.ts" }, { text: "get_contact · list_experiments", meta: "read", href: "https://github.com/jayhemnani9910/personal-website/blob/main/src/lib/webmcp.ts" }, { text: "toggle_theme · switch_mode", meta: "write", href: "https://github.com/jayhemnani9910/personal-website/blob/main/src/lib/webmcp.ts" }] },
+  ];
+  SOLVED = ["#F4D53A", "#EDEFF3", "#E2432E", "#F28C28", "#2E9B4F", "#2E63D9"];
+  componentDidMount() {
+    try { const t = localStorage.getItem("jh-theme"); if (t) this.applyTheme(t); } catch (e) {}
+    const fine = matchMedia("(pointer:fine)").matches, reduce = matchMedia("(prefers-reduced-motion:reduce)").matches;
+    this.setState({ fine, reduce, vw: innerWidth, seen: reduce ? { 0: 1, 1: 1, 2: 1, 3: 1, 4: 1, 5: 1 } : {} });
+    this.onWin = () => this.setState({ vw: innerWidth, navHover: -1 });
+    addEventListener("resize", this.onWin);
+    this.spy = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { const i = this.refs.findIndex(r => r.current === e.target); if (i >= 0) this.setState({ active: i }); } }), { rootMargin: "-45% 0px -45% 0px" });
+    this.reveal = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { const i = this.refs.findIndex(r => r.current === e.target); if (i >= 0 && !this.state.seen[i]) this.setState(s => ({ seen: { ...s.seen, [i]: true } })); } }), { rootMargin: "0px 0px -12% 0px" });
+    this.refs.forEach(r => { if (r.current) { this.spy.observe(r.current); this.reveal.observe(r.current); } });
+    this.onScroll = () => { const max = document.documentElement.scrollHeight - innerHeight; this.setState({ scrollY: scrollY, progress: max > 0 ? scrollY / max : 0 }); };
+    addEventListener("scroll", this.onScroll, { passive: true }); this.onScroll();
+    this.frameT = setInterval(() => this.setState(s => ({ frame: s.frame ? 0 : 1 })), 600);
+    this.blinkT = setInterval(() => { this.setState({ eye: "-" }); setTimeout(() => this.setState({ eye: "o" }), 140); }, 4800);
+    this.onKey = e => { const t = e.target; const typing = t && (t.tagName === "INPUT" || t.tagName === "TEXTAREA"); if (e.key === "`" && !typing) { e.preventDefault(); this.openShell(); } if (e.key === "Escape") this.setState({ shell: false }); };
+    addEventListener("keydown", this.onKey);
+    if (!reduce) this.initGL();
+  }
+  componentWillUnmount() { this.spy && this.spy.disconnect(); this.reveal && this.reveal.disconnect(); clearInterval(this.frameT); clearInterval(this.blinkT); clearInterval(this.revealT); clearInterval(this.cubeT); removeEventListener("keydown", this.onKey); removeEventListener("scroll", this.onScroll); removeEventListener("resize", this.onResize); removeEventListener("resize", this.onWin); cancelAnimationFrame(this.raf); }
+  initGL() {
+    const c = this.glRef.current; if (!c) return; const gl = c.getContext("webgl", { alpha: true, premultipliedAlpha: true, antialias: false }); if (!gl) return;
+    const vs = "attribute vec2 p;void main(){gl_Position=vec4(p,0.,1.);}";
+    const fs = `precision mediump float;uniform vec2 r;uniform float t;uniform vec2 m;uniform vec3 c;uniform float s;
+float h(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}
+float n(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);return mix(mix(h(i),h(i+vec2(1,0)),f.x),mix(h(i+vec2(0,1)),h(i+vec2(1,1)),f.x),f.y);}
+void main(){vec2 uv=gl_FragCoord.xy/r;float ar=r.x/r.y;vec2 p=vec2(uv.x*ar,uv.y);
+vec2 mm=vec2(m.x/r.x*ar,1.-m.y/r.y);
+vec2 b1=vec2(.25*ar+.12*sin(t*.07),.7+.08*cos(t*.05))+(mm-vec2(.5*ar,.5))*.06;
+vec2 b2=vec2(.8*ar+.1*cos(t*.06),.25+.1*sin(t*.045));
+float g1=exp(-pow(distance(p,b1)/.55,2.));float g2=exp(-pow(distance(p,b2)/.6,2.));
+float grain=(h(gl_FragCoord.xy+fract(t)*13.)-.5)*.018;
+float a=g1*.045+g2*.035+grain;
+vec3 warm=vec3(1.,.93,.78);vec3 cool=vec3(.78,.86,1.);
+vec3 col=(warm*g1+cool*g2)/max(g1+g2,.001);
+gl_FragColor=vec4(c*col*max(a,0.),max(a,0.));}`;
+    const sh = (type, src) => { const s = gl.createShader(type); gl.shaderSource(s, src); gl.compileShader(s); return s; };
+    const prog = gl.createProgram(); gl.attachShader(prog, sh(gl.VERTEX_SHADER, vs)); gl.attachShader(prog, sh(gl.FRAGMENT_SHADER, fs)); gl.linkProgram(prog); gl.useProgram(prog);
+    const buf = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, buf); gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), gl.STATIC_DRAW);
+    const loc = gl.getAttribLocation(prog, "p"); gl.enableVertexAttribArray(loc); gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
+    const U = k => gl.getUniformLocation(prog, k); const uR = U("r"), uT = U("t"), uM = U("m"), uC = U("c"), uS = U("s");
+    gl.enable(gl.BLEND); gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
+    let dpr = 1; this.onResize = () => { dpr = Math.min(1.5, devicePixelRatio || 1); c.width = innerWidth * dpr; c.height = innerHeight * dpr; gl.viewport(0, 0, c.width, c.height); }; addEventListener("resize", this.onResize); this.onResize();
+    const t0 = performance.now(); let smx = innerWidth / 2, smy = innerHeight / 2;
+    const draw = () => { const s = this.state; smx += (s.mx - smx) * .08; smy += (s.my - smy) * .08; gl.clearColor(0, 0, 0, 0); gl.clear(gl.COLOR_BUFFER_BIT); gl.uniform2f(uR, c.width, c.height); gl.uniform1f(uT, (performance.now() - t0) / 1000); gl.uniform2f(uM, smx * dpr, smy * dpr); const col = s.theme === "dark" ? [1, 1, 1] : [0.1, 0.1, 0.12]; gl.uniform3f(uC, col[0], col[1], col[2]); gl.uniform1f(uS, dpr); gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4); this.raf = requestAnimationFrame(draw); };
+    draw();
+  }
+  applyTheme(t) { document.documentElement.setAttribute("data-theme", t); this.setState({ theme: t }); try { localStorage.setItem("jh-theme", t); } catch (e) {} }
+  toggleTheme = () => this.applyTheme(this.state.theme === "dark" ? "light" : "dark");
+  onMove = e => { this.state.mx = e.clientX; this.state.my = e.clientY; const c = this.curRef.current; if (c) c.style.transform = `translate(${e.clientX}px,${e.clientY}px)`; };
+  setCur = (label, kind) => () => this.setState({ curLabel: label, curKind: kind });
+  hoverNone = () => this.setState({ curLabel: "", curKind: "" });
+  brandIn = () => this.setState({ brandHover: true }); brandOut = () => this.setState({ brandHover: false });
+  navEnter = i => e => { const nav = this.navRef.current; const r = e.currentTarget.getBoundingClientRect(); const nr = nav.getBoundingClientRect(); this.setState({ navHover: i, pill: { x: r.left - nr.left, w: r.width } }); };
+  navLeave = () => this.setState({ navHover: -1 });
+  onBrief = e => this.setState({ brief: e.target.value });
+  onBriefKey = e => { if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) { e.preventDefault(); this.runBrief(); } };
+  fallback(text) { const t = text.toLowerCase(); return (/(data|dashboard|metric|number|warehouse|trust)/.test(t) ? this.PRESETS[1] : /(model|ml|notebook|predict|vision|video|customer)/.test(t) ? this.PRESETS[2] : this.PRESETS[0]).out; }
+  runBrief = async () => {
+    const text = this.state.brief.trim() || this.PRESETS[0].text; if (!this.state.brief.trim()) this.setState({ brief: text });
+    this.setState({ running: true, out: null, shown: 0, engine: "thinking" });
+    let out = null; const preset = this.PRESETS.find(p => p.text === text);
+    if (preset) out = preset.out;
+    else if (window.claude && window.claude.complete) {
+      try {
+        const ids = this.PROJECTS.map(p => `${p.id} [${p.tags.join(", ")}]: ${p.did}`).join("\n");
+        const raw = await window.claude.complete({ system: "You are the decomposition engine on Jay Hemnani's portfolio. Jay is a Forward Deployed Engineer (agentic AI, data pipelines, distributed backends, computer vision). Given a vague customer brief, return ONLY JSON: {\"scope\":[3 short lines],\"architecture\":[3],\"plan\":[3 lines, week-by-week],\"risks\":[3],\"match\":[2 project ids]}. Terse, concrete, no fluff, boring parts first. Project ids to choose from:\n" + ids, messages: [{ role: "user", content: text }], max_tokens: 700 });
+        const j = JSON.parse(raw.slice(raw.indexOf("{"), raw.lastIndexOf("}") + 1));
+        const arr = k => Array.isArray(j[k]) && j[k].length ? j[k].slice(0, 3).map(String) : null;
+        if (arr("scope") && arr("architecture") && arr("plan") && arr("risks")) { out = { scope: arr("scope"), architecture: arr("architecture"), plan: arr("plan"), risks: arr("risks"), match: (Array.isArray(j.match) ? j.match : []).filter(id => this.PROJECTS.some(p => p.id === id)).slice(0, 2) }; this.setState({ engine: "claude" }); }
+      } catch (e) { out = null; }
+    }
+    if (preset) this.setState({ engine: "local" }); else if (!out) { out = this.fallback(text); this.setState({ engine: "offline" }); }
+    this.setState({ out, running: false, shown: 0 });
+    clearInterval(this.revealT); this.revealT = setInterval(() => this.setState(s => { if (s.shown >= 13) { clearInterval(this.revealT); return null; } return { shown: s.shown + 1 }; }), 160);
+  };
+  scramble = () => {
+    if (this.cubeT) return; const rnd = () => this.SOLVED[Math.floor(Math.random() * 6)]; let n = 0;
+    this.setState({ cubeSpeed: "1.2s", cubeNote: "scrambling…", cubeTime: "0.00" }); const t0 = performance.now();
+    this.cubeT = setInterval(() => { n++; this.setState({ cube: Array.from({ length: 6 }, () => Array.from({ length: 9 }, rnd)), cubeTime: ((performance.now() - t0) / 1000).toFixed(2) }); if (n > 14) { clearInterval(this.cubeT); this.cubeT = null; this.setState({ cube: null, cubeSpeed: "14s", cubeTime: "16.7", cubeNote: "Solved. Yours took " + ((performance.now() - t0) / 1000).toFixed(2) + " s of watching. Mine is still 16.7 — the timer app is project 19." }); } }, 120);
+  };
+  openShell = () => { this.setState({ shell: true }); setTimeout(() => this.shellInputRef.current && this.shellInputRef.current.focus(), 380); };
+  closeShell = () => this.setState({ shell: false });
+  stop = e => e.stopPropagation();
+  onShellInput = e => this.setState({ shellInput: e.target.value });
+  exec = cmd => { const out = this.run(cmd); this.setState(s => ({ shellInput: "", shellLines: cmd === "clear" ? [] : [...s.shellLines, { icon: "❯", iconColor: "var(--fa)", text: cmd, color: "var(--tx)" }, ...out] }), () => { const b = this.shellBodyRef.current; if (b) b.scrollTop = b.scrollHeight; }); };
+  onShellKey = e => { if (e.key === "Enter") this.exec(this.state.shellInput.trim()); };
+  run(cmd) {
+    const sp = cmd.indexOf(" "); const c = (sp < 0 ? cmd : cmd.slice(0, sp)).toLowerCase(); const rest = sp < 0 ? "" : cmd.slice(sp + 1).trim();
+    const L = (text, color = "var(--mu)", icon = " ", iconColor = "var(--fa)") => ({ text, color, icon, iconColor });
+    const ok = t => L(t, "var(--tx)", "✓", "var(--ok)"), info = t => L(t, "var(--tx)", "·", "var(--fa)");
+    switch (c) {
+      case "help": return [L("things that work here:", "var(--mu)", "?", "var(--ac)"), info("brief <text>   — run the decomposer on your problem"), info("ls             — the six featured projects"), info("open <1-6>     — one project, in three lines"), info("receipts       — every number on this page, with source"), info("whoami · contact · theme · cube · joke · clear")];
+      case "brief": if (!rest) return [L("brief <your vague problem> — the vaguer the better, honestly", "var(--mu)", "!", "var(--ac)")]; this.setState({ brief: rest.replace(/^"|"$/g, ""), shell: false }, () => { this.runBrief(); location.hash = "brief"; }); return [ok("running the decomposer up top ↑")];
+      case "whoami": return [ok("Jay Hemnani — Forward Deployed Engineer. Gujarat, IN. Relocating."), L("you, however, remain a mystery.")];
+      case "ls": return this.PROJECTS.map(p => info(`${p.num}  ${p.title.padEnd(26)} ${p.tech.slice(0, 3).join(", ")}`)).concat([L("… 21 more at /work")]);
+      case "open": { const p = this.PROJECTS[(parseInt(rest) || 0) - 1]; return p ? [ok(p.title), L("arrived as: " + p.arrived), L("did: " + p.did), L(p.changed, "var(--ok)", "✓", "var(--ok)")] : [L("open <1-6>. six, not seven. i checked.", "var(--mu)", "!", "var(--ac)")]; }
+      case "receipts": return this.RECEIPTS.map(r => info(`${r.n.padEnd(5)} ${r.label}`));
+      case "contact": return [ok("jayhemnani992000@gmail.com"), L("github.com/jayhemnani9910 · linkedin.com/in/jayhemnani")];
+      case "theme": this.toggleTheme(); return [ok("theme → " + (this.state.theme === "dark" ? "light" : "dark") + ". your retinas thank you. or not.")];
+      case "cube": this.setState({ shell: false }, this.scramble); location.hash = "method"; return [ok("scrambling the cube in §03 ↓")];
+      case "joke": return [L("a data pipeline walks into a bar. the bartender says: we don't serve your type here. the pipeline casts itself to string.", "var(--tx)", "☺", "var(--ac)")];
+      case "sudo": return [L("nice try. this shell runs on trust and yellow.", "var(--tx)", "✗", "var(--ac)")];
+      case "rm": return [L("absolutely not. it took me four years to build this.", "var(--tx)", "✗", "var(--ac)")];
+      case "clear": case "": return [];
+      default: return [L(`command not found: ${c}. try help — it's the one command everyone skips.`, "var(--tx)", "✗", "var(--ac)")];
+    }
+  }
+  pokeBuddy = () => { this.setState({ eye: "^", bounce: true, word: ["hi there", "send the brief", "^_^", "hello", "still here"][Math.floor(Math.random() * 5)] }); setTimeout(() => this.setState({ eye: "o", word: "", bounce: false }), 1300); };
+  renderVals() {
+    const s = this.state; const out = s.out;
+    const colDefs = [["00", "SCOPE", "scope"], ["01", "ARCHITECTURE", "architecture"], ["02", "PLAN", "plan"], ["03", "RISKS", "risks"]];
+    const cols = colDefs.map(([n, label, key], ci) => { const items = out ? (out[key] || []).filter((_, i) => ci * 3 + i < s.shown) : []; const active = out && s.shown < 12 && Math.floor(s.shown / 3) === ci; return { n, label, items, color: active ? "var(--ac)" : "var(--fa)", caret: active || (s.running && ci === 0) ? "inline-block" : "none" }; });
+    const matches = out && s.shown >= 12 ? (out.match || []).map(id => this.PROJECTS.find(p => p.id === id)).filter(Boolean).map(p => ({ title: p.title, href: p.id === "fifa-soccer-ds" ? "Project Detail.dc.html" : "Work Index.dc.html" })) : [];
+    const stepDefs = [["00", "brief", "#brief", 0], ["01", "proof", "#proof", 1], ["02", "work", "#work", 2], ["03", "method", "#method", 3], ["04", "contact", "#contact", 5]];
+    const bubble = s.word ? `╭${"─".repeat(s.word.length + 2)}╮\n│ ${s.word} │\n╰${"─".repeat(Math.floor((s.word.length + 2) / 2))}╥${"─".repeat(s.word.length + 1 - Math.floor((s.word.length + 2) / 2))}╯\n` : "";
+    const rc = this.RECEIPTS[s.receipt]; const rv = i => ({ o: s.seen[i] ? 1 : 0, y: s.seen[i] ? "0" : "28px" });
+    const kinds = { run: { size: "44px", ring: "var(--ac)", fill: "var(--acs)" }, open: { size: "40px", ring: "var(--tx)", fill: "transparent" }, proof: { size: "40px", ring: "var(--ok)", fill: "transparent" }, cube: { size: "56px", ring: "var(--ac)", fill: "transparent" }, buddy: { size: "48px", ring: "var(--ac)", fill: "transparent" } };
+    const k = kinds[s.curKind] || { size: "22px", ring: "var(--mu)", fill: "transparent" };
+    const scrolled = s.scrollY > 240;
+    const navDefs = [["Work", "27 shipped", "Work Index.dc.html"], ["Writing", "3 essays", "Writing.dc.html"], ["About", "the log", "About.dc.html"], ["Channel", "on video", "Channel.dc.html"]];
+    const narrow = s.vw < 900, tiny = s.vw < 600;
+    const faceT = ["translateZ(27px)", "rotateY(180deg) translateZ(27px)", "rotateY(90deg) translateZ(27px)", "rotateY(-90deg) translateZ(27px)", "rotateX(90deg) translateZ(27px)", "rotateX(-90deg) translateZ(27px)"];
+    return {
+      mainRef: this.mainRef, glRef: this.glRef, navRef: this.navRef, ref0: this.refs[0], ref1: this.refs[1], ref2: this.refs[2], ref3: this.refs[3], ref4: this.refs[4], ref5: this.refs[5], briefRef: this.briefRef, shellBodyRef: this.shellBodyRef, shellInputRef: this.shellInputRef,
+      onMove: this.onMove, curRef: this.curRef, pageCursor: s.fine && !s.reduce ? "none" : "auto", cur: { display: s.fine && !s.reduce ? "block" : "none", size: k.size, ring: k.ring, fill: k.fill, blend: "normal", label: s.curLabel, labelO: s.curLabel ? 1 : 0, labelY: s.curLabel ? "0" : "4px" },
+      navDisplay: tiny ? "none" : "flex", heroCols: narrow ? "minmax(0,1fr)" : "minmax(0,5fr) minmax(0,7fr)", contactCols: narrow ? "minmax(0,1fr)" : "minmax(0,7fr) minmax(0,5fr)", outCols: tiny ? "minmax(0,1fr)" : narrow ? "repeat(2,minmax(0,1fr))" : "repeat(4,minmax(0,1fr))", recCols: tiny ? "repeat(2,minmax(0,1fr))" : narrow ? "repeat(3,minmax(0,1fr))" : "repeat(6,minmax(0,1fr))", twoCol: narrow ? "minmax(0,1fr)" : "minmax(0,1fr) minmax(0,2fr)", methodCols: tiny ? "1fr" : "1fr 1fr", footCols: narrow ? "1fr" : "1fr auto 1fr",
+      tableHead: narrow ? "none" : "grid", cellLabel: narrow ? "block" : "none", workCols: narrow ? "2.5rem minmax(0,1fr)" : "3rem minmax(0,1.1fr) minmax(0,1fr) minmax(0,1fr) minmax(0,.8fr)", workGap: narrow ? ".9rem 1rem" : "1.5rem",
+      hoverRun: this.setCur("RUN", "run"), hoverOpen: this.setCur("OPEN", "open"), hoverProof: this.setCur("PROOF", "proof"), hoverFlip: this.setCur("FLIP", "run"), hoverJump: this.setCur("JUMP", "open"), hoverMail: this.setCur("WRITE", "run"), hoverCube: this.setCur("SCRAMBLE", "cube"), hoverBuddy: this.setCur("POKE", "buddy"), hoverNone: this.hoverNone,
+      headH: scrolled ? "48px" : "60px", progress: (s.progress * 100).toFixed(2) + "%", themeRot: s.theme === "dark" ? "0deg" : "180deg", themeGlyph: s.theme === "dark" ? "◐" : "◑",
+      brandIn: this.brandIn, brandOut: this.brandOut, brandY: s.brandHover ? "-20px" : "0",
+      navItems: navDefs.map(([label, alt, href], i) => ({ label, alt, href, enter: this.navEnter(i), color: s.navHover === i ? "var(--tx)" : "var(--mu)", y: s.navHover === i ? "-30px" : "0" })), navLeave: this.navLeave,
+      pill: s.pill ? { x: s.pill.x + "px", w: s.pill.w + "px", o: s.navHover >= 0 ? 1 : 0 } : { x: "0", w: "0", o: 0 },
+      steps: stepDefs.map(([n, label, href, idx]) => ({ n, label, href, color: idx === s.active ? "var(--tx)" : "var(--fa)", dot: idx === s.active ? "var(--ac)" : "var(--ln)", w: idx === s.active ? "28px" : "14px", labelO: idx === s.active ? 1 : .55 })),
+      railX: scrolled ? "0" : "24px", railO: scrolled && !narrow ? 1 : 0, railEvents: scrolled && !narrow ? "auto" : "none",
+      rv1: rv(1), rv2: rv(2), rv3: rv(3), rv4: rv(4), rv5: rv(5),
+      toggleTheme: this.toggleTheme, brief: s.brief, onBrief: this.onBrief, onBriefKey: this.onBriefKey, runBrief: this.runBrief,
+      presets: this.PRESETS.map(p => ({ short: p.short, pick: () => this.setState({ brief: p.text }, this.runBrief) })),
+      engineLabel: s.engine === "thinking" ? "● decomposing…" : s.engine === "claude" ? "● live model" : s.engine === "local" ? "● preset" : s.engine === "offline" ? "● closest preset (offline)" : "idle", engineColor: s.engine === "thinking" ? "var(--ac)" : s.engine === "idle" ? "var(--fa)" : s.engine === "offline" ? "var(--ac)" : "var(--ok)", noteDisplay: s.engine === "offline" && out ? "block" : "none",
+      outDisplay: out || s.running ? "block" : "none", idleDisplay: out || s.running ? "none" : "block", cols, matches, matchDisplay: matches.length ? "flex" : "none",
+      receipts: this.RECEIPTS.map((r, i) => ({ ...r, open: () => this.setState({ receipt: s.receipt === i ? -1 : i }), bg: s.receipt === i ? "var(--sf2)" : "var(--sf)", numColor: s.receipt === i ? "var(--ac)" : "var(--tx)", cta: s.receipt === i ? "▲ close" : "▼ " + r.cta, o: s.seen[1] ? 1 : 0, y: s.seen[1] ? "0" : "18px", d: (i * 70) + "ms" })),
+      receiptDisplay: rc ? "grid" : "none", receipt: rc || { n: "", title: "", note: "", lines: [] },
+      projects: this.PROJECTS.map((p, i) => ({ ...p, href: p.id === "fifa-soccer-ds" ? "Project Detail.dc.html" : "Work Index.dc.html", enter: () => this.setState({ hover: i, curLabel: "OPEN", curKind: "open" }), leave: () => this.setState({ hover: -1, curLabel: "", curKind: "" }), numColor: s.hover === i ? "var(--ac)" : "var(--fa)", resultColor: s.hover === i ? "var(--ok)" : "var(--tx)", shift: s.hover === i ? "6px" : "0", bar: s.hover === i ? 1 : 0 })),
+      method: [
+        { n: "01", rule: "Boring parts first.", why: "Ingestion, schema, tests. The clever layer only earns its place once the dull one holds.", from: "Stock Data Platform", href: "Work Index.dc.html" },
+        { n: "02", rule: "Make it re-runnable before making it better.", why: "Seven DVC stages from raw video. If a result can't be reproduced it isn't a result.", from: "FIFA Soccer DS", href: "Project Detail.dc.html" },
+        { n: "03", rule: "Argue with the model.", why: "A supporter and an adversary per claim, then a judge. Agreement is not evidence.", from: "CAG Deep Research", href: "Work Index.dc.html" },
+        { n: "04", rule: "Publish the gap.", why: "82.68% in the paper; 74.46% in the committed notebook. Both numbers are on the résumé.", from: "Diabetes stacking, IEEE 2021", href: "About.dc.html" },
+      ].map((m, i) => ({ ...m, enter: () => this.setState({ mhover: i }), leave: () => this.setState({ mhover: -1 }), bg: s.mhover === i ? "var(--sf2)" : "var(--sf)", shift: s.mhover === i ? "-4px" : "0" })),
+      faces: faceT.map((t, f) => ({ t, cells: s.cube ? s.cube[f] : Array(9).fill(this.SOLVED[f]) })), cubeSpeed: s.cubeSpeed, cubeTime: s.cubeTime, cubeNote: s.cubeNote, scramble: this.scramble,
+      log: [
+        { when: "2025", role: "Data Analyst", org: "Elite Hotel Group", what: "ETL in SQL + Python that cut manual prep 40%; occupancy and revenue dashboards; time-series demand forecasts for pricing." },
+        { when: "2022–24", role: "Technical Consultant", org: "Independent", what: "Analytics and pipeline work for small businesses; A/B frameworks; reporting automation." },
+        { when: "2022", role: "AI/ML Intern", org: "Amnex", what: "Credit-fraud ensemble with SMOTE, 94% precision; anomaly dashboards." },
+        { when: "2021", role: "iOS Intern", org: "Cygnus SoftTech", what: "CodeLock: AES-encrypted iOS privacy app on Core Data." },
+        { when: "2019", role: "SWE Intern", org: "Cactus Creatives", what: "First-responder comms platform on Azure microservices; CI/CD cut deploys 60%." },
+      ],
+      openShell: this.openShell, closeShell: this.closeShell, stop: this.stop, onShellInput: this.onShellInput, onShellKey: this.onShellKey,
+      chips: ["help", "brief we have data nobody trusts", "ls", "receipts", "cube", "joke", "theme"].map(c => ({ label: c, run: () => this.exec(c) })),
+      shellScrim: s.shell ? ".4" : "0", shellEvents: s.shell ? "auto" : "none", shellY: s.shell ? "0" : "24px", shellO: s.shell ? 1 : 0, shellLines: s.shellLines, shellInput: s.shellInput,
+      pokeBuddy: this.pokeBuddy, buddyBubble: bubble, eye: s.eye, buddyEye: s.eye === "^" ? "var(--ac)" : "var(--mu)", buddyArms: s.frame ? "-|_-_|-" : "=|_-_|=", buddyLegs: s.frame ? " (| |) " : " /| |\\ ", buddyAnim: s.bounce ? "wiggle .5s ease" : "none",
+    };
+  }
+}
+</script>
+</body>
+</html>
