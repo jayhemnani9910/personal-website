@@ -1,10 +1,8 @@
-import type { CSSProperties } from "react";
 import Link from "next/link";
 import type { Metadata } from "next";
-import { getAllPosts, getProjectSummaries } from "@/lib/content";
+import { getAllPosts, getAllProjects } from "@/lib/content";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
-import { Reveal } from "@/components/motion/Reveal";
 
 export const metadata: Metadata = {
   title: "Writing",
@@ -12,231 +10,131 @@ export const metadata: Metadata = {
   alternates: { canonical: "/blog" },
 };
 
-// Mono UI chrome: section markers, statuses. Uppercase + wide tracking,
-// the `.mono-label` convention shared across the token routes.
-const mono: CSSProperties = {
-  fontFamily: "var(--font-geist-mono)",
-  letterSpacing: ".08em",
-};
+// Mono UI chrome: kickers and card labels. Matches the MONO convention used
+// across the v4 home sections (see Method.tsx, Hero.tsx, Contact.tsx).
+const MONO =
+  "font-[family-name:var(--ff-mono)] text-[length:var(--tr-t-mono-sm)] tracking-[.1em] text-tr-text-faint";
 
-// Mono machine-channel DATA: dates, counts, indices. No forced uppercase and
-// no extra tracking, so natural casing (e.g. "May 23, 2026") survives instead
-// of being shouted into caps. The `.mono-data` half of the same split.
-const monoData: CSSProperties = {
-  fontFamily: "var(--font-geist-mono)",
-};
-
-const serif: CSSProperties = {
-  fontFamily: "var(--font-instrument)",
-};
-
-const SHELL = "px-[clamp(1.25rem,5vw,2rem)]";
-const WRAP = "mx-auto max-w-[1400px]";
-
-const pad = (n: number) => String(n).padStart(2, "0");
-
-const fmtDate = (d: string) =>
-  new Date(d).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" });
-
-// Shared row treatment for the three hairline-ruled <ol> lists below (essays,
-// deep-dives). Hover moves the serif title to ember; the row itself carries
-// `group` so the title span can react to it.
-const rowLinkClass =
-  "group flex flex-col gap-[var(--tr-s-2)] py-[var(--tr-s-5)] no-underline sm:flex-row sm:items-baseline sm:gap-[var(--tr-s-5)]";
-const rowTitleClass =
-  "mb-[var(--tr-s-1)] text-[length:var(--tr-t-h3)] font-light text-tr-text transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] group-hover:text-tr-ember";
-const rowDeckClass = "line-clamp-1 text-[length:var(--tr-t-body)] text-tr-text-mute";
-
-const sectionHeadClass = "mb-[var(--tr-s-6)] flex flex-wrap items-baseline justify-between gap-[var(--tr-s-2)]";
-const sectionLabelClass =
-  "mb-[var(--tr-s-1)] text-[length:var(--tr-t-mono-sm)] uppercase tracking-[.08em] text-tr-text-mute";
-const sectionMetaClass = "text-[length:var(--tr-t-mono-sm)] uppercase text-tr-text-mute";
-const sectionTitleClass = "text-[length:var(--tr-t-h2)] font-light text-tr-text";
-
-const DRAFTS = [
-  { status: "Outlined", title: "Building a five-agent system in ten days, including the parts that did not work." },
-  { status: "Outlined", title: "Reading vLLM end to end: notes from landing a patch in a large codebase." },
-  { status: "Outlined", title: "WebMCP, six months in: what happens when an LLM can read your site directly." },
-  { status: "Thinking", title: "VDOS spectra as a learned feature for protein stability." },
-  { status: "Thinking", title: "What one year of daily Cursor, Claude Code, and Codex actually changes." },
-];
+const fmtDate = (date: string) =>
+  new Date(date).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" });
 
 export default async function WritingPage() {
   const posts = await getAllPosts();
-  const projects = await getProjectSummaries();
+  const projects = await getAllProjects();
 
-  const deepDives = [...projects].sort((a, b) => {
-    if (a.featured !== b.featured) return a.featured ? -1 : 1;
-    return (a.priority ?? 99) - (b.priority ?? 99);
-  });
+  // The right rail of the write-ups section: the first three projects with a
+  // deep dive, in catalogue order, plus a fourth card pointing at the index.
+  const deepDives = projects.filter((p) => p.deepDive).slice(0, 3);
 
   return (
     <main id="main-content" className="bg-tr-bg text-tr-text">
       <SiteHeader />
 
-      {/* ========== HERO ==========
-          Not wrapped in Reveal: this is the LCP surface and must paint on
-          first render (the same rule every hero on the site follows). */}
-      <section className={`${SHELL} pt-[6.5rem] pb-[3rem]`}>
-        <div className={WRAP}>
-          <div className="max-w-[46rem]">
-            <p className="mb-[var(--tr-s-4)] text-[length:var(--tr-t-mono)] uppercase text-tr-text-mute" style={mono}>
-              Department B / The Writing
-            </p>
-
-            <h1
-              className="mb-[var(--tr-s-5)] text-[length:var(--tr-t-display)] font-light leading-[var(--tr-lh-display)] tracking-[-.02em] text-tr-text"
-              style={serif}
-            >
-              Notes from <span className="italic">the bench.</span>
-            </h1>
-
-            <p className="max-w-[52ch] text-[length:var(--tr-t-body)] leading-[var(--tr-lh-body)] text-tr-text-mute" style={serif}>
-              Long-form project post-mortems, an essay on the role I am currently targeting, and a few
-              drafts left in plain sight as a form of public accountability.
-            </p>
-          </div>
+      {/* ========== INTRO ========== */}
+      <section className="mx-auto grid max-w-[1280px] items-end gap-[clamp(2rem,5vw,5rem)] px-[clamp(1rem,4vw,2rem)] pt-[clamp(2.5rem,5vw,4rem)] pb-8 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]">
+        <div>
+          <p className={MONO}>
+            /WRITING · {posts.length} {posts.length === 1 ? "ESSAY" : "ESSAYS"} · {projects.length} WRITE-UPS
+          </p>
+          <h1 className="mt-[var(--tr-s-2)] text-[length:var(--tr-t-display)] leading-[var(--tr-lh-display)] tracking-[-.035em] font-medium">
+            Written down so I can be checked later.
+          </h1>
         </div>
+        <p className="max-w-[56ch] text-tr-text-mute [text-wrap:pretty]">
+          Essays on the Forward Deployed Engineer role, and one on this site. Unflattering details left
+          in. Every project also has a write-up with its decisions and trade-offs, and those live under
+          Work.
+        </p>
       </section>
 
       {/* ========== ESSAYS ========== */}
-      {posts.length > 0 && (
-        <Reveal>
-          <section className={`${SHELL} py-[var(--tr-s-10)]`}>
-            <div className={WRAP}>
-              <div className={sectionHeadClass}>
-                <div>
-                  <p className={sectionLabelClass} style={mono}>
-                    § 01 / essays
-                  </p>
-                  <h2 className={sectionTitleClass} style={serif}>
-                    All essays.
-                  </h2>
-                </div>
-                <p className={sectionMetaClass} style={mono}>
-                  {posts.length} {posts.length === 1 ? "essay" : "essays"}
-                </p>
-              </div>
-
-              <ol className="border-t border-tr-hairline">
-                {posts.map((post) => (
-                  <li key={post.slug} className="border-b border-tr-hairline">
-                    <Link href={`/blog/${post.slug}`} data-cursor="OPEN" className={rowLinkClass}>
-                      <span
-                        className="shrink-0 text-[length:var(--tr-t-mono-sm)] text-tr-text-mute sm:w-[9rem]"
-                        style={monoData}
-                      >
-                        {fmtDate(post.date)}
-                        {post.readingTime ? ` · ${post.readingTime} min` : ""}
-                      </span>
-                      <div className="min-w-0 flex-1">
-                        <h3 className={rowTitleClass} style={serif}>
-                          {post.title}
-                        </h3>
-                        <p className={rowDeckClass} style={serif}>
-                          {post.excerpt || post.summary}
-                        </p>
-                      </div>
-                    </Link>
-                  </li>
-                ))}
-              </ol>
-            </div>
-          </section>
-        </Reveal>
-      )}
-
-      {/* ========== PROJECT DEEP-DIVES ========== */}
-      <Reveal>
-        <section className={`${SHELL} py-[var(--tr-s-10)]`}>
-          <div className={WRAP}>
-            <div className={sectionHeadClass}>
-              <div>
-                <p className={sectionLabelClass} style={mono}>
-                  § 02 / project deep-dives
-                </p>
-                <h2 className={sectionTitleClass} style={serif}>
-                  Project deep-dives.
-                </h2>
-              </div>
-              <p className={sectionMetaClass} style={mono}>
-                {deepDives.length} writeups
-              </p>
-            </div>
-            <p className="mb-[var(--tr-s-6)] max-w-[60ch] text-[length:var(--tr-t-body)] text-tr-text-mute" style={serif}>
-              Each project in the catalogue has a corresponding writeup: challenge, solution, impact,
-              architecture, learnings. The full dossier on each one lives under{" "}
-              <span className="text-[length:var(--tr-t-mono-sm)]" style={monoData}>
-                /projects
-              </span>
-              .
-            </p>
-
-            <ol className="border-t border-tr-hairline">
-              {deepDives.map((p, i) => (
-                <li key={p.id} className="border-b border-tr-hairline">
-                  <Link href={`/projects/${p.id}`} data-cursor="OPEN" className={rowLinkClass}>
-                    <span
-                      className="shrink-0 text-[length:var(--tr-t-mono-sm)] text-tr-text-mute sm:w-[3rem]"
-                      style={monoData}
-                    >
-                      {pad(i + 1)}
+      <section className="mx-auto max-w-[1280px] px-[clamp(1rem,4vw,2rem)]">
+        <ol className="border-t border-tr-hairline">
+          {posts.map((post) => (
+            <li key={post.slug} className="border-b border-tr-hairline">
+              <Link
+                href={`/blog/${post.slug}`}
+                data-cursor="OPEN"
+                className="group grid items-start gap-[clamp(1rem,3vw,2.5rem)] py-[clamp(1.5rem,3vw,2.5rem)] no-underline lg:grid-cols-[8rem_minmax(0,1fr)_5rem]"
+              >
+                <div className="font-[family-name:var(--ff-mono)] leading-relaxed text-tr-text-faint">
+                  <span className="block">{fmtDate(post.date)}</span>
+                  {post.readingTime && (
+                    <span className="block text-tr-text-faint transition-colors group-hover:text-tr-ember">
+                      {post.readingTime} min
                     </span>
-                    <div className="min-w-0 flex-1">
-                      <h3 className={rowTitleClass} style={serif}>
-                        {p.title}.
-                      </h3>
-                      <p className={rowDeckClass} style={serif}>
-                        {p.summary}
-                      </p>
+                  )}
+                </div>
+
+                <div className="min-w-0">
+                  <p className="block text-[length:var(--tr-t-h2)] leading-[var(--tr-lh-h2)] tracking-[-.03em] font-medium transition-transform duration-300 ease-[var(--tr-ease)] group-hover:translate-x-1.5">
+                    {post.title}
+                  </p>
+                  <p className="mt-3 max-w-[66ch] text-tr-text-mute">{post.excerpt ?? post.summary}</p>
+                  {post.tags.length > 0 && (
+                    <div className="mt-3 flex flex-wrap gap-2">
+                      {post.tags.map((tag) => (
+                        <span
+                          key={tag}
+                          className="rounded-[var(--tr-r-sm)] border border-tr-hairline px-1.5 py-0.5 font-[family-name:var(--ff-mono)] text-[length:var(--tr-t-mono-sm)] text-tr-text-mute"
+                        >
+                          {tag}
+                        </span>
+                      ))}
                     </div>
-                  </Link>
-                </li>
-              ))}
-            </ol>
-          </div>
-        </section>
-      </Reveal>
+                  )}
+                </div>
 
-      {/* ========== DRAFTS ========== */}
-      <Reveal>
-        <section className={`${SHELL} py-[var(--tr-s-10)]`}>
-          <div className={WRAP}>
-            <div className={sectionHeadClass}>
-              <div>
-                <p className={sectionLabelClass} style={mono}>
-                  § 03 / in the pipeline
-                </p>
-                <h2 className={sectionTitleClass} style={serif}>
-                  In the pipeline.
-                </h2>
-              </div>
-              <p className={sectionMetaClass} style={mono}>
-                {DRAFTS.length} drafts · not yet published
-              </p>
-            </div>
+                <span className="font-[family-name:var(--ff-mono)] text-tr-text-faint transition-colors group-hover:text-tr-ember lg:text-right">
+                  read ↗
+                </span>
+              </Link>
+            </li>
+          ))}
+        </ol>
+      </section>
 
-            <ul className="border-t border-tr-hairline">
-              {DRAFTS.map((d) => (
-                <li
-                  key={d.title}
-                  className="flex flex-col gap-[var(--tr-s-1)] border-b border-tr-hairline py-[var(--tr-s-4)] sm:flex-row sm:items-baseline sm:gap-[var(--tr-s-5)]"
-                >
-                  <span
-                    className="shrink-0 text-[length:var(--tr-t-mono-sm)] uppercase text-tr-text-faint sm:w-[7rem]"
-                    style={mono}
-                  >
-                    {d.status}
-                  </span>
-                  <span className="text-[length:var(--tr-t-body)] text-tr-text-mute" style={serif}>
-                    {d.title}
-                  </span>
-                </li>
-              ))}
-            </ul>
+      {/* ========== PROJECT WRITE-UPS ========== */}
+      <section className="border-t border-tr-hairline bg-tr-surface-1">
+        <div className="mx-auto grid max-w-[1280px] gap-[clamp(2rem,5vw,5rem)] px-[clamp(1rem,4vw,2rem)] py-[clamp(3rem,6vw,5rem)] lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]">
+          <div>
+            <h2 className="text-[length:var(--tr-t-h2)] leading-[var(--tr-lh-h2)] tracking-[-.025em] font-medium">
+              Project write-ups.
+            </h2>
+            <p className="mt-5 max-w-[40ch] text-tr-text-mute">
+              {projects.length}, each with the same skeleton: arrived as, what I did, what changed,
+              decisions and their cost.
+            </p>
           </div>
-        </section>
-      </Reveal>
+
+          <div className="grid gap-px overflow-hidden rounded-[var(--tr-r-lg)] border border-tr-hairline bg-tr-hairline sm:grid-cols-2">
+            {deepDives.map((p) => (
+              <Link
+                key={p.id}
+                href={`/projects/${p.id}`}
+                data-cursor="OPEN"
+                className="flex flex-col gap-2 bg-tr-surface-1 p-5 no-underline transition-colors hover:bg-tr-surface-2"
+              >
+                <span className={MONO}>DEEP DIVE</span>
+                <span className="font-medium tracking-[-.01em]">{p.title}</span>
+                <span className="line-clamp-2 text-tr-text-mute">{p.summary}</span>
+              </Link>
+            ))}
+
+            <Link
+              href="/projects"
+              data-cursor="OPEN"
+              className="flex flex-col gap-2 bg-tr-surface-1 p-5 no-underline transition-colors hover:bg-tr-surface-2"
+            >
+              <span className={MONO}>ALL {projects.length}</span>
+              <span className="font-medium tracking-[-.01em]">The index</span>
+              <span className="line-clamp-2 text-tr-text-mute">
+                Filter by stack or domain. Student work is labelled, not hidden.
+              </span>
+            </Link>
+          </div>
+        </div>
+      </section>
 
       <SiteFooter />
     </main>
