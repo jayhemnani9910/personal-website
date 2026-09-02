@@ -3,6 +3,7 @@
 - **Status:** Accepted
 - **Date:** 2026-07-16
 - **Commit:** `60cc059` Redesign v3: dark cinematic "TWO READERS" rebuild
+- **Amended by:** [ADR 0015](0015-match-the-design-palette-and-drop-below-aa.md) (the theme-default sentence below; see the note where it appears)
 
 ## Context
 
@@ -45,6 +46,10 @@ Dark is canonical rather than alternative. The dark values live on `:root`, and
 `[data-theme="light"]` overrides them. Light is fully supported and
 contrast-tested, it is just not the origin of the palette. Default follows
 `prefers-color-scheme`; the toggle overrides and persists.
+
+*Amended by ADR 0015, 2026-09-03: the previous sentence no longer holds. The
+default no longer follows the OS preference at all, dark is unconditional, and
+only the toggle changes it.*
 
 The whole system is expressed as `--tr-*` custom properties in
 `src/app/globals.css`, so a page composes tokens instead of choosing values.

@@ -2,6 +2,7 @@
 
 - **Status:** Accepted
 - **Date:** 2026-09-02, promoted the same day
+- **Amended by:** [ADR 0015](0015-match-the-design-palette-and-drop-below-aa.md) (reverts the four lifted colour values below; see the note at the paragraph they were introduced in)
 - **Related:** ADR 0001 (TWO READERS), ADR 0002 (the scoped-override pattern), ADR 0006 (visual baselines), ADR 0007 (one palette), ADR 0008 (performance budget)
 
 ## Context
@@ -66,6 +67,11 @@ Jay's.
 dark faint to `#7E8694`, light faint to `#5F6671`, light accent to `#7A6200`,
 light ok to `#17703F`. Accessibility at 100 is a constraint the design does not
 get to override.
+
+*Amended by ADR 0015, 2026-09-03: this paragraph no longer holds. ADR 0015 ships
+the design's own faint, accent, ok and warn values instead of these lifted ones,
+and accepts 15 sub-AA pairs rather than correcting them. Accessibility at 100 is
+no longer unconditional; see ADR 0015 for what stayed above AA and why.*
 
 ## Consequences
 

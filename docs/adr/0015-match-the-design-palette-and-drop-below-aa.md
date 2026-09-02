@@ -2,7 +2,7 @@
 
 - **Status:** Accepted
 - **Date:** 2026-09-03
-- **Related:** ADR 0001 (TWO READERS; committed the token layer to WCAG AA), ADR 0014 (lifted four of the design's values at the v4 promotion to hold that line)
+- **Supersedes (in part):** [ADR 0001](0001-two-readers-as-the-single-design-concept.md) (the theme default no longer follows `prefers-color-scheme`; dark is unconditional now, only the toggle changes it) and [ADR 0014](0014-adopt-the-v4-home-as-a-scoped-island.md) (the four lifted values this record names are reverted to the design's own, so 0014's "accessibility at 100 is a constraint the design does not get to override" no longer holds)
 
 ## Context
 
