@@ -204,7 +204,7 @@ export function buildReceipts(c: { projectCount: number; toolCount: number }): R
       title: "The archive",
       note: "Computer vision, agentic AI, data platforms, on-device ML, a Go voice tool. Sorted by priority, then id.",
       lines: [
-        { text: "Work index, filterable by domain and stack", meta: "/work", href: "/projects" },
+        { text: "Work index, filterable by domain and stack", meta: "/projects", href: "/projects" },
         {
           text: "Every entry has challenge · solution · impact",
           meta: "content/projects/*.mdx",
