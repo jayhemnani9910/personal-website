@@ -228,12 +228,114 @@ for (const [theme, palette] of [["dark", DARK], ["light", LIGHT]] as const) {
 // NOT added to TEXT_TOKENS above: :root and :root[data-theme="light"] don't
 // declare --tr-ok, so contrastRatio would receive undefined and return NaN.
 
-describe("Two Readers token contrast (WCAG AA, 4.5:1 minimum)", () => {
-  it.each(cases)("$theme: $fg on $bg clears 4.5:1", ({ theme, fg, bg, palette }) => {
+// This used to assert 4.5:1 on every pair. ADR 0015 replaced that rule with the
+// design's exact palette, which puts 12 pairs below AA. Deleting the suite would
+// mean a future edit could drift the palette with nothing noticing, so it now
+// pins the measured ratio of every pair instead. A change of more than 0.05
+// fails, and RECORDED is the list of what we knowingly accepted.
+//
+// To change a colour on purpose: edit globals.css, run this file, and paste the
+// reported ratio in. The point is that it cannot happen by accident.
+const RECORDED: Record<string, number> = {
+  "dark:text on bg": 16.99,
+  "dark:text on surface-1": 16.13,
+  "dark:text on surface-2": 14.97,
+  "dark:text-mute on bg": 7.41,
+  "dark:text-mute on surface-1": 7.04,
+  "dark:text-mute on surface-2": 6.53,
+  "dark:text-faint on bg": 3.39,
+  "dark:text-faint on surface-1": 3.21,
+  "dark:text-faint on surface-2": 2.98,
+  "dark:accent on bg": 13.44,
+  "dark:accent on surface-1": 12.75,
+  "dark:accent on surface-2": 11.84,
+  "dark:ok on bg": 11.98,
+  "dark:ok on surface-1": 11.37,
+  "dark:ok on surface-2": 10.55,
+  "dark:warn on bg": 9.40,
+  "dark:warn on surface-1": 8.92,
+  "dark:warn on surface-2": 8.28,
+  "dark:on-accent on accent": 13.44,
+  "dark:on-accent on accent-hover": 15.00,
+  "light:text on bg": 17.01,
+  "light:text on surface-1": 18.58,
+  "light:text on surface-2": 15.68,
+  "light:text-mute on bg": 5.79,
+  "light:text-mute on surface-1": 6.32,
+  "light:text-mute on surface-2": 5.34,
+  "light:text-faint on bg": 2.90,
+  "light:text-faint on surface-1": 3.17,
+  "light:text-faint on surface-2": 2.68,
+  "light:accent on bg": 2.84,
+  "light:accent on surface-1": 3.10,
+  "light:accent on surface-2": 2.62,
+  "light:ok on bg": 4.00,
+  "light:ok on surface-1": 4.37,
+  "light:ok on surface-2": 3.69,
+  "light:warn on bg": 3.91,
+  "light:warn on surface-1": 4.27,
+  "light:warn on surface-2": 3.60,
+  "light:on-accent on accent": 5.99,
+  "light:on-accent on accent-hover": 7.78,
+};
+
+/** Pairs below AA, listed so the cost is visible in the test output. */
+const BELOW_AA = Object.entries(RECORDED)
+  .filter(([, r]) => r < AA_MIN)
+  .map(([k]) => k)
+  .sort();
+
+describe("Two Readers token contrast (pinned to ADR 0015, not to AA)", () => {
+  it.each(cases)("$theme: $fg on $bg holds its recorded ratio", ({ theme, fg, bg, palette }) => {
+    const key = `${theme}:${fg} on ${bg}`;
+    const recorded = RECORDED[key];
+    expect(recorded, `${key} has no recorded ratio; add one to RECORDED`).toBeDefined();
     const ratio = contrastRatio(palette[fg], palette[bg]);
     expect(
       ratio,
-      `${theme} ${fg} (${palette[fg]}) on ${bg} (${palette[bg]}) measured ${ratio.toFixed(2)}:1, below the ${AA_MIN}:1 AA minimum`,
-    ).toBeGreaterThanOrEqual(AA_MIN);
+      `${key} is ${ratio.toFixed(2)}, recorded ${recorded}. If this change was ` +
+        `deliberate, update RECORDED and say so in ADR 0015.`,
+    ).toBeCloseTo(recorded, 1);
+  });
+
+  // Guards the guard: a typo'd key would make the pin above vacuous for that
+  // pair, because `cases` and RECORDED would simply never meet.
+  it("records a ratio for every case the suite generates", () => {
+    const missing = cases
+      .map(({ theme, fg, bg }) => `${theme}:${fg} on ${bg}`)
+      .filter((k) => RECORDED[k] === undefined);
+    expect(missing, `RECORDED is missing: ${missing.join(", ")}`).toEqual([]);
+    expect(Object.keys(RECORDED)).toHaveLength(cases.length);
+  });
+
+  it("accepts exactly the 15 sub-AA pairs ADR 0015 signed off", () => {
+    expect(BELOW_AA).toEqual([
+      "dark:text-faint on bg",
+      "dark:text-faint on surface-1",
+      "dark:text-faint on surface-2",
+      "light:accent on bg",
+      "light:accent on surface-1",
+      "light:accent on surface-2",
+      "light:ok on bg",
+      "light:ok on surface-1",
+      "light:ok on surface-2",
+      "light:text-faint on bg",
+      "light:text-faint on surface-1",
+      "light:text-faint on surface-2",
+      "light:warn on bg",
+      "light:warn on surface-1",
+      "light:warn on surface-2",
+    ]);
+  });
+
+  // The Run button's label. The palette as a whole dropped below AA; this pair
+  // deliberately did not, and it is the one that would be worst to lose.
+  it("keeps the accent-background label above AA in both themes", () => {
+    for (const theme of ["dark", "light"] as const) {
+      for (const bg of ["accent", "accent-hover"] as const) {
+        const key = `${theme}:on-accent on ${bg}`;
+        expect(RECORDED[key], `${key} must stay >= ${AA_MIN}`).toBeGreaterThanOrEqual(AA_MIN);
+      }
+    }
   });
 });

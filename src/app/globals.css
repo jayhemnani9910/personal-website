@@ -405,7 +405,8 @@ html.lenis {
   --tr-hairline: #23272F;
   --tr-text: #EDEFF3;
   --tr-text-mute: #98A0AC;
-  --tr-text-faint: #7E8694;   /* design #5F6673 is 3.4:1 on bg; lifted to 5.3:1 */
+  /* The design's own value. 3.39:1 on --tr-bg, below AA, accepted in ADR 0015. */
+  --tr-text-faint: #5F6673;
   --tr-accent: #F4D53A;
   --tr-accent-hover: #FFE066;
   --tr-on-accent: #0B0C0F;
@@ -500,40 +501,26 @@ html.lenis {
   --tr-surface-2: #ECECE7;
   --tr-hairline: #DADAD3;
   --tr-text: #111318;
-  --tr-text-mute: #4A5160;    /* design #5A606B; darkened so faint can sit below it */
-  --tr-text-faint: #5F6671;   /* design #8B919B is 3.0:1; now 4.9:1 on surface-2 */
-  --tr-accent: #7A6200;        /* design #B08F00 is 2.9:1 as text; now 5.0:1 */
-  --tr-accent-hover: #5E4B00;
-  --tr-on-accent: #FFFFFF;     /* white on #7A6200 is 5.9:1 */
-  --tr-ok: #17703F;           /* design #1E8A50 is 4.1:1; now 5.2:1 */
-  --tr-warn: #8A4A08;         /* design #B8651B is 3.6:1 on surface-2; now 5.8:1 */
-  --tr-accent-soft: rgba(122, 98, 0, .14);
+  --tr-text-mute: #5A606B;
+  --tr-text-faint: #8B919B;
+  --tr-accent: #B08F00;
+  --tr-accent-hover: #C9A400;
+  /* Moves with the accent, and it is not optional. The current #FFFFFF was
+     chosen for the darker #7A6200; on #B08F00 white measures 3.10:1 and on the
+     hover fill 2.39:1, and this is the Run button's label. The design's
+     near-black gives 5.99:1 and 7.78:1, so the site's most prominent text pair
+     stays above AA even though the palette as a whole no longer does. */
+  --tr-on-accent: #111318;
+  --tr-ok: #1E8A50;
+  --tr-warn: #B8651B;
+  --tr-accent-soft: rgba(176, 143, 0, .14);
   --tr-shadow-card: 0 30px 80px -50px rgba(0, 0, 0, .35);
   --tr-shadow-modal: 0 40px 100px -30px rgba(0, 0, 0, .3);
 }
 
-/* No-JS fallback: layout.tsx's inline script sets data-theme before
-   paint whenever JS runs, so this block only fires for a visitor with
-   JS disabled AND a light system preference. */
-@media (prefers-color-scheme: light) {
-  :root:not([data-theme]) {
-    --tr-bg: #F5F5F2;
-    --tr-surface-1: #FFFFFF;
-    --tr-surface-2: #ECECE7;
-    --tr-hairline: #DADAD3;
-    --tr-text: #111318;
-    --tr-text-mute: #4A5160;
-    --tr-text-faint: #5F6671;
-    --tr-accent: #7A6200;
-    --tr-accent-hover: #5E4B00;
-    --tr-on-accent: #FFFFFF;
-    --tr-ok: #17703F;
-    --tr-warn: #8A4A08;
-    --tr-accent-soft: rgba(122, 98, 0, .14);
-    --tr-shadow-card: 0 30px 80px -50px rgba(0, 0, 0, .35);
-    --tr-shadow-modal: 0 40px 100px -30px rgba(0, 0, 0, .3);
-  }
-}
+/* No `prefers-color-scheme` rule, deliberately. The design is dark-canonical:
+   `:root` is dark for everyone and light is reached only through the toggle,
+   which persists in localStorage. See ADR 0015. */
 
 /* The v4 palette and type scale now live at :root above (ADR 0014's promotion
    step), so the scope class this concept shipped behind is gone. These are the
