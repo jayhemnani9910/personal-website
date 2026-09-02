@@ -9,6 +9,8 @@ import type { Preset } from "./fdeData";
 import { PRESETS, PHASES } from "./fdeData";
 import { FdeSimulation } from "./FdeSimulation";
 
+const MONO = "font-[family-name:var(--ff-mono)]";
+
 interface SimState {
   active: boolean;
   brief: string;
@@ -171,27 +173,29 @@ export function FdeConsole() {
     setSimState({ active: false, brief: '', payload: null, source: null, streaming: false });
 
   return (
-    <div className="fde">
+    <div>
       {/* Brief card */}
-      <div className="fde-brief-card">
-        <div className="fde-brief-head">
-          <div className="fde-term-dots" aria-hidden="true">
-            <span className="fde-term-dot" />
-            <span className="fde-term-dot" />
-            <span className="fde-term-dot" />
+      <div className="overflow-hidden rounded-[var(--tr-r-md)] border border-tr-hairline bg-tr-surface-1">
+        <div className={`flex items-center justify-between gap-4 border-b border-tr-hairline bg-tr-surface-2 px-5 py-3 ${MONO} text-[length:var(--tr-t-mono-sm)] tracking-[.04em] text-tr-text-mute`}>
+          <div className="flex items-center gap-3">
+            <div className="flex gap-1.5" aria-hidden="true">
+              <span className="h-[9px] w-[9px] rounded-full bg-tr-hairline" />
+              <span className="h-[9px] w-[9px] rounded-full bg-tr-hairline" />
+              <span className="h-[9px] w-[9px] rounded-full bg-tr-hairline" />
+            </div>
+            <span>fde.sim: awaiting customer brief</span>
           </div>
-          <span>fde.sim: awaiting customer brief</span>
-          <span className="fde-ready-badge">● READY</span>
+          <span className="text-tr-ember">● READY</span>
         </div>
 
-        <div className="fde-brief-body">
-          <div className="fde-brief-prompt">
-            <span className="fde-prompt-arrow" aria-hidden="true">❯ </span>
+        <div className="px-6 py-7 sm:px-8">
+          <div className={`mb-3.5 ${MONO} text-[length:var(--tr-t-mono-sm)] tracking-[.04em] text-tr-text-mute`}>
+            <span className="text-tr-ember" aria-hidden="true">❯ </span>
             tell me what you want built. ambiguity is fine, that&apos;s the point.
           </div>
 
           <textarea
-            className="fde-brief-input"
+            className="min-h-[84px] w-full resize-none border-0 bg-transparent py-1 text-[length:var(--tr-t-h3)] leading-[var(--tr-lh-h3)] tracking-[-.005em] text-tr-text outline-none placeholder:italic placeholder:text-tr-text-faint"
             value={briefInput}
             onChange={e => setBriefInput(e.target.value)}
             onKeyDown={e => {
@@ -202,13 +206,15 @@ export function FdeConsole() {
             aria-label="Enter your problem brief"
           />
 
-          <div className="fde-brief-foot">
-            <div className="fde-presets">
-              <span className="fde-presets-label" aria-hidden="true">or start with:</span>
+          <div className="mt-4 flex flex-wrap items-center justify-between gap-4 border-t border-dashed border-tr-hairline pt-3.5">
+            <div className="flex flex-wrap items-center gap-1.5">
+              <span className={`mr-2 ${MONO} text-[length:var(--tr-t-mono-sm)] tracking-[.04em] text-tr-text-mute`} aria-hidden="true">
+                or start with:
+              </span>
               {PRESETS.map(p => (
                 <button
                   key={p.id}
-                  className="fde-preset-btn"
+                  className={`whitespace-nowrap rounded-full border border-tr-hairline px-2.5 py-1 ${MONO} text-[length:var(--tr-t-mono-sm)] text-tr-text transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] hover:border-tr-ember hover:text-tr-ember`}
                   onClick={() => startPreset(p)}
                   type="button"
                 >
@@ -217,7 +223,7 @@ export function FdeConsole() {
               ))}
             </div>
             <button
-              className="fde-submit"
+              className={`whitespace-nowrap rounded-[var(--tr-r-sm)] bg-tr-ember px-4 py-2.5 ${MONO} text-[length:var(--tr-t-mono-sm)] font-semibold uppercase tracking-[.04em] text-tr-on-ember transition-opacity duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] disabled:cursor-not-allowed disabled:opacity-40`}
               onClick={startCustom}
               disabled={!briefInput.trim() || loading}
               type="button"
@@ -227,35 +233,46 @@ export function FdeConsole() {
           </div>
 
           {/* Phase strip preview */}
-          <div className="fde-phasestrip" aria-label="Simulation phases overview">
-            <span className="fde-phasestrip-label">flow:</span>
+          <div
+            className={`mt-4 flex flex-wrap items-center gap-1.5 ${MONO} text-[length:var(--tr-t-mono-sm)] tracking-[.04em] text-tr-text-mute`}
+            aria-label="Simulation phases overview"
+          >
+            <span className="mr-1.5 text-tr-text-faint">flow:</span>
             {PHASES.map((p, i) => (
-              <span key={p.key} className="fde-phasestrip-group">
-                <span className="fde-phasestrip-step">
-                  <span className="fde-phasestrip-num">{i + 1}</span>
+              <span key={p.key} className="inline-flex items-center gap-1.5">
+                <span className="inline-flex items-center gap-1.5">
+                  <span className="inline-flex h-[18px] w-[18px] items-center justify-center rounded-full border border-tr-hairline bg-tr-hairline text-[10px] text-tr-text-mute">
+                    {i + 1}
+                  </span>
                   {p.title.toLowerCase()}
                 </span>
                 {i < PHASES.length - 1 && (
-                  <span className="fde-phasestrip-arr" aria-hidden="true">→</span>
+                  <span className="mx-0.5 text-tr-text-faint" aria-hidden="true">→</span>
                 )}
               </span>
             ))}
           </div>
 
           {loading && (
-            <div className="fde-loading" aria-live="polite">
-              <span className="fde-spinner" aria-hidden="true" />
-              <span>routing your brief through the agent<span className="fde-dots" aria-hidden="true" /></span>
+            <div className={`flex items-center gap-2.5 py-6 ${MONO} text-[length:var(--tr-t-mono)] text-tr-text-mute`} aria-live="polite">
+              <span className="h-4 w-4 shrink-0 animate-spin rounded-full border-2 border-tr-hairline border-t-tr-ember" aria-hidden="true" />
+              <span>
+                routing your brief through the agent
+                <span className="animate-pulse" aria-hidden="true">...</span>
+              </span>
             </div>
           )}
 
           {error && (
-            <div className="fde-error-block" role="alert">
-              <span className="fde-error-label">ERROR · </span>
+            <div
+              className={`mt-4 border-l-2 border-tr-ember bg-[color-mix(in_srgb,var(--tr-ember)_12%,transparent)] px-3.5 py-3 ${MONO} text-[length:var(--tr-t-mono)] leading-[var(--tr-lh-body)] text-tr-text`}
+              role="alert"
+            >
+              <span className="tracking-[.1em] text-tr-ember">ERROR · </span>
               {error}
-              <div className="fde-error-actions">
+              <div className="mt-2.5">
                 <button
-                  className="fde-preset-btn"
+                  className={`whitespace-nowrap rounded-full border border-tr-hairline px-2.5 py-1 ${MONO} text-[length:var(--tr-t-mono-sm)] text-tr-text transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] hover:border-tr-ember hover:text-tr-ember`}
                   type="button"
                   onClick={() => startPreset(closestPreset(briefInput))}
                 >
@@ -269,7 +286,7 @@ export function FdeConsole() {
 
       {/* Simulation panel */}
       {simState.active && simState.payload && (
-        <div ref={simRef} style={{ marginTop: 24 }}>
+        <div ref={simRef} className="mt-6">
           <FdeSimulation
             payload={simState.payload}
             brief={simState.brief}

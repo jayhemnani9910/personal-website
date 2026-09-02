@@ -19,6 +19,8 @@ interface Props {
   streaming?: boolean;
 }
 
+const MONO = "font-[family-name:var(--ff-mono)]";
+
 const SECTION_KEYS: (keyof Preset)[] = ['scope', 'decomposition', 'architecture', 'sprint', 'risks'];
 
 // Which payload key each phase tab needs before it has anything to show.
@@ -83,28 +85,40 @@ export function FdeSimulation({ payload, brief, source, onExit, streaming = fals
   const prev = () => setPhase(p => Math.max(p - 1, 0));
 
   return (
-    <div className="fde fde-sim">
+    <div className="overflow-hidden rounded-[var(--tr-r-md)] border border-tr-hairline bg-tr-surface-1">
       {/* Head */}
-      <div className="fde-sim-head">
-        <button className="fde-sim-exit" onClick={onExit} type="button">
+      <div className="grid grid-cols-[auto_1fr_auto] items-center gap-4 border-b border-tr-hairline bg-tr-surface-2 px-5 py-3.5">
+        <button
+          className={`whitespace-nowrap rounded-[var(--tr-r-sm)] border border-tr-hairline px-2.5 py-1.5 ${MONO} text-[length:var(--tr-t-mono-sm)] tracking-[.06em] text-tr-text transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] hover:border-tr-ember hover:text-tr-ember`}
+          onClick={onExit}
+          type="button"
+        >
           × EXIT SIM
         </button>
-        <div className="fde-sim-brief" title={brief}>{brief}</div>
-        <div className="fde-sim-status">
+        <div className="min-w-0 overflow-hidden text-ellipsis whitespace-nowrap text-[length:var(--tr-t-h3)] italic text-tr-text" title={brief}>
+          &ldquo;{brief}&rdquo;
+        </div>
+        <div className={`whitespace-nowrap ${MONO} text-[length:var(--tr-t-mono-sm)] tracking-[.1em] text-tr-text-mute`}>
           {source === 'live' ? '* LIVE · ' : '◆ DEMO · '}
           PHASE {PHASES[phase].num} · {PHASES[phase].status.toUpperCase()}
         </div>
       </div>
 
       {/* Phase tabs */}
-      <div className="fde-phasetabs" role="tablist" aria-label="Simulation phases">
+      <div className="grid grid-cols-3 border-b border-tr-hairline bg-tr-surface-1 sm:grid-cols-6" role="tablist" aria-label="Simulation phases">
         {PHASES.map((p, i) => {
           const ready = sectionReady(payload, p.key);
           const state = i === phase ? 'active' : (i < phase ? 'done' : 'pending');
           return (
             <button
               key={p.key}
-              className="fde-phasetab"
+              className={`border-b-2 border-r border-r-tr-hairline px-3.5 py-3.5 text-left ${MONO} text-[length:var(--tr-t-mono-sm)] tracking-[.06em] transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] last:border-r-0 disabled:cursor-not-allowed ${
+                state === 'active'
+                  ? 'border-b-tr-ember bg-tr-surface-2 text-tr-ember'
+                  : state === 'done'
+                    ? 'border-b-transparent text-tr-text hover:bg-tr-surface-2'
+                    : 'border-b-transparent text-tr-text-faint hover:enabled:bg-tr-surface-2 hover:enabled:text-tr-text'
+              }`}
               data-state={state}
               role="tab"
               aria-selected={i === phase}
@@ -117,37 +131,37 @@ export function FdeSimulation({ payload, brief, source, onExit, streaming = fals
               aria-disabled={!ready}
               title={ready ? undefined : 'still generating'}
             >
-              <span className="fde-tab-num">{state === 'done' && ready ? '✓ ' : ''}{p.num}</span>
-              <span className="fde-tab-title">{p.title}</span>
+              <span>{state === 'done' && ready ? '✓ ' : ''}{p.num}</span>
+              <span className="mt-0.5 block text-[length:var(--tr-t-small)] font-medium text-tr-text">{p.title}</span>
             </button>
           );
         })}
       </div>
 
       {/* Body */}
-      <div className="fde-sim-body">
+      <div className="grid min-h-[520px] grid-cols-1 lg:grid-cols-[1fr_320px]">
         <div
-          className="fde-sim-main"
+          className="min-w-0 overflow-x-hidden px-5 py-6 sm:px-9 sm:py-8"
           id={`fde-panel-${currentKey}`}
           role="tabpanel"
           aria-label={`Phase ${PHASES[phase].title}`}
         >
           <PhaseContent phase={currentKey} payload={payload} streaming={streaming} />
 
-          <div className="fde-phase-nav">
+          <div className="mt-8 flex flex-wrap items-center justify-between gap-3.5 border-t border-tr-hairline pt-5">
             <button
-              className="fde-navbtn"
+              className={`rounded-[var(--tr-r-sm)] border border-tr-hairline bg-tr-surface-2 px-4 py-2 ${MONO} text-[length:var(--tr-t-mono-sm)] tracking-[.04em] text-tr-text transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] hover:enabled:border-tr-ember disabled:cursor-not-allowed disabled:opacity-40`}
               onClick={prev}
               disabled={phase === 0}
               type="button"
             >
               &larr; previous
             </button>
-            <span className="fde-nav-count">
+            <span className={`${MONO} text-[length:var(--tr-t-mono-sm)] tracking-[.08em] text-tr-text-faint`}>
               {phase + 1} / {PHASES.length}
             </span>
             <button
-              className="fde-navbtn fde-navbtn-primary"
+              className={`rounded-[var(--tr-r-sm)] bg-tr-ember px-4 py-2 ${MONO} text-[length:var(--tr-t-mono-sm)] font-semibold tracking-[.04em] text-tr-on-ember transition-opacity duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] disabled:cursor-not-allowed disabled:opacity-40`}
               onClick={next}
               disabled={phase === PHASES.length - 1 || !nextReady}
               type="button"
@@ -157,27 +171,27 @@ export function FdeSimulation({ payload, brief, source, onExit, streaming = fals
           </div>
         </div>
 
-        <aside className="fde-sim-side" ref={sideRef}>
-          <h3 className="fde-side-label">{"// Jay, narrating"}</h3>
+        <aside
+          className={`border-t border-tr-hairline bg-tr-surface-2 px-5 py-6 ${MONO} text-[length:var(--tr-t-mono-sm)] leading-[var(--tr-lh-body)] text-tr-text lg:border-l lg:border-t-0 lg:px-6 lg:py-7`}
+          ref={sideRef}
+        >
+          <h3 className="mb-3.5 text-[length:var(--tr-t-mono-sm)] uppercase tracking-[.18em] text-tr-ember">{"// Jay, narrating"}</h3>
           {narration.slice(0, narrationVisible).map((n, i) => (
-            <div
-              key={`${phase}-${i}`}
-              className={`fde-narration-line${n.who === 'sys' ? ' fde-narration-sys' : ''}`}
-            >
-              <span className="fde-narration-who">{n.who === 'jay' ? '$ jay' : '~ sys'}</span>
+            <div key={`${phase}-${i}`} className={`mb-2.5 ${n.who === 'sys' ? 'text-tr-text-mute' : ''}`}>
+              <span className={`mr-1.5 ${n.who === 'sys' ? 'text-tr-text-faint' : 'text-tr-ember'}`}>{n.who === 'jay' ? '$ jay' : '~ sys'}</span>
               <span>{n.text}</span>
             </div>
           ))}
 
-          <hr className="fde-rule" style={{ margin: '24px 0 16px' }} />
+          <hr className="my-6 border-0 border-t border-tr-hairline" />
 
-          <h3 className="fde-side-label">{"// Brief"}</h3>
-          <div className="fde-side-brief">&quot;{brief}&quot;</div>
+          <h3 className="mb-3.5 text-[length:var(--tr-t-mono-sm)] uppercase tracking-[.18em] text-tr-ember">{"// Brief"}</h3>
+          <div className="italic text-tr-text-mute">&quot;{brief}&quot;</div>
 
-          <hr className="fde-rule" style={{ margin: '24px 0 16px' }} />
+          <hr className="my-6 border-0 border-t border-tr-hairline" />
 
-          <h3 className="fde-side-label">{"// Stack"}</h3>
-          <div className="fde-side-stack">
+          <h3 className="mb-3.5 text-[length:var(--tr-t-mono-sm)] uppercase tracking-[.18em] text-tr-ember">{"// Stack"}</h3>
+          <div className="text-tr-text-mute">
             LangGraph · MCP · RAG<br />
             Python · FastAPI · Node<br />
             evals · postgres · redis<br />
@@ -191,12 +205,19 @@ export function FdeSimulation({ payload, brief, source, onExit, streaming = fals
 
 // ─── Phase content ────────────────────────────────────────────────────────────
 
+const PHASE_TITLE = `mb-2 max-w-[22ch] text-[length:var(--tr-t-h2)] leading-[var(--tr-lh-h2)] tracking-[-.01em] font-medium text-tr-text`;
+const PHASE_SUB = `mb-7 ${MONO} text-[length:var(--tr-t-mono-sm)] tracking-[.04em] text-tr-text-mute`;
+const EM = "italic text-tr-ember";
+
 /** Shown in the panel for a section that has not arrived yet. */
 function AwaitingSection({ title }: { title: string }) {
   return (
-    <div className="fde-loading" aria-live="polite">
-      <span className="fde-spinner" aria-hidden="true" />
-      <span>generating {title.toLowerCase()}<span className="fde-dots" aria-hidden="true" /></span>
+    <div className={`flex items-center gap-2.5 py-6 ${MONO} text-[length:var(--tr-t-mono)] text-tr-text-mute`} aria-live="polite">
+      <span className="h-4 w-4 shrink-0 animate-spin rounded-full border-2 border-tr-hairline border-t-tr-ember" aria-hidden="true" />
+      <span>
+        generating {title.toLowerCase()}
+        <span className="animate-pulse" aria-hidden="true">...</span>
+      </span>
     </div>
   );
 }
@@ -218,20 +239,19 @@ function PhaseContent({
     case 'scope':
       return (
         <div>
-          <h2 className="fde-phase-title">
-            First: <span className="fde-em">three questions</span> I need answered.
+          <h2 className={PHASE_TITLE}>
+            First: <span className={EM}>three questions</span> I need answered.
           </h2>
-          <div className="fde-phase-sub">{"// scoping. before any building, before any architecture, before anything."}</div>
+          <div className={PHASE_SUB}>{"// scoping. before any building, before any architecture, before anything."}</div>
           {(payload.scope ?? []).map((s, i) => (
-            <div
-              key={i}
-              className="fde-scope-q"
-              style={{ animationDelay: `${i * 0.18}s` }}
-            >
-              <div className="fde-qnum">Q{i + 1}</div>
+            <div key={i} className="grid grid-cols-[2.5rem_1fr] gap-4 border-t border-tr-hairline py-[18px] last:border-b">
+              <div className="pt-1 text-[length:var(--tr-t-stat)] italic leading-[var(--tr-lh-numeral)] text-tr-ember">Q{i + 1}</div>
               <div>
-                <div className="fde-q">{s.q}</div>
-                <div className="fde-why">{s.why}</div>
+                <div className="max-w-[50ch] text-[length:var(--tr-t-h3)] leading-[var(--tr-lh-h3)] text-tr-text">{s.q}</div>
+                <div className={`mt-1.5 flex gap-1 ${MONO} text-[length:var(--tr-t-mono-sm)] tracking-[.04em] text-tr-text-mute`}>
+                  <span className="text-tr-ember" aria-hidden="true">{"//"}</span>
+                  <span>{s.why}</span>
+                </div>
               </div>
             </div>
           ))}
@@ -241,21 +261,20 @@ function PhaseContent({
     case 'decomp':
       return (
         <div>
-          <h2 className="fde-phase-title">
-            The <span className="fde-em">subproblems</span>.
+          <h2 className={PHASE_TITLE}>
+            The <span className={EM}>subproblems</span>.
           </h2>
-          <div className="fde-phase-sub">{"// each one has a clean boundary. each one is shippable on its own."}</div>
-          <div className="fde-decomp">
-            {(payload.decomposition ?? []).map((d, i) => (
+          <div className={PHASE_SUB}>{"// each one has a clean boundary. each one is shippable on its own."}</div>
+          <div className="grid gap-2.5">
+            {(payload.decomposition ?? []).map((d) => (
               <div
                 key={d.id}
-                className="fde-decomp-row"
-                style={{ animationDelay: `${i * 0.12}s` }}
+                className="grid grid-cols-[3.75rem_1fr] items-start gap-[18px] rounded-[var(--tr-r-sm)] border-l-2 border-tr-ember bg-tr-surface-2 px-4 py-3.5"
               >
-                <div className="fde-decomp-id">{d.id}</div>
+                <div className={`pt-0.5 ${MONO} text-[length:var(--tr-t-mono-sm)] tracking-[.08em] text-tr-ember`}>{d.id}</div>
                 <div>
-                  <div className="fde-decomp-title">{d.title}</div>
-                  <div className="fde-decomp-why">{d.why}</div>
+                  <div className="mb-1 font-medium text-tr-text">{d.title}</div>
+                  <div className={`${MONO} text-[length:var(--tr-t-mono-sm)] leading-[var(--tr-lh-body)] text-tr-text-mute`}>{d.why}</div>
                 </div>
               </div>
             ))}
@@ -266,10 +285,10 @@ function PhaseContent({
     case 'arch':
       return (
         <div>
-          <h2 className="fde-phase-title">
-            How the <span className="fde-em">system</span> wants to be drawn.
+          <h2 className={PHASE_TITLE}>
+            How the <span className={EM}>system</span> wants to be drawn.
           </h2>
-          <div className="fde-phase-sub">{"// services · data flows · failure boundaries · where humans are in the loop."}</div>
+          <div className={PHASE_SUB}>{"// services · data flows · failure boundaries · where humans are in the loop."}</div>
           <FdeArchDiagram architecture={payload.architecture} />
         </div>
       );
@@ -277,21 +296,23 @@ function PhaseContent({
     case 'plan':
       return (
         <div>
-          <h2 className="fde-phase-title">
-            <span className="fde-em">Fourteen days</span> to something working.
+          <h2 className={PHASE_TITLE}>
+            <span className={EM}>Fourteen days</span> to something working.
           </h2>
-          <div className="fde-phase-sub">{"// real deliverables. each row is something a human can observe was done."}</div>
-          <div className="fde-sprint-grid">
+          <div className={PHASE_SUB}>{"// real deliverables. each row is something a human can observe was done."}</div>
+          <div className="grid gap-3">
             {(payload.sprint ?? []).map((s, i) => (
               <div
                 key={i}
-                className="fde-sprint-row"
-                style={{ animationDelay: `${i * 0.1}s` }}
+                className="grid grid-cols-[6.25rem_1fr] items-start gap-[18px] rounded-[var(--tr-r-sm)] border border-tr-hairline bg-tr-surface-2 px-[18px] py-4"
               >
-                <div className="fde-sprint-day">{s.day}</div>
+                <div className={`pt-0.5 ${MONO} text-[length:var(--tr-t-mono-sm)] tracking-[.08em] text-tr-ember`}>{s.day}</div>
                 <div>
-                  <div className="fde-sprint-title">{s.title}</div>
-                  <div className="fde-sprint-deliv">{s.deliv}</div>
+                  <div className="mb-1.5 font-medium text-tr-text">{s.title}</div>
+                  <div className={`${MONO} text-[length:var(--tr-t-mono-sm)] leading-[var(--tr-lh-body)] text-tr-text-mute`}>
+                    <span className="text-tr-ember">deliverable: </span>
+                    {s.deliv}
+                  </div>
                 </div>
               </div>
             ))}
@@ -302,24 +323,23 @@ function PhaseContent({
     case 'risks':
       return (
         <div>
-          <h2 className="fde-phase-title">
-            What I&apos;m <span className="fde-em">honest about</span>, on day one.
+          <h2 className={PHASE_TITLE}>
+            What I&apos;m <span className={EM}>honest about</span>, on day one.
           </h2>
-          <div className="fde-phase-sub">{"// the failure modes I would name in the SOW. specific to your problem."}</div>
-          <div className="fde-risk-grid">
+          <div className={PHASE_SUB}>{"// the failure modes I would name in the SOW. specific to your problem."}</div>
+          <div className="grid gap-3">
             {(payload.risks ?? []).map((r, i) => (
               <div
                 key={i}
-                className="fde-risk-row"
-                style={{ animationDelay: `${i * 0.12}s` }}
+                className="grid grid-cols-1 gap-[22px] rounded-[var(--tr-r-sm)] border border-tr-hairline border-l-2 border-l-tr-ember bg-tr-surface-2 px-[18px] py-4 sm:grid-cols-2"
               >
-                <div className="fde-risk-col">
-                  <h5>Risk</h5>
-                  <p>{r.risk}</p>
+                <div>
+                  <h5 className={`mb-2 ${MONO} text-[length:var(--tr-t-mono-sm)] uppercase tracking-[.16em] text-tr-ember`}>Risk</h5>
+                  <p className="text-tr-text">{r.risk}</p>
                 </div>
-                <div className="fde-risk-col fde-risk-mit">
-                  <h5>Mitigation</h5>
-                  <p>{r.mitigation}</p>
+                <div>
+                  <h5 className={`mb-2 ${MONO} text-[length:var(--tr-t-mono-sm)] uppercase tracking-[.16em] text-tr-ember`}>Mitigation</h5>
+                  <p className="text-tr-text">{r.mitigation}</p>
                 </div>
               </div>
             ))}
@@ -330,30 +350,26 @@ function PhaseContent({
     case 'receipts':
       return (
         <div>
-          <h2 className="fde-phase-title">
-            And every phase above: <span className="fde-em">I&apos;ve done that work</span>.
+          <h2 className={PHASE_TITLE}>
+            And every phase above: <span className={EM}>I&apos;ve done that work</span>.
           </h2>
-          <div className="fde-phase-sub">{"// brief -> receipts. each phase mapped to evidence in production code, shipped systems, or current work."}</div>
-          <div className="fde-receipts">
+          <div className={PHASE_SUB}>{"// brief -> receipts. each phase mapped to evidence in production code, shipped systems, or current work."}</div>
+          <div className="grid grid-cols-1 gap-3.5 sm:grid-cols-2">
             {RECEIPTS.map((r, i) => (
-              <div
-                key={i}
-                className="fde-receipt"
-                style={{ animationDelay: `${i * 0.12}s` }}
-              >
-                <div className="fde-receipt-phase">{r.phase}</div>
-                <div className="fde-receipt-project">{r.project}</div>
-                <h3 className="fde-receipt-title">{r.title}</h3>
-                <p className="fde-receipt-desc">{r.desc}</p>
+              <div key={i} className="rounded-[var(--tr-r-sm)] border border-tr-hairline bg-tr-surface-2 px-5 py-[18px]">
+                <div className={`mb-2.5 ${MONO} text-[length:var(--tr-t-mono-sm)] tracking-[.14em] text-tr-ember`}>{r.phase}</div>
+                <div className={`mb-2 ${MONO} text-[length:var(--tr-t-mono-sm)] tracking-[.06em] text-tr-ember`}>{r.project}</div>
+                <h3 className="mb-2 text-[length:var(--tr-t-h3)] leading-[var(--tr-lh-h3)] font-medium text-tr-text">{r.title}</h3>
+                <p className="mb-3 leading-[var(--tr-lh-prose)] text-tr-text">{r.desc}</p>
                 {r.note && (
-                  <div className="fde-receipt-note">
-                    <span className="fde-receipt-note-label">note / </span>
+                  <div className={`mb-3 border-l-2 border-tr-ember pl-2.5 ${MONO} text-[length:var(--tr-t-mono-sm)] text-tr-text-faint`}>
+                    <span className="tracking-[.1em] text-tr-ember">note / </span>
                     {r.note}
                   </div>
                 )}
                 {r.link && (
                   <a
-                    className="fde-receipt-link"
+                    className={`${MONO} border-b border-dashed border-tr-hairline pb-px text-[length:var(--tr-t-mono-sm)] text-tr-text no-underline transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] hover:border-tr-ember hover:text-tr-ember`}
                     href={r.link.href}
                     target="_blank"
                     rel="noreferrer"
@@ -365,13 +381,13 @@ function PhaseContent({
             ))}
           </div>
 
-          <div className="fde-receipts-cta">
+          <div className="mt-9 rounded-[var(--tr-r-md)] border border-dashed border-tr-ember bg-tr-surface-2 px-7 py-6 text-[length:var(--tr-t-h3)] leading-[var(--tr-lh-h3)] italic text-tr-text">
             You just experienced what a 30-minute scoping call with me feels like, on your real problem.
             <br />
-            <span className="fde-receipts-cta-accent">If that landed → </span>
+            <span className="text-tr-ember">If that landed → </span>
             <a
               href="mailto:jayhemnani992000@gmail.com"
-              className="fde-receipts-cta-link"
+              className="not-italic text-tr-ember underline decoration-current underline-offset-2"
             >
               jayhemnani992000@gmail.com
             </a>

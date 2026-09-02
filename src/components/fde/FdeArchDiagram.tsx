@@ -82,7 +82,11 @@ export function FdeArchDiagram({ architecture }: Props) {
   const byId = Object.fromEntries(comps.map(c => [c.id, c]));
 
   return (
-    <div className="fde-arch-canvas" role="img" aria-label="System architecture diagram">
+    <div
+      className="fde-arch-canvas relative overflow-x-auto rounded-[var(--tr-r-sm)] border border-tr-hairline bg-tr-surface-2 p-5"
+      role="img"
+      aria-label="System architecture diagram"
+    >
       <svg
         viewBox={`0 0 ${maxX} ${maxY}`}
         width="100%"
@@ -240,13 +244,16 @@ export function FdeArchDiagram({ architecture }: Props) {
         `}</style>
       </svg>
 
-      <div className="fde-arch-legend" aria-label="Architecture legend">
-        <span><span className="fde-swatch" style={{ borderColor: 'var(--tr-ember)' }} />UI surface</span>
-        <span><span className="fde-swatch" style={{ borderColor: 'var(--tr-text)' }} />Agent / model</span>
-        <span><span className="fde-swatch" style={{ borderColor: 'var(--tr-text-mute)' }} />Service</span>
-        <span><span className="fde-swatch" style={{ borderColor: 'var(--tr-text-mute)' }} />Data store</span>
-        <span><span className="fde-swatch" style={{ borderColor: 'var(--tr-text-faint)' }} />External system</span>
-        <span style={{ marginLeft: 'auto' }}>-- dashed = retrieve / feedback</span>
+      <div
+        className="mt-3.5 flex flex-wrap gap-3.5 font-[family-name:var(--ff-mono)] text-[length:var(--tr-t-mono-sm)] tracking-[.06em] text-tr-text-mute"
+        aria-label="Architecture legend"
+      >
+        <span><span className="mr-1.5 inline-block h-2.5 w-2.5 border align-middle" style={{ borderColor: 'var(--tr-ember)' }} />UI surface</span>
+        <span><span className="mr-1.5 inline-block h-2.5 w-2.5 border align-middle" style={{ borderColor: 'var(--tr-text)' }} />Agent / model</span>
+        <span><span className="mr-1.5 inline-block h-2.5 w-2.5 border align-middle" style={{ borderColor: 'var(--tr-text-mute)' }} />Service</span>
+        <span><span className="mr-1.5 inline-block h-2.5 w-2.5 border align-middle" style={{ borderColor: 'var(--tr-text-mute)' }} />Data store</span>
+        <span><span className="mr-1.5 inline-block h-2.5 w-2.5 border align-middle" style={{ borderColor: 'var(--tr-text-faint)' }} />External system</span>
+        <span className="ml-auto">-- dashed = retrieve / feedback</span>
       </div>
     </div>
   );
