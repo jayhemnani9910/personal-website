@@ -3,6 +3,7 @@
 import { useState } from "react";
 import type { ReactNode } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import type { Project } from "@/lib/definitions";
 import { SHOWCASE_PROJECTS } from "@/lib/showcase";
 import { CodeBlock } from "./CodeBlock";
@@ -59,8 +60,13 @@ export function ProjectDetail({
 
   const deepDive = project.deepDive;
   const links = project.links ?? {};
-  const compareDemo = SHOWCASE_PROJECTS[project.id]?.demo;
-  const comparePairs = compareDemo?.kind === "compare" ? compareDemo.pairs : [];
+  const showcase = SHOWCASE_PROJECTS[project.id];
+  const demo = showcase?.demo;
+  // stock-data-platform and biotech-accelerator carry an arch diagram but no
+  // `demo`, and biotech-accelerator's dataFlow is a prose string rather than
+  // the structured form the stage strip below needs, so this can't just live
+  // inside the Data flow section: it renders on its own, next to it.
+  const archImage = showcase?.arch;
 
   const flow: DataFlowStep[] =
     Array.isArray(deepDive?.dataFlow) && typeof deepDive.dataFlow[0] === "object"
@@ -172,11 +178,109 @@ export function ProjectDetail({
         </section>
       )}
 
-      {/* ── Comparison slider ── */}
-      {comparePairs.length > 0 && (
+      {/* ── Demo: whichever kind this project's showcase config carries ── */}
+      {demo?.kind === "compare" && (
         <section className={`${SHELL} pb-[clamp(2rem,5vw,4rem)]`}>
           <div className={WRAP}>
-            <ComparisonSlider projectTitle={project.title} pairs={comparePairs} />
+            <ComparisonSlider projectTitle={project.title} pairs={demo.pairs} />
+          </div>
+        </section>
+      )}
+
+      {demo?.kind === "tools" && (
+        <section className={`${SHELL} pb-[clamp(2rem,5vw,4rem)]`}>
+          <div className={WRAP}>
+            <h2 className={H2}>Tools this site registers.</h2>
+            <p className="mt-3 max-w-[62ch] text-tr-text-mute [text-wrap:pretty]">{demo.note}</p>
+
+            <div className="mt-8 hidden grid-cols-[minmax(0,1fr)_5rem_minmax(0,1.6fr)] gap-6 border-b border-tr-hairline pb-2 lg:grid">
+              <span className={LABEL}>TOOL</span>
+              <span className={LABEL}>KIND</span>
+              <span className={LABEL}>DESCRIPTION</span>
+            </div>
+
+            {demo.tools.map((t, i) => (
+              <div
+                key={i}
+                className="grid gap-2 border-b border-tr-hairline py-[1.1rem] lg:grid-cols-[minmax(0,1fr)_5rem_minmax(0,1.6fr)] lg:items-baseline lg:gap-6"
+              >
+                <code className={`${MONO} text-[length:var(--tr-t-small)] text-tr-ember`}>{t.name}</code>
+                {/* read and write are distinguished by the word itself, not a
+                    second saturated colour: the ember-only rule means status
+                    tokens (ok/warn) are reserved for verified/gap semantics
+                    elsewhere on this page, not for labelling a tool kind. */}
+                <span
+                  data-tool-kind={t.kind}
+                  className={`${MONO} text-[length:var(--tr-t-mono-sm)] uppercase tracking-[.08em] text-tr-text-faint`}
+                >
+                  {t.kind}
+                </span>
+                <p className="text-tr-text-mute">{t.description}</p>
+              </div>
+            ))}
+
+            <div className="mt-8 grid gap-6 sm:grid-cols-2">
+              <div className="min-w-0 overflow-hidden rounded-[var(--tr-r-lg)] border border-tr-hairline bg-tr-bg">
+                <p className={`${LABEL} border-b border-tr-hairline px-4 py-2`}>
+                  AGENT CALLS <code className="text-tr-ember">{demo.sample.tool}</code>
+                </p>
+                <pre className="min-w-0 overflow-x-auto p-4 text-[length:var(--tr-t-mono-sm)] leading-[var(--tr-lh-body)] text-tr-text">
+                  <code>{demo.sample.request}</code>
+                </pre>
+              </div>
+              <div className="min-w-0 overflow-hidden rounded-[var(--tr-r-lg)] border border-tr-hairline bg-tr-bg">
+                <p className={`${LABEL} border-b border-tr-hairline px-4 py-2`}>SITE RETURNS</p>
+                <pre className="min-w-0 overflow-x-auto p-4 text-[length:var(--tr-t-mono-sm)] leading-[var(--tr-lh-body)] text-tr-text">
+                  <code>{demo.sample.response}</code>
+                </pre>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {demo?.kind === "report" && (
+        <section className={`${SHELL} pb-[clamp(2rem,5vw,4rem)]`}>
+          <div className={WRAP}>
+            <h2 className={H2}>{demo.title}</h2>
+            <p className="mt-3 max-w-[62ch] text-tr-text-mute [text-wrap:pretty]">{demo.note}</p>
+
+            <ul className="mt-8 list-none">
+              {demo.findings.map((f, i) => {
+                const verdictClass =
+                  f.verdict === "VERIFIED"
+                    ? "text-tr-ok"
+                    : f.verdict === "CONTESTED"
+                      ? "text-tr-warn"
+                      : "text-tr-text-faint";
+                return (
+                  <li
+                    key={i}
+                    className="grid gap-2 border-t border-tr-hairline py-[1.1rem] sm:grid-cols-[8rem_minmax(0,1fr)] sm:gap-6"
+                  >
+                    <span
+                      data-verdict={f.verdict}
+                      className={`${MONO} text-[length:var(--tr-t-mono-sm)] uppercase tracking-[.08em] ${verdictClass}`}
+                    >
+                      {f.verdict}
+                    </span>
+                    <p className="text-tr-text">{f.text}</p>
+                  </li>
+                );
+              })}
+            </ul>
+
+            {demo.sourceUrl && (
+              <a
+                href={demo.sourceUrl}
+                target="_blank"
+                rel="noreferrer"
+                data-cursor="OPEN"
+                className={`${MONO} mt-6 inline-block text-[length:var(--tr-t-mono)] text-tr-text-mute hover:text-tr-ember`}
+              >
+                Run it yourself on GitHub ↗
+              </a>
+            )}
           </div>
         </section>
       )}
@@ -222,6 +326,29 @@ export function ProjectDetail({
           </div>
         </div>
       </section>
+
+      {/* ── Architecture diagram ──
+          Independent of the Data flow section below: biotech-accelerator has
+          this image but its dataFlow is prose, not the structured stages that
+          section needs, so gating this on flow.length would drop the image
+          for that project. */}
+      {archImage && (
+        <section className={`${SHELL} border-t border-tr-hairline py-[clamp(2rem,5vw,4rem)]`}>
+          <div className={WRAP}>
+            <p className={`${LABEL} mb-3`}>ARCHITECTURE</p>
+            <figure className="overflow-hidden rounded-[var(--tr-r-lg)] border border-tr-hairline bg-tr-surface-1">
+              <Image
+                src={archImage}
+                alt={`${project.title}: system architecture diagram`}
+                width={1386}
+                height={1114}
+                sizes="(max-width: 1280px) 100vw, 1120px"
+                className="h-auto w-full"
+              />
+            </figure>
+          </div>
+        </section>
+      )}
 
       {/* ── Data flow ── */}
       {flow.length > 0 && selectedFlow && (

@@ -55,7 +55,10 @@ export function ComparisonSlider({
         )}
       </div>
 
-      <figure className="relative mt-4 aspect-video select-none overflow-hidden rounded-[var(--tr-r-lg)] border border-tr-hairline bg-tr-surface-1">
+      <figure
+        data-testid="comparison-slider"
+        className="relative mt-4 aspect-video select-none overflow-hidden rounded-[var(--tr-r-lg)] border border-tr-hairline bg-tr-surface-1"
+      >
         <Image
           src={active.after}
           alt={`${projectTitle}, ${pairLabel}: output after the pipeline runs on this frame`}
