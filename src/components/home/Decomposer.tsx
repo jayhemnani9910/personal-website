@@ -152,7 +152,7 @@ export function Decomposer() {
       className="border border-tr-hairline rounded-[var(--tr-r-lg)] bg-tr-surface-1 overflow-hidden"
       style={{ boxShadow: "var(--tr-shadow-card)" }}
     >
-      <div className="h-10 px-4 flex items-center gap-2 border-b border-tr-hairline font-mono text-[length:var(--tr-t-mono)] text-tr-text-mute">
+      <div className="h-10 px-4 flex items-center gap-2 border-b border-tr-hairline font-mono text-[length:var(--tr-t-mono-xs)] text-tr-text-mute">
         <span className="text-tr-accent">◆</span>
         <span>decompose</span>
         <span className="text-tr-text-faint">· incoming brief</span>
@@ -252,7 +252,7 @@ export function Decomposer() {
       )}
 
       {!started && (
-        <p className="m-0 border-t border-tr-hairline py-[.9rem] px-4 font-mono text-[length:var(--tr-t-mono)] text-tr-text-faint">
+        <p className="m-0 border-t border-tr-hairline py-[.9rem] px-4 font-mono text-[length:var(--tr-t-mono-xs)] text-tr-text-faint">
           {COPY.idleNote}
         </p>
       )}

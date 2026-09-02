@@ -28,7 +28,9 @@ export function WorkTable({ projects, total }: { projects: FeaturedProject[]; to
         >
           {projects.length} of {total}.
         </h2>
-        <p className="max-w-[56ch] text-tr-text-mute [text-wrap:pretty]">{COPY.workDeck}</p>
+        <p className="max-w-[56ch] text-[length:var(--tr-t-body)] leading-[var(--tr-lh-body)] text-tr-text-mute [text-wrap:pretty]">
+          {COPY.workDeck}
+        </p>
       </div>
 
       <div className={`hidden lg:grid ${HEADER_COLS} gap-6 pb-[.6rem] border-b border-tr-hairline ${MONO}`}>

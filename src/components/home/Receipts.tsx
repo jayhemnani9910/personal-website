@@ -43,10 +43,10 @@ export function Receipts({ receipts }: { receipts: Receipt[] }) {
               >
                 {r.n}
               </span>
-              <span className="text-[12.5px] leading-[var(--tr-lh-prose)] text-tr-text-mute">{r.label}</span>
+              <span className="text-[12.5px] leading-[var(--tr-lh-card)] text-tr-text-mute">{r.label}</span>
               <span
                 className={`mt-auto font-mono text-[length:var(--tr-t-mono-sm)] ${
-                  isOpen ? "text-tr-accent" : "text-tr-text-faint"
+                  isOpen ? "text-tr-accent" : "text-tr-text"
                 }`}
               >
                 {isOpen ? "▲ close" : `▼ ${r.cta}`}

@@ -2,7 +2,7 @@ import { COPY } from "@/data/home";
 import { SITE_CONFIG } from "@/../content/site";
 
 const MONO = 'font-[family-name:var(--ff-mono)] text-[length:var(--tr-t-mono-sm)] tracking-[.1em] text-tr-text-faint';
-const MONO_ROW = 'font-[family-name:var(--ff-mono)] text-[length:var(--tr-t-mono-sm)] tracking-[.1em] text-tr-text-mute';
+const MONO_ROW = 'font-[family-name:var(--ff-mono)] text-[length:var(--tr-t-mono-lg)] tracking-normal text-tr-text-mute';
 
 const SOCIAL_ROWS: { label: string; url: string; handle: string }[] = [
   { label: "github", url: SITE_CONFIG.social.github, handle: SITE_CONFIG.social.github.replace("https://github.com/", "") },
@@ -33,7 +33,7 @@ export function Contact() {
           <a
             href={`mailto:${SITE_CONFIG.social.email}`}
             data-cursor="WRITE"
-            className="block text-[length:var(--tr-t-mail)] tracking-[-.035em] font-medium leading-[var(--tr-lh-display)] [overflow-wrap:anywhere]"
+            className="block text-[length:var(--tr-t-mail)] tracking-[-.035em] font-medium leading-[var(--tr-lh-mail)] [overflow-wrap:anywhere]"
           >
             {mailUser}
             <wbr />@{mailHost}

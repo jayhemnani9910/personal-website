@@ -337,8 +337,8 @@ html.lenis {
   display: block;
   font-family: var(--ff-mono);
   white-space: pre;
-  line-height: 1.15;
-  font-size: 12px;
+  line-height: var(--tr-lh-tight);
+  font-size: var(--tr-t-mono-xs);
   text-align: center;
   color: var(--tr-text-mute);
 }
@@ -458,6 +458,10 @@ html.lenis {
   --tr-lh-h3: 1.15;       /* sub-headings and card titles */
   --tr-lh-body: 1.5;      /* body prose and code */
   --tr-lh-prose: 1.45;    /* long-form reading: blog post bodies */
+  --tr-lh-loose: 1.8;     /* the hero's // asides, per the comp */
+  --tr-lh-tight: 1.2;     /* the footer's ascii mascot, per the comp */
+  --tr-lh-card: 1.35;     /* receipt card labels: 16.875px at 12.5px, per the comp */
+  --tr-lh-mail: 1.05;     /* the contact email display, per the comp */
 
   /* ---- spacing: 4px-based ramp, theme-independent ---- */
   --tr-s-1: 0.25rem;   /* 4px */
@@ -534,8 +538,18 @@ html.lenis {
    element-level rules that came with it, unscoped now that every route is in
    this system. */
 ::selection { background: var(--tr-accent); color: var(--tr-on-accent); }
-a { color: inherit; text-decoration: none; }
-a:hover { color: var(--tr-accent); }
+/* @layer base, not unlayered: Tailwind's utilities live in @layer utilities,
+   which the framework declares after base, so a layered rule here still loses
+   to any `text-tr-*` utility on the same <a>. Left unlayered, this plain
+   selector sat OUTSIDE Tailwind's layer stack entirely, and unlayered CSS
+   beats every layered rule regardless of specificity, so it silently
+   overrode every text-color utility ever applied straight to an anchor
+   (e.g. the method cards' back-ref links, stuck at inherited full-strength
+   text no matter which --tr-text-* utility they carried). */
+@layer base {
+  a { color: inherit; text-decoration: none; }
+  a:hover { color: var(--tr-accent); }
+}
 textarea::placeholder, input::placeholder { color: var(--tr-text-faint); }
 
 @keyframes v4-caret { 50%, 100% { opacity: 0; } }

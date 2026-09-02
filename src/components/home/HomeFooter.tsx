@@ -1,7 +1,7 @@
 import { Buddy } from "@/components/Buddy";
 import { COPY } from "@/data/home";
 
-const MONO = 'font-[family-name:var(--ff-mono)] text-[length:var(--tr-t-mono-sm)] tracking-[.1em] text-tr-text-faint';
+const MONO = 'font-[family-name:var(--ff-mono)] text-[length:var(--tr-t-mono-xs)] tracking-normal text-tr-text-faint';
 
 export function HomeFooter({ toolCount }: { toolCount: number }) {
   return (

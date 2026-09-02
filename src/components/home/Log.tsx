@@ -18,8 +18,12 @@ export function Log({ entries }: { entries: LogEntry[] }) {
         >
           {COPY.logH2}
         </h2>
-        <p className="mt-5 max-w-[40ch] text-tr-text-mute">{COPY.logDeck}</p>
-        <p className={`${MONO} mt-4`}>{COPY.logAside}</p>
+        <p className="mt-5 max-w-[40ch] text-[length:var(--tr-t-body)] leading-[var(--tr-lh-body)] text-tr-text-mute">
+          {COPY.logDeck}
+        </p>
+        <p className="mt-4 font-[family-name:var(--ff-mono)] text-[length:var(--tr-t-mono-xs)] tracking-normal text-tr-text-faint">
+          {COPY.logAside}
+        </p>
       </div>
 
       <ol className="list-none m-0 p-0">
@@ -27,10 +31,10 @@ export function Log({ entries }: { entries: LogEntry[] }) {
           <li key={`${e.when}-${e.org}`} className="grid grid-cols-[6rem_minmax(0,1fr)] gap-6 py-4 border-t border-tr-hairline">
             <span className={`${MONO} pt-[3px]`}>{e.when}</span>
             <div>
-              <p className="font-medium tracking-[-.01em]">
+              <p className="text-[length:var(--tr-t-body)] font-medium tracking-[-.01em]">
                 {e.role} <span className="text-tr-text-mute font-normal">· {e.org}</span>
               </p>
-              <p className="mt-[.3rem] text-[13.5px] leading-[var(--tr-lh-prose)] text-tr-text-mute">{e.what}</p>
+              <p className="mt-[.3rem] text-[13.5px] leading-[var(--tr-lh-body)] text-tr-text-mute">{e.what}</p>
             </div>
           </li>
         ))}

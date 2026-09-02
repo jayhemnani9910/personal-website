@@ -140,15 +140,13 @@ export function MethodCube() {
         <p className="m-0 mb-1 font-mono text-[length:var(--tr-t-mono-sm)] tracking-[0.1em] text-tr-text-faint">
           OFF THE CLOCK · WCA
         </p>
-        <p className="m-0 text-[length:var(--tr-t-stat)] font-medium leading-[var(--tr-lh-display)] tracking-[-0.03em] tabular-nums text-tr-text">
+        <p className="m-0 text-[1.6rem] font-medium leading-[var(--tr-lh-numeral)] tracking-[-0.03em] tabular-nums text-tr-text">
           {time}
           <span className="text-[length:var(--tr-t-small)] text-tr-text-mute"> s</span>
         </p>
-        <p className="mb-0 mt-2 text-[length:var(--tr-t-small)] leading-[var(--tr-lh-prose)] text-tr-text-mute">
-          {note}
-        </p>
+        <p className="mb-0 mt-2 text-[12.5px] leading-[var(--tr-lh-prose)] text-tr-text-mute">{note}</p>
         {scrambled && (
-          <p className="mb-0 mt-1 text-[length:var(--tr-t-small)] leading-[var(--tr-lh-prose)] text-tr-text-mute">
+          <p className="mb-0 mt-1 text-[12.5px] leading-[var(--tr-lh-prose)] text-tr-text-mute">
             I wrote{" "}
             <Link href="/projects/rubiks-timer" className="underline hover:text-tr-accent">
               the timer app

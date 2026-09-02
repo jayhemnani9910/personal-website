@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import { COPY } from "@/data/home";
 
-const MONO = 'font-[family-name:var(--ff-mono)] text-[length:var(--tr-t-mono)] text-tr-text-faint';
+const MONO = 'font-[family-name:var(--ff-mono)] text-[length:var(--tr-t-mono-xs)] text-tr-text-faint';
 
 /**
  * `children` is the receipts grid, a client component. The heading lives out
