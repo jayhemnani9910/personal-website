@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { RESUME } from "@/data/resume";
+import { MERGED_PRS, MERGED_PRS_SEARCH } from "@/data/home";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SkillGroups } from "./SkillGroups";
@@ -253,15 +254,31 @@ export default function AboutPage() {
                   Open source
                 </p>
                 <p className="mt-2 text-[length:var(--tr-t-body)] leading-[var(--tr-lh-body)] text-tr-text-mute">
-                  Merged pull requests to repositories not my own.
+                  {MERGED_PRS.length} merged pull requests to repositories not my own, by repo and
+                  number so the diff can be read directly.
                 </p>
+                <ul className="mt-3 flex flex-col gap-2">
+                  {MERGED_PRS.map((pr) => (
+                    <li key={pr.href}>
+                      <a
+                        href={pr.href}
+                        target="_blank"
+                        rel="noreferrer"
+                        className={`${MONO} inline-flex min-h-6 items-center gap-2 py-1 text-[length:var(--tr-t-mono-sm)] text-tr-text-mute transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] hover:text-tr-ember`}
+                      >
+                        <span>{pr.repo}</span>
+                        <span className="text-tr-text-faint">{pr.number} ↗</span>
+                      </a>
+                    </li>
+                  ))}
+                </ul>
                 <a
-                  href="https://github.com/pulls?q=is%3Apr+author%3Ajayhemnani9910+is%3Amerged"
+                  href={MERGED_PRS_SEARCH}
                   target="_blank"
                   rel="noreferrer"
-                  className={`${MONO} mt-2 inline-block text-[length:var(--tr-t-mono-sm)] text-tr-text-mute transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] hover:text-tr-ember`}
+                  className={`${MONO} mt-2 inline-flex min-h-6 items-center py-1 text-[length:var(--tr-t-mono-sm)] text-tr-text-faint transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] hover:text-tr-ember`}
                 >
-                  verify ↗
+                  verify all ↗
                 </a>
               </div>
               <div className="mt-6">

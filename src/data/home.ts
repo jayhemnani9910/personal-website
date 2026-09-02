@@ -206,6 +206,25 @@ export const PRESETS: Preset[] = [
   },
 ];
 
+/**
+ * The merged upstream pull requests, by repo and number.
+ *
+ * One list, two readers: the home page's proof ledger and the about page's
+ * open-source block. It lives here rather than in resume.ts because resume.ts
+ * has no field for it, and duplicating three URLs across two pages is how a
+ * verified claim drifts into an unverified one. Sourced from
+ * forjobs/MASTER_PROFILE.md section 7, which is the canonical list.
+ */
+export const MERGED_PRS: { repo: string; number: string; href: string }[] = [
+  { repo: "vllm-project/vllm", number: "#31513", href: "https://github.com/vllm-project/vllm/pull/31513" },
+  { repo: "modelcontextprotocol/python-sdk", number: "#1826", href: "https://github.com/modelcontextprotocol/python-sdk/pull/1826" },
+  { repo: "google/A2UI", number: "#407", href: "https://github.com/google/A2UI/pull/407" },
+];
+
+/** Every merged PR by author, for anyone who wants to check the list above. */
+export const MERGED_PRS_SEARCH =
+  "https://github.com/pulls?q=is%3Apr+author%3Ajayhemnani9910+is%3Amerged";
+
 export function buildReceipts(c: { projectCount: number; toolCount: number }): Receipt[] {
   return [
     {
@@ -224,24 +243,14 @@ export function buildReceipts(c: { projectCount: number; toolCount: number }): R
       ],
     },
     {
-      n: "3",
+      n: String(MERGED_PRS.length),
       label: "pull requests merged into ecosystem repositories",
       cta: "show PRs",
       title: "Merged upstream",
       note: "Small changes in large repos. Listed by repo and number so you can read the diff yourself.",
       lines: [
-        { text: "vllm-project/vllm", meta: "#31513", href: "https://github.com/vllm-project/vllm/pull/31513" },
-        {
-          text: "modelcontextprotocol/python-sdk",
-          meta: "#1826",
-          href: "https://github.com/modelcontextprotocol/python-sdk/pull/1826",
-        },
-        { text: "google/A2UI", meta: "#407", href: "https://github.com/google/A2UI/pull/407" },
-        {
-          text: "All merged PRs by author, on GitHub",
-          meta: "search",
-          href: "https://github.com/pulls?q=is%3Apr+author%3Ajayhemnani9910+is%3Amerged",
-        },
+        ...MERGED_PRS.map((pr) => ({ text: pr.repo, meta: pr.number, href: pr.href })),
+        { text: "All merged PRs by author, on GitHub", meta: "search", href: MERGED_PRS_SEARCH },
       ],
     },
     {

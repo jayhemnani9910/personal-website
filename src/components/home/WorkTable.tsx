@@ -3,8 +3,16 @@ import type { FeaturedProject } from "@/data/home";
 import { COPY } from "@/data/home";
 
 const MONO = 'font-[family-name:var(--ff-mono)] text-[length:var(--tr-t-mono-sm)] tracking-[.1em] text-tr-text-faint';
+// Both of these spell the five-column track list out in full rather than
+// sharing a constant, and the duplication is the point. Tailwind v4 discovers
+// classes by scanning source text for literal candidates, so `lg:${HEADER_COLS}`
+// produces a string at runtime that the scanner never saw at build time: the
+// rule is simply never generated. That shipped. The row rendered as two stacked
+// columns at every width, and the baselines locked it in, because a screenshot
+// of a wrong layout looks exactly like a screenshot of a right one.
 const HEADER_COLS = "grid-cols-[3rem_minmax(0,1.1fr)_minmax(0,1fr)_minmax(0,1fr)_minmax(0,.8fr)]";
-const ROW_COLS = `grid-cols-[2.5rem_minmax(0,1fr)] gap-[.9rem_1rem] lg:${HEADER_COLS} lg:gap-6`;
+const ROW_COLS =
+  "grid-cols-[2.5rem_minmax(0,1fr)] gap-[.9rem_1rem] lg:grid-cols-[3rem_minmax(0,1.1fr)_minmax(0,1fr)_minmax(0,1fr)_minmax(0,.8fr)] lg:gap-6";
 
 export function WorkTable({ projects, total }: { projects: FeaturedProject[]; total: number }) {
   return (
