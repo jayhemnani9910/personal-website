@@ -94,7 +94,9 @@
   /* Glass / neon tokens (lab + architecture viz, restyled later) */
   --glass-border: var(--tr-hairline);
 
-  color-scheme: light;
+  /* Dark is the only default (ADR 0015): bare :root is the unauthenticated
+     visitor's UA colour scheme, so it must say dark, not light. */
+  color-scheme: dark;
 }
 
 /* Dark Theme — warm ink */
@@ -514,6 +516,7 @@ html.lenis {
   --tr-ok: #1E8A50;
   --tr-warn: #B8651B;
   --tr-accent-soft: rgba(176, 143, 0, .14);
+  color-scheme: light;
   --tr-shadow-card: 0 30px 80px -50px rgba(0, 0, 0, .35);
   --tr-shadow-modal: 0 40px 100px -30px rgba(0, 0, 0, .3);
 }

@@ -23,7 +23,9 @@ function getInitialTheme(): Theme {
   if (typeof window === "undefined") return "dark";
   const stored = localStorage.getItem("theme");
   if (stored === "dark" || stored === "light") return stored;
-  return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+  // Dark is the only default (ADR 0015): an unset theme does not fall back to
+  // the OS preference, it is dark for everyone until the toggle is used.
+  return "dark";
 }
 
 export function ThemeProvider({ children }: { children: ReactNode }) {

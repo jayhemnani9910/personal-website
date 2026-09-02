@@ -26,10 +26,12 @@ const geistMono = Geist_Mono({
 });
 
 export const viewport: Viewport = {
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
-    { media: "(prefers-color-scheme: dark)", color: "#000000" },
-  ],
+  // Static, not media-query-keyed: the theme is resolved in JS from
+  // localStorage and defaults to dark (ADR 0015), so a value keyed to the OS
+  // preference would track the wrong thing more often than not. Matches
+  // --tr-bg. Someone who toggles to light keeps a dark address bar, which is
+  // the smaller and rarer mismatch.
+  themeColor: "#0B0C0F",
   width: "device-width",
   initialScale: 1,
 };
@@ -117,8 +119,8 @@ export default function RootLayout({
               (function() {
                 try {
                   var theme = localStorage.getItem('theme');
-                  if (!theme) {
-                    theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+                  if (theme !== 'dark' && theme !== 'light') {
+                    theme = 'dark';
                   }
                   document.documentElement.setAttribute('data-theme', theme);
                 } catch (e) {}
