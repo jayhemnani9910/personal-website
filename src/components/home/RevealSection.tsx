@@ -9,35 +9,32 @@ import { EASE, DUR } from "@/lib/motion-tokens";
 // spread of EASE widens to (same fix as Reveal.tsx / EditorialMasthead.tsx).
 const CUBIC_EASE: [number, number, number, number] = [EASE[0], EASE[1], EASE[2], EASE[3]];
 
+// Presentational on purpose: a div, not a section. Every content component in
+// this directory already renders its own <section id aria-labelledby>, the way
+// the design gives each top-level section its own id. Wrapping those in another
+// section would nest one inside the other, and passing the id down to the
+// wrapper would put the same id on two elements.
 interface RevealSectionProps {
-  id?: string;
   className?: string;
-  labelledBy?: string;
   children: ReactNode;
 }
 
-export function RevealSection({ id, className, labelledBy, children }: RevealSectionProps) {
+export function RevealSection({ className, children }: RevealSectionProps) {
   const reduced = usePrefersReducedMotion();
 
   if (reduced) {
-    return (
-      <section id={id} className={className} aria-labelledby={labelledBy}>
-        {children}
-      </section>
-    );
+    return <div className={className}>{children}</div>;
   }
 
   return (
-    <m.section
-      id={id}
+    <m.div
       className={className}
-      aria-labelledby={labelledBy}
       initial={{ opacity: 0, y: 28 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "0px 0px -12% 0px" }}
       transition={{ duration: DUR.slow, ease: CUBIC_EASE }}
     >
       {children}
-    </m.section>
+    </m.div>
   );
 }

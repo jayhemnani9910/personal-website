@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
-import { EditorialHome } from "@/components/EditorialHome";
-import { getAllProjects, getAllPosts } from "@/lib/content";
+import { HomeV4 } from "@/components/home/HomeV4";
 
 export const metadata: Metadata = {
   alternates: { canonical: "/" },
@@ -9,16 +8,8 @@ export const metadata: Metadata = {
 export const dynamic = "force-static";
 export const revalidate = 3600;
 
-export default async function Home() {
-  const [projects, posts] = await Promise.all([getAllProjects(), getAllPosts()]);
-  const projectCount = projects.length;
-  const deepDiveCount = projects.filter((p) => p.deepDive).length;
-  const essayCount = posts.length;
-  return (
-    <EditorialHome
-      projectCount={projectCount}
-      deepDiveCount={deepDiveCount}
-      essayCount={essayCount}
-    />
-  );
+// HomeV4 reads the content itself, so the counts it needs stay next to the
+// markup that interpolates them rather than being threaded through here.
+export default function Home() {
+  return <HomeV4 />;
 }

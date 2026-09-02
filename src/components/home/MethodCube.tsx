@@ -48,7 +48,7 @@ function randomFace(): string[] {
 // puts the click handler on a plain div, which a keyboard user can't reach;
 // here the cube stage itself is the button, and the text column (which needs
 // to carry a link once a scramble finishes) sits outside it.
-export function MethodCube(): JSX.Element {
+export function MethodCube() {
   const reduced = usePrefersReducedMotion();
   const [faces, setFaces] = useState<string[][] | null>(null);
   const [note, setNote] = useState(IDLE_NOTE);

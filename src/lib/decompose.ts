@@ -66,6 +66,11 @@ const THREE_STRINGS = { type: "ARRAY", items: { type: "STRING" }, minItems: 3, m
  * Mirrors buildGeminiBody's structure (systemInstruction / contents /
  * generationConfig): the rules live in systemInstruction, the visitor's brief
  * is its own user turn.
+ *
+ * The brief is fenced in a tag and followed by a fixed instruction, the same
+ * shape fde-prompt.ts uses. Anyone can type into this box from the public home
+ * page, so the text arrives as data to be read rather than as further
+ * instructions, and the turn ends on a line the visitor did not write.
  */
 export function buildDecomposeBody(brief: string) {
   return {
@@ -73,7 +78,7 @@ export function buildDecomposeBody(brief: string) {
     contents: [
       {
         role: "user",
-        parts: [{ text: brief }],
+        parts: [{ text: `<customer_brief>\n${brief}\n</customer_brief>\n\nReturn the JSON now.` }],
       },
     ],
     generationConfig: {

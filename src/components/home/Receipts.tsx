@@ -2,12 +2,13 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import type { Route } from "next";
 import type { Receipt } from "@/data/home";
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
 
 const STAGGER_MS = 70;
 
-export function Receipts({ receipts }: { receipts: Receipt[] }): JSX.Element {
+export function Receipts({ receipts }: { receipts: Receipt[] }) {
   const reduced = usePrefersReducedMotion();
   const [openIndex, setOpenIndex] = useState(-1);
   const open = openIndex >= 0 ? receipts[openIndex] : null;
@@ -89,7 +90,10 @@ export function Receipts({ receipts }: { receipts: Receipt[] }): JSX.Element {
                       {inner}
                     </a>
                   ) : (
-                    <Link href={l.href} data-cursor="OPEN" className="flex items-baseline gap-[.6rem]">
+                    /* Cast: typedRoutes needs the literal at the call site, and this
+                       one comes from src/data/home.ts. home.test.ts asserts every
+                       internal receipt href is a known route or a real project file. */
+                    <Link href={l.href as Route} data-cursor="OPEN" className="flex items-baseline gap-[.6rem]">
                       {inner}
                     </Link>
                   )}

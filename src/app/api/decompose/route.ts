@@ -117,11 +117,14 @@ export async function POST(request: NextRequest) {
 
     let res: Response;
     try {
+        // The key travels as a header, not as ?key= in the query string, which
+        // is what fde-sim does and for the same reason: a query string is the
+        // part of a request that proxies, access logs and error traces keep.
         res = await fetch(
-            `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent?key=${apiKey}`,
+            `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent`,
             {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
+                headers: { "Content-Type": "application/json", "x-goog-api-key": apiKey },
                 body: JSON.stringify(buildDecomposeBody(brief)),
             },
         );

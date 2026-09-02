@@ -2293,6 +2293,28 @@ html[data-theme="dark"] .editorial .ph::before {
 @keyframes v4-cube-idle { from { transform: rotateX(-24deg) rotateY(0deg); } to { transform: rotateX(-24deg) rotateY(360deg); } }
 @keyframes v4-wiggle { 0%, 100% { transform: rotate(0); } 25% { transform: rotate(-6deg); } 75% { transform: rotate(6deg); } }
 
+/* The custom reticle (src/components/motion/Cursor.tsx) is position:fixed at
+   body level, so it sits OUTSIDE .home-v4 and inherits the ember palette and
+   JetBrains Mono no matter what the page under it is using. On the v4 home that
+   draws an orange reticle with the wrong mono face over a yellow Instrument
+   Sans page. Re-point the four properties it actually reads while a v4 page is
+   mounted. The values are duplicated from the .home-v4 blocks above on purpose:
+   the test in src/lib/tokens.test.ts parses hex literals, so aliasing them
+   through another custom property would make the palette unparseable. They go
+   away with the scope, see ADR 0014. */
+:root:has(.home-v4) .tr-reticle {
+  --tr-ember: #F4D53A;
+  --tr-bg: #0B0C0F;
+  --tr-hairline: #23272F;
+  --font-jetbrains: var(--font-geist-mono);
+}
+
+[data-theme="light"]:has(.home-v4) .tr-reticle {
+  --tr-ember: #7A6200;
+  --tr-bg: #F5F5F2;
+  --tr-hairline: #DADAD3;
+}
+
 /* Same as .fde-page: the token override this block existed for is gone, because
    the .editorial rules read --tr-* directly now. It sets the page ground. */
 .tr-editorial-scope {

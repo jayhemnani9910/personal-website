@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
+import type { Route } from "next";
 import { METHOD, COPY } from "@/data/home";
 
 const MONO = 'font-[family-name:var(--ff-mono)] text-[length:var(--tr-t-mono-sm)] tracking-[.1em] text-tr-text-faint';
@@ -36,7 +37,10 @@ export function Method({ children }: { children: ReactNode }) {
             <span className={`${MONO} text-tr-ember`}>{m.n}</span>
             <p className="text-[length:var(--tr-t-h3)] leading-[var(--tr-lh-h3)] font-medium">{m.rule}</p>
             <p className="text-tr-text-mute">{m.why}</p>
-            <Link href={m.href} data-cursor="OPEN" className={`${MONO} mt-auto hover:text-tr-ember`}>
+            {/* Cast: typedRoutes needs the literal at the call site, and this one
+                arrives from src/data/home.ts. Backed by home.test.ts, which checks
+                every METHOD href points at a real content/projects file. */}
+            <Link href={m.href as Route} data-cursor="OPEN" className={`${MONO} mt-auto hover:text-tr-ember`}>
               ← {m.from}
             </Link>
           </li>

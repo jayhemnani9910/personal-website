@@ -83,27 +83,31 @@ describe("SectionRail", () => {
 });
 
 describe("RevealSection", () => {
-  it("renders a section carrying the given id and aria-labelledby, with its children", () => {
+  // It wraps components that already render their own <section id>. If this
+  // rendered a section too the page would nest one inside the other, so the
+  // wrapper stays a plain div and owns no semantics.
+  it("renders a div, not a section, and leaves the child's semantics alone", () => {
     render(
-      <RevealSection id="brief" labelledBy="brief-h">
-        <p>hello there</p>
+      <RevealSection className="marker-class">
+        <section id="brief" aria-labelledby="brief-h">
+          <p>hello there</p>
+        </section>
       </RevealSection>
     );
-    const section = document.getElementById("brief");
-    expect(section?.tagName.toLowerCase()).toBe("section");
-    expect(section?.getAttribute("aria-labelledby")).toBe("brief-h");
+    expect(document.querySelector(".marker-class")?.tagName.toLowerCase()).toBe("div");
     expect(screen.getByText("hello there")).toBeDefined();
+    expect(document.querySelectorAll("section")).toHaveLength(1);
+    expect(document.getElementById("brief")?.getAttribute("aria-labelledby")).toBe("brief-h");
   });
 
-  it("renders a plain section under reduced motion, children still present", () => {
+  it("renders a plain div under reduced motion, children still present", () => {
     mockReducedMotion.mockReturnValue(true);
     render(
-      <RevealSection id="proof" labelledBy="proof-h">
+      <RevealSection className="reduced-marker">
         <p>reduced content</p>
       </RevealSection>
     );
-    const section = document.getElementById("proof");
-    expect(section?.tagName.toLowerCase()).toBe("section");
+    expect(document.querySelector(".reduced-marker")?.tagName.toLowerCase()).toBe("div");
     expect(screen.getByText("reduced content")).toBeDefined();
   });
 });

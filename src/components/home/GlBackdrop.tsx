@@ -27,7 +27,7 @@ gl_FragColor=vec4(c*col*max(a,0.),max(a,0.));}`;
 // Fixed full-viewport backdrop behind the page content. Reduced motion (OS
 // preference or reader mode) drops the canvas entirely, no context, no
 // listeners, nothing to pause.
-export function GlBackdrop(): JSX.Element | null {
+export function GlBackdrop() {
   const reduced = usePrefersReducedMotion();
   const { theme } = useTheme();
   const canvasRef = useRef<HTMLCanvasElement>(null);

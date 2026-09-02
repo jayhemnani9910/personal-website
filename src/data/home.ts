@@ -9,6 +9,7 @@
  * May 2019 internship, not four years of anything) and the "project 19" aside
  * in the cube-scramble copy (no such project exists). Neither survives here.
  */
+import type { Route } from "next";
 
 export type FeaturedProject = {
   id: string;
@@ -42,11 +43,21 @@ export type Receipt = {
   lines: ReceiptLine[];
 };
 
+// next.config.ts sets typedRoutes, so a Link's href has to be a route the
+// compiler recognises. `Route` covers static routes, hashes and external URLs,
+// which is everything the nav and the rail use, so those are checked here.
+//
+// It cannot cover the method and receipt hrefs: those point at the dynamic
+// /projects/[id] route, and Next only accepts a dynamic route when the literal
+// is visible at the Link call site, which it is not once the value has been
+// through this module. Those two stay `string` and are cast at the call site.
+// What makes that safe is src/data/home.test.ts, which asserts every
+// /projects/... href in this file resolves to a real content/projects/*.mdx.
 export type MethodRule = { n: string; rule: string; why: string; from: string; href: string };
 
-export type NavItem = { label: string; alt: string; href: string };
+export type NavItem = { label: string; alt: string; href: Route };
 
-export type SectionStep = { n: string; label: string; href: string; id: string };
+export type SectionStep = { n: string; label: string; href: Route; id: string };
 
 export const FEATURED: FeaturedProject[] = [
   {

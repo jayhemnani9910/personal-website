@@ -38,7 +38,7 @@ const LINE_ANIM = "animate-[v4-line-in_.4s_cubic-bezier(.16,1,.3,1)_both]";
 // would be invalid HTML. This id is only for the label association.
 const BRIEF_FIELD_ID = "brief-input";
 
-export function Decomposer(): JSX.Element {
+export function Decomposer() {
   const reduced = usePrefersReducedMotion();
   const [brief, setBrief] = useState("");
   const [engine, setEngine] = useState<Engine>("idle");
