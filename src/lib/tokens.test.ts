@@ -41,11 +41,11 @@ function paletteFor(selector: string): Record<string, string> {
 const DARK = paletteFor(":root"); // dark is canonical, so it is the base
 const LIGHT = paletteFor(':root[data-theme="light"]');
 
-const REQUIRED = ["bg", "surface-1", "surface-2", "text", "text-mute", "text-faint", "ember", "ember-hover", "on-ember", "ok"] as const;
+const REQUIRED = ["bg", "surface-1", "surface-2", "text", "text-mute", "text-faint", "ember", "ember-hover", "on-ember", "ok", "warn"] as const;
 const SURFACES = ["bg", "surface-1", "surface-2"] as const;
 // `ok` joined this list when the v4 system was promoted to :root (ADR 0014):
 // it is the live/verified green, and it carries text on all three surfaces.
-const TEXT_TOKENS = ["text", "text-mute", "text-faint", "ember", "ok"] as const;
+const TEXT_TOKENS = ["text", "text-mute", "text-faint", "ember", "ok", "warn"] as const;
 const AA_MIN = 4.5;
 
 function channelLuminance(channel8bit: number): number {

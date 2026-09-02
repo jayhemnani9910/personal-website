@@ -2094,6 +2094,11 @@ html[data-theme="dark"] .editorial .ph::before {
   --tr-ember-hover: #FFE066;
   --tr-on-ember: #0B0C0F;
   --tr-ok: #6BE19A;
+  /* The third status colour, after ok. It marks the honest gaps: a published
+     number the notebook does not reproduce, a component wired but untrained,
+     a decision's cost. Distinct from the accent, which means live or
+     actionable, so a page can say "attention" without saying "click me". */
+  --tr-warn: #F2A259;
   --tr-accent-soft: rgba(244, 213, 58, .12);
   --tr-shadow-card: 0 30px 80px -50px rgba(0, 0, 0, .8);
   --tr-shadow-modal: 0 40px 100px -30px rgba(0, 0, 0, .7);
@@ -2108,6 +2113,11 @@ html[data-theme="dark"] .editorial .ph::before {
      than the one it replaces because this concept sets display type in a sans
      rather than a serif, and adds four sizes the old scale had no name for. */
   --tr-t-display: clamp(2.6rem, 5.2vw, 5rem);
+  /* Interior pages set their h1 smaller than the home page does. In the design
+     that is a deliberate hierarchy: the home page opens on a statement, the
+     index pages open on a label. Without it a three-word heading wraps to three
+     lines and crowds the column beside it. */
+  --tr-t-display-sm: clamp(2.2rem, 4.2vw, 3.8rem);
   --tr-t-h2: clamp(1.6rem, 2.6vw, 2.4rem);
   --tr-t-h3: clamp(1.15rem, 1.5vw, 1.4rem);
   --tr-t-deck: clamp(1.05rem, 1.3vw, 1.25rem);
@@ -2185,6 +2195,7 @@ html[data-theme="dark"] .editorial .ph::before {
   --tr-ember-hover: #5E4B00;
   --tr-on-ember: #FFFFFF;     /* white on #7A6200 is 5.9:1 */
   --tr-ok: #17703F;           /* design #1E8A50 is 4.1:1; now 5.2:1 */
+  --tr-warn: #8A4A08;         /* design #B8651B is 3.6:1 on surface-2; now 5.8:1 */
   --tr-accent-soft: rgba(122, 98, 0, .14);
   --tr-shadow-card: 0 30px 80px -50px rgba(0, 0, 0, .35);
   --tr-shadow-modal: 0 40px 100px -30px rgba(0, 0, 0, .3);
@@ -2208,6 +2219,7 @@ html[data-theme="dark"] .editorial .ph::before {
     --tr-ember-hover: #5E4B00;
     --tr-on-ember: #FFFFFF;
     --tr-ok: #17703F;
+    --tr-warn: #8A4A08;
     --tr-accent-soft: rgba(122, 98, 0, .14);
     --tr-shadow-card: 0 30px 80px -50px rgba(0, 0, 0, .35);
     --tr-shadow-modal: 0 40px 100px -30px rgba(0, 0, 0, .3);
@@ -2290,4 +2302,5 @@ textarea::placeholder, input::placeholder { color: var(--tr-text-faint); }
   --color-tr-ember-hover: var(--tr-ember-hover);
   --color-tr-on-ember: var(--tr-on-ember);
   --color-tr-ok: var(--tr-ok);
+  --color-tr-warn: var(--tr-warn);
 }

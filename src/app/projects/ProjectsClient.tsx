@@ -63,7 +63,7 @@ export function ProjectsClient({ projects }: ProjectsClientProps) {
             <p className={`mb-3 ${MONO} text-[length:var(--tr-t-mono)] tracking-[.1em] text-tr-text-faint`}>
               /WORK · 2019 → 2026
             </p>
-            <h1 className="text-[length:var(--tr-t-display)] leading-[var(--tr-lh-display)] tracking-[-.035em] font-medium">
+            <h1 className="text-[length:var(--tr-t-display-sm)] leading-[var(--tr-lh-display)] tracking-[-.035em] font-medium">
               {projects.length}, sorted by what they&apos;d cost you to ignore.
             </h1>
           </div>

@@ -30,7 +30,7 @@ export default function YouTubePage() {
             <p className={`${MONO} mb-4`}>
               /CHANNEL · {channelCount} CHANNELS · {formatViews(totalUploads)} UPLOADS
             </p>
-            <h1 className="text-[length:var(--tr-t-display)] leading-[var(--tr-lh-display)] tracking-[-.035em] font-medium">
+            <h1 className="text-[length:var(--tr-t-display-sm)] leading-[var(--tr-lh-display)] tracking-[-.035em] font-medium">
               Small numbers, shown anyway.
             </h1>
           </div>

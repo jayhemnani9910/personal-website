@@ -36,7 +36,7 @@ export default async function WritingPage() {
           <p className={MONO}>
             /WRITING · {posts.length} {posts.length === 1 ? "ESSAY" : "ESSAYS"} · {projects.length} WRITE-UPS
           </p>
-          <h1 className="mt-[var(--tr-s-2)] text-[length:var(--tr-t-display)] leading-[var(--tr-lh-display)] tracking-[-.035em] font-medium">
+          <h1 className="mt-[var(--tr-s-2)] text-[length:var(--tr-t-display-sm)] leading-[var(--tr-lh-display)] tracking-[-.035em] font-medium">
             Written down so I can be checked later.
           </h1>
         </div>

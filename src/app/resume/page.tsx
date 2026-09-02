@@ -54,7 +54,7 @@ export default function AboutPage() {
           <p className={`${MONO} mb-4 text-[length:var(--tr-t-mono)] tracking-[.1em] text-tr-text-faint`}>
             /ABOUT · THE PARTICULARS
           </p>
-          <h1 className="text-[length:var(--tr-t-display)] leading-[var(--tr-lh-display)] tracking-[-.035em] font-medium text-tr-text">
+          <h1 className="text-[length:var(--tr-t-display-sm)] leading-[var(--tr-lh-display)] tracking-[-.035em] font-medium text-tr-text">
             Came from design. Stayed for the mess.
           </h1>
         </div>
