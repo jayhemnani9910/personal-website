@@ -439,8 +439,12 @@ html.lenis {
   --tr-t-mail: clamp(1.5rem, 3.2vw, 3rem);
   --tr-t-body: 15px;
   --tr-t-small: 13.5px;
-  --tr-t-mono: 11.5px;
-  --tr-t-mono-sm: 10.5px;
+  /* Mono, largest to smallest. The design uses all four; collapsing them onto
+     one token is what made every mono run on the page the wrong size. */
+  --tr-t-mono-lg: 12px;    /* contact links and handles */
+  --tr-t-mono: 11.5px;     /* the hero status line and its // asides */
+  --tr-t-mono-xs: 11px;    /* panel meta, card back-refs, the colophon */
+  --tr-t-mono-sm: 10.5px;  /* the smallest caps labels, e.g. OFF THE CLOCK */
 
   /* ---- line height (paired with the sizes above, theme-independent) ----
      The scale had sizes but no leading, so leading was written inline and
