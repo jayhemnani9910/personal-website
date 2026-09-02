@@ -78,7 +78,7 @@ export function ProjectsClient({ projects }: ProjectsClientProps) {
       <section className={`sticky top-14 z-[30] bg-tr-bg border-b border-tr-hairline ${SHELL} pt-4 pb-6`}>
         <div className={`${WRAP} flex flex-wrap items-center gap-2`}>
           <div className="flex h-8 min-w-[240px] items-center gap-2 rounded-[var(--tr-r-md)] border border-tr-hairline bg-tr-surface-1 px-3">
-            <span aria-hidden="true" className={`${MONO} text-tr-ember`}>
+            <span aria-hidden="true" className={`${MONO} text-tr-accent`}>
               /
             </span>
             <label htmlFor="project-search" className="sr-only">
@@ -102,8 +102,8 @@ export function ProjectsClient({ projects }: ProjectsClientProps) {
               aria-pressed={filter === c.key}
               className={`inline-flex h-8 items-center gap-1 rounded-full border px-[.8rem] text-[12.5px] transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] ${MONO} ${
                 filter === c.key
-                  ? "border-tr-ember bg-tr-ember text-tr-on-ember"
-                  : "border-tr-hairline text-tr-text-mute hover:border-tr-ember"
+                  ? "border-tr-accent bg-tr-accent text-tr-on-accent"
+                  : "border-tr-hairline text-tr-text-mute hover:border-tr-accent"
               }`}
             >
               {c.label} <span className="text-[10.5px]">{c.count}</span>

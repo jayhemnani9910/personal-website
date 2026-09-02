@@ -38,7 +38,7 @@ export function Receipts({ receipts }: { receipts: Receipt[] }) {
             >
               <span
                 className={`text-[length:var(--tr-t-stat)] leading-[var(--tr-lh-numeral)] tracking-[-.04em] font-medium tabular-nums ${
-                  isOpen ? "text-tr-ember" : "text-tr-text"
+                  isOpen ? "text-tr-accent" : "text-tr-text"
                 }`}
               >
                 {r.n}
@@ -46,7 +46,7 @@ export function Receipts({ receipts }: { receipts: Receipt[] }) {
               <span className="text-[12.5px] leading-[var(--tr-lh-prose)] text-tr-text-mute">{r.label}</span>
               <span
                 className={`mt-auto font-mono text-[length:var(--tr-t-mono-sm)] ${
-                  isOpen ? "text-tr-ember" : "text-tr-text-faint"
+                  isOpen ? "text-tr-accent" : "text-tr-text-faint"
                 }`}
               >
                 {isOpen ? "▲ close" : `▼ ${r.cta}`}

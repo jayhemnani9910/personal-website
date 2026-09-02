@@ -486,7 +486,7 @@ System
                                         key={chip}
                                         type="button"
                                         onClick={() => handleCommand(chip)}
-                                        className="h-[26px] px-[.65rem] rounded-full border border-tr-hairline text-tr-text-mute font-mono text-[11px] hover:border-tr-ember hover:text-tr-text transition-colors"
+                                        className="h-[26px] px-[.65rem] rounded-full border border-tr-hairline text-tr-text-mute font-mono text-[11px] hover:border-tr-accent hover:text-tr-text transition-colors"
                                     >
                                         {chip}
                                     </button>
@@ -511,14 +511,14 @@ System
 
                             {!isBooting && (
                                 <div className="flex items-center gap-2 mt-2">
-                                    <span className="text-tr-ember">➜</span>
+                                    <span className="text-tr-accent">➜</span>
                                     <input
                                         ref={inputRef}
                                         type="text"
                                         value={input}
                                         onChange={(e) => setInput(e.target.value)}
                                         onKeyDown={handleKeyDown}
-                                        className="bg-transparent outline-none flex-1 text-tr-ember caret-tr-ember"
+                                        className="bg-transparent outline-none flex-1 text-tr-accent caret-tr-accent"
                                         autoFocus
                                         spellCheck={false}
                                         autoComplete="off"
@@ -558,12 +558,12 @@ function MatrixRain() {
             // Read the live token values each frame (cheap for a canvas
             // loop, and keeps this theme-reactive without a separate
             // theme-change listener): the trail is the machine channel's
-            // quiet ink, and ember marks only the live edge of each
-            // column, consistent with "ember is the only saturated
+            // quiet ink, and accent marks only the live edge of each
+            // column, consistent with "accent is the only saturated
             // colour in the system."
             const tokens = getComputedStyle(document.documentElement);
             const rain = tokens.getPropertyValue("--tr-text-mute").trim();
-            const live = tokens.getPropertyValue("--tr-ember").trim();
+            const live = tokens.getPropertyValue("--tr-accent").trim();
 
             // The trail fade must be the surface the canvas sits on, not black.
             // Hardcoding rgba(0,0,0,.05) works on dark and progressively
@@ -575,7 +575,7 @@ function MatrixRain() {
             ctx.font = "12px monospace";
 
             for (let i = 0; i < drops.length; i++) {
-                // Leading glyph: the live edge of the column, ember.
+                // Leading glyph: the live edge of the column, accent.
                 const text = chars[Math.floor(Math.random() * chars.length)];
                 ctx.fillStyle = live;
                 ctx.fillText(text, i * 14, drops[i] * 14);

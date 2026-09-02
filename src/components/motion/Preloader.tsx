@@ -131,7 +131,7 @@ export function Preloader() {
       <p className="text-[.9375rem] text-tr-text-mute" style={mono}>
         {FULL_TEXT.slice(0, typedLength)}
         <span
-          className="ml-[2px] inline-block h-[1.05em] w-[.55em] align-[-0.15em] bg-tr-ember"
+          className="ml-[2px] inline-block h-[1.05em] w-[.55em] align-[-0.15em] bg-tr-accent"
           style={{ animation: `${CURSOR_BLINK_KEYFRAMES} 900ms steps(1) infinite` }}
         />
       </p>

@@ -181,7 +181,7 @@ body {
 
 .input:focus {
   outline: none;
-  border-color: var(--tr-ember);
+  border-color: var(--tr-accent);
   background: var(--bg-primary);
 }
 
@@ -194,7 +194,7 @@ body {
    ═══════════════════════════════════════════════════════════════ */
 
 :focus-visible {
-  outline: 2px solid var(--tr-ember);
+  outline: 2px solid var(--tr-accent);
   outline-offset: 2px;
 }
 
@@ -318,11 +318,11 @@ html.lenis {
   outline: none;
 }
 .buddy:focus-visible {
-  outline: 2px solid var(--tr-ember); outline-offset: 2px; border-radius: 2px;
+  outline: 2px solid var(--tr-accent); outline-offset: 2px; border-radius: 2px;
 }
 .buddy--mini { font-size: 12px; }
 .buddy--full { font-size: 14px; display: block; }
-.buddy-prompt { color: var(--tr-ember); }
+.buddy-prompt { color: var(--tr-accent); }
 .buddy-face { color: var(--tr-text); }
 .buddy-word {
   color: var(--tr-text-mute); font-size: 0.9em;
@@ -396,7 +396,7 @@ html.lenis {
 :root {
   /* ---- color: dark (canonical) ----
      Promoted from the .home-v4 scope on 2026-09-02, see ADR 0014. The accent
-     is yellow now; --tr-ember keeps its slot name for the moment. Four values
+     is yellow now; --tr-accent keeps its slot name for the moment. Four values
      differ from the design export because the export's fail WCAG AA as text,
      noted inline. */
   --tr-bg: #0B0C0F;
@@ -406,9 +406,9 @@ html.lenis {
   --tr-text: #EDEFF3;
   --tr-text-mute: #98A0AC;
   --tr-text-faint: #7E8694;   /* design #5F6673 is 3.4:1 on bg; lifted to 5.3:1 */
-  --tr-ember: #F4D53A;
-  --tr-ember-hover: #FFE066;
-  --tr-on-ember: #0B0C0F;
+  --tr-accent: #F4D53A;
+  --tr-accent-hover: #FFE066;
+  --tr-on-accent: #0B0C0F;
   --tr-ok: #6BE19A;
   /* The third status colour, after ok. It marks the honest gaps: a published
      number the notebook does not reproduce, a component wired but untrained,
@@ -502,9 +502,9 @@ html.lenis {
   --tr-text: #111318;
   --tr-text-mute: #4A5160;    /* design #5A606B; darkened so faint can sit below it */
   --tr-text-faint: #5F6671;   /* design #8B919B is 3.0:1; now 4.9:1 on surface-2 */
-  --tr-ember: #7A6200;        /* design #B08F00 is 2.9:1 as text; now 5.0:1 */
-  --tr-ember-hover: #5E4B00;
-  --tr-on-ember: #FFFFFF;     /* white on #7A6200 is 5.9:1 */
+  --tr-accent: #7A6200;        /* design #B08F00 is 2.9:1 as text; now 5.0:1 */
+  --tr-accent-hover: #5E4B00;
+  --tr-on-accent: #FFFFFF;     /* white on #7A6200 is 5.9:1 */
   --tr-ok: #17703F;           /* design #1E8A50 is 4.1:1; now 5.2:1 */
   --tr-warn: #8A4A08;         /* design #B8651B is 3.6:1 on surface-2; now 5.8:1 */
   --tr-accent-soft: rgba(122, 98, 0, .14);
@@ -524,9 +524,9 @@ html.lenis {
     --tr-text: #111318;
     --tr-text-mute: #4A5160;
     --tr-text-faint: #5F6671;
-    --tr-ember: #7A6200;
-    --tr-ember-hover: #5E4B00;
-    --tr-on-ember: #FFFFFF;
+    --tr-accent: #7A6200;
+    --tr-accent-hover: #5E4B00;
+    --tr-on-accent: #FFFFFF;
     --tr-ok: #17703F;
     --tr-warn: #8A4A08;
     --tr-accent-soft: rgba(122, 98, 0, .14);
@@ -539,9 +539,9 @@ html.lenis {
    step), so the scope class this concept shipped behind is gone. These are the
    element-level rules that came with it, unscoped now that every route is in
    this system. */
-::selection { background: var(--tr-ember); color: var(--tr-on-ember); }
+::selection { background: var(--tr-accent); color: var(--tr-on-accent); }
 a { color: inherit; text-decoration: none; }
-a:hover { color: var(--tr-ember); }
+a:hover { color: var(--tr-accent); }
 textarea::placeholder, input::placeholder { color: var(--tr-text-faint); }
 
 @keyframes v4-caret { 50%, 100% { opacity: 0; } }
@@ -549,7 +549,7 @@ textarea::placeholder, input::placeholder { color: var(--tr-text-faint); }
 @keyframes v4-cube-idle { from { transform: rotateX(-24deg) rotateY(0deg); } to { transform: rotateX(-24deg) rotateY(360deg); } }
 @keyframes v4-wiggle { 0%, 100% { transform: rotate(0); } 25% { transform: rotate(-6deg); } 75% { transform: rotate(6deg); } }
 
-/* Expose color tokens to Tailwind utilities (bg-tr-bg, text-tr-ember, …).
+/* Expose color tokens to Tailwind utilities (bg-tr-bg, text-tr-accent, …).
    "inline" so utilities stay theme-reactive instead of freezing at the
    :root (dark) default — see Tailwind v4 @theme docs. */
 @theme inline {
@@ -560,9 +560,9 @@ textarea::placeholder, input::placeholder { color: var(--tr-text-faint); }
   --color-tr-text: var(--tr-text);
   --color-tr-text-mute: var(--tr-text-mute);
   --color-tr-text-faint: var(--tr-text-faint);
-  --color-tr-ember: var(--tr-ember);
-  --color-tr-ember-hover: var(--tr-ember-hover);
-  --color-tr-on-ember: var(--tr-on-ember);
+  --color-tr-accent: var(--tr-accent);
+  --color-tr-accent-hover: var(--tr-accent-hover);
+  --color-tr-on-accent: var(--tr-on-accent);
   --color-tr-ok: var(--tr-ok);
   --color-tr-warn: var(--tr-warn);
 }

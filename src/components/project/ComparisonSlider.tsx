@@ -28,7 +28,7 @@ export function ComparisonSlider({
     <div>
       <div className="flex flex-wrap items-center justify-between gap-3">
         <p className="font-[family-name:var(--ff-mono)] text-[length:var(--tr-t-mono)] tracking-[.05em] text-tr-text-faint">
-          <span aria-hidden="true" className="text-tr-ember">
+          <span aria-hidden="true" className="text-tr-accent">
             ◆
           </span>{" "}
           INPUT FRAME → PIPELINE OUTPUT · drag
@@ -44,8 +44,8 @@ export function ComparisonSlider({
                 onClick={() => setActiveIndex(i)}
                 className={`inline-flex h-7 items-center rounded-full border px-3 font-[family-name:var(--ff-mono)] text-[length:var(--tr-t-mono-sm)] transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] ${
                   i === activeIndex
-                    ? "border-tr-ember bg-tr-ember text-tr-on-ember"
-                    : "border-tr-hairline text-tr-text-mute hover:border-tr-ember"
+                    ? "border-tr-accent bg-tr-accent text-tr-on-accent"
+                    : "border-tr-hairline text-tr-text-mute hover:border-tr-accent"
                 }`}
               >
                 {p.label ?? `Frame ${i + 1}`}
@@ -95,12 +95,12 @@ export function ComparisonSlider({
 
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute inset-y-0 w-px bg-tr-ember"
+          className="pointer-events-none absolute inset-y-0 w-px bg-tr-accent"
           style={{ left: `${pos}%` }}
         />
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute top-1/2 flex h-11 w-11 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-tr-ember font-[family-name:var(--ff-mono)] text-[13px] text-tr-on-ember"
+          className="pointer-events-none absolute top-1/2 flex h-11 w-11 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-tr-accent font-[family-name:var(--ff-mono)] text-[13px] text-tr-on-accent"
           style={{ left: `${pos}%` }}
         >
           ‹&nbsp;›

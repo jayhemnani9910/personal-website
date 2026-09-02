@@ -13,7 +13,7 @@ const MONO = "font-[family-name:var(--ff-mono)]";
 const fmtDate = (d: string) =>
   new Date(d).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" });
 
-const backLinkClass = `group inline-flex items-center gap-2 ${MONO} text-[length:var(--tr-t-mono)] uppercase tracking-[.04em] text-tr-text-mute no-underline transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] hover:text-tr-ember`;
+const backLinkClass = `group inline-flex items-center gap-2 ${MONO} text-[length:var(--tr-t-mono)] uppercase tracking-[.04em] text-tr-text-mute no-underline transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] hover:text-tr-accent`;
 
 // Vertical hairline divider between meta chips, matching the stat rows the
 // other token routes use (PROJECTS · OSS PRS · PAPERS).
@@ -69,7 +69,7 @@ const mdxComponents = {
   a: (props: JSX.IntrinsicElements["a"]) => (
     <a
       {...props}
-      className="text-tr-text underline decoration-transparent underline-offset-[3px] transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] hover:text-tr-ember hover:decoration-tr-ember"
+      className="text-tr-text underline decoration-transparent underline-offset-[3px] transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] hover:text-tr-accent hover:decoration-tr-accent"
     />
   ),
   strong: (props: JSX.IntrinsicElements["strong"]) => <strong {...props} className="font-semibold text-tr-text" />,

@@ -185,12 +185,12 @@ export function FdeConsole() {
             </div>
             <span>fde.sim: awaiting customer brief</span>
           </div>
-          <span className="text-tr-ember">● READY</span>
+          <span className="text-tr-accent">● READY</span>
         </div>
 
         <div className="px-6 py-7 sm:px-8">
           <div className={`mb-3.5 ${MONO} text-[length:var(--tr-t-mono-sm)] tracking-[.04em] text-tr-text-mute`}>
-            <span className="text-tr-ember" aria-hidden="true">❯ </span>
+            <span className="text-tr-accent" aria-hidden="true">❯ </span>
             tell me what you want built. ambiguity is fine, that&apos;s the point.
           </div>
 
@@ -214,7 +214,7 @@ export function FdeConsole() {
               {PRESETS.map(p => (
                 <button
                   key={p.id}
-                  className={`whitespace-nowrap rounded-full border border-tr-hairline px-2.5 py-1 ${MONO} text-[length:var(--tr-t-mono-sm)] text-tr-text transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] hover:border-tr-ember hover:text-tr-ember`}
+                  className={`whitespace-nowrap rounded-full border border-tr-hairline px-2.5 py-1 ${MONO} text-[length:var(--tr-t-mono-sm)] text-tr-text transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] hover:border-tr-accent hover:text-tr-accent`}
                   onClick={() => startPreset(p)}
                   type="button"
                 >
@@ -223,7 +223,7 @@ export function FdeConsole() {
               ))}
             </div>
             <button
-              className={`whitespace-nowrap rounded-[var(--tr-r-sm)] bg-tr-ember px-4 py-2.5 ${MONO} text-[length:var(--tr-t-mono-sm)] font-semibold uppercase tracking-[.04em] text-tr-on-ember transition-opacity duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] disabled:cursor-not-allowed disabled:opacity-40`}
+              className={`whitespace-nowrap rounded-[var(--tr-r-sm)] bg-tr-accent px-4 py-2.5 ${MONO} text-[length:var(--tr-t-mono-sm)] font-semibold uppercase tracking-[.04em] text-tr-on-accent transition-opacity duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] disabled:cursor-not-allowed disabled:opacity-40`}
               onClick={startCustom}
               disabled={!briefInput.trim() || loading}
               type="button"
@@ -255,7 +255,7 @@ export function FdeConsole() {
 
           {loading && (
             <div className={`flex items-center gap-2.5 py-6 ${MONO} text-[length:var(--tr-t-mono)] text-tr-text-mute`} aria-live="polite">
-              <span className="h-4 w-4 shrink-0 animate-spin rounded-full border-2 border-tr-hairline border-t-tr-ember" aria-hidden="true" />
+              <span className="h-4 w-4 shrink-0 animate-spin rounded-full border-2 border-tr-hairline border-t-tr-accent" aria-hidden="true" />
               <span>
                 routing your brief through the agent
                 <span className="animate-pulse" aria-hidden="true">...</span>
@@ -265,14 +265,14 @@ export function FdeConsole() {
 
           {error && (
             <div
-              className={`mt-4 border-l-2 border-tr-ember bg-[color-mix(in_srgb,var(--tr-ember)_12%,transparent)] px-3.5 py-3 ${MONO} text-[length:var(--tr-t-mono)] leading-[var(--tr-lh-body)] text-tr-text`}
+              className={`mt-4 border-l-2 border-tr-accent bg-[color-mix(in_srgb,var(--tr-accent)_12%,transparent)] px-3.5 py-3 ${MONO} text-[length:var(--tr-t-mono)] leading-[var(--tr-lh-body)] text-tr-text`}
               role="alert"
             >
-              <span className="tracking-[.1em] text-tr-ember">ERROR · </span>
+              <span className="tracking-[.1em] text-tr-accent">ERROR · </span>
               {error}
               <div className="mt-2.5">
                 <button
-                  className={`whitespace-nowrap rounded-full border border-tr-hairline px-2.5 py-1 ${MONO} text-[length:var(--tr-t-mono-sm)] text-tr-text transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] hover:border-tr-ember hover:text-tr-ember`}
+                  className={`whitespace-nowrap rounded-full border border-tr-hairline px-2.5 py-1 ${MONO} text-[length:var(--tr-t-mono-sm)] text-tr-text transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] hover:border-tr-accent hover:text-tr-accent`}
                   type="button"
                   onClick={() => startPreset(closestPreset(briefInput))}
                 >

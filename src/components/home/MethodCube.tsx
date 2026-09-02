@@ -17,7 +17,7 @@ const IDLE_NOTE = "Personal best, official. Click to scramble, I promise I am fa
 // lights are quoted elsewhere in this system: the one place in this file
 // allowed to be raw hex instead of a --tr-* token.
 const SOLVED_COLORS = [
-  "var(--tr-ember)",
+  "var(--tr-accent)",
   "var(--tr-text)",
   "#E2432E",
   "#F28C28",
@@ -150,7 +150,7 @@ export function MethodCube() {
         {scrambled && (
           <p className="mb-0 mt-1 text-[length:var(--tr-t-small)] leading-[var(--tr-lh-prose)] text-tr-text-mute">
             I wrote{" "}
-            <Link href="/projects/rubiks-timer" className="underline hover:text-tr-ember">
+            <Link href="/projects/rubiks-timer" className="underline hover:text-tr-accent">
               the timer app
             </Link>
             .

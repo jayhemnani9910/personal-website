@@ -3,10 +3,10 @@ import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 
-// Contrast guard for the "Two Readers" palette (see redesign/TOKENS.md).
+// Contrast guard for the palette (see redesign/TOKENS.md).
 //
 // This test parses the REAL stylesheet. An earlier version mirrored the hexes
-// as literals in this file, which made it vacuous: setting --tr-ember to a
+// as literals in this file, which made it vacuous: setting --tr-accent to a
 // 2:1 value in globals.css left all 26 assertions green, because they were
 // checking a copy of the palette rather than the palette. A test that cannot
 // fail is worse than no test.
@@ -41,11 +41,11 @@ function paletteFor(selector: string): Record<string, string> {
 const DARK = paletteFor(":root"); // dark is canonical, so it is the base
 const LIGHT = paletteFor(':root[data-theme="light"]');
 
-const REQUIRED = ["bg", "surface-1", "surface-2", "text", "text-mute", "text-faint", "ember", "ember-hover", "on-ember", "ok", "warn"] as const;
+const REQUIRED = ["bg", "surface-1", "surface-2", "text", "text-mute", "text-faint", "accent", "accent-hover", "on-accent", "ok", "warn"] as const;
 const SURFACES = ["bg", "surface-1", "surface-2"] as const;
 // `ok` joined this list when the v4 system was promoted to :root (ADR 0014):
 // it is the live/verified green, and it carries text on all three surfaces.
-const TEXT_TOKENS = ["text", "text-mute", "text-faint", "ember", "ok", "warn"] as const;
+const TEXT_TOKENS = ["text", "text-mute", "text-faint", "accent", "ok", "warn"] as const;
 const AA_MIN = 4.5;
 
 function channelLuminance(channel8bit: number): number {
@@ -213,14 +213,14 @@ for (const [theme, palette] of [["dark", DARK], ["light", LIGHT]] as const) {
   for (const fg of TEXT_TOKENS) {
     for (const bg of SURFACES) cases.push({ theme, fg, bg, palette });
   }
-  // The primary CTA's label on its own ember fill. This is the single most
-  // important pair on the site: white on the dark ember measures 3.08:1 and
-  // fails, which is why --tr-on-ember is near-black rather than white.
-  cases.push({ theme, fg: "on-ember", bg: "ember", palette });
+  // The primary CTA's label on its own accent fill. This is the single most
+  // important pair on the site: white on the dark accent measures 3.08:1 and
+  // fails, which is why --tr-on-accent is near-black rather than white.
+  cases.push({ theme, fg: "on-accent", bg: "accent", palette });
   // The same label once the cursor is on it. A hover fill is still a surface
   // carrying text, so it has to clear AA too, in both directions: dark hover
-  // lightens the ember, light hover darkens it.
-  cases.push({ theme, fg: "on-ember", bg: "ember-hover", palette });
+  // lightens the accent, light hover darkens it.
+  cases.push({ theme, fg: "on-accent", bg: "accent-hover", palette });
 }
 
 // The v4 home (ADR 0014) adds one foreground not present in the base

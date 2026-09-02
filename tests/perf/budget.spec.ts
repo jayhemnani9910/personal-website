@@ -27,14 +27,15 @@ const ROUTE = "/";
 // with no headroom is the same thing with extra steps.
 const BUDGET = {
   scriptBytes: 850 * 1024,     // measured 765.7 KB, then 718.2 KB on 2026-09-02
-  // 95 KB (measured 84.3) under the editorial system, then 110 KB for the day
-  // the v4 home shipped a second palette beside it. ADR 0014 said that number
-  // had to come back down when the scope was promoted to :root and deleted, or
-  // the promotion was not finished. It did: measured 96.1 KB. The gap against
-  // the original 84.3 is real and is not leftovers, it is that the v4
-  // components lean on arbitrary-value utilities (exact clamps, exact pixel
-  // sizes) far more than the editorial ones did.
-  stylesheetBytes: 105 * 1024, // measured 96.1 KB
+  // A moving number, so the history matters: 95 KB under the editorial system,
+  // 110 KB for the day the v4 home shipped a second palette beside it, 105 KB
+  // once ADR 0014's promotion put one palette back at :root. Now 65 KB, because
+  // deleting the retired .editorial / .fde-* / .dossier / .sw-* rules and the
+  // unused utility layer took globals.css from 76.9 KB to 19.5 KB of source.
+  // Measured 56.9 KB served. Headroom is deliberate but this one is tight on
+  // purpose: there is no longer a second design system to absorb, so the next
+  // few KB of growth should be something a person chose.
+  stylesheetBytes: 65 * 1024,  // measured 56.9 KB
   // 5 under the editorial system, 6 for the day both type systems shipped, now
   // 4: Newsreader and JetBrains Mono are out of the build entirely, and both
   // remaining families are variable faces. Still an equality check, and this is

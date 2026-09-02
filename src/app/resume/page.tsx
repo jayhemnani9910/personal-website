@@ -79,7 +79,7 @@ export default function AboutPage() {
                 target="_blank"
                 rel="noreferrer"
                 data-cursor="OPEN"
-                className={`${MONO} text-[length:var(--tr-t-mono-sm)] uppercase text-tr-text-mute underline decoration-tr-hairline decoration-1 underline-offset-4 transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] hover:text-tr-ember hover:decoration-tr-ember`}
+                className={`${MONO} text-[length:var(--tr-t-mono-sm)] uppercase text-tr-text-mute underline decoration-tr-hairline decoration-1 underline-offset-4 transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] hover:text-tr-accent hover:decoration-tr-accent`}
               >
                 {r.label}
               </a>
@@ -196,7 +196,7 @@ export default function AboutPage() {
                         href={pub.link}
                         target="_blank"
                         rel="noreferrer"
-                        className="inline-flex min-h-6 items-center py-1 transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] hover:text-tr-ember"
+                        className="inline-flex min-h-6 items-center py-1 transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] hover:text-tr-accent"
                       >
                         ieeexplore ↗
                       </a>
@@ -206,13 +206,13 @@ export default function AboutPage() {
                         href={pub.github}
                         target="_blank"
                         rel="noreferrer"
-                        className="inline-flex min-h-6 items-center py-1 transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] hover:text-tr-ember"
+                        className="inline-flex min-h-6 items-center py-1 transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] hover:text-tr-accent"
                       >
                         notebook ↗
                       </a>
                     ) : null}
                     {gap ? (
-                      <p className="border border-tr-hairline rounded-[var(--tr-r-md)] px-3 py-2 text-tr-ember">
+                      <p className="border border-tr-hairline rounded-[var(--tr-r-md)] px-3 py-2 text-tr-accent">
                         Published {gap.published}% · reproduced {gap.reproduced}%.
                       </p>
                     ) : null}
@@ -264,7 +264,7 @@ export default function AboutPage() {
                         href={pr.href}
                         target="_blank"
                         rel="noreferrer"
-                        className={`${MONO} inline-flex min-h-6 items-center gap-2 py-1 text-[length:var(--tr-t-mono-sm)] text-tr-text-mute transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] hover:text-tr-ember`}
+                        className={`${MONO} inline-flex min-h-6 items-center gap-2 py-1 text-[length:var(--tr-t-mono-sm)] text-tr-text-mute transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] hover:text-tr-accent`}
                       >
                         <span>{pr.repo}</span>
                         <span className="text-tr-text-faint">{pr.number} ↗</span>
@@ -276,7 +276,7 @@ export default function AboutPage() {
                   href={MERGED_PRS_SEARCH}
                   target="_blank"
                   rel="noreferrer"
-                  className={`${MONO} mt-2 inline-flex min-h-6 items-center py-1 text-[length:var(--tr-t-mono-sm)] text-tr-text-faint transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] hover:text-tr-ember`}
+                  className={`${MONO} mt-2 inline-flex min-h-6 items-center py-1 text-[length:var(--tr-t-mono-sm)] text-tr-text-faint transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] hover:text-tr-accent`}
                 >
                   verify all ↗
                 </a>
@@ -290,7 +290,7 @@ export default function AboutPage() {
                   <Link
                     href="/projects/rubiks-timer"
                     data-cursor="OPEN"
-                    className="text-tr-text-mute underline decoration-tr-hairline decoration-1 underline-offset-4 transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] hover:text-tr-ember hover:decoration-tr-ember"
+                    className="text-tr-text-mute underline decoration-tr-hairline decoration-1 underline-offset-4 transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] hover:text-tr-accent hover:decoration-tr-accent"
                   >
                     the timer
                   </Link>

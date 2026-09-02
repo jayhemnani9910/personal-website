@@ -28,8 +28,8 @@ export function SkillGroups({ groups }: { groups: SkillGroup[] }) {
             onClick={() => setActive(i)}
             className={`${MONO} h-[30px] rounded-full border px-[.8rem] text-[12.5px] transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] ${
               i === active
-                ? "border-tr-ember bg-tr-ember text-tr-on-ember"
-                : "border-tr-hairline text-tr-text-mute hover:border-tr-ember"
+                ? "border-tr-accent bg-tr-accent text-tr-on-accent"
+                : "border-tr-hairline text-tr-text-mute hover:border-tr-accent"
             }`}
           >
             {g.category}

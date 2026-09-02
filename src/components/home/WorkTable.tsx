@@ -49,7 +49,7 @@ export function WorkTable({ projects, total }: { projects: FeaturedProject[]; to
               data-cursor="OPEN"
               className={`peer group grid ${ROW_COLS} py-[1.35rem] items-start`}
             >
-              <span className={`${MONO} text-tr-text-faint group-hover:text-tr-ember`}>{p.num}</span>
+              <span className={`${MONO} text-tr-text-faint group-hover:text-tr-accent`}>{p.num}</span>
 
               <span className="group-hover:translate-x-1.5 transition-transform">
                 <span className="block text-[length:var(--tr-t-h3)] leading-[var(--tr-lh-h3)] tracking-[-.02em] font-medium">
@@ -84,7 +84,7 @@ export function WorkTable({ projects, total }: { projects: FeaturedProject[]; to
             </Link>
             <span
               aria-hidden
-              className="absolute left-[-1rem] top-0 bottom-0 w-0.5 bg-tr-ember origin-top scale-y-0 peer-hover:scale-y-100 transition-transform duration-300 ease-[var(--tr-ease)]"
+              className="absolute left-[-1rem] top-0 bottom-0 w-0.5 bg-tr-accent origin-top scale-y-0 peer-hover:scale-y-100 transition-transform duration-300 ease-[var(--tr-ease)]"
             />
           </li>
         ))}

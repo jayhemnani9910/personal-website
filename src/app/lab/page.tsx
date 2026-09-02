@@ -19,7 +19,7 @@ const CONTAINER = "mx-auto max-w-[1280px] px-[clamp(1rem,4vw,2rem)]";
 const TWO_COL = "lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]";
 
 // Calm mono status derived from the tab plus (for Building) the progress value.
-// Never ember: the active tab is the page's single at-rest ember, so a status
+// Never the accent: the active tab is the page's single at-rest accent, so a status
 // here stays in the machine channel.
 function statusFor(tab: TabKey, progress?: number): string {
   if (tab === "exploring") return "Exploring";
@@ -45,7 +45,7 @@ function LabCard({ item, tab }: { item: LabItem; tab: TabKey }) {
             rel="noreferrer"
             aria-label={`${item.title} on GitHub`}
             data-cursor="OPEN"
-            className="text-tr-text-mute transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] hover:text-tr-ember"
+            className="text-tr-text-mute transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] hover:text-tr-accent"
           >
             <Github aria-hidden="true" className="h-4 w-4" />
           </a>
@@ -152,7 +152,7 @@ export default function LabPage() {
                 onKeyDown={(e) => onTabKeyDown(e, i)}
                 className={`-mb-px flex items-center gap-2 border-b-2 pb-3 text-[length:var(--tr-t-mono)] uppercase tracking-[.04em] transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] ${
                   selected
-                    ? "border-tr-ember text-tr-ember"
+                    ? "border-tr-accent text-tr-accent"
                     : "border-transparent text-tr-text-mute hover:text-tr-text"
                 }`}
               >
@@ -209,7 +209,7 @@ export default function LabPage() {
           <a
             href="mailto:jayhemnani992000@gmail.com"
             data-cursor="OPEN"
-            className="flex flex-col border border-tr-hairline bg-tr-bg px-5 py-4 no-underline transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] hover:border-tr-ember"
+            className="flex flex-col border border-tr-hairline bg-tr-bg px-5 py-4 no-underline transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] hover:border-tr-accent"
           >
             <span className={`${MONO} text-[length:var(--tr-t-mono-sm)] uppercase tracking-[.08em] text-tr-text-mute`}>
               Open the line

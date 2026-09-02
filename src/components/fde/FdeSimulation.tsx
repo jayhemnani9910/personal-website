@@ -89,7 +89,7 @@ export function FdeSimulation({ payload, brief, source, onExit, streaming = fals
       {/* Head */}
       <div className="grid grid-cols-[auto_1fr_auto] items-center gap-4 border-b border-tr-hairline bg-tr-surface-2 px-5 py-3.5">
         <button
-          className={`whitespace-nowrap rounded-[var(--tr-r-sm)] border border-tr-hairline px-2.5 py-1.5 ${MONO} text-[length:var(--tr-t-mono-sm)] tracking-[.06em] text-tr-text transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] hover:border-tr-ember hover:text-tr-ember`}
+          className={`whitespace-nowrap rounded-[var(--tr-r-sm)] border border-tr-hairline px-2.5 py-1.5 ${MONO} text-[length:var(--tr-t-mono-sm)] tracking-[.06em] text-tr-text transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] hover:border-tr-accent hover:text-tr-accent`}
           onClick={onExit}
           type="button"
         >
@@ -114,7 +114,7 @@ export function FdeSimulation({ payload, brief, source, onExit, streaming = fals
               key={p.key}
               className={`border-b-2 border-r border-r-tr-hairline px-3.5 py-3.5 text-left ${MONO} text-[length:var(--tr-t-mono-sm)] tracking-[.06em] transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] last:border-r-0 disabled:cursor-not-allowed ${
                 state === 'active'
-                  ? 'border-b-tr-ember bg-tr-surface-2 text-tr-ember'
+                  ? 'border-b-tr-accent bg-tr-surface-2 text-tr-accent'
                   : state === 'done'
                     ? 'border-b-transparent text-tr-text hover:bg-tr-surface-2'
                     : 'border-b-transparent text-tr-text-faint hover:enabled:bg-tr-surface-2 hover:enabled:text-tr-text'
@@ -150,7 +150,7 @@ export function FdeSimulation({ payload, brief, source, onExit, streaming = fals
 
           <div className="mt-8 flex flex-wrap items-center justify-between gap-3.5 border-t border-tr-hairline pt-5">
             <button
-              className={`rounded-[var(--tr-r-sm)] border border-tr-hairline bg-tr-surface-2 px-4 py-2 ${MONO} text-[length:var(--tr-t-mono-sm)] tracking-[.04em] text-tr-text transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] hover:enabled:border-tr-ember disabled:cursor-not-allowed disabled:opacity-40`}
+              className={`rounded-[var(--tr-r-sm)] border border-tr-hairline bg-tr-surface-2 px-4 py-2 ${MONO} text-[length:var(--tr-t-mono-sm)] tracking-[.04em] text-tr-text transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] hover:enabled:border-tr-accent disabled:cursor-not-allowed disabled:opacity-40`}
               onClick={prev}
               disabled={phase === 0}
               type="button"
@@ -161,7 +161,7 @@ export function FdeSimulation({ payload, brief, source, onExit, streaming = fals
               {phase + 1} / {PHASES.length}
             </span>
             <button
-              className={`rounded-[var(--tr-r-sm)] bg-tr-ember px-4 py-2 ${MONO} text-[length:var(--tr-t-mono-sm)] font-semibold tracking-[.04em] text-tr-on-ember transition-opacity duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] disabled:cursor-not-allowed disabled:opacity-40`}
+              className={`rounded-[var(--tr-r-sm)] bg-tr-accent px-4 py-2 ${MONO} text-[length:var(--tr-t-mono-sm)] font-semibold tracking-[.04em] text-tr-on-accent transition-opacity duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] disabled:cursor-not-allowed disabled:opacity-40`}
               onClick={next}
               disabled={phase === PHASES.length - 1 || !nextReady}
               type="button"
@@ -175,22 +175,22 @@ export function FdeSimulation({ payload, brief, source, onExit, streaming = fals
           className={`border-t border-tr-hairline bg-tr-surface-2 px-5 py-6 ${MONO} text-[length:var(--tr-t-mono-sm)] leading-[var(--tr-lh-body)] text-tr-text lg:border-l lg:border-t-0 lg:px-6 lg:py-7`}
           ref={sideRef}
         >
-          <h3 className="mb-3.5 text-[length:var(--tr-t-mono-sm)] uppercase tracking-[.18em] text-tr-ember">{"// Jay, narrating"}</h3>
+          <h3 className="mb-3.5 text-[length:var(--tr-t-mono-sm)] uppercase tracking-[.18em] text-tr-accent">{"// Jay, narrating"}</h3>
           {narration.slice(0, narrationVisible).map((n, i) => (
             <div key={`${phase}-${i}`} className={`mb-2.5 ${n.who === 'sys' ? 'text-tr-text-mute' : ''}`}>
-              <span className={`mr-1.5 ${n.who === 'sys' ? 'text-tr-text-faint' : 'text-tr-ember'}`}>{n.who === 'jay' ? '$ jay' : '~ sys'}</span>
+              <span className={`mr-1.5 ${n.who === 'sys' ? 'text-tr-text-faint' : 'text-tr-accent'}`}>{n.who === 'jay' ? '$ jay' : '~ sys'}</span>
               <span>{n.text}</span>
             </div>
           ))}
 
           <hr className="my-6 border-0 border-t border-tr-hairline" />
 
-          <h3 className="mb-3.5 text-[length:var(--tr-t-mono-sm)] uppercase tracking-[.18em] text-tr-ember">{"// Brief"}</h3>
+          <h3 className="mb-3.5 text-[length:var(--tr-t-mono-sm)] uppercase tracking-[.18em] text-tr-accent">{"// Brief"}</h3>
           <div className="italic text-tr-text-mute">&quot;{brief}&quot;</div>
 
           <hr className="my-6 border-0 border-t border-tr-hairline" />
 
-          <h3 className="mb-3.5 text-[length:var(--tr-t-mono-sm)] uppercase tracking-[.18em] text-tr-ember">{"// Stack"}</h3>
+          <h3 className="mb-3.5 text-[length:var(--tr-t-mono-sm)] uppercase tracking-[.18em] text-tr-accent">{"// Stack"}</h3>
           <div className="text-tr-text-mute">
             LangGraph · MCP · RAG<br />
             Python · FastAPI · Node<br />
@@ -207,13 +207,13 @@ export function FdeSimulation({ payload, brief, source, onExit, streaming = fals
 
 const PHASE_TITLE = `mb-2 max-w-[22ch] text-[length:var(--tr-t-h2)] leading-[var(--tr-lh-h2)] tracking-[-.01em] font-medium text-tr-text`;
 const PHASE_SUB = `mb-7 ${MONO} text-[length:var(--tr-t-mono-sm)] tracking-[.04em] text-tr-text-mute`;
-const EM = "italic text-tr-ember";
+const EM = "italic text-tr-accent";
 
 /** Shown in the panel for a section that has not arrived yet. */
 function AwaitingSection({ title }: { title: string }) {
   return (
     <div className={`flex items-center gap-2.5 py-6 ${MONO} text-[length:var(--tr-t-mono)] text-tr-text-mute`} aria-live="polite">
-      <span className="h-4 w-4 shrink-0 animate-spin rounded-full border-2 border-tr-hairline border-t-tr-ember" aria-hidden="true" />
+      <span className="h-4 w-4 shrink-0 animate-spin rounded-full border-2 border-tr-hairline border-t-tr-accent" aria-hidden="true" />
       <span>
         generating {title.toLowerCase()}
         <span className="animate-pulse" aria-hidden="true">...</span>
@@ -245,11 +245,11 @@ function PhaseContent({
           <div className={PHASE_SUB}>{"// scoping. before any building, before any architecture, before anything."}</div>
           {(payload.scope ?? []).map((s, i) => (
             <div key={i} className="grid grid-cols-[2.5rem_1fr] gap-4 border-t border-tr-hairline py-[18px] last:border-b">
-              <div className="pt-1 text-[length:var(--tr-t-stat)] italic leading-[var(--tr-lh-numeral)] text-tr-ember">Q{i + 1}</div>
+              <div className="pt-1 text-[length:var(--tr-t-stat)] italic leading-[var(--tr-lh-numeral)] text-tr-accent">Q{i + 1}</div>
               <div>
                 <div className="max-w-[50ch] text-[length:var(--tr-t-h3)] leading-[var(--tr-lh-h3)] text-tr-text">{s.q}</div>
                 <div className={`mt-1.5 flex gap-1 ${MONO} text-[length:var(--tr-t-mono-sm)] tracking-[.04em] text-tr-text-mute`}>
-                  <span className="text-tr-ember" aria-hidden="true">{"//"}</span>
+                  <span className="text-tr-accent" aria-hidden="true">{"//"}</span>
                   <span>{s.why}</span>
                 </div>
               </div>
@@ -269,9 +269,9 @@ function PhaseContent({
             {(payload.decomposition ?? []).map((d) => (
               <div
                 key={d.id}
-                className="grid grid-cols-[3.75rem_1fr] items-start gap-[18px] rounded-[var(--tr-r-sm)] border-l-2 border-tr-ember bg-tr-surface-2 px-4 py-3.5"
+                className="grid grid-cols-[3.75rem_1fr] items-start gap-[18px] rounded-[var(--tr-r-sm)] border-l-2 border-tr-accent bg-tr-surface-2 px-4 py-3.5"
               >
-                <div className={`pt-0.5 ${MONO} text-[length:var(--tr-t-mono-sm)] tracking-[.08em] text-tr-ember`}>{d.id}</div>
+                <div className={`pt-0.5 ${MONO} text-[length:var(--tr-t-mono-sm)] tracking-[.08em] text-tr-accent`}>{d.id}</div>
                 <div>
                   <div className="mb-1 font-medium text-tr-text">{d.title}</div>
                   <div className={`${MONO} text-[length:var(--tr-t-mono-sm)] leading-[var(--tr-lh-body)] text-tr-text-mute`}>{d.why}</div>
@@ -306,11 +306,11 @@ function PhaseContent({
                 key={i}
                 className="grid grid-cols-[6.25rem_1fr] items-start gap-[18px] rounded-[var(--tr-r-sm)] border border-tr-hairline bg-tr-surface-2 px-[18px] py-4"
               >
-                <div className={`pt-0.5 ${MONO} text-[length:var(--tr-t-mono-sm)] tracking-[.08em] text-tr-ember`}>{s.day}</div>
+                <div className={`pt-0.5 ${MONO} text-[length:var(--tr-t-mono-sm)] tracking-[.08em] text-tr-accent`}>{s.day}</div>
                 <div>
                   <div className="mb-1.5 font-medium text-tr-text">{s.title}</div>
                   <div className={`${MONO} text-[length:var(--tr-t-mono-sm)] leading-[var(--tr-lh-body)] text-tr-text-mute`}>
-                    <span className="text-tr-ember">deliverable: </span>
+                    <span className="text-tr-accent">deliverable: </span>
                     {s.deliv}
                   </div>
                 </div>
@@ -331,14 +331,14 @@ function PhaseContent({
             {(payload.risks ?? []).map((r, i) => (
               <div
                 key={i}
-                className="grid grid-cols-1 gap-[22px] rounded-[var(--tr-r-sm)] border border-tr-hairline border-l-2 border-l-tr-ember bg-tr-surface-2 px-[18px] py-4 sm:grid-cols-2"
+                className="grid grid-cols-1 gap-[22px] rounded-[var(--tr-r-sm)] border border-tr-hairline border-l-2 border-l-tr-accent bg-tr-surface-2 px-[18px] py-4 sm:grid-cols-2"
               >
                 <div>
-                  <h5 className={`mb-2 ${MONO} text-[length:var(--tr-t-mono-sm)] uppercase tracking-[.16em] text-tr-ember`}>Risk</h5>
+                  <h5 className={`mb-2 ${MONO} text-[length:var(--tr-t-mono-sm)] uppercase tracking-[.16em] text-tr-accent`}>Risk</h5>
                   <p className="text-tr-text">{r.risk}</p>
                 </div>
                 <div>
-                  <h5 className={`mb-2 ${MONO} text-[length:var(--tr-t-mono-sm)] uppercase tracking-[.16em] text-tr-ember`}>Mitigation</h5>
+                  <h5 className={`mb-2 ${MONO} text-[length:var(--tr-t-mono-sm)] uppercase tracking-[.16em] text-tr-accent`}>Mitigation</h5>
                   <p className="text-tr-text">{r.mitigation}</p>
                 </div>
               </div>
@@ -357,19 +357,19 @@ function PhaseContent({
           <div className="grid grid-cols-1 gap-3.5 sm:grid-cols-2">
             {RECEIPTS.map((r, i) => (
               <div key={i} className="rounded-[var(--tr-r-sm)] border border-tr-hairline bg-tr-surface-2 px-5 py-[18px]">
-                <div className={`mb-2.5 ${MONO} text-[length:var(--tr-t-mono-sm)] tracking-[.14em] text-tr-ember`}>{r.phase}</div>
-                <div className={`mb-2 ${MONO} text-[length:var(--tr-t-mono-sm)] tracking-[.06em] text-tr-ember`}>{r.project}</div>
+                <div className={`mb-2.5 ${MONO} text-[length:var(--tr-t-mono-sm)] tracking-[.14em] text-tr-accent`}>{r.phase}</div>
+                <div className={`mb-2 ${MONO} text-[length:var(--tr-t-mono-sm)] tracking-[.06em] text-tr-accent`}>{r.project}</div>
                 <h3 className="mb-2 text-[length:var(--tr-t-h3)] leading-[var(--tr-lh-h3)] font-medium text-tr-text">{r.title}</h3>
                 <p className="mb-3 leading-[var(--tr-lh-prose)] text-tr-text">{r.desc}</p>
                 {r.note && (
-                  <div className={`mb-3 border-l-2 border-tr-ember pl-2.5 ${MONO} text-[length:var(--tr-t-mono-sm)] text-tr-text-faint`}>
-                    <span className="tracking-[.1em] text-tr-ember">note / </span>
+                  <div className={`mb-3 border-l-2 border-tr-accent pl-2.5 ${MONO} text-[length:var(--tr-t-mono-sm)] text-tr-text-faint`}>
+                    <span className="tracking-[.1em] text-tr-accent">note / </span>
                     {r.note}
                   </div>
                 )}
                 {r.link && (
                   <a
-                    className={`${MONO} border-b border-dashed border-tr-hairline pb-px text-[length:var(--tr-t-mono-sm)] text-tr-text no-underline transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] hover:border-tr-ember hover:text-tr-ember`}
+                    className={`${MONO} border-b border-dashed border-tr-hairline pb-px text-[length:var(--tr-t-mono-sm)] text-tr-text no-underline transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] hover:border-tr-accent hover:text-tr-accent`}
                     href={r.link.href}
                     target="_blank"
                     rel="noreferrer"
@@ -381,13 +381,13 @@ function PhaseContent({
             ))}
           </div>
 
-          <div className="mt-9 rounded-[var(--tr-r-md)] border border-dashed border-tr-ember bg-tr-surface-2 px-7 py-6 text-[length:var(--tr-t-h3)] leading-[var(--tr-lh-h3)] italic text-tr-text">
+          <div className="mt-9 rounded-[var(--tr-r-md)] border border-dashed border-tr-accent bg-tr-surface-2 px-7 py-6 text-[length:var(--tr-t-h3)] leading-[var(--tr-lh-h3)] italic text-tr-text">
             You just experienced what a 30-minute scoping call with me feels like, on your real problem.
             <br />
-            <span className="text-tr-ember">If that landed → </span>
+            <span className="text-tr-accent">If that landed → </span>
             <a
               href="mailto:jayhemnani992000@gmail.com"
-              className="not-italic text-tr-ember underline decoration-current underline-offset-2"
+              className="not-italic text-tr-accent underline decoration-current underline-offset-2"
             >
               jayhemnani992000@gmail.com
             </a>

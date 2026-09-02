@@ -34,7 +34,7 @@ const BOX_LERP = 0.28;
 type TargetRect = { x: number; y: number; w: number; h: number };
 
 // Ported 1:1 from the cursor reticle in redesign/concepts/two-readers.html
-// (class names, structure, lerp constants), with --ember/--hairline/--bg/--ease/
+// (class names, structure, lerp constants), with --accent/--hairline/--bg/--ease/
 // --font-mono swapped for their --tr-*/--font-geist-mono equivalents. Lives here
 // instead of globals.css so this component is fully self-contained.
 const RETICLE_STYLE = `
@@ -52,7 +52,7 @@ const RETICLE_STYLE = `
   .tr-reticle-mark {
     position: absolute;
     inset: 0;
-    stroke: var(--tr-ember);
+    stroke: var(--tr-accent);
     stroke-width: 1;
     fill: none;
     opacity: 1;
@@ -61,7 +61,7 @@ const RETICLE_STYLE = `
   .tr-reticle-box {
     position: absolute;
     inset: 0;
-    border: 1px solid var(--tr-ember);
+    border: 1px solid var(--tr-accent);
     opacity: 0;
     transition: opacity 0.2s var(--tr-ease);
   }
@@ -77,7 +77,7 @@ const RETICLE_STYLE = `
     font-size: var(--tr-t-mono-sm);
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: var(--tr-ember);
+    color: var(--tr-accent);
     background: var(--tr-bg);
     border: 1px solid var(--tr-hairline);
     padding: 0.25em 0.5em;
@@ -97,7 +97,7 @@ const RETICLE_STYLE = `
 `;
 
 // Custom reticle cursor: a hollow crosshair that lerps toward the pointer and
-// snaps to a thin ember outline around any [data-cursor="LABEL"] element it
+// snaps to a thin accent outline around any [data-cursor="LABEL"] element it
 // hovers. Desktop-fine-pointer-only, and inert under reduced motion.
 export function Cursor() {
   const finePointer = useFinePointer();

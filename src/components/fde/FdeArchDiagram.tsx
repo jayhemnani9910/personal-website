@@ -13,13 +13,13 @@ const PAD = 30;
 
 // kind -> { stroke (CSS var or named), fill (color-mix) }
 // Fills use inline style color-mix where supported; fallback is a low-opacity solid.
-// TWO READERS: ember is the only saturated colour, so node TYPES are encoded by
+// TWO READERS: accent is the only saturated colour, so node TYPES are encoded by
 // neutral tier + their mono labels, not by five hues (the old green/purple broke
-// the ember-only rule). UI (the entry the human acts on) is the one ember; the
+// the accent-only rule). UI (the entry the human acts on) is the one accent; the
 // rest step down through the text tiers. On /fde these editorial vars are remapped
 // to --tr-* by the .fde-page scope override in globals.css.
 const KIND_COLORS: Record<string, { stroke: string; fill: string }> = {
-  ui:       { stroke: 'var(--tr-ember)',   fill: 'color-mix(in srgb, var(--tr-ember) 8%, transparent)' },
+  ui:       { stroke: 'var(--tr-accent)',   fill: 'color-mix(in srgb, var(--tr-accent) 8%, transparent)' },
   agent:    { stroke: 'var(--tr-text)',      fill: 'color-mix(in srgb, var(--tr-text) 8%, transparent)' },
   service:  { stroke: 'var(--tr-text-mute)', fill: 'color-mix(in srgb, var(--tr-text-mute) 6%, transparent)' },
   data:     { stroke: 'var(--tr-text-mute)', fill: 'color-mix(in srgb, var(--tr-text-mute) 6%, transparent)' },
@@ -100,7 +100,7 @@ export function FdeArchDiagram({ architecture }: Props) {
           </marker>
           {/* Arrowhead for dashed (retrieval/feedback) edges */}
           <marker id="fde-arr-d" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
-            <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--tr-ember)" />
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--tr-accent)" />
           </marker>
         </defs>
 
@@ -116,7 +116,7 @@ export function FdeArchDiagram({ architecture }: Props) {
               <path
                 d={d}
                 fill="none"
-                stroke={isDashed ? 'var(--tr-ember)' : 'var(--tr-text-faint)'}
+                stroke={isDashed ? 'var(--tr-accent)' : 'var(--tr-text-faint)'}
                 strokeOpacity={isDashed ? 0.7 : 0.5}
                 strokeWidth={1.4}
                 strokeDasharray={isDashed ? '5 4' : undefined}
@@ -248,7 +248,7 @@ export function FdeArchDiagram({ architecture }: Props) {
         className="mt-3.5 flex flex-wrap gap-3.5 font-[family-name:var(--ff-mono)] text-[length:var(--tr-t-mono-sm)] tracking-[.06em] text-tr-text-mute"
         aria-label="Architecture legend"
       >
-        <span><span className="mr-1.5 inline-block h-2.5 w-2.5 border align-middle" style={{ borderColor: 'var(--tr-ember)' }} />UI surface</span>
+        <span><span className="mr-1.5 inline-block h-2.5 w-2.5 border align-middle" style={{ borderColor: 'var(--tr-accent)' }} />UI surface</span>
         <span><span className="mr-1.5 inline-block h-2.5 w-2.5 border align-middle" style={{ borderColor: 'var(--tr-text)' }} />Agent / model</span>
         <span><span className="mr-1.5 inline-block h-2.5 w-2.5 border align-middle" style={{ borderColor: 'var(--tr-text-mute)' }} />Service</span>
         <span><span className="mr-1.5 inline-block h-2.5 w-2.5 border align-middle" style={{ borderColor: 'var(--tr-text-mute)' }} />Data store</span>

@@ -50,7 +50,7 @@ export function SiteHeader({ meta }: { meta?: string }) {
               aria-current={isActive(item.href) ? "page" : undefined}
               className={
                 isActive(item.href)
-                  ? "border-b border-tr-ember pb-px text-tr-text"
+                  ? "border-b border-tr-accent pb-px text-tr-text"
                   : "text-tr-text-mute hover:text-tr-text"
               }
             >
@@ -66,7 +66,7 @@ export function SiteHeader({ meta }: { meta?: string }) {
             onClick={toggleTheme}
             aria-label="Toggle theme"
             data-cursor="FLIP"
-            className="h-[30px] w-[30px] rounded-[var(--tr-r-md)] border border-tr-hairline text-tr-text-mute transition-[transform,color,border-color] duration-500 ease-[var(--tr-ease)] hover:border-tr-ember hover:text-tr-text"
+            className="h-[30px] w-[30px] rounded-[var(--tr-r-md)] border border-tr-hairline text-tr-text-mute transition-[transform,color,border-color] duration-500 ease-[var(--tr-ease)] hover:border-tr-accent hover:text-tr-text"
             style={{ transform: theme === "dark" ? "rotate(0deg)" : "rotate(180deg)" }}
           >
             {theme === "dark" ? "◐" : "◑"}

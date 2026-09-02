@@ -24,10 +24,10 @@ const COLUMNS: { key: ColumnKey; n: string; label: string }[] = [
 
 const ENGINE_META: Record<Engine, { text: string; className: string }> = {
   idle: { text: "idle", className: "text-tr-text-faint" },
-  thinking: { text: "● decomposing…", className: "text-tr-ember" },
+  thinking: { text: "● decomposing…", className: "text-tr-accent" },
   preset: { text: "● preset", className: "text-tr-ok" },
   model: { text: "● live model", className: "text-tr-ok" },
-  offline: { text: "● closest preset (offline)", className: "text-tr-ember" },
+  offline: { text: "● closest preset (offline)", className: "text-tr-accent" },
 };
 
 const LINE_ANIM = "animate-[v4-line-in_.4s_cubic-bezier(.16,1,.3,1)_both]";
@@ -153,7 +153,7 @@ export function Decomposer() {
       style={{ boxShadow: "var(--tr-shadow-card)" }}
     >
       <div className="h-10 px-4 flex items-center gap-2 border-b border-tr-hairline font-mono text-[length:var(--tr-t-mono)] text-tr-text-mute">
-        <span className="text-tr-ember">◆</span>
+        <span className="text-tr-accent">◆</span>
         <span>decompose</span>
         <span className="text-tr-text-faint">· incoming brief</span>
         <span className={`ml-auto ${ENGINE_META[engine].className}`}>{ENGINE_META[engine].text}</span>
@@ -179,7 +179,7 @@ export function Decomposer() {
               key={p.short}
               type="button"
               onClick={() => pick(p.text)}
-              className="h-7 px-[.7rem] rounded-full border border-tr-hairline bg-transparent text-tr-text-mute text-[12px] transition-colors hover:border-tr-ember hover:text-tr-text"
+              className="h-7 px-[.7rem] rounded-full border border-tr-hairline bg-transparent text-tr-text-mute text-[12px] transition-colors hover:border-tr-accent hover:text-tr-text"
             >
               {p.short}
             </button>
@@ -188,7 +188,7 @@ export function Decomposer() {
             type="button"
             data-cursor="RUN"
             onClick={run}
-            className="ml-auto inline-flex items-center gap-2 h-[34px] px-4 rounded-[var(--tr-r-md)] bg-tr-ember text-tr-on-ember text-[12.5px] font-semibold"
+            className="ml-auto inline-flex items-center gap-2 h-[34px] px-4 rounded-[var(--tr-r-md)] bg-tr-accent text-tr-on-accent text-[12.5px] font-semibold"
           >
             Run <span className="font-mono font-normal opacity-70">⌘↵</span>
           </button>
@@ -205,7 +205,7 @@ export function Decomposer() {
                 <div key={col.key} className="bg-tr-bg p-4 min-h-[200px]">
                   <p
                     className={`m-0 mb-3 font-mono text-[length:var(--tr-t-mono-sm)] tracking-[.1em] ${
-                      active ? "text-tr-ember" : "text-tr-text-faint"
+                      active ? "text-tr-accent" : "text-tr-text-faint"
                     }`}
                   >
                     {col.n} {col.label}
@@ -223,7 +223,7 @@ export function Decomposer() {
                   {active && (
                     <span
                       aria-hidden="true"
-                      className="mt-2 inline-block h-[14px] w-2 bg-tr-ember animate-[v4-caret_.9s_steps(1)_infinite]"
+                      className="mt-2 inline-block h-[14px] w-2 bg-tr-accent animate-[v4-caret_.9s_steps(1)_infinite]"
                     />
                   )}
                 </div>
@@ -241,7 +241,7 @@ export function Decomposer() {
                   key={project.id}
                   href={`/projects/${project.id}`}
                   data-cursor="OPEN"
-                  className="border-b border-tr-hairline pb-[1px] hover:border-tr-ember"
+                  className="border-b border-tr-hairline pb-[1px] hover:border-tr-accent"
                 >
                   {project.title} <span className="text-tr-text-faint">↗</span>
                 </Link>
@@ -258,7 +258,7 @@ export function Decomposer() {
       )}
 
       {engine === "offline" && out && (
-        <p className="m-0 border-t border-tr-hairline py-[.7rem] px-4 font-mono text-[length:var(--tr-t-mono)] text-tr-ember">
+        <p className="m-0 border-t border-tr-hairline py-[.7rem] px-4 font-mono text-[length:var(--tr-t-mono)] text-tr-accent">
           {COPY.offlineNote}
         </p>
       )}

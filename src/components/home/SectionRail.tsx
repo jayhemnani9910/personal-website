@@ -42,7 +42,7 @@ export function SectionRail({ steps }: { steps: SectionStep[] }) {
               <span
                 aria-hidden="true"
                 className={`h-0.5 rounded-sm transition-[width] duration-[350ms] ${
-                  active ? "w-7 bg-tr-ember" : "w-3.5 bg-tr-hairline"
+                  active ? "w-7 bg-tr-accent" : "w-3.5 bg-tr-hairline"
                 }`}
               />
             </a>

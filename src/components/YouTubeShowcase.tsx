@@ -16,7 +16,7 @@ const MONO =
   "font-[family-name:var(--ff-mono)] text-[length:var(--tr-t-mono-sm)] tracking-[.1em] text-tr-text-faint";
 
 const CARD =
-  "block border border-tr-hairline rounded-[var(--tr-r-md)] overflow-hidden bg-tr-surface-1 hover:border-tr-ember transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)]";
+  "block border border-tr-hairline rounded-[var(--tr-r-md)] overflow-hidden bg-tr-surface-1 hover:border-tr-accent transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)]";
 
 // Fixed dark scrim, independent of theme: it sits over arbitrary YouTube
 // thumbnail imagery, so a theme token could land on a light frame and vanish.
@@ -95,7 +95,7 @@ function ChannelButton({
       aria-pressed={selected}
       onClick={onSelect}
       className={`min-w-[220px] text-left flex flex-col gap-[.15rem] px-4 py-[.7rem] rounded-[var(--tr-r-md)] border transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] ${
-        selected ? "border-tr-ember bg-tr-surface-1" : "border-tr-hairline bg-transparent hover:border-tr-ember"
+        selected ? "border-tr-accent bg-tr-surface-1" : "border-tr-hairline bg-transparent hover:border-tr-accent"
       }`}
     >
       <span className="font-medium tracking-[-.01em]">{channel.title}</span>
@@ -124,12 +124,12 @@ export function YouTubeShowcase({ data }: { data: YouTubeData }) {
 
       <div className="grid lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] gap-[clamp(2rem,5vw,5rem)] mt-8 mb-8">
         <div>
-          <h2 className={`${MONO} text-tr-ember`}>{copy?.tagline ?? channel.title}</h2>
+          <h2 className={`${MONO} text-tr-accent`}>{copy?.tagline ?? channel.title}</h2>
           <a
             href={channel.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-block mt-3 text-tr-text-mute border-b border-tr-hairline hover:text-tr-ember hover:border-tr-ember transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)]"
+            className="inline-block mt-3 text-tr-text-mute border-b border-tr-hairline hover:text-tr-accent hover:border-tr-accent transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)]"
           >
             {channel.url} ↗
           </a>

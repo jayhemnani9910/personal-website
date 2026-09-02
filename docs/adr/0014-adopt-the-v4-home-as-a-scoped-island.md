@@ -160,8 +160,30 @@ Measured across the promotion: stylesheet 103.5 KB to 96.1 KB, fonts 233.2 KB to
 budget's stylesheet entry said it had to come back down or the promotion was not
 finished; it did.
 
-**What is still outstanding:** `--tr-ember` holds yellow and has not been
-renamed to `--tr-accent`. That was the third item in the promotion criterion
-above and is deliberately deferred as its own change, because it is a mechanical
-rename across about forty files and mixing it into any of the four steps above
-would have buried real edits in noise.
+5. **The rename landed last**, on its own, which is why it is listed apart from
+   the four steps above: `--tr-ember` to `--tr-accent`, `--tr-ember-hover` to
+   `--tr-accent-hover`, `--tr-on-ember` to `--tr-on-accent`, 181 occurrences
+   across 28 files, plus the prose in comments that still called the accent an
+   ember. Mixing a mechanical rename of that size into a step that also changed
+   behaviour would have buried the real edits. `tokens.test.ts` proves it is not
+   cosmetic: it parses the real stylesheet, so its 47 contrast assertions only
+   pass if the key names it asks for match the tokens the CSS actually declares.
+
+That completes all three items of the promotion criterion. The scope is gone,
+the values are at `:root`, and the token is named after what it is.
+
+**The stylesheet went with it.** With `/fde` and `/projects/[id]` rebuilt, no
+element carried an `.editorial` or `.fde-page` wrapper any more, so the 393
+rules scoped under them could not match anything. They were deleted along with
+the unused pre-token utility layer (`.btn*`, `.glass*`, `.title-*`,
+`.section-*`, `.body-*`, `.card-interactive`, `.eyebrow`, `.no-print`,
+`.tr-cta`): 453 blocks, `globals.css` from 76.9 KB to 19.5 KB, served CSS from
+101 KB to 56.9 KB. ADR 0002 made visual regression coverage the precondition for
+exactly this, and the removal was verified against it rather than followed by a
+rebaseline: all 28 baselines passed unchanged, and hover and focus, which
+screenshots do not capture, were measured directly.
+
+The glow tokens were retired in the same pass. `--tr-glow-text` and
+`--tr-glow-box` had been set to `none` since the promotion, and three components
+still read them. A token whose value is `none` invites someone to give it a
+value and reintroduce the effect this concept dropped.

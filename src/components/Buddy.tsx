@@ -321,12 +321,12 @@ export function Buddy({ variant = "mini", className }: BuddyProps) {
   // implicit focusability outright; the click handler keeps working for
   // mouse users, it just leaves the tab order.
   const [eye1, eye2] = EYE_CHARS[expression];
-  // The one thing allowed to go ember: the eyes, and only while Buddy is
+  // The one thing allowed to take the accent: the eyes, and only while Buddy is
   // reacting to something real (a click or a theme change), never during
   // ambient cursor/scroll tracking or the idle blink loop.
   const isReacting = expression === "surprised" || expression === "happy";
   const eyeStyle = isReacting
-    ? { color: "var(--tr-ember)" }
+    ? { color: "var(--tr-accent)" }
     : undefined;
 
   const variantClass = variant === "full" ? "buddy buddy--full" : "buddy buddy--mini";

@@ -34,13 +34,13 @@ export function Method({ children }: { children: ReactNode }) {
             key={m.n}
             className="bg-tr-surface-1 hover:bg-tr-surface-2 transition-colors p-6 min-h-[210px] flex flex-col gap-4"
           >
-            <span className={`${MONO} text-tr-ember`}>{m.n}</span>
+            <span className={`${MONO} text-tr-accent`}>{m.n}</span>
             <p className="text-[length:var(--tr-t-h3)] leading-[var(--tr-lh-h3)] font-medium">{m.rule}</p>
             <p className="text-tr-text-mute">{m.why}</p>
             {/* Cast: typedRoutes needs the literal at the call site, and this one
                 arrives from src/data/home.ts. Backed by home.test.ts, which checks
                 every METHOD href points at a real content/projects file. */}
-            <Link href={m.href as Route} data-cursor="OPEN" className={`${MONO} mt-auto hover:text-tr-ember`}>
+            <Link href={m.href as Route} data-cursor="OPEN" className={`${MONO} mt-auto hover:text-tr-accent`}>
               ← {m.from}
             </Link>
           </li>

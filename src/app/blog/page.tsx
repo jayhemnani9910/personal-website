@@ -60,7 +60,7 @@ export default async function WritingPage() {
                 <div className="font-[family-name:var(--ff-mono)] leading-relaxed text-tr-text-faint">
                   <span className="block">{fmtDate(post.date)}</span>
                   {post.readingTime && (
-                    <span className="block text-tr-text-faint transition-colors group-hover:text-tr-ember">
+                    <span className="block text-tr-text-faint transition-colors group-hover:text-tr-accent">
                       {post.readingTime} min
                     </span>
                   )}
@@ -85,7 +85,7 @@ export default async function WritingPage() {
                   )}
                 </div>
 
-                <span className="font-[family-name:var(--ff-mono)] text-tr-text-faint transition-colors group-hover:text-tr-ember lg:text-right">
+                <span className="font-[family-name:var(--ff-mono)] text-tr-text-faint transition-colors group-hover:text-tr-accent lg:text-right">
                   read ↗
                 </span>
               </Link>
