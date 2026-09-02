@@ -27,7 +27,15 @@ const ROUTE = "/";
 // with no headroom is the same thing with extra steps.
 const BUDGET = {
   scriptBytes: 850 * 1024,     // measured 765.7 KB, then 718.2 KB on 2026-09-02
-  stylesheetBytes: 95 * 1024,  // measured 84.3 KB
+  // Was 95 KB against a measured 84.3. Raised on 2026-09-02 because the v4
+  // home ships a second palette and a second set of utilities in the same
+  // stylesheet, which is the cost ADR 0014 names and accepts. Deleting the
+  // retired editorial home was measured first and recovered 0.7 KB, so this is
+  // the island itself rather than leftovers.
+  //
+  // This number comes back to roughly 95 KB when the scope is promoted to
+  // :root and deleted. If it does not, the promotion was not finished.
+  stylesheetBytes: 110 * 1024, // measured 104.1 KB
   // Was 5. The v4 home (ADR 0014) sets its type in Instrument Sans and Geist
   // Mono, so a sixth face is fetched on this route. Only one more rather than
   // two, because a browser downloads a face when a glyph renders in it and the

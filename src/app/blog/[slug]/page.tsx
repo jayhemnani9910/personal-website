@@ -14,8 +14,8 @@ const mono: CSSProperties = {
 };
 
 // Machine-channel data (dates, categories, reading time): no forced uppercase
-// or tracking, so natural casing survives. Matches EditorialHome.tsx's
-// `.mono-data` convention.
+// or tracking, so natural casing survives. The `.mono-data` convention,
+// paired with `.mono-label` for chrome.
 const monoData: CSSProperties = {
   fontFamily: "var(--font-jetbrains)",
 };
@@ -30,8 +30,8 @@ const fmtDate = (d: string) =>
 const backLinkClass =
   "group inline-flex items-center gap-[var(--tr-s-2)] text-[length:var(--tr-t-mono)] uppercase text-tr-text-mute no-underline transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] hover:text-tr-ember";
 
-// Vertical hairline divider between meta chips, matching the stat row on
-// EditorialHome.tsx's hero (PROJECTS · OSS PRS · PAPERS).
+// Vertical hairline divider between meta chips, matching the stat rows the
+// other token routes use (PROJECTS · OSS PRS · PAPERS).
 function Divider() {
   return <span aria-hidden="true" className="mx-[.75em] inline-block h-[.9em] w-px bg-tr-hairline" />;
 }

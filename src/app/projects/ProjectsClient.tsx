@@ -9,7 +9,7 @@ import { EditorialColophon } from "@/components/EditorialColophon";
 
 // Mono UI chrome: labels, kickers, buttons. Uppercase + wide tracking,
 // matching the section eyebrows and nav links elsewhere (see
-// EditorialHome.tsx / EditorialMasthead.tsx for the same split).
+// EditorialMasthead.tsx for the same split).
 const mono: CSSProperties = {
   fontFamily: "var(--font-jetbrains)",
   letterSpacing: ".08em",

@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 };
 
 // Mono UI chrome: section markers, statuses. Uppercase + wide tracking,
-// matching EditorialHome.tsx's `.mono-label` convention.
+// the `.mono-label` convention shared across the token routes.
 const mono: CSSProperties = {
   fontFamily: "var(--font-jetbrains)",
   letterSpacing: ".08em",
@@ -21,7 +21,7 @@ const mono: CSSProperties = {
 
 // Mono machine-channel DATA: dates, counts, indices. No forced uppercase and
 // no extra tracking, so natural casing (e.g. "May 23, 2026") survives instead
-// of being shouted into caps. Matches EditorialHome.tsx's `.mono-data`.
+// of being shouted into caps. The `.mono-data` half of the same split.
 const monoData: CSSProperties = {
   fontFamily: "var(--font-jetbrains)",
 };
@@ -76,7 +76,7 @@ export default async function WritingPage() {
 
       {/* ========== HERO ==========
           Not wrapped in Reveal: this is the LCP surface and must paint on
-          first render (same rule as EditorialHome.tsx's hero). */}
+          first render (the same rule every hero on the site follows). */}
       <section className={`${SHELL} pt-[6.5rem] pb-[3rem]`}>
         <div className={WRAP}>
           <div className="max-w-[46rem]">
