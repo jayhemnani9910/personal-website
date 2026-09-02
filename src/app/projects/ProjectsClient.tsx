@@ -151,7 +151,10 @@ function ArchiveRow({ project: p }: { project: CatalogueProject }) {
           className="w-[11rem] shrink-0 text-[length:var(--tr-t-mono-sm)] text-tr-text-faint"
           style={monoData}
         >
-          {p.domain ?? "—"}
+          {/* Five of the 27 projects declare no domain in their frontmatter.
+              This was a rendered em-dash, which the copy rules ban, and a dash
+              in a data column reads as a value rather than as its absence. */}
+          {p.domain ?? "unfiled"}
         </span>
 
         <div className="min-w-0 flex-1">
