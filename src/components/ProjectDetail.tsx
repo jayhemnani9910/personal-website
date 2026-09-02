@@ -335,13 +335,18 @@ export function ProjectDetail({
                 {metrics.length > 0 && (
                   <dl className="mt-8 grid grid-cols-2 gap-px overflow-hidden rounded-[var(--tr-r-md)] border border-tr-hairline bg-tr-hairline">
                     {metrics.map((m, i) => (
-                      <div key={i} className="bg-tr-bg p-4">
-                        <dd className="text-[length:var(--tr-t-stat)] font-medium tabular-nums text-tr-text">{m.value}</dd>
-                        <dt className={`mt-1 ${MONO} text-[length:var(--tr-t-mono-sm)] uppercase tracking-[.08em] text-tr-text-mute`}>
+                      // A dl group is <dt> then its <dd>s, in that order. The
+                      // design shows the figure above its label, so the order is
+                      // flipped visually rather than in the markup, and the
+                      // context is a second <dd> rather than a <p> loose inside
+                      // the group. Both were invalid list structure before.
+                      <div key={i} className="flex flex-col bg-tr-bg p-4">
+                        <dt className={`order-2 mt-1 ${MONO} text-[length:var(--tr-t-mono-sm)] uppercase tracking-[.08em] text-tr-text-mute`}>
                           {m.label}
                         </dt>
+                        <dd className="order-1 text-[length:var(--tr-t-stat)] font-medium tabular-nums text-tr-text">{m.value}</dd>
                         {m.context && (
-                          <p className={`mt-1 ${MONO} text-[length:var(--tr-t-mono-sm)] text-tr-text-faint`}>{m.context}</p>
+                          <dd className={`order-3 mt-1 ${MONO} text-[length:var(--tr-t-mono-sm)] text-tr-text-faint`}>{m.context}</dd>
                         )}
                       </div>
                     ))}

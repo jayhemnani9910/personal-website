@@ -185,13 +185,17 @@ export default function AboutPage() {
                       {pub.description}
                     </p>
                   </div>
-                  <div className={`${MONO} min-w-0 grid content-start gap-2 text-[length:var(--tr-t-mono-sm)] text-tr-text-mute`}>
+                  {/* gap-3 plus py-1 on each link, so the two stacked targets
+                      clear the 24px minimum a tap target needs. At gap-2 with no
+                      padding they measured under it and Lighthouse flagged the
+                      pair as overlapping. */}
+                  <div className={`${MONO} min-w-0 grid content-start gap-3 text-[length:var(--tr-t-mono-sm)] text-tr-text-mute`}>
                     {pub.link ? (
                       <a
                         href={pub.link}
                         target="_blank"
                         rel="noreferrer"
-                        className="transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] hover:text-tr-ember"
+                        className="inline-flex min-h-6 items-center py-1 transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] hover:text-tr-ember"
                       >
                         ieeexplore ↗
                       </a>
@@ -201,7 +205,7 @@ export default function AboutPage() {
                         href={pub.github}
                         target="_blank"
                         rel="noreferrer"
-                        className="transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] hover:text-tr-ember"
+                        className="inline-flex min-h-6 items-center py-1 transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] hover:text-tr-ember"
                       >
                         notebook ↗
                       </a>
