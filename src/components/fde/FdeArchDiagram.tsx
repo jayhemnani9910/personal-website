@@ -132,7 +132,7 @@ export function FdeArchDiagram({ architecture }: Props) {
                   <text
                     x={labelX}
                     y={labelY + 3.5}
-                    fontFamily="var(--font-jetbrains)"
+                    fontFamily="var(--font-geist-mono)"
                     fontSize="10"
                     fill="var(--tr-text-mute)"
                     textAnchor="middle"
@@ -184,7 +184,7 @@ export function FdeArchDiagram({ architecture }: Props) {
               <text
                 x={c.x + 9}
                 y={c.y + 11.5}
-                fontFamily="var(--font-jetbrains)"
+                fontFamily="var(--font-geist-mono)"
                 fontSize="9"
                 fill={col.stroke}
                 letterSpacing="0.14em"
@@ -195,7 +195,7 @@ export function FdeArchDiagram({ architecture }: Props) {
               <text
                 x={c.x + BOX_W / 2}
                 y={c.y + 38}
-                fontFamily="var(--font-newsreader)"
+                fontFamily="var(--font-instrument)"
                 fontSize="14"
                 fontWeight="500"
                 fill="var(--tr-text)"
@@ -208,7 +208,7 @@ export function FdeArchDiagram({ architecture }: Props) {
                 <text
                   x={c.x + BOX_W / 2}
                   y={c.y + 56}
-                  fontFamily="var(--font-jetbrains)"
+                  fontFamily="var(--font-geist-mono)"
                   fontSize="10"
                   fill="var(--tr-text-mute)"
                   textAnchor="middle"

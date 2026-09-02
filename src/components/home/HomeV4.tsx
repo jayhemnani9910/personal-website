@@ -63,7 +63,7 @@ export async function HomeV4() {
   const featured = FEATURED.filter((f) => ids.has(f.id));
 
   return (
-    <div className="home-v4 relative min-h-screen bg-tr-bg text-tr-text">
+    <div className="relative min-h-screen bg-tr-bg text-tr-text">
       <GlBackdrop />
       <HomeHeader nav={buildNav({ projectCount, essayCount })} />
       <SectionRail steps={SECTIONS} />

@@ -4,12 +4,12 @@ import { EditorialMasthead } from "@/components/EditorialMasthead";
 import { EditorialColophon } from "@/components/EditorialColophon";
 
 const mono: CSSProperties = {
-  fontFamily: "var(--font-jetbrains)",
+  fontFamily: "var(--font-geist-mono)",
   letterSpacing: ".08em",
 };
 
 const serif: CSSProperties = {
-  fontFamily: "var(--font-newsreader)",
+  fontFamily: "var(--font-instrument)",
 };
 
 export default function NotFound() {

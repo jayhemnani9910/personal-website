@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Newsreader, JetBrains_Mono, Instrument_Sans, Geist_Mono } from "next/font/google";
+import { Instrument_Sans, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ClientLayout } from "@/components/ClientLayout";
 import { ThemeProvider } from "@/context/ThemeContext";
@@ -8,29 +8,9 @@ import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { SITE_CONFIG } from "@/../content/site";
 
-// No `weight` array on purpose. Newsreader is a variable font, and listing
-// explicit weights makes next/font ship static instances instead: the previous
-// ["400","500","600"] x ["normal","italic"] meant six files and, more to the
-// point, no weight 300. The display type across the site is authored with
-// `font-light` (39 occurrences), which had no face to resolve to and silently
-// rendered at 400. Omitting `weight` loads the variable face, so the full
-// 200-800 range is available in two files.
-const newsreader = Newsreader({
-  subsets: ["latin"],
-  style: ["normal", "italic"],
-  display: "swap",
-  variable: "--font-newsreader",
-});
-
-const jetbrainsMono = JetBrains_Mono({
-  subsets: ["latin"],
-  weight: ["400", "500"],
-  display: "swap",
-  variable: "--font-jetbrains",
-});
-
-// Instrument Sans is a variable font, so no `weight` array for the same
-// reason as Newsreader above: listing weights ships static instances.
+// Instrument Sans is a variable font, so no `weight` array: listing weights
+// makes next/font ship static instances instead of the variable face, which
+// cost four extra files the last time it happened.
 const instrumentSans = Instrument_Sans({
   subsets: ["latin"],
   style: ["normal", "italic"],
@@ -124,7 +104,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${newsreader.variable} ${jetbrainsMono.variable} ${instrumentSans.variable} ${geistMono.variable}`} suppressHydrationWarning>
+    <html lang="en" className={`${instrumentSans.variable} ${geistMono.variable}`} suppressHydrationWarning>
       <head>
         <script
           type="application/ld+json"

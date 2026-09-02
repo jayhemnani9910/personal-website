@@ -16,18 +16,18 @@ const TABS: { key: TabKey; label: string }[] = [
 
 // Mono UI chrome: uppercase labels + wide tracking (tabs, statuses, kickers).
 const mono: CSSProperties = {
-  fontFamily: "var(--font-jetbrains)",
+  fontFamily: "var(--font-geist-mono)",
   letterSpacing: ".08em",
 };
 
 // Mono machine-channel DATA: tech tags and percentages. No forced casing or
 // tracking, so proper-noun casing (Next.js 16, WebMCP, ONNX) survives.
 const monoData: CSSProperties = {
-  fontFamily: "var(--font-jetbrains)",
+  fontFamily: "var(--font-geist-mono)",
 };
 
 const serif: CSSProperties = {
-  fontFamily: "var(--font-newsreader)",
+  fontFamily: "var(--font-instrument)",
 };
 
 const SHELL = "px-[clamp(1.25rem,5vw,2rem)]";

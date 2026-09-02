@@ -11,7 +11,7 @@ import { EditorialColophon } from "@/components/EditorialColophon";
 // matching the section eyebrows and nav links elsewhere (see
 // EditorialMasthead.tsx for the same split).
 const mono: CSSProperties = {
-  fontFamily: "var(--font-jetbrains)",
+  fontFamily: "var(--font-geist-mono)",
   letterSpacing: ".08em",
 };
 
@@ -19,11 +19,11 @@ const mono: CSSProperties = {
 // and no extra tracking, so proper-noun / mixed casing (TypeScript, Next.js
 // 16, On-device AI) survives instead of being shouted into caps.
 const monoData: CSSProperties = {
-  fontFamily: "var(--font-jetbrains)",
+  fontFamily: "var(--font-geist-mono)",
 };
 
 const serif: CSSProperties = {
-  fontFamily: "var(--font-newsreader)",
+  fontFamily: "var(--font-instrument)",
 };
 
 const SHELL = "px-[clamp(1.25rem,5vw,2rem)]";

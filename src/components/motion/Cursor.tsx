@@ -35,7 +35,7 @@ type TargetRect = { x: number; y: number; w: number; h: number };
 
 // Ported 1:1 from the cursor reticle in redesign/concepts/two-readers.html
 // (class names, structure, lerp constants), with --ember/--hairline/--bg/--ease/
-// --font-mono swapped for their --tr-*/--font-jetbrains equivalents. Lives here
+// --font-mono swapped for their --tr-*/--font-geist-mono equivalents. Lives here
 // instead of globals.css so this component is fully self-contained.
 const RETICLE_STYLE = `
   .tr-reticle {
@@ -73,7 +73,7 @@ const RETICLE_STYLE = `
     top: 50%;
     transform: translateY(-50%);
     display: inline-block;
-    font-family: var(--font-jetbrains);
+    font-family: var(--font-geist-mono);
     font-size: var(--tr-t-mono-sm);
     letter-spacing: 0.08em;
     text-transform: uppercase;

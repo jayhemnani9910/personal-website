@@ -15,7 +15,7 @@ export const metadata: Metadata = {
 // Mono UI chrome: section markers, statuses. Uppercase + wide tracking,
 // the `.mono-label` convention shared across the token routes.
 const mono: CSSProperties = {
-  fontFamily: "var(--font-jetbrains)",
+  fontFamily: "var(--font-geist-mono)",
   letterSpacing: ".08em",
 };
 
@@ -23,11 +23,11 @@ const mono: CSSProperties = {
 // no extra tracking, so natural casing (e.g. "May 23, 2026") survives instead
 // of being shouted into caps. The `.mono-data` half of the same split.
 const monoData: CSSProperties = {
-  fontFamily: "var(--font-jetbrains)",
+  fontFamily: "var(--font-geist-mono)",
 };
 
 const serif: CSSProperties = {
-  fontFamily: "var(--font-newsreader)",
+  fontFamily: "var(--font-instrument)",
 };
 
 const SHELL = "px-[clamp(1.25rem,5vw,2rem)]";

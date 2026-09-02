@@ -27,20 +27,19 @@ const ROUTE = "/";
 // with no headroom is the same thing with extra steps.
 const BUDGET = {
   scriptBytes: 850 * 1024,     // measured 765.7 KB, then 718.2 KB on 2026-09-02
-  // Was 95 KB against a measured 84.3. Raised on 2026-09-02 because the v4
-  // home ships a second palette and a second set of utilities in the same
-  // stylesheet, which is the cost ADR 0014 names and accepts. Deleting the
-  // retired editorial home was measured first and recovered 0.7 KB, so this is
-  // the island itself rather than leftovers.
-  //
-  // This number comes back to roughly 95 KB when the scope is promoted to
-  // :root and deleted. If it does not, the promotion was not finished.
-  stylesheetBytes: 110 * 1024, // measured 104.1 KB
-  // Was 5. The v4 home (ADR 0014) sets its type in Instrument Sans and Geist
-  // Mono, so a sixth face is fetched on this route. Only one more rather than
-  // two, because a browser downloads a face when a glyph renders in it and the
-  // mono is variable. Still exact, for the reason below.
-  fontFiles: 6,                // exact, see below
+  // 95 KB (measured 84.3) under the editorial system, then 110 KB for the day
+  // the v4 home shipped a second palette beside it. ADR 0014 said that number
+  // had to come back down when the scope was promoted to :root and deleted, or
+  // the promotion was not finished. It did: measured 96.1 KB. The gap against
+  // the original 84.3 is real and is not leftovers, it is that the v4
+  // components lean on arbitrary-value utilities (exact clamps, exact pixel
+  // sizes) far more than the editorial ones did.
+  stylesheetBytes: 105 * 1024, // measured 96.1 KB
+  // 5 under the editorial system, 6 for the day both type systems shipped, now
+  // 4: Newsreader and JetBrains Mono are out of the build entirely, and both
+  // remaining families are variable faces. Still an equality check, and this is
+  // exactly the "fewer means a family stopped loading" case, deliberately.
+  fontFiles: 4,                // exact, see below
   // 160, 168, 168, 220, 224 across five runs under this test's own conditions,
   // which include a cold `next start` that JIT-compiles on the first request. An
   // earlier draft cited 84ms from a warm server, which is not what this measures.

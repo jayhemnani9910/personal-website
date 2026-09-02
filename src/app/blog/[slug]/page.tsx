@@ -9,7 +9,7 @@ import type { Metadata } from "next";
 import { MDXRemote } from "next-mdx-remote/rsc";
 
 const mono: CSSProperties = {
-  fontFamily: "var(--font-jetbrains)",
+  fontFamily: "var(--font-geist-mono)",
   letterSpacing: ".08em",
 };
 
@@ -17,11 +17,11 @@ const mono: CSSProperties = {
 // or tracking, so natural casing survives. The `.mono-data` convention,
 // paired with `.mono-label` for chrome.
 const monoData: CSSProperties = {
-  fontFamily: "var(--font-jetbrains)",
+  fontFamily: "var(--font-geist-mono)",
 };
 
 const serif: CSSProperties = {
-  fontFamily: "var(--font-newsreader)",
+  fontFamily: "var(--font-instrument)",
 };
 
 const fmtDate = (d: string) =>
@@ -106,7 +106,7 @@ const mdxComponents = {
       <code
         {...props}
         className={`rounded-[var(--tr-r-sm)] bg-tr-surface-2 px-[.4em] py-[.15em] text-[length:var(--tr-t-mono-sm)] text-tr-text ${props.className ?? ""}`}
-        style={{ fontFamily: "var(--font-jetbrains)" }}
+        style={{ fontFamily: "var(--font-geist-mono)" }}
       />
     );
   },
@@ -114,7 +114,7 @@ const mdxComponents = {
     <pre
       {...props}
       className="mb-[var(--tr-s-5)] overflow-x-auto border border-tr-hairline bg-tr-surface-1 p-[var(--tr-s-5)] text-[length:var(--tr-t-mono)] leading-[var(--tr-lh-body)] text-tr-text-mute"
-      style={{ fontFamily: "var(--font-jetbrains)" }}
+      style={{ fontFamily: "var(--font-geist-mono)" }}
     />
   ),
   blockquote: (props: JSX.IntrinsicElements["blockquote"]) => (

@@ -13,10 +13,10 @@ export const metadata: Metadata = {
 };
 
 // Mono UI chrome: labels, kickers, buttons. Uppercase + wide tracking.
-const mono: CSSProperties = { fontFamily: "var(--font-jetbrains)", letterSpacing: ".08em" };
+const mono: CSSProperties = { fontFamily: "var(--font-geist-mono)", letterSpacing: ".08em" };
 // Mono DATA: proper-noun casing survives (vLLM, Next.js), no forced caps.
-const monoData: CSSProperties = { fontFamily: "var(--font-jetbrains)" };
-const serif: CSSProperties = { fontFamily: "var(--font-newsreader)" };
+const monoData: CSSProperties = { fontFamily: "var(--font-geist-mono)" };
+const serif: CSSProperties = { fontFamily: "var(--font-instrument)" };
 
 const SHELL = "px-[clamp(1.25rem,5vw,2rem)]";
 const WRAP = "mx-auto max-w-[72rem]";

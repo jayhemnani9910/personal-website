@@ -28,17 +28,17 @@ const GRID_CLASS: Record<TabKey, string> = {
 
 // Mono UI chrome: uppercase labels + wide tracking (tabs, statuses, kickers).
 const mono: CSSProperties = {
-  fontFamily: "var(--font-jetbrains)",
+  fontFamily: "var(--font-geist-mono)",
   letterSpacing: ".08em",
 };
 
 // Mono machine-channel DATA: view counts, dates, durations. No forced casing.
 const monoData: CSSProperties = {
-  fontFamily: "var(--font-jetbrains)",
+  fontFamily: "var(--font-geist-mono)",
 };
 
 const serif: CSSProperties = {
-  fontFamily: "var(--font-newsreader)",
+  fontFamily: "var(--font-instrument)",
 };
 
 function StatBlock({ label, value }: { label: string; value: string }) {

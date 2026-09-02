@@ -22,12 +22,12 @@ const NAV_LINKS = [
 ] as const;
 
 const mono: CSSProperties = {
-  fontFamily: "var(--font-jetbrains)",
+  fontFamily: "var(--font-geist-mono)",
   letterSpacing: ".08em",
 };
 
 const serif: CSSProperties = {
-  fontFamily: "var(--font-newsreader)",
+  fontFamily: "var(--font-instrument)",
 };
 
 const HEADER_PAD = "px-[clamp(1.25rem,5vw,2rem)] py-[1.1rem]";

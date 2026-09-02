@@ -21,7 +21,7 @@ const WATCHDOG_MS = 3000; // fail-safe: guarantees teardown even if a timer stal
 // idempotent, so in the normal ~1.3s run this fires and no-ops.
 const CURSOR_BLINK_KEYFRAMES = "tr-preloader-cursor-blink";
 
-const mono: CSSProperties = { fontFamily: "var(--font-jetbrains)" };
+const mono: CSSProperties = { fontFamily: "var(--font-geist-mono)" };
 
 // Whether the cold open should play this pageload: first visit of the session,
 // motion allowed. Modelled as external state (sessionStorage) read through

@@ -40,12 +40,12 @@ function paletteFor(selector: string): Record<string, string> {
 
 const DARK = paletteFor(":root"); // dark is canonical, so it is the base
 const LIGHT = paletteFor(':root[data-theme="light"]');
-const V4_DARK = paletteFor(".home-v4");
-const V4_LIGHT = paletteFor('[data-theme="light"] .home-v4');
 
-const REQUIRED = ["bg", "surface-1", "surface-2", "text", "text-mute", "text-faint", "ember", "ember-hover", "on-ember"] as const;
+const REQUIRED = ["bg", "surface-1", "surface-2", "text", "text-mute", "text-faint", "ember", "ember-hover", "on-ember", "ok"] as const;
 const SURFACES = ["bg", "surface-1", "surface-2"] as const;
-const TEXT_TOKENS = ["text", "text-mute", "text-faint", "ember"] as const;
+// `ok` joined this list when the v4 system was promoted to :root (ADR 0014):
+// it is the live/verified green, and it carries text on all three surfaces.
+const TEXT_TOKENS = ["text", "text-mute", "text-faint", "ember", "ok"] as const;
 const AA_MIN = 4.5;
 
 function channelLuminance(channel8bit: number): number {
@@ -71,8 +71,6 @@ describe("token parsing (guards the contrast suite against going vacuous)", () =
   it.each([
     ["dark", DARK],
     ["light", LIGHT],
-    ["v4 dark", V4_DARK],
-    ["v4 light", V4_LIGHT],
   ])("%s: parsed all 8 --tr- tokens out of globals.css", (theme, palette) => {
     const missing = REQUIRED.filter((k) => !palette[k]);
     expect(missing, `${theme}: could not parse ${missing.join(", ")} from globals.css`).toEqual([]);
@@ -82,8 +80,6 @@ describe("token parsing (guards the contrast suite against going vacuous)", () =
     for (const [theme, palette] of [
       ["dark", DARK],
       ["light", LIGHT],
-      ["v4 dark", V4_DARK],
-      ["v4 light", V4_LIGHT],
     ] as const) {
       for (const [name, value] of Object.entries(palette)) {
         expect(value, `${theme} --tr-${name} is not a hex colour`).toMatch(/^#[0-9A-Fa-f]{6}$/);
@@ -97,10 +93,6 @@ describe("token parsing (guards the contrast suite against going vacuous)", () =
     expect(DARK.text).not.toBe(LIGHT.text);
   });
 
-  it("v4 dark is a different palette from the base dark palette", () => {
-    // Catches paletteFor(".home-v4") accidentally matching :root instead.
-    expect(V4_DARK.ember).not.toBe(DARK.ember);
-  });
 });
 
 // Tailwind's `text-*` utility means BOTH font-size and colour. Given a bare CSS
@@ -235,17 +227,6 @@ for (const [theme, palette] of [["dark", DARK], ["light", LIGHT]] as const) {
 // palettes: --tr-ok, a status colour used nowhere else. It is deliberately
 // NOT added to TEXT_TOKENS above: :root and :root[data-theme="light"] don't
 // declare --tr-ok, so contrastRatio would receive undefined and return NaN.
-const V4_TEXT_TOKENS = [...TEXT_TOKENS, "ok"] as const;
-for (const [theme, palette] of [
-  ["v4 dark", V4_DARK],
-  ["v4 light", V4_LIGHT],
-] as const) {
-  for (const fg of V4_TEXT_TOKENS) {
-    for (const bg of SURFACES) cases.push({ theme, fg, bg, palette });
-  }
-  cases.push({ theme, fg: "on-ember", bg: "ember", palette });
-  cases.push({ theme, fg: "on-ember", bg: "ember-hover", palette });
-}
 
 describe("Two Readers token contrast (WCAG AA, 4.5:1 minimum)", () => {
   it.each(cases)("$theme: $fg on $bg clears 4.5:1", ({ theme, fg, bg, palette }) => {
