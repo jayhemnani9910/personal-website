@@ -305,6 +305,19 @@ export function buildReceipts(c: { projectCount: number; toolCount: number }): R
   ];
 }
 
+/**
+ * The six receipts as a flat index: title and label only, no figures.
+ *
+ * Two of the six numbers are computed at build time from the real content, so
+ * anything rendering outside the home page (the shell overlay is mounted on
+ * every route) cannot know them. The labels state the claim on their own,
+ * which is what an index needs.
+ */
+export const RECEIPT_INDEX: { title: string; label: string }[] = buildReceipts({
+  projectCount: 0,
+  toolCount: 0,
+}).map((r) => ({ title: r.title, label: r.label }));
+
 export const METHOD: MethodRule[] = [
   {
     n: "01",

@@ -63,6 +63,16 @@ export function MethodCube() {
     };
   }, []);
 
+  // The shell's `cube` command drives this from anywhere on the page. Kept in
+  // a ref for the same reason the Decomposer does it: the listener registers
+  // once, and a stale closure would scramble against last render's state.
+  const scrambleRef = useRef<() => void>(() => {});
+  useEffect(() => {
+    const run = () => scrambleRef.current();
+    window.addEventListener("v4:cube", run);
+    return () => window.removeEventListener("v4:cube", run);
+  }, []);
+
   const scramble = () => {
     if (intervalRef.current) return;
     setSpeed("1.2s");
@@ -87,6 +97,12 @@ export function MethodCube() {
       }
     }, SCRAMBLE_INTERVAL_MS);
   };
+
+  // Kept current every render, so the listener registered once on mount always
+  // calls the latest closure. Assigning during render trips react-hooks/refs.
+  useEffect(() => {
+    scrambleRef.current = scramble;
+  });
 
   return (
     <div className="grid grid-cols-[auto_minmax(0,1fr)] items-center gap-6 rounded-[var(--tr-r-md)] border border-tr-hairline bg-tr-bg p-5">

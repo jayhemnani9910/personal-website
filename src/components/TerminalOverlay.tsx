@@ -7,6 +7,7 @@ import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
 import { Terminal as TerminalIcon, Cpu, Wifi } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { TERMINAL_FILES, BOOT_SEQUENCE, TERMINAL_CONFIG } from "@/../content/terminal";
+import { RECEIPT_INDEX } from "@/data/home";
 
 interface CommandHistory {
     type: "input" | "output" | "error" | "system" | "success";
@@ -18,7 +19,13 @@ const COMMANDS = [
     "help", "ls", "cat", "clear", "exit", "whoami", "date", "open",
     "projects", "resume", "skills", "contact", "education", "experience",
     "sudo", "ascii", "joke", "neofetch", "matrix", "blog", "history",
+    // v4 home commands, see ADR 0014
+    "brief", "receipts", "cube", "rm",
 ];
+
+// Shown above the input. Each is a command the shell actually runs, so the
+// row doubles as the discoverable half of `help`.
+const CHIPS = ["help", "brief we have data nobody trusts", "ls", "receipts", "cube", "joke"];
 
 const DEV_JOKES = [
     "Why do programmers prefer dark mode? Because light attracts bugs.",
@@ -192,6 +199,11 @@ Quick Info
   education       Show education
   experience      Show work experience
 
+Home page
+  brief [text]    Run the decomposer on your problem
+  receipts        Every number on the home page, with its source
+  cube            Scramble the cube in section 03
+
 Fun
   ascii           ASCII art logo
   joke            Random dev joke
@@ -326,6 +338,47 @@ System
                     newHistory.push({ type: "output", content: hist });
                 }
                 break;
+            // ── v4 home commands (ADR 0014) ──
+            // Each drives the home page rather than printing at it, so the
+            // shell stays a way of using the site instead of a second copy of
+            // it. The page listens for these events; see Decomposer.tsx and
+            // MethodCube.tsx.
+            case "brief": {
+                const text = trimmed.slice(command.length).trim().replace(/^"|"$/g, "");
+                if (!text) {
+                    newHistory.push({ type: "error", content: "brief <your vague problem>. The vaguer the better, honestly." });
+                    break;
+                }
+                newHistory.push({ type: "success", content: "Running the decomposer up top." });
+                closeTerminal();
+                if (window.location.pathname !== "/") router.push("/");
+                window.setTimeout(() => {
+                    window.dispatchEvent(new CustomEvent("v4:brief", { detail: text }));
+                }, 60);
+                break;
+            }
+            case "receipts": {
+                // Two of the six numbers are computed at build time from the
+                // real content, and this overlay is mounted on every route, so
+                // it has no honest way to know them here. The labels carry the
+                // claim without the figure; the figures are on the page.
+                const lines = RECEIPT_INDEX.map((r) => `  ${r.title.padEnd(24)} ${r.label}`).join("\n");
+                newHistory.push({ type: "output", content: `Every number on the home page, with its source:\n${lines}\n\nOpen section 01 for the figures and the links.` });
+                if (window.location.pathname === "/") window.location.hash = "proof";
+                break;
+            }
+            case "cube":
+                newHistory.push({ type: "success", content: "Scrambling the cube in section 03." });
+                closeTerminal();
+                if (window.location.pathname !== "/") router.push("/");
+                window.setTimeout(() => {
+                    window.dispatchEvent(new Event("v4:cube"));
+                    window.location.hash = "method";
+                }, 60);
+                break;
+            case "rm":
+                newHistory.push({ type: "error", content: "Absolutely not. It took years to build this." });
+                break;
             default:
                 newHistory.push({ type: "error", content: `Command not found: ${command}. Type 'help' for available commands.` });
         }
@@ -336,6 +389,12 @@ System
 
     const handleKeyDown = (e: React.KeyboardEvent) => {
         if (e.key === "Enter") {
+            // Without this, a command that closes the overlay reopens it
+            // immediately. Closing restores focus to whatever opened the
+            // dialog, which is the header's shell button, and Enter's default
+            // action then activates that newly focused button on keyup. The
+            // dialog looked like it ignored `exit` entirely.
+            e.preventDefault();
             handleCommand(input);
         } else if (e.key === "ArrowUp") {
             e.preventDefault();
@@ -416,6 +475,24 @@ System
                                 </div>
                             </div>
                         </div>
+
+                        {/* Chips: the discoverable half of `help`. Each runs a
+                            real command, so nothing here can drift from the
+                            dispatcher below. */}
+                        {!isBooting && (
+                            <div className="flex flex-wrap gap-2 px-4 py-3 border-b border-tr-hairline bg-tr-bg">
+                                {CHIPS.map((chip) => (
+                                    <button
+                                        key={chip}
+                                        type="button"
+                                        onClick={() => handleCommand(chip)}
+                                        className="h-[26px] px-[.65rem] rounded-full border border-tr-hairline text-tr-text-mute font-mono text-[11px] hover:border-tr-ember hover:text-tr-text transition-colors"
+                                    >
+                                        {chip}
+                                    </button>
+                                ))}
+                            </div>
+                        )}
 
                         {/* Terminal Body */}
                         <div className="flex-1 p-6 font-mono text-sm overflow-y-auto scrollbar-hide text-tr-text-mute" onClick={() => inputRef.current?.focus()}>
