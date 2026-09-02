@@ -4,12 +4,12 @@ import { useMemo, useState, type CSSProperties } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { ProjectSummary } from "@/lib/content";
-import { EditorialMasthead } from "@/components/EditorialMasthead";
-import { EditorialColophon } from "@/components/EditorialColophon";
+import { SiteHeader } from "@/components/SiteHeader";
+import { SiteFooter } from "@/components/SiteFooter";
 
 // Mono UI chrome: labels, kickers, buttons. Uppercase + wide tracking,
 // matching the section eyebrows and nav links elsewhere (see
-// EditorialMasthead.tsx for the same split).
+// SiteHeader.tsx for the same split).
 const mono: CSSProperties = {
   fontFamily: "var(--font-geist-mono)",
   letterSpacing: ".08em",
@@ -243,7 +243,7 @@ export function ProjectsClient({ projects }: ProjectsClientProps) {
 
   return (
     <main id="main-content" className="bg-tr-bg text-tr-text">
-      <EditorialMasthead active="work" />
+      <SiteHeader />
 
       {/* Hero */}
       <section className={`${SHELL} pt-[6.5rem] pb-[var(--tr-s-10)]`}>
@@ -402,7 +402,7 @@ export function ProjectsClient({ projects }: ProjectsClientProps) {
         </div>
       </section>
 
-      <EditorialColophon />
+      <SiteFooter />
     </main>
   );
 }

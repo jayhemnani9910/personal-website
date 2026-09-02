@@ -1,7 +1,7 @@
 import type { CSSProperties } from "react";
 import type { Metadata } from "next";
-import { EditorialMasthead } from "@/components/EditorialMasthead";
-import { EditorialColophon } from "@/components/EditorialColophon";
+import { SiteHeader } from "@/components/SiteHeader";
+import { SiteFooter } from "@/components/SiteFooter";
 import { YouTubeShowcase } from "@/components/YouTubeShowcase";
 import { getYouTubeData } from "@/lib/youtube-data";
 
@@ -29,7 +29,7 @@ export default function YouTubePage() {
 
   return (
     <main id="main-content" className="flex min-h-screen flex-col bg-tr-bg text-tr-text">
-      <EditorialMasthead active="channel" />
+      <SiteHeader />
 
       <div className="flex-1">
         <section className={`${SHELL} pt-[6.5rem] pb-[var(--tr-s-6)]`}>
@@ -65,7 +65,7 @@ export default function YouTubePage() {
         </section>
       </div>
 
-      <EditorialColophon />
+      <SiteFooter />
     </main>
   );
 }

@@ -2,8 +2,8 @@ import type { CSSProperties } from "react";
 import Link from "next/link";
 import type { Metadata } from "next";
 import { getAllPosts, getProjectSummaries } from "@/lib/content";
-import { EditorialMasthead } from "@/components/EditorialMasthead";
-import { EditorialColophon } from "@/components/EditorialColophon";
+import { SiteHeader } from "@/components/SiteHeader";
+import { SiteFooter } from "@/components/SiteFooter";
 import { Reveal } from "@/components/motion/Reveal";
 
 export const metadata: Metadata = {
@@ -72,7 +72,7 @@ export default async function WritingPage() {
 
   return (
     <main id="main-content" className="bg-tr-bg text-tr-text">
-      <EditorialMasthead active="writing" />
+      <SiteHeader />
 
       {/* ========== HERO ==========
           Not wrapped in Reveal: this is the LCP surface and must paint on
@@ -238,7 +238,7 @@ export default async function WritingPage() {
         </section>
       </Reveal>
 
-      <EditorialColophon />
+      <SiteFooter />
     </main>
   );
 }

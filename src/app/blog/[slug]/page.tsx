@@ -1,7 +1,7 @@
 import type { CSSProperties, JSX } from "react";
 import { getPost, getAllPosts } from "@/lib/content";
-import { EditorialMasthead } from "@/components/EditorialMasthead";
-import { EditorialColophon } from "@/components/EditorialColophon";
+import { SiteHeader } from "@/components/SiteHeader";
+import { SiteFooter } from "@/components/SiteFooter";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
@@ -206,7 +206,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
 
   return (
     <main id="main-content" className="bg-tr-bg text-tr-text">
-      <EditorialMasthead active="writing" />
+      <SiteHeader />
 
       <article className="px-[clamp(1.25rem,5vw,2rem)] pt-[6.5rem] pb-[var(--tr-s-12)]">
         <div className="mx-auto max-w-[66ch]">
@@ -265,7 +265,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
         </div>
       </article>
 
-      <EditorialColophon />
+      <SiteFooter />
     </main>
   );
 }

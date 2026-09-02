@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { CSSProperties } from "react";
-import { EditorialMasthead } from "@/components/EditorialMasthead";
-import { EditorialColophon } from "@/components/EditorialColophon";
+import { SiteHeader } from "@/components/SiteHeader";
+import { SiteFooter } from "@/components/SiteFooter";
 
 const mono: CSSProperties = {
   fontFamily: "var(--font-geist-mono)",
@@ -15,7 +15,7 @@ const serif: CSSProperties = {
 export default function NotFound() {
   return (
     <main id="main-content" className="flex min-h-screen flex-col bg-tr-bg text-tr-text">
-      <EditorialMasthead />
+      <SiteHeader />
 
       <div className="flex flex-1 items-center px-[clamp(1.25rem,5vw,2rem)] pt-[var(--tr-s-12)] pb-[var(--tr-s-10)]">
         <div className="mx-auto max-w-[46rem]">
@@ -56,7 +56,7 @@ export default function NotFound() {
         </div>
       </div>
 
-      <EditorialColophon />
+      <SiteFooter />
     </main>
   );
 }

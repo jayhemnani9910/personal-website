@@ -2,15 +2,15 @@
    Interactive console is a client island. Static sections (Proofs, Fit, Contact)
    are plain server JSX. layout.tsx is untouched (provides metadata + JSON-LD). */
 
-import { EditorialMasthead } from "@/components/EditorialMasthead";
-import { EditorialColophon } from "@/components/EditorialColophon";
+import { SiteHeader } from "@/components/SiteHeader";
+import { SiteFooter } from "@/components/SiteFooter";
 import { FdeConsole } from "@/components/fde/FdeConsole";
 import { PROOFS } from "@/components/fde/fdeData";
 
 export default function FDEPage() {
   return (
     <main id="main-content" className="editorial fde-page">
-      <EditorialMasthead active="fde" />
+      <SiteHeader />
 
       {/* ── Hero ──────────────────────────────────────────────────────── */}
       <header className="fde fde-hero">
@@ -110,7 +110,7 @@ export default function FDEPage() {
       {/* ── Contact ───────────────────────────────────────────────────── */}
       <FdeContact />
 
-      <EditorialColophon />
+      <SiteFooter />
     </main>
   );
 }

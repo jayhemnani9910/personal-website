@@ -2,8 +2,8 @@ import { getAllProjects, getProject } from "@/lib/content";
 import { ProjectDetail } from "@/components/ProjectDetail";
 import { ProjectShowcase } from "@/components/ProjectShowcase";
 import { SHOWCASE_PROJECTS } from "@/lib/showcase";
-import { EditorialMasthead } from "@/components/EditorialMasthead";
-import { EditorialColophon } from "@/components/EditorialColophon";
+import { SiteHeader } from "@/components/SiteHeader";
+import { SiteFooter } from "@/components/SiteFooter";
 import { ViewCounter } from "@/components/ViewCounter";
 import { notFound } from "next/navigation";
 import { MDXRemote } from "next-mdx-remote/rsc";
@@ -43,14 +43,14 @@ export default async function ProjectPage({ params }: { params: Promise<{ id: st
 
     return (
         <main id="main-content" className="editorial tr-editorial-scope">
-            <EditorialMasthead active="work" />
+            <SiteHeader />
             {isShowcase
                 ? <ProjectShowcase project={project} overview={overview} />
                 : <ProjectDetail project={project} overview={overview} />}
             <div className="section-wide py-10 mb-12 flex items-center justify-end">
                 <ViewCounter slug={id} />
             </div>
-            <EditorialColophon />
+            <SiteFooter />
         </main>
     );
 }

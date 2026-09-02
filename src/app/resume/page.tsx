@@ -2,8 +2,8 @@ import type { CSSProperties } from "react";
 import Link from "next/link";
 import type { Metadata } from "next";
 import { RESUME } from "@/data/resume";
-import { EditorialMasthead } from "@/components/EditorialMasthead";
-import { EditorialColophon } from "@/components/EditorialColophon";
+import { SiteHeader } from "@/components/SiteHeader";
+import { SiteFooter } from "@/components/SiteFooter";
 
 export const metadata: Metadata = {
   title: "About",
@@ -127,7 +127,7 @@ function SectionHead({ label, meta, title }: { label: string; meta?: string; tit
 export default function AboutPage() {
   return (
     <main id="main-content" className="bg-tr-bg text-tr-text">
-      <EditorialMasthead active="about" />
+      <SiteHeader />
 
       {/* ========== HERO — thesis ========== */}
       <section className={`${SHELL} pt-[6.5rem] pb-[var(--tr-s-7)]`}>
@@ -448,7 +448,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <EditorialColophon />
+      <SiteFooter />
     </main>
   );
 }

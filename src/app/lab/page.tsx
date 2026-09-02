@@ -2,8 +2,8 @@
 
 import { useRef, useState, type CSSProperties, type KeyboardEvent } from "react";
 import { Github } from "lucide-react";
-import { EditorialMasthead } from "@/components/EditorialMasthead";
-import { EditorialColophon } from "@/components/EditorialColophon";
+import { SiteHeader } from "@/components/SiteHeader";
+import { SiteFooter } from "@/components/SiteFooter";
 import { LAB_ITEMS, type LabItem } from "@/data/lab";
 
 type TabKey = "building" | "exploring" | "radar";
@@ -125,7 +125,7 @@ export default function LabPage() {
 
   return (
     <main id="main-content" className="flex min-h-screen flex-col bg-tr-bg text-tr-text">
-      <EditorialMasthead />
+      <SiteHeader />
 
       <div className="flex-1">
         <section className={`${SHELL} pt-[6.5rem] pb-[var(--tr-s-6)]`}>
@@ -257,7 +257,7 @@ export default function LabPage() {
         </section>
       </div>
 
-      <EditorialColophon />
+      <SiteFooter />
     </main>
   );
 }
