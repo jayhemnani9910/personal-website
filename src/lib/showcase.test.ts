@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 
-// A showcase hero is rendered by ProjectShowcase through next/image with
+// A showcase hero is rendered through next/image with
 // `priority`, so a wrong path is an eager request for a 404 in the LCP slot and
 // nothing in the build complains.
 //
