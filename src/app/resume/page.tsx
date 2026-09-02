@@ -1,9 +1,9 @@
-import type { CSSProperties } from "react";
-import Link from "next/link";
 import type { Metadata } from "next";
+import Link from "next/link";
 import { RESUME } from "@/data/resume";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
+import { SkillGroups } from "./SkillGroups";
 
 export const metadata: Metadata = {
   title: "About",
@@ -11,15 +11,6 @@ export const metadata: Metadata = {
     "Resume, experience, publications, open-source contributions, and a few things worth knowing about Jay Hemnani.",
   alternates: { canonical: "/resume" },
 };
-
-// Mono UI chrome: labels, kickers, buttons. Uppercase + wide tracking.
-const mono: CSSProperties = { fontFamily: "var(--font-geist-mono)", letterSpacing: ".08em" };
-// Mono DATA: proper-noun casing survives (vLLM, Next.js), no forced caps.
-const monoData: CSSProperties = { fontFamily: "var(--font-geist-mono)" };
-const serif: CSSProperties = { fontFamily: "var(--font-instrument)" };
-
-const SHELL = "px-[clamp(1.25rem,5vw,2rem)]";
-const WRAP = "mx-auto max-w-[72rem]";
 
 const RESUME_PDFS = [
   { label: "Forward-Deployed", file: "/resume/jay-hemnani-fde.pdf" },
@@ -29,186 +20,57 @@ const RESUME_PDFS = [
   { label: "Data Analyst", file: "/resume/jay-hemnani-analyst.pdf" },
 ];
 
-// The signature: proof read first. Real, load-bearing numbers, not vanity metrics.
-const PROOF = [
-  { n: "2", unit: "", head: "IEEE papers", sub: "peer-reviewed, as an undergrad" },
-  { n: "3", unit: "", head: "OSS PRs merged", sub: "vLLM · MCP SDK · A2UI" },
-  { n: "10", unit: "days", head: "CAG Deep Research", sub: "5-agent LangGraph, shipped" },
-  { n: "8", unit: "tools", head: "WebMCP, in production", sub: "early W3C adopter", live: true },
-];
+const MONO = "font-[family-name:var(--ff-mono)]";
+const CONTAINER = "mx-auto max-w-[1280px] px-[clamp(1rem,4vw,2rem)]";
+const TWO_COL = "lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]";
+const H2 = "text-[length:var(--tr-t-h2)] leading-[var(--tr-lh-h2)] tracking-[-.025em] font-medium text-tr-text";
 
-const OSS = [
-  {
-    pr: "PR #31513",
-    repo: "vllm-project / vllm",
-    title: "LoRA support for the LLaVA tower and connector.",
-    body: "Enabled LoRA training for the LLaVA vision tower and connector inside vLLM, the high-throughput LLM inference engine.",
-    when: "Merged Jan 2026",
-    url: "https://github.com/vllm-project/vllm/pull/31513",
-  },
-  {
-    pr: "PR #1826",
-    repo: "modelcontextprotocol / python-sdk",
-    title: "Type annotation for the call_tool decorator.",
-    body: "Fixed a missing type annotation on call_tool in the Anthropic MCP Python SDK, the SDK that powers MCP-based integrations.",
-    when: "Merged Jan 2026",
-    url: "https://github.com/modelcontextprotocol/python-sdk/pull/1826",
-  },
-  {
-    pr: "PR #407",
-    repo: "google / A2UI",
-    title: ".env.example templates for safer secret setup.",
-    body: "Added env templates to Google's A2UI, the open standard for agent-to-user interfaces. A small patch with real surface area.",
-    when: "Merged Jan 2026",
-    url: "https://github.com/google/A2UI/pull/407",
-  },
-];
-
-const PUBLICATIONS = RESUME.publications;
-
-// Grouped by what Jay actually does with each tool, not by a self-assigned
-// mastery level. The previous top tier was labelled "Expert" across fourteen
-// technologies, which is the claim a senior reviewer will open an interview by
-// testing, and it buys nothing the behaviour underneath does not already say.
-// The notes were always the honest part; they are now the heading.
-const SKILLS = [
-  {
-    level: "Ship daily",
-    note: "design from scratch, no docs open",
-    items: ["Python", "TypeScript", "SQL", "PyTorch", "PostgreSQL", "Docker", "Kafka", "Airflow", "LangChain", "LangGraph", "MCP", "Next.js", "FastAPI", "Node.js / Express"],
-  },
-  {
-    level: "Ship confidently",
-    note: "reach for the docs on the edges",
-    items: ["YOLOv8", "ByteTrack", "TimescaleDB", "MongoDB", "Redis", "MLflow", "DVC", "Tableau", "Power BI", "AWS", "Ollama", "vLLM"],
-  },
-  {
-    level: "Shipped once or twice",
-    note: "enough to be useful, ready to ramp",
-    items: ["Go", "Rust", "Kubernetes", "pgvector", "Pinecone", "Weights & Biases", "GCP", "Azure", "Chrome Extensions", "WebMCP", "Three.js", "C++"],
-  },
-];
-
-// The human details that don't belong in the ledger but are true regardless.
-const OFF_RESUME = [
-  "Two production data platforms, two languages: Stock Data Platform in Python (Kafka, Airflow, TimescaleDB); an Indian-market platform in Rust (Axum, WASM, Neon).",
-  "Cursor, Claude Code, and Codex daily for over a year: faster ramps on unfamiliar codebases, tighter feedback loops.",
-  "WCA-registered speedcuber, 16.7-second best. Not on the resume, true regardless.",
-];
-
-const pad = (n: number) => String(n).padStart(2, "0");
-const roleCount = RESUME.experience.reduce((n, c) => n + c.roles.length, 0);
-
-// Section label: a mono eyebrow that names the section (not a forced 01/02/03
-// sequence — these sections aren't ordered steps) + a serif heading.
-function SectionHead({ label, meta, title }: { label: string; meta?: string; title: string }) {
-  return (
-    <div className="mb-[var(--tr-s-6)] border-t border-tr-hairline pt-[var(--tr-s-4)]">
-      <div className="flex flex-wrap items-baseline justify-between gap-x-[var(--tr-s-4)] gap-y-[var(--tr-s-1)]">
-        <p className="text-[length:var(--tr-t-mono-sm)] uppercase text-tr-text-mute" style={mono}>
-          {label}
-        </p>
-        {meta ? (
-          <p className="text-[length:var(--tr-t-mono-sm)] text-tr-text-faint" style={monoData}>
-            {meta}
-          </p>
-        ) : null}
-      </div>
-      <h2
-        className="mt-[var(--tr-s-3)] text-[length:var(--tr-t-h2)] font-light leading-[var(--tr-lh-h2)] tracking-[-.015em] text-tr-text"
-        style={serif}
-      >
-        {title}
-      </h2>
-    </div>
-  );
+// A publication's description states the published-vs-reproduced gap inline
+// (e.g. "82.68% accuracy as published; ... reproduces 74.46% ..."). Pulling
+// both numbers out programmatically, rather than hardcoding them, keeps the
+// callout tied to whatever resume.ts actually says.
+function parsePublishedVsReproduced(description?: string) {
+  if (!description) return null;
+  const published = description.match(/([\d.]+)%[^.]*as published/i)?.[1];
+  const reproduced = description.match(/reproduces\s*([\d.]+)%/i)?.[1];
+  if (!published || !reproduced) return null;
+  return { published, reproduced };
 }
+
+const roles = RESUME.experience.flatMap((company) =>
+  company.roles.map((role) => ({ company, role }))
+);
 
 export default function AboutPage() {
   return (
     <main id="main-content" className="bg-tr-bg text-tr-text">
       <SiteHeader />
 
-      {/* ========== HERO — thesis ========== */}
-      <section className={`${SHELL} pt-[6.5rem] pb-[var(--tr-s-7)]`}>
-        <div className={WRAP}>
-          <div className="max-w-[54rem]">
-            <p className="mb-[var(--tr-s-4)] text-[length:var(--tr-t-mono)] uppercase text-tr-text-mute" style={mono}>
-              Forward Deployed Engineer · Gujarat, India (open to relocate)
-            </p>
-            <h1
-              className="mb-[var(--tr-s-5)] text-[length:var(--tr-t-display)] font-light leading-[var(--tr-lh-display)] tracking-[-.02em] text-tr-text"
-              style={serif}
-            >
-              Jay Hemnani.
-            </h1>
-            <p
-              className="max-w-[44ch] text-[length:var(--tr-t-h3)] font-light leading-[var(--tr-lh-h3)] text-tr-text"
-              style={serif}
-            >
-              Four years of finished things: production data platforms, computer-vision research, and
-              merged code in repositories I did not own.
-            </p>
-            <p className="mt-[var(--tr-s-5)] max-w-[60ch] text-[length:var(--tr-t-body)] leading-[var(--tr-lh-body)] text-tr-text-mute" style={serif}>
-              Trained in computer engineering at PDEU. I have moved between data-analyst, ML-engineer, and
-              full-stack roles, usually because the project demanded it, and I take prototypes to production
-              quickly. Available for full-time and freelance.
-            </p>
-          </div>
+      {/* ========== INTRO ========== */}
+      <section
+        className={`${CONTAINER} grid gap-[clamp(2rem,5vw,5rem)] pt-[clamp(2.5rem,5vw,4rem)] pb-8 ${TWO_COL} lg:items-end`}
+      >
+        <div>
+          <p className={`${MONO} mb-4 text-[length:var(--tr-t-mono)] tracking-[.1em] text-tr-text-faint`}>
+            /ABOUT · THE PARTICULARS
+          </p>
+          <h1 className="text-[length:var(--tr-t-display)] leading-[var(--tr-lh-display)] tracking-[-.035em] font-medium text-tr-text">
+            Came from design. Stayed for the mess.
+          </h1>
         </div>
-      </section>
-
-      {/* ========== PROOF LEDGER — the signature ========== */}
-      <section className={`${SHELL} pb-[var(--tr-s-9)]`}>
-        <div className={WRAP}>
-          <div className="border border-tr-hairline bg-tr-surface-1">
-            <p
-              className="border-b border-tr-hairline px-[var(--tr-s-5)] py-[var(--tr-s-3)] text-[length:var(--tr-t-mono-sm)] uppercase text-tr-text-faint"
-              style={mono}
-            >
-              {"// the case, read first"}
-            </p>
-            <dl className="grid grid-cols-1 gap-px bg-tr-hairline sm:grid-cols-2">
-              {PROOF.map((p) => (
-                <div
-                  key={p.head}
-                  className="min-w-0 bg-tr-surface-1 px-[var(--tr-s-5)] py-[var(--tr-s-6)]"
-                >
-                  <dd className="flex items-baseline gap-[.15em]">
-                    <span
-                      className="text-[length:var(--tr-t-display)] font-light leading-[var(--tr-lh-numeral)] tracking-[-.03em] text-tr-text"
-                      style={serif}
-                    >
-                      {p.n}
-                    </span>
-                    {p.unit ? (
-                      <span className="text-[length:var(--tr-t-h3)] font-light text-tr-text-mute" style={serif}>
-                        {p.unit}
-                      </span>
-                    ) : null}
-                    {p.live ? (
-                      <span
-                        aria-hidden="true"
-                        className="ml-[.4em] inline-block h-[.5em] w-[.5em] translate-y-[-.6em] rounded-full bg-tr-ember shadow-[var(--tr-glow-box)]"
-                      />
-                    ) : null}
-                  </dd>
-                  <dt className="mt-[var(--tr-s-3)] text-[length:var(--tr-t-body)] text-tr-text" style={serif}>
-                    {p.head}
-                  </dt>
-                  <p className="mt-[var(--tr-s-1)] text-[length:var(--tr-t-mono-sm)] text-tr-text-faint" style={monoData}>
-                    {p.sub}
-                  </p>
-                </div>
-              ))}
-            </dl>
-          </div>
-
-          {/* résumé downloads sit right under the ledger — the action after the pitch */}
-          <div className="mt-[var(--tr-s-5)] flex flex-wrap items-center gap-x-[var(--tr-s-4)] gap-y-[var(--tr-s-3)]">
-            <p className="text-[length:var(--tr-t-mono-sm)] uppercase text-tr-text-mute" style={mono}>
+        <div>
+          <p className="max-w-[56ch] text-[length:var(--tr-t-body)] leading-[var(--tr-lh-body)] text-tr-text-mute [text-wrap:pretty]">
+            Two design internships, a conference and three student clubs before a line of production
+            code. Then iOS, fraud models, consulting, finance pipelines. The pattern: I get handed the
+            vague part, and I come back with something that runs.
+          </p>
+          <p className={`${MONO} mt-4 text-[length:var(--tr-t-mono-sm)] text-tr-text-faint`}>
+            {RESUME.location} · {RESUME.contact.email}
+          </p>
+          <div className="mt-6 flex flex-wrap items-center gap-x-4 gap-y-2">
+            <span className={`${MONO} text-[length:var(--tr-t-mono-sm)] uppercase text-tr-text-faint`}>
               Résumé, by role ·
-            </p>
+            </span>
             {RESUME_PDFS.map((r) => (
               <a
                 key={r.file}
@@ -216,8 +78,7 @@ export default function AboutPage() {
                 target="_blank"
                 rel="noreferrer"
                 data-cursor="OPEN"
-                className="text-[length:var(--tr-t-mono-sm)] uppercase text-tr-text-mute underline decoration-tr-hairline decoration-1 underline-offset-4 transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] hover:text-tr-ember hover:decoration-tr-ember"
-                style={mono}
+                className={`${MONO} text-[length:var(--tr-t-mono-sm)] uppercase text-tr-text-mute underline decoration-tr-hairline decoration-1 underline-offset-4 transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] hover:text-tr-ember hover:decoration-tr-ember`}
               >
                 {r.label}
               </a>
@@ -226,222 +87,194 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* ========== EVIDENCE — open source ========== */}
-      <section className={`${SHELL} py-[var(--tr-s-9)]`}>
-        <div className={WRAP}>
-          <SectionHead label="// evidence · open source" meta="3 merged" title="Merged into repos I don't own." />
-          <p className="mb-[var(--tr-s-6)] max-w-[60ch] text-[length:var(--tr-t-body)] leading-[var(--tr-lh-body)] text-tr-text-mute" style={serif}>
-            Landing a change inside an unfamiliar large codebase is the whole forward-deployed skill in
-            miniature: read the seam, respect the conventions, ship the patch.
-          </p>
-          <ol className="grid list-none gap-[var(--tr-s-4)] lg:grid-cols-3">
-            {OSS.map((o) => (
-              <li key={o.url} className="flex min-w-0 flex-col border border-tr-hairline bg-tr-surface-1 p-[var(--tr-s-5)]">
-                <div className="flex items-baseline justify-between gap-[var(--tr-s-2)]">
-                  <span className="text-[length:var(--tr-t-mono)] text-tr-text" style={monoData}>{o.pr}</span>
-                  <span className="text-[length:var(--tr-t-mono-sm)] uppercase text-tr-text-faint" style={mono}>{o.when}</span>
-                </div>
-                <p className="mt-[var(--tr-s-1)] break-words text-[length:var(--tr-t-mono-sm)] text-tr-text-faint" style={monoData}>
-                  {o.repo}
-                </p>
-                <h3 className="mt-[var(--tr-s-4)] text-[length:var(--tr-t-h3)] font-light leading-[var(--tr-lh-h3)] text-tr-text" style={serif}>
-                  {o.title}
-                </h3>
-                <p className="mt-[var(--tr-s-3)] flex-1 text-[length:var(--tr-t-body)] leading-[var(--tr-lh-body)] text-tr-text-mute" style={serif}>
-                  {o.body}
-                </p>
-                <a
-                  href={o.url}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="mt-[var(--tr-s-4)] text-[length:var(--tr-t-mono-sm)] uppercase text-tr-text-mute no-underline transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] hover:text-tr-ember"
-                  style={mono}
-                >
-                  View PR ↗
-                </a>
-              </li>
-            ))}
-          </ol>
-        </div>
-      </section>
-
-      {/* ========== EVIDENCE — publications ========== */}
-      <section className={`${SHELL} py-[var(--tr-s-9)]`}>
-        <div className={WRAP}>
-          <SectionHead label="// evidence · research" meta="two IEEE papers" title="Published as an undergrad." />
-          <ol className="list-none">
-            {PUBLICATIONS.map((pub, i) => (
-              <li key={pub.title} className="border-t border-tr-hairline py-[var(--tr-s-6)] first:border-t-0">
-                <div className="grid gap-[var(--tr-s-3)] lg:grid-cols-[9rem_1fr] lg:gap-[var(--tr-s-6)]">
-                  <div className="text-[length:var(--tr-t-h2)] font-light leading-none text-tr-text-faint" style={serif}>
-                    №{pad(i + 1)}
-                  </div>
-                  <div className="min-w-0">
-                    <h3 className="text-[length:var(--tr-t-h3)] font-light leading-[var(--tr-lh-h3)] text-tr-text" style={serif}>
-                      {pub.title}.
-                    </h3>
-                    <p className="mt-[var(--tr-s-1)] text-[length:var(--tr-t-mono-sm)] uppercase text-tr-text-mute" style={mono}>
-                      {pub.venue} · {pub.year}
-                    </p>
-                    <p className="mt-[var(--tr-s-3)] max-w-[60ch] text-[length:var(--tr-t-body)] leading-[var(--tr-lh-body)] text-tr-text-mute" style={serif}>
-                      {pub.description}
-                    </p>
-                    <div className="mt-[var(--tr-s-3)] flex flex-wrap gap-x-[var(--tr-s-5)] gap-y-[var(--tr-s-2)] text-[length:var(--tr-t-mono-sm)] uppercase text-tr-text-mute" style={mono}>
-                      {pub.link ? (
-                        <a href={pub.link} target="_blank" rel="noreferrer" className="no-underline transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] hover:text-tr-ember">
-                          Paper ↗
-                        </a>
-                      ) : null}
-                      {pub.github ? (
-                        <a href={pub.github} target="_blank" rel="noreferrer" className="no-underline transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] hover:text-tr-ember">
-                          Code ↗
-                        </a>
-                      ) : null}
-                    </div>
-                  </div>
-                </div>
-              </li>
-            ))}
-          </ol>
-        </div>
-      </section>
-
-      {/* ========== STACK — matrix ========== */}
-      <section className={`${SHELL} py-[var(--tr-s-9)]`}>
-        <div className={WRAP}>
-          <SectionHead label="// stack" meta="grouped by how I use them" title="What I reach for." />
-          <div className="grid gap-px overflow-hidden border border-tr-hairline bg-tr-hairline lg:grid-cols-3">
-            {SKILLS.map((col) => (
-              <div key={col.level} className="min-w-0 bg-tr-bg p-[var(--tr-s-5)]">
-                <div className="flex items-baseline justify-between gap-[var(--tr-s-2)]">
-                  <h3 className="text-[length:var(--tr-t-h3)] font-light text-tr-text" style={serif}>{col.level}</h3>
-                  <span className="text-[length:var(--tr-t-mono-sm)] text-tr-text-faint" style={monoData}>{col.items.length}</span>
-                </div>
-                <p className="mt-[var(--tr-s-1)] text-[length:var(--tr-t-mono-sm)] text-tr-text-mute" style={monoData}>{col.note}</p>
-                <div className="mt-[var(--tr-s-4)] flex flex-wrap gap-[.4em] text-[length:var(--tr-t-mono-sm)] text-tr-text-mute" style={monoData}>
-                  {col.items.map((s) => (
-                    <span key={s} className="border border-tr-hairline px-[.6em] py-[.25em]">{s}</span>
-                  ))}
-                </div>
-              </div>
-            ))}
+      {/* ========== EXPERIENCE ========== */}
+      <section className="border-t border-tr-hairline">
+        <div className={`${CONTAINER} grid gap-[clamp(2rem,5vw,5rem)] py-[clamp(3rem,6vw,5rem)] ${TWO_COL}`}>
+          <div>
+            <h2 className={H2}>Experience</h2>
+            <p className="mt-4 max-w-[40ch] text-[length:var(--tr-t-body)] leading-[var(--tr-lh-body)] text-tr-text-mute">
+              {roles.length} roles. Bullets are outcomes, not duties.
+            </p>
           </div>
-        </div>
-      </section>
-
-      {/* ========== EXPERIENCE — the honest CV, quieter ========== */}
-      <section className={`${SHELL} py-[var(--tr-s-9)]`} id="resume">
-        <div className={WRAP}>
-          <SectionHead label="// experience" meta={`${roleCount} roles · 2019–2025`} title="The working record." />
           <ol className="list-none">
-            {RESUME.experience.flatMap((company) =>
-              company.roles.map((role) => {
-                const place = role.location || company.location;
-                return (
-                  <li key={`${company.name}-${role.title}`} className="border-t border-tr-hairline py-[var(--tr-s-5)] first:border-t-0">
-                    <div className="grid gap-[var(--tr-s-2)] lg:grid-cols-[13rem_1fr] lg:gap-[var(--tr-s-6)]">
-                      <div className="min-w-0">
-                        <div className="text-[length:var(--tr-t-mono-sm)] text-tr-text-mute" style={monoData}>{role.period?.label}</div>
-                        <div className="mt-[var(--tr-s-1)] text-[length:var(--tr-t-mono-sm)] uppercase text-tr-text-faint" style={mono}>{role.employmentType}</div>
-                      </div>
-                      <div className="min-w-0">
-                        <div className="flex flex-wrap items-baseline gap-x-[var(--tr-s-3)] gap-y-[var(--tr-s-1)]">
-                          <h3 className="text-[length:var(--tr-t-h3)] font-light text-tr-text" style={serif}>{role.title}</h3>
-                          <p className="text-[length:var(--tr-t-mono-sm)] uppercase text-tr-text-mute" style={mono}>
-                            {company.name}{place ? ` · ${place}` : ""}
-                          </p>
-                        </div>
-                        <ul className="mt-[var(--tr-s-3)] max-w-[60ch] list-disc space-y-[var(--tr-s-2)] pl-[1.15em] marker:text-tr-text-faint">
-                          {role.bullets.map((b, i) => (
-                            <li key={i} className="text-[length:var(--tr-t-body)] leading-[var(--tr-lh-body)] text-tr-text-mute" style={serif}>
-                              {b.text}
-                            </li>
-                          ))}
-                        </ul>
-                        {role.tech && role.tech.length > 0 ? (
-                          <div className="mt-[var(--tr-s-3)] flex flex-wrap gap-x-[1em] gap-y-[.3em] text-[length:var(--tr-t-mono-sm)] text-tr-text-faint" style={monoData}>
-                            {role.tech.map((t) => <span key={t}>{t}</span>)}
-                          </div>
-                        ) : null}
-                      </div>
-                    </div>
-                  </li>
-                );
-              })
-            )}
-          </ol>
-        </div>
-      </section>
-
-      {/* ========== EDUCATION + OFF-RESUME ========== */}
-      <section className={`${SHELL} py-[var(--tr-s-9)]`}>
-        <div className={WRAP}>
-          <div className="grid gap-[var(--tr-s-9)] lg:grid-cols-2">
-            <div>
-              <SectionHead label="// education" meta="one degree" title="Education." />
-              {RESUME.education.map((edu) => (
-                <div key={edu.institution}>
-                  <h3 className="text-[length:var(--tr-t-h3)] font-light text-tr-text" style={serif}>{edu.degree}.</h3>
-                  <p className="mt-[var(--tr-s-1)] text-[length:var(--tr-t-mono-sm)] uppercase text-tr-text-mute" style={mono}>
-                    {edu.institution} · {edu.location}
+            {roles.map(({ company, role }) => (
+              <li
+                key={`${company.name}-${role.title}`}
+                className="grid gap-6 border-t border-tr-hairline py-5 lg:grid-cols-[7rem_minmax(0,1fr)]"
+              >
+                <div className={`${MONO} min-w-0 text-[length:var(--tr-t-mono-sm)] text-tr-text-faint`}>
+                  <div>{role.period?.label}</div>
+                  <div className="mt-1 text-[10px] uppercase tracking-[.06em]">{role.employmentType}</div>
+                </div>
+                <div className="min-w-0">
+                  <p className="text-[length:var(--tr-t-body)] text-tr-text">
+                    {role.title} ·{" "}
+                    <span className="font-normal text-tr-text-mute">{company.name}</span>
                   </p>
-                  <p className="mt-[var(--tr-s-2)] text-[length:var(--tr-t-mono-sm)] text-tr-text-faint" style={monoData}>
-                    {edu.start}–{edu.end}{edu.gpa ? ` · GPA ${edu.gpa}` : ""}
-                  </p>
-                  {edu.courses && edu.courses.length > 0 ? (
-                    <div className="mt-[var(--tr-s-4)] flex flex-wrap gap-x-[1em] gap-y-[.3em] text-[length:var(--tr-t-mono-sm)] text-tr-text-faint" style={monoData}>
-                      {edu.courses.map((c) => <span key={c}>{c}</span>)}
+                  <ul className="mt-3 grid gap-2">
+                    {role.bullets.map((b, i) => (
+                      <li key={i} className="grid grid-cols-[.9rem_1fr] gap-[.4rem]">
+                        <span className={`${MONO} text-tr-ok`} aria-hidden="true">✓</span>
+                        <span className="text-[length:var(--tr-t-body)] leading-[var(--tr-lh-body)] text-tr-text-mute">
+                          {b.text}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                  {role.tech && role.tech.length > 0 ? (
+                    <div className="mt-3 flex flex-wrap gap-2">
+                      {role.tech.map((t) => (
+                        <span
+                          key={t}
+                          className={`${MONO} rounded-[3px] border border-tr-hairline px-[5px] py-px text-[10px] text-tr-text-mute`}
+                        >
+                          {t}
+                        </span>
+                      ))}
                     </div>
                   ) : null}
                 </div>
-              ))}
-            </div>
-            <div>
-              <SectionHead label="// off the resume" meta="true regardless" title="A few particulars." />
-              <ul className="list-none space-y-[var(--tr-s-4)]">
-                {OFF_RESUME.map((f) => (
-                  <li key={f} className="flex gap-[var(--tr-s-3)] text-[length:var(--tr-t-body)] leading-[var(--tr-lh-body)] text-tr-text-mute" style={serif}>
-                    <span aria-hidden="true" className="mt-[.55em] h-[1px] w-[1.1em] shrink-0 bg-tr-ember" />
-                    <span className="min-w-0">{f}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
+              </li>
+            ))}
+          </ol>
         </div>
       </section>
 
-      {/* ========== CONTACT ========== */}
-      <section className={`${SHELL} py-[var(--tr-s-12)]`}>
-        <div className={WRAP}>
-          <SectionHead label="// correspondence" meta="responses inside 48h" title="Get in touch." />
-          <div className="grid gap-[var(--tr-s-8)] lg:grid-cols-2 lg:items-end">
-            <div>
-              <p className="max-w-[26ch] text-[length:var(--tr-t-h2)] font-light leading-[var(--tr-lh-h2)] text-tr-text" style={serif}>
-                A note, an offer, or a problem worth solving.
-              </p>
-              <p className="mt-[var(--tr-s-4)] max-w-[52ch] text-[length:var(--tr-t-body)] leading-[var(--tr-lh-body)] text-tr-text-mute" style={serif}>
-                I am looking for forward-deployed engineering, data engineering, agentic AI, and senior
-                software roles. Staff-shaped problems welcome. India-remote, global-remote, and on-site with
-                relocation all on the table.
-              </p>
-            </div>
-            <div className="flex flex-col items-start gap-[var(--tr-s-5)] lg:items-end">
-              <a
-                href="mailto:jayhemnani992000@gmail.com"
-                data-cursor="OPEN"
-                className="tr-cta flex max-w-full flex-col border border-transparent px-[var(--tr-s-5)] py-[var(--tr-s-4)] no-underline"
-              >
-                <span className="text-[length:var(--tr-t-mono-sm)] uppercase" style={mono}>Open the line</span>
-                <span className="mt-[var(--tr-s-1)] break-words text-[length:var(--tr-t-body)]" style={monoData}>
-                  jayhemnani992000@gmail.com
-                </span>
-              </a>
-              <div className="flex flex-wrap gap-x-[var(--tr-s-5)] gap-y-[var(--tr-s-2)] text-[length:var(--tr-t-mono)] uppercase text-tr-text-mute" style={mono}>
-                <a href="https://github.com/jayhemnani9910" target="_blank" rel="noreferrer" className="no-underline transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] hover:text-tr-ember">GitHub ↗</a>
-                <a href="https://linkedin.com/in/jayhemnani" target="_blank" rel="noreferrer" className="no-underline transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] hover:text-tr-ember">LinkedIn ↗</a>
-                <a href="https://x.com/jeyhemnani9" target="_blank" rel="noreferrer" className="no-underline transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] hover:text-tr-ember">Twitter ↗</a>
-                <Link href="/projects" className="no-underline transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] hover:text-tr-ember">Work →</Link>
+      {/* ========== STACK ========== */}
+      <section className="border-t border-tr-hairline bg-tr-surface-1">
+        <div className={`${CONTAINER} grid gap-[clamp(2rem,5vw,5rem)] py-[clamp(3rem,6vw,5rem)] ${TWO_COL}`}>
+          <div>
+            <h2 className={H2}>Stack</h2>
+            <p className="mt-4 max-w-[40ch] text-[length:var(--tr-t-body)] leading-[var(--tr-lh-body)] text-tr-text-mute">
+              Grouped the way the resume groups them. Click a group to see where it was used.
+            </p>
+            <p className={`${MONO} mt-4 text-[length:var(--tr-t-mono-sm)] text-tr-text-faint`}>
+              {"// no percentage bars. nobody is 80% Python."}
+            </p>
+          </div>
+          <SkillGroups
+            groups={RESUME.skills.map((s) => ({
+              category: s.category,
+              items: s.items.map((i) => i.name),
+            }))}
+          />
+        </div>
+      </section>
+
+      {/* ========== PUBLICATIONS ========== */}
+      <section className="border-t border-tr-hairline">
+        <div className={`${CONTAINER} grid gap-[clamp(2rem,5vw,5rem)] py-[clamp(3rem,6vw,5rem)] ${TWO_COL}`}>
+          <div>
+            <h2 className={H2}>Publications</h2>
+            <p className="mt-4 max-w-[40ch] text-[length:var(--tr-t-body)] leading-[var(--tr-lh-body)] text-tr-text-mute">
+              {RESUME.publications.length}, IEEE AIMV {RESUME.publications[0]?.year}. With the gap
+              between the published number and the committed notebook stated plainly.
+            </p>
+          </div>
+          <ol className="grid list-none gap-px overflow-hidden rounded-[var(--tr-r-lg)] border border-tr-hairline bg-tr-hairline">
+            {RESUME.publications.map((pub) => {
+              const gap = parsePublishedVsReproduced(pub.description);
+              return (
+                <li key={pub.title} className="grid gap-6 bg-tr-bg p-6 sm:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
+                  <div className="min-w-0">
+                    <h3 className="text-[1.1rem] font-medium tracking-[-.01em] text-tr-text">{pub.title}</h3>
+                    <p className="mt-1 text-[length:var(--tr-t-body)] text-tr-text-mute">
+                      {pub.venue} · {pub.year}
+                    </p>
+                    <p className="mt-3 text-[length:var(--tr-t-body)] leading-[var(--tr-lh-body)] text-tr-text-mute">
+                      {pub.description}
+                    </p>
+                  </div>
+                  <div className={`${MONO} min-w-0 grid content-start gap-2 text-[length:var(--tr-t-mono-sm)] text-tr-text-mute`}>
+                    {pub.link ? (
+                      <a
+                        href={pub.link}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] hover:text-tr-ember"
+                      >
+                        ieeexplore ↗
+                      </a>
+                    ) : null}
+                    {pub.github ? (
+                      <a
+                        href={pub.github}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] hover:text-tr-ember"
+                      >
+                        notebook ↗
+                      </a>
+                    ) : null}
+                    {gap ? (
+                      <p className="border border-tr-hairline rounded-[var(--tr-r-md)] px-3 py-2 text-tr-ember">
+                        Published {gap.published}% · reproduced {gap.reproduced}%.
+                      </p>
+                    ) : null}
+                  </div>
+                </li>
+              );
+            })}
+          </ol>
+        </div>
+      </section>
+
+      {/* ========== EDUCATION AND ELSEWHERE ========== */}
+      <section className="border-t border-tr-hairline bg-tr-surface-1">
+        <div className={`${CONTAINER} grid gap-[clamp(2rem,5vw,5rem)] py-[clamp(3rem,6vw,5rem)] ${TWO_COL}`}>
+          <div>
+            <h2 className={H2}>Education and elsewhere</h2>
+          </div>
+          <div className="grid gap-px overflow-hidden rounded-[var(--tr-r-lg)] border border-tr-hairline bg-tr-hairline sm:grid-cols-2">
+            {RESUME.education.map((edu) => (
+              <div key={edu.institution} className="min-w-0 bg-tr-surface-1 p-6">
+                <p className={`${MONO} text-[length:var(--tr-t-mono-sm)] uppercase text-tr-text-faint`}>
+                  {edu.start} → {edu.end} · {edu.location}
+                </p>
+                <h3 className="mt-2 text-[length:var(--tr-t-h3)] font-medium text-tr-text">{edu.degree}</h3>
+                <p className="mt-1 text-[length:var(--tr-t-body)] text-tr-text-mute">
+                  {edu.institution}
+                  {edu.gpa ? ` · GPA ${edu.gpa}` : ""}
+                </p>
+                {edu.courses && edu.courses.length > 0 ? (
+                  <p className="mt-4 text-[length:var(--tr-t-body)] leading-[var(--tr-lh-body)] text-tr-text-mute">
+                    {edu.courses.join(" · ")}
+                  </p>
+                ) : null}
+              </div>
+            ))}
+            <div className="min-w-0 bg-tr-surface-1 p-6">
+              <div>
+                <p className={`${MONO} text-[length:var(--tr-t-mono-sm)] uppercase text-tr-text-faint`}>
+                  Open source
+                </p>
+                <p className="mt-2 text-[length:var(--tr-t-body)] leading-[var(--tr-lh-body)] text-tr-text-mute">
+                  Merged pull requests to repositories not my own.
+                </p>
+                <a
+                  href="https://github.com/pulls?q=is%3Apr+author%3Ajayhemnani9910+is%3Amerged"
+                  target="_blank"
+                  rel="noreferrer"
+                  className={`${MONO} mt-2 inline-block text-[length:var(--tr-t-mono-sm)] text-tr-text-mute transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] hover:text-tr-ember`}
+                >
+                  verify ↗
+                </a>
+              </div>
+              <div className="mt-6">
+                <p className={`${MONO} text-[length:var(--tr-t-mono-sm)] uppercase text-tr-text-faint`}>
+                  Off the clock
+                </p>
+                <p className="mt-2 text-[length:var(--tr-t-body)] leading-[var(--tr-lh-body)] text-tr-text-mute">
+                  {RESUME.education[0]?.achievements?.[0]}. Wrote{" "}
+                  <Link
+                    href="/projects/rubiks-timer"
+                    data-cursor="OPEN"
+                    className="text-tr-text-mute underline decoration-tr-hairline decoration-1 underline-offset-4 transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] hover:text-tr-ember hover:decoration-tr-ember"
+                  >
+                    the timer
+                  </Link>
+                  .
+                </p>
               </div>
             </div>
           </div>
