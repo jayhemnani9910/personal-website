@@ -1,403 +1,190 @@
 "use client";
 
-import { useMemo, useState, type CSSProperties } from "react";
-import Image from "next/image";
+import { useMemo, useState } from "react";
 import Link from "next/link";
-import { ProjectSummary } from "@/lib/content";
+import type { ProjectSummary } from "@/lib/content";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 
-// Mono UI chrome: labels, kickers, buttons. Uppercase + wide tracking,
-// matching the section eyebrows and nav links elsewhere (see
-// SiteHeader.tsx for the same split).
-const mono: CSSProperties = {
-  fontFamily: "var(--font-geist-mono)",
-  letterSpacing: ".08em",
-};
-
-// Mono machine-channel DATA: stats, tags, domain labels. No forced uppercase
-// and no extra tracking, so proper-noun / mixed casing (TypeScript, Next.js
-// 16, On-device AI) survives instead of being shouted into caps.
-const monoData: CSSProperties = {
-  fontFamily: "var(--font-geist-mono)",
-};
-
-const serif: CSSProperties = {
-  fontFamily: "var(--font-instrument)",
-};
-
-const SHELL = "px-[clamp(1.25rem,5vw,2rem)]";
-const WRAP = "mx-auto max-w-[1400px]";
-
-// Cards stay uniform even when a project carries a long tag list: show the
-// first few and fold the rest into a "+N" indicator.
-const MAX_VISIBLE_TAGS = 4;
-
-// `hero` is resolved from SHOWCASE_PROJECTS on the server (see page.tsx) so the
-// client bundle does not pull in the showcase module and its dependencies.
-type CatalogueProject = ProjectSummary & { hero?: string };
+const MONO = "font-[family-name:var(--ff-mono)]";
+const SHELL = "px-[clamp(1rem,4vw,2rem)]";
+const WRAP = "mx-auto max-w-[1280px]";
 
 interface ProjectsClientProps {
-  projects: CatalogueProject[];
+  projects: ProjectSummary[];
 }
 
-function TagRow({ tags }: { tags?: string[] }) {
-  const visible = tags?.slice(0, MAX_VISIBLE_TAGS) ?? [];
-  const overflow = (tags?.length ?? 0) - visible.length;
-  if (visible.length === 0) return null;
-  return (
-    <div className="flex flex-wrap gap-[.4em]">
-      {visible.map((t) => (
-        <span
-          key={t}
-          className="border border-tr-hairline px-[.6em] py-[.25em] text-[length:var(--tr-t-mono-sm)] text-tr-text-faint"
-          style={monoData}
-        >
-          {t}
-        </span>
-      ))}
-      {overflow > 0 && (
-        <span
-          className="px-[.6em] py-[.25em] text-[length:var(--tr-t-mono-sm)] text-tr-text-faint"
-          style={monoData}
-        >
-          +{overflow}
-        </span>
-      )}
-    </div>
-  );
-}
-
-/** Top-shelf presentation: hero art, deck, tags. */
-function ProjectCard({ project: p }: { project: CatalogueProject }) {
-  return (
-    <Link
-      href={`/projects/${p.id}`}
-      data-cursor="OPEN"
-      className="group relative flex min-w-0 flex-col border border-tr-hairline bg-tr-surface-1 no-underline"
-    >
-      {/* Depth rule: a lit top edge on hover instead of a shadow
-          (shadows are invisible on a near-black surface). */}
-      <span
-        aria-hidden="true"
-        className="absolute inset-x-0 top-0 z-[var(--tr-z-sticky)] h-px bg-transparent transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] group-hover:bg-tr-ember"
-      />
-
-      {/* Every card reserves the same media box so the grid stays even. The
-          selected set all carry hero art; the placeholder is here for the case
-          where one does not, rather than leaving a ragged frame. */}
-      <div className="relative aspect-[16/10] w-full overflow-hidden border-b border-tr-hairline bg-tr-surface-2">
-        {p.hero ? (
-          <Image
-            src={p.hero}
-            alt=""
-            fill
-            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-            className="object-cover"
-          />
-        ) : (
-          <span
-            aria-hidden="true"
-            className="absolute inset-0 grid place-items-center px-[var(--tr-s-4)] text-center text-[length:var(--tr-t-mono-sm)] uppercase text-tr-text-faint"
-            style={mono}
-          >
-            {p.domain ?? "Project"}
-          </span>
-        )}
-      </div>
-
-      <div className="flex min-w-0 flex-1 flex-col gap-[var(--tr-s-3)] p-[var(--tr-s-5)]">
-        {p.domain && (
-          <span className="text-[length:var(--tr-t-mono-sm)] text-tr-text-mute" style={monoData}>
-            {p.domain}
-          </span>
-        )}
-
-        <h3
-          className="text-[length:var(--tr-t-h3)] font-light text-tr-text transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] group-hover:text-tr-ember"
-          style={serif}
-        >
-          {p.title}
-        </h3>
-
-        {/* The summary was already loaded and used for search matching, but
-            never rendered. A card exists to help someone decide what to open,
-            and a title plus tags is not enough to decide on. */}
-        <p
-          className="line-clamp-3 text-[length:var(--tr-t-body)] leading-[var(--tr-lh-body)] text-tr-text-mute"
-          style={serif}
-        >
-          {p.summary}
-        </p>
-
-        <div className="mt-auto pt-[var(--tr-s-2)]">
-          <TagRow tags={p.tags} />
-        </div>
-      </div>
-    </Link>
-  );
-}
-
-/** Archive presentation: one quiet rule-separated row, no media. */
-function ArchiveRow({ project: p }: { project: CatalogueProject }) {
-  return (
-    <li className="border-b border-tr-hairline">
-      <Link
-        href={`/projects/${p.id}`}
-        data-cursor="OPEN"
-        className="group flex flex-col gap-[var(--tr-s-2)] py-[var(--tr-s-5)] no-underline lg:flex-row lg:items-baseline lg:gap-[var(--tr-s-6)]"
-      >
-        <span
-          className="w-[11rem] shrink-0 text-[length:var(--tr-t-mono-sm)] text-tr-text-faint"
-          style={monoData}
-        >
-          {/* Five of the 27 projects declare no domain in their frontmatter.
-              This was a rendered em-dash, which the copy rules ban, and a dash
-              in a data column reads as a value rather than as its absence. */}
-          {p.domain ?? "unfiled"}
-        </span>
-
-        <div className="min-w-0 flex-1">
-          <h3
-            className="text-[length:var(--tr-t-h3)] font-light text-tr-text transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] group-hover:text-tr-ember"
-            style={serif}
-          >
-            {p.title}
-          </h3>
-          <p
-            className="mt-[var(--tr-s-1)] line-clamp-2 max-w-[60ch] text-[length:var(--tr-t-body)] leading-[var(--tr-lh-body)] text-tr-text-mute"
-            style={serif}
-          >
-            {p.summary}
-          </p>
-        </div>
-
-        <span
-          className="shrink-0 text-[length:var(--tr-t-mono-sm)] text-tr-text-faint"
-          style={monoData}
-        >
-          {p.period ?? ""}
-        </span>
-      </Link>
-    </li>
-  );
-}
+// Five of the catalogue's entries declare no domain in their frontmatter:
+// early coursework kept for context rather than pitched. They, and any entry
+// explicitly marked "Student work", render their domain cell a shade fainter
+// instead of dropping opacity on already-muted text.
+const isStudentWork = (domain?: string) => !domain || domain === "Student work";
 
 export function ProjectsClient({ projects }: ProjectsClientProps) {
   const [filter, setFilter] = useState("all");
   const [query, setQuery] = useState("");
 
-  // Sort: featured first, then by priority ascending, then title.
-  const sorted = useMemo(
-    () =>
-      [...projects].sort((a, b) => {
-        if (a.featured !== b.featured) return a.featured ? -1 : 1;
-        const pa = a.priority ?? 99;
-        const pb = b.priority ?? 99;
-        if (pa !== pb) return pa - pb;
-        return a.title.localeCompare(b.title);
-      }),
+  const domains = useMemo(
+    () => Array.from(new Set(projects.map((p) => p.domain).filter((d): d is string => Boolean(d)))),
     [projects]
   );
 
-  // Filter chips derived from distinct domains.
-  const domains = useMemo(
-    () => Array.from(new Set(sorted.map((p) => p.domain).filter(Boolean))) as string[],
-    [sorted]
-  );
-
-  const count = (key: string) =>
-    key === "all"
-      ? sorted.length
-      : key === "featured"
-      ? sorted.filter((p) => p.featured).length
-      : sorted.filter((p) => p.domain === key).length;
+  const countFor = (domain: string) => projects.filter((p) => p.domain === domain).length;
 
   const chips = [
-    { key: "all", label: "All" },
-    { key: "featured", label: "Featured" },
-    ...domains.map((d) => ({ key: d, label: d })),
+    { key: "all", label: "All", count: projects.length },
+    ...domains.map((d) => ({ key: d, label: d, count: countFor(d) })),
   ];
 
-  const visible = sorted.filter((p) => {
-    const matchFilter =
-      filter === "all" ||
-      (filter === "featured" ? p.featured : p.domain === filter);
-    const q = query.toLowerCase();
+  const q = query.trim().toLowerCase();
+
+  // The order here is the order `projects` arrived in: priority first, then
+  // id, the same order src/lib/content.ts sorts the catalogue into. Filtering
+  // and searching narrow that list; nothing here re-sorts it.
+  const visible = projects.filter((p) => {
+    const matchFilter = filter === "all" || p.domain === filter;
     const matchQuery =
       !q ||
       p.title.toLowerCase().includes(q) ||
       p.summary.toLowerCase().includes(q) ||
+      (p.domain?.toLowerCase().includes(q) ?? false) ||
       p.tech.some((t) => t.toLowerCase().includes(q));
     return matchFilter && matchQuery;
   });
-
-  // Two bands, not one flat grid. A catalogue of 28 equal-looking entries means
-  // a reader with 30 seconds can easily land on the weakest thing in it, so the
-  // selected work gets the media treatment and everything else drops to a quiet
-  // list. Both bands stay filterable; an empty one just does not render.
-  const selected = visible.filter((p) => p.featured);
-  const archive = visible.filter((p) => !p.featured);
-
-  const featuredCount = sorted.filter((p) => p.featured).length;
 
   return (
     <main id="main-content" className="bg-tr-bg text-tr-text">
       <SiteHeader />
 
-      {/* Hero */}
-      <section className={`${SHELL} pt-[6.5rem] pb-[var(--tr-s-10)]`}>
-        <div className={WRAP}>
-          <div className="max-w-[46rem]">
-            <p
-              className="mb-[var(--tr-s-4)] text-[length:var(--tr-t-mono)] uppercase text-tr-text-mute"
-              style={mono}
-            >
-              § 01 / the work
+      {/* Intro */}
+      <section className={`${SHELL} pt-[clamp(2.5rem,5vw,4rem)] pb-6`}>
+        <div className={`${WRAP} grid gap-[clamp(2rem,5vw,5rem)] items-end lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]`}>
+          <div>
+            <p className={`mb-3 ${MONO} text-[length:var(--tr-t-mono)] tracking-[.1em] text-tr-text-faint`}>
+              /WORK · 2019 → 2026
             </p>
-
-            <h1
-              className="mb-[var(--tr-s-5)] text-[length:var(--tr-t-display)] font-light leading-[var(--tr-lh-display)] tracking-[-.02em] text-tr-text"
-              style={serif}
-            >
-              The work,
-              <br />
-              <span className="italic">sorted.</span>
+            <h1 className="text-[length:var(--tr-t-display)] leading-[var(--tr-lh-display)] tracking-[-.035em] font-medium">
+              {projects.length}, sorted by what they&apos;d cost you to ignore.
             </h1>
-
-            <p
-              className="mb-[var(--tr-s-6)] max-w-[52ch] text-[length:var(--tr-t-body)] leading-[var(--tr-lh-body)] text-tr-text-mute"
-              style={serif}
-            >
-              A working catalogue. Each entry is a real, shipped thing: production systems, research prototypes,
-              and a few honest experiments left in for context.
-            </p>
-
-            <div
-              className="flex flex-wrap items-center gap-x-[.75em] text-[length:var(--tr-t-mono-sm)] text-tr-text-mute"
-              style={monoData}
-            >
-              <span>{sorted.length} PROJECTS ON FILE</span>
-              <span aria-hidden="true" className="mx-[.25em] inline-block h-[.9em] w-px bg-tr-hairline" />
-              <span>{featuredCount} SELECTED</span>
-            </div>
           </div>
+          <p className="max-w-[56ch] text-tr-text-mute [text-wrap:pretty]">
+            Priority first, then alphabetical, the same order the code uses. The early entries are student
+            work and are labelled as such; leaving them out would be curating, not documenting.
+          </p>
         </div>
       </section>
 
-      {/* Filters + search */}
-      <section className={`${SHELL} border-y border-tr-hairline py-[var(--tr-s-5)]`}>
-        <div
-          className={`${WRAP} flex flex-col gap-[var(--tr-s-4)] lg:flex-row lg:items-center lg:justify-between`}
-        >
-          <div className="flex flex-wrap items-center gap-x-[var(--tr-s-4)] gap-y-[var(--tr-s-2)]">
-            <span className="text-[length:var(--tr-t-mono-sm)] uppercase text-tr-text-faint" style={mono}>
-              Filter
+      {/* Filter bar */}
+      <section className={`sticky top-14 z-[30] bg-tr-bg border-b border-tr-hairline ${SHELL} pt-4 pb-6`}>
+        <div className={`${WRAP} flex flex-wrap items-center gap-2`}>
+          <div className="flex h-8 min-w-[240px] items-center gap-2 rounded-[var(--tr-r-md)] border border-tr-hairline bg-tr-surface-1 px-3">
+            <span aria-hidden="true" className={`${MONO} text-tr-ember`}>
+              /
             </span>
-            {chips.map((c) => (
-              // min-h-[44px] + vertical padding: these were bare text buttons,
-              // so the hit area was roughly the 12px glyph. 44px is the WCAG /
-              // platform minimum for a touch target. The visual weight is
-              // unchanged, only the box around it.
-              <button
-                key={c.key}
-                type="button"
-                onClick={() => setFilter(c.key)}
-                aria-pressed={filter === c.key}
-                className={`inline-flex min-h-[44px] items-center py-[var(--tr-s-2)] text-[length:var(--tr-t-mono)] uppercase transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] ${
-                  filter === c.key ? "text-tr-ember" : "text-tr-text-mute hover:text-tr-text"
-                }`}
-                style={mono}
-              >
-                {c.label} <span className="ml-[.4em] text-tr-text-faint">{count(c.key)}</span>
-              </button>
-            ))}
-          </div>
-
-          <div className="w-full lg:max-w-[20rem]">
             <label htmlFor="project-search" className="sr-only">
-              Search projects
+              Search projects by name, stack, or domain
             </label>
             <input
               id="project-search"
               type="text"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              placeholder="Search title, summary, or stack"
-              className="w-full border border-tr-hairline bg-tr-surface-1 px-[var(--tr-s-4)] py-[.625em] text-[length:var(--tr-t-mono)] text-tr-text placeholder:text-tr-text-faint caret-tr-ember outline-none transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] focus:border-tr-ember"
-              style={mono}
+              placeholder="filter by name, stack, domain"
+              className={`flex-1 border-0 bg-transparent text-[length:var(--tr-t-mono)] text-tr-text placeholder:text-tr-text-faint outline-none ${MONO}`}
             />
           </div>
+
+          {chips.map((c) => (
+            <button
+              key={c.key}
+              type="button"
+              onClick={() => setFilter(c.key)}
+              aria-pressed={filter === c.key}
+              className={`inline-flex h-8 items-center gap-1 rounded-full border px-[.8rem] text-[12.5px] transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] ${MONO} ${
+                filter === c.key
+                  ? "border-tr-ember bg-tr-ember text-tr-on-ember"
+                  : "border-tr-hairline text-tr-text-mute hover:border-tr-ember"
+              }`}
+            >
+              {c.label} <span className="text-[10.5px]">{c.count}</span>
+            </button>
+          ))}
+
+          <span className={`ml-auto ${MONO} text-[length:var(--tr-t-mono)] text-tr-text-faint`} aria-live="polite">
+            {visible.length} / {projects.length}
+          </span>
         </div>
       </section>
 
-      {/* Catalogue */}
-      <section className={`${SHELL} py-[var(--tr-s-10)]`}>
+      {/* Table */}
+      <section className={`${SHELL} py-[var(--tr-s-8)]`}>
         <div className={WRAP}>
-          <p
-            className="mb-[var(--tr-s-8)] text-[length:var(--tr-t-mono-sm)] text-tr-text-faint"
-            style={monoData}
-            aria-live="polite"
+          <div
+            className={`hidden lg:grid lg:grid-cols-[3rem_minmax(0,1.2fr)_minmax(0,2fr)_9rem_5rem] gap-6 pt-3 pb-[.6rem] text-[length:var(--tr-t-mono-sm)] tracking-[.1em] text-tr-text-faint ${MONO}`}
           >
-            {visible.length} {visible.length === 1 ? "entry" : "entries"} showing
-          </p>
+            <span>#</span>
+            <span>PROJECT</span>
+            <span>ONE LINE</span>
+            <span>DOMAIN</span>
+            <span className="text-right">YEAR</span>
+          </div>
 
-          {visible.length === 0 && (
-            <p className="py-[var(--tr-s-8)] text-[length:var(--tr-t-mono)] text-tr-text-faint" style={monoData}>
-              {query ? <>no projects match &quot;{query}&quot;</> : "no projects match this filter"}
+          {visible.length === 0 ? (
+            <p className={`py-[var(--tr-s-8)] text-[length:var(--tr-t-mono)] text-tr-text-faint ${MONO}`}>
+              nothing matches &quot;{query}&quot;. try a stack name like kafka, yolo, langgraph
             </p>
-          )}
+          ) : (
+            <ol className="list-none">
+              {visible.map((p, i) => (
+                <li key={p.id} className="border-t border-tr-hairline">
+                  <Link
+                    href={`/projects/${p.id}`}
+                    data-cursor="OPEN"
+                    className="group grid gap-[.6rem_1rem] py-[1.1rem] items-start lg:grid-cols-[3rem_minmax(0,1.2fr)_minmax(0,2fr)_9rem_5rem] lg:gap-6 hover:bg-[linear-gradient(90deg,var(--tr-surface-1)_0,transparent_100%)]"
+                  >
+                    <span className={`text-[length:var(--tr-t-mono-sm)] text-tr-text-faint ${MONO}`}>
+                      {String(i + 1).padStart(2, "0")}
+                    </span>
 
-          {selected.length > 0 && (
-            <div className="mb-[var(--tr-s-12)]">
-              <div className="mb-[var(--tr-s-6)] flex flex-wrap items-baseline justify-between gap-[var(--tr-s-2)] border-b border-tr-hairline pb-[var(--tr-s-3)]">
-                <h2
-                  className="text-[length:var(--tr-t-h2)] font-light leading-[var(--tr-lh-h2)] text-tr-text"
-                  style={serif}
-                >
-                  Selected work.
-                </h2>
-                <span className="text-[length:var(--tr-t-mono-sm)] uppercase text-tr-text-faint" style={mono}>
-                  {selected.length} {selected.length === 1 ? "entry" : "entries"}
-                </span>
-              </div>
+                    <div>
+                      {/* A plain span, not a heading: this is one row of a data table, not a
+                          document section, and the page carries exactly one <h1> and no <h2>s
+                          for these 27 rows to nest under. WorkTable.tsx (the home page's version
+                          of this same table) makes the same call. */}
+                      <span className="block text-[length:var(--tr-t-h3)] leading-[var(--tr-lh-h3)] tracking-[-.015em] font-medium">
+                        {p.title}
+                      </span>
+                      {p.tech.length > 0 && (
+                        <div className="mt-2 flex flex-wrap gap-1.5">
+                          {p.tech.slice(0, 3).map((t) => (
+                            <span
+                              key={t}
+                              className={`rounded-[var(--tr-r-sm)] border border-tr-hairline px-1.5 py-0.5 text-[length:var(--tr-t-mono-sm)] text-tr-text-mute ${MONO}`}
+                            >
+                              {t}
+                            </span>
+                          ))}
+                        </div>
+                      )}
+                    </div>
 
-              <div className="grid gap-[var(--tr-s-5)] sm:grid-cols-2 lg:grid-cols-3">
-                {selected.map((p) => (
-                  <ProjectCard key={p.id} project={p} />
-                ))}
-              </div>
-            </div>
-          )}
+                    <p className="text-tr-text-mute">{p.summary}</p>
 
-          {archive.length > 0 && (
-            <div>
-              <div className="mb-[var(--tr-s-4)] flex flex-wrap items-baseline justify-between gap-[var(--tr-s-2)] border-b border-tr-hairline pb-[var(--tr-s-3)]">
-                <h2
-                  className="text-[length:var(--tr-t-h2)] font-light leading-[var(--tr-lh-h2)] text-tr-text"
-                  style={serif}
-                >
-                  Archive.
-                </h2>
-                <span className="text-[length:var(--tr-t-mono-sm)] uppercase text-tr-text-faint" style={mono}>
-                  {archive.length} {archive.length === 1 ? "entry" : "entries"}
-                </span>
-              </div>
+                    <span
+                      className={`text-[length:var(--tr-t-mono-sm)] ${MONO} ${
+                        isStudentWork(p.domain) ? "text-tr-text-faint" : "text-tr-text-mute"
+                      }`}
+                    >
+                      {p.domain ?? "unfiled"}
+                    </span>
 
-              <p
-                className="mb-[var(--tr-s-5)] max-w-[60ch] text-[length:var(--tr-t-body)] leading-[var(--tr-lh-body)] text-tr-text-mute"
-                style={serif}
-              >
-                Everything else on file: coursework, concepts, and smaller experiments. Kept for context rather
-                than pitched.
-              </p>
-
-              <ul className="list-none border-t border-tr-hairline">
-                {archive.map((p) => (
-                  <ArchiveRow key={p.id} project={p} />
-                ))}
-              </ul>
-            </div>
+                    <span className={`text-[length:var(--tr-t-mono-sm)] text-tr-text-faint lg:text-right ${MONO}`}>
+                      {p.period ?? ""}
+                    </span>
+                  </Link>
+                </li>
+              ))}
+            </ol>
           )}
         </div>
       </section>
