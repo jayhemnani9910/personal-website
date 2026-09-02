@@ -469,6 +469,7 @@ html.lenis {
   --tr-lh-tight: 1.2;     /* the footer's ascii mascot, per the comp */
   --tr-lh-card: 1.35;     /* receipt card labels: 16.875px at 12.5px, per the comp */
   --tr-lh-mail: 1.05;     /* the contact email display, per the comp */
+  --tr-lh-shell: 1.75;    /* the terminal shell body, per the comp */
 
   /* ---- spacing: 4px-based ramp, theme-independent ---- */
   --tr-s-1: 0.25rem;   /* 4px */

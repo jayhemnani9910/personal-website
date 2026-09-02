@@ -3,118 +3,74 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { m, AnimatePresence } from "framer-motion";
 import { useTerminal } from "@/context/TerminalContext";
-import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
-import { Terminal as TerminalIcon, Cpu, Wifi } from "lucide-react";
+import { useTheme } from "@/context/ThemeContext";
 import { useRouter } from "next/navigation";
-import { TERMINAL_FILES, BOOT_SEQUENCE, TERMINAL_CONFIG } from "@/../content/terminal";
-import { RECEIPT_INDEX } from "@/data/home";
+import { EASE, DUR } from "@/lib/motion-tokens";
+import { FEATURED, RECEIPT_INDEX } from "@/data/home";
+import { SITE_CONFIG } from "@/../content/site";
 
-interface CommandHistory {
-    type: "input" | "output" | "error" | "system" | "success";
-    content: string;
-}
-
-// All available commands for autocomplete
+// All available commands for tab-completion. `exit` is not advertised in
+// `help` or the chip row (the design has no such command), but it is kept
+// working: see the Enter handler below.
 const COMMANDS = [
-    "help", "ls", "cat", "clear", "exit", "whoami", "date", "open",
-    "projects", "resume", "skills", "contact", "education", "experience",
-    "sudo", "ascii", "joke", "neofetch", "matrix", "blog", "history",
-    // v4 home commands, see ADR 0014
-    "brief", "receipts", "cube", "rm",
+    "help", "brief", "whoami", "ls", "open", "receipts", "contact",
+    "theme", "cube", "joke", "sudo", "rm", "clear", "exit",
 ];
 
 // Shown above the input. Each is a command the shell actually runs, so the
-// row doubles as the discoverable half of `help`.
-const CHIPS = ["help", "brief we have data nobody trusts", "ls", "receipts", "cube", "joke"];
+// row doubles as the discoverable half of `help`. Verbatim from the design.
+const CHIPS = ["help", "brief we have data nobody trusts", "ls", "receipts", "cube", "joke", "theme"];
 
-const DEV_JOKES = [
-    "Why do programmers prefer dark mode? Because light attracts bugs.",
-    "A SQL query walks into a bar, walks up to two tables and asks... 'Can I join you?'",
-    "!false. It's funny because it's true.",
-    "A programmer's wife tells him: 'Go to the store and buy a gallon of milk. If they have eggs, buy a dozen.' He comes home with 12 gallons of milk.",
-    "There are only 10 types of people in the world: those who understand binary and those who don't.",
-    "Why do Java developers wear glasses? Because they can't C#.",
-    "What's a programmer's favorite hangout place? Foo Bar.",
-    "How many programmers does it take to change a light bulb? None. That's a hardware problem.",
-    "The best thing about a boolean is that even if you're wrong, you're only off by a bit.",
-    "// This code works. I don't know why.",
+type ColorKey = "text" | "mute" | "faint" | "accent" | "ok";
+
+const TEXT_COLOR: Record<ColorKey, string> = {
+    text: "text-tr-text",
+    mute: "text-tr-text-mute",
+    faint: "text-tr-text-faint",
+    accent: "text-tr-accent",
+    ok: "text-tr-ok",
+};
+
+type Line = { text: string; color: ColorKey; icon: string; iconColor: ColorKey };
+
+const line = (text: string, color: ColorKey = "mute", icon = " ", iconColor: ColorKey = "faint"): Line => ({
+    text,
+    color,
+    icon,
+    iconColor,
+});
+const ok = (text: string): Line => line(text, "text", "✓", "ok");
+const info = (text: string): Line => line(text, "text", "·", "faint");
+const warn = (text: string): Line => line(text, "mute", "!", "accent");
+const err = (text: string): Line => line(text, "text", "✗", "accent");
+
+// The shell's greeting, printed once on mount. Verbatim from the design.
+const INITIAL_LINES: Line[] = [
+    line("hey. this is a real shell, minus the part where you can break anything.", "text", "☺", "accent"),
+    line("try a chip above, or type `brief we have data nobody trusts`"),
 ];
 
-const ASCII_ART = `
-     ██╗ █████╗ ██╗   ██╗
-     ██║██╔══██╗╚██╗ ██╔╝
-     ██║███████║ ╚████╔╝
-██   ██║██╔══██║  ╚██╔╝
-╚█████╔╝██║  ██║   ██║
- ╚════╝ ╚═╝  ╚═╝   ╚═╝
-
-  Forward Deployed Engineer · Builder
-  jayhemnani.me
-`;
-
-const NEOFETCH = `
-  ┌──────────────────────┐    guest@portfolio
-  │                      │    ──────────────
-  │   ░░░░░░░░░░░░░░░░   │    OS: Portfolio v2.0
-  │   ░░  ██  ██  ░░░░   │    Host: Vercel Edge
-  │   ░░░░░░░░░░░░░░░░   │    Stack: Next.js 16 / React 19
-  │   ░░  ████████  ░░   │    Lang: TypeScript
-  │   ░░░░░░░░░░░░░░░░   │    UI: Tailwind 4 + Framer Motion
-  │                      │    Projects: 26
-  └──────────────────────┘    Uptime: always shipping
-`;
-
-export function TerminalOverlay() {
+export function TerminalOverlay({ projectCount }: { projectCount: number }) {
     const { isOpen, closeTerminal } = useTerminal();
+    const { theme, toggleTheme } = useTheme();
     const [input, setInput] = useState("");
-    const [history, setHistory] = useState<CommandHistory[]>([]);
-    const [isBooting, setIsBooting] = useState(true);
+    const [history, setHistory] = useState<Line[]>(INITIAL_LINES);
     const inputRef = useRef<HTMLInputElement>(null);
     const bottomRef = useRef<HTMLDivElement>(null);
     const panelRef = useRef<HTMLDivElement>(null);
     const previouslyFocusedRef = useRef<HTMLElement | null>(null);
-    const timeoutsRef = useRef<number[]>([]);
     const router = useRouter();
 
     // Command history for arrow key navigation
     const cmdHistoryRef = useRef<string[]>([]);
     const historyIndexRef = useRef(-1);
 
-    // Easter egg state
-    const [isPurging, setIsPurging] = useState(false);
-    // Matrix rain state
-    const [showMatrix, setShowMatrix] = useState(false);
-
-    const clearBootTimeouts = () => {
-        timeoutsRef.current.forEach((t) => clearTimeout(t));
-        timeoutsRef.current = [];
-    };
-
+    // Focuses the input once the panel has finished sliding in, matching the
+    // comp's own 380ms delay rather than fighting the entrance transition.
     useEffect(() => {
-        clearBootTimeouts();
-
-        if (isOpen) {
-            const timer = window.setTimeout(() => {
-                setIsBooting(true);
-                setHistory([]);
-                let delay = 0;
-                BOOT_SEQUENCE.forEach((line, i) => {
-                    delay += Math.random() * 300 + 100;
-                    const lineTimer = window.setTimeout(() => {
-                        setHistory((prev) => [...prev, { type: "system", content: line }]);
-                        if (i === BOOT_SEQUENCE.length - 1) {
-                            setIsBooting(false);
-                            const focusTimer = window.setTimeout(() => inputRef.current?.focus(), 100);
-                            timeoutsRef.current.push(focusTimer);
-                        }
-                    }, delay);
-                    timeoutsRef.current.push(lineTimer);
-                });
-            }, 0);
-            timeoutsRef.current.push(timer);
-        }
-
-        return () => clearBootTimeouts();
+        if (!isOpen) return;
+        const t = window.setTimeout(() => inputRef.current?.focus(), 380);
+        return () => window.clearTimeout(t);
     }, [isOpen]);
 
     // Dialog semantics: remember what had focus before opening (to restore
@@ -163,212 +119,100 @@ export function TerminalOverlay() {
 
     useEffect(() => {
         bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-    }, [history, isBooting]);
+    }, [history]);
 
-    const handleCommand = useCallback((cmd: string) => {
-        const trimmed = cmd.trim();
-        if (!trimmed) return;
+    const handleCommand = useCallback((raw: string) => {
+        const trimmed = raw.trim();
+        if (!trimmed) {
+            setHistory([]);
+            setInput("");
+            return;
+        }
 
-        // Save to command history
         cmdHistoryRef.current.push(trimmed);
         historyIndexRef.current = -1;
 
-        const args = trimmed.split(" ");
-        const command = args[0].toLowerCase();
+        const sp = trimmed.indexOf(" ");
+        const command = (sp < 0 ? trimmed : trimmed.slice(0, sp)).toLowerCase();
+        const rest = sp < 0 ? "" : trimmed.slice(sp + 1).trim();
 
-        const newHistory: CommandHistory[] = [...history, { type: "input", content: cmd }];
+        if (command === "clear") {
+            setHistory([]);
+            setInput("");
+            return;
+        }
+
+        const echo = line(trimmed, "text", "❯", "faint");
+        let out: Line[];
 
         switch (command) {
             case "help":
-                newHistory.push({
-                    type: "output",
-                    content: `Available commands:
-
-Files
-  ls              List available files
-  cat [file]      Display file contents
-
-Navigation
-  projects        Go to projects page
-  resume          Go to resume page
-  blog            List blog posts
-
-Quick Info
-  skills          Display technical skills
-  contact         Show contact info
-  education       Show education
-  experience      Show work experience
-
-Home page
-  brief [text]    Run the decomposer on your problem
-  receipts        Every number on the home page, with its source
-  cube            Scramble the cube in section 03
-
-Fun
-  ascii           ASCII art logo
-  joke            Random dev joke
-  neofetch        System info
-  matrix          Enter the Matrix
-  history         Command history
-
-System
-  help            Show this help message
-  whoami          Current user
-  date            Show current date
-  open [url]      Open URL in browser
-  clear           Clear terminal
-  exit            Close terminal`,
-                });
+                out = [
+                    line("things that work here:", "mute", "?", "accent"),
+                    info(`${"brief <text>".padEnd(15)}run the decomposer on your problem`),
+                    info(`${"ls".padEnd(15)}the six featured projects`),
+                    info(`${"open <1-6>".padEnd(15)}one project, in three lines`),
+                    info(`${"receipts".padEnd(15)}every number on this page, with source`),
+                    line("whoami · contact · theme · cube · joke · clear"),
+                ];
                 break;
-            case "ls":
-                newHistory.push({
-                    type: "output",
-                    content: Object.keys(TERMINAL_FILES).join("  "),
-                });
-                break;
-            case "cat":
-                if (args[1] && TERMINAL_FILES[args[1] as keyof typeof TERMINAL_FILES]) {
-                    newHistory.push({
-                        type: "output",
-                        content: TERMINAL_FILES[args[1] as keyof typeof TERMINAL_FILES],
-                    });
-                } else if (args[1]) {
-                    newHistory.push({ type: "error", content: `File not found: ${args[1]}` });
-                } else {
-                    newHistory.push({ type: "error", content: "Usage: cat [filename]" });
-                }
-                break;
-            case "clear":
-                setHistory([]);
-                setInput("");
-                return;
-            case "exit":
-                closeTerminal();
-                break;
-            case "whoami":
-                newHistory.push({ type: "success", content: "guest@portfolio" });
-                break;
-            case "date":
-                newHistory.push({ type: "output", content: new Date().toString() });
-                break;
-            case "open":
-                if (args[1]) {
-                    if (args[1] === "projects") {
-                        router.push("/projects");
-                        newHistory.push({ type: "success", content: "Opening /projects..." });
-                    } else {
-                        window.open(args[1], "_blank");
-                        newHistory.push({ type: "success", content: `Opening ${args[1]}...` });
-                    }
-                } else {
-                    newHistory.push({ type: "error", content: "Usage: open [url]" });
-                }
-                break;
-            case "sudo":
-                if (trimmed === "sudo rm -rf /") {
-                    setIsPurging(true);
-                    newHistory.push({ type: "error", content: "INITIATING SYSTEM PURGE..." });
-                    const purgeTimer = window.setTimeout(() => {
-                        setHistory((prev) => [
-                            ...prev,
-                            { type: "error", content: "CRITICAL ERROR: ACCESS DENIED." },
-                            { type: "success", content: "Nice try. Security protocols engaged." },
-                        ]);
-                        setIsPurging(false);
-                    }, 3000);
-                    timeoutsRef.current.push(purgeTimer);
-                } else {
-                    newHistory.push({ type: "error", content: "User is not in the sudoers file. This incident will be reported." });
-                }
-                break;
-            case "skills":
-                newHistory.push({ type: "output", content: TERMINAL_FILES["skills.json"] });
-                break;
-            case "contact":
-                newHistory.push({ type: "output", content: TERMINAL_FILES["contact.txt"] });
-                break;
-            case "education":
-                newHistory.push({ type: "output", content: TERMINAL_FILES["education.md"] });
-                break;
-            case "experience":
-                newHistory.push({ type: "output", content: TERMINAL_FILES["experience.md"] });
-                break;
-            case "projects":
-                router.push("/projects");
-                newHistory.push({ type: "success", content: "Navigating to /projects..." });
-                closeTerminal();
-                break;
-            case "resume":
-                router.push("/resume");
-                newHistory.push({ type: "success", content: "Navigating to /resume..." });
-                closeTerminal();
-                break;
-            // ── New commands ──
-            case "ascii":
-                newHistory.push({ type: "success", content: ASCII_ART });
-                break;
-            case "joke":
-                newHistory.push({
-                    type: "output",
-                    content: DEV_JOKES[Math.floor(Math.random() * DEV_JOKES.length)],
-                });
-                break;
-            case "neofetch":
-                newHistory.push({ type: "output", content: NEOFETCH });
-                break;
-            case "matrix":
-                newHistory.push({ type: "success", content: "Entering the Matrix..." });
-                setShowMatrix(true);
-                const matrixTimer = window.setTimeout(() => setShowMatrix(false), 5000);
-                timeoutsRef.current.push(matrixTimer);
-                break;
-            case "blog":
-                newHistory.push({
-                    type: "output",
-                    content: "Blog posts:\n  → fde-interview-loop  (latest)\n  → forward-deployed-engineer\n\nVisit jayhemnani.me/blog for more.",
-                });
-                break;
-            case "history":
-                if (cmdHistoryRef.current.length === 0) {
-                    newHistory.push({ type: "output", content: "No command history yet." });
-                } else {
-                    const hist = cmdHistoryRef.current
-                        .map((c, i) => `  ${i + 1}  ${c}`)
-                        .join("\n");
-                    newHistory.push({ type: "output", content: hist });
-                }
-                break;
-            // ── v4 home commands (ADR 0014) ──
-            // Each drives the home page rather than printing at it, so the
-            // shell stays a way of using the site instead of a second copy of
-            // it. The page listens for these events; see Decomposer.tsx and
-            // MethodCube.tsx.
             case "brief": {
-                const text = trimmed.slice(command.length).trim().replace(/^"|"$/g, "");
+                const text = rest.replace(/^"|"$/g, "");
                 if (!text) {
-                    newHistory.push({ type: "error", content: "brief <your vague problem>. The vaguer the better, honestly." });
+                    out = [warn("brief <your vague problem>. The vaguer the better, honestly.")];
                     break;
                 }
-                newHistory.push({ type: "success", content: "Running the decomposer up top." });
+                out = [ok("Running the decomposer up top.")];
                 closeTerminal();
                 if (window.location.pathname !== "/") router.push("/");
                 window.setTimeout(() => {
                     window.dispatchEvent(new CustomEvent("v4:brief", { detail: text }));
+                    window.location.hash = "brief";
                 }, 60);
                 break;
             }
-            case "receipts": {
-                // Two of the six numbers are computed at build time from the
+            case "whoami":
+                out = [
+                    ok("Jay Hemnani, Forward Deployed Engineer. Gujarat, IN. Relocating."),
+                    line("you, however, remain a mystery."),
+                ];
+                break;
+            case "ls": {
+                const more = projectCount - FEATURED.length;
+                out = [
+                    ...FEATURED.map((p) => info(`${p.num}  ${p.title.padEnd(26)} ${p.tech.slice(0, 3).join(", ")}`)),
+                    line(`… ${more} more at /work`),
+                ];
+                break;
+            }
+            case "open": {
+                const p = FEATURED[(parseInt(rest, 10) || 0) - 1];
+                out = p
+                    ? [ok(p.title), line(`arrived as: ${p.arrived}`), line(`did: ${p.did}`), line(p.changed, "ok", "✓", "ok")]
+                    : [warn("open <1-6>. six, not seven. i checked.")];
+                break;
+            }
+            case "receipts":
+                // RECEIPT_INDEX carries title + label only, not the figure: two
+                // of the six receipts derive their number at build time from
                 // real content, and this overlay is mounted on every route, so
-                // it has no honest way to know them here. The labels carry the
-                // claim without the figure; the figures are on the page.
-                const lines = RECEIPT_INDEX.map((r) => `  ${r.title.padEnd(24)} ${r.label}`).join("\n");
-                newHistory.push({ type: "output", content: `Every number on the home page, with its source:\n${lines}\n\nOpen section 01 for the figures and the links.` });
-                if (window.location.pathname === "/") window.location.hash = "proof";
+                // it has no honest way to know them here. See home.ts.
+                out = RECEIPT_INDEX.map((r) => info(`${r.title.padEnd(24)} ${r.label}`));
+                break;
+            case "contact":
+                out = [
+                    ok(SITE_CONFIG.social.email),
+                    line(`${SITE_CONFIG.social.github.replace(/^https:\/\//, "")} · ${SITE_CONFIG.social.linkedin.replace(/^https:\/\//, "")}`),
+                ];
+                break;
+            case "theme": {
+                const next = theme === "dark" ? "light" : "dark";
+                toggleTheme();
+                out = [ok(`theme → ${next}. your retinas thank you. or not.`)];
                 break;
             }
             case "cube":
-                newHistory.push({ type: "success", content: "Scrambling the cube in section 03." });
+                out = [ok("Scrambling the cube in section 03.")];
                 closeTerminal();
                 if (window.location.pathname !== "/") router.push("/");
                 window.setTimeout(() => {
@@ -376,16 +220,26 @@ System
                     window.location.hash = "method";
                 }, 60);
                 break;
+            case "joke":
+                out = [line("a data pipeline walks into a bar. the bartender says: we don't serve your type here. the pipeline casts itself to string.", "text", "☺", "accent")];
+                break;
+            case "sudo":
+                out = [err("nice try. this shell runs on trust and yellow.")];
+                break;
             case "rm":
-                newHistory.push({ type: "error", content: "Absolutely not. It took years to build this." });
+                out = [err("absolutely not. it took me four years to build this.")];
+                break;
+            case "exit":
+                out = [];
+                closeTerminal();
                 break;
             default:
-                newHistory.push({ type: "error", content: `Command not found: ${command}. Type 'help' for available commands.` });
+                out = [err(`command not found: ${command}. try help, it's the one command everyone skips.`)];
         }
 
-        setHistory(newHistory);
+        setHistory((prev) => [...prev, echo, ...out]);
         setInput("");
-    }, [history, closeTerminal, router]);
+    }, [closeTerminal, router, projectCount, theme, toggleTheme]);
 
     const handleKeyDown = (e: React.KeyboardEvent) => {
         if (e.key === "Enter") {
@@ -429,187 +283,92 @@ System
         <AnimatePresence>
             {isOpen && (
                 <m.div
-                    initial={{ opacity: 0, scale: 0.95 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.95 }}
-                    className={`fixed inset-0 z-[var(--tr-z-overlay)] flex items-center justify-center bg-tr-bg/80 p-4 ${isPurging ? "animate-shake" : ""}`}
+                    initial={{ opacity: 0, y: 24 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 24 }}
+                    transition={{ duration: DUR.base, ease: EASE }}
+                    className="fixed inset-0 z-[var(--tr-z-overlay)] flex items-end justify-center bg-black/40 px-[clamp(1rem,4vw,2rem)] pb-6"
                     onClick={closeTerminal}
                 >
                     <div
                         ref={panelRef}
                         role="dialog"
                         aria-modal="true"
-                        aria-label="Terminal"
-                        className="w-full max-w-4xl h-[70vh] bg-tr-surface-1 rounded-[var(--tr-r-sm)] border border-tr-hairline overflow-hidden flex flex-col relative"
+                        aria-label="jay's shell"
+                        className="w-[min(880px,100%)] overflow-hidden rounded-[var(--tr-r-xl)] border border-tr-hairline bg-tr-surface-1 shadow-[0_40px_100px_-30px_rgba(0,0,0,.7)]"
                         onClick={(e) => e.stopPropagation()}
                     >
-                        {/* Matrix Rain Overlay */}
-                        {showMatrix && <MatrixRain />}
-
-                        {/* Window Header */}
-                        <div className="flex items-center justify-between px-4 py-3 border-b border-tr-hairline bg-tr-surface-2">
-                            <div className="flex items-center gap-4">
-                                <div className="flex gap-2">
-                                    <button
-                                        type="button"
-                                        onClick={closeTerminal}
-                                        aria-label="Close terminal"
-                                        className="w-3 h-3 rounded-full bg-tr-text-faint hover:bg-tr-text-mute cursor-pointer"
-                                    />
-                                    <span aria-hidden="true" className="block w-3 h-3 rounded-full bg-tr-hairline" />
-                                    <span aria-hidden="true" className="block w-3 h-3 rounded-full bg-tr-hairline" />
-                                </div>
-                                <div className="flex items-center gap-2 text-xs text-tr-text-mute font-mono">
-                                    <TerminalIcon className="w-3 h-3" />
-                                    <span>{TERMINAL_CONFIG.prompt}</span>
-                                </div>
-                            </div>
-                            <div className="flex items-center gap-4 text-xs text-tr-text-faint font-mono">
-                                <div className="flex items-center gap-1">
-                                    <Cpu className="w-3 h-3" />
-                                    <span>CPU: 12%</span>
-                                </div>
-                                <div className="flex items-center gap-1">
-                                    <Wifi className="w-3 h-3" />
-                                    <span>NET: ON</span>
-                                </div>
-                            </div>
+                        {/* Window header */}
+                        <div className="flex h-11 items-center gap-3 border-b border-tr-hairline px-4 font-mono text-[length:var(--tr-t-mono)] text-tr-text-mute">
+                            <span aria-hidden="true" className="flex gap-[5px]">
+                                <i className="block h-[9px] w-[9px] rounded-full bg-[#FF5F57]" />
+                                <i className="block h-[9px] w-[9px] rounded-full bg-[#FEBC2E]" />
+                                <i className="block h-[9px] w-[9px] rounded-full bg-[#28C840]" />
+                            </span>
+                            <span className="text-tr-text">{"jay's shell"}</span>
+                            <span className="text-tr-text-faint">· no sudo required</span>
+                            <button
+                                type="button"
+                                onClick={closeTerminal}
+                                className="ml-auto cursor-pointer border-0 bg-transparent text-tr-text-mute hover:text-tr-accent"
+                            >
+                                esc ✕
+                            </button>
                         </div>
 
                         {/* Chips: the discoverable half of `help`. Each runs a
                             real command, so nothing here can drift from the
-                            dispatcher below. */}
-                        {!isBooting && (
-                            <div className="flex flex-wrap gap-2 px-4 py-3 border-b border-tr-hairline bg-tr-bg">
-                                {CHIPS.map((chip) => (
-                                    <button
-                                        key={chip}
-                                        type="button"
-                                        onClick={() => handleCommand(chip)}
-                                        className="h-[26px] px-[.65rem] rounded-full border border-tr-hairline text-tr-text-mute font-mono text-[11px] hover:border-tr-accent hover:text-tr-text transition-colors"
-                                    >
-                                        {chip}
-                                    </button>
-                                ))}
-                            </div>
-                        )}
+                            dispatcher above. */}
+                        <div className="flex flex-wrap gap-[.4rem] border-b border-tr-hairline bg-tr-bg px-4 py-3">
+                            {CHIPS.map((chip) => (
+                                <button
+                                    key={chip}
+                                    type="button"
+                                    onClick={() => handleCommand(chip)}
+                                    className="h-[26px] cursor-pointer rounded-full border border-tr-hairline bg-tr-surface-1 px-[.65rem] font-mono text-[length:var(--tr-t-mono-xs)] text-tr-text-mute hover:border-tr-accent hover:text-tr-text"
+                                >
+                                    {chip}
+                                </button>
+                            ))}
+                        </div>
 
-                        {/* Terminal Body */}
-                        <div className="flex-1 p-6 font-mono text-sm overflow-y-auto scrollbar-hide text-tr-text-mute" onClick={() => inputRef.current?.focus()}>
+                        {/* Shell body. 12.5px is a literal: none of the four
+                            mono tokens (12/11.5/11/10.5) matches the comp's
+                            body size, and it has exactly one call site. */}
+                        <div
+                            className="h-[280px] overflow-y-auto p-4 font-mono text-[12.5px] leading-[var(--tr-lh-shell)]"
+                            onClick={() => inputRef.current?.focus()}
+                        >
                             {history.map((entry, i) => (
-                                <div key={i} className="mb-1 whitespace-pre-wrap">
-                                    {entry.type === "input" ? (
-                                        <span className="flex gap-2">
-                                            <span>➜</span>
-                                            <span>{entry.content}</span>
-                                        </span>
-                                    ) : (
-                                        <span>{entry.content}</span>
-                                    )}
+                                <div
+                                    key={i}
+                                    className={`grid grid-cols-[1.4rem_minmax(0,1fr)] gap-[.4rem] whitespace-pre-wrap ${TEXT_COLOR[entry.color]}`}
+                                >
+                                    <span className={TEXT_COLOR[entry.iconColor]}>{entry.icon}</span>
+                                    <span>{entry.text}</span>
                                 </div>
                             ))}
 
-                            {!isBooting && (
-                                <div className="flex items-center gap-2 mt-2">
-                                    <span className="text-tr-accent">➜</span>
-                                    <input
-                                        ref={inputRef}
-                                        type="text"
-                                        value={input}
-                                        onChange={(e) => setInput(e.target.value)}
-                                        onKeyDown={handleKeyDown}
-                                        className="bg-transparent outline-none flex-1 text-tr-accent caret-tr-accent"
-                                        autoFocus
-                                        spellCheck={false}
-                                        autoComplete="off"
-                                        aria-label="Terminal command input"
-                                    />
-                                </div>
-                            )}
+                            <div className="grid grid-cols-[1.4rem_minmax(0,1fr)] items-center gap-[.4rem]">
+                                <span className="text-tr-accent">❯</span>
+                                <input
+                                    ref={inputRef}
+                                    type="text"
+                                    value={input}
+                                    onChange={(e) => setInput(e.target.value)}
+                                    onKeyDown={handleKeyDown}
+                                    placeholder="type something, or hit a chip above"
+                                    className="border-0 bg-transparent p-0 text-tr-text outline-none"
+                                    spellCheck={false}
+                                    autoComplete="off"
+                                    aria-label="Terminal command input"
+                                />
+                            </div>
                             <div ref={bottomRef} />
                         </div>
                     </div>
                 </m.div>
             )}
         </AnimatePresence>
-    );
-}
-
-// ── Matrix Rain Effect ──
-function MatrixRain() {
-    const canvasRef = useRef<HTMLCanvasElement>(null);
-    const prefersReducedMotion = usePrefersReducedMotion();
-
-    useEffect(() => {
-        const canvas = canvasRef.current;
-        if (!canvas) return;
-        const ctx = canvas.getContext("2d");
-        if (!ctx) return;
-
-        canvas.width = canvas.offsetWidth;
-        canvas.height = canvas.offsetHeight;
-
-        const columns = Math.floor(canvas.width / 14);
-        const drops: number[] = Array(columns).fill(1);
-        const chars = "アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン0123456789";
-
-        let animId = 0;
-        const draw = () => {
-            // Read the live token values each frame (cheap for a canvas
-            // loop, and keeps this theme-reactive without a separate
-            // theme-change listener): the trail is the machine channel's
-            // quiet ink, and accent marks only the live edge of each
-            // column, consistent with "accent is the only saturated
-            // colour in the system."
-            const tokens = getComputedStyle(document.documentElement);
-            const rain = tokens.getPropertyValue("--tr-text-mute").trim();
-            const live = tokens.getPropertyValue("--tr-accent").trim();
-
-            // The trail fade must be the surface the canvas sits on, not black.
-            // Hardcoding rgba(0,0,0,.05) works on dark and progressively
-            // blackens the terminal on the light theme, where the surface is white.
-            const surface = tokens.getPropertyValue("--tr-surface-1").trim();
-            const [fr, fg, fb] = [1, 3, 5].map((i) => parseInt(surface.slice(i, i + 2), 16));
-            ctx.fillStyle = `rgba(${fr}, ${fg}, ${fb}, 0.05)`;
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            ctx.font = "12px monospace";
-
-            for (let i = 0; i < drops.length; i++) {
-                // Leading glyph: the live edge of the column, accent.
-                const text = chars[Math.floor(Math.random() * chars.length)];
-                ctx.fillStyle = live;
-                ctx.fillText(text, i * 14, drops[i] * 14);
-
-                // The row immediately behind the head drops out of "live"
-                // and joins the falling trail; everything further back
-                // keeps fading via the translucent overlay above.
-                if (drops[i] > 0) {
-                    const trailText = chars[Math.floor(Math.random() * chars.length)];
-                    ctx.fillStyle = rain;
-                    ctx.fillText(trailText, i * 14, (drops[i] - 1) * 14);
-                }
-
-                if (drops[i] * 14 > canvas.height && Math.random() > 0.975) {
-                    drops[i] = 0;
-                }
-                drops[i]++;
-            }
-            // Reduced motion: paint a single static frame instead of
-            // scheduling the next one.
-            if (!prefersReducedMotion) {
-                animId = requestAnimationFrame(draw);
-            }
-        };
-        draw();
-
-        return () => cancelAnimationFrame(animId);
-    }, [prefersReducedMotion]);
-
-    return (
-        <canvas
-            ref={canvasRef}
-            aria-hidden="true"
-            className="absolute inset-0 w-full h-full z-30 pointer-events-none opacity-80"
-        />
     );
 }

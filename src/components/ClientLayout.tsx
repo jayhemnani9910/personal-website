@@ -13,14 +13,14 @@ import { ReaderMode } from "@/components/ReaderMode";
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
 import { usePathname } from "next/navigation";
 
-export function ClientLayout({ children }: { children: React.ReactNode }) {
+export function ClientLayout({ children, projectCount }: { children: React.ReactNode; projectCount: number }) {
     const prefersReducedMotion = usePrefersReducedMotion();
     const pathname = usePathname();
     const isLanding = pathname === "/";
 
     const content = (
         <TerminalProvider>
-            <TerminalOverlay />
+            <TerminalOverlay projectCount={projectCount} />
             <TransitionLayout>
                 {children}
             </TransitionLayout>

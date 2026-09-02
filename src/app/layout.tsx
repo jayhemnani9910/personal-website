@@ -7,6 +7,7 @@ import { WebMCPLoader } from "@/components/WebMCPLoader";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { SITE_CONFIG } from "@/../content/site";
+import { getAllProjects } from "@/lib/content";
 
 // Instrument Sans is a variable font, so no `weight` array: listing weights
 // makes next/font ship static instances instead of the variable face, which
@@ -100,11 +101,18 @@ const personJsonLd = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // The shell overlay's `ls` command derives its "N more at /work" line from
+  // the real project count rather than a hardcoded number (see
+  // TerminalOverlay.tsx). It is a client component mounted on every route, so
+  // it cannot call the fs-backed getAllProjects() itself; this is the same
+  // server-fetch-then-prop pattern WebMCPLoader below already uses.
+  const projectCount = (await getAllProjects()).length;
+
   return (
     <html lang="en" className={`${instrumentSans.variable} ${geistMono.variable}`} suppressHydrationWarning>
       <head>
@@ -133,7 +141,7 @@ export default function RootLayout({
         className="antialiased"
       >
         <ThemeProvider>
-          <ClientLayout>{children}</ClientLayout>
+          <ClientLayout projectCount={projectCount}>{children}</ClientLayout>
           <WebMCPLoader />
           <Analytics />
           <SpeedInsights />
