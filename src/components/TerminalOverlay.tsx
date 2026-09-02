@@ -6,8 +6,9 @@ import { useTerminal } from "@/context/TerminalContext";
 import { useTheme } from "@/context/ThemeContext";
 import { useRouter } from "next/navigation";
 import { EASE, DUR } from "@/lib/motion-tokens";
-import { FEATURED, RECEIPT_INDEX } from "@/data/home";
+import { FEATURED, buildReceipts } from "@/data/home";
 import { SITE_CONFIG } from "@/../content/site";
+import { WEBMCP_TOOL_COUNT } from "@/lib/webmcp";
 
 // All available commands for tab-completion. `exit` is not advertised in
 // `help` or the chip row (the design has no such command), but it is kept
@@ -193,11 +194,10 @@ export function TerminalOverlay({ projectCount }: { projectCount: number }) {
                 break;
             }
             case "receipts":
-                // RECEIPT_INDEX carries title + label only, not the figure: two
-                // of the six receipts derive their number at build time from
-                // real content, and this overlay is mounted on every route, so
-                // it has no honest way to know them here. See home.ts.
-                out = RECEIPT_INDEX.map((r) => info(`${r.title.padEnd(24)} ${r.label}`));
+                // Both of buildReceipts's dynamic inputs are honestly available
+                // here: projectCount arrives as a prop (see layout.tsx), and
+                // WEBMCP_TOOL_COUNT is a static array length, not a fs read.
+                out = buildReceipts({ projectCount, toolCount: WEBMCP_TOOL_COUNT }).map((r) => info(`${r.n.padEnd(5)} ${r.label}`));
                 break;
             case "contact":
                 out = [

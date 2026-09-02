@@ -21,7 +21,8 @@ vi.mock("next/navigation", () => ({
 
 
 import { TerminalOverlay } from "./TerminalOverlay";
-import { FEATURED, RECEIPT_INDEX } from "@/data/home";
+import { FEATURED, buildReceipts } from "@/data/home";
+import { WEBMCP_TOOL_COUNT } from "@/lib/webmcp";
 
 // The real project count as of this write-up (see src/data/home.test.ts,
 // which hardcodes the same number for the same reason: the overlay is a
@@ -148,16 +149,18 @@ describe("TerminalOverlay v4 commands", () => {
     expect(dialog.textContent).toContain(`${PROJECT_COUNT - FEATURED.length} more at /work`);
   });
 
-  it("receipts prints every receipt from the shared index", () => {
+  it("receipts prints every receipt's figure and label, not its title", () => {
     renderOpen();
     type("receipts");
 
     // Each receipt is its own row now, not one combined block, so assert
-    // against the dialog's full text rather than a single text node.
+    // against the dialog's full text rather than a single text node. The
+    // command is named after the number, so this checks for the padded
+    // figure ("27", "94%", ...) next to its label, not the receipt's title.
     const dialog = screen.getByRole("dialog");
-    for (const r of RECEIPT_INDEX) {
-      expect(dialog.textContent).toContain(r.title);
-      expect(dialog.textContent).toContain(r.label);
+    const receipts = buildReceipts({ projectCount: PROJECT_COUNT, toolCount: WEBMCP_TOOL_COUNT });
+    for (const r of receipts) {
+      expect(dialog.textContent).toContain(`${r.n.padEnd(5)} ${r.label}`);
     }
   });
 
@@ -181,7 +184,8 @@ describe("TerminalOverlay v4 commands", () => {
     const chip = screen.getByRole("button", { name: "receipts" });
     fireEvent.click(chip);
     const dialog = screen.getByRole("dialog");
-    expect(dialog.textContent).toContain(RECEIPT_INDEX[0].label);
+    const receipts = buildReceipts({ projectCount: PROJECT_COUNT, toolCount: WEBMCP_TOOL_COUNT });
+    expect(dialog.textContent).toContain(receipts[0].label);
   });
 
   // Regression. Enter ran the command, the command closed the overlay, closing
