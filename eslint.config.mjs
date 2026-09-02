@@ -22,6 +22,14 @@ const eslintConfig = defineConfig([
     // Scratch files written by the remember plugin, at the repo root and
     // inside the practice-problem folders. Not ours, and not code.
     "**/.remember/**",
+    // Playwright's own output. Both are gitignored, but ESLint reads the
+    // working tree rather than the index, so after any test:visual or
+    // test:perf run a plain `npm run lint` reported about 3000 errors out of
+    // the vendor JS bundled into the HTML reporter, which buries anything
+    // real. Deleting the directories by hand before linting is not a fix, it
+    // is a thing to forget.
+    "playwright-report/**",
+    "test-results/**",
   ]),
 ]);
 

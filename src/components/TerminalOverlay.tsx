@@ -511,7 +511,7 @@ System
 
                             {!isBooting && (
                                 <div className="flex items-center gap-2 mt-2">
-                                    <span className="text-tr-ember" style={{ textShadow: "var(--tr-glow-text)" }}>➜</span>
+                                    <span className="text-tr-ember">➜</span>
                                     <input
                                         ref={inputRef}
                                         type="text"

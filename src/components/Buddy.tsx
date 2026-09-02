@@ -326,7 +326,7 @@ export function Buddy({ variant = "mini", className }: BuddyProps) {
   // ambient cursor/scroll tracking or the idle blink loop.
   const isReacting = expression === "surprised" || expression === "happy";
   const eyeStyle = isReacting
-    ? { color: "var(--tr-ember)", textShadow: "var(--tr-glow-text)" }
+    ? { color: "var(--tr-ember)" }
     : undefined;
 
   const variantClass = variant === "full" ? "buddy buddy--full" : "buddy buddy--mini";
