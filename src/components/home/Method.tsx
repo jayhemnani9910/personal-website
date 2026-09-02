@@ -37,10 +37,15 @@ export function Method({ children }: { children: ReactNode }) {
             className="bg-tr-surface-1 hover:bg-tr-surface-2 transition-colors p-6 min-h-[210px] flex flex-col gap-4"
           >
             <span className={`${MONO} text-tr-accent`}>{m.n}</span>
-            {/* --tr-t-h3 computes to 19.2px at 1280px; the comp draws this card
-                heading at 17.92px, so it gets a literal rather than the h3 token
-                (which stays reserved for real h3s). */}
-            <p className="text-[1.12rem] leading-tight tracking-[-.015em] font-medium">{m.rule}</p>
+            {/* --tr-t-h3 computes to 19.2px at 1280px where the comp draws this
+                card heading at 17.92px, so it gets its own fluid token
+                (--tr-t-card-h) rather than the h3 token, which stays reserved
+                for real h3s. `leading-tight` here is Tailwind's built-in 1.25
+                step, not the --tr-lh-tight custom token (1.2, used by the
+                footer's ascii mascot) - same word, different number. */}
+            <p className="text-[length:var(--tr-t-card-h)] leading-tight tracking-[-.015em] font-medium">
+              {m.rule}
+            </p>
             <p className="text-[length:var(--tr-t-small)] leading-[var(--tr-lh-body)] text-tr-text-mute">{m.why}</p>
             {/* Cast: typedRoutes needs the literal at the call site, and this one
                 arrives from src/data/home.ts. Backed by home.test.ts, which checks

@@ -398,9 +398,9 @@ html.lenis {
 :root {
   /* ---- color: dark (canonical) ----
      Promoted from the .home-v4 scope on 2026-09-02, see ADR 0014. The accent
-     is yellow now; --tr-accent keeps its slot name for the moment. Four values
-     differ from the design export because the export's fail WCAG AA as text,
-     noted inline. */
+     is yellow now; --tr-accent keeps its slot name for the moment. The palette
+     matches the design export exactly; ADR 0015 records the 15 pairs that fall
+     below AA as a result and why that was accepted. */
   --tr-bg: #0B0C0F;
   --tr-surface-1: #111319;
   --tr-surface-2: #181B22;
@@ -434,6 +434,13 @@ html.lenis {
   --tr-t-display-sm: clamp(2.2rem, 4.2vw, 3.8rem);
   --tr-t-h2: clamp(1.6rem, 2.6vw, 2.4rem);
   --tr-t-h3: clamp(1.15rem, 1.5vw, 1.4rem);
+  /* Method card headings, per the comp. --tr-t-h3 does not fit: it computes
+     19.2px at 1280px where the comp measures 17.92px. A literal 1.12rem
+     looked like the fix because 1.4vw also happens to equal 17.92px at
+     exactly 1280px, but the comp's rule is this clamp, fluid below ~1257px
+     (down to 1.1rem/17.6px) and above ~1486px (up to 1.3rem/20.8px); a fixed
+     value stays 17.92px forever and drifts from the comp off that one width. */
+  --tr-t-card-h: clamp(1.1rem, 1.4vw, 1.3rem);
   --tr-t-deck: clamp(1.05rem, 1.3vw, 1.25rem);
   --tr-t-stat: clamp(1.8rem, 2.8vw, 2.6rem);
   --tr-t-mail: clamp(1.5rem, 3.2vw, 3rem);
