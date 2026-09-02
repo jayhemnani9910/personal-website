@@ -84,9 +84,11 @@ const CURSOR_STYLE = `
 // Custom cursor: a ring that follows the pointer directly (no lerp) and
 // resizes/recolours per kind over any [data-cursor="LABEL"] element it
 // hovers. Desktop-fine-pointer-only, and inert under reduced motion. The
-// markup always mounts (so it never flashes in on first paint); only the
-// tracking effect below is gated on `active`, so an inactive visitor just
-// gets three invisible, off-screen, unstyled divs.
+// markup always mounts (so `active` being false in tests, e.g. jsdom's
+// matchMedia stub, doesn't stop the ring/dot/label from rendering), but an
+// inactive visitor gets `display: none` on the root, same as the comp
+// (`display: s.fine && !s.reduce ? "block" : "none"`), so nothing is ever
+// laid out or painted for them and the tracking effect below is skipped too.
 export function Cursor() {
   const finePointer = useFinePointer();
   const prefersReducedMotion = usePrefersReducedMotion();
@@ -163,7 +165,7 @@ export function Cursor() {
   return (
     <>
       <style>{CURSOR_STYLE}</style>
-      <div ref={cursorRef} className="tr-cursor" aria-hidden="true">
+      <div ref={cursorRef} className="tr-cursor" aria-hidden="true" style={{ display: active ? "block" : "none" }}>
         <div ref={ringRef} className="tr-cursor-ring" />
         <div className="tr-cursor-dot" />
         <div ref={labelRef} className="tr-cursor-label" />
