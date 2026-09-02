@@ -1,7 +1,7 @@
 # 0014. Adopt the v4 home as a scoped island
 
-- **Status:** Proposed
-- **Date:** 2026-09-02
+- **Status:** Accepted
+- **Date:** 2026-09-02, promoted the same day
 - **Related:** ADR 0001 (TWO READERS), ADR 0002 (the scoped-override pattern), ADR 0006 (visual baselines), ADR 0007 (one palette), ADR 0008 (performance budget)
 
 ## Context
@@ -122,3 +122,46 @@ and the exact font-file count.
 `--color-tr-ok` so Tailwind emits `text-tr-ok` and `bg-tr-ok`, and those
 utilities resolve to nothing outside `.home-v4`. That is deliberate for now and
 becomes a plain root token at promotion.
+
+## Promotion, 2026-09-02
+
+The scope lasted about two hours. Jay looked at the site with only the home page
+converted and said the rest still read as the old design, which it did: the
+palette was the only thing the scope was holding back, and every other route was
+still ember and Newsreader under a masthead built for a magazine cover.
+
+What shipped, in the order it shipped:
+
+1. **The values moved to `:root`.** Palette, type scale, line heights and radii,
+   plus the light block and the no-JS fallback. `.home-v4` and its light
+   companion are gone, and so is the rule that pointed the custom reticle at the
+   scope, because the reticle reads `:root` like everything else now. This only
+   worked because of ADR 0007: every route, including the two still on legacy
+   `.editorial` rules, already read `--tr-*` directly.
+2. **The fonts followed.** `--ff-*` point at Instrument Sans and Geist Mono, the
+   thirty-odd call sites that named `--font-newsreader` and `--font-jetbrains`
+   directly were repointed, and both old families were dropped from
+   `layout.tsx`, which is what makes it total: nothing can fall back to them.
+3. **Shared chrome.** `SiteHeader` and `SiteFooter`, taken from the design
+   screens, replaced `EditorialMasthead` and `EditorialColophon` on all nine
+   non-home routes. Those two components are now deleted.
+4. **Every page body was rebuilt** to its design screen: Work Index, Writing,
+   About, Channel, Project Detail. `/lab`, `/fde`, `/blog/[slug]` and
+   `not-found` have no design screen and follow the shape of the ones that do.
+
+Two tokens were added that the screens needed and the home page had not:
+`--tr-warn`, the third status colour for honest gaps, distinct from the accent
+so a page can say "attention" without saying "click me"; and
+`--tr-t-display-sm`, the interior-page heading size, because the design opens an
+index smaller than it opens the home page.
+
+Measured across the promotion: stylesheet 103.5 KB to 96.1 KB, fonts 233.2 KB to
+88.6 KB across four files rather than six, requests 35 to 33. The performance
+budget's stylesheet entry said it had to come back down or the promotion was not
+finished; it did.
+
+**What is still outstanding:** `--tr-ember` holds yellow and has not been
+renamed to `--tr-accent`. That was the third item in the promotion criterion
+above and is deliberately deferred as its own change, because it is a mechanical
+rename across about forty files and mixing it into any of the four steps above
+would have buried real edits in noise.

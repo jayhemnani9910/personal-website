@@ -15,7 +15,7 @@ const TYPE_INTERVAL_MS = 16; // ~16ms/char, the concept's typewriter cadence
 const HOLD_MS = DUR.base * 1000; // 300ms pause after typing (== DUR.base), not a bare literal
 const FADE_MS = 500; // opacity fade-out. The concept hardcodes .5s; no DUR value equals 500ms,
 // and DUR.slow (600ms) would push the total past the 1.4s cap with no margin. Bespoke, like
-// EditorialMasthead's MCP_DOT_DURATION.
+// the masthead status dot's cadence, back when the masthead had one.
 const HIDE_BUFFER_MS = 20; // gap between the CSS fade finishing and unmount
 const WATCHDOG_MS = 3000; // fail-safe: guarantees teardown even if a timer stalls. finish() is
 // idempotent, so in the normal ~1.3s run this fires and no-ops.

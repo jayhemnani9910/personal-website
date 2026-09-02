@@ -6,7 +6,7 @@ import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
 import { EASE, DUR } from "@/lib/motion-tokens";
 
 // framer-motion wants an exact 4-tuple for the `ease` prop, not the `number[]`
-// a spread of EASE widens to (same fix as EditorialMasthead.tsx).
+// a spread of EASE widens to (the same fix Stagger.tsx carries).
 const CUBIC_EASE: [number, number, number, number] = [EASE[0], EASE[1], EASE[2], EASE[3]];
 
 // `containerVariants` never changes the container's own visual style (both

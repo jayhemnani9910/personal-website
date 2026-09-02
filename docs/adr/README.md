@@ -52,7 +52,7 @@ there.
 | [0011](0011-stream-the-simulation-section-by-section.md) | Stream the simulation section by section | Accepted | 2026-08-21 |
 | [0012](0012-turn-off-thinking-on-the-simulation-model.md) | Turn off thinking on the simulation model | Proposed | 2026-08-23 |
 | [0013](0013-retry-a-streamed-simulation-while-nothing-has-been-sent.md) | Retry a streamed simulation while nothing has been sent | Accepted | 2026-08-23 |
-| [0014](0014-adopt-the-v4-home-as-a-scoped-island.md) | Adopt the v4 home as a scoped island | Proposed | 2026-09-02 |
+| [0014](0014-adopt-the-v4-home-as-a-scoped-island.md) | Adopt the v4 home as a scoped island | Accepted | 2026-09-02 |
 
 ## Adding one
 
