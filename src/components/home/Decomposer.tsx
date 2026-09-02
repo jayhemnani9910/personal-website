@@ -5,7 +5,7 @@ import type { KeyboardEvent } from "react";
 import Link from "next/link";
 import { FEATURED, PRESETS, COPY } from "@/data/home";
 import type { DecomposeOutput } from "@/data/home";
-import { BRIEF_MAX, closestPreset, findPreset } from "@/lib/decompose";
+import { BRIEF_MAX, closestPreset, findPreset } from "@/lib/presets";
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
 
 type Engine = "idle" | "thinking" | "preset" | "model" | "offline";

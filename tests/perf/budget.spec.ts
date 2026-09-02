@@ -26,9 +26,13 @@ const ROUTE = "/";
 // a budget that fails on rounding gets raised until it means nothing, and one
 // with no headroom is the same thing with extra steps.
 const BUDGET = {
-  scriptBytes: 850 * 1024,     // measured 765.7 KB
+  scriptBytes: 850 * 1024,     // measured 765.7 KB, then 718.2 KB on 2026-09-02
   stylesheetBytes: 95 * 1024,  // measured 84.3 KB
-  fontFiles: 5,                // exact, see below
+  // Was 5. The v4 home (ADR 0014) sets its type in Instrument Sans and Geist
+  // Mono, so a sixth face is fetched on this route. Only one more rather than
+  // two, because a browser downloads a face when a glyph renders in it and the
+  // mono is variable. Still exact, for the reason below.
+  fontFiles: 6,                // exact, see below
   // 160, 168, 168, 220, 224 across five runs under this test's own conditions,
   // which include a cold `next start` that JIT-compiles on the first request. An
   // earlier draft cited 84ms from a warm server, which is not what this measures.

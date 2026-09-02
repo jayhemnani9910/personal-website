@@ -5,8 +5,8 @@
 // mirrors, and decompose.test.ts.
 
 import { z } from "zod";
-import { FEATURED, PRESETS } from "@/data/home";
-import type { DecomposeOutput, Preset } from "@/data/home";
+import { FEATURED } from "@/data/home";
+import type { DecomposeOutput } from "@/data/home";
 
 export const DecomposeOutputSchema = z.object({
   scope: z.array(z.string().min(1)).length(3),
@@ -26,27 +26,10 @@ type Inferred = z.infer<typeof DecomposeOutputSchema>;
 const _assignable: DecomposeOutput = {} as Inferred;
 void _assignable;
 
-// The longest brief the route accepts. Presets and the model call both sit
-// behind this, so it bounds token spend as well as abuse.
-export const BRIEF_MAX = 600;
-
-/**
- * The offline fallback: no model call, no network. Mirrors the design's
- * fallback() (docs/design, portfolio-home export, line 341) so a visitor
- * without a live backend still gets a plausible answer shaped like a real
- * one, just not read from their actual brief.
- */
-export function closestPreset(text: string): Preset {
-  const lower = text.toLowerCase();
-  if (/(data|dashboard|metric|number|warehouse|trust)/.test(lower)) return PRESETS[1];
-  if (/(model|ml|notebook|predict|vision|video|customer)/.test(lower)) return PRESETS[2];
-  return PRESETS[0];
-}
-
-/** Exact-text match against the three worked examples on the page. */
-export function findPreset(text: string): Preset | undefined {
-  return PRESETS.find((p) => p.text === text);
-}
+// Re-exported, not defined here. They live in presets.ts so the browser can
+// import them without dragging Zod along; this module stays the one place the
+// route and its tests import from.
+export { BRIEF_MAX, closestPreset, findPreset } from "@/lib/presets";
 
 // Built once at module load: one line per featured project, so the model has
 // real ids to choose from and can't invent one the route would then have to

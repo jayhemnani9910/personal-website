@@ -3,7 +3,8 @@ import { WEBMCP_TOOL_COUNT } from "@/lib/webmcp";
 import { RESUME } from "@/data/resume";
 import { FEATURED, SECTIONS, LOG_NOTES, buildNav, buildReceipts } from "@/data/home";
 
-import { GlBackdrop } from "./GlBackdrop";
+import dynamic from "next/dynamic";
+
 import { HomeHeader } from "./HomeHeader";
 import { SectionRail } from "./SectionRail";
 import { RevealSection } from "./RevealSection";
@@ -17,6 +18,12 @@ import { MethodCube } from "./MethodCube";
 import { Log } from "./Log";
 import { Contact } from "./Contact";
 import { HomeFooter } from "./HomeFooter";
+
+// Decorative, behind everything, and it renders nothing at all under reduced
+// motion or on a machine without WebGL. Loading the shader with the rest of
+// the page put it in the first-load bundle for every visitor including the
+// ones who never see it, so it comes down on its own after paint instead.
+const GlBackdrop = dynamic(() => import("./GlBackdrop").then((m) => m.GlBackdrop));
 
 /**
  * Newest first, which is the order src/data/resume.ts already declares. Each
