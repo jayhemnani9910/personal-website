@@ -27,9 +27,11 @@ function useFinePointer(): boolean {
   return useSyncExternalStore(subscribeFinePointer, getFinePointerSnapshot, getFinePointerServerSnapshot);
 }
 
-type CursorKind = "run" | "open" | "proof" | "cube" | "buddy" | "default";
+// Exported (along with LABEL_CHIP below) so the comp's spec is asserted
+// directly in Cursor.test.tsx, rather than only ever checked by hand.
+export type CursorKind = "run" | "open" | "proof" | "cube" | "buddy" | "default";
 
-const KINDS: Record<CursorKind, { size: number; ring: string; fill: string }> = {
+export const KINDS: Record<CursorKind, { size: number; ring: string; fill: string }> = {
   default: { size: 22, ring: "var(--tr-text-mute)", fill: "transparent" },
   run:     { size: 44, ring: "var(--tr-accent)",    fill: "var(--tr-accent-soft)" },
   open:    { size: 40, ring: "var(--tr-text)",      fill: "transparent" },
@@ -37,6 +39,12 @@ const KINDS: Record<CursorKind, { size: number; ring: string; fill: string }> = 
   cube:    { size: 56, ring: "var(--tr-accent)",    fill: "transparent" },
   buddy:   { size: 48, ring: "var(--tr-accent)",    fill: "transparent" },
 };
+
+// The label chip is inverted from the rest of the palette: light background,
+// dark text. Pulled out as its own constant (rather than inlined in
+// CURSOR_STYLE below) so the test can pin the exact two values down directly
+// instead of parsing them back out of a CSS string.
+export const LABEL_CHIP = { background: "var(--tr-text)", color: "var(--tr-bg)" };
 
 /** The design keys ring size and colour off a `kind`. Our call sites only carry
  *  a label, so derive the kind from it and let `data-cursor-kind` win when set. */
@@ -68,7 +76,7 @@ const CURSOR_STYLE = `
   .tr-cursor-label { position: absolute; left: 18px; top: 14px; white-space: nowrap;
     font-family: var(--font-geist-mono); font-size: 10px; letter-spacing: .12em;
     padding: 3px 7px; border-radius: 4px;
-    background: var(--tr-text); color: var(--tr-bg);
+    background: ${LABEL_CHIP.background}; color: ${LABEL_CHIP.color};
     opacity: 0; transform: translateY(4px); transition: opacity .2s, transform .2s; }
   .tr-cursor.is-hover .tr-cursor-label { opacity: 1; transform: none; }
   @media (pointer: fine) {
@@ -110,7 +118,7 @@ export function Cursor() {
     let activeEl: Element | null = null;
 
     const applyKind = (kind: CursorKind) => {
-      const k = KINDS[kind];
+      const k = KINDS[kind] ?? KINDS.default; // guard: attrKind is an unvalidated `as` cast
       ring.style.width = `${k.size}px`;
       ring.style.height = `${k.size}px`;
       ring.style.marginLeft = `${-k.size / 2}px`;
