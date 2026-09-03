@@ -443,7 +443,12 @@ html.lenis {
   --tr-t-card-h: clamp(1.1rem, 1.4vw, 1.3rem);
   --tr-t-deck: clamp(1.05rem, 1.3vw, 1.25rem);
   --tr-t-stat: clamp(1.8rem, 2.8vw, 2.6rem);
-  --tr-t-mail: clamp(1.5rem, 3.2vw, 3rem);
+  /* Capped at 2.9rem, not the design's 3rem. Above a 1440px viewport the page
+     container stops growing at 1280px, so the contact column pins at 663px
+     while 3.2vw keeps rising: at the 3rem cap the address measures 663px in a
+     663px column and wraps onto a second line. 2.9rem needs 649px, which fits
+     with 14px to spare and is 1.6px smaller than the design's cap. */
+  --tr-t-mail: clamp(1.5rem, 3.2vw, 2.9rem);
   --tr-t-body: 15px;
   --tr-t-small: 13.5px;
   /* Mono, largest to smallest. The design uses all four; collapsing them onto
