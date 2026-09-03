@@ -38,7 +38,7 @@ export function Contact() {
             {mailUser}
             <wbr />@{mailHost}
           </a>
-          <p className="mt-6 max-w-[52ch] text-tr-text-mute [text-wrap:pretty]">{COPY.contactDeck}</p>
+          <p className="mt-6 max-w-[52ch] text-[length:var(--tr-t-body)] leading-[var(--tr-lh-body)] text-tr-text-mute [text-wrap:pretty]">{COPY.contactDeck}</p>
         </div>
 
         <div className="flex flex-col">
