@@ -167,7 +167,7 @@ describe("TerminalOverlay v4 commands", () => {
   it("rm refuses", () => {
     renderOpen();
     type("rm -rf .");
-    expect(screen.getByText(/absolutely not/i)).toBeDefined();
+    expect(screen.getByText(/not a chance/i)).toBeDefined();
   });
 
   it("help lists the home page commands", () => {

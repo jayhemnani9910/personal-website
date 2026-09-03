@@ -227,7 +227,7 @@ export function TerminalOverlay({ projectCount }: { projectCount: number }) {
                 out = [err("nice try. this shell runs on trust and yellow.")];
                 break;
             case "rm":
-                out = [err("absolutely not. it took me four years to build this.")];
+                out = [err("not a chance. it took me four years to build this.")];
                 break;
             case "exit":
                 out = [];
