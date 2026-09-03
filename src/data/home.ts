@@ -1,13 +1,15 @@
 /**
  * Copy and structured data for the v4 home page (see docs/design/portfolio-home).
  * Every count that can drift from the real content (project count, MCP tool
- * count, essay count) arrives as a function argument computed at build time,
- * never a literal baked into this file.
+ * count, essay count, years of experience) arrives as a function argument
+ * computed at build time, never a literal baked into this file.
  *
- * Two claims from the design export were dropped because nothing in the repo
- * backs them: the "4 YRS" experience chip (the earliest role on record is a
- * May 2019 internship, not four years of anything) and the "project 19" aside
- * in the cube-scramble copy (no such project exists). Neither survives here.
+ * One claim from the design export was dropped because nothing in the repo
+ * backs it: the "project 19" aside in the cube-scramble copy (no such project
+ * exists). It does not survive here. The "4 YRS" experience chip, previously
+ * dropped for the same reason, is now computable: src/lib/experience.ts sums
+ * the role spans in resume.ts, so it arrives here the same way the other
+ * counts do.
  */
 import type { Route } from "next";
 
@@ -78,7 +80,7 @@ export const FEATURED: FeaturedProject[] = [
     tech: ["LangGraph", "LangChain", "Ollama", "Groq"],
     arrived: "Research agents that confidently agree with themselves.",
     did: "Planned a causal graph per question; paired adversary and supporter agents per edge; a judge rules and loops back through an auditor.",
-    changed: "Every claim exits tagged VERIFIED, CONTESTED or UNVERIFIED, with the evidence attached.",
+    changed: "Every claim exits tagged VERIFIED, CONTESTED or UNVERIFIED, with the evidence.",
   },
   {
     id: "stock-data-platform",
@@ -384,15 +386,17 @@ export const SECTIONS: SectionStep[] = [
   { n: "04", label: "contact", href: "#contact", id: "contact" },
 ];
 
-export const HERO = {
-  status: ["FORWARD DEPLOYED ENGINEER", "GUJARAT, IN → RELOCATING", "OPEN TO WORK"],
-  h1: "Give me the vague version.",
-  deck: "Briefs never arrive clean. Paste one the way it actually shows up and watch how I take it apart, then see what I have already shipped that looks like it.",
-  aside: [
-    "// this is the job. the rest of the page is the evidence.",
-    "// yes, it actually runs. no, it won't judge your typos.",
-  ],
-};
+export function buildHero(c: { years: number }) {
+  return {
+    status: ["FORWARD DEPLOYED ENGINEER", "GUJARAT, IN → RELOCATING", `${c.years} YRS`, "OPEN TO WORK"],
+    h1: "Give me the vague version.",
+    deck: "Briefs never arrive clean. Paste one the way it actually shows up and watch how I take it apart, then see what I've already shipped that looks like it.",
+    aside: [
+      "// this is the job. the rest of the page is the evidence.",
+      "// yes, it actually runs. no, it won't judge your typos.",
+    ],
+  };
+}
 
 export const COPY = {
   proofH2: "Numbers with receipts.",
@@ -407,7 +411,7 @@ export const COPY = {
   logAside: "// git log --oneline, but for a person",
   contactLabel: "ONE INBOX",
   contactDeck:
-    "Looking for forward-deployed and data-engineering roles. Senior software is on the table. Send the vague version. That is the point.",
+    "Looking for forward-deployed and data-engineering roles. Senior software is on the table. Send the vague version, that's the point.",
   footerLine: (toolCount: number) =>
     `© 2026 Jay Hemnani · set in Instrument Sans + Geist Mono · readable by people and by ${toolCount} MCP tools`,
   footerTop: "// you scrolled all the way. respect.",

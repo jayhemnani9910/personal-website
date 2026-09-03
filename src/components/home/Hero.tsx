@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { HERO } from "@/data/home";
+import { buildHero } from "@/data/home";
 
 // Status line (role / location / live badge): 11.5px mono, .06em tracking, per comp.
 const STATUS_MONO =
@@ -12,8 +12,8 @@ const ASIDE_MONO =
  * The brief console. `children` is the Decomposer slot (a client component
  * owned by another agent) rendered to the right of the h1 + deck.
  */
-export function Hero({ children }: { children: ReactNode }) {
-  const [line1, line2, live] = HERO.status;
+export function Hero({ children, years }: { children: ReactNode; years: number }) {
+  const HERO = buildHero({ years });
 
   return (
     <section
@@ -21,12 +21,18 @@ export function Hero({ children }: { children: ReactNode }) {
       className="pt-[clamp(3rem,7vw,6rem)] pb-[clamp(3rem,6vw,5rem)] max-w-[1280px] mx-auto px-[clamp(1rem,4vw,2rem)]"
     >
       <p className={`${STATUS_MONO} mb-8 flex flex-wrap gap-[.5rem_1.25rem]`}>
-        <span className="text-tr-text-mute">{line1}</span>
-        <span className="text-tr-text-faint">{line2}</span>
-        <span className="inline-flex items-center gap-[.4rem] text-tr-ok">
-          <span aria-hidden className="w-1.5 h-1.5 rounded-full bg-tr-ok" />
-          {live}
-        </span>
+        {HERO.status.map((item, i) =>
+          i === HERO.status.length - 1 ? (
+            <span key={item} className="inline-flex items-center gap-[.4rem] text-tr-ok">
+              <span aria-hidden className="w-1.5 h-1.5 rounded-full bg-tr-ok" />
+              {item}
+            </span>
+          ) : (
+            <span key={item} className={i === 0 ? "text-tr-text-mute" : "text-tr-text-faint"}>
+              {item}
+            </span>
+          ),
+        )}
       </p>
 
       <div className="grid lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] gap-[clamp(2rem,5vw,5rem)] items-start">

@@ -11,7 +11,7 @@ const cubeAchievement = RESUME.education
   .find((s) => s.startsWith("Rubik's Cube"));
 const CUBE_PB = cubeAchievement?.match(/([\d.]+)\s*sec/)?.[1] ?? "16.7";
 
-const IDLE_NOTE = "Personal best, official. Click to scramble, I promise I am faster than this animation.";
+const IDLE_NOTE = "Personal best, official. Click to scramble, I promise I'm faster than this animation.";
 
 // Quoting a physical object's stickers, the same way the macOS traffic
 // lights are quoted elsewhere in this system: the one place in this file

@@ -82,7 +82,7 @@ describe("HomeFooter", () => {
 
 describe("Hero", () => {
   it("renders exactly one h1 with the hero headline", () => {
-    render(<Hero>{null}</Hero>);
+    render(<Hero years={4}>{null}</Hero>);
     const h1s = screen.getAllByRole("heading", { level: 1 });
     expect(h1s.length).toBe(1);
     expect(h1s[0].textContent).toBe("Give me the vague version.");

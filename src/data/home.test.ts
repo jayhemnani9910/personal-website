@@ -8,7 +8,7 @@ import {
   METHOD,
   LOG_NOTES,
   SECTIONS,
-  HERO,
+  buildHero,
   COPY,
   buildNav,
 } from "./home";
@@ -17,6 +17,7 @@ import { RESUME } from "./resume";
 const PROJECTS_DIR = join(process.cwd(), "content/projects");
 const FEATURED_IDS = new Set(FEATURED.map((p) => p.id));
 const RECEIPTS = buildReceipts({ projectCount: 27, toolCount: 8 });
+const HERO = buildHero({ years: 4 });
 
 const ALL_TEXT = JSON.stringify({
   FEATURED,
@@ -139,9 +140,9 @@ describe("home data", () => {
     expect(nav[1].alt).toBe("2 essays");
   });
 
-  it("drops the unbacked years-of-experience claim from HERO.status", () => {
-    for (const s of HERO.status) {
-      expect(s).not.toMatch(/\d+\s*YRS/i);
-    }
+  it("wires the computed years-of-experience claim into HERO.status", () => {
+    expect(HERO.status).toContain("4 YRS");
+    const hero7 = buildHero({ years: 7 });
+    expect(hero7.status).toContain("7 YRS");
   });
 });

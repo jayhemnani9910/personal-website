@@ -1,6 +1,8 @@
 import { getAllProjects, getAllPosts } from "@/lib/content";
 import { WEBMCP_TOOL_COUNT } from "@/lib/webmcp";
+import { yearsOfExperience } from "@/lib/experience";
 import { RESUME } from "@/data/resume";
+import type { TimelineRange } from "@/data/types";
 import { FEATURED, SECTIONS, LOG_NOTES, buildNav, buildReceipts } from "@/data/home";
 
 import dynamic from "next/dynamic";
@@ -55,6 +57,9 @@ export async function HomeV4() {
   const projectCount = projects.length;
   const essayCount = posts.length;
   const toolCount = WEBMCP_TOOL_COUNT;
+  const years = yearsOfExperience(
+    RESUME.experience.flatMap((c) => c.roles.map((r) => r.period)).filter((p): p is TimelineRange => !!p),
+  );
 
   // A featured entry naming a project that no longer has a file would render a
   // link to a 404. Filtering here means deleting content can only ever shorten
@@ -69,7 +74,7 @@ export async function HomeV4() {
       <SectionRail steps={SECTIONS} />
 
       <main id="main-content" className="relative z-[1]">
-        <Hero>
+        <Hero years={years}>
           <Decomposer />
         </Hero>
 
