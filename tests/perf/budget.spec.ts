@@ -26,16 +26,19 @@ const ROUTE = "/";
 // a budget that fails on rounding gets raised until it means nothing, and one
 // with no headroom is the same thing with extra steps.
 const BUDGET = {
-  scriptBytes: 850 * 1024,     // measured 765.7 KB, then 718.2 KB on 2026-09-02
+  scriptBytes: 850 * 1024,     // measured 765.7 KB, then 718.2 KB on 2026-09-02, then 693.0 KB on 2026-09-03
   // A moving number, so the history matters: 95 KB under the editorial system,
   // 110 KB for the day the v4 home shipped a second palette beside it, 105 KB
   // once ADR 0014's promotion put one palette back at :root. Now 65 KB, because
   // deleting the retired .editorial / .fde-* / .dossier / .sw-* rules and the
   // unused utility layer took globals.css from 76.9 KB to 19.5 KB of source.
-  // Measured 56.9 KB served. Headroom is deliberate but this one is tight on
-  // purpose: there is no longer a second design system to absorb, so the next
-  // few KB of growth should be something a person chose.
-  stylesheetBytes: 65 * 1024,  // measured 56.9 KB
+  // Measured 56.9 KB served, then 58.6 KB on 2026-09-03 once the v4 design-gap
+  // closure added the two extra mono sizes and rewrote the cursor and shell.
+  // Headroom is deliberate but this one is tight on purpose: there is no
+  // longer a second design system to absorb, so the next few KB of growth
+  // should be something a person chose. Not lowered here: 58.6 KB is not well
+  // under the budget, it is a few KB up from the last measurement.
+  stylesheetBytes: 65 * 1024,  // measured 58.6 KB
   // 5 under the editorial system, 6 for the day both type systems shipped, now
   // 4: Newsreader and JetBrains Mono are out of the build entirely, and both
   // remaining families are variable faces. Still an equality check, and this is

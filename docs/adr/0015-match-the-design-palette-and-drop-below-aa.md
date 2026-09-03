@@ -80,13 +80,32 @@ LIGHT
   on-accent on accent-hover 7.78  ok
 ```
 
-Lighthouse accessibility will no longer be 100 on any route that renders
-`--tr-text-faint` text, in either theme, and on the routes that also render
-`--tr-accent`, `--tr-ok` or `--tr-warn` text in light theme. The three dark
-`text-faint` rows matter most: dark is the only default now, so those three
-reach every first-time visitor, not only the ones who opt into light.
-`text-faint` sets the `//` asides, the hero location line, the work-table column
-headers, the social handles and the footer colophon.
+Measured with Lighthouse 13.4.1 (mobile preset, accessibility category only)
+against the production build, on the ten routes, in dark, the site's only
+default now that there is no `prefers-color-scheme` rule:
+
+```
+home                              96
+/projects                         96
+/projects/accurate-guesser        96
+/blog                             96
+/blog/forward-deployed-engineer   95
+/fde                               96
+/resume                           96
+/lab                              96
+/youtube                          96
+404 (not-found)                   95
+```
+
+Every one of the ten scores below 100 traces to a single audit,
+`color-contrast`, and every flagged node's foreground colour is `#5f6673`,
+`--tr-text-faint` in dark: the three accepted dark rows above (3.39, 3.21,
+2.98:1) and nothing else. No route fails for any other reason. `text-faint`
+sets the `//` asides, the hero location line, the work-table column headers,
+the social handles and the footer colophon, which is why the pages with more
+of that mono aside copy (`/projects`, `home`) carry more failing nodes (59 and
+51) than a page with little of it (`/blog/forward-deployed-engineer`, 3), even
+though the per-route score only moves between 95 and 96 either way.
 
 One pair was deliberately kept above AA rather than left to fall out of the
 comp's own values: `on-accent on accent`, the Run button's label. The design's
