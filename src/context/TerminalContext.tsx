@@ -21,6 +21,17 @@ export const TerminalProvider: React.FC<{ children: React.ReactNode }> = ({ chil
             if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
                 e.preventDefault();
                 toggleTerminal();
+                return;
+            }
+            // Backtick is what the header's own "shell `" badge advertises
+            // (HomeHeader.tsx), so it has to actually work. Guarded so typing
+            // a literal backtick into a text field, including the shell's own
+            // command input, never toggles the overlay out from under it.
+            const target = e.target as HTMLElement | null;
+            const typing = target?.tagName === "INPUT" || target?.tagName === "TEXTAREA";
+            if (e.key === "`" && !typing) {
+                e.preventDefault();
+                toggleTerminal();
             }
         };
 
