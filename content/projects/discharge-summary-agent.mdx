@@ -1,0 +1,23 @@
+---
+title: "Discharge Summary Agent"
+summary: "Agentic system that drafts a clinically-safe discharge summary from messy scanned clinical notes, with a no-fabrication guardrail."
+role: "Builder"
+period: "2026"
+tags: ["healthcare-ai", "agents", "clinical-nlp", "ocr", "llm"]
+tech: ["Python", "Gemini", "DeepSeek", "pypdfium2", "pytest"]
+challenge: "Scanned clinical records (71 pages of typed printouts and handwriting) have no text layer, contradict each other across pages, and contain data that is missing or pending. A system reading them must surface conflicts and gaps rather than resolve them with plausible guesses."
+solution:
+  - "From-scratch agent loop (no framework): each step the model receives the running conversation plus tool schemas, emits a reasoning note and tool calls, and re-plans based on results."
+  - "Two-stage ingestion: pypdfium2 rasterises each page, then a vision model (Gemini) transcribes it; unreadable text is marked [illegible] and flagged, never guessed."
+  - "No-fabrication enforced at three layers: typed state requires a source page and verbatim quote per value; the citation guardrail rejects writes where the quote is not found on that page; an independent verifier LLM re-reads every recorded value after the loop and removes anything unsupported."
+  - "Conflicts, pending results, and missing fields are first-class states (CONFLICT, PENDING, MISSING), stored and surfaced in flags.md, never silently resolved."
+  - "Medication reconciliation diffs admission vs discharge lists; any change without a documented, quote-backed reason is flagged automatically."
+  - "Provider abstraction lets vision OCR (Gemini) and reasoning (Gemini or DeepSeek) run independently, with automatic key rotation on quota errors."
+impact:
+  - "On the 71-page patient record the agent ran 66 steps, raised 41 flags, and the citation guardrail rejected 29 attempts to record a value whose quote was not verbatim on the cited page."
+  - "Surfaced a principal-diagnosis conflict (gastroenteritis vs DKA) and a demographics conflict (mismatched pronouns across pages) rather than picking one answer."
+  - "Post-hoc verifier independently checked 39 recorded values; dropped fabricated or unsupported values and replaced them with flags."
+  - "Part 2 learning loop: mean edit burden dropped from 0.154 baseline to ~0.036 (roughly 80% lower) on a held-out split, with safety retention at 100% throughout."
+github: "https://github.com/jayhemnani9910/discharge-summary-agent"
+---
+The Discharge Summary Agent reads a patient's scanned clinical notes and produces a structured discharge summary draft for clinician review. Its defining constraint is that it never invents a clinical fact: any value it cannot source from the documents is marked MISSING, PENDING, or CONFLICT and raised as a flag, rather than filled with a plausible guess. The system was built from scratch without an agent framework as a take-home project, and includes a second component (Part 2) that learns from doctor edits to reduce the editing burden on future drafts while keeping safety flags intact.
