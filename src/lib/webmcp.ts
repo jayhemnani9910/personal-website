@@ -118,7 +118,7 @@ export function registerWebMCPTools(data: SiteData): void {
   mc.provideContext({
     name: "site_info",
     description: "Jay Hemnani's portfolio website, a Forward Deployed Engineer's personal site",
-    content: `This is Jay Hemnani's portfolio at jayhemnani.me. Jay is a Forward Deployed Engineer with experience in ML/AI, full-stack development, and data pipelines. The site showcases ${data.projects.length} projects across domains like sports analytics, computer vision, distributed systems, and more.`,
+    content: `This is Jay Hemnani's portfolio at jayhemnani.in. Jay is a Forward Deployed Engineer with experience in ML/AI, full-stack development, and data pipelines. The site showcases ${data.projects.length} projects across domains like sports analytics, computer vision, distributed systems, and more.`,
   });
 
   // Tool 1: Search projects
@@ -175,7 +175,7 @@ export function registerWebMCPTools(data: SiteData): void {
           tech: p.tech,
           tags: p.tags,
           domain: p.domain,
-          url: `https://www.jayhemnani.me/projects/${p.id}`,
+          url: `https://jayhemnani.in/projects/${p.id}`,
         })),
       };
     },
@@ -199,7 +199,7 @@ export function registerWebMCPTools(data: SiteData): void {
       }
       return {
         ...project,
-        url: `https://www.jayhemnani.me/projects/${project.id}`,
+        url: `https://jayhemnani.in/projects/${project.id}`,
         github: project.github || null,
       };
     },
@@ -295,7 +295,7 @@ export function registerWebMCPTools(data: SiteData): void {
         name: data.resume.name,
         email: data.resume.contact.email,
         social: data.social,
-        website: "https://www.jayhemnani.me",
+        website: "https://jayhemnani.in",
       };
     },
   });

@@ -10,7 +10,7 @@ import { DUR } from "@/lib/motion-tokens";
 // (or null) and never wraps `children`, so the real page underneath paints at
 // full opacity from the first frame regardless of what this does.
 const STORAGE_KEY = "tr-intro-seen";
-const FULL_TEXT = "> jayhemnani.me : initializing";
+const FULL_TEXT = "> jayhemnani.in : initializing";
 const TYPE_INTERVAL_MS = 16; // ~16ms/char, the concept's typewriter cadence
 const HOLD_MS = DUR.base * 1000; // 300ms pause after typing (== DUR.base), not a bare literal
 const FADE_MS = 500; // opacity fade-out. The concept hardcodes .5s; no DUR value equals 500ms,

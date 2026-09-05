@@ -1,5 +1,5 @@
 {
-  "endpoint": "https://www.jayhemnani.me/api/fde-sim",
+  "endpoint": "https://jayhemnani.in/api/fde-sim",
   "recordedAt": "2026-08-21",
   "model": "gemini-2.5-flash",
   "totals": {

@@ -15,7 +15,7 @@ async function loadGoogleFont(font: string, weight: number, text: string) {
 
 export default async function OpengraphImage() {
   const title = "Jay Hemnani.";
-  const url = "jayhemnani.me";
+  const url = "jayhemnani.in";
   const role = "Forward Deployed Engineer · Data & AI";
   const tagline = "Agentic systems, shipped into production.";
 

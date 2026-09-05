@@ -129,7 +129,7 @@ export const RECEIPTS: Receipt[] = [
     project: 'ELITE HOTEL GROUP · DATA ANALYST',
     desc: "Defined metrics and SLAs in working sessions with finance and operations. The clarifying-questions muscle this phase uses is the same muscle that turned vague \"we need better reporting\" into a structured forecasting + ETL system.",
     note: "Internal stakeholders, not external customers. Relevant practice, not full FDE-grade.",
-    link: { label: 'jayhemnani.me/resume', href: 'https://www.jayhemnani.me/resume' },
+    link: { label: 'jayhemnani.in/resume', href: 'https://jayhemnani.in/resume' },
   },
   {
     phase: 'PHASE 02 · DECOMPOSE',
@@ -149,8 +149,8 @@ export const RECEIPTS: Receipt[] = [
     phase: 'PHASE 04 · PLAN',
     title: 'Shipping zero-to-something-working fast.',
     project: 'WEBMCP PORTFOLIO + ANTHROPIC SDK PR',
-    desc: `Made jayhemnani.me agent-queryable via the W3C WebMCP standard: ${WEBMCP_TOOL_COUNT} tools, in production, on the surface FDE postings now call table-stakes. Separately: a merged PR into the Anthropic MCP Python SDK. Both are about shipping precise work fast in unfamiliar code.`,
-    link: { label: 'try jayhemnani.me with any MCP client', href: 'https://www.jayhemnani.me' },
+    desc: `Made jayhemnani.in agent-queryable via the W3C WebMCP standard: ${WEBMCP_TOOL_COUNT} tools, in production, on the surface FDE postings now call table-stakes. Separately: a merged PR into the Anthropic MCP Python SDK. Both are about shipping precise work fast in unfamiliar code.`,
+    link: { label: 'try jayhemnani.in with any MCP client', href: 'https://jayhemnani.in' },
   },
   {
     phase: 'PHASE 05 · RISKS + EVALS',
@@ -457,7 +457,7 @@ export const PROOFS: ProofItem[] = [
     title: { pre: 'Made my own site ', em: 'agent-queryable', post: ' via W3C WebMCP.' },
     body: `${WEBMCP_TOOL_COUNT} tools in production. Early implementation on the exact surface OpenAI / Anthropic / Google FDE postings now call table-stakes.`,
     stack: ['W3C WebMCP', `${WEBMCP_TOOL_COUNT} tools`, 'production'],
-    link: { label: 'try with any MCP client', href: 'https://www.jayhemnani.me' },
+    link: { label: 'try with any MCP client', href: 'https://jayhemnani.in' },
   },
   {
     id: 'III',

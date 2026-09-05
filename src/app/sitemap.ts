@@ -45,7 +45,7 @@ function newestMtime(dir: string): Date | undefined {
  * https://nextjs.org/docs/app/api-reference/file-conventions/metadata/sitemap
  */
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://www.jayhemnani.me";
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://jayhemnani.in";
   const newestProject = newestMtime("projects");
   const newestPost = newestMtime("blog");
   const newestAny = [newestProject, newestPost]

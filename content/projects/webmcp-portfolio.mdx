@@ -12,7 +12,7 @@ links:
 challenge: "AI agents that use a website have to scrape its DOM and click buttons, which is brittle, slow, and breaks the moment a layout changes. The emerging WebMCP browser API takes a different route: a site registers structured tools that an agent calls directly, with JSON Schema inputs and typed JSON results. This project works out what it takes to expose a real, content-heavy site through that API."
 solution:
   - "Registers 8 structured tools on this site through the WebMCP browser API (navigator.modelContext): project search, single-project lookup, resume, skills, contact, lab experiments, and two that change the page (theme and presentation mode)."
-  - "Each tool ships a JSON Schema for its inputs and returns typed JSON with canonical jayhemnani.me URLs, so an agent gets structured data instead of parsing rendered HTML."
+  - "Each tool ships a JSON Schema for its inputs and returns typed JSON with canonical jayhemnani.in URLs, so an agent gets structured data instead of parsing rendered HTML."
   - "Progressive enhancement: the site works normally everywhere, and the tools register only when the browser exposes the API (Chrome 146+ with the WebMCP flag), then unregister on cleanup."
   - "Site data is gathered server-side (projects, resume, socials, lab) into one typed object and handed to a client component that registers the tools in the browser on mount."
 impact:
@@ -30,7 +30,7 @@ deepDive:
     - step: "Tools register"
       detail: "registerWebMCPTools provides a site-context blurb and registers the 8 tools, each with a JSON Schema and a handler closed over SiteData."
     - step: "Agent calls a tool"
-      detail: "navigator.modelContext invokes the handler with the supplied args; read tools return structured JSON with canonical jayhemnani.me URLs."
+      detail: "navigator.modelContext invokes the handler with the supplied args; read tools return structured JSON with canonical jayhemnani.in URLs."
     - step: "Write tools change the page"
       detail: "toggle_theme and switch_mode set the data-theme / site-mode and dispatch a storage event so React contexts update live; cleanup unregisters everything on unmount."
   components:
@@ -80,7 +80,7 @@ deepDive:
               count: results.length,
               projects: results.map((p) => ({
                 id: p.id, title: p.title, tech: p.tech,
-                url: `https://www.jayhemnani.me/projects/${p.id}`,
+                url: `https://jayhemnani.in/projects/${p.id}`,
               })),
             };
           },

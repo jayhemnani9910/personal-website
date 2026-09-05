@@ -9,7 +9,7 @@ export const SITE_CONFIG = {
   name: "Jay Hemnani",
   title: "Jay Hemnani | Forward Deployed Engineer",
   description: "Forward Deployed Engineer who builds end-to-end: data pipelines, ML and computer vision systems, and the full-stack apps that put them in users' hands. Available for full-time roles and freelance projects.",
-  url: "https://www.jayhemnani.me",
+  url: "https://jayhemnani.in",
   
   // Social/OG
   // NOTE: /og-image.png does not exist as a static file; the dynamic opengraph-image.tsx

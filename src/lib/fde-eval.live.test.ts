@@ -24,7 +24,7 @@ const LIVE = !!process.env.FDE_EVAL_LIVE;
 // and gates; only an explicit update rewrites the committed fixtures, so a
 // regression cannot be absorbed into the baseline just by running twice.
 const UPDATE = !!process.env.FDE_EVAL_UPDATE;
-const ENDPOINT = process.env.FDE_EVAL_ENDPOINT ?? "https://www.jayhemnani.me/api/fde-sim";
+const ENDPOINT = process.env.FDE_EVAL_ENDPOINT ?? "https://jayhemnani.in/api/fde-sim";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const OUT_DIR = resolve(HERE, "../../tests/eval");

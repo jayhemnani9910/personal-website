@@ -5,7 +5,7 @@
 **I build things: data pipelines, ML models, web apps, whatever the problem needs.**
 
 [![Open to Work](https://img.shields.io/badge/Open_to_Work-16a34a?style=for-the-badge&logoColor=white)](#connect)
-[![Portfolio](https://img.shields.io/badge/jayhemnani.me-0a84ff?style=for-the-badge&logo=safari&logoColor=white)](https://jayhemnani.me)
+[![Portfolio](https://img.shields.io/badge/jayhemnani.in-0a84ff?style=for-the-badge&logo=safari&logoColor=white)](https://jayhemnani.in)
 
 ![Python](https://img.shields.io/badge/Python-3776AB?style=flat-square&logo=python&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=flat-square&logo=typescript&logoColor=white)
@@ -30,13 +30,13 @@ Based in India, open to relocate. Currently looking for roles where I can build 
 
 ### Featured Projects
 
-**[FIFA Soccer DS](https://jayhemnani.me/projects/fifa-soccer-ds)**: Football tracking pipeline with YOLOv8 detection and ByteTrack multi-object tracking, served over FastAPI with ONNX/TensorRT export and an MLflow + DVC workflow.
+**[FIFA Soccer DS](https://jayhemnani.in/projects/fifa-soccer-ds)**: Football tracking pipeline with YOLOv8 detection and ByteTrack multi-object tracking, served over FastAPI with ONNX/TensorRT export and an MLflow + DVC workflow.
 
-**[Stock Data Platform](https://jayhemnani.me/projects/stock-data-platform)**: Distributed market-data platform with real-time OHLC ingestion, candlestick charting, and multi-symbol streaming behind a live dashboard.
+**[Stock Data Platform](https://jayhemnani.in/projects/stock-data-platform)**: Distributed market-data platform with real-time OHLC ingestion, candlestick charting, and multi-symbol streaming behind a live dashboard.
 
 27 projects total, from computer vision research to distributed systems to on-device ML.
 
-**[See all projects →](https://jayhemnani.me/projects)**
+**[See all projects →](https://jayhemnani.in/projects)**
 
 ---
 
@@ -63,7 +63,7 @@ Based in India, open to relocate. Currently looking for roles where I can build 
 
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://linkedin.com/in/jayhemnani)
 [![Email](https://img.shields.io/badge/Email-EA4335?style=for-the-badge&logo=gmail&logoColor=white)](mailto:jayhemnani992000@gmail.com)
-[![Portfolio](https://img.shields.io/badge/Portfolio-000000?style=for-the-badge&logo=safari&logoColor=white)](https://jayhemnani.me)
+[![Portfolio](https://img.shields.io/badge/Portfolio-000000?style=for-the-badge&logo=safari&logoColor=white)](https://jayhemnani.in)
 [![Twitter](https://img.shields.io/badge/Twitter-1DA1F2?style=for-the-badge&logo=twitter&logoColor=white)](https://twitter.com/jayhemnani)
 
 </div>

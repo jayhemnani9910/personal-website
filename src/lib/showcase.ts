@@ -167,14 +167,14 @@ export const SHOWCASE_PROJECTS: Record<string, ShowcaseConfig> = {
       "title": "Nobel Data Intelligence",
       "tech": ["Python", "PyTorch", "ProDy", "Transformers"],
       "domain": "Computational Biology",
-      "url": "https://www.jayhemnani.me/projects/nobel-dataintelligence"
+      "url": "https://jayhemnani.in/projects/nobel-dataintelligence"
     },
     {
       "id": "biotech-accelerator",
       "title": "Biotech Accelerator",
       "tech": ["Python", "LangGraph", "ProDy", "httpx"],
       "domain": "AI/ML",
-      "url": "https://www.jayhemnani.me/projects/biotech-accelerator"
+      "url": "https://jayhemnani.in/projects/biotech-accelerator"
     }
   ]
 }`,

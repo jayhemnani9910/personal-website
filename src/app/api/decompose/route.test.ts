@@ -39,7 +39,7 @@ function makeRedis(overrides: Partial<FakeRedis> = {}): FakeRedis {
 async function post(brief: string, ip = "203.0.113.7") {
   const { POST } = await import("@/app/api/decompose/route");
   const { NextRequest } = await import("next/server");
-  const req = new NextRequest("https://www.jayhemnani.me/api/decompose", {
+  const req = new NextRequest("https://jayhemnani.in/api/decompose", {
     method: "POST",
     headers: { "content-type": "application/json", "x-real-ip": ip },
     body: JSON.stringify({ brief }),

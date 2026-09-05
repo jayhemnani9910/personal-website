@@ -158,8 +158,8 @@ export default function FDEPage() {
 function FdeContact() {
   const links = [
     { lbl: 'email',    val: 'jayhemnani992000@gmail.com',       href: 'mailto:jayhemnani992000@gmail.com', primary: true },
-    { lbl: 'essay',    val: 'what FDE means in 2026',           href: 'https://www.jayhemnani.me/blog/forward-deployed-engineer' },
-    { lbl: 'resume',   val: 'the one-pager',                    href: 'https://www.jayhemnani.me/resume' },
+    { lbl: 'essay',    val: 'what FDE means in 2026',           href: 'https://jayhemnani.in/blog/forward-deployed-engineer' },
+    { lbl: 'resume',   val: 'the one-pager',                    href: 'https://jayhemnani.in/resume' },
     { lbl: 'github',   val: 'jayhemnani9910',                   href: 'https://github.com/jayhemnani9910' },
     { lbl: 'linkedin', val: 'in / jayhemnani',                  href: 'https://linkedin.com/in/jayhemnani' },
     { lbl: 'twitter',  val: '@jeyhemnani9',                     href: 'https://x.com/jeyhemnani9' },
