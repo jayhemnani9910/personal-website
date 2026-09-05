@@ -51,7 +51,11 @@ Based in India, open to relocate. Currently looking for roles where I can build 
 
 <div align="center">
 
-![Jay's GitHub Stats](https://github-readme-stats.vercel.app/api?username=jayhemnani9910&show_icons=true&theme=tokyonight&hide_border=true&bg_color=00000000&rank_icon=github)
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/jayhemnani9910/personal-website/output/github-snake-dark.svg?v=1">
+  <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/jayhemnani9910/personal-website/output/github-snake.svg?v=1">
+  <img alt="Snake eating my contribution graph" src="https://raw.githubusercontent.com/jayhemnani9910/personal-website/output/github-snake.svg?v=1">
+</picture>
 
 </div>
 
