@@ -213,17 +213,27 @@ export const PRESETS: Preset[] = [
  *
  * One list, two readers: the home page's proof ledger and the about page's
  * open-source block. It lives here rather than in resume.ts because resume.ts
- * has no field for it, and duplicating three URLs across two pages is how a
+ * has no field for it, and duplicating these URLs across two pages is how a
  * verified claim drifts into an unverified one. Sourced from
- * forjobs/MASTER_PROFILE.md section 7, which is the canonical list.
+ * the job-search MASTER_PROFILE.md section 7, which is the canonical list.
+ *
+ * modular/modular #6954 shows as Closed on GitHub rather than Merged, because
+ * Modular lands outside contributions with Copybara instead of pressing merge.
+ * It landed in commit 39b94179d6c9c5be6334888f119fcb51469c3ad0 on 2026-09-02,
+ * which the modularbot comment on the PR states. That is also why it does not
+ * appear in MERGED_PRS_SEARCH below.
  */
 export const MERGED_PRS: { repo: string; number: string; href: string }[] = [
   { repo: "vllm-project/vllm", number: "#31513", href: "https://github.com/vllm-project/vllm/pull/31513" },
   { repo: "modelcontextprotocol/python-sdk", number: "#1826", href: "https://github.com/modelcontextprotocol/python-sdk/pull/1826" },
   { repo: "google/A2UI", number: "#407", href: "https://github.com/google/A2UI/pull/407" },
+  { repo: "modular/modular", number: "#6954", href: "https://github.com/modular/modular/pull/6954" },
 ];
 
-/** Every merged PR by author, for anyone who wants to check the list above. */
+/**
+ * Every merged PR by author, for anyone who wants to check the list above.
+ * Returns three of the four: see the Copybara note on MERGED_PRS.
+ */
 export const MERGED_PRS_SEARCH =
   "https://github.com/pulls?q=is%3Apr+author%3Ajayhemnani9910+is%3Amerged";
 

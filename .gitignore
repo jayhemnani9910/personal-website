@@ -51,31 +51,16 @@ AGENTS.md
 # Generated GitHub profile graphs
 profile-3d-contrib/
 
-# Private directories
-forjobs/
-/resume/
-
 # Local planning docs
 TODO-*.md
 
-# Local-only practice work. Removed from the repo in abb235d and kept on disk.
-# Anchored with a leading slash on purpose: a bare `leetcode/` would match a
-# directory of that name at ANY depth, which is exactly the trap `resume/` on
-# line 56 fell into (it silently hid src/app/resume/ from Tailwind's scanner
-# and shipped the About page without its CSS).
-/leetcode/
-
 # ---- Local-only working material ----
 # None of this is part of the website. Kept on disk, out of the repo.
-# Anchored with a leading slash so a directory of the same name nested under
-# src/ can never be swallowed (see /leetcode/ above for why that matters).
-/PORTFOLIO.md
-/HERO_IMAGE_PROMPTS.md
-/REDESIGN_PROMPT.md
-/docs/audits/
+# Always anchor these with a leading slash. A bare `resume/` once matched
+# src/app/resume/ too, hid it from Tailwind's scanner, and shipped the About
+# page with no CSS. The job-search and practice directories that used to sit
+# here now live in ../job-search/ and ../competitive-coding/.
 /docs/superpowers/
-/codeforces/
-/sync/
 
 
 # Playwright visual regression. The baselines under tests/visual/__snapshots__

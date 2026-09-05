@@ -8,7 +8,7 @@
 import { readFileSync, writeFileSync, renameSync } from "node:fs";
 import path from "node:path";
 
-const SECRETS_DIR = "/home/po/projects/personal/jh-analytics/stream/secrets";
+const SECRETS_DIR = "/home/po/projects/personal/youtube/jh-analytics/stream/secrets";
 const OUT = path.join(process.cwd(), "src", "data", "youtube.json");
 const API = "https://www.googleapis.com/youtube/v3";
 const MAX_ITEMS = 12;
