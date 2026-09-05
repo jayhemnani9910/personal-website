@@ -52,9 +52,9 @@ Based in India, open to relocate. Currently looking for roles where I can build 
 <div align="center">
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/jayhemnani9910/personal-website/output/github-snake-dark.svg?v=1">
-  <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/jayhemnani9910/personal-website/output/github-snake.svg?v=1">
-  <img alt="Snake eating my contribution graph" src="https://raw.githubusercontent.com/jayhemnani9910/personal-website/output/github-snake.svg?v=1">
+  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/jayhemnani9910/jayhemnani9910/output/github-snake-dark.svg?v=1">
+  <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/jayhemnani9910/jayhemnani9910/output/github-snake.svg?v=1">
+  <img alt="Snake eating my contribution graph" src="https://raw.githubusercontent.com/jayhemnani9910/jayhemnani9910/output/github-snake.svg?v=1">
 </picture>
 
 </div>
