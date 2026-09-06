@@ -232,6 +232,65 @@ body {
   scroll-behavior: auto !important;
 }
 
+/* ── The hero's rotating job title (RoleCycle.tsx) ──────────────────────────
+   Eight titles stacked in one grid cell, each fading in for its own slice of a
+   single shared loop. Positive animation-delays are correct here: an item's
+   base style is opacity 0, so before its turn arrives it is simply not painted,
+   and item N takes over exactly as item N-1 finishes.
+
+   The sizer reserves the width of the longest title. Without it the items after
+   the role on the status line would slide sideways eight times a loop.
+
+   Under reduced motion or reader mode the global rules above crush every
+   animation to 0.01ms, which would settle all eight items on their final
+   keyframe at once and paint them on top of each other. So both cases are
+   opted out explicitly and the first title is shown on its own. */
+.role-cycle {
+  display: inline-grid;
+  vertical-align: baseline;
+}
+
+.role-cycle > * {
+  grid-area: 1 / 1;
+}
+
+.role-cycle__sizer {
+  visibility: hidden;
+}
+
+/* The stack is itself a grid so all eight titles share one cell. Left as normal
+   inline flow they sat side by side, invisible at opacity 0 but still each
+   claiming their own width, which stretched the status line across the page. */
+.role-cycle__stack {
+  display: grid;
+}
+
+.role-cycle__stack > .role-cycle__item {
+  grid-area: 1 / 1;
+}
+
+.role-cycle__item {
+  opacity: 0;
+  animation-name: tr-role-cycle;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  will-change: opacity;
+}
+
+@keyframes tr-role-cycle {
+  0%          { opacity: 0; }
+  1.5%, 10.5% { opacity: 1; }
+  12.5%, 100% { opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .role-cycle__item { animation: none !important; opacity: 0; }
+  .role-cycle__item:first-child { opacity: 1; }
+}
+
+[data-reader="on"] .role-cycle__item { animation: none !important; opacity: 0; }
+[data-reader="on"] .role-cycle__item:first-child { opacity: 1; }
+
 /* ═══════════════════════════════════════════════════════════════
    ANIMATIONS
    ═══════════════════════════════════════════════════════════════ */
@@ -411,6 +470,12 @@ html.lenis {
   --tr-text-faint: #5F6673;
   --tr-accent: #F4D53A;
   --tr-accent-hover: #FFE066;
+  /* Accent-coloured TEXT. Split from --tr-accent because that token is tuned
+     as a fill and reads at 2.84:1 on the light background, below anything
+     legible. In dark the two are the same yellow (13.44:1); in light this is
+     the darker gold the palette used before, which clears AA on all three
+     surfaces. Use it wherever the accent has to be readable as letterforms. */
+  --tr-accent-ink: #F4D53A;
   --tr-on-accent: #0B0C0F;
   --tr-ok: #6BE19A;
   /* The third status colour, after ok. It marks the honest gaps: a published
@@ -528,6 +593,8 @@ html.lenis {
   --tr-text-faint: #8B919B;
   --tr-accent: #B08F00;
   --tr-accent-hover: #C9A400;
+  /* 5.38:1 on bg, 5.87:1 on surface-1, 4.96:1 on surface-2. See the dark note. */
+  --tr-accent-ink: #7A6200;
   /* Moves with the accent, and it is not optional. The current #FFFFFF was
      chosen for the darker #7A6200; on #B08F00 white measures 3.10:1 and on the
      hover fill 2.39:1, and this is the Run button's label. The design's
@@ -582,6 +649,7 @@ textarea::placeholder, input::placeholder { color: var(--tr-text-faint); }
   --color-tr-text-mute: var(--tr-text-mute);
   --color-tr-text-faint: var(--tr-text-faint);
   --color-tr-accent: var(--tr-accent);
+  --color-tr-accent-ink: var(--tr-accent-ink);
   --color-tr-accent-hover: var(--tr-accent-hover);
   --color-tr-on-accent: var(--tr-on-accent);
   --color-tr-ok: var(--tr-ok);

@@ -54,6 +54,7 @@ there.
 | [0013](0013-retry-a-streamed-simulation-while-nothing-has-been-sent.md) | Retry a streamed simulation while nothing has been sent | Accepted | 2026-08-23 |
 | [0014](0014-adopt-the-v4-home-as-a-scoped-island.md) | Adopt the v4 home as a scoped island | Accepted | 2026-09-02 |
 | [0015](0015-match-the-design-palette-and-drop-below-aa.md) | Match the design palette and drop below AA | Accepted | 2026-09-03 |
+| [0016](0016-split-accent-ink-from-accent-for-readable-yellow.md) | Split accent-ink from accent for readable yellow | Accepted | 2026-09-06 |
 
 ## Adding one
 

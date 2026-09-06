@@ -1,6 +1,6 @@
 import { COPY } from "@/data/home";
 
-const MONO = 'font-[family-name:var(--ff-mono)] text-[length:var(--tr-t-mono-sm)] tracking-[.1em] text-tr-text-faint';
+const MONO = 'font-[family-name:var(--ff-mono)] text-[length:var(--tr-t-mono)] tracking-[.1em] text-tr-text-mute';
 
 type LogEntry = { when: string; role: string; org: string; what: string };
 
@@ -20,9 +20,6 @@ export function Log({ entries }: { entries: LogEntry[] }) {
         </h2>
         <p className="mt-5 max-w-[40ch] text-[length:var(--tr-t-body)] leading-[var(--tr-lh-body)] text-tr-text-mute">
           {COPY.logDeck}
-        </p>
-        <p className="mt-4 font-[family-name:var(--ff-mono)] text-[length:var(--tr-t-mono-xs)] tracking-normal text-tr-text-faint">
-          {COPY.logAside}
         </p>
       </div>
 

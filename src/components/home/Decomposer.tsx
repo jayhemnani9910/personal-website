@@ -155,7 +155,7 @@ export function Decomposer() {
       <div className="h-10 px-4 flex items-center gap-2 border-b border-tr-hairline font-mono text-[length:var(--tr-t-mono-xs)] text-tr-text-mute">
         <span className="text-tr-accent">◆</span>
         <span>decompose</span>
-        <span className="text-tr-text-faint">· incoming brief</span>
+        <span className="text-tr-text-mute">· incoming brief</span>
         <span className={`ml-auto ${ENGINE_META[engine].className}`}>{ENGINE_META[engine].text}</span>
       </div>
 
@@ -233,7 +233,7 @@ export function Decomposer() {
 
           {matches.length > 0 && (
             <div className="flex flex-wrap items-baseline gap-4 py-[.9rem] px-4 border-t border-tr-hairline text-[13px]">
-              <span className="font-mono text-[length:var(--tr-t-mono-sm)] tracking-[.1em] text-tr-text-faint">
+              <span className="font-mono text-[length:var(--tr-t-mono)] tracking-[.1em] text-tr-text-mute">
                 SHIPPED BEFORE
               </span>
               {matches.map((project) => (
@@ -252,7 +252,7 @@ export function Decomposer() {
       )}
 
       {!started && (
-        <p className="m-0 border-t border-tr-hairline py-[.9rem] px-4 font-mono text-[length:var(--tr-t-mono-xs)] text-tr-text-faint">
+        <p className="m-0 border-t border-tr-hairline py-[.9rem] px-4 font-mono text-[length:var(--tr-t-body)] leading-[var(--tr-lh-body)] text-tr-text-mute">
           {COPY.idleNote}
         </p>
       )}

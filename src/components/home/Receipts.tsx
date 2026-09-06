@@ -59,7 +59,7 @@ export function Receipts({ receipts }: { receipts: Receipt[] }) {
       {open && (
         <div className="grid gap-8 p-6 bg-tr-surface-1 border border-t-0 border-tr-hairline rounded-b-[var(--tr-r-lg)] lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)]">
           <div>
-            <p className="m-0 mb-2 font-mono text-[length:var(--tr-t-mono-sm)] tracking-[.1em] text-tr-text-faint">
+            <p className="m-0 mb-2 font-mono text-[length:var(--tr-t-mono)] tracking-[.1em] text-tr-text-mute">
               RECEIPT · {open.n}
             </p>
             <p className="m-0 text-[17px] font-medium">{open.title}</p>
@@ -97,7 +97,7 @@ export function Receipts({ receipts }: { receipts: Receipt[] }) {
                       {inner}
                     </Link>
                   )}
-                  <span className="font-mono text-[11px] text-tr-text-faint">{l.meta}</span>
+                  <span className="font-mono text-[length:var(--tr-t-mono)] text-tr-text-mute">{l.meta}</span>
                 </li>
               );
             })}

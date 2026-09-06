@@ -1,7 +1,7 @@
 import { COPY } from "@/data/home";
 import { SITE_CONFIG } from "@/../content/site";
 
-const MONO = 'font-[family-name:var(--ff-mono)] text-[length:var(--tr-t-mono-sm)] tracking-[.1em] text-tr-text-faint';
+const MONO = 'font-[family-name:var(--ff-mono)] text-[length:var(--tr-t-mono)] tracking-[.1em] text-tr-text-mute';
 const MONO_ROW = 'font-[family-name:var(--ff-mono)] text-[length:var(--tr-t-mono-lg)] tracking-normal text-tr-text-mute';
 
 const SOCIAL_ROWS: { label: string; url: string; handle: string }[] = [
@@ -52,7 +52,7 @@ export function Contact() {
               }`}
             >
               <span>{row.label}</span>
-              <span className="text-tr-text-faint">{row.handle} ↗</span>
+              <span className="text-tr-text-mute">{row.handle} ↗</span>
             </a>
           ))}
         </div>

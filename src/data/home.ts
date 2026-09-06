@@ -383,21 +383,34 @@ export const SECTIONS: SectionStep[] = [
   { n: "04", label: "contact", href: "#contact", id: "contact" },
 ];
 
-export function buildHero(c: { years: number }) {
+/**
+ * The titles the hero cycles through. One person, eight labels that hiring
+ * pages use for overlapping work, so the line rotates rather than picking one
+ * and shrinking the range. ROLES[0] is what server-rendered HTML, a crawler and
+ * a reduced-motion visitor see first, so it stays the most specific one.
+ */
+export const ROLES = [
+  "FORWARD DEPLOYED ENGINEER",
+  "SOFTWARE ENGINEER",
+  "DATA ENGINEER",
+  "DATA SCIENTIST",
+  "DATA ANALYST",
+  "ML ENGINEER",
+  "AI ENGINEER",
+  "FULL-STACK ENGINEER",
+] as const;
+
+export function buildHero() {
   return {
-    status: ["FORWARD DEPLOYED ENGINEER", "GUJARAT, IN → RELOCATING", `${c.years} YRS`, "OPEN TO WORK"],
+    status: ["GUJARAT, IN", "OPEN TO WORK"],
     h1: "Give me the vague version.",
     deck: "Briefs never arrive clean. Paste one the way it actually shows up and watch how I take it apart, then see what I've already shipped that looks like it.",
-    aside: [
-      "// this is the job. the rest of the page is the evidence.",
-      "// yes, it actually runs. no, it won't judge your typos.",
-    ],
   };
 }
 
 export const COPY = {
   proofH2: "Numbers with receipts.",
-  proofAside: "// numbers without sources are just fonts. click one.",
+  proofAside: "Every number here opens its sources. Click one.",
   workDeck:
     "Each one is written the same way on purpose: the problem as it arrived, what I actually did, what changed. If a line here can't be checked, it isn't here.",
   workMore: (n: number) => `The other ${n}, with filters`,
@@ -405,14 +418,12 @@ export const COPY = {
   methodDeck: "Principles are cheap. Each of these is attached to the place it cost me something.",
   logH2: "The log.",
   logDeck: "Five roles, one habit: whichever part nobody wanted, I took it.",
-  logAside: "// git log --oneline, but for a person",
   contactLabel: "ONE INBOX",
   contactDeck:
-    "Looking for forward-deployed and data-engineering roles. Senior software is on the table. Send the vague version, that's the point.",
+    "Looking for software, data and ML roles, forward-deployed ones included. Send the vague version, that's the point.",
   footerLine: (toolCount: number) =>
     `© 2026 Jay Hemnani · set in Instrument Sans + Geist Mono · readable by people and by ${toolCount} MCP tools`,
-  footerTop: "// you scrolled all the way. respect.",
-  idleNote: "// output lands here: scope / architecture / plan / risks, plus the projects that prove it",
+  idleNote: "You get back a scope, an architecture, a plan and the risks, plus the projects that prove it.",
   offlineNote:
-    "// offline: this is the closest preset, not a reading of your brief. the live version calls a model.",
+    "Offline right now, so this is the closest saved example rather than a reading of your brief. The live version calls a model.",
 };

@@ -2,7 +2,7 @@ import { Resume } from "@/data/types";
 
 export const RESUME: Resume = {
   name: "Jay Hemnani",
-  tagline: "Forward Deployed Engineer",
+  tagline: "Software, Data and ML Engineer",
   summary: "End-to-end builder across data pipelines, ML systems, and distributed backends. Production experience spanning real-time streaming architectures, computer vision research, and full-stack applications, taking prototypes to production quickly.",
   location: "Gujarat, India (Open to Relocate)",
   contact: {

@@ -41,11 +41,15 @@ function paletteFor(selector: string): Record<string, string> {
 const DARK = paletteFor(":root"); // dark is canonical, so it is the base
 const LIGHT = paletteFor(':root[data-theme="light"]');
 
-const REQUIRED = ["bg", "surface-1", "surface-2", "text", "text-mute", "text-faint", "accent", "accent-hover", "on-accent", "ok", "warn"] as const;
+const REQUIRED = ["bg", "surface-1", "surface-2", "text", "text-mute", "text-faint", "accent", "accent-ink", "accent-hover", "on-accent", "ok", "warn"] as const;
 const SURFACES = ["bg", "surface-1", "surface-2"] as const;
 // `ok` joined this list when the v4 system was promoted to :root (ADR 0014):
 // it is the live/verified green, and it carries text on all three surfaces.
-const TEXT_TOKENS = ["text", "text-mute", "text-faint", "accent", "ok", "warn"] as const;
+// `accent-ink` joined it when the work table's column headers went yellow: it
+// exists precisely because `accent` is a fill colour that fails as letterforms
+// in light, so the whole reason it is a separate token is a contrast one and it
+// has to be measured here or the split is decorative.
+const TEXT_TOKENS = ["text", "text-mute", "text-faint", "accent", "accent-ink", "ok", "warn"] as const;
 const AA_MIN = 4.5;
 
 function channelLuminance(channel8bit: number): number {
@@ -249,6 +253,10 @@ const RECORDED: Record<string, number> = {
   "dark:accent on bg": 13.44,
   "dark:accent on surface-1": 12.75,
   "dark:accent on surface-2": 11.84,
+  // Same yellow as the accent in dark; the split only bites in light.
+  "dark:accent-ink on bg": 13.44,
+  "dark:accent-ink on surface-1": 12.75,
+  "dark:accent-ink on surface-2": 11.84,
   "dark:ok on bg": 11.98,
   "dark:ok on surface-1": 11.37,
   "dark:ok on surface-2": 10.55,
@@ -266,6 +274,11 @@ const RECORDED: Record<string, number> = {
   "light:text-faint on bg": 2.90,
   "light:text-faint on surface-1": 3.17,
   "light:text-faint on surface-2": 2.68,
+  // The darker gold that exists so accent-coloured text is legible here: 5.38:1
+  // against the 2.84:1 the fill accent manages on the same background.
+  "light:accent-ink on bg": 5.38,
+  "light:accent-ink on surface-1": 5.87,
+  "light:accent-ink on surface-2": 4.96,
   "light:accent on bg": 2.84,
   "light:accent on surface-1": 3.10,
   "light:accent on surface-2": 2.62,

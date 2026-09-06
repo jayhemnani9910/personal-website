@@ -1,7 +1,7 @@
 import { Buddy } from "@/components/Buddy";
 import { COPY } from "@/data/home";
 
-const MONO = 'font-[family-name:var(--ff-mono)] text-[length:var(--tr-t-mono-xs)] tracking-normal text-tr-text-faint';
+const MONO = 'font-[family-name:var(--ff-mono)] text-[length:var(--tr-t-mono)] tracking-normal text-tr-text-mute';
 
 export function HomeFooter({ toolCount }: { toolCount: number }) {
   return (
@@ -10,7 +10,7 @@ export function HomeFooter({ toolCount }: { toolCount: number }) {
         <span>{COPY.footerLine(toolCount)}</span>
         <Buddy variant="full" />
         <span className="lg:text-right">
-          {COPY.footerTop} <a href="#brief">top ↑</a>
+          <a href="#brief">Back to top ↑</a>
         </span>
       </div>
     </footer>

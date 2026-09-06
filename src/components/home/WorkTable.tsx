@@ -3,6 +3,13 @@ import type { FeaturedProject } from "@/data/home";
 import { COPY } from "@/data/home";
 
 const MONO = 'font-[family-name:var(--ff-mono)] text-[length:var(--tr-t-mono-sm)] tracking-[.1em] text-tr-text-faint';
+// The four column headers are the key to reading every row under them, so they
+// are the one place on this page that gets the accent as letterforms. At
+// --tr-t-mono-sm in --tr-text-faint they measured 3.39:1 and the eye slid past
+// them; --tr-accent-ink is 13.44:1 dark and 5.38:1 light. The accent rule under
+// the row carries the same signal for anyone who cannot separate the hue.
+const HEADER_MONO =
+  'font-[family-name:var(--ff-mono)] text-[length:var(--tr-t-mono)] tracking-[.14em] text-tr-accent-ink';
 // Both of these spell the five-column track list out in full rather than
 // sharing a constant, and the duplication is the point. Tailwind v4 discovers
 // classes by scanning source text for literal candidates, so `lg:${HEADER_COLS}`
@@ -33,7 +40,7 @@ export function WorkTable({ projects, total }: { projects: FeaturedProject[]; to
         </p>
       </div>
 
-      <div className={`hidden lg:grid ${HEADER_COLS} gap-6 pb-[.6rem] border-b border-tr-hairline ${MONO}`}>
+      <div className={`hidden lg:grid ${HEADER_COLS} gap-6 pb-[.6rem] border-b-2 border-tr-accent ${HEADER_MONO}`}>
         <span>#</span>
         <span>PROJECT</span>
         <span>ARRIVED AS</span>
@@ -70,17 +77,17 @@ export function WorkTable({ projects, total }: { projects: FeaturedProject[]; to
               </span>
 
               <span className="text-[13.5px] leading-[var(--tr-lh-prose)] text-tr-text-mute">
-                <span className={`${MONO} lg:hidden block mb-[2px]`}>ARRIVED AS</span>
+                <span className={`${HEADER_MONO} lg:hidden block mb-[2px]`}>ARRIVED AS</span>
                 {p.arrived}
               </span>
 
               <span className="text-[13.5px] leading-[var(--tr-lh-prose)]">
-                <span className={`${MONO} lg:hidden block mb-[2px]`}>WHAT I DID</span>
+                <span className={`${HEADER_MONO} lg:hidden block mb-[2px]`}>WHAT I DID</span>
                 {p.did}
               </span>
 
               <span className="text-[13.5px] leading-[var(--tr-lh-prose)] group-hover:text-tr-ok transition-colors">
-                <span className={`${MONO} lg:hidden block mb-[2px]`}>WHAT CHANGED</span>
+                <span className={`${HEADER_MONO} lg:hidden block mb-[2px]`}>WHAT CHANGED</span>
                 {p.changed}
               </span>
             </Link>

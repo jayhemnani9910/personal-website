@@ -3,7 +3,7 @@ import Link from "next/link";
 import type { Route } from "next";
 import { METHOD, COPY } from "@/data/home";
 
-const MONO = 'font-[family-name:var(--ff-mono)] text-[length:var(--tr-t-mono-sm)] tracking-[.1em] text-tr-text-faint';
+const MONO = 'font-[family-name:var(--ff-mono)] text-[length:var(--tr-t-mono)] tracking-[.1em] text-tr-text-mute';
 
 /** `children` is the WCA cube card slot, a client component owned by another agent. */
 export function Method({ children }: { children: ReactNode }) {
@@ -53,7 +53,7 @@ export function Method({ children }: { children: ReactNode }) {
             <Link
               href={m.href as Route}
               data-cursor="OPEN"
-              className="mt-auto font-[family-name:var(--ff-mono)] text-[length:var(--tr-t-mono-xs)] tracking-normal text-tr-text-faint hover:text-tr-accent"
+              className="mt-auto font-[family-name:var(--ff-mono)] text-[length:var(--tr-t-mono)] tracking-normal text-tr-text-mute hover:text-tr-accent-ink"
             >
               ← {m.from}
             </Link>

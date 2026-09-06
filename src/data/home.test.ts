@@ -9,6 +9,7 @@ import {
   LOG_NOTES,
   SECTIONS,
   buildHero,
+  ROLES,
   COPY,
   buildNav,
 } from "./home";
@@ -17,7 +18,7 @@ import { RESUME } from "./resume";
 const PROJECTS_DIR = join(process.cwd(), "content/projects");
 const FEATURED_IDS = new Set(FEATURED.map((p) => p.id));
 const RECEIPTS = buildReceipts({ projectCount: 27, toolCount: 8 });
-const HERO = buildHero({ years: 4 });
+const HERO = buildHero();
 
 const ALL_TEXT = JSON.stringify({
   FEATURED,
@@ -140,9 +141,29 @@ describe("home data", () => {
     expect(nav[1].alt).toBe("2 essays");
   });
 
-  it("wires the computed years-of-experience claim into HERO.status", () => {
-    expect(HERO.status).toContain("4 YRS");
-    const hero7 = buildHero({ years: 7 });
-    expect(hero7.status).toContain("7 YRS");
+  // The status line used to carry a relocation arrow and a computed years count.
+  // Both are gone on purpose, and both are the kind of thing that creeps back in
+  // when someone reaches for something to fill the line with.
+  it("keeps the status line to place and availability", () => {
+    expect(HERO.status).toEqual(["GUJARAT, IN", "OPEN TO WORK"]);
+    const joined = HERO.status.join(" ");
+    expect(joined).not.toMatch(/RELOCAT/i);
+    expect(joined).not.toMatch(/\d+\s*YRS/i);
+  });
+
+  it("carries the role titles the hero cycles through, most specific first", () => {
+    expect(ROLES.length).toBeGreaterThan(1);
+    expect(ROLES[0]).toBe("FORWARD DEPLOYED ENGINEER");
+    expect(new Set(ROLES).size).toBe(ROLES.length);
+    // Every title renders into one fixed-width slot, so a stray lowercase entry
+    // would show up mid-rotation as the only one that looks different.
+    for (const r of ROLES) expect(r).toBe(r.toUpperCase());
+  });
+
+  // These lines are the page's own voice, and the mono `//` styling they used to
+  // carry measured 3.39:1. Prose replaced it; the marker should not come back.
+  it("has no // asides left in the copy", () => {
+    const strings = Object.values(COPY).filter((v): v is string => typeof v === "string");
+    for (const v of strings) expect(v.startsWith("//"), v).toBe(false);
   });
 });

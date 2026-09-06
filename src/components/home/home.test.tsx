@@ -6,7 +6,7 @@ import { Method } from "./Method";
 import { Log } from "./Log";
 import { Contact } from "./Contact";
 import { HomeFooter } from "./HomeFooter";
-import { FEATURED, METHOD } from "@/data/home";
+import { FEATURED, METHOD, ROLES } from "@/data/home";
 import { SITE_CONFIG } from "@/../content/site";
 
 const LOG_FIXTURE = [
@@ -82,10 +82,27 @@ describe("HomeFooter", () => {
 
 describe("Hero", () => {
   it("renders exactly one h1 with the hero headline", () => {
-    render(<Hero years={4}>{null}</Hero>);
+    render(<Hero>{null}</Hero>);
     const h1s = screen.getAllByRole("heading", { level: 1 });
     expect(h1s.length).toBe(1);
     expect(h1s[0].textContent).toBe("Give me the vague version.");
+  });
+
+  // The rotation is CSS, so only one title is visible at a time and none of them
+  // is a heading. Every title still has to be in the document: the animated
+  // stack is aria-hidden, and the readable copy is the one assistive tech and a
+  // crawler get. Losing it would leave the page never stating what he does.
+  it("puts every role title in the document for assistive tech", () => {
+    const { container } = render(<Hero>{null}</Hero>);
+    const readable = container.querySelector(".sr-only");
+    expect(readable).not.toBeNull();
+    for (const role of ROLES) expect(readable!.textContent).toContain(role);
+  });
+
+  it("no longer claims a relocation or a years count", () => {
+    const { container } = render(<Hero>{null}</Hero>);
+    expect(container.textContent).not.toMatch(/RELOCAT/i);
+    expect(container.textContent).not.toMatch(/\d+\s*YRS/i);
   });
 });
 

@@ -137,7 +137,7 @@ export function MethodCube() {
         </div>
       </button>
       <div>
-        <p className="m-0 mb-1 font-mono text-[length:var(--tr-t-mono-sm)] tracking-[0.1em] text-tr-text-faint">
+        <p className="m-0 mb-1 font-mono text-[length:var(--tr-t-mono)] tracking-[0.1em] text-tr-text-mute">
           OFF THE CLOCK · WCA
         </p>
         <p className="m-0 text-[1.6rem] font-medium leading-[var(--tr-lh-numeral)] tracking-[-0.03em] tabular-nums text-tr-text">
