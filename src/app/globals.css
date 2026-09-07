@@ -401,6 +401,18 @@ html.lenis {
   text-align: center;
   color: var(--tr-text-mute);
 }
+
+/* Buddy standing on a section rule (DividerBuddy.tsx). The sprite is four lines
+   tall and hangs in the previous section's bottom padding, which bottoms out at
+   its 3rem floor below 640px, where the page is also too narrow to give the
+   sprite any horizontal clearance from the text on its left. So it gets smaller
+   type there. That beats mounting a second, one-line Buddy just for phones, and
+   beats a transform, which would fight the entrance animation on the same
+   element. */
+.buddy-on-rule .buddy-art { font-size: 9px; }
+@media (min-width: 40rem) {
+  .buddy-on-rule .buddy-art { font-size: var(--tr-t-mono-xs); }
+}
 @keyframes buddy-bounce {
   0%   { transform: translateY(0); }
   30%  { transform: translateY(-4px); }

@@ -8,6 +8,7 @@ import dynamic from "next/dynamic";
 import { HomeHeader } from "./HomeHeader";
 import { SectionRail } from "./SectionRail";
 import { RevealSection } from "./RevealSection";
+import { DividerBuddyProvider } from "./DividerBuddy";
 import { Hero } from "./Hero";
 import { Decomposer } from "./Decomposer";
 import { Proof } from "./Proof";
@@ -68,34 +69,38 @@ export async function HomeV4() {
       <HomeHeader nav={buildNav({ projectCount, essayCount })} />
       <SectionRail steps={SECTIONS} />
 
+      {/* The `divider` indexes match DIVIDER_IDS in DividerBuddy.tsx: the five
+          sections that open with a hairline rule, in page order. */}
       <main id="main-content" className="relative z-[1]">
-        <Hero>
-          <Decomposer />
-        </Hero>
+        <DividerBuddyProvider>
+          <Hero>
+            <Decomposer />
+          </Hero>
 
-        <RevealSection>
-          <Proof>
-            <Receipts receipts={buildReceipts({ projectCount, toolCount })} />
-          </Proof>
-        </RevealSection>
+          <RevealSection divider={0}>
+            <Proof>
+              <Receipts receipts={buildReceipts({ projectCount, toolCount })} />
+            </Proof>
+          </RevealSection>
 
-        <RevealSection>
-          <WorkTable projects={featured} total={projectCount} />
-        </RevealSection>
+          <RevealSection divider={1}>
+            <WorkTable projects={featured} total={projectCount} />
+          </RevealSection>
 
-        <RevealSection className="bg-[color-mix(in_srgb,var(--tr-surface-1)_85%,transparent)]">
-          <Method>
-            <MethodCube />
-          </Method>
-        </RevealSection>
+          <RevealSection divider={2} className="bg-[color-mix(in_srgb,var(--tr-surface-1)_85%,transparent)]">
+            <Method>
+              <MethodCube />
+            </Method>
+          </RevealSection>
 
-        <RevealSection>
-          <Log entries={buildLogEntries()} />
-        </RevealSection>
+          <RevealSection divider={3}>
+            <Log entries={buildLogEntries()} />
+          </RevealSection>
 
-        <RevealSection>
-          <Contact />
-        </RevealSection>
+          <RevealSection divider={4}>
+            <Contact />
+          </RevealSection>
+        </DividerBuddyProvider>
       </main>
 
       <HomeFooter />
