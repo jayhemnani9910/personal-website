@@ -1,6 +1,7 @@
 "use client";
 
 import { useLenis } from "lenis/react";
+import { Buddy } from "@/components/Buddy";
 import type { MouseEvent } from "react";
 import type { SectionStep } from "@/data/home";
 import { scrollToTarget } from "@/lib/scroll";
@@ -27,7 +28,30 @@ export function SectionRail({ steps }: { steps: SectionStep[] }) {
       {steps.map((s, i) => {
         const active = i === activeIndex;
         return (
-          <li key={s.id}>
+          <li key={s.id} className="relative">
+            {/* Buddy rides the rail: it renders inside whichever step is
+                current, so it steps down the markers as you scroll instead of
+                sitting in the footer where nobody looks. Mounting it in the
+                active <li> rather than translating one shared instance means
+                no measured row pitch to keep in sync with the gap, at the cost
+                of remounting it on each section change. That reset is not
+                visible: its blink and idle-word timers restart from a random
+                delay anyway. `right-full` is the <li>'s edge, and flex-col
+                stretches every <li> to the widest label, so it lands on the
+                same x for all five. */}
+            {active && (
+              <span
+                aria-hidden="true"
+                className="absolute right-full top-1/2 mr-[.7rem] -translate-y-1/2"
+              >
+                {/* Separate element for the entrance: v4-line-in ends on
+                    `transform: none`, which on the positioning span would
+                    cancel its -translate-y-1/2 and drop Buddy half a row. */}
+                <span className="block animate-[v4-line-in_.4s_cubic-bezier(.16,1,.3,1)_both]">
+                  <Buddy variant="mini" />
+                </span>
+              </span>
+            )}
             <a
               href={s.href}
               onClick={jump(s.href)}
