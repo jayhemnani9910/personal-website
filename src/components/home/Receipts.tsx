@@ -32,13 +32,13 @@ export function Receipts({ receipts }: { receipts: Receipt[] }) {
               data-cursor="PROOF"
               onClick={() => toggle(i)}
               style={reduced ? undefined : { animationDelay: `${i * STAGGER_MS}ms` }}
-              className={`flex flex-col gap-[.9rem] p-[1.25rem_1.1rem] text-left transition-colors ${
+              className={`group flex flex-col gap-[.9rem] p-[1.25rem_1.1rem] text-left transition-colors ${
                 isOpen ? "bg-tr-surface-2" : "bg-tr-surface-1 hover:bg-tr-surface-2"
               } ${reduced ? "" : "animate-[v4-line-in_.4s_cubic-bezier(.16,1,.3,1)_both]"}`}
             >
               <span
-                className={`text-[length:var(--tr-t-stat)] leading-[var(--tr-lh-numeral)] tracking-[-.04em] font-medium tabular-nums ${
-                  isOpen ? "text-tr-accent" : "text-tr-text"
+                className={`text-[length:var(--tr-t-stat)] leading-[var(--tr-lh-numeral)] tracking-[-.04em] font-medium tabular-nums transition-colors ${
+                  isOpen ? "text-tr-accent" : "text-tr-text group-hover:text-tr-accent-ink"
                 }`}
               >
                 {r.n}
