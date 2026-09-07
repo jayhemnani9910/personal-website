@@ -2,7 +2,7 @@
 
 import { createContext, useContext, type ReactNode } from "react";
 import { Buddy } from "@/components/Buddy";
-import { useSectionSpy } from "./useSectionSpy";
+import { useLastRuleInView } from "./useLastRuleInView";
 
 /**
  * The five home sections that open with a hairline divider, in page order.
@@ -18,12 +18,17 @@ const ActiveDivider = createContext(0);
  * Publishes which divider Buddy is standing on. One IntersectionObserver for
  * the whole page, rather than one per section, which is the only reason this
  * is a context and not a hook each slot calls for itself.
+ *
+ * The rail next door runs its own observer on a different question, and the two
+ * are meant to disagree: the rail highlights the section you are reading, while
+ * Buddy follows the last rule to come into view, so he is on screen rather than
+ * a screen behind. See useLastRuleInView.
  */
 export function DividerBuddyProvider({ children }: { children: ReactNode }) {
-  const active = useSectionSpy(DIVIDER_IDS as unknown as string[]);
-  // -1 is "before hydration, and before anything has crossed the middle of the
-  // viewport", which is the whole time the visitor is still reading the hero.
-  // The first rule is the one visible from there, so that is where Buddy waits.
+  const active = useLastRuleInView(DIVIDER_IDS);
+  // -1 is "before hydration, and before any rule has come into view", which is
+  // the whole time the visitor is still at the top of the hero. The first rule
+  // is the one visible from there, so that is where Buddy waits.
   return <ActiveDivider.Provider value={active < 0 ? 0 : active}>{children}</ActiveDivider.Provider>;
 }
 

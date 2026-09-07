@@ -72,6 +72,7 @@ export function Buddy({ variant = "mini", className }: BuddyProps) {
   const [word, setWord] = useState<string | null>(null);
   const [bouncing, setBouncing] = useState(false);
   const [idleFrame, setIdleFrame] = useState(0); // 0 = Frame A, 1 = Frame B
+  const [hovered, setHovered] = useState(false);
 
   // resting expression: what blink/idle return to (cursor+scroll update this)
   const restingRef = useRef<Expression>("rest");
@@ -320,14 +321,17 @@ export function Buddy({ variant = "mini", className }: BuddyProps) {
   // natively focusable. Rendering a plain div instead removes that
   // implicit focusability outright; the click handler keeps working for
   // mouse users, it just leaves the tab order.
-  const [eye1, eye2] = EYE_CHARS[expression];
-  // The one thing allowed to take the accent: the eyes, and only while Buddy is
-  // reacting to something real (a click or a theme change), never during
-  // ambient cursor/scroll tracking or the idle blink loop.
+  // A click runs surprised -> happy -> rest with a word, and that sequence has
+  // to survive hovering, since you have to be on him to click him. So a
+  // reaction wins; hover only supplies a face when nothing else is happening.
   const isReacting = expression === "surprised" || expression === "happy";
-  const eyeStyle = isReacting
-    ? { color: "var(--tr-accent)" }
-    : undefined;
+  const shown: Expression = isReacting ? expression : hovered ? "happy" : expression;
+  const [eye1, eye2] = EYE_CHARS[shown];
+  // The eyes are the one part that carries a hue. Yellow at rest, green while
+  // he is reacting to something real (a click or a theme change). Both are
+  // classes rather than inline styles so the hover rules in globals.css can
+  // reach the rest of the sprite without being outranked.
+  const eyeClass = isReacting ? "buddy-eye buddy-eye--reacting" : "buddy-eye";
 
   const variantClass = variant === "full" ? "buddy buddy--full" : "buddy buddy--mini";
   const cls = [variantClass, bouncing ? "buddy--bounce" : "", className ?? ""].filter(Boolean).join(" ");
@@ -344,9 +348,22 @@ export function Buddy({ variant = "mini", className }: BuddyProps) {
     const frame = prefersReducedMotion ? IDLE_FRAMES[0] : IDLE_FRAMES[idleFrame];
     const bubble = displayWord ? buildBubble(displayWord) : null;
 
+    // `data-cursor` is the text printed in the cursor chip, so it cannot double
+    // as the kind key: "LABEL" is what the comp calls this ring, and it would
+    // have shown up on screen as the word LABEL. `data-cursor-kind` picks the
+    // ring directly, which is the 48px accent one drawn for exactly this sprite.
     return (
-      <div ref={buddyRef} className={cls} onClick={handleClick} aria-hidden="true">
-        <span className="buddy-art" style={{ color: "var(--tr-text-mute)" }}>
+      <div
+        ref={buddyRef}
+        className={cls}
+        onClick={handleClick}
+        onMouseEnter={() => setHovered(true)}
+        onMouseLeave={() => setHovered(false)}
+        data-cursor="POKE"
+        data-cursor-kind="buddy"
+        aria-hidden="true"
+      >
+        <span className="buddy-art">
           {bubble && (
             <>
               {bubble}
@@ -356,14 +373,16 @@ export function Buddy({ variant = "mini", className }: BuddyProps) {
           {" .---. "}
           {"\n"}
           {" |"}
-          <span style={eyeStyle}>{eye1}</span>
+          <span className={eyeClass}>{eye1}</span>
           {" "}
-          <span style={eyeStyle}>{eye2}</span>
+          <span className={eyeClass}>{eye2}</span>
           {"| "}
           {"\n"}
-          {frame.arms}
+          {/* Arms and legs sit one neutral tier below the head, so the sprite
+              reads as a shape instead of an even block of glyphs. */}
+          <span className="buddy-limbs">{frame.arms}</span>
           {"\n"}
-          {frame.legs}
+          <span className="buddy-limbs">{frame.legs}</span>
         </span>
       </div>
     );
@@ -375,9 +394,9 @@ export function Buddy({ variant = "mini", className }: BuddyProps) {
       <span className="buddy-prompt" style={{ color: "var(--tr-text-mute)" }}>&#10095; </span>
       <span className="buddy-face" style={{ color: "var(--tr-text-mute)" }}>
         {"["}
-        <span style={eyeStyle}>{eye1}</span>
+        <span className={eyeClass}>{eye1}</span>
         {" "}
-        <span style={eyeStyle}>{eye2}</span>
+        <span className={eyeClass}>{eye2}</span>
         {"]"}
       </span>
       {displayWord && (

@@ -413,6 +413,25 @@ html.lenis {
 @media (min-width: 40rem) {
   .buddy-on-rule .buddy-art { font-size: var(--tr-t-mono-xs); }
 }
+
+/* Buddy's colour states.
+   The eyes are the one part that carries a hue, and both values are tokens the
+   palette already owns, so nothing here adds a colour. Yellow at rest uses
+   accent-ink rather than accent: as letterforms on the light theme, accent
+   measures 2.84:1 and the reaction was effectively invisible there (ADR 0016).
+   Green marks a real reaction, a click or a theme flip, so it stays distinct
+   from the resting yellow now that resting has one.
+   Hover lifts the whole sprite one neutral tier. Doing it in CSS rather than
+   React state means it costs nothing and works before hydration; it is also why
+   .buddy-art no longer carries an inline colour, which would outrank this. */
+.buddy-art,
+.buddy-limbs,
+.buddy-eye { transition: color .2s var(--tr-ease); }
+.buddy-eye { color: var(--tr-accent-ink); }
+.buddy-eye--reacting { color: var(--tr-ok); }
+.buddy--full .buddy-limbs { color: var(--tr-text-faint); }
+.buddy--full:hover .buddy-art { color: var(--tr-text); }
+.buddy--full:hover .buddy-limbs { color: var(--tr-text-mute); }
 @keyframes buddy-bounce {
   0%   { transform: translateY(0); }
   30%  { transform: translateY(-4px); }
