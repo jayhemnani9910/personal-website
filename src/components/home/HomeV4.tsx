@@ -98,7 +98,7 @@ export async function HomeV4() {
         </RevealSection>
       </main>
 
-      <HomeFooter toolCount={toolCount} />
+      <HomeFooter />
     </div>
   );
 }

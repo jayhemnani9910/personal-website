@@ -34,7 +34,7 @@ export function Method({ children }: { children: ReactNode }) {
         {METHOD.map((m) => (
           <li
             key={m.n}
-            className="bg-tr-surface-1 hover:bg-tr-surface-2 transition-colors p-6 min-h-[210px] flex flex-col gap-4"
+            className="group bg-tr-surface-1 hover:bg-tr-surface-2 transition-colors p-6 min-h-[210px] flex flex-col gap-4"
           >
             <span className={`${MONO} text-tr-accent`}>{m.n}</span>
             {/* --tr-t-h3 computes to 19.2px at 1280px where the comp draws this
@@ -43,7 +43,7 @@ export function Method({ children }: { children: ReactNode }) {
                 for real h3s. `leading-tight` here is Tailwind's built-in 1.25
                 step, not the --tr-lh-tight custom token (1.2, used by the
                 footer's ascii mascot) - same word, different number. */}
-            <p className="text-[length:var(--tr-t-card-h)] leading-tight tracking-[-.015em] font-medium">
+            <p className="text-[length:var(--tr-t-card-h)] leading-tight tracking-[-.015em] font-medium transition-colors group-hover:text-tr-accent-ink">
               {m.rule}
             </p>
             <p className="text-[length:var(--tr-t-small)] leading-[var(--tr-lh-body)] text-tr-text-mute">{m.why}</p>

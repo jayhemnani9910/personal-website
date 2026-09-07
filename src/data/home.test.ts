@@ -28,7 +28,7 @@ const ALL_TEXT = JSON.stringify({
   LOG_NOTES,
   SECTIONS,
   HERO,
-  COPY: { ...COPY, workMore: COPY.workMore(21), footerLine: COPY.footerLine(8) },
+  COPY: { ...COPY, workMore: COPY.workMore(21) },
   nav: buildNav({ projectCount: 27, essayCount: 2 }),
 });
 

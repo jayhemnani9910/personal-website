@@ -74,9 +74,15 @@ describe("Contact", () => {
 });
 
 describe("HomeFooter", () => {
-  it("interpolates the given tool count", () => {
-    render(<HomeFooter toolCount={8} />);
-    expect(screen.getByText(/8 MCP tools/)).toBeDefined();
+  // The bottom bar used to name the typefaces and the MCP tool count. Jay cut
+  // both: neither tells a visitor anything they can act on, and the tool count
+  // is already stated where it means something, in the proof grid. The bar is
+  // now the copyright and the back-to-top link, so this guards against the
+  // trivia creeping back in.
+  it("carries the copyright and nothing else in the left slot", () => {
+    render(<HomeFooter />);
+    expect(screen.getByText("© 2026 Jay Hemnani")).toBeDefined();
+    expect(screen.queryByText(/MCP tools|Instrument Sans|Geist Mono/)).toBeNull();
   });
 });
 

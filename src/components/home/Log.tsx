@@ -25,8 +25,11 @@ export function Log({ entries }: { entries: LogEntry[] }) {
 
       <ol className="list-none m-0 p-0">
         {entries.map((e) => (
-          <li key={`${e.when}-${e.org}`} className="grid grid-cols-[6rem_minmax(0,1fr)] gap-6 py-4 border-t border-tr-hairline">
-            <span className={`${MONO} pt-[3px]`}>{e.when}</span>
+          <li
+            key={`${e.when}-${e.org}`}
+            className="group grid grid-cols-[6rem_minmax(0,1fr)] gap-6 py-4 border-t border-tr-hairline"
+          >
+            <span className={`${MONO} pt-[3px] transition-colors group-hover:text-tr-accent-ink`}>{e.when}</span>
             <div>
               <p className="text-[length:var(--tr-t-body)] font-medium tracking-[-.01em]">
                 {e.role} <span className="text-tr-text-mute font-normal">· {e.org}</span>

@@ -421,8 +421,7 @@ export const COPY = {
   contactLabel: "ONE INBOX",
   contactDeck:
     "Looking for software, data and ML roles, forward-deployed ones included. Send the vague version, that's the point.",
-  footerLine: (toolCount: number) =>
-    `© 2026 Jay Hemnani · set in Instrument Sans + Geist Mono · readable by people and by ${toolCount} MCP tools`,
+  footerLine: "© 2026 Jay Hemnani",
   idleNote: "You get back a scope, an architecture, a plan and the risks, plus the projects that prove it.",
   offlineNote:
     "Offline right now, so this is the closest saved example rather than a reading of your brief. The live version calls a model.",
