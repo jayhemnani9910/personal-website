@@ -28,6 +28,9 @@ const eslintConfig = defineConfig([
     // is a thing to forget.
     "playwright-report/**",
     "test-results/**",
+    // Local audit output (gitignored), not project code.
+    ".audit/**",
+    "graphify-out/**",
   ]),
 ]);
 

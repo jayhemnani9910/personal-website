@@ -7,7 +7,7 @@ import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
 // ---- expression glyph map ----
 type Expression = "rest" | "blink" | "left" | "right" | "up" | "down" | "surprised" | "happy";
 
-// Two individual eye chars per expression. Shared by both variants, and
+// Two individual eye chars per expression, kept
 // kept separate from the surrounding brackets/frame so the eyes can be
 // colored independently (the one "alive" signal Buddy is allowed to carry).
 const EYE_CHARS: Record<Expression, [string, string]> = {
@@ -30,8 +30,7 @@ const IDLE_FRAMES: Array<{ arms: string; legs: string }> = [
 ];
 
 // ---- word pools ----
-const IDLE_WORDS = ["idle", "reading", "still here", "hello", "shipping", "thinking"];
-const IDLE_WORDS_FOOTER = [...IDLE_WORDS, "up to top"];
+const IDLE_WORDS = ["idle", "reading", "still here", "hello", "shipping", "thinking", "up to top"];
 const INTERACTION_WORDS_CLICK = ["hi there", "press me", "^_^", "hello"];
 
 function pickRandom<T>(arr: T[]): T {
@@ -57,11 +56,10 @@ function buildBubble(text: string): string {
 }
 
 interface BuddyProps {
-  variant?: "mini" | "full";
   className?: string;
 }
 
-export function Buddy({ variant = "mini", className }: BuddyProps) {
+export function Buddy({ className }: BuddyProps) {
   const { theme } = useTheme();
 
   // ---- reduced motion preference (SSR-safe, reacts to live changes) ----
@@ -249,12 +247,10 @@ export function Buddy({ variant = "mini", className }: BuddyProps) {
   useEffect(() => {
     if (prefersReducedMotion) return;
 
-    const pool = variant === "full" ? IDLE_WORDS_FOOTER : IDLE_WORDS;
-
     const scheduleWord = () => {
       const delay = 8000 + Math.random() * 6000;
       idleWordShowTimerRef.current = setTimeout(() => {
-        setWord(pickRandom(pool));
+        setWord(pickRandom(IDLE_WORDS));
         idleWordClearTimerRef.current = setTimeout(() => {
           setWord(null);
           scheduleWord();
@@ -268,11 +264,10 @@ export function Buddy({ variant = "mini", className }: BuddyProps) {
       if (idleWordShowTimerRef.current) clearTimeout(idleWordShowTimerRef.current);
       if (idleWordClearTimerRef.current) clearTimeout(idleWordClearTimerRef.current);
     };
-  }, [variant, prefersReducedMotion]);
+  }, [prefersReducedMotion]);
 
-  // ---- idle frame cycle (full variant only) ----
+  // ---- idle frame cycle ----
   useEffect(() => {
-    if (variant !== "full") return;
     if (prefersReducedMotion) return;
 
     idleFrameIntervalRef.current = setInterval(() => {
@@ -282,7 +277,7 @@ export function Buddy({ variant = "mini", className }: BuddyProps) {
     return () => {
       if (idleFrameIntervalRef.current) clearInterval(idleFrameIntervalRef.current);
     };
-  }, [variant, prefersReducedMotion]);
+  }, [prefersReducedMotion]);
 
   // ---- click handler ----
   const handleClick = useCallback(() => {
@@ -333,8 +328,7 @@ export function Buddy({ variant = "mini", className }: BuddyProps) {
   // reach the rest of the sprite without being outranked.
   const eyeClass = isReacting ? "buddy-eye buddy-eye--reacting" : "buddy-eye";
 
-  const variantClass = variant === "full" ? "buddy buddy--full" : "buddy buddy--mini";
-  const cls = [variantClass, bouncing ? "buddy--bounce" : "", className ?? ""].filter(Boolean).join(" ");
+  const cls = ["buddy buddy--full", bouncing ? "buddy--bounce" : "", className ?? ""].filter(Boolean).join(" ");
 
   // words with trailing ellipsis for "thinking"/"reading"-type words
   const ellipsisWords = new Set(["thinking", "reading", "shipping", "idle"]);
@@ -344,64 +338,45 @@ export function Buddy({ variant = "mini", className }: BuddyProps) {
       : word
     : null;
 
-  if (variant === "full") {
-    const frame = prefersReducedMotion ? IDLE_FRAMES[0] : IDLE_FRAMES[idleFrame];
-    const bubble = displayWord ? buildBubble(displayWord) : null;
+  const frame = prefersReducedMotion ? IDLE_FRAMES[0] : IDLE_FRAMES[idleFrame];
+  const bubble = displayWord ? buildBubble(displayWord) : null;
 
-    // `data-cursor` is the text printed in the cursor chip, so it cannot double
-    // as the kind key: "LABEL" is what the comp calls this ring, and it would
-    // have shown up on screen as the word LABEL. `data-cursor-kind` picks the
-    // ring directly, which is the 48px accent one drawn for exactly this sprite.
-    return (
-      <div
-        ref={buddyRef}
-        className={cls}
-        onClick={handleClick}
-        onMouseEnter={() => setHovered(true)}
-        onMouseLeave={() => setHovered(false)}
-        data-cursor="POKE"
-        data-cursor-kind="buddy"
-        aria-hidden="true"
-      >
-        <span className="buddy-art">
-          {bubble && (
-            <>
-              {bubble}
-              {"\n"}
-            </>
-          )}
-          {" .---. "}
-          {"\n"}
-          {" |"}
-          <span className={eyeClass}>{eye1}</span>
-          {" "}
-          <span className={eyeClass}>{eye2}</span>
-          {"| "}
-          {"\n"}
-          {/* Arms and legs sit one neutral tier below the head, so the sprite
-              reads as a shape instead of an even block of glyphs. */}
-          <span className="buddy-limbs">{frame.arms}</span>
-          {"\n"}
-          <span className="buddy-limbs">{frame.legs}</span>
-        </span>
-      </div>
-    );
-  }
-
-  // mini variant
+  // `data-cursor` is the text printed in the cursor chip, so it cannot double
+  // as the kind key: "LABEL" is what the comp calls this ring, and it would
+  // have shown up on screen as the word LABEL. `data-cursor-kind` picks the
+  // ring directly, which is the 48px accent one drawn for exactly this sprite.
   return (
-    <div ref={buddyRef} className={cls} onClick={handleClick} aria-hidden="true">
-      <span className="buddy-prompt" style={{ color: "var(--tr-text-mute)" }}>&#10095; </span>
-      <span className="buddy-face" style={{ color: "var(--tr-text-mute)" }}>
-        {"["}
+    <div
+      ref={buddyRef}
+      className={cls}
+      onClick={handleClick}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      data-cursor="POKE"
+      data-cursor-kind="buddy"
+      aria-hidden="true"
+    >
+      <span className="buddy-art">
+        {bubble && (
+          <>
+            {bubble}
+            {"\n"}
+          </>
+        )}
+        {" .---. "}
+        {"\n"}
+        {" |"}
         <span className={eyeClass}>{eye1}</span>
         {" "}
         <span className={eyeClass}>{eye2}</span>
-        {"]"}
+        {"| "}
+        {"\n"}
+        {/* Arms and legs sit one neutral tier below the head, so the sprite
+            reads as a shape instead of an even block of glyphs. */}
+        <span className="buddy-limbs">{frame.arms}</span>
+        {"\n"}
+        <span className="buddy-limbs">{frame.legs}</span>
       </span>
-      {displayWord && (
-        <span className="buddy-word" style={{ color: "var(--tr-text-mute)" }}>{displayWord}</span>
-      )}
     </div>
   );
 }

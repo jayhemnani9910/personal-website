@@ -51,7 +51,7 @@ export function DividerBuddy({ index }: { index: number }) {
       className="absolute bottom-full left-1/2 z-[2] mb-[.15rem] -translate-x-1/2"
     >
       <span className="block animate-[v4-line-in_.45s_cubic-bezier(.16,1,.3,1)_both]">
-        <Buddy variant="full" className="buddy-on-rule" />
+        <Buddy className="buddy-on-rule" />
       </span>
     </span>
   );

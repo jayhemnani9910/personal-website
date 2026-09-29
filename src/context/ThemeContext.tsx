@@ -6,14 +6,12 @@ type Theme = "light" | "dark";
 
 interface ThemeContextType {
   theme: Theme;
-  setTheme: (theme: Theme) => void;
   toggleTheme: () => void;
 }
 
 // Default context value for SSR
 const defaultContext: ThemeContextType = {
   theme: "dark",
-  setTheme: () => {},
   toggleTheme: () => {},
 };
 
@@ -50,15 +48,11 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     return () => window.removeEventListener("storage", onStorage);
   }, []);
 
-  const setTheme = useCallback((newTheme: Theme) => {
-    setThemeState(newTheme);
-  }, []);
-
   const toggleTheme = useCallback(() => {
     setThemeState((prev) => prev === "dark" ? "light" : "dark");
   }, []);
 
-  const value = useMemo(() => ({ theme, setTheme, toggleTheme }), [theme, setTheme, toggleTheme]);
+  const value = useMemo(() => ({ theme, toggleTheme }), [theme, toggleTheme]);
 
   return (
     <ThemeContext.Provider value={value}>

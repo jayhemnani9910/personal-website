@@ -3,7 +3,7 @@
 /* FDE Simulation workspace: phase tabs, narration side panel, 6 phase content
    renderers. Ported from sim.jsx and reskinned to editorial theme. */
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import type { Preset } from "./fdeData";
 import { PHASES, NARRATION, RECEIPTS } from "./fdeData";
 import { FdeArchDiagram } from "./FdeArchDiagram";
@@ -44,7 +44,6 @@ function sectionReady(payload: Partial<Preset>, phaseKey: string): boolean {
 export function FdeSimulation({ payload, brief, source, onExit, streaming = false }: Props) {
   const [phase, setPhase] = useState(0);
   const [revealed, setRevealed] = useState(0);
-  const sideRef = useRef<HTMLElement>(null);
 
   const currentKey = PHASES[phase].key;
   const narration = NARRATION[currentKey] || [];
@@ -173,7 +172,6 @@ export function FdeSimulation({ payload, brief, source, onExit, streaming = fals
 
         <aside
           className={`border-t border-tr-hairline bg-tr-surface-2 px-5 py-6 ${MONO} text-[length:var(--tr-t-mono-sm)] leading-[var(--tr-lh-body)] text-tr-text lg:border-l lg:border-t-0 lg:px-6 lg:py-7`}
-          ref={sideRef}
         >
           <h3 className="mb-3.5 text-[length:var(--tr-t-mono-sm)] uppercase tracking-[.18em] text-tr-accent">{"// Jay, narrating"}</h3>
           {narration.slice(0, narrationVisible).map((n, i) => (
@@ -233,8 +231,6 @@ function PhaseContent({
     const title = PHASES.find((p) => p.key === phase)?.title ?? 'this section';
     return streaming ? <AwaitingSection title={title} /> : null;
   }
-  if (!payload) return null;
-
   switch (phase) {
     case 'scope':
       return (

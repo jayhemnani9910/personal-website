@@ -1,15 +1,12 @@
 /**
  * Copy and structured data for the v4 home page (see docs/design/portfolio-home).
  * Every count that can drift from the real content (project count, MCP tool
- * count, essay count, years of experience) arrives as a function argument
- * computed at build time, never a literal baked into this file.
+ * count, essay count) arrives as a function argument computed at build time,
+ * never a literal baked into this file.
  *
- * One claim from the design export was dropped because nothing in the repo
- * backs it: the "project 19" aside in the cube-scramble copy (no such project
- * exists). It does not survive here. The "4 YRS" experience chip, previously
- * dropped for the same reason, is now computable: src/lib/experience.ts sums
- * the role spans in resume.ts, so it arrives here the same way the other
- * counts do.
+ * Two claims from the design export were dropped because nothing in the repo
+ * backs them: the "project 19" aside in the cube-scramble copy (no such project
+ * exists) and the "4 YRS" experience chip.
  */
 import type { Route } from "next";
 

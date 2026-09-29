@@ -10,9 +10,8 @@ import { useTheme } from "@/context/ThemeContext";
 const VERTEX_SHADER = "attribute vec2 p;void main(){gl_Position=vec4(p,0.,1.);}";
 
 // Copied verbatim from the design export (fragment shader source only).
-const FRAGMENT_SHADER = `precision mediump float;uniform vec2 r;uniform float t;uniform vec2 m;uniform vec3 c;uniform float s;
+const FRAGMENT_SHADER = `precision mediump float;uniform vec2 r;uniform float t;uniform vec2 m;uniform vec3 c;
 float h(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}
-float n(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);return mix(mix(h(i),h(i+vec2(1,0)),f.x),mix(h(i+vec2(0,1)),h(i+vec2(1,1)),f.x),f.y);}
 void main(){vec2 uv=gl_FragCoord.xy/r;float ar=r.x/r.y;vec2 p=vec2(uv.x*ar,uv.y);
 vec2 mm=vec2(m.x/r.x*ar,1.-m.y/r.y);
 vec2 b1=vec2(.25*ar+.12*sin(t*.07),.7+.08*cos(t*.05))+(mm-vec2(.5*ar,.5))*.06;
@@ -76,7 +75,6 @@ export function GlBackdrop() {
     const uT = gl.getUniformLocation(program, "t");
     const uM = gl.getUniformLocation(program, "m");
     const uC = gl.getUniformLocation(program, "c");
-    const uS = gl.getUniformLocation(program, "s");
 
     gl.enable(gl.BLEND);
     gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
@@ -112,7 +110,6 @@ export function GlBackdrop() {
       gl.uniform2f(uM, smx * dpr, smy * dpr);
       const col = themeRef.current === "dark" ? [1, 1, 1] : [0.1, 0.1, 0.12];
       gl.uniform3f(uC, col[0], col[1], col[2]);
-      gl.uniform1f(uS, dpr);
       gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
       rafId = requestAnimationFrame(draw);
     };

@@ -513,7 +513,7 @@ export function ProjectDetail({
                 <h2 className={`${MONO} text-[length:var(--tr-t-mono-sm)] tracking-[.1em] text-tr-ok`}>✓ LEARNED</h2>
                 <ol className="list-none">
                   {learnings.map((l, i) => {
-                    const text = typeof l === "string" ? l : l.insight || l.learning || l.lesson || l.title || "";
+                    const text = typeof l === "string" ? l : l.insight || l.learning || l.lesson || "";
                     const desc = typeof l === "object" ? l.description || l.detail : undefined;
                     return (
                       <li key={i} className="border-t border-tr-hairline py-[.8rem]">
