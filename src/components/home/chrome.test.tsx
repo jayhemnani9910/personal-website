@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { act, render, screen, within, fireEvent } from "@testing-library/react";
+import { act, render, screen, waitFor, within, fireEvent } from "@testing-library/react";
 import type { NavItem } from "@/data/home";
 import { SECTIONS } from "@/data/home";
 
@@ -33,6 +33,7 @@ vi.mock("@/hooks/usePrefersReducedMotion", () => ({
 import { HomeHeader } from "./HomeHeader";
 import { SectionRail } from "./SectionRail";
 import { RevealSection } from "./RevealSection";
+import { MotionProvider } from "@/components/motion/MotionProvider";
 import { useScrollProgress, useScrolled } from "./useScrollState";
 
 afterEach(() => {
@@ -110,15 +111,36 @@ describe("RevealSection", () => {
     expect(document.getElementById("brief")?.getAttribute("aria-labelledby")).toBe("brief-h");
   });
 
-  it("renders a plain div under reduced motion, children still present", () => {
+  it("renders a plain div under reduced motion, children still present", async () => {
     mockReducedMotion.mockReturnValue(true);
     render(
-      <RevealSection className="reduced-marker">
-        <p>reduced content</p>
-      </RevealSection>
+      <MotionProvider>
+        <RevealSection className="reduced-marker">
+          <p>reduced content</p>
+        </RevealSection>
+      </MotionProvider>
     );
-    expect(document.querySelector(".reduced-marker")?.tagName.toLowerCase()).toBe("div");
+    const wrapper = document.querySelector<HTMLElement>(".reduced-marker");
+    expect(wrapper?.tagName.toLowerCase()).toBe("div");
     expect(screen.getByText("reduced content")).toBeDefined();
+    // Shown at once, with no scroll into view (the observer stub never fires).
+    await waitFor(() => expect(wrapper?.style.opacity).not.toBe("0"));
+    expect(wrapper?.style.transform).not.toBe("translateY(28px)");
+  });
+
+  it("keeps the section hidden until it scrolls into view when motion is allowed", async () => {
+    render(
+      <MotionProvider>
+        <RevealSection className="animated-marker">
+          <p>animated content</p>
+        </RevealSection>
+      </MotionProvider>
+    );
+    const wrapper = document.querySelector<HTMLElement>(".animated-marker");
+    // Give a wrongly started animation the same chance the reduced one gets.
+    await act(() => new Promise((r) => setTimeout(r, 50)));
+    expect(wrapper?.style.opacity).toBe("0");
+    expect(wrapper?.style.transform).toBe("translateY(28px)");
   });
 });
 
