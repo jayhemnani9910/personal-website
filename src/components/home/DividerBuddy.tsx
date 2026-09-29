@@ -33,8 +33,8 @@ export function DividerBuddyProvider({ children }: { children: ReactNode }) {
 }
 
 /**
- * Buddy standing on one section's divider, drawn only while that section is
- * the one being read.
+ * Buddy standing on one section's divider, drawn only while that divider is
+ * the last rule to enter the viewport.
  *
  * `bottom-full` puts its feet exactly on the parent's top edge, which is the
  * rule, so nothing here has to know a row height or measure an offset. It also
