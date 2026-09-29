@@ -357,7 +357,7 @@ export const METHOD: MethodRule[] = [
   {
     n: "04",
     rule: "Publish the gap.",
-    why: "82.68% in the paper; 74.46% in the committed notebook. Both numbers are on the résumé.",
+    why: "82.68% in the paper; 73.59% in the committed notebook. Both numbers are on the résumé.",
     from: "Diabetes stacking, IEEE 2021",
     href: "/projects/diabetes-stacking",
   },

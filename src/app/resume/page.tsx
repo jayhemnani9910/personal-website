@@ -29,7 +29,7 @@ const TWO_COL = "lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]";
 const H2 = "text-[length:var(--tr-t-h2)] leading-[var(--tr-lh-h2)] tracking-[-.025em] font-medium text-tr-text";
 
 // A publication's description states the published-vs-reproduced gap inline
-// (e.g. "82.68% accuracy as published; ... reproduces 74.46% ..."). Pulling
+// (e.g. "82.68% accuracy as published; ... reproduces 73.59% ..."). Pulling
 // both numbers out programmatically, rather than hardcoding them, keeps the
 // callout tied to whatever resume.ts actually says.
 function parsePublishedVsReproduced(description?: string) {
