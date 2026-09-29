@@ -29,7 +29,9 @@ const securityHeaders = [
   { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=()" },
   {
     key: "Strict-Transport-Security",
-    value: "max-age=63072000; includeSubDomains; preload",
+    // No "preload": the domain is not on the preload list, and getting off it
+    // again takes months.
+    value: "max-age=63072000; includeSubDomains",
   },
   { key: "Content-Security-Policy-Report-Only", value: cspReportOnly },
   { key: "Reporting-Endpoints", value: 'csp="/api/csp-report"' },

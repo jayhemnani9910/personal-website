@@ -70,7 +70,7 @@ export const FEATURED: FeaturedProject[] = [
     tech: ["YOLOv8", "ByteTrack", "DVC", "MLflow", "FastAPI"],
     arrived: "Match footage and a question: can we track every player and turn it into tactics?",
     did: "Detection → multi-object tracking → tactical graph, wired as one reproducible DVC stage (analyze_frames) with MLflow tracking and a FastAPI service.",
-    changed: "22 fps end to end. Reproducible from raw video with one command.",
+    changed: "22 fps end to end. Reproducible from extracted frames with one command.",
   },
   {
     id: "revolu-idea",
@@ -90,7 +90,7 @@ export const FEATURED: FeaturedProject[] = [
     tech: ["Kafka", "Airflow", "TimescaleDB", "Chart.js"],
     arrived: "Tick data nobody could query and a dashboard everyone wanted.",
     did: "Kafka ingestion, 23 Airflow DAGs, a TimescaleDB star schema, a Chart.js dashboard.",
-    changed: "Real-time multi-symbol OHLC from tick to chart; a warehouse a BI tool can join.",
+    changed: "Multi-symbol OHLC from ingest to a Chart.js dashboard; a warehouse a BI tool can join.",
   },
   {
     id: "webmcp-portfolio",
