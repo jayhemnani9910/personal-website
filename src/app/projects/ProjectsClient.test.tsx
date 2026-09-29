@@ -50,9 +50,13 @@ describe("ProjectsClient: the work index table", () => {
     expect(screen.getByText("Flagship Pipeline")).toBeDefined();
     expect(screen.queryByText("Old Coursework")).toBeNull();
 
-    fireEvent.change(box, { target: { value: "php" } }); // tech only
-    expect(screen.getByText("Another Archive Piece")).toBeDefined();
+    fireEvent.change(box, { target: { value: "yolo" } }); // tech only
+    expect(screen.getByText("Second Featured")).toBeDefined();
     expect(screen.queryByText("Flagship Pipeline")).toBeNull();
+
+    fireEvent.change(box, { target: { value: "python" } }); // tech only
+    expect(screen.getByText("Flagship Pipeline")).toBeDefined();
+    expect(screen.queryByText("Second Featured")).toBeNull();
   });
 
   it("reports an empty result rather than rendering an empty table", () => {
