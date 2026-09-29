@@ -7,6 +7,7 @@ import { FEATURED, PRESETS, COPY } from "@/data/home";
 import type { DecomposeOutput } from "@/data/home";
 import { BRIEF_MAX, closestPreset, findPreset } from "@/lib/presets";
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
+import { useShellIntent } from "@/lib/shell-intent";
 
 type Engine = "idle" | "thinking" | "preset" | "model" | "offline";
 
@@ -122,6 +123,7 @@ export function Decomposer() {
     window.addEventListener("v4:brief", onExternalBrief);
     return () => window.removeEventListener("v4:brief", onExternalBrief);
   }, []);
+  useShellIntent("brief"); // a `brief` typed in the shell on another page
 
   const run = () => {
     const text = brief.trim() || PRESETS[0].text;

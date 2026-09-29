@@ -11,6 +11,7 @@ import { SITE_CONFIG } from "@/../content/site";
 import { WEBMCP_TOOL_COUNT } from "@/lib/webmcp-tools";
 import { scrollBehavior } from "@/lib/scroll";
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
+import { dispatchShellIntent, saveShellIntent, type ShellIntent } from "@/lib/shell-intent";
 
 // All available commands for tab-completion. `exit` is not advertised in
 // `help` or the chip row (the design has no such command), but it is kept
@@ -100,7 +101,9 @@ export function TerminalOverlay({ projectCount }: { projectCount: number }) {
                 closeTerminal();
                 return;
             }
-            if (e.key === "Tab") {
+            // defaultPrevented: the input already used this Tab to complete a
+            // command, so focus must stay where it is.
+            if (e.key === "Tab" && !e.defaultPrevented) {
                 const focusable = getFocusable();
                 if (focusable.length === 0) return;
                 const first = focusable[0];
@@ -126,10 +129,25 @@ export function TerminalOverlay({ projectCount }: { projectCount: number }) {
         bottomRef.current?.scrollIntoView({ behavior: scrollBehavior() });
     }, [history]);
 
+    // `brief` and `cube` act on the home page. On / its listeners are live, so
+    // the event goes straight to them; from anywhere else the intent is stored
+    // and / takes it on mount (see shell-intent.ts).
+    const runOnHome = useCallback((intent: ShellIntent, hash: string) => {
+        if (window.location.pathname === "/") {
+            dispatchShellIntent(intent);
+            window.location.hash = hash;
+        } else {
+            saveShellIntent(intent);
+            router.push(`/#${hash}`);
+        }
+    }, [router]);
+
     const handleCommand = useCallback((raw: string) => {
         const trimmed = raw.trim();
+        // An empty line echoes an empty prompt, as a shell does. Only `clear`
+        // wipes the log.
         if (!trimmed) {
-            setHistory([]);
+            setHistory((prev) => [...prev, line("", "text", "❯", "faint")]);
             setInput("");
             return;
         }
@@ -169,11 +187,7 @@ export function TerminalOverlay({ projectCount }: { projectCount: number }) {
                 }
                 out = [ok("Running the decomposer up top.")];
                 closeTerminal();
-                if (window.location.pathname !== "/") router.push("/");
-                window.setTimeout(() => {
-                    window.dispatchEvent(new CustomEvent("v4:brief", { detail: text }));
-                    window.location.hash = "brief";
-                }, 60);
+                runOnHome({ kind: "brief", text }, "brief");
                 break;
             }
             case "whoami":
@@ -186,7 +200,7 @@ export function TerminalOverlay({ projectCount }: { projectCount: number }) {
                 const more = projectCount - FEATURED.length;
                 out = [
                     ...FEATURED.map((p) => info(`${p.num}  ${p.title.padEnd(26)} ${p.tech.slice(0, 3).join(", ")}`)),
-                    line(`… ${more} more at /work`),
+                    line(`… ${more} more at /projects`),
                 ];
                 break;
             }
@@ -218,11 +232,7 @@ export function TerminalOverlay({ projectCount }: { projectCount: number }) {
             case "cube":
                 out = [ok("Scrambling the cube in section 03.")];
                 closeTerminal();
-                if (window.location.pathname !== "/") router.push("/");
-                window.setTimeout(() => {
-                    window.dispatchEvent(new Event("v4:cube"));
-                    window.location.hash = "method";
-                }, 60);
+                runOnHome({ kind: "cube" }, "method");
                 break;
             case "joke":
                 out = [line("a data pipeline walks into a bar. the bartender says: we don't serve your type here. the pipeline casts itself to string.", "text", "☺", "accent")];
@@ -243,7 +253,7 @@ export function TerminalOverlay({ projectCount }: { projectCount: number }) {
 
         setHistory((prev) => [...prev, echo, ...out]);
         setInput("");
-    }, [closeTerminal, router, projectCount, theme, toggleTheme]);
+    }, [closeTerminal, runOnHome, projectCount, theme, toggleTheme]);
 
     const handleKeyDown = (e: React.KeyboardEvent) => {
         if (e.key === "Enter") {
@@ -275,11 +285,14 @@ export function TerminalOverlay({ projectCount }: { projectCount: number }) {
                 historyIndexRef.current = newIndex;
                 setInput(cmds[newIndex]);
             }
-        } else if (e.key === "Tab") {
-            e.preventDefault();
-            if (!input) return;
+        } else if (e.key === "Tab" && !e.shiftKey && input) {
+            // Only a Tab that completes something stays in the input. Any
+            // other Tab (or Shift+Tab) moves focus as usual.
             const match = COMMANDS.find((c) => c.startsWith(input.toLowerCase()));
-            if (match) setInput(match);
+            if (match && match !== input) {
+                e.preventDefault();
+                setInput(match);
+            }
         }
     };
 
@@ -299,6 +312,10 @@ export function TerminalOverlay({ projectCount }: { projectCount: number }) {
                         role="dialog"
                         aria-modal="true"
                         aria-label="jay's shell"
+                        // Lenis (home page smooth scroll) takes every wheel event
+                        // unless an ancestor opts out, so without this the page
+                        // behind the modal scrolled instead of the log.
+                        data-lenis-prevent
                         className="w-[min(880px,100%)] overflow-hidden rounded-[var(--tr-r-xl)] border border-tr-hairline bg-tr-surface-1 shadow-[var(--tr-shadow-modal)]"
                         onClick={(e) => e.stopPropagation()}
                     >
@@ -340,18 +357,23 @@ export function TerminalOverlay({ projectCount }: { projectCount: number }) {
                             mono tokens (12/11.5/11/10.5) matches the comp's
                             body size, and it has exactly one call site. */}
                         <div
-                            className="h-[280px] overflow-y-auto p-4 font-mono text-[12.5px] leading-[var(--tr-lh-shell)]"
+                            className="h-[280px] overflow-y-auto overscroll-contain p-4 font-mono text-[12.5px] leading-[var(--tr-lh-shell)]"
                             onClick={() => inputRef.current?.focus()}
                         >
-                            {history.map((entry, i) => (
-                                <div
-                                    key={i}
-                                    className={`grid grid-cols-[1.4rem_minmax(0,1fr)] gap-[.4rem] whitespace-pre-wrap ${TEXT_COLOR[entry.color]}`}
-                                >
-                                    <span className={TEXT_COLOR[entry.iconColor]}>{entry.icon}</span>
-                                    <span>{entry.text}</span>
-                                </div>
-                            ))}
+                            {/* role="log" (polite by default) so a screen reader
+                                hears each command's output. The input row sits
+                                outside it. */}
+                            <div role="log" aria-label="Shell output">
+                                {history.map((entry, i) => (
+                                    <div
+                                        key={i}
+                                        className={`grid grid-cols-[1.4rem_minmax(0,1fr)] gap-[.4rem] whitespace-pre-wrap ${TEXT_COLOR[entry.color]}`}
+                                    >
+                                        <span className={TEXT_COLOR[entry.iconColor]}>{entry.icon}</span>
+                                        <span>{entry.text}</span>
+                                    </div>
+                                ))}
+                            </div>
 
                             <div className="grid grid-cols-[1.4rem_minmax(0,1fr)] items-center gap-[.4rem]">
                                 <span className="text-tr-accent-ink">❯</span>
