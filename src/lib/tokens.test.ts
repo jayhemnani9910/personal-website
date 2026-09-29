@@ -150,7 +150,8 @@ describe("type scale is actually applied (Tailwind silently drops the un-hinted 
   // The build, lint and type check were all green throughout.
   //
   // Fails when a directory under src/ is caught by such a pattern unless
-  // globals.css explicitly re-includes it with @source.
+  // globals.css explicitly re-includes it with @source. A leading `**/` matches
+  // at any depth too, so `**/resume/` counts as bare.
   it("no source directory is hidden from Tailwind by a bare .gitignore pattern", () => {
     const ROOT = resolve(SRC, "..");
     const ignoreFile = join(ROOT, ".gitignore");
@@ -159,7 +160,7 @@ describe("type scale is actually applied (Tailwind silently drops the un-hinted 
       .split("\n")
       .map((l) => l.trim())
       .filter((l) => l && !l.startsWith("#") && !l.startsWith("!") && !l.startsWith("/"))
-      .map((l) => l.replace(/\/$/, ""))
+      .map((l) => l.replace(/^\*\*\//, "").replace(/\/$/, ""))
       .filter((l) => !l.includes("/") && !l.includes("*"));
 
     function dirsUnder(dir: string): string[] {
@@ -169,14 +170,12 @@ describe("type scale is actually applied (Tailwind silently drops the un-hinted 
     }
 
     // `CSS` has comments stripped, so this only sees real @source directives.
-    const reIncluded = CSS.match(/@source\s+"[^"]+"/g) ?? [];
+    // Their paths are relative to globals.css, so resolve them from src/app.
+    const reIncluded = [...CSS.matchAll(/@source\s+(["'])(.+?)\1/g)].map((m) => resolve(SRC, "app", m[2]));
 
     const offenders = dirsUnder(SRC)
       .filter((d) => bareDirPatterns.includes(d.split("/").pop()!))
-      .filter((d) => {
-        const rel = d.slice(SRC.length + 1); // e.g. "app/resume"
-        return !reIncluded.some((s) => s.includes(rel));
-      })
+      .filter((d) => !reIncluded.some((p) => d === p || d.startsWith(p + "/")))
       .map((d) => d.replace(ROOT, "."));
 
     expect(

@@ -1,7 +1,20 @@
+import { readFileSync, readdirSync } from "node:fs";
+import { join } from "node:path";
+import matter from "gray-matter";
 import { describe, expect, it } from "vitest";
 import { render, screen, within } from "@testing-library/react";
-import { getAllPosts, getAllProjects } from "@/lib/content";
+import { getAllProjects } from "@/lib/content";
 import WritingPage from "./page";
+
+// The published posts counted from the files, not through the loader the page
+// renders from: a post the loader drops (a file name getPost refuses as a slug,
+// say) would otherwise vanish from the page and from the expected count at once.
+function publishedPostFiles(): string[] {
+  const dir = join(process.cwd(), "content", "blog");
+  return readdirSync(dir)
+    .filter((f) => f.endsWith(".mdx"))
+    .filter((f) => matter(readFileSync(join(dir, f), "utf8")).data.draft !== true);
+}
 
 // WritingPage is an async Server Component: it must be awaited to get the
 // element before render(), same as any other async function that returns JSX.
@@ -15,13 +28,14 @@ describe("WritingPage", () => {
   });
 
   it("renders one row for every published post", async () => {
-    const posts = await getAllPosts();
+    const files = publishedPostFiles();
+    expect(files.length).toBeGreaterThan(0);
     render(await WritingPage());
 
     const postLinks = screen
       .getAllByRole("link")
       .filter((a) => a.getAttribute("href")?.startsWith("/blog/"));
-    expect(postLinks).toHaveLength(posts.length);
+    expect(postLinks).toHaveLength(files.length);
   });
 
   it("renders the deep-dive cards plus the index card", async () => {

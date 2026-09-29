@@ -65,3 +65,14 @@ both palettes, and pins all six of its ratios. Changing either value without
 updating the recorded numbers fails the suite. The same file still asserts the
 sub-AA list is exactly the fifteen pairs 0015 signed off, so adding a sixteenth
 by accident also fails.
+
+## Notes
+
+The rule in the Decision section was not held: the 2026-09-29 audit found the
+fill `accent` used as a text colour in about 75 places, at 2.84:1 in light.
+[ADR 0017](0017-lift-the-palette-to-wcag-aa.md) moved them to `accent-ink`,
+drew the focus ring in `accent-ink`, and added a test that fails on any
+`text-tr-accent` in `src/`. The same record lifted the rest of the palette to
+AA, so the fifteen-pair sub-AA list the Compliance section refers to no longer
+exists; `accent-ink` is now held to the same 4.5:1 floor as every other text
+token rather than to pinned ratios.
