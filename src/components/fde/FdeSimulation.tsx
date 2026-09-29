@@ -368,8 +368,7 @@ function PhaseContent({
                   <a
                     className={`${MONO} border-b border-dashed border-tr-hairline pb-px text-[length:var(--tr-t-mono-sm)] text-tr-text no-underline transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] hover:border-tr-accent hover:text-tr-accent`}
                     href={r.link.href}
-                    target="_blank"
-                    rel="noreferrer"
+                    {...(r.link.href.startsWith("http") ? { target: "_blank", rel: "noreferrer" } : {})}
                   >
                     ↗ {r.link.label}
                   </a>

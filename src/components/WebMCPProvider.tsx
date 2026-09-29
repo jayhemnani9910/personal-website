@@ -1,31 +1,38 @@
 "use client";
 
 import { useEffect } from "react";
-import { registerWebMCPTools, unregisterWebMCPTools, isWebMCPAvailable } from "@/lib/webmcp";
-import type { SiteData } from "@/lib/webmcp";
-
-interface WebMCPProviderProps {
-  data: SiteData;
-}
 
 /**
- * Client component that initializes WebMCP tools on mount.
- * Receives pre-loaded site data from a server component parent.
- *
- * WebMCP (W3C standard) lets AI agents interact with the site
- * via navigator.modelContext in Chrome 146+.
+ * Registers the site's WebMCP tools when the browser has the API
+ * (document.modelContext, Chrome with the WebMCP flag on). Everything else
+ * pays nothing: the tool code and the site data are only fetched after the
+ * API is detected, and any failure is logged and leaves the page untouched.
  */
-export function WebMCPProvider({ data }: WebMCPProviderProps) {
+export function WebMCPProvider() {
   useEffect(() => {
-    if (!isWebMCPAvailable()) return;
+    if (typeof document === "undefined" || !document.modelContext) return;
+    const controller = new AbortController();
 
-    registerWebMCPTools(data);
+    (async () => {
+      try {
+        const [{ registerWebMCPTools }, res] = await Promise.all([
+          import("@/lib/webmcp"),
+          fetch("/site-data.json", { signal: controller.signal }),
+        ]);
+        if (!res.ok) throw new Error(`site-data.json ${res.status}`);
+        const data = await res.json();
+        if (controller.signal.aborted) return;
+        await registerWebMCPTools(data, controller.signal);
+      } catch (err) {
+        if (!controller.signal.aborted) {
+          console.warn("[webmcp] tools not registered:", err instanceof Error ? err.message : err);
+        }
+      }
+    })();
 
-    return () => {
-      unregisterWebMCPTools();
-    };
-  }, [data]);
+    // Aborting unregisters every tool registered with this signal.
+    return () => controller.abort();
+  }, []);
 
-  // Renders nothing — purely a side-effect component
   return null;
 }

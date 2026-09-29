@@ -91,8 +91,7 @@ export default function FDEPage() {
                   <a
                     className={`mt-auto w-fit border-b border-dashed border-tr-hairline pb-px ${MONO} text-[length:var(--tr-t-mono-sm)] text-tr-text no-underline transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] hover:border-tr-accent hover:text-tr-accent`}
                     href={p.link.href}
-                    target="_blank"
-                    rel="noreferrer"
+                    {...(p.link.href.startsWith("http") ? { target: "_blank", rel: "noreferrer" } : {})}
                   >
                     ↗ {p.link.label}
                   </a>

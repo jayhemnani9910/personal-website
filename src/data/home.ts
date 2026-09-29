@@ -99,7 +99,7 @@ export const FEATURED: FeaturedProject[] = [
     tech: ["TypeScript", "Next.js 16", "WebMCP"],
     arrived: "Could a portfolio be read by a machine as easily as by a person?",
     did: `Registered ${WEBMCP_TOOL_COUNT} tools with the WebMCP browser API: search, résumé, skills, contact, experiments, theme, mode.`,
-    changed: "An agent in Chrome 146+ reads this site without scraping it.",
+    changed: "An agent in Chrome, with the WebMCP flag on, reads this site without scraping it.",
   },
   {
     id: "biotech-accelerator",
@@ -310,7 +310,7 @@ export function buildReceipts(c: { projectCount: number; toolCount: number }): R
       n: String(c.toolCount),
       label: "MCP tools an agent can call on this page right now",
       cta: "list tools",
-      title: "navigator.modelContext",
+      title: "document.modelContext",
       note: "Registered in webmcp.ts and asserted by a test, so the count can't drift from the code.",
       lines: toolLines(),
     },

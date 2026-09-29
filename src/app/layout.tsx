@@ -3,7 +3,7 @@ import { Instrument_Sans, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ClientLayout } from "@/components/ClientLayout";
 import { ThemeProvider } from "@/context/ThemeContext";
-import { WebMCPLoader } from "@/components/WebMCPLoader";
+import { WebMCPProvider } from "@/components/WebMCPProvider";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { SITE_CONFIG } from "@/../content/site";
@@ -107,11 +107,10 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  // The shell overlay's `ls` command derives its "N more at /work" line from
-  // the real project count rather than a hardcoded number (see
-  // TerminalOverlay.tsx). It is a client component mounted on every route, so
-  // it cannot call the fs-backed getAllProjects() itself; this is the same
-  // server-fetch-then-prop pattern WebMCPLoader below already uses.
+  // The shell overlay's `ls` command derives its "N more" line from the real
+  // project count rather than a hardcoded number (see TerminalOverlay.tsx). It
+  // is a client component mounted on every route, so it cannot call the
+  // fs-backed getAllProjects() itself; the count comes down as a prop.
   const projectCount = (await getAllProjects()).length;
 
   return (
@@ -150,7 +149,7 @@ export default async function RootLayout({
       >
         <ThemeProvider>
           <ClientLayout projectCount={projectCount}>{children}</ClientLayout>
-          <WebMCPLoader />
+          <WebMCPProvider />
           <Analytics />
           <SpeedInsights />
         </ThemeProvider>
