@@ -86,9 +86,9 @@ export const FEATURED: FeaturedProject[] = [
     num: "03",
     title: "Stock Data Platform",
     tags: ["data", "streaming", "warehouse", "dashboard"],
-    tech: ["Kafka", "Airflow", "TimescaleDB", "Dash"],
+    tech: ["Kafka", "Airflow", "TimescaleDB", "Chart.js"],
     arrived: "Tick data nobody could query and a dashboard everyone wanted.",
-    did: "Kafka ingestion, 18 Airflow DAGs, a TimescaleDB star schema, live candlesticks.",
+    did: "Kafka ingestion, 23 Airflow DAGs, a TimescaleDB star schema, a Chart.js dashboard.",
     changed: "Real-time multi-symbol OHLC from tick to chart; a warehouse a BI tool can join.",
   },
   {
