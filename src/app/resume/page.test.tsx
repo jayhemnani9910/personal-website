@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { fireEvent, render, screen, within } from "@testing-library/react";
-import { RESUME } from "@/data/resume";
+import { RESUME, companyAnchor } from "@/data/resume";
 import AboutPage from "./page";
 
 const roleCount = RESUME.experience.reduce((n, c) => n + c.roles.length, 0);
@@ -17,6 +17,15 @@ describe("AboutPage", () => {
     render(<AboutPage />);
     const section = screen.getByRole("heading", { name: "Experience" }).closest("section")!;
     expect(section.querySelectorAll("ol > li")).toHaveLength(roleCount);
+  });
+
+  it("gives each company's first role row an anchor the home receipts can link to", () => {
+    const { container } = render(<AboutPage />);
+    for (const company of RESUME.experience) {
+      const row = container.querySelector(`#${companyAnchor(company.name)}`);
+      expect(row?.textContent).toContain(company.name);
+    }
+    expect(companyAnchor("Cactus Creatives Pvt. Ltd.")).toBe("cactus-creatives-pvt-ltd");
   });
 
   it("switches the shown skill chips when a different stack pill is clicked", () => {

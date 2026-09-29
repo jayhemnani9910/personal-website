@@ -95,6 +95,17 @@ describe("getAllProjects", () => {
       }
     }
   });
+
+  // The page's meta description is `description` when set, else the summary.
+  // Search results cut a longer one mid-sentence, and a very short one is
+  // padded out by the engine with whatever text it picks from the page.
+  it("gives every project a 70-160 character meta description", async () => {
+    for (const p of await getAllProjects()) {
+      const meta = p.description ?? p.summary;
+      expect(meta.length, `${p.id}: ${meta.length} characters`).toBeGreaterThanOrEqual(70);
+      expect(meta.length, `${p.id}: ${meta.length} characters`).toBeLessThanOrEqual(160);
+    }
+  });
 });
 
 describe("content schemas", () => {

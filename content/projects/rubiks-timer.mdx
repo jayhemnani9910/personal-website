@@ -1,9 +1,10 @@
 ---
 title: "Rubik's Cube Timer & Visualizer"
 summary: "A keyboard-first speedcubing app in vanilla JS: a Three.js 3D cube, WCA-style scrambles for 2x2 to 7x7, an inspection timer with +2/DNF, full session stats (Ao5/Ao12/Ao100), and a C++ solver compiled to WebAssembly, all offline-capable as a PWA."
+description: "A keyboard-first speedcubing PWA in vanilla JS: a Three.js 3D cube, WCA-style scrambles for 2x2 to 7x7, session stats, and a WebAssembly solver."
 role: "Builder"
 period: "2026"
-domain: "Web / Frontend"
+domain: "Web and tools"
 tags: ["javascript", "three-js", "webassembly", "pwa", "speedcubing"]
 tech: ["JavaScript", "Three.js", "WebAssembly", "Chart.js", "Vite", "PWA"]
 github: "https://github.com/jayhemnani9910/rubiks-cube"
@@ -109,7 +110,7 @@ deepDive:
           applyScrambleToThreeCube(sequence.filter(t => !t.includes("w"))); // 3D cube
           syncPreviewFromState();
         };
-      explanation: "A scramble is generated for the selected puzzle size, then applied to two representations at once: the logical cube state used for validation and previews, and the Three.js cube the user sees. Keeping them in sync is what lets the preview and the 3D view always match the scramble."
+      explanation: "A scramble is generated for the selected puzzle size, then applied to two representations at once: the logical cube state used for validation and previews, and the Three.js cube the user sees. Keeping them in sync is what lets the preview and the 3D view match the scramble; on 4x4 and larger the 3D cube skips the wide moves (Rw, Uw and the like), so there only the preview shows the full scramble."
   metrics:
     - value: "25 modules"
       label: "vanilla-JS app"

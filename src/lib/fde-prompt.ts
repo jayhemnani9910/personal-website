@@ -178,8 +178,8 @@ export function buildGeminiBody(brief: string) {
       // Turning it off is only defensible with evidence that the answers stay
       // good, which is what the golden set exists for. Measured: p50 fell from
       // ~21.0s to ~10.5s and the golden set scored 169/170 either way, but not
-      // the same 169. One check regressed and one was fixed, so `npm run
-      // eval:fde` gates red. ADR 0012 has the detail and is still Proposed.
+      // the same 169. The golden set was re-recorded with thinking off on
+      // 2026-09-29 and ADR 0012, which has the detail, is Accepted.
       thinkingConfig: { thinkingBudget: 0 },
     },
   };

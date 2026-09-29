@@ -14,7 +14,7 @@ export type ShowcaseDemo =
       kind: "report";
       title: string;
       note: string;
-      findings: { verdict: "VERIFIED" | "CONTESTED" | "UNVERIFIED"; text: string }[];
+      findings: { verdict: "VERIFIED" | "FALSIFIED" | "UNCLEAR"; text: string }[];
       sourceUrl?: string;
     }
   | {
@@ -73,14 +73,18 @@ export const SHOWCASE_PROJECTS: Record<string, ShowcaseConfig> = {
     {
       "id": "nobel-dataintelligence",
       "title": "Nobel Data Intelligence",
-      "tech": ["Python", "PyTorch", "ProDy", "Transformers"],
-      "domain": "Computational Biology",
+      "summary": "Physics-informed deep learning for protein stability and enzyme kinetics. A tri-modal architecture fuses ProtT5 sequence embeddings, a VDOS vibrational spectrum from normal mode analysis, and ChemBERTa chemistry through learned gated attention.",
+      "tech": ["Python", "PyTorch", "ProDy", "Transformers", "RDKit", "Biopython"],
+      "tags": ["deep-learning", "molecular-biology", "pytorch", "research", "protein"],
+      "domain": "Research",
       "url": "https://jayhemnani.in/projects/nobel-dataintelligence"
     },
     {
       "id": "biotech-accelerator",
       "title": "Biotech Accelerator",
-      "tech": ["Python", "LangGraph", "ProDy", "httpx"],
+      "summary": "Multi-agent AI system for biotech research that routes a query through protein databases, literature, structural analysis, and chemistry, then proposes experiments worth running next.",
+      "tech": ["Python", "LangGraph", "ProDy", "httpx", "Rich", "Docker"],
+      "tags": ["langgraph", "agents", "bioinformatics", "research"],
       "domain": "AI/ML",
       "url": "https://jayhemnani.in/projects/biotech-accelerator"
     }
@@ -96,9 +100,9 @@ export const SHOWCASE_PROJECTS: Record<string, ShowcaseConfig> = {
       note: "Static sample showing the shape of a CAG run, verdict-tagged findings. A real run grounds each claim in web citations and evidence objects.",
       findings: [
         { verdict: "VERIFIED", text: "Productivity impact is not uniform; it varies by role, tooling, and meeting load." },
-        { verdict: "CONTESTED", text: "Fully remote always increases productivity compared to hybrid arrangements." },
+        { verdict: "FALSIFIED", text: "Fully remote always increases productivity compared to hybrid arrangements." },
         { verdict: "VERIFIED", text: "Strong async practices reduce coordination overhead for distributed teams." },
-        { verdict: "UNVERIFIED", text: "A single policy works well for every team without exceptions." },
+        { verdict: "UNCLEAR", text: "A single policy works well for every team without exceptions." },
       ],
       sourceUrl: "https://github.com/jayhemnani9910/revolu-idea",
     },

@@ -1,10 +1,11 @@
 ---
 title: "Wikipedia Analysis"
 summary: "URL → scrape → tokenize → top frequent words with visuals."
+description: "A Flask app that scrapes a Wikipedia article, filters out stopwords, and charts its most frequent words."
 role: "Concept"
 domain: "Student work"
 tags: ["python", "flask", "nlp", "web"]
-tech: ["Python", "Flask", "BeautifulSoup", "HTML/CSS"]
+tech: ["Python", "Flask", "BeautifulSoup", "HTML", "CSS"]
 challenge: "Quickly summarize long articles."
 solution:
   - "BeautifulSoup to scrape; tokenization + stopword removal."
@@ -52,16 +53,20 @@ deepDive:
 
   keyDecisions:
     - decision: "Stateless Processing"
-      rationale: "Chose not to persist analysis results in a database. Each request is processed fresh, eliminating maintenance overhead and allowing the tool to remain lightweight and deployable anywhere. This tradeoff favors simplicity over features like historical analysis."
+      rationale: "Chose not to persist analysis results in a database. Each request is processed fresh, eliminating maintenance overhead and allowing the tool to remain lightweight and deployable anywhere."
+      tradeoff: "No history: every analysis starts from scratch, so past results cannot be revisited or compared."
 
     - decision: "BeautifulSoup over API"
       rationale: "Wikipedia offers an official API, but BeautifulSoup on raw HTML provided more control over content extraction, specifically the ability to exclude specific sections like references and external links that would skew frequency analysis with non-article terms."
+      tradeoff: "Tied to Wikipedia's HTML layout: a markup change can break the selectors, where the API would stay stable."
 
     - decision: "Extended Stopword List"
       rationale: "Standard NLTK stopwords weren't sufficient for Wikipedia content. Added domain-specific stopwords like 'wikipedia', 'cite', 'reference', 'retrieved', 'archive' to filter out meta-content that appears frequently but doesn't relate to article topics."
+      tradeoff: "A hand-kept list: new meta terms have to be noticed and added by hand."
 
     - decision: "Top-N Frequency Display"
       rationale: "Limited visualization to top 20-30 terms rather than showing all unique words. This decision focuses attention on the most significant themes while keeping charts readable. Long-tail words (appearing 1-2 times) add noise without insight."
+      tradeoff: "A rare but telling word never reaches the chart."
 
   codeSnippets:
     - label: "Web Scraping with BeautifulSoup"
@@ -124,18 +129,18 @@ deepDive:
 
   learnings:
     - lesson: "Domain-Specific Text Processing"
-      insight: "Generic NLP techniques require customization for specific domains. Wikipedia articles contain structural elements (citations, infoboxes, navigation) that must be filtered out. Building domain-aware stopword lists improved result quality dramatically, reducing noise from metadata terms that would otherwise dominate frequency counts."
+      detail: "Generic NLP techniques require customization for specific domains. Wikipedia articles contain structural elements (citations, infoboxes, navigation) that must be filtered out. Building domain-aware stopword lists improved result quality dramatically, reducing noise from metadata terms that would otherwise dominate frequency counts."
 
     - lesson: "HTML Structure Fragility"
-      insight: "Web scraping is brittle. Wikipedia's HTML structure can change, breaking CSS selectors. The scraper needed defensive programming, checking if elements exist before accessing them, handling various page types (disambiguation, redirect, standard), and gracefully degrading when structure doesn't match expectations."
+      detail: "Web scraping is brittle. Wikipedia's HTML structure can change, breaking CSS selectors. The scraper needed defensive programming, checking if elements exist before accessing them, handling various page types (disambiguation, redirect, standard), and gracefully degrading when structure doesn't match expectations."
 
     - lesson: "Insight vs. Accuracy Tradeoff"
-      insight: "Perfect linguistic analysis wasn't the goal, quick insights were. Chose simple tokenization over advanced NLP (stemming, lemmatization, named entity recognition) because speed and simplicity outweighed marginal accuracy gains. Sometimes 80% accuracy in milliseconds beats 95% accuracy in seconds."
+      detail: "Perfect linguistic analysis wasn't the goal, quick insights were. Chose simple tokenization over advanced NLP (stemming, lemmatization, named entity recognition) because speed and simplicity outweighed marginal accuracy gains. Sometimes 80% accuracy in milliseconds beats 95% accuracy in seconds."
 
     - lesson: "Visualization Drives Understanding"
-      insight: "Raw frequency lists are hard to interpret. Visual charts transformed data into immediate understanding, users could glance at a bar chart and instantly grasp article themes. The visualization layer turned out to be as important as the analysis itself for delivering value."
+      detail: "Raw frequency lists are hard to interpret. Visual charts transformed data into immediate understanding, users could glance at a bar chart and instantly grasp article themes. The visualization layer turned out to be as important as the analysis itself for delivering value."
 
     - lesson: "Scale Considerations"
-      insight: "Processing individual Wikipedia articles works well, but the architecture doesn't scale to bulk analysis of hundreds of articles. If revisiting this project, I'd add caching, batch processing capabilities, and potentially move to Wikipedia dumps for large-scale corpus analysis rather than real-time scraping."
+      detail: "Processing individual Wikipedia articles works well, but the architecture doesn't scale to bulk analysis of hundreds of articles. If revisiting this project, I'd add caching, batch processing capabilities, and potentially move to Wikipedia dumps for large-scale corpus analysis rather than real-time scraping."
 ---
-URL → scrape → tokenize → top frequent words with visuals.
+A small Flask app that takes a Wikipedia URL, scrapes the article text with BeautifulSoup, filters out stopwords, and charts the most frequent words. It is stateless: each request is scraped and counted fresh, with no database behind it. The point is a quick read of what an article emphasizes before reading all of it.

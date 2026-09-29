@@ -108,7 +108,7 @@ export function ProjectDetail({
   };
   // links.code stands in when there is no top-level github (basic-banking).
   linkCell("CODE", project.github ?? links.code, "GitHub ↗");
-  linkCell("DEMO", links.demo, "Live ↗");
+  linkCell("DEMO", links.demo, "Demo ↗");
   linkCell("SITE", links.site, "Site ↗");
   linkCell("PAPER", links.paper, "IEEE ↗");
 
@@ -245,7 +245,7 @@ export function ProjectDetail({
                 const verdictClass =
                   f.verdict === "VERIFIED"
                     ? "text-tr-ok"
-                    : f.verdict === "CONTESTED"
+                    : f.verdict === "FALSIFIED"
                       ? "text-tr-warn"
                       : "text-tr-text-faint";
                 return (

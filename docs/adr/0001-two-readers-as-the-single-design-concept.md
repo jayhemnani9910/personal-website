@@ -3,7 +3,7 @@
 - **Status:** Accepted
 - **Date:** 2026-07-16
 - **Commit:** `60cc059` Redesign v3: dark cinematic "TWO READERS" rebuild
-- **Amended by:** [ADR 0015](0015-match-the-design-palette-and-drop-below-aa.md) (the theme-default sentence below; see the note where it appears)
+- **Amended by:** [ADR 0014](0014-adopt-the-v4-home-as-a-scoped-island.md) (the typefaces, the ember accent and the no-shadow rule were replaced by the v4 design), [ADR 0015](0015-match-the-design-palette-and-drop-below-aa.md) (the theme-default sentence below; see the note where it appears)
 
 ## Context
 

@@ -1,9 +1,10 @@
 ---
 title: "ReceiptLens"
 summary: "An offline iPhone prototype that reads receipts, documents, and screenshots by running the MiniCPM-V 4.6 vision-language model fully on-device with llama.cpp, no server, no upload. A SwiftUI app wrapping an on-device multimodal engine."
+description: "An offline iPhone prototype that reads receipts, documents, and screenshots with the MiniCPM-V 4.6 vision-language model, fully on-device."
 role: "Builder"
 period: "2026"
-domain: "On-device AI"
+domain: "AI/ML"
 tags: ["ios", "swiftui", "on-device-ml", "vision-language"]
 tech: ["Swift", "SwiftUI", "llama.cpp", "MiniCPM-V", "Objective-C++"]
 github: "https://github.com/jayhemnani9910/receiptlens-minicpm-v46"
@@ -116,4 +117,4 @@ deepDive:
     - "On-device inference is a UX problem as much as an ML one: model download, storage, and progress are most of what makes a local-model app usable."
 priority: 19
 ---
-ReceiptLens is an offline iPhone prototype that reads receipts, documents, and screenshots by running the MiniCPM-V 4.6 vision-language model fully on-device with llama.cpp, nothing is uploaded. A SwiftUI app captures or picks an image, applies one of three mode-specific prompts (receipt, document, screen), and runs inference locally through a Swift engine over llama.cpp's multimodal (mtmd) runtime, with an in-app model downloader and a local scan history. It is built honestly as a prototype: the SwiftUI app, model management, camera flow, and engine wiring are the original work, while the low-level native bridge is adapted from OpenBMB's official iOS demo and llama.cpp ships as a vendored xcframework.
+ReceiptLens is an offline iPhone prototype that reads receipts, documents, and screenshots by running the MiniCPM-V 4.6 vision-language model fully on-device with llama.cpp. Nothing is uploaded. A SwiftUI app captures or picks an image, applies one of three mode-specific prompts (receipt, document, screen), and runs inference locally through a Swift engine over llama.cpp's multimodal (mtmd) runtime, with an in-app model downloader and a local scan history. It is built honestly as a prototype: the SwiftUI app, model management, camera flow, and engine wiring are the original work, while the low-level native bridge is adapted from OpenBMB's official iOS demo and llama.cpp ships as a vendored xcframework.

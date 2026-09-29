@@ -1,6 +1,7 @@
 ---
 title: "Accurate Guesser"
 summary: "Java desktop guessing game (GUI)."
+description: "A number-guessing game in Java Swing: an event-driven GUI with input validation, hints, scoring, and replay."
 role: "Concept"
 domain: "Student work"
 tags: ["java", "desktop"]
@@ -41,15 +42,19 @@ deepDive:
   keyDecisions:
     - decision: "Swing over JavaFX for UI framework"
       rationale: "Chose Swing for its maturity, extensive documentation, and lower learning curve for fundamental GUI concepts. While JavaFX offers more modern features, Swing's simplicity made it ideal for demonstrating core event-driven programming patterns without framework-specific abstractions."
+      tradeoff: "Gives up JavaFX's more modern features and look."
 
     - decision: "State machine for game flow control"
       rationale: "Implemented explicit state management (INITIAL, PLAYING, FINISHED) to prevent invalid operations and ensure predictable behavior. This prevents edge cases like submitting guesses after winning or starting multiple games simultaneously. The state machine makes transitions explicit and testable."
+      tradeoff: "More code up front: every state and transition is written out rather than implied."
 
     - decision: "Input validation at UI layer"
       rationale: "Performed validation in InputPanel before reaching GameEngine to provide immediate user feedback and maintain clean separation of concerns. The UI handles presentation-level validation (numeric input, range checks), while GameEngine focuses purely on game logic. This reduces coupling and improves user experience."
+      tradeoff: "Checks sit in more than one layer, so changing a rule means changing it in each."
 
     - decision: "Modal dialogs for game state changes"
       rationale: "Used JOptionPane for win/loss notifications and replay confirmations to create clear breakpoints in game flow. Modal dialogs ensure users acknowledge outcomes before proceeding, preventing accidental game resets and making state transitions explicit."
+      tradeoff: "Each dialog blocks the window until dismissed: an extra click at every win, loss, or replay."
 
   codeSnippets:
     - language: "java"

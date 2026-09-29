@@ -1,83 +1,70 @@
 ---
 title: "Basic Banking System"
-summary: "Simple login + transactions with PHP backend."
-role: "Web Dev Intern"
+summary: "A small PHP and MySQL banking app: a money-transfer form with balance checks and a paginated transaction history."
+role: "Developer"
 domain: "Student work"
-period: "Feb 2020"
+period: "Feb 2021"
 tags: ["web", "php"]
-tech: ["PHP", "MySQL", "HTML/CSS"]
-challenge: "Minimal banking flow for learning + demo."
+tech: ["PHP", "MySQL", "HTML", "CSS"]
+challenge: "A minimal banking flow for learning: move money between accounts and keep a record of every transfer."
 solution:
-  - "Auth, transfers, and ledger views; clean UI."
+  - "A transfer form (debit account, beneficiary account, amount) that validates the input, checks the balance, and moves the money."
+  - "A transaction history page that lists every transfer, newest first, 100 per page."
 impact:
-  - "Good primer on forms, security basics, and SQL ops."
+  - "A first pass at forms, server-side validation, and SQL writes against a real schema."
 links:
   code: "https://github.com/jeyhemnani99/Basic-banking-system"
 deepDive:
-  context: |
-    This was one of my first complete web applications, built during my internship to learn the fundamentals of full-stack development. The goal was to understand the complete request-response cycle, database interactions, and basic security considerations in a controlled learning environment.
-
-    While the scope was intentionally limited (basic CRUD operations for banking transactions), the project served as a practical introduction to server-side programming, SQL databases, and user authentication - concepts I'd only known theoretically before this.
+  context: "One of my first complete web applications, built in February 2021 as a task for The Sparks Foundation, which the app's footer credits. The scope is deliberately small: a home page, a form that transfers money between two accounts, and a history of every transfer. It was a way to learn the request-response cycle and how a page reads and writes a MySQL database."
 
   architecture: |
-    Simple MVC-inspired structure with PHP handling both routing and business logic:
+    Four procedural PHP files over one MySQL database, with no framework:
 
-    - **Models**: Direct SQL queries for user authentication and transaction records
-    - **Views**: HTML templates with embedded PHP for dynamic content rendering
-    - **Controllers**: PHP scripts processing form submissions and coordinating database operations
+    - **index.php**: the home page, linking to the transfer form and the history.
+    - **transfermoney.php**: renders the transfer form and, on POST, runs the transfer.
+    - **transactionhistory.php**: lists transfers, newest first, 100 per page.
+    - **database.php**: opens the mysqli connection the other pages share.
 
-    The database schema included basic tables for users (credentials, account balances) and transactions (sender, receiver, amount, timestamp). No complex relationships or normalization beyond what was necessary for the demo.
+    The schema has an ACCOUNTS table (account number and balance) and a TRANSACTIONS table (debit account, beneficiary account, amount, time added).
 
   components:
-    - name: "Authentication System"
-      purpose: "Login/logout flow with session management. Used PHP sessions to maintain user state and basic password hashing (md5 at the time - learned about bcrypt later)."
+    - name: "Transfer form"
+      purpose: "Takes a debit account number, a beneficiary account number, and an amount, and marks the field that was wrong when a transfer fails."
 
-    - name: "Transaction Module"
-      purpose: "Form-based money transfers between accounts. Implemented basic validation to prevent negative balances and self-transfers."
+    - name: "Transfer logic"
+      purpose: "Rejects a zero amount or an unknown account, refuses a transfer that would leave the sender below a 1,000 minimum balance, then records the transfer and updates both balances."
 
-    - name: "Transaction History"
-      purpose: "Simple ledger view showing incoming and outgoing transfers. Basic SQL JOINs to fetch related user data."
-
-    - name: "Admin Dashboard"
-      purpose: "Overview page showing all users and their balances. First exposure to role-based access control concepts."
+    - name: "Transaction history"
+      purpose: "Reads TRANSACTIONS newest first, 100 rows per page, and shows the account number on each side of every transfer."
 
   dataFlow: |
-    1. User submits login credentials via POST request
-    2. PHP script queries MySQL database to verify credentials
-    3. On success, create session and redirect to dashboard
-    4. For transfers: validate inputs, check sender balance, execute dual UPDATE queries (debit sender, credit receiver)
-    5. Insert transaction record for audit trail
-    6. Reload dashboard with updated balances
-
-    All database operations were synchronous with direct query execution. No ORM, prepared statements were manually implemented after learning about SQL injection.
+    1. The user fills in the transfer form and submits it back to transfermoney.php
+    2. The amount must not be zero, the debit account must exist, and the sender must keep at least 1,000 after the transfer
+    3. A row goes into TRANSACTIONS; if the beneficiary account does not exist, the insert fails and the page says so
+    4. Two UPDATE queries debit the sender and credit the beneficiary
+    5. The page shows success, or the error next to the field that failed
 
   keyDecisions:
-    - decision: "Choosing procedural PHP over frameworks"
+    - decision: "Procedural PHP over a framework"
       rationale: "Wanted to understand the fundamentals before using abstractions like Laravel. This helped me appreciate what frameworks do under the hood."
+      tradeoff: "Each page mixes HTML, form handling, and SQL; nothing is shared between pages except the database connection."
 
-    - decision: "Manual SQL queries instead of ORM"
-      rationale: "Needed to learn SQL syntax, table relationships, and query optimization basics. Wrote JOIN queries by hand to understand database operations."
-
-    - decision: "Session-based authentication"
-      rationale: "Simplest authentication mechanism to implement. Learned about session cookies, server-side storage, and state management."
+    - decision: "Hand-written SQL instead of an ORM"
+      rationale: "Needed to learn SQL itself: an insert that looks up account ids with sub-selects, the balance updates, and a paginated history query."
+      tradeoff: "The queries are built by concatenating form input into SQL rather than using prepared statements, and the insert and the two balance updates run without a database transaction."
 
     - decision: "Minimal frontend styling"
-      rationale: "Focus was on backend logic. Used basic HTML/CSS to make it functional but not fancy - this was about learning server-side concepts."
+      rationale: "Focus was on the server side. Bootstrap's stylesheet and a few inline styles make it usable, not polished."
+      tradeoff: "No client-side validation: every check happens on the server, after the form is submitted."
 
   learnings:
+    - learning: "Validation belongs on the server"
+      description: "Every check (zero amount, unknown account, minimum balance) runs in PHP after the form posts, so a request built by hand cannot skip it."
+
     - learning: "Security fundamentals"
-      description: "First real exposure to SQL injection, XSS vulnerabilities, and why input validation matters. Initially wrote vulnerable code, then learned to use prepared statements and sanitize outputs."
+      description: "Concatenating form input into SQL, as this code does, leaves it open to SQL injection. Prepared statements are the fix."
 
-    - learning: "Database design basics"
-      description: "Understanding primary keys, foreign keys, and why atomicity matters in financial transactions. Learned the hard way about race conditions when two transfers happened simultaneously."
-
-    - learning: "State management"
-      description: "How sessions work, cookie-based authentication, and the stateless nature of HTTP. This foundation helped later when learning about JWT tokens and modern auth patterns."
-
-    - learning: "Form handling and validation"
-      description: "Server-side validation, error messaging, and user feedback. Learned why client-side validation alone isn't enough."
-
-    - learning: "Development workflow"
-      description: "Setting up local PHP/MySQL environment (XAMPP), debugging with var_dump(), and basic version control with Git. First project where I used branches and commits meaningfully."
+    - learning: "Why atomicity matters for money"
+      description: "The transfer is three separate queries: an insert and two updates. If one fails partway, the balances and the history disagree. Wrapping them in one database transaction is what keeps them in step."
 ---
-Simple login + transactions with PHP backend.
+A small banking app in procedural PHP and MySQL, built in February 2021 as a task for The Sparks Foundation. A form moves money between two accounts after checking the amount, both account numbers, and a 1,000 minimum balance, and a history page lists every transfer, newest first. There is no login: the project is about forms, server-side validation, and SQL writes.

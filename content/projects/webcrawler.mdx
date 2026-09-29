@@ -1,9 +1,10 @@
 ---
 title: "Website Watcher"
 summary: "A website archiver and change-detection service: it discovers pages, snapshots them with ArchiveBox, detects content changes by hash, makes every version full-text searchable, and seals versions with Merkle trees and OpenTimestamps anchoring."
+description: "A website archiver and change detector: snapshots pages with ArchiveBox, makes every version searchable, and seals versions with Merkle trees."
 role: "Builder"
 period: "2024"
-domain: "Data Engineering"
+domain: "Data engineering"
 tags: ["web-scraping", "archival", "search", "monitoring"]
 tech: ["Python", "Flask", "ArchiveBox", "SQLite (FTS5)", "APScheduler", "Docker"]
 github: "https://github.com/jayhemnani9910/webcrawler"
@@ -106,7 +107,13 @@ deepDive:
 
         def verify_proof(leaf, proof, root, index) -> bool:
             h = sha256(leaf)
-            # fold sibling hashes up the tree, order by index parity
+            idx = index
+            for sib in proof:
+                if idx % 2 == 0:
+                    h = sha256(h + sib)
+                else:
+                    h = sha256(sib + h)
+                idx = idx // 2
             return h == root
       explanation: "Version hashes are leaves of a Merkle tree, so a single root commits to many archived versions and a short proof can show that a specific version belongs to it. This is the verifiable-record core, an actual implementation, not a stub."
     - title: "OpenTimestamps anchoring that works without the tool installed"

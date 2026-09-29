@@ -10,6 +10,10 @@ date: 2026-09-01T19:15:22Z
 - Baseline recreation of the current home kept as `Current Home.dc.html`
 
 ## Screen map
+
+(Note, 2026-09-29: the Current Home row is historical. The editorial home
+components it lists were deleted on 2026-09-02 when the v4 home replaced them.)
+
 | Screen | Repo files |
 | --- | --- |
 | Current Home.dc.html | src/app/page.tsx, src/app/layout.tsx, src/components/ClientLayout.tsx, src/components/EditorialHome.tsx, src/components/EditorialMasthead.tsx, src/components/EditorialColophon.tsx, src/components/motion/DecompositionScene.tsx, src/components/Buddy.tsx, src/components/featured/*.tsx, src/app/globals.css, src/lib/webmcp.ts |
