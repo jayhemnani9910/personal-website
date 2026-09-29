@@ -3,7 +3,7 @@ title: "Voxt"
 summary: "A voice-to-text clipboard tool for Linux written in Go: press a global hotkey, speak, and the transcription (via Groq's Whisper) lands on your clipboard, with a system tray, desktop notifications, SQLite history, and Wayland and X11 support."
 role: "Builder"
 period: "2026"
-domain: "Developer Tools"
+domain: "Web and tools"
 tags: ["go", "linux", "speech-to-text", "desktop"]
 tech: ["Go", "PortAudio", "Groq Whisper", "SQLite", "GTK"]
 github: "https://github.com/jayhemnani9910/voxt"
@@ -48,7 +48,7 @@ deepDive:
     - name: "clipboard + notify"
       purpose: "Copies the transcription to the clipboard and fires a desktop notification when it is ready."
     - name: "tray/tray.go"
-      purpose: "A system-tray icon that reflects the recording state and hosts the minimal UI."
+      purpose: "A system-tray icon (getlantern/systray, which draws it through the GTK3 AppIndicator library on Linux) that reflects the recording state and hosts the minimal UI."
     - name: "db/sqlite.go"
       purpose: "A local SQLite store keeping a history of every transcription."
   keyDecisions:

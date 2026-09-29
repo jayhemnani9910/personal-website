@@ -3,7 +3,7 @@ title: "Airbnb - Distributed Booking"
 summary: "A team-built Airbnb-style booking platform that grew from a monolith into event-driven microservices: a React/Redux frontend over four Node services and a Python AI agent, talking through Kafka with MongoDB, and deployable on Kubernetes."
 role: "Developer"
 period: "2025"
-domain: "Distributed Systems"
+domain: "Distributed systems"
 tags: ["distributed-systems", "microservices", "cloud-native"]
 tech: ["React", "Redux", "Node.js", "MongoDB", "Kafka", "FastAPI", "Docker", "Kubernetes"]
 github: "https://github.com/vrushabh05/Lab1_distributed_system"
@@ -13,7 +13,7 @@ challenge: "An Airbnb-style app has clearly separable concerns, travelers, owner
 solution:
   - "A React + Redux + Vite frontend (Tailwind) with feature slices for auth, properties, bookings, favorites, and the owner dashboard, talking to the backend over a small API layer."
   - "Four Node/Express microservices, traveler, owner, property, and booking, each with its own responsibility and MongoDB data, deployable independently."
-  - "Kafka as the event bus: the booking service consumes booking-request and booking-update topics with consumer groups and retry-on-failure, so booking status stays consistent across services without synchronous coupling."
+  - "Kafka as the event bus: the booking service consumes booking-requests and booking-updates topics with consumer groups and retry-on-failure, so booking status stays consistent across services without synchronous coupling."
   - "A separate Python FastAPI agent service that uses LangChain with a local Ollama model to generate day-by-day travel itineraries as structured JSON."
   - "Packaged for both local and cluster runs: Docker Compose for development and a full set of Kubernetes manifests, with Playwright end-to-end tests, a Postman collection, and JMeter load testing."
 impact:
@@ -22,7 +22,7 @@ impact:
   - "An AI concierge built as its own service rather than bolted onto the frontend, keeping the LLM dependency isolated behind a clean API."
 deepDive:
   context: "This was a team distributed-systems project built in two iterations: a monolithic first version (Lab 1) and then a re-architecture into event-driven microservices (Lab 2). The product is an Airbnb-style booking site, travelers search and book properties, owners list and manage them, with an added AI travel-planning concierge. Internally the team called it Voyage. My focus was on the distributed back end: the services, their Kafka communication, and the deployment setup."
-  architecture: "The system is a React/Redux/Vite frontend over four Node/Express microservices, each owning a slice of the domain: traveler (port 3001), owner (3002), booking (3004), and property. Each service has its own MongoDB data and exposes an HTTP API; cross-service workflows go through Kafka rather than direct calls. The booking service, for example, subscribes to booking-request and booking-update topics on a consumer group, so a booking made in one place propagates to the others asynchronously and survives transient failures through Kafka's retry. A separate Python FastAPI agent service wraps a local Ollama LLM through LangChain to generate travel itineraries, isolated so the AI dependency never touches the core booking path. Everything is containerized: Docker Compose for local development and a full set of Kubernetes manifests (services, MongoDB, Kafka, Ollama, config, secrets) for cluster deployment, with Playwright, Postman, and JMeter covering end-to-end, API, and load testing."
+  architecture: "The system is a React/Redux/Vite frontend over four Node/Express microservices, each owning a slice of the domain: traveler (port 3001), owner (3002), booking (3004), and property. Each service has its own MongoDB data and exposes an HTTP API; cross-service workflows go through Kafka rather than direct calls. The booking service, for example, subscribes to booking-requests and booking-updates topics on a consumer group, so a booking made in one place propagates to the others asynchronously and survives transient failures through Kafka's retry. A separate Python FastAPI agent service wraps a local Ollama LLM through LangChain to generate travel itineraries, isolated so the AI dependency never touches the core booking path. Everything is containerized: Docker Compose for local development and a full set of Kubernetes manifests (services, MongoDB, Kafka, Ollama, config, secrets) for cluster deployment, with Playwright, Postman, and JMeter covering end-to-end, API, and load testing."
   dataFlow:
     - step: "Browse and book (frontend)"
       component: "Frontend (React + Redux + Vite)"
@@ -45,7 +45,7 @@ deepDive:
     - name: "Traveler / Owner / Property / Booking services"
       purpose: "Four Node/Express microservices, each owning its domain and MongoDB data, deployable independently on their own ports."
     - name: "Kafka event bus"
-      purpose: "Asynchronous communication between services: booking-request and booking-update topics consumed on consumer groups, with retry on failure."
+      purpose: "Asynchronous communication between services: booking-requests and booking-updates topics consumed on consumer groups, with retry on failure."
     - name: "Agent service (FastAPI + LangChain + Ollama)"
       purpose: "A separate Python service generating day-by-day travel itineraries as structured JSON from a local LLM, isolated behind its own API."
     - name: "MongoDB"
