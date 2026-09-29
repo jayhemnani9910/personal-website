@@ -67,15 +67,22 @@ export function Preloader() {
     finishedRef.current = true;
     clearTimers();
     setIsLeaving(true);
-    try {
-      sessionStorage.setItem(STORAGE_KEY, "1");
-    } catch {
-      // sessionStorage unavailable (privacy mode): the intro may replay next load, an
-      // acceptable degrade rather than a broken state.
-    }
     // Unmount after the fade completes. `finished` hiding the scrim is what actually
-    // stops the render; the sessionStorage write above only prevents a REPLAY on reload.
-    timeoutsRef.current.push(setTimeout(() => setFinished(true), FADE_MS + HIDE_BUFFER_MS));
+    // stops the render; the sessionStorage write only prevents a REPLAY on reload. It
+    // waits for the fade too: useShouldPlayIntro re-reads storage on every render, so
+    // writing it now would flip `active` off on the very render that starts the fade,
+    // and the scrim would vanish instead of fading.
+    timeoutsRef.current.push(
+      setTimeout(() => {
+        try {
+          sessionStorage.setItem(STORAGE_KEY, "1");
+        } catch {
+          // sessionStorage unavailable (privacy mode): the intro may replay next load, an
+          // acceptable degrade rather than a broken state.
+        }
+        setFinished(true);
+      }, FADE_MS + HIDE_BUFFER_MS)
+    );
   }, [clearTimers]);
 
   const active = shouldPlay && !finished && !prefersReducedMotion;

@@ -1,6 +1,24 @@
-import { render } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { fireEvent, render } from "@testing-library/react";
+import { afterEach, describe, expect, it } from "vitest";
 import { Cursor, KINDS, LABEL_CHIP } from "./Cursor";
+
+const defaultMatchMedia = window.matchMedia;
+
+// matchMedia answering true for exactly the given queries.
+function mediaMatching(...queries: string[]) {
+  window.matchMedia = (query: string) =>
+    ({
+      matches: queries.includes(query),
+      media: query,
+      addEventListener: () => {},
+      removeEventListener: () => {},
+    }) as unknown as MediaQueryList;
+}
+
+afterEach(() => {
+  window.matchMedia = defaultMatchMedia;
+  document.body.classList.remove("has-cursor");
+});
 
 describe("Cursor", () => {
   it("renders a ring, an accent dot and an inverted label chip", () => {
@@ -30,6 +48,35 @@ describe("Cursor", () => {
     ["buddy", { size: 48, ring: "var(--tr-accent)", fill: "transparent" }],
   ] as const)("kind %s matches the comp's spec", (kind, expected) => {
     expect(KINDS[kind]).toEqual(expected);
+  });
+
+  it("takes over the pointer for a fine-pointer visitor", () => {
+    mediaMatching("(pointer: fine)");
+    const { container } = render(<Cursor />);
+    expect((container.querySelector(".tr-cursor") as HTMLElement).style.display).toBe("block");
+    expect(document.body.classList.contains("has-cursor")).toBe(true);
+  });
+
+  // Decision D5: these visitors often run an enlarged or high-contrast system
+  // pointer, which CSS cannot detect, so they keep it.
+  it.each(["(prefers-contrast: more)", "(forced-colors: active)"])("leaves the system pointer alone under %s", (query) => {
+    mediaMatching("(pointer: fine)", query);
+    const { container } = render(<Cursor />);
+    expect((container.querySelector(".tr-cursor") as HTMLElement).style.display).toBe("none");
+    expect(document.body.classList.contains("has-cursor")).toBe(false);
+  });
+
+  it("hides the ring while the pointer is outside the window", () => {
+    mediaMatching("(pointer: fine)");
+    const { container } = render(<Cursor />);
+    const cursor = container.querySelector(".tr-cursor") as HTMLElement;
+
+    fireEvent.mouseMove(window, { clientX: 10, clientY: 10 });
+    expect(cursor.style.visibility).toBe("");
+    fireEvent.mouseOut(document.body, { relatedTarget: null });
+    expect(cursor.style.visibility).toBe("hidden");
+    fireEvent.mouseMove(window, { clientX: 12, clientY: 12 });
+    expect(cursor.style.visibility).toBe("");
   });
 
   it("keeps the label chip light background, dark text, not inverted", () => {
