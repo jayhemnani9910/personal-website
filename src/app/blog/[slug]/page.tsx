@@ -1,5 +1,5 @@
 import type { JSX } from "react";
-import { getPost, getAllPosts } from "@/lib/content";
+import { formatPostDate, getPost, getAllPosts } from "@/lib/content";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { notFound } from "next/navigation";
@@ -10,9 +10,6 @@ import { MDXRemote } from "next-mdx-remote/rsc";
 
 const MONO = "font-[family-name:var(--ff-mono)]";
 
-const fmtDate = (d: string) =>
-  new Date(d).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" });
-
 const backLinkClass = `group inline-flex items-center gap-2 ${MONO} text-[length:var(--tr-t-mono)] uppercase tracking-[.04em] text-tr-text-mute no-underline transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] hover:text-tr-accent-ink`;
 
 // Vertical hairline divider between meta chips, matching the stat rows the
@@ -21,11 +18,10 @@ function Divider() {
   return <span aria-hidden="true" className="mx-3 inline-block h-[.9em] w-px bg-tr-hairline align-middle" />;
 }
 
-// Both live posts open their MDX body with a `# Title` line that repeats the
-// frontmatter title verbatim (a pre-existing content quirk, not introduced
-// here; content/blog/*.mdx is out of scope for this pass). Sizing this at
-// h2 scale, one step below the page's own <h1>, keeps that duplication from
-// reading as two stacked hero headlines.
+// A guard, not a fix for current content: no post body opens with a `# Title`
+// line today, but one that did would repeat the frontmatter title. Sizing it
+// at h2 scale, one step below the page's own <h1>, keeps that from reading as
+// two stacked hero headlines.
 const mdxComponents = {
   // A markdown `#` in the body maps through this key regardless of which HTML
   // tag it renders, so this emits an actual <h2>, not a second <h1>: the page
@@ -113,27 +109,6 @@ const mdxComponents = {
       className="my-[var(--tr-s-5)] max-w-full border border-tr-hairline rounded-[var(--tr-r-sm)]"
     />
   ),
-  table: (props: JSX.IntrinsicElements["table"]) => (
-    // overflow-x-auto wrapper + a min-width floor on the table so a wide
-    // table scrolls internally instead of pushing the page past 390px. The
-    // wrapper is a plain block div (no flex/grid ancestor anywhere up to
-    // <body> on this page), so it does not stretch to fit the oversized
-    // child the way a flex/grid item would, so it stays at the prose column's
-    // width and lets the table scroll inside it.
-    <div className="mb-[var(--tr-s-5)] min-w-0 overflow-x-auto">
-      <table {...props} className="w-full min-w-[32rem] border-collapse text-[length:var(--tr-t-body)] text-tr-text" />
-    </div>
-  ),
-  thead: (props: JSX.IntrinsicElements["thead"]) => <thead {...props} className="border-b border-tr-hairline" />,
-  th: (props: JSX.IntrinsicElements["th"]) => (
-    <th
-      {...props}
-      className={`${MONO} px-[var(--tr-s-3)] py-[var(--tr-s-2)] text-left text-[length:var(--tr-t-mono-sm)] uppercase tracking-[.04em] text-tr-text-mute`}
-    />
-  ),
-  td: (props: JSX.IntrinsicElements["td"]) => (
-    <td {...props} className="border-b border-tr-hairline px-[var(--tr-s-3)] py-[var(--tr-s-2)]" />
-  ),
 };
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
@@ -198,7 +173,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
               </h1>
 
               <div className={`flex flex-wrap items-center ${MONO} text-[length:var(--tr-t-mono-sm)] text-tr-text-mute`}>
-                <time dateTime={post.date}>{fmtDate(post.date)}</time>
+                <time dateTime={post.date}>{formatPostDate(post.date)}</time>
                 {post.readingTime && (
                   <>
                     <Divider />

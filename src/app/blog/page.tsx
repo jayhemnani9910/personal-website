@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { Metadata } from "next";
-import { getAllPosts, getAllProjects } from "@/lib/content";
+import { formatPostDate, getAllPosts, getAllProjects } from "@/lib/content";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 
@@ -14,9 +14,6 @@ export const metadata: Metadata = {
 // across the v4 home sections (see Method.tsx, Hero.tsx, Contact.tsx).
 const MONO =
   "font-[family-name:var(--ff-mono)] text-[length:var(--tr-t-mono-sm)] tracking-[.1em] text-tr-text-faint";
-
-const fmtDate = (date: string) =>
-  new Date(date).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" });
 
 export default async function WritingPage() {
   const posts = await getAllPosts();
@@ -58,7 +55,7 @@ export default async function WritingPage() {
                   className="group grid items-start gap-[clamp(1rem,3vw,2.5rem)] py-[clamp(1.5rem,3vw,2.5rem)] no-underline lg:grid-cols-[8rem_minmax(0,1fr)_5rem]"
                 >
                   <div className="font-[family-name:var(--ff-mono)] leading-relaxed text-tr-text-faint">
-                    <span className="block">{fmtDate(post.date)}</span>
+                    <span className="block">{formatPostDate(post.date)}</span>
                     {post.readingTime && (
                       <span className="block text-tr-text-faint transition-colors group-hover:text-tr-accent-ink">
                         {post.readingTime} min

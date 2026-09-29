@@ -3,7 +3,8 @@ import path from "path";
 import matter from "gray-matter";
 import { ProjectSchema, PostSchema, Project, Post, calculateReadingTime } from "./definitions";
 
-export type ProjectSummary = Pick<Project, "id" | "title" | "summary" | "role" | "period" | "domain" | "tags" | "tech" | "priority" | "github" | "links">;
+// Only the fields the /projects list reads: this is its whole client payload.
+export type ProjectSummary = Pick<Project, "id" | "title" | "summary" | "period" | "domain" | "tech">;
 
 const CONTENT_DIR = path.join(process.cwd(), "content");
 
@@ -55,12 +56,12 @@ export async function getProject(slug: string): Promise<ProjectWithContent | nul
     const fileContents = await fs.promises.readFile(fullPath, "utf8");
     const { data, content } = matter(fileContents);
 
-    // Validate frontmatter
+    // Invalid frontmatter throws, so the build fails on it. Returning null
+    // would drop the project from every list and 404 its page, quietly.
     const result = ProjectSchema.safeParse({ ...data, id: slug });
 
     if (!result.success) {
-        console.error(`Invalid frontmatter for project ${slug}:`, result.error);
-        return null;
+        throw new Error(`Invalid frontmatter for project ${slug}: ${result.error.message}`);
     }
 
     return { ...result.data, content };
@@ -107,14 +108,9 @@ export async function getProjectSummaries(): Promise<ProjectSummary[]> {
         id: p.id,
         title: p.title,
         summary: p.summary,
-        role: p.role,
         period: p.period,
         domain: p.domain,
-        tags: p.tags,
         tech: p.tech,
-        priority: p.priority,
-        github: p.github,
-        links: p.links,
     }));
 }
 
@@ -140,12 +136,12 @@ export async function getPost(slug: string): Promise<PostWithContent | null> {
     // Calculate reading time if not provided
     const readingTime = data.readingTime ?? calculateReadingTime(content);
 
-    // Validate frontmatter
+    // Throws for the same reason as getProject: a post that fails the schema
+    // must fail the build, not disappear from /blog and the sitemap.
     const result = PostSchema.safeParse({ ...data, slug, readingTime });
 
     if (!result.success) {
-        console.error(`Invalid frontmatter for post ${slug}:`, result.error);
-        return null;
+        throw new Error(`Invalid frontmatter for post ${slug}: ${result.error.message}`);
     }
 
     // Drafts are previewable in dev but not publicly reachable in production.
@@ -181,7 +177,20 @@ export async function getAllPosts(): Promise<Post[]> {
             })
     );
 
+    // Newest first; the slug tiebreak keeps same-day posts in a fixed order
+    // (see the project sort above).
     return posts
         .filter((p): p is PostListItem => p !== null && !p.draft)
-        .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+        .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime() || a.slug.localeCompare(b.slug));
+}
+
+/** A post's YYYY-MM-DD date for display. UTC, so a build machine west of UTC
+ * cannot print the day before. */
+export function formatPostDate(date: string): string {
+    return new Date(date).toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+        timeZone: "UTC",
+    });
 }

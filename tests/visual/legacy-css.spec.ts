@@ -63,7 +63,7 @@ for (const route of ROUTES) {
 // Every showcase project's demo content renders directly on the page now:
 // there is no tab bar to click into any more (ProjectShowcase and its
 // `.sw-tab` markup were retired when /projects/[id] moved to one flowing
-// template for all 27 projects), so the ROUTES screenshots above already
+// template for every project), so the ROUTES screenshots above already
 // cover tools/findings/compare/arch in their rendered state.
 //
 // What they cannot cover is whether the rarer branch of a project's data

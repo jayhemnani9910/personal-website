@@ -55,15 +55,18 @@ export function ComparisonSlider({
         )}
       </div>
 
+      {/* The range input is invisible, so its focus ring would be too: the
+          figure draws it instead while the input has keyboard focus. */}
       <figure
         data-testid="comparison-slider"
-        className="relative mt-4 aspect-video select-none overflow-hidden rounded-[var(--tr-r-lg)] border border-tr-hairline bg-tr-surface-1"
+        className="relative mt-4 aspect-video select-none overflow-hidden rounded-[var(--tr-r-lg)] border border-tr-hairline bg-tr-surface-1 has-[input:focus-visible]:outline-2 has-[input:focus-visible]:outline-offset-2 has-[input:focus-visible]:outline-tr-accent-ink"
       >
+        {/* The figure fills the 1280px content column. */}
         <Image
           src={active.after}
           alt={`${projectTitle}, ${pairLabel}: output after the pipeline runs on this frame`}
           fill
-          sizes="(max-width: 980px) 100vw, 820px"
+          sizes="(max-width: 1344px) 100vw, 1280px"
           className="object-cover"
         />
         {/* These two corner labels sit on top of a photograph, where a --tr-*
@@ -82,7 +85,7 @@ export function ComparisonSlider({
             src={active.before}
             alt={`${projectTitle}, ${pairLabel}: raw input frame before the pipeline runs`}
             fill
-            sizes="(max-width: 980px) 100vw, 820px"
+            sizes="(max-width: 1344px) 100vw, 1280px"
             className="object-cover"
           />
           <span
@@ -116,6 +119,7 @@ export function ComparisonSlider({
           max={100}
           step={1}
           value={pos}
+          aria-valuetext={`${pos}% raw input`}
           onChange={(e) => setPos(Number(e.target.value))}
           className="absolute inset-0 h-full w-full cursor-ew-resize appearance-none opacity-0"
         />

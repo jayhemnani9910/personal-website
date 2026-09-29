@@ -2,6 +2,7 @@
 title: "Chatbot (NLP)"
 summary: "Intent-based bot trained from JSON corpus."
 role: "Concept"
+domain: "Student work"
 tags: ["python", "nlp"]
 tech: ["Python"]
 challenge: "Lightweight Q/A without heavy infra."
@@ -38,37 +39,43 @@ deepDive:
 
   components:
     - name: "Text Preprocessor"
-      description: "Tokenizes and stems input text using NLTK. Handles normalization, punctuation removal, and vocabulary reduction to prepare text for vectorization."
+      purpose: "Tokenizes and stems input text using NLTK. Handles normalization, punctuation removal, and vocabulary reduction to prepare text for vectorization."
 
     - name: "Bag-of-Words Encoder"
-      description: "Converts preprocessed tokens into fixed-length binary vectors based on training vocabulary. Implements efficient lookup for real-time inference."
+      purpose: "Converts preprocessed tokens into fixed-length binary vectors based on training vocabulary. Implements efficient lookup for real-time inference."
 
     - name: "Intent Classifier (Neural Network)"
-      description: "Multi-layer feedforward neural network built with TensorFlow/Keras or PyTorch. Uses softmax output layer for multi-class classification across intent categories."
+      purpose: "Multi-layer feedforward neural network built with TensorFlow/Keras or PyTorch. Uses softmax output layer for multi-class classification across intent categories."
 
     - name: "Response Generator"
-      description: "Maps predicted intent to appropriate responses from JSON corpus. Implements response randomization and context-aware selection logic."
+      purpose: "Maps predicted intent to appropriate responses from JSON corpus. Implements response randomization and context-aware selection logic."
 
     - name: "Training Pipeline"
-      description: "Loads JSON corpus, generates training data, performs data augmentation, and trains the neural network. Saves model weights and vocabulary for deployment."
+      purpose: "Loads JSON corpus, generates training data, performs data augmentation, and trains the neural network. Saves model weights and vocabulary for deployment."
 
   dataFlow:
     - step: "Intent corpus loaded from JSON"
+      component: "Training Pipeline"
       detail: "JSON file contains intent tags, example patterns, and response templates. Parser extracts training data and builds vocabulary."
 
     - step: "Training data generation"
+      component: "Bag-of-Words Encoder"
       detail: "Each pattern is tokenized, stemmed, and converted to bag-of-words representation. Labels are one-hot encoded for intent categories."
 
     - step: "Model training"
+      component: "Intent Classifier (Neural Network)"
       detail: "Neural network is trained using gradient descent (Adam optimizer) with categorical cross-entropy loss. Validation set monitors overfitting."
 
     - step: "User input processing"
+      component: "Text Preprocessor"
       detail: "At inference time, user text follows the same preprocessing → bag-of-words → model prediction pipeline."
 
     - step: "Intent confidence thresholding"
+      component: "Intent Classifier (Neural Network)"
       detail: "If highest probability falls below confidence threshold (e.g., 0.7), the bot returns a fallback response indicating uncertainty."
 
     - step: "Response delivery"
+      component: "Response Generator"
       detail: "Selected intent triggers response lookup from JSON corpus. System randomly selects from available responses for natural conversation flow."
 
   keyDecisions:
