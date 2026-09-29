@@ -10,7 +10,7 @@ tech: ["Python", "Gemini", "DeepSeek", "pypdfium2", "pytest"]
 challenge: "Scanned clinical records (71 pages of typed printouts and handwriting) have no text layer, contradict each other across pages, and contain data that is missing or pending. A system reading them must surface conflicts and gaps rather than resolve them with plausible guesses."
 solution:
   - "From-scratch agent loop (no framework): each step the model receives the running conversation plus tool schemas, emits a reasoning note and tool calls, and re-plans based on results."
-  - "Two-stage ingestion: pypdfium2 rasterises each page, then a vision model (Gemini) transcribes it; unreadable text is marked [illegible] and flagged, never guessed."
+  - "Two-stage ingestion: pypdfium2 rasterizes each page, then a vision model (Gemini) transcribes it; unreadable text is marked [illegible] and flagged, never guessed."
   - "No-fabrication enforced at three layers: typed state requires a source page and verbatim quote per value; the citation guardrail rejects writes where the quote is not found on that page; an independent verifier LLM re-reads every recorded value after the loop and removes anything unsupported."
   - "Conflicts, pending results, and missing fields are first-class states (CONFLICT, PENDING, MISSING), stored and surfaced in flags.md, never silently resolved."
   - "Medication reconciliation diffs admission vs discharge lists; any change without a documented, quote-backed reason is flagged automatically."

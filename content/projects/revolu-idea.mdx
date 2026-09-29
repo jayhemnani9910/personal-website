@@ -15,17 +15,17 @@ solution:
   - "A dialectical judge weighs the two sides on scientific criteria and returns a structured verdict: VERIFIED, FALSIFIED, or UNCLEAR, with a confidence score."
   - "Hexagonal architecture (ports + adapters) so search engines (DuckDuckGo, Tavily, Exa) and LLM providers (Ollama, Groq, GitHub Models) are swappable."
 impact:
-  - "Falsification-first design: every causal claim faces a dedicated adversary before it is accepted, instead of one model synthesising unchecked."
+  - "Falsification-first design: every causal claim faces a dedicated adversary before it is accepted, instead of one model synthesizing unchecked."
   - "Runs entirely on free backends (DuckDuckGo + Ollama or GitHub Models) or scales up to paid search and faster cloud LLMs, with no code changes."
   - "Safety rails throughout: recursion-depth caps, per-edge investigation limits, loop detection via action hashes, and an auditor that decides loop-or-finish."
 priority: 5
 deepDive:
-  context: "Most LLM research tools are confirmation engines: ask a question, get a confident synthesis, rarely an argument against it. That is the opposite of how good research works, where a claim is only trusted after someone has actually tried to break it. CAG (Causal-Adversarial Graph) is built around that idea, a Popperian falsification loop. It turns a question into a causal graph of hypothesised cause-and-effect links, then, for each link, runs an adversary whose only job is to find contradicting evidence alongside a supporter looking for confirming evidence. A judge weighs both and rules. The output is not a single narrative but a set of causal claims, each tagged with a verdict and the evidence on both sides."
-  architecture: "The system is a LangGraph state machine over a shared ResearchState whose centre is a causal graph (the evolving 'world model'). A Causal Planner turns the query into a causal DAG of hypothesised edges. An Edge Selector picks the next unresolved edge. The Investigate step runs two agents concurrently (asyncio.gather): an Adversary (red team) searching for contradicting evidence and a Supporter (blue team) searching for supporting evidence, writing into separate evidence buffers that custom LangGraph reducers merge without clobbering each other. A Dialectical Judge then weighs the two sides on scientific criteria (credibility, recency, methodology, replication, effect size, confounders) and returns a structured verdict (VERIFIED / FALSIFIED / UNCLEAR) with confidence, updating the graph. An Auditor enforces safety, recursion-depth caps, per-edge investigation limits, loop detection via action hashes, node-visit counting, and routes back to the Selector or on to the Writer, which synthesises the final verdict-tagged report. Routing is done with explicit Command(goto=...) returns rather than conditional edges, a deliberate workaround for hangs observed with LangGraph 1.0.x conditional edges. Everything external lives behind hexagonal ports: LLM, search, and storage adapters are injected, so the same engine runs on free or paid backends."
+  context: "Most LLM research tools are confirmation engines: ask a question, get a confident synthesis, rarely an argument against it. That is the opposite of how good research works, where a claim is only trusted after someone has actually tried to break it. CAG (Causal-Adversarial Graph) is built around that idea, a Popperian falsification loop. It turns a question into a causal graph of hypothesized cause-and-effect links, then, for each link, runs an adversary whose only job is to find contradicting evidence alongside a supporter looking for confirming evidence. A judge weighs both and rules. The output is not a single narrative but a set of causal claims, each tagged with a verdict and the evidence on both sides."
+  architecture: "The system is a LangGraph state machine over a shared ResearchState whose center is a causal graph (the evolving 'world model'). A Causal Planner turns the query into a causal DAG of hypothesized edges. An Edge Selector picks the next unresolved edge. The Investigate step runs two agents concurrently (asyncio.gather): an Adversary (red team) searching for contradicting evidence and a Supporter (blue team) searching for supporting evidence, writing into separate evidence buffers that custom LangGraph reducers merge without clobbering each other. A Dialectical Judge then weighs the two sides on scientific criteria (credibility, recency, methodology, replication, effect size, confounders) and returns a structured verdict (VERIFIED / FALSIFIED / UNCLEAR) with confidence, updating the graph. An Auditor enforces safety, recursion-depth caps, per-edge investigation limits, loop detection via action hashes, node-visit counting, and routes back to the Selector or on to the Writer, which synthesizes the final verdict-tagged report. Routing is done with explicit Command(goto=...) returns rather than conditional edges, a deliberate workaround for hangs observed with LangGraph 1.0.x conditional edges. Everything external lives behind hexagonal ports: LLM, search, and storage adapters are injected, so the same engine runs on free or paid backends."
   dataFlow:
     - step: "Plan"
       component: "Causal Planner"
-      detail: "The Causal Planner turns the query into a causal DAG of hypothesised cause-to-effect edges."
+      detail: "The Causal Planner turns the query into a causal DAG of hypothesized cause-to-effect edges."
     - step: "Select"
       component: "Edge Selector"
       detail: "The Edge Selector picks the next unresolved edge, capped by a per-edge investigation limit."
@@ -40,10 +40,10 @@ deepDive:
       detail: "The Auditor checks gaps, recursion depth, visit counts, and loop hashes, then routes back to Select or on to Write."
     - step: "Write"
       component: "Writer"
-      detail: "The Writer synthesises a report where each causal claim carries its verdict and the evidence on both sides."
+      detail: "The Writer synthesizes a report where each causal claim carries its verdict and the evidence on both sides."
   components:
     - name: "Causal Planner"
-      purpose: "Turns the query into a causal DAG of hypothesised cause-and-effect edges, the system's world model."
+      purpose: "Turns the query into a causal DAG of hypothesized cause-and-effect edges, the system's world model."
     - name: "Edge Selector"
       purpose: "Picks the next unresolved edge to investigate and enforces a per-edge investigation cap."
     - name: "Adversary (red team)"
@@ -55,15 +55,15 @@ deepDive:
     - name: "Auditor"
       purpose: "Safety and control: recursion-depth caps, loop detection via action hashes, node-visit counting, and loop-or-finish routing."
     - name: "Writer"
-      purpose: "Synthesises the final verdict-tagged report from the resolved causal graph."
+      purpose: "Synthesizes the final verdict-tagged report from the resolved causal graph."
     - name: "Ports + adapters (hexagonal)"
       purpose: "LLM, search, and storage behind interfaces, with adapters for DuckDuckGo / Tavily / Exa and Ollama / OpenAI-compatible / Groq / GitHub Models."
   keyDecisions:
-    - decision: "Causal-adversarial (Popperian) design over a single-LLM synthesiser"
-      reasoning: "A question is modelled as a causal graph, and each edge is attacked by a dedicated adversary before being accepted. Trying to falsify a claim catches confident-but-wrong synthesis that a single model would wave through."
+    - decision: "Causal-adversarial (Popperian) design over a single-LLM synthesizer"
+      reasoning: "A question is modeled as a causal graph, and each edge is attacked by a dedicated adversary before being accepted. Trying to falsify a claim catches confident-but-wrong synthesis that a single model would wave through."
       tradeoff: "Far more LLM and search calls per question than a one-shot answer, which is why recursion depth and per-edge investigations are capped."
     - decision: "Run adversary and supporter in parallel, then judge"
-      reasoning: "Red and blue teams run concurrently (asyncio.gather) so each edge gets both perspectives quickly, and a separate judge synthesises a verdict, no single agent both argues and rules."
+      reasoning: "Red and blue teams run concurrently (asyncio.gather) so each edge gets both perspectives quickly, and a separate judge synthesizes a verdict, no single agent both argues and rules."
       tradeoff: "Parallel writes need care: supporting and contradicting evidence go to separate buffers with custom LangGraph reducers so concurrent updates do not clobber each other."
     - decision: "Command(goto=...) routing instead of conditional edges"
       reasoning: "LangGraph 1.0.x conditional edges hung in this environment, so nodes return explicit Command(goto=...) to route (e.g. auditor decides selector vs writer). It is deterministic and debuggable."
@@ -82,16 +82,17 @@ deepDive:
             3. Adversary + Supporter -> parallel red / blue research
             4. Judge     -> resolves the conflict, updates the graph
             5. loop to Selector until edges resolve or max depth
-            6. Writer    -> synthesises the final report
+            6. Writer    -> synthesizes the final report
             """
             def build(self) -> StateGraph:
                 wf = StateGraph(ResearchState)
                 wf.add_node("planner", self._run_planner)
+                wf.add_node("auditor", self._run_auditor)
                 wf.add_node("selector", self._run_selector)
                 wf.add_node("investigate", self._run_parallel_investigation)
                 wf.add_node("judge", self._run_judge)
-                wf.add_node("auditor", self._run_auditor)
                 wf.add_node("writer", self._run_writer)
+                wf.add_node("error_handler", self._handle_error)
                 wf.add_edge(START, "planner")
                 wf.add_edge("planner", "auditor")
                 wf.add_edge("investigate", "judge")
@@ -134,7 +135,7 @@ deepDive:
   metrics:
     - value: "7 nodes"
       label: "in the graph"
-      context: "planner · selector · adversary · supporter · judge · auditor · writer"
+      context: "planner · auditor · selector · investigate · judge · writer · error_handler"
     - value: "Red / Blue"
       label: "per causal edge"
       context: "adversary vs supporter, then a dialectical judge"
@@ -145,14 +146,14 @@ deepDive:
       label: "providers"
       context: "DuckDuckGo / Tavily / Exa · Ollama / Groq / GitHub Models"
   learnings:
-    - "Falsification beats confirmation. Giving each causal edge a dedicated adversary surfaced contradictions that a single synthesising model would have smoothed over. The adversary is the most valuable agent in the system."
+    - "Falsification beats confirmation. Giving each causal edge a dedicated adversary surfaced contradictions that a single synthesizing model would have smoothed over. The adversary is the most valuable agent in the system."
     - "Parallelism is easy; merging parallel state is not. Running red and blue teams with asyncio.gather was trivial, but getting their concurrent writes into LangGraph state without clobbering took custom reducers and separate evidence buffers."
     - "Sometimes the honest fix is a workaround. Conditional edges hung on this LangGraph version, so routing moved into Command(goto=...) returns. Less elegant, but deterministic and debuggable beat clever-but-hanging."
     - "Hexagonal architecture earned its keep. Because search and LLMs sit behind ports, the same engine runs free on DuckDuckGo + Ollama or scales to paid search and cloud models by config, which made iterating cheap."
     - "Agent loops need hard rails. Recursion-depth caps, per-edge limits, node-visit counts, and action-hash loop detection are what stop a self-directed research loop from running forever."
   futureWork:
-    - "Persist and visualise the causal graph so a reader can see which edges were verified, falsified, or left unclear."
+    - "Persist and visualize the causal graph so a reader can see which edges were verified, falsified, or left unclear."
     - "Wire the live demo to real runs with grounded citations; the current published sample is a static shape preview."
     - "Add a calibration pass that checks whether judge confidence scores track real-world correctness."
 ---
-CAG (Causal-Adversarial Graph) is a deep-research engine built as a Popperian falsification loop. A LangGraph workflow turns a question into a causal graph, then investigates each causal edge with a red team (adversary) and blue team (supporter) running in parallel; a dialectical judge weighs both and returns a verdict (VERIFIED / FALSIFIED / UNCLEAR) with confidence, while an auditor enforces depth caps and loop detection and the writer synthesises a verdict-tagged report. It is built on a hexagonal architecture, so search engines (DuckDuckGo, Tavily, Exa) and LLM providers (Ollama, Groq, GitHub Models) are swappable by configuration.
+CAG (Causal-Adversarial Graph) is a deep-research engine built as a Popperian falsification loop. A LangGraph workflow turns a question into a causal graph, then investigates each causal edge with a red team (adversary) and blue team (supporter) running in parallel; a dialectical judge weighs both and returns a verdict (VERIFIED / FALSIFIED / UNCLEAR) with confidence, while an auditor enforces depth caps and loop detection and the writer synthesizes a verdict-tagged report. It is built on a hexagonal architecture, so search engines (DuckDuckGo, Tavily, Exa) and LLM providers (Ollama, Groq, GitHub Models) are swappable by configuration.

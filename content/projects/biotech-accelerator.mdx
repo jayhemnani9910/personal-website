@@ -93,7 +93,7 @@ deepDive:
 
         # build: parse -> resolve_proteins -> literature -> structure
         #        -> drugs (conditional) -> synthesis -> END
-      explanation: "Each node wraps its agent in try/except/finally. A failing external source turns into a labelled gap in the report instead of aborting the whole pipeline, and the drug stage is skipped entirely when the query is not drug-related."
+      explanation: "Each node wraps its agent in try/except/finally. A failing external source turns into a labeled gap in the report instead of aborting the whole pipeline, and the drug stage is skipped entirely when the query is not drug-related."
   metrics:
     - value: "5 agents"
       label: "in the pipeline"

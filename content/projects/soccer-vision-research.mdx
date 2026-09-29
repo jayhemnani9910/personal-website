@@ -61,7 +61,7 @@ deepDive:
       reasoning: "The research question is which model combination works, so the system was built around a model registry plus validated config presets. Changing detector, fusion strategy, or execution mode is a config edit, not a code change."
       tradeoff: "More abstraction and moving parts than a single fixed pipeline would need; the payoff is experiment speed."
     - decision: "SigLIP zero-shot identification over a trained roster classifier"
-      reasoning: "Text-image matching identifies players and teams without collecting and labelling per-team training data, so it generalizes to any match out of the box."
+      reasoning: "Text-image matching identifies players and teams without collecting and labeling per-team training data, so it generalizes to any match out of the box."
       tradeoff: "Less precise than a model trained on a specific roster; it is a flexible baseline rather than a tuned identifier."
     - decision: "Selectable fusion strategies rather than one fixed rule"
       reasoning: "Different scenarios reward different fusion: confidence-based when one model dominates, temporal consistency for video, voting when models disagree. Exposing all seven lets the right one be chosen per experiment."
@@ -144,7 +144,7 @@ deepDive:
       context: "schema-validated per model"
   learnings:
     - "For a research harness, the registry and config layer matter more than any single model. Once swapping a detector or fusion rule became a config edit, running experiments got an order of magnitude cheaper."
-    - "Zero-shot identification with SigLIP is a useful baseline. It will not beat a roster-trained model, but it works on any match with no labelling, which is exactly what you want early in research."
+    - "Zero-shot identification with SigLIP is a useful baseline. It will not beat a roster-trained model, but it works on any match with no labeling, which is exactly what you want early in research."
     - "Fusion is the hard part, not detection. Getting four models to agree (Hungarian alignment across detections, temporal smoothing of identities) was where most of the real engineering went."
     - "Validate config before inference, not during. Schema checks with range constraints turn a class of silent mid-video failures into a fast, obvious error at load time."
   futureWork:

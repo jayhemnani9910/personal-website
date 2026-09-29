@@ -79,7 +79,7 @@ export const FEATURED: FeaturedProject[] = [
     tech: ["LangGraph", "LangChain", "Ollama", "Groq"],
     arrived: "Research agents that confidently agree with themselves.",
     did: "Planned a causal graph per question; paired adversary and supporter agents per edge; a judge rules and loops back through an auditor.",
-    changed: "Every claim exits tagged VERIFIED, CONTESTED or UNVERIFIED, with the evidence.",
+    changed: "Every claim exits tagged VERIFIED, FALSIFIED or UNCLEAR, with the evidence.",
   },
   {
     id: "stock-data-platform",

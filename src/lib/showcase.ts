@@ -14,7 +14,7 @@ export type ShowcaseDemo =
       kind: "report";
       title: string;
       note: string;
-      findings: { verdict: "VERIFIED" | "CONTESTED" | "UNVERIFIED"; text: string }[];
+      findings: { verdict: "VERIFIED" | "FALSIFIED" | "UNCLEAR"; text: string }[];
       sourceUrl?: string;
     }
   | {
@@ -96,9 +96,9 @@ export const SHOWCASE_PROJECTS: Record<string, ShowcaseConfig> = {
       note: "Static sample showing the shape of a CAG run, verdict-tagged findings. A real run grounds each claim in web citations and evidence objects.",
       findings: [
         { verdict: "VERIFIED", text: "Productivity impact is not uniform; it varies by role, tooling, and meeting load." },
-        { verdict: "CONTESTED", text: "Fully remote always increases productivity compared to hybrid arrangements." },
+        { verdict: "FALSIFIED", text: "Fully remote always increases productivity compared to hybrid arrangements." },
         { verdict: "VERIFIED", text: "Strong async practices reduce coordination overhead for distributed teams." },
-        { verdict: "UNVERIFIED", text: "A single policy works well for every team without exceptions." },
+        { verdict: "UNCLEAR", text: "A single policy works well for every team without exceptions." },
       ],
       sourceUrl: "https://github.com/jayhemnani9910/revolu-idea",
     },

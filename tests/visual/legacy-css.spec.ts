@@ -33,7 +33,7 @@ const ROUTES = [
   {
     path: "/projects/revolu-idea",
     name: "showcase-findings",
-    why: "the only project with a findings list, so the only cover for the VERIFIED/CONTESTED/UNVERIFIED verdict states",
+    why: "the only project with a findings list, so the only cover for the VERIFIED/FALSIFIED/UNCLEAR verdict states",
   },
   {
     path: "/projects/fifa-soccer-ds",
@@ -89,8 +89,8 @@ test("findings list renders all three verdict states", async ({ page, colorSchem
   await settle(page, "/projects/revolu-idea");
 
   await expect(page.locator('[data-verdict="VERIFIED"]').first()).toBeVisible();
-  await expect(page.locator('[data-verdict="CONTESTED"]').first()).toBeVisible();
-  await expect(page.locator('[data-verdict="UNVERIFIED"]').first()).toBeVisible();
+  await expect(page.locator('[data-verdict="FALSIFIED"]').first()).toBeVisible();
+  await expect(page.locator('[data-verdict="UNCLEAR"]').first()).toBeVisible();
 });
 
 // The sliders are the piece most likely to regress unnoticed: they render

@@ -20,7 +20,7 @@ impact:
   - "Each stage logs to MLflow and runs standalone or as one unified pipeline; Dockerized."
 priority: 1
 deepDive:
-  context: "Commercial sports-analytics platforms lean on manual tagging teams that spend hundreds of hours per match, so only elite leagues get full coverage and lower-tier, youth, and amateur footage go unanalyzed. This project is an honest attempt at the automation path: get the production-grade plumbing right (detection, tracking, graph construction, MLOps) on real broadcast footage first, then layer trained tactical models on top. The detection and tracking stages work today on real La Liga clips; the tactical GNN is a wired scaffold waiting on labelled training data."
+  context: "Commercial sports-analytics platforms lean on manual tagging teams that spend hundreds of hours per match, so only elite leagues get full coverage and lower-tier, youth, and amateur footage go unanalyzed. This project is an honest attempt at the automation path: get the production-grade plumbing right (detection, tracking, graph construction, MLOps) on real broadcast footage first, then layer trained tactical models on top. The detection and tracking stages work today on real La Liga clips; the tactical GNN is a wired scaffold waiting on labeled training data."
   architecture: "A modular three-stage pipeline. (1) Detection uses YOLOv8n with stock COCO weights, keeping the person and sports-ball classes, run through ultralytics. (2) Tracking uses ByteTrack (via the supervision library) with Kalman motion prediction, tuned for La Liga footage (confidence 0.35, distance threshold 120px, max_age 20 frames, which recovers 3 to 5 frame occlusions). (3) Analysis builds a spatial-temporal interaction graph from the tracklets and runs a GraphSAGE position classifier (PyTorch Geometric). Everything is exposed through a FastAPI service with batch and live RTSP paths, ONNX and TensorRT export for deployment, MLflow for experiment tracking, and a DVC-declared pipeline for reproducibility. A fine-tuned soccer checkpoint and trained GNN weights are the explicit next milestones; the training pipelines exist in the repo."
   dataFlow:
     - step: "Ingest"
@@ -62,7 +62,7 @@ deepDive:
       tradeoff: "Less reliable under long occlusions than appearance-based re-ID; tuned here for mostly static broadcast camera angles."
     - decision: "GraphSAGE over flat positional features for tactics"
       reasoning: "Soccer tactics are relational: who is near whom, and how that changes over time. A graph where players are nodes and proximity plus time are edges encodes that directly, and an inductive GNN generalizes across variable player counts (substitutions, missed detections)."
-      tradeoff: "Needs labelled tactical data to actually train; the classifier currently ships as an inference-ready scaffold rather than trained weights."
+      tradeoff: "Needs labeled tactical data to actually train; the classifier currently ships as an inference-ready scaffold rather than trained weights."
     - decision: "MLflow + DVC instead of a managed MLOps platform"
       reasoning: "As a solo build, a lightweight stack gave experiment tracking, a model registry, and git-like data versioning that run locally or on any cloud, without standing up Kubernetes or paying for a managed service."
       tradeoff: "More manual wiring than a turnkey platform, and no hosted UI by default."
@@ -148,7 +148,7 @@ deepDive:
                 for conv in self.convs:
                     x = self.dropout(F.relu(conv(x, edge_index)))
                 return self.classifier(x)
-      explanation: "The tactical head: a GraphSAGE stack that aggregates each player's graph neighbourhood into role logits. It is inference-ready and wired into the full pipeline, but ships untrained, training it on labelled tactical data is the open milestone."
+      explanation: "The tactical head: a GraphSAGE stack that aggregates each player's graph neighborhood into role logits. It is inference-ready and wired into the full pipeline, but ships untrained, training it on labeled tactical data is the open milestone."
   metrics:
     - value: "22 FPS"
       label: "real-time inference"
@@ -172,7 +172,7 @@ deepDive:
     - "Fine-tune and ship the soccer-specific YOLO checkpoint (player, goalkeeper, ball, referee) using the existing training pipeline and DVC stage."
     - "Label tactical data and train the GraphSAGE role classifier so the scaffold produces real formation and role outputs."
     - "Homography and pitch calibration to map image coordinates to real pitch coordinates for distance-true graphs (calibration code exists in src/calib)."
-    - "Team classification by jersey colour to split tracks into home and away before graph construction."
+    - "Team classification by jersey color to split tracks into home and away before graph construction."
     - "Edge deployment with INT8 quantization and ONNX Runtime for sideline analysis on tablets."
 ---
 Production-shaped computer-vision pipeline for soccer video. YOLOv8n (stock COCO) handles detection, ByteTrack with Kalman filtering persists player identities, and a spatial-temporal graph feeds a GraphSAGE position-classifier scaffold. Wrapped in real MLOps: a DVC-declared pipeline, MLflow tracking, FastAPI endpoints with a live RTSP path, ONNX and TensorRT export, and Docker. Detection and tracking run on real La Liga footage at 22 FPS; the tactical GNN is wired and waiting on trained weights.
