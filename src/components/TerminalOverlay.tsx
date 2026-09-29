@@ -331,9 +331,10 @@ export function TerminalOverlay({ projectCount }: { projectCount: number }) {
                             <button
                                 type="button"
                                 onClick={closeTerminal}
+                                aria-label="Close shell"
                                 className="ml-auto cursor-pointer border-0 bg-transparent text-tr-text-mute hover:text-tr-accent-ink"
                             >
-                                esc ✕
+                                <span aria-hidden="true">esc ✕</span>
                             </button>
                         </div>
 

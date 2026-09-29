@@ -206,7 +206,7 @@ export default function AboutPage() {
                           rel="noreferrer"
                           className="inline-flex min-h-6 items-center py-1 transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] hover:text-tr-accent-ink"
                         >
-                          ieeexplore ↗
+                          ieeexplore <span aria-hidden="true">↗</span>
                         </a>
                       ) : null}
                       {pub.github ? (
@@ -216,7 +216,7 @@ export default function AboutPage() {
                           rel="noreferrer"
                           className="inline-flex min-h-6 items-center py-1 transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] hover:text-tr-accent-ink"
                         >
-                          notebook ↗
+                          notebook <span aria-hidden="true">↗</span>
                         </a>
                       ) : null}
                       {gap ? (
@@ -275,7 +275,7 @@ export default function AboutPage() {
                           className={`${MONO} inline-flex min-h-6 items-center gap-2 py-1 text-[length:var(--tr-t-mono-sm)] text-tr-text-mute transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] hover:text-tr-accent-ink`}
                         >
                           <span>{pr.repo}</span>
-                          <span className="text-tr-text-faint">{pr.number} ↗</span>
+                          <span className="text-tr-text-faint">{pr.number} <span aria-hidden="true">↗</span></span>
                         </a>
                       </li>
                     ))}
@@ -286,7 +286,7 @@ export default function AboutPage() {
                     rel="noreferrer"
                     className={`${MONO} mt-2 inline-flex min-h-6 items-center py-1 text-[length:var(--tr-t-mono-sm)] text-tr-text-faint transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] hover:text-tr-accent-ink`}
                   >
-                    verify all ↗
+                    verify all <span aria-hidden="true">↗</span>
                   </a>
                 </div>
                 <div className="mt-6">
