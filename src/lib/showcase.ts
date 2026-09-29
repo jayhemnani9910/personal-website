@@ -73,14 +73,18 @@ export const SHOWCASE_PROJECTS: Record<string, ShowcaseConfig> = {
     {
       "id": "nobel-dataintelligence",
       "title": "Nobel Data Intelligence",
-      "tech": ["Python", "PyTorch", "ProDy", "Transformers"],
-      "domain": "Computational Biology",
+      "summary": "Physics-informed deep learning for protein stability and enzyme kinetics. A tri-modal architecture fuses ProtT5 sequence embeddings, a VDOS vibrational spectrum from normal mode analysis, and ChemBERTa chemistry through learned gated attention.",
+      "tech": ["Python", "PyTorch", "ProDy", "Transformers", "RDKit", "Biopython"],
+      "tags": ["deep-learning", "molecular-biology", "pytorch", "research", "protein"],
+      "domain": "Research",
       "url": "https://jayhemnani.in/projects/nobel-dataintelligence"
     },
     {
       "id": "biotech-accelerator",
       "title": "Biotech Accelerator",
-      "tech": ["Python", "LangGraph", "ProDy", "httpx"],
+      "summary": "Multi-agent AI system for biotech research that routes a query through protein databases, literature, structural analysis, and chemistry, then proposes experiments worth running next.",
+      "tech": ["Python", "LangGraph", "ProDy", "httpx", "Rich", "Docker"],
+      "tags": ["langgraph", "agents", "bioinformatics", "research"],
       "domain": "AI/ML",
       "url": "https://jayhemnani.in/projects/biotech-accelerator"
     }
