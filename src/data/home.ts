@@ -11,6 +11,7 @@
 import type { Route } from "next";
 import { SITE_CONFIG } from "@/../content/site";
 import { WEBMCP_TOOLS, WEBMCP_TOOL_COUNT } from "@/lib/webmcp-tools";
+import { RESUME, companyAnchor, parsePublishedVsReproduced } from "@/data/resume";
 
 export type FeaturedProject = {
   id: string;
@@ -118,8 +119,8 @@ export const FEATURED: FeaturedProject[] = [
     tags: ["ml", "bio", "deep-learning"],
     tech: ["PyTorch Geometric", "ProDy", "RDKit", "Transformers"],
     arrived: "Protein stability prediction stuck on sequence alone.",
-    did: "Fused sequence (ProtT5), structure (graph) and a vibrational VDOS signal into one head.",
-    changed: "The vibrational channel is the part that moves the number.",
+    did: "Fused sequence (ProtT5), a vibrational VDOS spectrum (SpectralCNN) and substrate chemistry (ChemBERTa + DRFP) through a learned gate.",
+    changed: "Still predicts when no structure is available. Whether the vibrational branch helps is not benchmarked yet.",
   },
 ];
 
@@ -219,22 +220,45 @@ export const PRESETS: Preset[] = [
  * modular/modular #6954 shows as Closed on GitHub rather than Merged, because
  * Modular lands outside contributions with Copybara instead of pressing merge.
  * It landed in commit 39b94179d6c9c5be6334888f119fcb51469c3ad0 on 2026-09-02,
- * which the modularbot comment on the PR states. That is also why it does not
- * appear in MERGED_PRS_SEARCH below.
+ * which the modularbot comment on the PR states, so that commit is linked as
+ * `landed`. That is also why it does not appear in MERGED_PRS_SEARCH below.
+ *
+ * A2UI #407 was merged under google/A2UI; the repo has since moved to
+ * a2ui-project/a2ui, so the name and link use its current home.
  */
-export const MERGED_PRS: { repo: string; number: string; href: string }[] = [
+export const MERGED_PRS: { repo: string; number: string; href: string; landed?: string }[] = [
   { repo: "vllm-project/vllm", number: "#31513", href: "https://github.com/vllm-project/vllm/pull/31513" },
   { repo: "modelcontextprotocol/python-sdk", number: "#1826", href: "https://github.com/modelcontextprotocol/python-sdk/pull/1826" },
-  { repo: "google/A2UI", number: "#407", href: "https://github.com/google/A2UI/pull/407" },
-  { repo: "modular/modular", number: "#6954", href: "https://github.com/modular/modular/pull/6954" },
+  { repo: "a2ui-project/a2ui", number: "#407", href: "https://github.com/a2ui-project/a2ui/pull/407" },
+  {
+    repo: "modular/modular",
+    number: "#6954",
+    href: "https://github.com/modular/modular/pull/6954",
+    landed: "https://github.com/modular/modular/commit/39b94179d6c9c5be6334888f119fcb51469c3ad0",
+  },
 ];
 
 /**
- * Every merged PR by author, for anyone who wants to check the list above.
- * Returns three of the four: see the Copybara note on MERGED_PRS.
+ * The PRs above in one GitHub search, for anyone who wants to check the list.
+ * A github.com/search URL loads without signing in (github.com/pulls does not),
+ * and the repo: qualifiers keep it to these repos. It finds the ones GitHub
+ * marks merged, so not #6954: see the Copybara note on MERGED_PRS.
  */
-export const MERGED_PRS_SEARCH =
-  "https://github.com/pulls?q=is%3Apr+author%3Ajayhemnani9910+is%3Amerged";
+export const MERGED_PRS_SEARCH = `https://github.com/search?q=${encodeURIComponent(
+  ["is:pr", "is:merged", "author:jayhemnani9910", ...MERGED_PRS.map((pr) => `repo:${pr.repo}`)].join(" "),
+)}&type=pullrequests`;
+
+/** How many of MERGED_PRS that search finds, e.g. "3 of 4". */
+export const MERGED_PRS_SEARCH_LABEL = `${MERGED_PRS.filter((pr) => !pr.landed).length} of ${MERGED_PRS.length}`;
+
+// METHOD[3] quotes the diabetes paper's two numbers. They are parsed out of
+// resume.ts the same way /resume parses them, so the two pages cannot disagree.
+const PAPER_GAP = RESUME.publications
+  .map((pub) => parsePublishedVsReproduced(pub.description))
+  .find((gap) => gap !== null);
+if (!PAPER_GAP) throw new Error("resume.ts: no publication states a published-vs-reproduced gap");
+
+const ROLE_COUNT = RESUME.experience.flatMap((company) => company.roles).length;
 
 export function buildReceipts(c: { projectCount: number; toolCount: number }): Receipt[] {
   return [
@@ -260,28 +284,22 @@ export function buildReceipts(c: { projectCount: number; toolCount: number }): R
       title: "Merged upstream",
       note: "Small changes in large repos. Listed by repo and number so you can read the diff yourself.",
       lines: [
-        ...MERGED_PRS.map((pr) => ({ text: pr.repo, meta: pr.number, href: pr.href })),
-        { text: "All merged PRs by author, on GitHub", meta: "search", href: MERGED_PRS_SEARCH },
+        ...MERGED_PRS.flatMap((pr) => [
+          { text: pr.repo, meta: pr.number, href: pr.href },
+          ...(pr.landed ? [{ text: `${pr.number} closed, landed as this commit`, meta: "commit", href: pr.landed }] : []),
+        ]),
+        { text: "The merged ones, in one GitHub search", meta: MERGED_PRS_SEARCH_LABEL, href: MERGED_PRS_SEARCH },
       ],
     },
     {
-      n: "2",
-      label: "peer-reviewed IEEE papers, 2021",
+      n: String(RESUME.publications.length),
+      label: `peer-reviewed IEEE papers, ${RESUME.publications[0]?.year}`,
       cta: "show papers",
-      title: "IEEE AIMV 2021",
-      note: "Both include the honest gap between the published number and the reproducible notebook.",
-      lines: [
-        {
-          text: "Diabetes Prediction using Stacking Classifier",
-          meta: "ieeexplore 9670920",
-          href: "https://ieeexplore.ieee.org/document/9670920",
-        },
-        {
-          text: "CPU Scheduling Algorithms Analysis",
-          meta: "ieeexplore 9670986",
-          href: "https://ieeexplore.ieee.org/document/9670986",
-        },
-      ],
+      title: `IEEE AIMV ${RESUME.publications[0]?.year}`,
+      note: "The diabetes paper includes the honest gap between the published number and the reproducible notebook.",
+      lines: RESUME.publications.flatMap((pub) =>
+        pub.link ? [{ text: pub.title, meta: `ieeexplore ${pub.link.split("/").pop()}`, href: pub.link }] : [],
+      ),
     },
     {
       n: "22",
@@ -304,7 +322,7 @@ export function buildReceipts(c: { projectCount: number; toolCount: number }): R
       cta: "show role",
       title: "Amnex, 2022",
       note: "Random Forest + XGBoost with SMOTE for imbalance. Internship, but it ran on real transactions.",
-      lines: [{ text: "AI/ML Intern · Amnex · Gujarat", meta: "Jan-May 2022", href: "/resume" }],
+      lines: [{ text: "AI/ML Intern · Amnex · Gujarat", meta: "Jan-May 2022", href: `/resume#${companyAnchor("Amnex")}` }],
     },
     {
       n: String(c.toolCount),
@@ -357,7 +375,7 @@ export const METHOD: MethodRule[] = [
   {
     n: "04",
     rule: "Publish the gap.",
-    why: "82.68% in the paper; 74.46% in the committed notebook. Both numbers are on the résumé.",
+    why: `${PAPER_GAP.published}% in the paper; ${PAPER_GAP.reproduced}% in the committed notebook. Both numbers are on the résumé.`,
     from: "Diabetes stacking, IEEE 2021",
     href: "/projects/diabetes-stacking",
   },
@@ -423,7 +441,7 @@ export const COPY = {
   methodH2: "How I work, with the project that taught me.",
   methodDeck: "Principles are cheap. Each of these is attached to the place it cost me something.",
   logH2: "The log.",
-  logDeck: "Five roles, one habit: whichever part nobody wanted, I took it.",
+  logDeck: `${ROLE_COUNT} roles, one habit: whichever part nobody wanted, I took it.`,
   contactLabel: "ONE INBOX",
   contactDeck:
     "Looking for software, data and ML roles, forward-deployed ones included. Send the vague version, that's the point.",

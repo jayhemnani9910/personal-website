@@ -14,7 +14,7 @@ export const LAB_ITEMS: Record<"building" | "exploring" | "radar", LabItem[]> = 
       title: "Portfolio V4",
       description:
         "This website - sans and mono on a yellow accent, a live brief decomposer on the home page, AI-queryable via WebMCP",
-      tags: ["Next.js 16", "Framer Motion", "Three.js"],
+      tags: ["Next.js 16", "Framer Motion", "WebGL"],
       progress: 100,
       link: "https://github.com/jayhemnani9910/personal-website",
     },
