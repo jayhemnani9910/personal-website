@@ -1,4 +1,4 @@
-import type { JSX } from "react";
+import type { JSX, ReactNode } from "react";
 import { formatPostDate, getPost, getAllPosts } from "@/lib/content";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
@@ -110,6 +110,17 @@ const mdxComponents = {
       alt={props.alt ?? ""}
       className="my-[var(--tr-s-5)] max-w-full border border-tr-hairline rounded-[var(--tr-r-sm)]"
     />
+  ),
+  // Wraps an inline <svg> diagram in a post. At width 100% a 700-unit diagram
+  // shrinks its labels to about 5px on a phone, so the svg keeps a minimum
+  // width and this box scrolls sideways instead. Capitalised because MDX only
+  // routes literal lowercase tags like <svg> through components when they come
+  // from markdown syntax, never when written as JSX. tabIndex lets a keyboard
+  // user scroll it.
+  Diagram: ({ children }: { children?: ReactNode }) => (
+    <div tabIndex={0} className="mb-[var(--tr-s-5)] overflow-x-auto [&>svg]:min-w-[640px]">
+      {children}
+    </div>
   ),
 };
 
