@@ -76,3 +76,9 @@ as separate ADRs because they are pins rather than architecture:
 - **`lucide-react` stays on 0.554.0.** v1 removed brand icons, leaving no GitHub
   mark, only a generic `GitBranch` and `GitFork`. That icon is the repo link on
   every `/lab` card, so Jay chose no visual change over a stable major.
+
+**Correction, 2026-09-29.** The Compliance section overstated two things.
+`engines` alone never made `npm ci` fail: npm only warns (`EBADENGINE`) unless
+`engine-strict` is set, and an open range like `>=24.0.0` lets Vercel move to
+the newest major it offers. Both are now closed: `engines.node` is `24.x`, and a
+committed `.npmrc` sets `engine-strict=true`, so an install on Node 20 fails.
