@@ -50,18 +50,20 @@ export default async function ProjectPage({ params }: { params: Promise<{ id: st
     const meta = `${String(index + 1).padStart(2, "0")} / ${total}`;
 
     return (
-        <main id="main-content" className="bg-tr-bg text-tr-text">
+        <>
             <SiteHeader meta={meta} />
-            <ProjectDetail
-                project={project}
-                overview={overview}
-                nextProject={{ id: next.id, title: next.title, index: allProjects.indexOf(next) + 1 }}
-            />
-            <div className="mx-auto flex max-w-[1280px] items-center justify-end px-[clamp(1rem,4vw,2rem)] py-6">
-                <ViewCounter slug={id} />
-            </div>
+            <main id="main-content" className="bg-tr-bg text-tr-text">
+                <ProjectDetail
+                    project={project}
+                    overview={overview}
+                    nextProject={{ id: next.id, title: next.title, index: allProjects.indexOf(next) + 1 }}
+                />
+                <div className="mx-auto flex max-w-[1280px] items-center justify-end px-[clamp(1rem,4vw,2rem)] py-6">
+                    <ViewCounter slug={id} />
+                </div>
+            </main>
             <SiteFooter />
-        </main>
+        </>
     );
 }
 

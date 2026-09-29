@@ -7,10 +7,9 @@ import type { ReactNode } from "react";
 // the shared framer-motion chunk went from 31.4 kB brotli to 20.4 kB, which every
 // route pays, and that alone brought /projects/[id] back under its budget.
 //
-// Every animated component MUST use `m.*`, never `motion.*`. A single `motion.*`
-// import anywhere re-pulls the full feature set and silently undoes this. (Proof
-// it is real: /personal and /jh still import `motion` and now carry an extra
-// 11.6 kB chunk that no other route loads.)
+// Every animated component MUST use `m.*`, never `motion.*`: a single `motion.*`
+// import re-pulls the full feature set and silently undoes this. `strict` makes
+// that a thrown error (in dev and in vitest) instead of a quiet regression.
 //
 // The async feature loader — `features={() => import("framer-motion").then(m => m.domAnimation)}`
 // — was tried and REVERTED. It is the form framer-motion's docs recommend for
@@ -20,5 +19,5 @@ import type { ReactNode } from "react";
 // import resolves to the same chunk. It bought nothing and added a window where
 // animations do not run. Do not reintroduce it without re-measuring.
 export function MotionProvider({ children }: { children: ReactNode }) {
-  return <LazyMotion features={domAnimation}>{children}</LazyMotion>;
+  return <LazyMotion features={domAnimation} strict>{children}</LazyMotion>;
 }

@@ -137,6 +137,13 @@ export default async function RootLayout({
             `,
           }}
         />
+        {/* framer-motion writes each home section's hidden starting state
+            (opacity 0) into the server HTML, and only JS reveals it. Without
+            JS, or if a chunk fails to load, un-hide them. Inert whenever
+            scripting is on. */}
+        <noscript>
+          <style>{".tr-reveal{opacity:1!important;transform:none!important}"}</style>
+        </noscript>
       </head>
       <body
         className="antialiased"

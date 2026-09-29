@@ -2,8 +2,8 @@ import Link from "next/link";
 import { SITE_CONFIG } from "@/../content/site";
 
 // The footer the v4 design screens carry: one rule, one surface, a copyright
-// and a way back. The home page has its own, taller, with the ASCII mascot in
-// the middle; this is the version every other route uses.
+// and a way back. The home page has its own slimmer copyright and back-to-top
+// bar; this is the version every other route uses.
 export function SiteFooter() {
   return (
     <footer className="border-t border-tr-hairline bg-tr-surface-1">
