@@ -23,7 +23,7 @@ const ROUTES = [
   {
     path: "/projects/accurate-guesser",
     name: "dossier",
-    why: "no showcase config: the fact-grid degrade, arrived/built/changed, and a decisions table whose cost column is empty throughout because none of this project's decisions record a trade-off",
+    why: "no showcase config: the fact-grid degrade, arrived/built/changed, and a decisions table with a trade-off on every row",
   },
   {
     path: "/projects/webmcp-portfolio",

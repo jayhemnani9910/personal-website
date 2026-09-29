@@ -4,7 +4,7 @@ summary: "Relational schema + CRUD for immigration ops."
 role: "Concept"
 domain: "Student work"
 tags: ["sql"]
-tech: ["SQL", "MySQL/Postgres"]
+tech: ["SQL", "MySQL"]
 challenge: "Normalize complex person-/case-centric data."
 solution:
   - "ERD → SQL DDL; indexes for frequent lookups; CRUD console."
@@ -117,7 +117,7 @@ deepDive:
     - **Rationale:** Enables SQL queries on historical data, maintains normalization, and allows efficient range queries (e.g., "all cases that were pending in Q2 2023").
 
     **5. Database Engine Choice**
-    - **Decision:** MySQL/Postgres with InnoDB/default engine
+    - **Decision:** MySQL with the InnoDB engine
     - **Rationale:** ACID compliance critical for immigration data integrity. Row-level locking supports concurrent case updates. Native support for foreign keys and transactions.
 
     **6. Text Encoding for Internationalization**
@@ -341,4 +341,4 @@ deepDive:
        - Stored procedure with transaction boundaries solved this completely.
        - Learning: Multi-table operations must be wrapped in transactions. ACID compliance is worth the learning curve.
 ---
-Relational schema + CRUD for immigration ops.
+A normalized (3NF) MySQL schema for immigration case management: people, cases, a junction table for who plays which role on each case, documents with issue and expiration dates, and a status-history table as the audit trail. Indexes cover the frequent lookups, such as documents expiring soon, and a stored procedure creates a case and its people in one transaction.
