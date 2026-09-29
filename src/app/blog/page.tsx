@@ -39,9 +39,8 @@ export default async function WritingPage() {
             </h1>
           </div>
           <p className="max-w-[56ch] text-tr-text-mute [text-wrap:pretty]">
-            Essays on the Forward Deployed Engineer role, and one on this site. Unflattering details left
-            in. Every project also has a write-up with its decisions and trade-offs, and those live under
-            Work.
+            Essays on the Forward Deployed Engineer role. Unflattering details left in. Every project also
+            has a write-up, most with their decisions and trade-offs, and those live under Work.
           </p>
         </section>
 
@@ -100,8 +99,8 @@ export default async function WritingPage() {
                 Project write-ups.
               </h2>
               <p className="mt-5 max-w-[40ch] text-tr-text-mute">
-                {projects.length}, each with the same skeleton: arrived as, what I did, what changed,
-                decisions and their cost.
+                {projects.length}, each with the same skeleton: arrived as, what I did, what changed. The
+                deep dives add the decisions and their cost.
               </p>
             </div>
 
