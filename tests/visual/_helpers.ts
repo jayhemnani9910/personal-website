@@ -37,9 +37,11 @@ export async function prepare(page: Page, theme: "dark" | "light") {
     }),
   );
 
-  // No test clicks "run sim", but a stray call would spend Gemini quota and
-  // return different prose every run.
+  // No test clicks "run sim" or types a brief into the home page's Decomposer,
+  // but a stray call to either would spend Gemini quota and return different
+  // prose every run.
   await page.route("**/api/fde-sim**", (route) => route.abort());
+  await page.route("**/api/decompose**", (route) => route.abort());
 }
 
 /** Navigate and wait for everything that moves pixels to have settled. */
