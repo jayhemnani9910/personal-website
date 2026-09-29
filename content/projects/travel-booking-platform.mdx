@@ -121,7 +121,6 @@ deepDive:
     - "Independent deployability is the whole prize of microservices, and a shared-types package in a monorepo is what keeps fourteen of them from drifting into incompatibility."
     - "Events over a log beat direct calls for resilience: a consumer that was offline catches up instead of failing, which is hard to get from synchronous REST."
     - "At fourteen services the operational surface (Docker, Kubernetes, CI/CD) is as much of the project as the code, so building that in from the start mattered."
-featured: false
 priority: 7
 ---
 A travel booking platform decomposed into 14 independently deployable services, built as a TypeScript monorepo. An Express API gateway fronts domain services for flights, hotels, cars, booking, billing, and users, with supporting services for notifications, admin analytics, deal aggregation, airport resolution, external adapters, and a Python AI concierge, all behind a React/Vite client with i18n. Services coordinate through Kafka domain events on consumer groups rather than direct calls, persist to MongoDB and MySQL with Redis caching, and share TypeScript event and model types through an internal @kayak/shared package. Everything is containerized per service and deployed with Kubernetes manifests, with GitHub Actions CI/CD and unit, end-to-end, and performance tests.

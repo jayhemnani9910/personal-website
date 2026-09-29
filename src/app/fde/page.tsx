@@ -2,6 +2,9 @@
    Interactive console is a client island. Static sections (Proofs, Fit, Contact)
    are plain server JSX. layout.tsx is untouched (provides metadata + JSON-LD). */
 
+import Link from "next/link";
+import type { Route } from "next";
+import { SITE_CONFIG } from "@/../content/site";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { FdeConsole } from "@/components/fde/FdeConsole";
@@ -156,13 +159,14 @@ export default function FDEPage() {
 
 // Contact is extracted as a small function to keep the page component readable.
 function FdeContact() {
+  const { social, handles } = SITE_CONFIG;
   const links = [
-    { lbl: 'email',    val: 'jayhemnani992000@gmail.com',       href: 'mailto:jayhemnani992000@gmail.com', primary: true },
-    { lbl: 'essay',    val: 'what FDE means in 2026',           href: 'https://jayhemnani.in/blog/forward-deployed-engineer' },
-    { lbl: 'resume',   val: 'the one-pager',                    href: 'https://jayhemnani.in/resume' },
-    { lbl: 'github',   val: 'jayhemnani9910',                   href: 'https://github.com/jayhemnani9910' },
-    { lbl: 'linkedin', val: 'in / jayhemnani',                  href: 'https://linkedin.com/in/jayhemnani' },
-    { lbl: 'twitter',  val: '@jeyhemnani9',                     href: 'https://x.com/jeyhemnani9' },
+    { lbl: 'email',    val: social.email,            href: `mailto:${social.email}`, primary: true },
+    { lbl: 'essay',    val: 'what FDE means in 2026', href: '/blog/forward-deployed-engineer', internal: true },
+    { lbl: 'resume',   val: 'the one-pager',          href: '/resume', internal: true },
+    { lbl: 'github',   val: handles.github,           href: social.github },
+    { lbl: 'linkedin', val: handles.linkedin,         href: social.linkedin },
+    { lbl: 'twitter',  val: handles.twitter,          href: social.twitter },
   ];
 
   return (
@@ -179,33 +183,49 @@ function FdeContact() {
         </div>
 
         <div className="mt-9 border-t border-tr-hairline">
-          {links.map((l) => (
-            <a
-              key={l.lbl}
-              href={l.href}
-              target="_blank"
-              rel="noreferrer"
-              data-cursor="OPEN"
-              className="group grid grid-cols-[6rem_1fr_auto] items-center gap-4 border-b border-tr-hairline py-4 no-underline sm:grid-cols-[8.75rem_1fr_auto]"
-            >
-              <span className={`${MONO} text-[length:var(--tr-t-mono-sm)] uppercase tracking-[.14em] text-tr-text-mute`}>
-                {l.lbl}
-              </span>
-              <span
-                className={`min-w-0 [overflow-wrap:anywhere] text-[length:var(--tr-t-h3)] font-medium transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] group-hover:text-tr-accent ${
-                  l.primary ? "italic text-tr-accent" : "text-tr-text"
-                }`}
+          {links.map((l) => {
+            const row = (
+              <>
+                <span className={`${MONO} text-[length:var(--tr-t-mono-sm)] uppercase tracking-[.14em] text-tr-text-mute`}>
+                  {l.lbl}
+                </span>
+                <span
+                  className={`min-w-0 [overflow-wrap:anywhere] text-[length:var(--tr-t-h3)] font-medium transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] group-hover:text-tr-accent ${
+                    l.primary ? "italic text-tr-accent" : "text-tr-text"
+                  }`}
+                >
+                  {l.val}
+                </span>
+                <span
+                  aria-hidden="true"
+                  className={`${MONO} text-tr-accent transition-transform duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] group-hover:translate-x-1 group-hover:-translate-y-1`}
+                >
+                  ↗
+                </span>
+              </>
+            );
+            const className = "group grid grid-cols-[6rem_1fr_auto] items-center gap-4 border-b border-tr-hairline py-4 no-underline sm:grid-cols-[8.75rem_1fr_auto]";
+            // The essay and the resume are pages on this site: same tab, client-side.
+            if (l.internal) {
+              return (
+                <Link key={l.lbl} href={l.href as Route} data-cursor="OPEN" className={className}>
+                  {row}
+                </Link>
+              );
+            }
+            const external = l.href.startsWith("http");
+            return (
+              <a
+                key={l.lbl}
+                href={l.href}
+                {...(external ? { target: "_blank", rel: "noreferrer" } : {})}
+                data-cursor="OPEN"
+                className={className}
               >
-                {l.val}
-              </span>
-              <span
-                aria-hidden="true"
-                className={`${MONO} text-tr-accent transition-transform duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] group-hover:translate-x-1 group-hover:-translate-y-1`}
-              >
-                ↗
-              </span>
-            </a>
-          ))}
+                {row}
+              </a>
+            );
+          })}
         </div>
       </div>
     </section>

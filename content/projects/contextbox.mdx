@@ -126,7 +126,6 @@ deepDive:
     - "Treating every heavy dependency as optional changes the install story: the base tool stays small, and a missing model or OCR binary disables one feature instead of breaking the whole CLI."
     - "A keyword fallback behind semantic search is cheap insurance: retrieval keeps working before the embedding model is installed, which matters for a tool people try once from the terminal."
     - "Question classification plus source attribution makes LLM answers auditable: you can see which captures an answer came from, which is what makes a personal-knowledge tool trustworthy."
-featured: true
 priority: 6
 ---
 ContextBox is a CLI-first personal knowledge assistant in Python. It captures screenshots (with Tesseract OCR) and web, Wikipedia, and YouTube content into a local SQLite store, embeds everything with sentence-transformers (all-MiniLM-L6-v2) for semantic search, and answers questions over your captures via GitHub Models with question classification, source attribution, and confidence levels. It is a 27-module package with a Click + Rich CLI, optional feature groups so heavy dependencies stay optional, a Fernet-based privacy mode, and a React documentation site on GitHub Pages.

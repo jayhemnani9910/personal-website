@@ -7,6 +7,7 @@ import { WebMCPLoader } from "@/components/WebMCPLoader";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { SITE_CONFIG } from "@/../content/site";
+import { THEME_KEY } from "@/lib/storage";
 import { getAllProjects } from "@/lib/content";
 
 // Instrument Sans is a variable font, so no `weight` array: listing weights
@@ -126,7 +127,7 @@ export default async function RootLayout({
             __html: `
               (function() {
                 try {
-                  var theme = localStorage.getItem('theme');
+                  var theme = localStorage.getItem('${THEME_KEY}');
                   if (theme !== 'dark' && theme !== 'light') {
                     theme = 'dark';
                   }

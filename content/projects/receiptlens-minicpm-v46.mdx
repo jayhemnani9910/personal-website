@@ -109,7 +109,6 @@ deepDive:
     - "A multimodal model, not just a text model, can run on a phone through llama.cpp's mtmd path, which makes offline document reading possible."
     - "For a prototype, adapting an existing native bridge (OpenBMB's) and spending the effort on the app and UX was the right trade, and saying so plainly is part of doing it honestly."
     - "On-device inference is a UX problem as much as an ML one: model download, storage, and progress are most of what makes a local-model app usable."
-featured: false
 priority: 19
 ---
 ReceiptLens is an offline iPhone prototype that reads receipts, documents, and screenshots by running the MiniCPM-V 4.6 vision-language model fully on-device with llama.cpp, nothing is uploaded. A SwiftUI app captures or picks an image, applies one of three mode-specific prompts (receipt, document, screen), and runs inference locally through a Swift engine over llama.cpp's multimodal (mtmd) runtime, with an in-app model downloader and a local scan history. It is built honestly as a prototype: the SwiftUI app, model management, camera flow, and engine wiring are the original work, while the low-level native bridge is adapted from OpenBMB's official iOS demo and llama.cpp ships as a vendored xcframework.

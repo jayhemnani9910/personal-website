@@ -113,7 +113,6 @@ deepDive:
     - "Nine algorithms collapse into one engine once you see that they differ only in the next-process selection rule, the queueing and I/O logic is shared."
     - "Adding an I/O block queue is what separates a toy CPU-only model from schedules that behave the way an OS course actually describes."
     - "Lifting logic out of DOM handlers into a Node-testable module turned a browser demo into something with a real regression suite behind it."
-featured: false
 priority: 16
 ---
 An interactive web visualizer for 9 CPU scheduling algorithms (FCFS, SJF, SRTF, LJF, LRTF, Priority NP/P, Round Robin, HRRN). You build a process set with CPU and I/O bursts, arrival times, and priorities, set the context-switch time and time quantum, then run any algorithm and watch the schedule build on a Gantt chart. All algorithms are compared on the same input by average completion, turnaround, waiting, and response time, with a Round Robin sweep across time quanta. It is a single ~1,105-line vanilla-JS app whose core scheduling logic is also extracted into a Node test suite covering all 9 algorithms, and it is the implementation behind a published IEEE paper (AIMV 2021).

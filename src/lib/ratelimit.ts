@@ -1,8 +1,8 @@
 /**
- * "unavailable" is kept distinct from "ok" (rather than folding a missing or
- * broken store into "ok", the way fde-sim's boolean does) so a caller can log
- * or count it separately. Either way the caller must fail open: treat
- * "unavailable" exactly like "ok", never as a denial.
+ * The one fixed-window limiter every API route uses. "unavailable" is kept
+ * distinct from "ok" (rather than folding a missing or broken store into "ok")
+ * so a caller can log or count it separately. Either way the caller must fail
+ * open: treat "unavailable" exactly like "ok", never as a denial.
  */
 export type RateLimitResult = "ok" | "limited" | "unavailable";
 

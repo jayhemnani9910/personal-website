@@ -122,7 +122,6 @@ deepDive:
     - "A framework is not always the answer: a shared state module plus a storage module was enough structure for an app that is mostly imperative 3D and keyboard handling."
     - "Compiling existing C++ to WebAssembly is a clean way to reuse heavy logic in the browser, and cwrap makes the JS-to-WASM call site read like an ordinary function."
     - "Designing for offline from the start (service worker, localStorage, export/import) fits how a timer is actually used, repeatedly and often without a network."
-featured: false
 priority: 15
 ---
 A keyboard-first speedcubing app built in vanilla JavaScript as 25 ES modules. It renders a Rubik's Cube in 3D with Three.js, generates WCA-style scrambles for 2x2 through 7x7, times solves with inspection and +2/DNF penalties, and keeps the averages cubers care about, best, mean, and rolling Ao5/Ao12/Ao100, with a PB timeline and Chart.js charts. A C++ cube routine compiled to WebAssembly handles scramble validation and hints, and the whole thing runs offline as an installable PWA with local persistence and JSON/CSV export.

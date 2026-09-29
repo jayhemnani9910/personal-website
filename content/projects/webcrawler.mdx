@@ -138,7 +138,6 @@ deepDive:
     - "Wrapping ArchiveBox instead of rebuilding capture kept the project focused on what was actually missing: change detection, search, and provenance."
     - "Treating provenance tools (OpenTimestamps, IPFS) as optional with safe fallbacks is what makes the service deployable anywhere while still gaining verifiability where the tools exist."
     - "Hashing versions and rolling them into a Merkle tree turns a collection of snapshots into a tamper-evident sequence, which is the difference between an archive and a verifiable record."
-featured: true
 priority: 4
 ---
 Website Watcher is a website archiver and change-detection service. It discovers pages (sitemap and link crawling, robots-compliant), snapshots them with ArchiveBox, detects content changes with SHA-256 hashing, and indexes every version for SQLite FTS5 full-text search. On top it builds a verifiable-provenance layer, Merkle trees over version hashes plus OpenTimestamps anchoring and optional IPFS storage, each degrading gracefully when the external tool is absent. It ships as a 26-module Python service with a Flask UI and API, an APScheduler-driven CLI, and Docker Compose and systemd deployment with Prometheus metrics.

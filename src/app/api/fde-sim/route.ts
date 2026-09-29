@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getRedis } from "@/lib/kv";
+import { clientIp } from "@/lib/client-ip";
+import { rateLimit } from "@/lib/ratelimit";
 import { PROMPT_LEAK_MARKERS, buildGeminiBody, simCacheKey } from "@/lib/fde-prompt";
 import { classifyStatus, readSimMetrics, recordSim, type SimFailure } from "@/lib/fde-metrics";
 import { JsonSectionExtractor } from "@/lib/json-sections";
@@ -57,44 +59,6 @@ function extractJson(raw: string): SimPayload {
         }
 
         throw new Error("unparseable");
-    }
-}
-
-const RATE_LIMIT = 8;            // max requests
-const RATE_WINDOW_SECONDS = 60;  // per IP, per minute
-
-async function isRateLimited(ip: string): Promise<boolean> {
-    const redis = getRedis();
-    if (!redis) return false; // no store configured -> skip
-    try {
-        const key = `ratelimit:fde-sim:${ip}`;
-        const count = await redis.incr(key);
-        if (count === 1) {
-            await redis.expire(key, RATE_WINDOW_SECONDS);
-            return false;
-        }
-        if (count > RATE_LIMIT) {
-            // Only the first hit of a window sets the TTL, so an `expire` that
-            // failed back then leaves a key that counts up forever and never
-            // resets: that IP is throttled permanently. Checking here rather
-            // than on every request keeps the extra round trip on the path
-            // that is already being rejected. A missing TTL (-1) means the key
-            // is stranded, so repair it and let this request through instead of
-            // enforcing a window that has no end.
-            const ttl = await redis.ttl(key);
-            if (ttl < 0) {
-                await redis.expire(key, RATE_WINDOW_SECONDS);
-                console.error(`[fde-sim] rate-limit key had no TTL; window repaired`);
-                return false;
-            }
-            return true;
-        }
-        return false;
-    } catch (err) {
-        // Fail open: a store outage should not take the feature down. Log it,
-        // because while this is firing the route has no rate limit at all.
-        console.error("[fde-sim] rate-limit store unavailable, failing open:", err instanceof Error ? err.message : err);
-        return false;
     }
 }
 
@@ -298,15 +262,8 @@ export async function POST(request: NextRequest) {
     // anything else that just wants the object, is unaffected by this existing.
     const wantsStream = request.nextUrl.searchParams.get("stream") === "1";
 
-    // Best-effort per-IP rate limit (requires KV; skipped when unconfigured).
-    // Trust the platform-set client IP: x-real-ip, or the right-most (last hop)
-    // x-forwarded-for value. The left-most value is client-supplied and spoofable,
-    // so using it would let an attacker rotate fake IPs to bypass the limit.
-    const ip =
-        request.headers.get("x-real-ip")?.trim() ||
-        request.headers.get("x-forwarded-for")?.split(",").pop()?.trim() ||
-        "anon";
-    if (await isRateLimited(ip)) {
+    // Best-effort per-IP rate limit (requires KV; fails open when unconfigured).
+    if ((await rateLimit(getRedis(), "fde-sim", clientIp(request.headers))) === "limited") {
         await recordSim(getRedis(), { outcome: "rate_limited" });
         return NextResponse.json({ error: "rate-limited" }, { status: 429 });
     }

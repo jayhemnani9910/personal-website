@@ -5,6 +5,7 @@ import { Github } from "lucide-react";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { LAB_ITEMS, type LabItem } from "@/data/lab";
+import { SITE_CONFIG } from "@/../content/site";
 
 type TabKey = "building" | "exploring" | "radar";
 
@@ -207,7 +208,7 @@ export default function LabPage() {
             </p>
           </div>
           <a
-            href="mailto:jayhemnani992000@gmail.com"
+            href={`mailto:${SITE_CONFIG.social.email}`}
             data-cursor="OPEN"
             className="flex flex-col border border-tr-hairline bg-tr-bg px-5 py-4 no-underline transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] hover:border-tr-accent"
           >
@@ -215,7 +216,7 @@ export default function LabPage() {
               Open the line
             </span>
             <span className="text-[length:var(--tr-t-h3)] font-medium text-tr-text">
-              jayhemnani992000@gmail.com
+              {SITE_CONFIG.social.email}
             </span>
           </a>
         </div>

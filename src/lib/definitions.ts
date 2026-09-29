@@ -111,7 +111,6 @@ export const ProjectSchema = z.object({
     challenge: z.string(),
     solution: z.array(z.string()),
     impact: z.array(z.string()),
-    featured: z.boolean().optional(),
     priority: z.number().optional(),
     github: z.string().url().optional(),
     links: z.record(z.string(), z.string()).nullable().transform(v => v || undefined).optional(),

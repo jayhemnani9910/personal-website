@@ -18,7 +18,6 @@ impact:
   - "Falsification-first design: every causal claim faces a dedicated adversary before it is accepted, instead of one model synthesising unchecked."
   - "Runs entirely on free backends (DuckDuckGo + Ollama or GitHub Models) or scales up to paid search and faster cloud LLMs, with no code changes."
   - "Safety rails throughout: recursion-depth caps, per-edge investigation limits, loop detection via action hashes, and an auditor that decides loop-or-finish."
-featured: true
 priority: 5
 deepDive:
   context: "Most LLM research tools are confirmation engines: ask a question, get a confident synthesis, rarely an argument against it. That is the opposite of how good research works, where a claim is only trusted after someone has actually tried to break it. CAG (Causal-Adversarial Graph) is built around that idea, a Popperian falsification loop. It turns a question into a causal graph of hypothesised cause-and-effect links, then, for each link, runs an adversary whose only job is to find contradicting evidence alongside a supporter looking for confirming evidence. A judge weighs both and rules. The output is not a single narrative but a set of causal claims, each tagged with a verdict and the evidence on both sides."

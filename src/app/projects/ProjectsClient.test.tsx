@@ -7,7 +7,6 @@ const base: Omit<ProjectSummary, "id" | "title" | "summary" | "domain" | "tech">
   role: "Builder",
   period: "2026",
   tags: ["agents"],
-  featured: true,
   priority: 1,
   github: undefined,
   links: {},

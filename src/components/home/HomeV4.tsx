@@ -1,5 +1,5 @@
 import { getAllProjects, getAllPosts } from "@/lib/content";
-import { WEBMCP_TOOL_COUNT } from "@/lib/webmcp";
+import { WEBMCP_TOOL_COUNT } from "@/lib/webmcp-tools";
 import { RESUME } from "@/data/resume";
 import { FEATURED, SECTIONS, LOG_NOTES, buildNav, buildReceipts } from "@/data/home";
 

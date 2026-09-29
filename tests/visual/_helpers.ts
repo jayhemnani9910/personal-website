@@ -15,7 +15,7 @@ const VIEWS_STUB = { count: 42, counted: false };
 export async function prepare(page: Page, theme: "dark" | "light") {
   await page.addInitScript((t) => {
     try {
-      localStorage.setItem("theme", t);
+      localStorage.setItem("theme-choice", t); // THEME_KEY in src/lib/storage.ts
       // The cold open is once-per-session and already off under reduced motion.
       // Belt and braces: a preloader caught mid-fade is the classic flaky shot.
       sessionStorage.setItem("tr-intro-seen", "1");

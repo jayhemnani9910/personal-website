@@ -4,6 +4,9 @@ import { SITE_CONFIG } from "@/../content/site";
 import { LAB_EXPERIMENTS } from "@/data/lab";
 import { WebMCPProvider } from "./WebMCPProvider";
 import type { SiteData } from "@/lib/webmcp";
+import { FEATURED } from "@/data/home";
+
+const FEATURED_IDS = new Set(FEATURED.map((f) => f.id));
 
 /**
  * Server component that loads site data at build time
@@ -22,7 +25,8 @@ export async function WebMCPLoader() {
       domain: p.domain,
       tags: p.tags,
       tech: p.tech,
-      featured: p.featured,
+      // The home page's six are the one featured list (not an MDX flag).
+      featured: FEATURED_IDS.has(p.id),
       priority: p.priority,
       github: p.github,
       challenge: p.challenge,

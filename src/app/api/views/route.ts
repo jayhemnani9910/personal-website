@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getRedis } from "@/lib/kv";
+import { clientIp } from "@/lib/client-ip";
 
 // Slugs are content ids/kebab-case; cap charset and length so the value can't
 // be used to create arbitrary KV keys.
@@ -41,17 +42,6 @@ function pruneLocalSeen(now: number): void {
 // whose own copy says it publishes load-bearing numbers rather than vanity ones.
 const DEDUP_WINDOW_SECONDS = 60 * 60 * 24;
 
-// Platform-set client IP only. The left-most x-forwarded-for entry is supplied
-// by the caller, so keying on it would let anyone mint unlimited fresh identities
-// and defeat the dedup entirely. Same reasoning as the fde-sim rate limiter.
-function clientIp(request: NextRequest): string {
-    return (
-        request.headers.get("x-real-ip")?.trim() ||
-        request.headers.get("x-forwarded-for")?.split(",").pop()?.trim() ||
-        "anon"
-    );
-}
-
 export async function GET(request: NextRequest) {
     const slug = request.nextUrl.searchParams.get("slug");
     if (!isValidSlug(slug)) return NextResponse.json({ count: 0 });
@@ -81,7 +71,7 @@ export async function POST(request: NextRequest) {
                 // SET NX on the dedup key is the whole guard: it succeeds once per
                 // visitor per slug per day, and only that first success increments.
                 // Repeat callers get the current total back, so the UI still renders.
-                const seenKey = `viewed:${slug}:${clientIp(request)}`;
+                const seenKey = `viewed:${slug}:${clientIp(request.headers)}`;
                 const first = await redis.set(seenKey, 1, { nx: true, ex: DEDUP_WINDOW_SECONDS });
 
                 if (!first) {
@@ -96,7 +86,7 @@ export async function POST(request: NextRequest) {
             }
         }
 
-        const seenKey = `viewed:${slug}:${clientIp(request)}`;
+        const seenKey = `viewed:${slug}:${clientIp(request.headers)}`;
         const now = Date.now();
         const expiry = localSeen.get(seenKey);
 

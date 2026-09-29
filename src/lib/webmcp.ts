@@ -9,6 +9,9 @@
  * @see https://webmcp.dev
  */
 
+import { READER_KEY, THEME_KEY, writeStorage } from "@/lib/storage";
+import { WEBMCP_TOOL_NAMES } from "@/lib/webmcp-tools";
+
 // Extend Navigator for WebMCP API (Chrome 146 Canary)
 declare global {
   interface Navigator {
@@ -84,25 +87,6 @@ export interface SiteData {
   experiments: { id: string; title: string; description: string; tags: string[]; progress?: number }[];
 }
 
-/**
- * The tools registered below, in registration order. Single source of truth:
- * unregisterWebMCPTools walks this list, and every place in the UI that quotes
- * a tool count reads WEBMCP_TOOL_COUNT rather than typing a number. The count
- * is asserted against the actual registerTool calls in webmcp.test.ts, so this
- * array cannot silently drift from what the site really registers.
- */
-export const WEBMCP_TOOL_NAMES = [
-  "search_projects",
-  "get_project",
-  "get_resume",
-  "search_skills",
-  "get_contact",
-  "list_experiments",
-  "toggle_theme",
-  "switch_mode",
-] as const;
-
-export const WEBMCP_TOOL_COUNT = WEBMCP_TOOL_NAMES.length;
 
 /** Check if WebMCP is available in the browser */
 export function isWebMCPAvailable(): boolean {
@@ -349,10 +333,10 @@ export function registerWebMCPTools(data: SiteData): void {
       }
 
       document.documentElement.setAttribute("data-theme", newTheme);
-      localStorage.setItem("theme", newTheme);
+      writeStorage(THEME_KEY, newTheme);
 
       // Dispatch storage event so ThemeContext picks it up
-      window.dispatchEvent(new StorageEvent("storage", { key: "theme", newValue: newTheme }));
+      window.dispatchEvent(new StorageEvent("storage", { key: THEME_KEY, newValue: newTheme }));
 
       return { previous: current, current: newTheme };
     },
@@ -377,7 +361,7 @@ export function registerWebMCPTools(data: SiteData): void {
     handler: async (args) => {
       const on = (args.mode as string) === "reader";
 
-      localStorage.setItem("reader-mode", on ? "on" : "off");
+      writeStorage(READER_KEY, on ? "on" : "off");
       if (on) document.documentElement.dataset.reader = "on";
       else delete document.documentElement.dataset.reader;
       // usePrefersReducedMotion listens for this and drops every motion

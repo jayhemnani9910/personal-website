@@ -114,7 +114,6 @@ deepDive:
     - "Moving from a monolith to microservices is mostly a communication problem: the services are the easy part, deciding what goes over Kafka versus a direct call is where the design actually lives."
     - "Retry-on-failure plus a graceful no-broker path makes the event bus a resilience feature rather than a new single point of failure."
     - "Keeping the LLM in its own service paid off: the AI concierge could change models or break entirely without touching the booking flow."
-featured: false
 priority: 9
 ---
 A team-built Airbnb-style booking platform, internally called Voyage, that evolved from a monolith into an event-driven microservices system. A React/Redux/Vite frontend sits over four Node/Express services (traveler, owner, property, booking), each with its own MongoDB, communicating through Kafka topics with consumer groups and retry rather than direct calls. A separate Python FastAPI service runs a local Ollama model through LangChain to generate JSON travel itineraries, kept isolated from the booking path. The whole system ships with Docker Compose for local runs and a full set of Kubernetes manifests, plus Playwright, Postman, and JMeter for end-to-end, API, and load testing.

@@ -9,6 +9,8 @@
  * exists) and the "4 YRS" experience chip.
  */
 import type { Route } from "next";
+import { SITE_CONFIG } from "@/../content/site";
+import { WEBMCP_TOOLS, WEBMCP_TOOL_COUNT } from "@/lib/webmcp-tools";
 
 export type FeaturedProject = {
   id: string;
@@ -96,7 +98,7 @@ export const FEATURED: FeaturedProject[] = [
     tags: ["web", "agents", "standards"],
     tech: ["TypeScript", "Next.js 16", "WebMCP"],
     arrived: "Could a portfolio be read by a machine as easily as by a person?",
-    did: "Registered 8 tools on navigator.modelContext: search, résumé, skills, contact, experiments, theme, mode.",
+    did: `Registered ${WEBMCP_TOOL_COUNT} tools with the WebMCP browser API: search, résumé, skills, contact, experiments, theme, mode.`,
     changed: "An agent in Chrome 146+ reads this site without scraping it.",
   },
   {
@@ -310,17 +312,24 @@ export function buildReceipts(c: { projectCount: number; toolCount: number }): R
       cta: "list tools",
       title: "navigator.modelContext",
       note: "Registered in webmcp.ts and asserted by a test, so the count can't drift from the code.",
-      lines: [
-        {
-          text: "search_projects · get_project · get_resume · search_skills",
-          meta: "webmcp.ts · read",
-          href: "/projects/webmcp-portfolio",
-        },
-        { text: "get_contact · list_experiments", meta: "webmcp.ts · read", href: "/projects/webmcp-portfolio" },
-        { text: "toggle_theme · switch_mode", meta: "webmcp.ts · write", href: "/projects/webmcp-portfolio" },
-      ],
+      lines: toolLines(),
     },
   ];
+}
+
+// The tool receipt's lines, built from the registry so a new tool shows up
+// here without anyone retyping the list: read tools four to a line, then the
+// write tools.
+function toolLines(): ReceiptLine[] {
+  const href = "/projects/webmcp-portfolio" as const;
+  const read = WEBMCP_TOOLS.filter((t) => t.kind === "read").map((t) => t.name);
+  const write = WEBMCP_TOOLS.filter((t) => t.kind === "write").map((t) => t.name);
+  const lines: ReceiptLine[] = [];
+  for (let i = 0; i < read.length; i += 4) {
+    lines.push({ text: read.slice(i, i + 4).join(" · "), meta: "webmcp.ts · read", href });
+  }
+  if (write.length) lines.push({ text: write.join(" · "), meta: "webmcp.ts · write", href });
+  return lines;
 }
 
 export const METHOD: MethodRule[] = [
@@ -418,7 +427,7 @@ export const COPY = {
   contactLabel: "ONE INBOX",
   contactDeck:
     "Looking for software, data and ML roles, forward-deployed ones included. Send the vague version, that's the point.",
-  footerLine: "© 2026 Jay Hemnani",
+  footerLine: SITE_CONFIG.copyright,
   idleNote: "You get back a scope, an architecture, a plan and the risks, plus the projects that prove it.",
   offlineNote:
     "Offline right now, so this is the closest saved example rather than a reading of your brief. The live version calls a model.",

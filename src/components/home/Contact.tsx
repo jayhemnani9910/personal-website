@@ -4,19 +4,12 @@ import { SITE_CONFIG } from "@/../content/site";
 const MONO = 'font-[family-name:var(--ff-mono)] text-[length:var(--tr-t-mono)] tracking-[.1em] text-tr-text-mute';
 const MONO_ROW = 'font-[family-name:var(--ff-mono)] text-[length:var(--tr-t-mono-lg)] tracking-normal text-tr-text-mute';
 
+const { social, handles } = SITE_CONFIG;
 const SOCIAL_ROWS: { label: string; url: string; handle: string }[] = [
-  { label: "github", url: SITE_CONFIG.social.github, handle: SITE_CONFIG.social.github.replace("https://github.com/", "") },
-  {
-    label: "linkedin",
-    url: SITE_CONFIG.social.linkedin,
-    handle: SITE_CONFIG.social.linkedin.replace("https://linkedin.com", ""),
-  },
-  { label: "x", url: SITE_CONFIG.social.twitter, handle: `@${SITE_CONFIG.social.twitter.replace("https://x.com/", "")}` },
-  {
-    label: "youtube",
-    url: SITE_CONFIG.social.youtube,
-    handle: SITE_CONFIG.social.youtube.replace("https://youtube.com/", ""),
-  },
+  { label: "github", url: social.github, handle: handles.github },
+  { label: "linkedin", url: social.linkedin, handle: handles.linkedin },
+  { label: "x", url: social.twitter, handle: handles.twitter },
+  { label: "youtube", url: social.youtube, handle: handles.youtube },
 ];
 
 export function Contact() {

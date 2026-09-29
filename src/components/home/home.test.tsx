@@ -81,7 +81,7 @@ describe("HomeFooter", () => {
   // trivia creeping back in.
   it("carries the copyright and nothing else in the left slot", () => {
     render(<HomeFooter />);
-    expect(screen.getByText("© 2026 Jay Hemnani")).toBeDefined();
+    expect(screen.getByText(SITE_CONFIG.copyright)).toBeDefined();
     expect(screen.queryByText(/MCP tools|Instrument Sans|Geist Mono/)).toBeNull();
   });
 });

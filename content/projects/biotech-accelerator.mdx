@@ -111,7 +111,6 @@ deepDive:
     - "Source-specific agents with typed interfaces make a research pipeline resilient: a flaky external API becomes a degraded result, not a crash."
     - "A structural-dynamics signal is worth the extra stage. Normal-mode analysis surfaces differences that sequence and literature evidence miss."
     - "Shipping in Docker from the start made the pipeline reproducible, which matters more than speed when the output is a research recommendation someone else has to trust."
-featured: true
 priority: 6
 ---
 Biotech Accelerator is a multi-agent AI system for early-stage biotech research. A LangGraph pipeline parses a research query and routes it through UniProt, PubMed, the PDB with ProDy normal-mode analysis, and ChEMBL, then synthesizes the collected evidence into a structured list of experiments worth running next. It runs in Docker for reproducibility and reports progress through a Rich terminal UI.

@@ -19,7 +19,19 @@ export const SITE_CONFIG = {
     github: "https://github.com/jayhemnani9910",
     linkedin: "https://linkedin.com/in/jayhemnani",
     twitter: "https://x.com/jeyhemnani9",
-    youtube: "https://youtube.com/@jayhemnani",
+    youtube: "https://youtube.com/@jhanalytics2.0",
   },
+
+  // How each profile is written on the page. Kept next to the URLs so no
+  // component rebuilds a handle by stripping a URL prefix.
+  handles: {
+    github: "jayhemnani9910",
+    linkedin: "in/jayhemnani",
+    twitter: "@jeyhemnani9",
+    youtube: "@jhanalytics2.0",
+  },
+
+  // Built when the page renders, so both footers stay current each year.
+  copyright: `© ${new Date().getFullYear()} Jay Hemnani`,
 } as const;
 

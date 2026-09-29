@@ -1,7 +1,7 @@
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
-import { WEBMCP_TOOL_COUNT, WEBMCP_TOOL_NAMES } from "./webmcp";
+import { WEBMCP_TOOL_COUNT, WEBMCP_TOOL_NAMES } from "./webmcp-tools";
 
 // Parses the real webmcp.ts, in the same spirit as tokens.test.ts parsing the
 // real globals.css. WEBMCP_TOOL_NAMES is hand-written but drives unregistration

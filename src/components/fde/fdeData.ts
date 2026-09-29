@@ -1,7 +1,7 @@
 /* FDE Simulation data: ported from the prototype (presets.jsx + sim.jsx + app.jsx).
    Verbatim copy of the content; no em-dashes introduced. */
 
-import { WEBMCP_TOOL_COUNT } from '@/lib/webmcp';
+import { WEBMCP_TOOL_COUNT } from '@/lib/webmcp-tools';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 

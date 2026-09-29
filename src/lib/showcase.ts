@@ -3,7 +3,7 @@
 // "use client") so server components can read it without RSC turning it into
 // a client reference.
 
-import { WEBMCP_TOOL_COUNT } from "@/lib/webmcp";
+import { WEBMCP_TOOL_COUNT } from "@/lib/webmcp-tools";
 
 export type ShowcaseDemo =
   | { kind: "iframe"; url: string }

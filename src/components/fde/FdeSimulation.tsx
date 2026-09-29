@@ -8,6 +8,7 @@ import type { Preset } from "./fdeData";
 import { PHASES, NARRATION, RECEIPTS } from "./fdeData";
 import { FdeArchDiagram } from "./FdeArchDiagram";
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
+import { SITE_CONFIG } from "@/../content/site";
 
 interface Props {
   /** Partial while a live run streams. Presets and cache hits arrive complete. */
@@ -382,10 +383,10 @@ function PhaseContent({
             <br />
             <span className="text-tr-accent">If that landed → </span>
             <a
-              href="mailto:jayhemnani992000@gmail.com"
+              href={`mailto:${SITE_CONFIG.social.email}`}
               className="not-italic text-tr-accent underline decoration-current underline-offset-2"
             >
-              jayhemnani992000@gmail.com
+              {SITE_CONFIG.social.email}
             </a>
           </div>
         </div>

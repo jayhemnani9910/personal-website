@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getRedis } from "@/lib/kv";
 import { rateLimit } from "@/lib/ratelimit";
+import { clientIp } from "@/lib/client-ip";
 import { FEATURED } from "@/data/home";
 import type { DecomposeOutput } from "@/data/home";
 import {
@@ -89,16 +90,7 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ engine: "preset", out: preset.out }, { status: 200 });
     }
 
-    // Trust the platform-set client IP: x-real-ip, or the right-most (last
-    // hop) x-forwarded-for value. The left-most value is client-supplied and
-    // spoofable, so using it would let an attacker rotate fake IPs to bypass
-    // the limit. Copied from fde-sim's route.
-    const ip =
-        request.headers.get("x-real-ip")?.trim() ||
-        request.headers.get("x-forwarded-for")?.split(",").pop()?.trim() ||
-        "anon";
-
-    const limit = await rateLimit(getRedis(), "decompose", ip);
+    const limit = await rateLimit(getRedis(), "decompose", clientIp(request.headers));
     if (limit === "limited") {
         return NextResponse.json({ error: "rate_limited" }, { status: 429 });
     }

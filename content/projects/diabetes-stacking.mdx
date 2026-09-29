@@ -103,7 +103,6 @@ deepDive:
     - "Stacking helps most when the base models are individually decent and make different errors, so tuning each one before combining them matters more than the choice of meta-learner."
     - "On a small dataset the train/test gap (87.9% vs 74.46%) is part of the result, not a footnote: it is a reminder of how little headroom 768 rows leaves before overfitting."
     - "Fixing the split and reporting the held-out number as-is is the honest way to present a result that a different random seed would move."
-featured: false
 priority: 23
 ---
 A stacking ensemble for early diabetes prediction on the PIMA Indians dataset (768 patients, 8 clinical features), co-authored and published at IEEE AIMV 2021. Six base classifiers, Gaussian Naive Bayes, Random Forest, Decision Tree, SVM, an ANN, and Logistic Regression, are each tuned with randomized search, then combined as the level-0 estimators of a scikit-learn StackingClassifier (cv=4) whose Random Forest meta-learner makes the final prediction. The committed notebook reaches 74.46% accuracy on a 30% held-out test set (87.9% on training), and the whole pipeline, data through evaluation, lives in one reproducible notebook.

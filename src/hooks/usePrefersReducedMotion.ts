@@ -14,7 +14,11 @@ function subscribe(callback: () => void) {
   };
 }
 
-function getSnapshot() {
+/**
+ * The same answer as the hook, read once, for code outside React's render
+ * (event handlers, scroll helpers). True under OS reduced motion or reader mode.
+ */
+export function isMotionReduced(): boolean {
   return (
     window.matchMedia(QUERY).matches ||
     document.documentElement.dataset.reader === "on"
@@ -32,5 +36,5 @@ function getServerSnapshot() {
 // SSR-safe: renders `false` on the server and on the client's first paint, then
 // syncs to the real value and reacts to live preference / reader-mode changes.
 export function usePrefersReducedMotion(): boolean {
-  return useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
+  return useSyncExternalStore(subscribe, isMotionReduced, getServerSnapshot);
 }
