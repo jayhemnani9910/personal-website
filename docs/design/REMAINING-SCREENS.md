@@ -1,7 +1,8 @@
 # The other five v4 screens
 
-Only `portfolio-home/` is saved locally, because it is the one being built.
-The rest of the project stays remote on purpose. Fetching them is one tool call
+Only `portfolio-home/` is saved locally; it was the first screen built. Every
+page has since been rebuilt in v4 (ADR 0014), and the rest of the project stays
+remote on purpose. Fetching them is one tool call
 each.
 
 ## Why they are not in this directory
@@ -24,7 +25,7 @@ paths:
 |---|---|---|
 | `About.dc.html` | About / Résumé | `src/data/resume.ts`, `src/app/resume/page.tsx` |
 | `Channel.dc.html` | YouTube channel | `src/data/youtube.json`, `src/lib/youtube.ts`, `src/lib/youtube-copy.ts` |
-| `Current Home.dc.html` | Baseline recreation of the pre-v4 home | `src/components/EditorialHome.tsx` and its neighbours |
+| `Current Home.dc.html` | Baseline recreation of the pre-v4 home (retired) | none: the editorial home it recreated was deleted on 2026-09-02 |
 | `Project Detail.dc.html` | One project (FIFA) | `content/projects/fifa-soccer-ds.mdx`, `src/lib/showcase.ts` |
 | `Work Index.dc.html` | Filterable project index | `content/projects/*.mdx`, `src/lib/content.ts` |
 | `Writing.dc.html` | Blog index | `content/blog/*.mdx`, `src/app/blog/page.tsx` |

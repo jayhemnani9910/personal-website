@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { pageMetadata } from "@/lib/page-metadata";
 import Link from "next/link";
-import { CUBE_ACHIEVEMENT, RESUME } from "@/data/resume";
-import { MERGED_PRS, MERGED_PRS_SEARCH } from "@/data/home";
+import { CUBE_ACHIEVEMENT, RESUME, companyAnchor, parsePublishedVsReproduced } from "@/data/resume";
+import { MERGED_PRS, MERGED_PRS_SEARCH, MERGED_PRS_SEARCH_LABEL } from "@/data/home";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SkillGroups } from "./SkillGroups";
@@ -28,20 +28,10 @@ const CONTAINER = "mx-auto max-w-[1280px] px-[clamp(1rem,4vw,2rem)]";
 const TWO_COL = "lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]";
 const H2 = "text-[length:var(--tr-t-h2)] leading-[var(--tr-lh-h2)] tracking-[-.025em] font-medium text-tr-text";
 
-// A publication's description states the published-vs-reproduced gap inline
-// (e.g. "82.68% accuracy as published; ... reproduces 73.59% ..."). Pulling
-// both numbers out programmatically, rather than hardcoding them, keeps the
-// callout tied to whatever resume.ts actually says.
-function parsePublishedVsReproduced(description?: string) {
-  if (!description) return null;
-  const published = description.match(/([\d.]+)%[^.]*as published/i)?.[1];
-  const reproduced = description.match(/reproduces\s*([\d.]+)%/i)?.[1];
-  if (!published || !reproduced) return null;
-  return { published, reproduced };
-}
-
+// A company's first role row carries its anchor (e.g. /resume#amnex), which
+// the home page's receipts link to.
 const roles = RESUME.experience.flatMap((company) =>
-  company.roles.map((role) => ({ company, role }))
+  company.roles.map((role, i) => ({ company, role, anchor: i === 0 ? companyAnchor(company.name) : undefined }))
 );
 
 export default function AboutPage() {
@@ -108,10 +98,11 @@ export default function AboutPage() {
               </p>
             </div>
             <ol className="list-none">
-              {roles.map(({ company, role }) => (
+              {roles.map(({ company, role, anchor }) => (
                 <li
                   key={`${company.name}-${role.title}`}
-                  className="grid gap-6 border-t border-tr-hairline py-5 lg:grid-cols-[7rem_minmax(0,1fr)]"
+                  id={anchor}
+                  className="grid scroll-mt-16 gap-6 border-t border-tr-hairline py-5 lg:grid-cols-[7rem_minmax(0,1fr)]"
                 >
                   <div className={`${MONO} min-w-0 text-[length:var(--tr-t-mono-sm)] text-tr-text-faint`}>
                     <div>{role.period?.label}</div>
@@ -178,8 +169,8 @@ export default function AboutPage() {
             <div>
               <h2 className={H2}>Publications</h2>
               <p className="mt-4 max-w-[40ch] text-[length:var(--tr-t-body)] leading-[var(--tr-lh-body)] text-tr-text-mute">
-                {RESUME.publications.length}, IEEE AIMV {RESUME.publications[0]?.year}. With the gap
-                between the published number and the committed notebook stated plainly.
+                {RESUME.publications.length}, IEEE AIMV {RESUME.publications[0]?.year}. Where the
+                published number and the committed notebook disagree, the gap is stated plainly.
               </p>
             </div>
             <ol className="grid list-none gap-px overflow-hidden rounded-[var(--tr-r-lg)] border border-tr-hairline bg-tr-hairline">
@@ -269,7 +260,7 @@ export default function AboutPage() {
                   </p>
                   <ul className="mt-3 flex flex-col gap-2">
                     {MERGED_PRS.map((pr) => (
-                      <li key={pr.href}>
+                      <li key={pr.href} className="flex flex-wrap items-center gap-x-3">
                         <a
                           href={pr.href}
                           target="_blank"
@@ -279,6 +270,18 @@ export default function AboutPage() {
                           <span>{pr.repo}</span>
                           <span className="text-tr-text-faint">{pr.number} <span aria-hidden="true">↗</span></span>
                         </a>
+                        {/* Closed on GitHub, not merged: Modular lands outside PRs
+                            with Copybara, so the commit is the proof it went in. */}
+                        {pr.landed ? (
+                          <a
+                            href={pr.landed}
+                            target="_blank"
+                            rel="noreferrer"
+                            className={`${MONO} inline-flex min-h-6 items-center py-1 text-[length:var(--tr-t-mono-sm)] text-tr-text-faint transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] hover:text-tr-accent-ink`}
+                          >
+                            closed, landed as a commit <span aria-hidden="true">↗</span>
+                          </a>
+                        ) : null}
                       </li>
                     ))}
                   </ul>
@@ -288,7 +291,7 @@ export default function AboutPage() {
                     rel="noreferrer"
                     className={`${MONO} mt-2 inline-flex min-h-6 items-center py-1 text-[length:var(--tr-t-mono-sm)] text-tr-text-faint transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] hover:text-tr-accent-ink`}
                   >
-                    verify all <span aria-hidden="true">↗</span>
+                    verify {MERGED_PRS_SEARCH_LABEL} on GitHub <span aria-hidden="true">↗</span>
                   </a>
                 </div>
                 <div className="mt-6">

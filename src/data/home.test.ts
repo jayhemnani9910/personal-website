@@ -12,8 +12,11 @@ import {
   ROLES,
   COPY,
   buildNav,
+  MERGED_PRS,
+  MERGED_PRS_SEARCH,
+  MERGED_PRS_SEARCH_LABEL,
 } from "./home";
-import { RESUME } from "./resume";
+import { RESUME, companyAnchor, parsePublishedVsReproduced } from "./resume";
 
 const PROJECTS_DIR = join(process.cwd(), "content/projects");
 const FEATURED_IDS = new Set(FEATURED.map((p) => p.id));
@@ -59,7 +62,7 @@ const BAN_WORD_RE = new RegExp(`\\b(${BAN_WORDS.join("|")})\\b`, "i");
 const ALLOWED_INTERNAL_PREFIXES = ["/projects", "/blog", "/resume", "/fde", "/youtube", "/lab"];
 function isAllowedHref(href: string): boolean {
   if (href.startsWith("https://")) return true;
-  return ALLOWED_INTERNAL_PREFIXES.some((p) => href === p || href.startsWith(`${p}/`));
+  return ALLOWED_INTERNAL_PREFIXES.some((p) => href === p || href.startsWith(`${p}/`) || href.startsWith(`${p}#`));
 }
 
 describe("home data", () => {
@@ -98,6 +101,41 @@ describe("home data", () => {
     expect(RECEIPTS).toHaveLength(6);
     expect(RECEIPTS[0].n).toBe("41");
     expect(RECEIPTS[RECEIPTS.length - 1].n).toBe("13");
+  });
+
+  it("every /resume# receipt href names a company row on /resume", () => {
+    const anchors = new Set(RESUME.experience.map((c) => companyAnchor(c.name)));
+    const hashes = RECEIPTS.flatMap((r) => r.lines.map((l) => l.href))
+      .filter((href) => href.startsWith("/resume#"))
+      .map((href) => href.slice("/resume#".length));
+    expect(hashes).toContain("amnex");
+    for (const h of hashes) expect(anchors.has(h)).toBe(true);
+  });
+
+  it("reads the paper receipt, the published gap and the role count from resume.ts", () => {
+    const papers = RECEIPTS.find((r) => r.title.startsWith("IEEE"))!;
+    expect(papers.n).toBe(String(RESUME.publications.length));
+    expect(papers.lines.map((l) => l.text)).toEqual(RESUME.publications.map((p) => p.title));
+    expect(papers.lines.map((l) => l.href)).toEqual(RESUME.publications.map((p) => p.link));
+
+    const gap = RESUME.publications.map((p) => parsePublishedVsReproduced(p.description)).find(Boolean)!;
+    expect(METHOD[3].why).toContain(`${gap.published}% in the paper`);
+    expect(METHOD[3].why).toContain(`${gap.reproduced}% in the committed notebook`);
+
+    const roles = RESUME.experience.flatMap((c) => c.roles).length;
+    expect(COPY.logDeck.startsWith(`${roles} roles`)).toBe(true);
+  });
+
+  it("searches only the listed repos, and says how many of them it finds", () => {
+    const url = new URL(MERGED_PRS_SEARCH);
+    expect(url.origin + url.pathname).toBe("https://github.com/search");
+    expect(url.searchParams.get("type")).toBe("pullrequests");
+    const q = url.searchParams.get("q")!;
+    for (const pr of MERGED_PRS) expect(q).toContain(`repo:${pr.repo}`);
+    // #6954 landed through Copybara, so GitHub shows it closed and the search
+    // cannot find it: the label must not claim all four.
+    expect(MERGED_PRS_SEARCH_LABEL).toBe("3 of 4");
+    expect(MERGED_PRS.find((pr) => pr.number === "#6954")?.landed).toMatch(/^https:\/\/github\.com\/modular\/modular\/commit\//);
   });
 
   it("LOG_NOTES keys match real employers, one note each way", () => {

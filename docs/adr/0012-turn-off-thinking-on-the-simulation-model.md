@@ -1,6 +1,6 @@
 # 0012. Turn off thinking on the simulation model
 
-- **Status:** Proposed
+- **Status:** Accepted
 - **Date:** 2026-08-23
 - **Related:** ADR 0009 (the golden set that has to judge this), ADR 0011 (the streaming work that exposed the problem)
 
@@ -98,3 +98,9 @@ The measurement in ADR 0011 was taken with ADR 0010's counters, which report
 the latency half of this change land: `GET /api/fde-sim` returns them, and the
 p50 time to first section should fall well below 13.0s if thinking was indeed
 the bulk of the wait.
+
+Accepted on 2026-09-29. Both routes had run with `thinkingBudget: 0` since this
+record was written, and the golden set was re-recorded that day with thinking
+off: 184 of 190 checks pass, and the six that fail are one known issue
+(`arch.captions-fit`, captions longer than their boxes), not the tone checks
+this record was waiting on.

@@ -180,12 +180,10 @@ export const RESUME: Resume = {
       github: "https://github.com/jayhemnani9910/diabetes-prediction-stacking"
     },
     {
-      title: "CPU Scheduling Algorithms Analysis",
+      title: "Efficient vaccine scheduler based on CPU scheduling algorithms",
       venue: "IEEE International Conference on Artificial Intelligence and Machine Vision (AIMV)",
       year: "2021",
       description: "Applied CPU-scheduling ideas to vaccine-distribution scheduling; the implementation is the 9-algorithm visualizer.",
-      abstract: "This paper presents a comparative study of various CPU scheduling algorithms including FCFS, SJF, Priority, and Round Robin. We analyze their performance metrics and propose optimizations using priority queue data structures for improved throughput and reduced waiting times.",
-      coAuthors: [],
       link: "https://ieeexplore.ieee.org/document/9670986",
       github: "https://github.com/jayhemnani9910/cpu-scheduling-algorithms"
     }
@@ -200,3 +198,20 @@ export const RESUME: Resume = {
 export const CUBE_ACHIEVEMENT = RESUME.education
   .flatMap((edu) => edu.achievements ?? [])
   .find((s) => s.startsWith("Rubik's Cube"));
+
+// A publication's description states the published-vs-reproduced gap inline
+// ("<n>% accuracy as published; ... reproduces <m>% ..."). Pulling
+// both numbers out programmatically, rather than hardcoding them, keeps /resume
+// and the home page tied to whatever this file actually says.
+export function parsePublishedVsReproduced(description?: string) {
+  if (!description) return null;
+  const published = description.match(/([\d.]+)%[^.]*as published/i)?.[1];
+  const reproduced = description.match(/reproduces\s*([\d.]+)%/i)?.[1];
+  if (!published || !reproduced) return null;
+  return { published, reproduced };
+}
+
+/** The id /resume gives a company's first role row, so other pages can link to it. */
+export function companyAnchor(name: string) {
+  return name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+}
