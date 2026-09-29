@@ -58,16 +58,28 @@ describe("WebMCP tool registry", () => {
     });
 
     // The MDX is content, not code, so it cannot import the constant. It still
-    // states a tool count in prose, and a wrong number there is as visible to a
-    // reader as a wrong number in the masthead. Catch it here instead.
-    it("keeps the project MDX's stated tool count in step", () => {
+    // states tool counts in prose, as digits or words ("8 structured tools",
+    // "eight tools", "6 read · 2 write"), and a wrong number there is as
+    // visible to a reader as a wrong number in the masthead. Catch it here.
+    it("keeps the project MDX's stated tool counts in step", () => {
         const mdx = readFileSync(
             join(process.cwd(), "content/projects/webmcp-portfolio.mdx"),
             "utf8"
         );
-        const counts = [...mdx.matchAll(/(\d+) tools\b/g)].map((m) => Number(m[1]));
-        expect(counts.length).toBeGreaterThan(0);
-        for (const n of counts) expect(n).toBe(WEBMCP_TOOL_COUNT);
+        const WORDS = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten",
+            "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen", "twenty"];
+        const N = `(\\d+|${WORDS.join("|")})`;
+        const value = (n: string) => (/^\d+$/.test(n) ? Number(n) : WORDS.indexOf(n.toLowerCase()));
+
+        const totals = [...mdx.matchAll(new RegExp(`\\b${N}\\s+(?:structured\\s+)?tools\\b`, "gi"))].map((m) => value(m[1]));
+        expect(totals.length).toBeGreaterThan(0);
+        for (const n of totals) expect(n).toBe(WEBMCP_TOOL_COUNT);
+
+        const perKind = [...mdx.matchAll(new RegExp(`\\b${N}\\s+(read|write)\\b`, "gi"))];
+        expect(perKind.length).toBeGreaterThan(0);
+        for (const [, n, kind] of perKind) {
+            expect(value(n)).toBe(WEBMCP_TOOLS.filter((t) => t.kind === kind.toLowerCase()).length);
+        }
     });
 });
 
