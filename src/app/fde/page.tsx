@@ -28,7 +28,6 @@ export default function FDEPage() {
               <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-current" aria-hidden="true" />
               FDE.SIM.v1 · interactive
             </span>
-            <span className={`${BADGE} border-tr-hairline bg-tr-surface-1 text-tr-text`}>2026.05.26 · last_built</span>
             <span className={`${BADGE} border-tr-hairline bg-tr-surface-1 text-tr-text`}>remote · gujarat, in · gmt+5:30</span>
           </div>
 
@@ -52,7 +51,7 @@ export default function FDEPage() {
         <section className="border-t border-tr-hairline">
           <div className={`${CONTAINER} py-[clamp(3rem,6vw,5rem)]`}>
             <div className={`mb-10 grid gap-[clamp(2rem,5vw,5rem)] ${TWO_COL} items-end`}>
-              <p className={`${MONO} text-[length:var(--tr-t-mono)] tracking-[.1em] text-tr-text-faint`}>/02 · RECEIPTS</p>
+              <p className={`${MONO} text-[length:var(--tr-t-mono)] tracking-[.1em] text-tr-text-faint`}>RECEIPTS</p>
               <div>
                 <h2 className={H2}>
                   The simulation above isn&apos;t <span className="italic text-tr-accent-ink">vibes</span>. Here&apos;s the
@@ -88,13 +87,18 @@ export default function FDEPage() {
                       </span>
                     ))}
                   </div>
-                  <a
-                    className={`mt-auto w-fit border-b border-dashed border-tr-hairline pb-px ${MONO} text-[length:var(--tr-t-mono-sm)] text-tr-text no-underline transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] hover:border-tr-accent hover:text-tr-accent-ink`}
-                    href={p.link.href}
-                    {...(p.link.href.startsWith("http") ? { target: "_blank", rel: "noreferrer" } : {})}
-                  >
-                    ↗ {p.link.label}
-                  </a>
+                  <div className="mt-auto flex flex-wrap gap-x-4 gap-y-1.5">
+                    {p.links.map((l) => (
+                      <a
+                        key={l.href}
+                        className={`w-fit border-b border-dashed border-tr-hairline pb-px ${MONO} text-[length:var(--tr-t-mono-sm)] text-tr-text no-underline transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] hover:border-tr-accent hover:text-tr-accent-ink`}
+                        href={l.href}
+                        {...(l.href.startsWith("http") ? { target: "_blank", rel: "noreferrer" } : {})}
+                      >
+                        ↗ {l.label}
+                      </a>
+                    ))}
+                  </div>
                 </div>
               ))}
             </div>
@@ -105,7 +109,7 @@ export default function FDEPage() {
         <section className="border-t border-tr-hairline bg-tr-surface-1">
           <div className={`${CONTAINER} py-[clamp(3rem,6vw,5rem)]`}>
             <div className={`mb-10 grid gap-[clamp(2rem,5vw,5rem)] ${TWO_COL} items-end`}>
-              <p className={`${MONO} text-[length:var(--tr-t-mono)] tracking-[.1em] text-tr-text-faint`}>/03 · CANDID</p>
+              <p className={`${MONO} text-[length:var(--tr-t-mono)] tracking-[.1em] text-tr-text-faint`}>CANDID</p>
               <div>
                 <h2 className={H2}>
                   Notes on <span className="italic text-tr-accent-ink">fit</span>.
