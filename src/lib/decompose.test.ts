@@ -22,6 +22,14 @@ describe("closestPreset", () => {
   it("falls back to the first preset when nothing matches", () => {
     expect(closestPreset("hello there")).toBe(PRESETS[0]);
   });
+
+  it("sends support-queue briefs to the support example, not the model one", () => {
+    expect(closestPreset("customer support tickets are piling up")).toBe(PRESETS[0]);
+  });
+
+  it("does not read 'ml' inside html, xml or yaml as machine learning", () => {
+    expect(closestPreset("our html and yaml configs are a mess")).toBe(PRESETS[0]);
+  });
 });
 
 describe("findPreset", () => {

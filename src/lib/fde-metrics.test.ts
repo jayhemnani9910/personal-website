@@ -4,7 +4,9 @@ import { fileURLToPath } from "node:url";
 import { describe, expect, it, vi } from "vitest";
 import type { Redis } from "@upstash/redis";
 import {
+  FAILURES,
   LATENCY_WINDOW,
+  OUTCOMES,
   classifyStatus,
   keys,
   percentile,
@@ -129,8 +131,8 @@ describe("recordSim", () => {
 });
 
 describe("readSimMetrics", () => {
-  const OUTCOME_COUNT = 5;  // ok, cache_hit, rate_limited, no_runtime, gave_up
-  const FAILURE_COUNT = 8;
+  const OUTCOME_COUNT = OUTCOMES.length;
+  const FAILURE_COUNT = FAILURES.length;
 
   function reader(
     outcomes: number[],
@@ -153,8 +155,8 @@ describe("readSimMetrics", () => {
 
   it("aggregates counts, rates and percentiles", async () => {
     const redis = reader(
-      [60, 40, 3, 1, 6],                  // ok, cache_hit, rate_limited, no_runtime, gave_up
-      [2, 1, 0, 1, 0, 3, 1, 0],
+      [60, 40, 3, 1, 6, 0],               // ok, cache_hit, rate_limited, no_runtime, gave_up, over_budget
+      [2, 1, 0, 1, 0, 3, 1, 0, 0],
       [100, 200, 300, 400, 500],
       [60_000, 90_000],
     );
@@ -176,7 +178,7 @@ describe("readSimMetrics", () => {
 
   it("reads time to first section from its own window", async () => {
     const m = (await readSimMetrics(
-      reader([1, 0, 0, 0, 0], Array(FAILURE_COUNT).fill(0), [9000], [0, 0], [400, 800, 1200]),
+      reader([1, 0, 0, 0, 0, 0], Array(FAILURE_COUNT).fill(0), [9000], [0, 0], [400, 800, 1200]),
     ))!;
     expect(m.latencyMs.p50).toBe(9000);
     expect(m.timeToFirstSectionMs).toMatchObject({ samples: 3, p50: 800 });
@@ -196,7 +198,7 @@ describe("readSimMetrics", () => {
   // Upstash can hand back numbers as strings depending on how they were written.
   it("coerces string-shaped values before doing arithmetic", async () => {
     const redis = {
-      mget: async () => ["10", "10", 0, 0, 0, ...Array(FAILURE_COUNT).fill(0)],
+      mget: async () => ["10", "10", 0, 0, 0, 0, ...Array(FAILURE_COUNT).fill(0)],
       lrange: async () => ["50", "150", "250"],
       get: async () => "1000",
     } as unknown as Redis;
@@ -229,7 +231,8 @@ describe("the route records every outcome this module defines", () => {
     "utf8",
   );
 
-  it.each(["ok", "cache_hit", "rate_limited", "no_runtime", "gave_up"])(
+  // Driven by OUTCOMES itself, so a new outcome is checked the day it is added.
+  it.each(OUTCOMES)(
     "route.ts records the %s outcome",
     (outcome) => {
       expect(route).toContain(`outcome: "${outcome}"`);

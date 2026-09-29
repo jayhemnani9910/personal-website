@@ -1,220 +1,197 @@
 {
   "scope": [
     {
-      "q": "What specific criteria or metrics currently define a 'ticket that matters' from the perspective of the business (e.g., churn risk, revenue impact, regulatory compliance, product severity)?",
-      "why": "Understanding the precise definition of 'matters' is fundamental to building an effective prioritization model and ensuring alignment with business goals."
+      "q": "What specific criteria or business metrics define a 'ticket that matters' beyond just volume, and how are these currently (if at all) being tracked or measured?",
+      "why": "Understanding the true definition of 'mattering' is critical to building a solution that aligns with business value, not just a generic prioritization."
     },
     {
-      "q": "Which existing ticketing systems, communication channels (e.g., email, chat, phone transcripts), and data formats will need to be integrated for ticket ingestion?",
-      "why": "Identifying all input sources and their specific data structures is critical for designing the data ingestion and normalization pipeline accurately."
+      "q": "What are the existing data sources for customer tickets (e.g., Zendesk, Salesforce Service Cloud, custom CRM) including their schema, access methods, and typical data completeness?",
+      "why": "Knowing the precise data landscape is fundamental for ingestion, processing, and integration, and directly impacts technical feasibility and complexity."
     },
     {
-      "q": "What is the desired immediate action or insight an agent should receive for a 'ticket that matters' directly within their current workflow, and what level of automation is acceptable?",
-      "why": "This clarifies the expected output, the primary user interface, and the direct impact on the agent, guiding the design of the system's interaction points."
+      "q": "What is the acceptable latency and desired frequency for ticket prioritization updates, and what is the current workflow for ticket assignment and escalation?",
+      "why": "Defining the operational window and integration points is crucial for designing a system that fits into existing support processes without disruption and meets user expectations."
     }
   ],
   "decomposition": [
     {
       "id": "D1",
-      "title": "Ticket Data Ingestion & Normalization",
-      "why": "To standardize diverse ticket data from various sources into a consistent, machine-readable format for downstream processing."
+      "title": "Data Ingestion & Preprocessing",
+      "why": "This establishes the foundation by reliably pulling raw ticket data and transforming it into a usable format for analysis."
     },
     {
       "id": "D2",
-      "title": "LLM-Based Ticket Analysis & Categorization",
-      "why": "To extract key information, intent, sentiment, and classify tickets into relevant categories using advanced language models."
+      "title": "Feature Engineering & Labeling",
+      "why": "This step extracts relevant signals from the raw data and defines what 'mattering' looks like for the model."
     },
     {
       "id": "D3",
-      "title": "Prioritization & Routing Engine",
-      "why": "To apply business rules and AI insights to rank tickets by urgency/importance and suggest optimal routing or agent actions."
+      "title": "Prioritization Model Training & Evaluation",
+      "why": "This focuses on building and validating the core AI logic that determines ticket importance."
     },
     {
       "id": "D4",
-      "title": "Agent Workspace Integration & UI",
-      "why": "To present prioritized tickets and AI-generated insights directly within the agents' existing tools or a dedicated interface, minimizing workflow disruption."
+      "title": "Prediction & Scoring Service",
+      "why": "This component serves the trained model, providing real-time prioritization scores for new and updated tickets."
     },
     {
       "id": "D5",
-      "title": "Agent Feedback & Model Retraining Loop",
-      "why": "To capture agent corrections and feedback on classifications and priorities, enabling continuous improvement and adaptation of the underlying AI models."
-    },
-    {
-      "id": "D6",
-      "title": "Performance Monitoring & Analytics",
-      "why": "To provide dashboards and reports on system effectiveness, ticket trends, agent performance, and 'ticket that matters' metrics for management."
+      "title": "Integration with Support System",
+      "why": "This ensures the prioritized information is seamlessly delivered back into the customer support team's workflow."
     }
   ],
   "architecture": {
     "components": [
       {
-        "id": "ext_ticketing",
-        "name": "External Ticketing System(s)",
+        "id": "external_crm",
+        "name": "External CRM/Helpdesk",
         "kind": "external",
-        "sub": "Existing systems like Zendesk, Salesforce Service Cloud, email.",
         "col": 0,
-        "row": 1,
+        "row": 0,
+        "sub": "Zendesk, Salesforce, etc.",
         "x": 60,
-        "y": 190
+        "y": 50
       },
       {
-        "id": "ingest_svc",
-        "name": "Ticket Ingestion Service",
+        "id": "data_ingest",
+        "name": "Data Ingestion Svc",
         "kind": "service",
-        "sub": "Pulls/receives raw ticket data, normalizes format.",
+        "col": 1,
+        "row": 0,
+        "sub": "Pull & Normalize Tickets",
+        "x": 280,
+        "y": 50
+      },
+      {
+        "id": "raw_data_store",
+        "name": "Raw Ticket DB",
+        "kind": "data",
         "col": 1,
         "row": 1,
+        "sub": "Normalized ticket data",
         "x": 280,
         "y": 190
       },
       {
-        "id": "ticket_db",
-        "name": "Normalized Ticket Data Store",
-        "kind": "data",
-        "sub": "Stores all ingested, normalized, and analyzed ticket data.",
-        "col": 1,
-        "row": 2,
-        "x": 280,
-        "y": 330
-      },
-      {
-        "id": "llm_agent",
-        "name": "LLM Analysis Agent",
-        "kind": "agent",
-        "sub": "Processes ticket text for categorization, sentiment, intent, keywords.",
-        "col": 2,
-        "row": 1,
-        "x": 500,
-        "y": 190
-      },
-      {
-        "id": "priority_svc",
-        "name": "Prioritization & Routing Service",
+        "id": "feature_eng",
+        "name": "Feature Engineering",
         "kind": "service",
-        "sub": "Applies business rules and LLM insights to rank tickets.",
-        "col": 2,
-        "row": 2,
-        "x": 500,
-        "y": 330
-      },
-      {
-        "id": "agent_ui",
-        "name": "Agent Workspace UI",
-        "kind": "ui",
-        "sub": "Displays prioritized tickets and AI insights to support agents.",
-        "col": 3,
-        "row": 0,
-        "x": 720,
-        "y": 50
-      },
-      {
-        "id": "feedback_svc",
-        "name": "Agent Feedback Service",
-        "kind": "service",
-        "sub": "Captures agent corrections and explicit feedback for model improvement.",
-        "col": 3,
-        "row": 1,
-        "x": 720,
-        "y": 190
-      },
-      {
-        "id": "metrics_db",
-        "name": "Performance Metrics & Audit Log",
-        "kind": "data",
-        "sub": "Stores system performance, model predictions, and agent feedback.",
         "col": 2,
         "row": 0,
+        "sub": "Extracts ML features",
         "x": 500,
         "y": 50
       },
       {
-        "id": "analytics_ui",
-        "name": "Analytics Dashboard",
+        "id": "model_train",
+        "name": "Model Training Svc",
+        "kind": "service",
+        "col": 2,
+        "row": 1,
+        "sub": "Trains prioritization model",
+        "x": 500,
+        "y": 190
+      },
+      {
+        "id": "model_repo",
+        "name": "Model Registry",
+        "kind": "data",
+        "col": 2,
+        "row": 2,
+        "sub": "Stores trained models",
+        "x": 500,
+        "y": 330
+      },
+      {
+        "id": "prediction_svc",
+        "name": "Prediction Service",
+        "kind": "service",
+        "col": 3,
+        "row": 0,
+        "sub": "Scores incoming tickets",
+        "x": 720,
+        "y": 50
+      },
+      {
+        "id": "prioritized_db",
+        "name": "Prioritized Ticket DB",
+        "kind": "data",
+        "col": 3,
+        "row": 1,
+        "sub": "Tickets with scores",
+        "x": 720,
+        "y": 190
+      },
+      {
+        "id": "support_ui",
+        "name": "Support Agent UI",
         "kind": "ui",
-        "sub": "Visualizes system performance, ticket trends, and 'mattering' metrics.",
         "col": 3,
         "row": 2,
+        "sub": "Displays prioritized list",
         "x": 720,
         "y": 330
       }
     ],
     "edges": [
       {
-        "from": "ext_ticketing",
-        "to": "ingest_svc",
-        "label": "Raw Tickets",
+        "from": "external_crm",
+        "to": "data_ingest",
+        "label": "Poll Tickets",
         "dashed": false
       },
       {
-        "from": "ingest_svc",
-        "to": "ticket_db",
-        "label": "Store Normalized",
+        "from": "data_ingest",
+        "to": "raw_data_store",
+        "label": "Store Raw Data",
         "dashed": false
       },
       {
-        "from": "ticket_db",
-        "to": "llm_agent",
-        "label": "Fetch New Tickets",
+        "from": "raw_data_store",
+        "to": "feature_eng",
+        "label": "Read for Features",
         "dashed": false
       },
       {
-        "from": "llm_agent",
-        "to": "ticket_db",
-        "label": "Store Analysis",
+        "from": "feature_eng",
+        "to": "model_train",
+        "label": "Training Data",
         "dashed": false
       },
       {
-        "from": "llm_agent",
-        "to": "metrics_db",
-        "label": "Log LLM Usage",
+        "from": "model_train",
+        "to": "model_repo",
+        "label": "Save Model",
         "dashed": false
       },
       {
-        "from": "ticket_db",
-        "to": "priority_svc",
-        "label": "Fetch Analyzed",
+        "from": "model_repo",
+        "to": "prediction_svc",
+        "label": "Load Model",
         "dashed": false
       },
       {
-        "from": "priority_svc",
-        "to": "ticket_db",
-        "label": "Store Priority",
+        "from": "data_ingest",
+        "to": "prediction_svc",
+        "label": "New Tickets",
         "dashed": false
       },
       {
-        "from": "priority_svc",
-        "to": "metrics_db",
-        "label": "Log Decisions",
+        "from": "prediction_svc",
+        "to": "prioritized_db",
+        "label": "Store Scores",
         "dashed": false
       },
       {
-        "from": "priority_svc",
-        "to": "agent_ui",
-        "label": "Prioritized List",
+        "from": "prioritized_db",
+        "to": "support_ui",
+        "label": "Display Prioritized",
         "dashed": false
       },
       {
-        "from": "agent_ui",
-        "to": "feedback_svc",
-        "label": "Agent Feedback",
-        "dashed": false
-      },
-      {
-        "from": "feedback_svc",
-        "to": "llm_agent",
-        "label": "Retrain Trigger",
-        "dashed": true
-      },
-      {
-        "from": "metrics_db",
-        "to": "analytics_ui",
-        "label": "Display Metrics",
-        "dashed": false
-      },
-      {
-        "from": "agent_ui",
-        "to": "ext_ticketing",
-        "label": "Update Status",
+        "from": "prediction_svc",
+        "to": "external_crm",
+        "label": "Update Ticket (Optional)",
         "dashed": true
       }
     ]
@@ -222,56 +199,56 @@
   "sprint": [
     {
       "day": "Day 1-2",
-      "title": "Core Infrastructure Setup & Ingestion MVP",
-      "deliv": "Dockerized ingestion service deployed, successfully ingesting 100 sample tickets into a local database."
+      "title": "Set up Data Ingestion Pipeline",
+      "deliv": "Working script to pull 1000 tickets from customer's CRM and store in a local database."
     },
     {
       "day": "Day 3-4",
-      "title": "LLM-Based Initial Categorization PoC",
-      "deliv": "Proof-of-concept LLM agent processes 50 sample tickets, categorizing them into 3 predefined, high-level categories."
+      "title": "Define & Extract Initial Features",
+      "deliv": "Python script that extracts basic features (e.g., word count, sender domain) from raw tickets."
     },
     {
       "day": "Day 5-6",
-      "title": "Basic Prioritization & Agent UI (Read-Only)",
-      "deliv": "Web UI displays 20 prioritized tickets with LLM analysis, fetched directly from the database, for agent review."
+      "title": "Build & Train Baseline Model",
+      "deliv": "A simple classification model (e.g., Logistic Regression) trained on initial features, reporting F1 score."
     },
     {
       "day": "Day 7-8",
-      "title": "Read-Only Integration with Customer's Ticketing System",
-      "deliv": "System successfully fetches actual tickets from customer's live ticketing system and displays them in the Agent UI."
+      "title": "Develop Prediction Service API",
+      "deliv": "REST API endpoint that accepts ticket data and returns a priority score using the baseline model."
     },
     {
       "day": "Day 9-10",
-      "title": "Agent Feedback Loop Implementation",
-      "deliv": "Agents can mark a ticket's priority or category as 'correct' or 'incorrect' in the UI, logging feedback to the system."
+      "title": "Integrate with Support System (Read-only)",
+      "deliv": "A dashboard or simple UI that displays the top 10 prioritized tickets from the prediction service."
     },
     {
       "day": "Day 11-12",
-      "title": "Performance Monitoring & Basic Dashboard",
-      "deliv": "Dashboard displays key metrics like number of tickets processed, categorization accuracy (based on feedback), and top categories."
+      "title": "Refine Features and Retrain",
+      "deliv": "Improved model with additional features (e.g., NLP embeddings), demonstrating higher F1 score."
     },
     {
       "day": "Day 13-14",
-      "title": "System Refinement, Testing, & Deployment Prep",
-      "deliv": "System tested with 500 real tickets, all components integrated, and deployment scripts ready for a staging environment release."
+      "title": "User Acceptance Testing & Feedback",
+      "deliv": "Support team reviews the prioritized list and provides structured feedback on accuracy and utility."
     }
   ],
   "risks": [
     {
-      "risk": "Ambiguous or constantly changing definition of 'ticket that matters' leads to inconsistent or inaccurate LLM prioritization.",
-      "mitigation": "Establish a clear, documented process for defining and updating prioritization rules, incorporating regular stakeholder reviews and agent feedback sessions."
+      "risk": "Ambiguous definition of 'ticket that matters' leads to a model that prioritizes irrelevant tickets.",
+      "mitigation": "Conduct extensive interviews with support managers and agents to establish clear, quantifiable metrics for 'mattering' (e.g., churn risk, revenue impact, regulatory compliance) and iterate on labels."
     },
     {
-      "risk": "Poor quality, inconsistent formatting, or highly unstructured ticket data from existing systems results in inaccurate LLM analysis.",
-      "mitigation": "Develop robust data cleaning and normalization pipelines, and work with the customer to identify and address primary data quality issues at the source systems."
+      "risk": "Poor quality or incomplete historical ticket data makes it impossible to train an effective model.",
+      "mitigation": "Perform a thorough data audit upfront, identifying gaps and inconsistencies. Implement data cleaning and imputation strategies, or suggest a manual labeling effort for a subset of critical tickets if automated methods fail."
     },
     {
-      "risk": "Low agent adoption due to perceived workflow disruption, lack of trust in AI-generated insights, or a cumbersome user experience.",
-      "mitigation": "Design the agent UI for minimal disruption, provide clear explanations for AI suggestions, and actively involve agents in early design and feedback iterations."
+      "risk": "Lack of clear feedback loop from support agents on model accuracy leads to low adoption and distrust.",
+      "mitigation": "Implement a 'thumbs up/down' or 'correct/incorrect' feedback mechanism within the support UI, allowing agents to easily flag mis-prioritized tickets to continuously improve the model."
     },
     {
-      "risk": "LLM model drift over time as customer issues, product features, or support language evolve, degrading model performance and relevance.",
-      "mitigation": "Implement a regular model retraining schedule using recent, agent-validated data, and establish continuous monitoring of key model performance metrics (e.g., accuracy, precision, recall)."
+      "risk": "Integrating the prioritization scores back into the existing CRM/helpdesk system is complex or requires significant changes.",
+      "mitigation": "Start with a read-only integration (e.g., a separate dashboard or prioritized list) to validate value. Then, explore native API capabilities of the CRM for direct updates, or develop a lightweight custom plugin if necessary, clearly outlining integration costs."
     }
   ]
 }

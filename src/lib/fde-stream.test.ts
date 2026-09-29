@@ -16,6 +16,16 @@ describe("encodeSse", () => {
     expect(frame.split("\n\n")).toHaveLength(2); // body, then the terminator
     expect(JSON.parse(frame.split("data: ")[1]).value).toBe("one\ntwo\n\nthree");
   });
+
+  // JSON.stringify leaves U+2028 / U+2029 raw, and the client's /^data: (.+)$/m
+  // treats them as line ends, which cut the frame and failed the run.
+  it("cannot be broken by U+2028 or U+2029 in the content", () => {
+    const value = "a\u2028b\u2029c";
+    const frame = encodeSse({ type: "section", key: "a", value });
+    expect(frame).not.toMatch(/[\u2028\u2029]/);
+    const data = frame.match(/^data: (.+)$/m)?.[1] ?? "";
+    expect(JSON.parse(data).value).toBe(value);
+  });
 });
 
 describe("SseDecoder", () => {

@@ -67,13 +67,26 @@ export function isSimPayload(p: unknown): p is SimPayload {
   const o = p as Record<string, unknown>;
 
   for (const key of ARRAY_SECTIONS) {
-    if (!Array.isArray(o[key])) return false;
+    if (!isSimSection(key, o[key])) return false;
   }
 
-  const arch = o.architecture;
-  if (!arch || typeof arch !== "object") return false;
-  const { components, edges } = arch as { components?: unknown; edges?: unknown };
-  // FdeArchDiagram maps over both, so a payload carrying one and not the other
-  // renders a diagram with no connections rather than failing honestly here.
-  return Array.isArray(components) && Array.isArray(edges);
+  return isSimSection("architecture", o.architecture);
+}
+
+const nonEmptyArray = (v: unknown): boolean => Array.isArray(v) && v.length > 0;
+
+/**
+ * The same shape rule for one section, used on the stream path before the
+ * section is sent: once it reaches the browser, rejecting the whole payload at
+ * the end is too late. Unknown keys fail. Sections must be non-empty arrays (an
+ * empty architecture drew a -Infinity viewBox), and architecture needs both
+ * components and edges, which FdeArchDiagram maps over.
+ */
+export function isSimSection(key: string, value: unknown): boolean {
+  if (key === "architecture") {
+    if (!value || typeof value !== "object") return false;
+    const { components, edges } = value as { components?: unknown; edges?: unknown };
+    return nonEmptyArray(components) && Array.isArray(edges);
+  }
+  return (ARRAY_SECTIONS as readonly string[]).includes(key) && nonEmptyArray(value);
 }

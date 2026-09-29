@@ -30,8 +30,11 @@ export function ViewCounter({ slug }: { slug: string }) {
                       body: JSON.stringify({ slug }),
                   }),
         })
-            .then((res) => res.json())
-            .then((data) => {
+            .then(async (res) => {
+                const data = res.ok ? await res.json() : null;
+                // Only a real number is shown, and only then is the view marked
+                // as counted: an error (store down, rate limited) retries next time.
+                if (typeof data?.count !== "number") return;
                 setCount(data.count);
                 try {
                     sessionStorage.setItem(`viewed:${slug}`, "1");

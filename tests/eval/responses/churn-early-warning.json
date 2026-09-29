@@ -1,271 +1,226 @@
 {
   "scope": [
     {
-      "q": "How do we precisely define 'customer leaving' (e.g., contract non-renewal, explicit termination, sustained zero usage), and what are the authoritative historical data sources for these events?",
-      "why": "A clear, consistent definition of the target variable and its historical availability is fundamental for training any predictive model accurately."
+      "q": "What specific customer interaction data (e.g., support tickets, product usage, billing changes) do you currently collect and have readily accessible for analysis?",
+      "why": "Understanding available data sources is critical to determine what signals can actually be used to predict churn and avoid building on assumptions."
     },
     {
-      "q": "What specific internal systems (e.g., CRM, billing, product usage logs, support tickets, website analytics) are available to provide features, and what are their typical data latency and access mechanisms?",
-      "why": "Understanding the breadth and freshness of available data sources is critical for feature engineering and determining the technical feasibility of real-time predictions."
+      "q": "Beyond just 'a reason,' what level of detail and interpretability do success managers require from the churn prediction model to actually trust and act on its output?",
+      "why": "The definition of 'trust' and 'reason' is subjective; clarifying this prevents delivering a solution that is technically sound but practically unusable."
     },
     {
-      "q": "What is the desired lead time for a 'heads up' (e.g., 30, 60, 90 days), and what specific actions are Success Managers expected to take based on a prediction and its associated explanation?",
-      "why": "Defining the prediction horizon and expected actions informs the model's design, feature selection, and the required granularity and actionability of the explanations."
+      "q": "What is the acceptable false positive rate for churn predictions, considering the cost of unnecessary outreach versus the cost of a missed churn?",
+      "why": "Defining an acceptable error tolerance is crucial for model calibration and for managing expectations around the model's practical utility and impact on workflow."
     }
   ],
   "decomposition": [
     {
       "id": "D1",
       "title": "Data Ingestion & Harmonization",
-      "why": "This subproblem focuses on connecting to disparate source systems and bringing raw customer data into a unified, accessible format for downstream processing."
+      "why": "Raw data from various sources needs to be collected, cleaned, and standardized into a unified format for effective feature engineering."
     },
     {
       "id": "D2",
-      "title": "Feature Engineering Pipeline",
-      "why": "Raw data needs to be transformed into meaningful predictive signals (features) that represent customer behavior and health, requiring a robust and scalable pipeline."
+      "title": "Feature Engineering & Selection",
+      "why": "Relevant predictive features must be extracted or constructed from the harmonized data to capture patterns indicative of churn."
     },
     {
       "id": "D3",
-      "title": "Churn Prediction Model Training & Evaluation",
-      "why": "The core of the system is a machine learning model that learns to identify patterns indicative of churn, requiring iterative training, validation, and performance monitoring."
+      "title": "Churn Prediction Model Training",
+      "why": "A machine learning model needs to be trained on historical data to learn the relationship between features and customer churn."
     },
     {
       "id": "D4",
-      "title": "Explanation Generation & Scoring Service",
-      "why": "To build trust and enable action, the system must provide human-understandable reasons behind each churn prediction, delivered via a dedicated service."
+      "title": "Model Interpretability & Explanation Generation",
+      "why": "A mechanism is required to explain *why* a customer is predicted to churn, providing the 'reason' success managers need for trust."
     },
     {
       "id": "D5",
-      "title": "Success Manager Dashboard & Alerting",
-      "why": "Success Managers need a user-friendly interface to view predictions, explanations, and receive timely alerts, integrating the system into their workflow."
+      "title": "Prediction & Alerting Service",
+      "why": "The trained model must be deployed to generate real-time or batch predictions and trigger alerts for success managers."
     }
   ],
   "architecture": {
     "components": [
       {
-        "id": "crm_db",
-        "name": "CRM Database",
+        "id": "ds_raw",
+        "name": "Raw Data Sources",
         "kind": "external",
-        "sub": "Customer records, contract data",
         "col": 0,
         "row": 0,
+        "sub": "CRM, Usage, Support, Billing",
         "x": 60,
         "y": 50
-      },
-      {
-        "id": "usage_logs",
-        "name": "Product Usage Logs",
-        "kind": "external",
-        "sub": "Customer interaction data",
-        "col": 0,
-        "row": 1,
-        "x": 60,
-        "y": 190
       },
       {
         "id": "data_ingest",
-        "name": "Data Ingestion Service",
+        "name": "Data Ingestion Svc",
         "kind": "service",
-        "sub": "ETL from source systems",
         "col": 1,
         "row": 0,
+        "sub": "ETL & Harmonization",
         "x": 280,
         "y": 50
-      },
-      {
-        "id": "data_lake",
-        "name": "Raw Data Lake",
-        "kind": "data",
-        "sub": "Centralized raw data storage",
-        "col": 1,
-        "row": 1,
-        "x": 280,
-        "y": 190
       },
       {
         "id": "feature_store",
         "name": "Feature Store",
         "kind": "data",
-        "sub": "Curated, versioned features",
+        "col": 2,
+        "row": 0,
+        "sub": "Pre-computed features",
+        "x": 500,
+        "y": 50
+      },
+      {
+        "id": "ml_train",
+        "name": "ML Training Service",
+        "kind": "service",
+        "col": 1,
+        "row": 1,
+        "sub": "Model training & tuning",
+        "x": 280,
+        "y": 190
+      },
+      {
+        "id": "churn_model",
+        "name": "Churn Prediction ML",
+        "kind": "agent",
         "col": 2,
         "row": 1,
+        "sub": "Deployed model",
         "x": 500,
         "y": 190
       },
       {
-        "id": "ml_train",
-        "name": "ML Training Pipeline",
+        "id": "explainer",
+        "name": "Explainability Svc",
         "kind": "service",
-        "sub": "Trains and evaluates churn models",
-        "col": 2,
-        "row": 0,
-        "x": 500,
-        "y": 50
-      },
-      {
-        "id": "churn_pred_svc",
-        "name": "Churn Prediction Service",
-        "kind": "service",
-        "sub": "Real-time churn scoring",
-        "col": 3,
-        "row": 0,
-        "x": 720,
-        "y": 50
-      },
-      {
-        "id": "expl_gen_svc",
-        "name": "Explanation Generation Service",
-        "kind": "service",
-        "sub": "Generates reasons for predictions",
         "col": 3,
         "row": 1,
+        "sub": "Reasoning generation",
         "x": 720,
         "y": 190
       },
       {
         "id": "alert_svc",
-        "name": "Notification Service",
+        "name": "Alerting Service",
         "kind": "service",
-        "sub": "Sends alerts to Success Managers",
-        "col": 2,
+        "col": 3,
         "row": 2,
-        "x": 500,
+        "sub": "Notifications",
+        "x": 720,
         "y": 330
       },
       {
-        "id": "sm_ui",
+        "id": "sm_dash",
         "name": "SM Dashboard",
         "kind": "ui",
-        "sub": "User interface for Success Managers",
-        "col": 3,
+        "col": 0,
         "row": 2,
-        "x": 720,
+        "sub": "Churn predictions & reasons",
+        "x": 60,
         "y": 330
       }
     ],
     "edges": [
       {
-        "from": "crm_db",
+        "from": "ds_raw",
         "to": "data_ingest",
-        "label": "Ingest CRM Data",
-        "dashed": false
-      },
-      {
-        "from": "usage_logs",
-        "to": "data_ingest",
-        "label": "Ingest Usage Data",
-        "dashed": false
+        "label": "Raw data streams"
       },
       {
         "from": "data_ingest",
-        "to": "data_lake",
-        "label": "Store Raw Data",
-        "dashed": false
-      },
-      {
-        "from": "data_lake",
         "to": "feature_store",
-        "label": "Extract & Transform Features",
-        "dashed": false
+        "label": "Writes features"
       },
       {
         "from": "feature_store",
         "to": "ml_train",
-        "label": "Training Data",
-        "dashed": false
+        "label": "Training data"
       },
       {
         "from": "ml_train",
-        "to": "churn_pred_svc",
-        "label": "Deploy Model Artifact",
-        "dashed": false
+        "to": "churn_model",
+        "label": "Deploys model"
       },
       {
         "from": "feature_store",
-        "to": "churn_pred_svc",
-        "label": "Serve Features for Prediction",
-        "dashed": false
+        "to": "churn_model",
+        "label": "Inference data"
       },
       {
-        "from": "churn_pred_svc",
-        "to": "expl_gen_svc",
-        "label": "Prediction & Features",
-        "dashed": false
+        "from": "churn_model",
+        "to": "explainer",
+        "label": "Prediction + features"
       },
       {
-        "from": "expl_gen_svc",
-        "to": "sm_ui",
-        "label": "Display Explanations",
-        "dashed": false
-      },
-      {
-        "from": "churn_pred_svc",
+        "from": "explainer",
         "to": "alert_svc",
-        "label": "High Churn Alert",
-        "dashed": false
+        "label": "Prediction + reason"
       },
       {
         "from": "alert_svc",
-        "to": "sm_ui",
-        "label": "Push Notifications",
-        "dashed": false
+        "to": "sm_dash",
+        "label": "Alerts",
+        "dashed": true
       },
       {
-        "from": "sm_ui",
-        "to": "churn_pred_svc",
-        "label": "Request Score (on demand)",
+        "from": "explainer",
+        "to": "sm_dash",
+        "label": "Displays explanations"
+      },
+      {
+        "from": "sm_dash",
+        "to": "feature_store",
+        "label": "Feature lookup (debug)",
         "dashed": true
       }
     ]
   },
   "sprint": [
     {
-      "day": "Day 1-2",
-      "title": "Data Source Integration & Schema Definition",
-      "deliv": "Ingested raw data samples from CRM and usage logs into a staging area, defined initial unified data schema."
+      "day": "Day 1-3",
+      "title": "Data Ingestion MVP",
+      "deliv": "Connect to 2 key data sources (e.g., CRM, usage logs) and ingest into a staging area."
     },
     {
-      "day": "Day 3-4",
-      "title": "Core Feature Engineering Pipeline",
-      "deliv": "Automated pipeline generating ~10 key behavioral and demographic features, stored in a prototype feature store."
+      "day": "Day 4-6",
+      "title": "Initial Feature Engineering & Baseline Model",
+      "deliv": "Generate 5-10 baseline features; train a simple logistic regression churn model and evaluate initial metrics."
     },
     {
-      "day": "Day 5-7",
-      "title": "Baseline Churn Model Training & Evaluation",
-      "deliv": "Deployed a baseline churn prediction model (e.g., Logistic Regression) and evaluated its performance on historical data with AUC and precision/recall metrics."
+      "day": "Day 7-9",
+      "title": "Model Interpretability Prototype",
+      "deliv": "Integrate a basic interpretability library (e.g., LIME/SHAP) to generate explanations for individual predictions."
     },
     {
-      "day": "Day 8-10",
-      "title": "Explanation Generation Prototype",
-      "deliv": "Implemented a local explanation method (e.g., SHAP/LIME) for model predictions, returning top-3 positive/negative reasons for a given customer."
+      "day": "Day 10-11",
+      "title": "Prediction Service & Alerting",
+      "deliv": "Deploy the model and explanation service as an API endpoint, trigger email alerts for high-churn predictions."
     },
     {
-      "day": "Day 11-12",
+      "day": "Day 12-14",
       "title": "Success Manager Dashboard MVP",
-      "deliv": "Functional UI displaying a list of customers, their churn scores, and the generated explanations for each."
-    },
-    {
-      "day": "Day 13-14",
-      "title": "Alerting & Feedback Loop Setup",
-      "deliv": "Configured basic email alerts for customers exceeding a churn threshold and integrated a mechanism for Success Managers to provide feedback on prediction accuracy."
+      "deliv": "Build a basic dashboard displaying churn predictions, top reasons, and customer details for a sample set of customers."
     }
   ],
   "risks": [
     {
-      "risk": "Lack of high-quality, historically labeled churn events to train the model, leading to poor predictive performance and model drift.",
-      "mitigation": "Conduct a thorough data audit upfront, starting with a clear, agreed-upon definition of 'churn.' If historical labels are sparse, implement a manual labeling process for a critical dataset and explore active learning strategies."
+      "risk": "Insufficient historical churn data or poor data quality prevents effective model training.",
+      "mitigation": "Conduct a thorough data audit upfront to assess data availability and quality; if lacking, explore alternative data collection or proxy metrics."
     },
     {
-      "risk": "Explanations generated by the model are not actionable, interpretable, or relevant to Success Managers, leading to low trust and adoption.",
-      "mitigation": "Involve Success Managers early and iteratively in the explanation design. Prototype explanations with mock data, gather direct feedback on clarity and actionability, and adjust the explanation method or presentation accordingly."
+      "risk": "Generated explanations are not understandable or actionable for success managers, leading to low adoption.",
+      "mitigation": "Involve success managers early in the explanation design process through mockups and iterative feedback sessions to ensure utility and clarity."
     },
     {
-      "risk": "Data latency or quality issues from source systems (e.g., CRM not updated, usage logs delayed) result in stale or incorrect predictions.",
-      "mitigation": "Implement robust data quality monitoring with automated alerts for delays, missing data, or anomalies in the ingestion and feature pipelines. Establish SLAs with source system owners for data freshness and reliability."
+      "risk": "Model predictions have a high false positive rate, overwhelming success managers with non-churning customers.",
+      "mitigation": "Implement adjustable confidence thresholds for alerting, allow success managers to provide feedback on prediction accuracy, and continuously retrain with new data."
     },
     {
-      "risk": "Over-reliance on the automated churn score leads Success Managers to neglect their intuition or unique customer context, potentially missing critical human insights.",
-      "mitigation": "Position the tool as an augmentation, not a replacement, for human judgment. Design the UI to encourage critical thinking, provide a clear 'confidence' score for predictions, and include a feedback loop for SMs to override or add context to predictions."
+      "risk": "Data privacy or security concerns with centralizing customer data for ML training and predictions.",
+      "mitigation": "Establish clear data governance policies, implement robust access controls, and anonymize/pseudonymize sensitive data where possible."
     }
   ]
 }

@@ -1,208 +1,195 @@
 {
   "scope": [
     {
-      "q": "What is the typical output format and required data granularity for these grant reports, and for which external stakeholders are they primarily intended?",
-      "why": "Understanding the precise output specifications (e.g., PDF, Excel, specific tables) and target audience is critical to defining the reporting engine's requirements and validation criteria."
+      "q": "What is the typical complexity and variability of these reporting rules, e.g., are they quantitative thresholds, specific qualitative narratives, or a mix, and how frequently do they change?",
+      "why": "Understanding the nature and dynamism of the rules is critical to determining the complexity of rule extraction, validation, and the system's adaptability."
     },
     {
-      "q": "Are the 'different reporting rules' mostly structured and quantitative (e.g., spending categories, deadlines) or do they involve significant qualitative interpretation and narrative generation?",
-      "why": "This determines the technical approach; highly structured rules can be codified directly, while subjective rules might require advanced NLP or human-in-the-loop workflows."
+      "q": "What are the downstream consequences of a missed or incorrect report, and how critical is auditability and traceability for each data point back to its source?",
+      "why": "This defines the acceptable error tolerance, the required rigor for data provenance, and the necessary validation steps, which impacts architecture and testing efforts."
     },
     {
-      "q": "What is the current volume of active grants, the average reporting frequency, and how often do new reporting rule sets or changes to existing ones typically occur?",
-      "why": "Quantifying the scale and volatility helps assess the necessary system robustness, scalability, and the effort required for ongoing rule maintenance."
+      "q": "Who are the primary users of the current reporting system (the one person, grant managers, auditors, executives) and what specific actions do they need to perform beyond just report generation?",
+      "why": "Identifying all stakeholders and their workflows helps define the necessary UI, access controls, and integration points, ensuring the solution addresses actual user needs."
     }
   ],
   "decomposition": [
     {
       "id": "D1",
-      "title": "Current State Analysis & Knowledge Formalization",
-      "why": "This piece is about extracting and structuring the implicit knowledge currently held by the single person and the spreadsheet into an explicit, shareable format."
+      "title": "Rule Extraction & Normalization",
+      "why": "This subproblem focuses on converting unstructured spreadsheet data into a structured, machine-readable format for rule definition."
     },
     {
       "id": "D2",
-      "title": "Structured Rule Definition & Storage",
-      "why": "We need a robust way to define, store, and manage the diverse reporting rules so they can be programmatically applied, moving beyond a single person's understanding."
+      "title": "Reporting Rule Engine",
+      "why": "This piece will implement the core logic to evaluate grant data against the normalized reporting rules and determine compliance."
     },
     {
       "id": "D3",
-      "title": "Grant Data Ingestion & Harmonization",
-      "why": "The existing spreadsheet data needs to be systematically ingested, validated, and transformed into a normalized, queryable data model suitable for automated processing."
+      "title": "Data Ingestion & Harmonization",
+      "why": "This involves collecting relevant grant and financial data from various sources and preparing it for evaluation by the rule engine."
     },
     {
       "id": "D4",
-      "title": "Dynamic Report Generation Engine",
-      "why": "This is the core logic that applies the defined reporting rules to the harmonized grant data to produce compliant and accurate reports for various grants."
+      "title": "Reporting & Visualization UI",
+      "why": "This covers the user interface for viewing report statuses, generating reports, and interacting with the system's outputs."
     },
     {
       "id": "D5",
-      "title": "Reporting Workflow & User Interface",
-      "why": "Users need an intuitive way to request reports, view status, and potentially manage rules, ensuring ease of use and reducing reliance on manual intervention."
-    },
-    {
-      "id": "D6",
-      "title": "Output & Auditability Framework",
-      "why": "Ensuring the generated reports are accurate, verifiable, and delivered in the correct format is crucial for trust and compliance, requiring robust validation and logging."
+      "title": "Audit & Compliance Logging",
+      "why": "This component is essential for tracking all rule evaluations, data changes, and report generations to ensure full auditability."
     }
   ],
   "architecture": {
     "components": [
       {
         "id": "ui_portal",
-        "name": "Grant Reporting Portal",
+        "name": "User Portal",
         "kind": "ui",
-        "sub": "User interface for report requests and rule management",
         "col": 0,
-        "row": 0,
+        "row": 1,
+        "sub": "Grant Managers, Auditors",
         "x": 60,
+        "y": 190
+      },
+      {
+        "id": "rule_editor",
+        "name": "Rule Editor",
+        "kind": "ui",
+        "col": 1,
+        "row": 0,
+        "sub": "Define/Update Rules",
+        "x": 280,
         "y": 50
       },
       {
-        "id": "legacy_sheet",
-        "name": "Legacy Grant Spreadsheet",
+        "id": "rule_store",
+        "name": "Rule Store",
+        "kind": "data",
+        "col": 2,
+        "row": 0,
+        "sub": "Structured Rule Data",
+        "x": 500,
+        "y": 50
+      },
+      {
+        "id": "data_sources",
+        "name": "External Data",
         "kind": "external",
-        "sub": "Existing single source of truth for grant data",
         "col": 0,
-        "row": 1,
+        "row": 0,
+        "sub": "ERP, CRM, Spreadsheets",
         "x": 60,
-        "y": 190
+        "y": 50
       },
       {
-        "id": "data_ingest_svc",
-        "name": "Grant Data Ingestion Service",
+        "id": "data_ingest",
+        "name": "Data Ingest Svc",
         "kind": "service",
-        "sub": "Parses, validates, and loads grant data",
         "col": 1,
         "row": 1,
+        "sub": "ETL & Harmonization",
         "x": 280,
         "y": 190
       },
       {
-        "id": "rule_mgmt_svc",
-        "name": "Reporting Rule Management Service",
-        "kind": "service",
-        "sub": "Defines, stores, and retrieves reporting rules",
-        "col": 1,
-        "row": 0,
-        "x": 280,
-        "y": 50
-      },
-      {
-        "id": "grant_db",
-        "name": "Structured Grant Data Store",
+        "id": "data_lake",
+        "name": "Grant Data Lake",
         "kind": "data",
-        "sub": "Normalized database for all grant-related information",
         "col": 2,
         "row": 1,
+        "sub": "Centralized Grant Data",
         "x": 500,
         "y": 190
       },
       {
-        "id": "rule_db",
-        "name": "Reporting Rules Database",
-        "kind": "data",
-        "sub": "Structured storage for all defined reporting rules",
+        "id": "rule_engine",
+        "name": "Reporting Rule Eng",
+        "kind": "service",
         "col": 2,
-        "row": 0,
+        "row": 2,
+        "sub": "Evaluate Rules",
         "x": 500,
-        "y": 50
+        "y": 330
       },
       {
-        "id": "report_gen_engine",
-        "name": "Report Generation Engine",
+        "id": "reporting_svc",
+        "name": "Reporting Service",
         "kind": "service",
-        "sub": "Applies rules to data to generate reports",
         "col": 3,
         "row": 1,
+        "sub": "Generate Reports",
         "x": 720,
         "y": 190
-      },
-      {
-        "id": "report_output_store",
-        "name": "Generated Reports Storage",
-        "kind": "data",
-        "sub": "Repository for all produced reports",
-        "col": 3,
-        "row": 0,
-        "x": 720,
-        "y": 50
       },
       {
         "id": "audit_log",
-        "name": "Audit & Validation Log",
+        "name": "Audit Log",
         "kind": "data",
-        "sub": "Records report generation process and data lineage",
         "col": 3,
-        "row": 2,
+        "row": 0,
+        "sub": "Compliance Records",
         "x": 720,
-        "y": 330
+        "y": 50
       }
     ],
     "edges": [
       {
-        "from": "ui_portal",
-        "to": "rule_mgmt_svc",
-        "label": "Manage Rules",
-        "dashed": false
+        "from": "data_sources",
+        "to": "data_ingest",
+        "label": "Pull data"
+      },
+      {
+        "from": "data_ingest",
+        "to": "data_lake",
+        "label": "Store data"
+      },
+      {
+        "from": "rule_editor",
+        "to": "rule_store",
+        "label": "Save rules"
       },
       {
         "from": "ui_portal",
-        "to": "report_gen_engine",
-        "label": "Request Report",
-        "dashed": false
+        "to": "rule_editor",
+        "label": "Manage rules"
       },
       {
-        "from": "legacy_sheet",
-        "to": "data_ingest_svc",
-        "label": "Extract Grant Data",
-        "dashed": false
+        "from": "rule_store",
+        "to": "rule_engine",
+        "label": "Fetch rules"
       },
       {
-        "from": "data_ingest_svc",
-        "to": "grant_db",
-        "label": "Store Normalized Data",
-        "dashed": false
+        "from": "data_lake",
+        "to": "rule_engine",
+        "label": "Query data"
       },
       {
-        "from": "rule_mgmt_svc",
-        "to": "rule_db",
-        "label": "Store/Retrieve Rules",
-        "dashed": false
+        "from": "rule_engine",
+        "to": "reporting_svc",
+        "label": "Evaluation results"
       },
       {
-        "from": "report_gen_engine",
-        "to": "grant_db",
-        "label": "Query Grant Data",
-        "dashed": false
+        "from": "reporting_svc",
+        "to": "ui_portal",
+        "label": "Display reports"
       },
       {
-        "from": "report_gen_engine",
-        "to": "rule_db",
-        "label": "Fetch Reporting Rules",
-        "dashed": false
-      },
-      {
-        "from": "report_gen_engine",
-        "to": "report_output_store",
-        "label": "Save Report",
-        "dashed": false
-      },
-      {
-        "from": "report_gen_engine",
+        "from": "rule_engine",
         "to": "audit_log",
-        "label": "Log Generation Details",
-        "dashed": false
+        "label": "Log evaluation",
+        "dashed": true
       },
       {
-        "from": "report_output_store",
-        "to": "ui_portal",
-        "label": "Display Report",
-        "dashed": false
+        "from": "reporting_svc",
+        "to": "audit_log",
+        "label": "Log report gen",
+        "dashed": true
       },
       {
-        "from": "audit_log",
-        "to": "ui_portal",
-        "label": "View Audit Trail",
+        "from": "ui_portal",
+        "to": "audit_log",
+        "label": "View logs",
         "dashed": true
       }
     ]
@@ -210,56 +197,56 @@
   "sprint": [
     {
       "day": "Day 1-2",
-      "title": "Kickoff & Initial Rule/Data Schema Design",
-      "deliv": "Documented schema for a generic grant data model and a draft structure for defining one specific type of reporting rule."
+      "title": "Initial Rule Schema & Data Ingest POC",
+      "deliv": "Defined JSON schema for a sample reporting rule and a script to ingest a small dataset from a CSV into a local database."
     },
     {
       "day": "Day 3-4",
-      "title": "Spreadsheet Data Ingestion MVP",
-      "deliv": "Python script or service that extracts data from the existing spreadsheet and loads it into a temporary structured database for one grant type."
+      "title": "Core Rule Engine Logic",
+      "deliv": "Working Python function that takes structured rule and data, and returns a boolean compliance check for a single rule."
     },
     {
       "day": "Day 5-6",
-      "title": "Rule Management Service & Storage PoC",
-      "deliv": "CRUD API endpoints for defining and retrieving a single, simple reporting rule, backed by a persistent database."
+      "title": "Basic Reporting Service & API",
+      "deliv": "A REST API endpoint that accepts grant ID, runs the rule engine, and returns compliance status for specified rules."
     },
     {
       "day": "Day 7-8",
-      "title": "Core Report Generation Logic (Single Rule)",
-      "deliv": "Service that can take a specific grant ID and a single rule ID, fetch data, apply the rule, and output a basic, structured report (e.g., JSON)."
+      "title": "Simple UI for Report View",
+      "deliv": "A basic web page that can display the compliance status for a grant by calling the reporting service API."
     },
     {
       "day": "Day 9-10",
-      "title": "Basic UI for Report Request & Display",
-      "deliv": "Web interface allowing a user to select a grant and rule, trigger report generation, and view the raw output from the core logic."
+      "title": "Audit Logging Integration",
+      "deliv": "Rule engine and reporting service write evaluation and generation events to a persistent log, accessible via a simple query."
     },
     {
       "day": "Day 11-12",
-      "title": "End-to-End Pilot with One Grant Type",
-      "deliv": "Fully functional system capable of ingesting data for one specific grant, applying its primary reporting rule, and generating a validated report via the UI."
+      "title": "Rule Editor Prototype",
+      "deliv": "A UI form that allows creation/editing of one type of structured reporting rule, stored in the rule store."
     },
     {
       "day": "Day 13-14",
-      "title": "Validation, Feedback, & Planning",
-      "deliv": "Detailed walk-through with the 'one person' to validate the pilot report, gather feedback, and outline the next set of rules to implement."
+      "title": "End-to-End Demo Preparation",
+      "deliv": "A functional demo showing rule definition, data ingestion, compliance check, and report display for 2-3 sample grants."
     }
   ],
   "risks": [
     {
-      "risk": "The 'one person's' undocumented knowledge about reporting rules is more complex or contradictory than anticipated, making formalization difficult.",
-      "mitigation": "Conduct intensive, structured interviews with the subject matter expert, recording edge cases and ambiguities, then prioritize explicit rule definition over implicit interpretation."
+      "risk": "The existing 'one person's' knowledge is highly tacit and difficult to codify into explicit rules, leading to incomplete or incorrect rule definitions.",
+      "mitigation": "Conduct extensive, structured interviews with the subject matter expert, using concrete examples to extract rule logic. Implement a robust rule testing framework with historical data for validation."
     },
     {
-      "risk": "The existing spreadsheet data has significant quality issues (inconsistencies, missing values, unstructured fields) that hinder automated processing.",
-      "mitigation": "Implement a robust data validation and cleansing pipeline during ingestion, with clear error reporting and a feedback loop to the data source owner for correction."
+      "risk": "Grant reporting rules are more complex and nuanced than anticipated (e.g., temporal dependencies, conditional logic, fuzzy matching), making the rule engine design too simplistic.",
+      "mitigation": "Start with a flexible, extensible rule engine architecture (e.g., a rules engine library or a DSL) that can accommodate increasing complexity. Prioritize rule discovery to identify edge cases early."
     },
     {
-      "risk": "New grant agreements introduce novel reporting requirements that don't fit the established rule definition framework, requiring frequent system re-engineering.",
-      "mitigation": "Design the rule definition framework with extensibility in mind (e.g., pluggable rule types, configurable parameters) and conduct regular reviews of new grant requirements to anticipate changes."
+      "risk": "Integrating with various, potentially messy, internal data sources (ERP, financial systems) proves challenging, leading to data quality issues and delays.",
+      "mitigation": "Perform a thorough data source audit early to understand formats, APIs, and data quality. Prioritize building robust ETL pipelines with data validation and error handling from day one."
     },
     {
-      "risk": "Stakeholders distrust automated reports due to a lack of transparency or an inability to audit how specific figures were derived.",
-      "mitigation": "Build in clear audit trails for each report, detailing which rules were applied and which data points were used, potentially allowing drill-down into source data and rule logic directly from the report."
+      "risk": "Adoption by grant managers is low due to a clunky UI or a lack of trust in the system's accuracy compared to their current manual processes.",
+      "mitigation": "Involve grant managers in UI/UX design from early stages. Implement parallel reporting for a period, comparing system outputs with manual reports to build confidence and refine accuracy."
     }
   ]
 }

@@ -27,6 +27,23 @@ export interface ProjectWithContent extends Project {
     content: string;
 }
 
+let projectIds: ReadonlySet<string> | null = null;
+
+/**
+ * The ids of every project page, from the file names alone (no parsing), read
+ * once per server instance. /api/views uses it so only real projects can get a
+ * counter: any other well-formed slug used to create a permanent Redis key.
+ */
+export function getProjectIds(): ReadonlySet<string> {
+    projectIds ??= new Set(
+        fs
+            .readdirSync(path.join(CONTENT_DIR, "projects"))
+            .filter((f) => f.endsWith(".mdx"))
+            .map((f) => f.replace(/\.mdx$/, "")),
+    );
+    return projectIds;
+}
+
 export async function getProject(slug: string): Promise<ProjectWithContent | null> {
     if (!isSafeSlug(slug)) return null;
     const fullPath = path.join(CONTENT_DIR, "projects", `${slug}.mdx`);

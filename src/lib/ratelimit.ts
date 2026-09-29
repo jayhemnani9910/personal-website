@@ -54,3 +54,34 @@ export async function rateLimit(
         return "unavailable";
     }
 }
+
+interface CounterLike {
+    incr(key: string): Promise<number>;
+    expire(key: string, seconds: number): Promise<unknown>;
+}
+
+/**
+ * A ceiling on model calls per UTC day, across all visitors. The per-IP limit
+ * above only slows one caller; this bounds the bill when many IPs arrive at
+ * once. Counted only for calls that actually go to the model (cache hits are
+ * free). Same fail-open rule: a missing or broken store never blocks a visitor.
+ */
+export async function dailyBudget(
+    redis: CounterLike | null,
+    name: string,
+    limit: number,
+    now: Date = new Date(),
+): Promise<"ok" | "exhausted" | "unavailable"> {
+    if (!redis) return "unavailable";
+    const key = `budget:${name}:${now.toISOString().slice(0, 10)}`;
+    try {
+        const count = await redis.incr(key);
+        // Two days, so a key never outlives its day by much even if the clock
+        // and the TTL disagree near midnight.
+        if (count === 1) await redis.expire(key, 60 * 60 * 48);
+        return count > limit ? "exhausted" : "ok";
+    } catch (err) {
+        console.error(`[ratelimit] "${name}" budget store unavailable, failing open:`, err instanceof Error ? err.message : err);
+        return "unavailable";
+    }
+}

@@ -1,64 +1,64 @@
 {
   "scope": [
     {
-      "q": "What specific KPIs are we optimizing for (e.g., total distance per order, average picking time, order throughput), and what are the target improvements?",
-      "why": "This defines the objective function for any analysis or optimization, and clarifies what 'too far' means in measurable terms."
+      "q": "What specific metrics define 'too far' and what is the current baseline or target for picker travel distance per order or per shift?",
+      "why": "Understanding the precise definition of the problem and desired improvement quantifies success and informs data analysis priorities."
     },
     {
-      "q": "What WMS data fields are consistently captured for each pick, including item location, picker ID, timestamps, and actual path taken, and is it accessible via API or database?",
-      "why": "Data availability and granularity are foundational; this determines if we can reconstruct paths accurately and what insights are extractable."
+      "q": "What are the physical constraints of the warehouse layout (e.g., shelving types, aisle widths, one-way paths, restricted zones) and how frequently does this layout change?",
+      "why": "The physical environment heavily dictates potential optimization strategies and the feasibility of implementing changes."
     },
     {
-      "q": "Are we only analyzing historical data to identify inefficiencies, or is the scope also to generate optimized picking routes and/or suggest warehouse layout changes?",
-      "why": "This clarifies the expected deliverables: a diagnostic report versus a prescriptive system with actionable, live recommendations."
+      "q": "Are there existing picking strategies (e.g., batch picking, zone picking, pick-to-light) in place, and what is the current WMS's capability to integrate with or enforce new routing algorithms?",
+      "why": "Knowing current operational modes and WMS flexibility determines the scope of potential solutions and integration complexity."
     }
   ],
   "decomposition": [
     {
       "id": "D1",
-      "title": "WMS Data Integration & ETL",
-      "why": "We need to reliably extract raw WMS data and transform it into a clean, structured format for analysis."
+      "title": "WMS Data Ingestion & Validation",
+      "why": "This foundational step ensures we have reliable and complete data from the WMS to analyze picker movements."
     },
     {
       "id": "D2",
-      "title": "Picker Path Reconstruction & Analytics",
-      "why": "This involves re-creating picker movements from raw data to calculate distances and identify common, inefficient patterns."
+      "title": "Picker Path Reconstruction & Visualization",
+      "why": "Reconstructing and visualizing picker paths is essential to understand current inefficiencies and identify specific problem areas."
     },
     {
       "id": "D3",
-      "title": "Warehouse Layout & Item Affinity Modeling",
-      "why": "Understanding the physical layout and how items are co-picked is crucial for identifying re-slotting opportunities."
+      "title": "Warehouse Layout & Item Location Modeling",
+      "why": "A precise model of the warehouse and item locations is crucial for accurate path calculations and optimization simulations."
     },
     {
       "id": "D4",
-      "title": "Route Optimization & Simulation Engine",
-      "why": "Developing an algorithm to generate more efficient picking paths and quantify their potential impact is a core deliverable."
+      "title": "Path Optimization Algorithm Development",
+      "why": "Developing an algorithm to suggest more efficient picking paths is the core problem-solving component."
     },
     {
       "id": "D5",
-      "title": "Performance Dashboard & Recommendation Interface",
-      "why": "Results need to be visualized and actionable recommendations presented to the warehouse operators effectively."
+      "title": "Simulation & Impact Analysis",
+      "why": "Simulating optimized paths against historical data allows us to quantify potential savings before operational changes."
     }
   ],
   "architecture": {
     "components": [
       {
-        "id": "wms",
-        "name": "WMS",
-        "kind": "external",
-        "sub": "Source of truth for operational data",
+        "id": "wms_db",
+        "name": "WMS Database",
+        "kind": "data",
         "col": 0,
         "row": 1,
+        "sub": "Order & Picker Activity",
         "x": 60,
         "y": 190
       },
       {
         "id": "data_ingest",
-        "name": "Data Ingestion Service",
+        "name": "Data Ingestion Svc",
         "kind": "service",
-        "sub": "Extracts raw data from WMS via API/DB",
         "col": 1,
         "row": 0,
+        "sub": "Extract & Validate",
         "x": 280,
         "y": 50
       },
@@ -66,122 +66,114 @@
         "id": "raw_data_store",
         "name": "Raw Data Lake",
         "kind": "data",
-        "sub": "Persistent storage for unprocessed WMS logs",
+        "col": 1,
+        "row": 1,
+        "sub": "Historical WMS Data",
+        "x": 280,
+        "y": 190
+      },
+      {
+        "id": "warehouse_model",
+        "name": "Warehouse Model DB",
+        "kind": "data",
         "col": 1,
         "row": 2,
+        "sub": "Layout, Item Locations",
         "x": 280,
         "y": 330
       },
       {
-        "id": "data_proc",
-        "name": "Data Processing Service",
-        "kind": "service",
-        "sub": "Cleans, enriches, and transforms raw WMS data",
-        "col": 2,
-        "row": 0,
-        "x": 500,
-        "y": 50
-      },
-      {
-        "id": "analytics_db",
-        "name": "Analytics Data Warehouse",
-        "kind": "data",
-        "sub": "Structured data for analysis and reporting",
-        "col": 2,
-        "row": 2,
-        "x": 500,
-        "y": 330
-      },
-      {
-        "id": "opt_engine",
-        "name": "Optimization Engine",
+        "id": "path_optimizer",
+        "name": "Path Optimizer Svc",
         "kind": "agent",
-        "sub": "Generates improved picking routes and layout suggestions",
-        "col": 3,
-        "row": 0,
-        "x": 720,
-        "y": 50
-      },
-      {
-        "id": "reporting_svc",
-        "name": "Reporting Service",
-        "kind": "service",
-        "sub": "Provides API for analytics and recommendations",
-        "col": 3,
+        "col": 2,
         "row": 1,
-        "x": 720,
+        "sub": "Routing Algorithms",
+        "x": 500,
         "y": 190
       },
       {
-        "id": "dashboard_ui",
-        "name": "Dashboard UI",
-        "kind": "ui",
-        "sub": "Visualizes performance, paths, and optimization results",
-        "col": 3,
+        "id": "sim_engine",
+        "name": "Simulation Engine",
+        "kind": "service",
+        "col": 2,
         "row": 2,
-        "x": 720,
+        "sub": "Evaluate New Paths",
+        "x": 500,
         "y": 330
+      },
+      {
+        "id": "analytics_ui",
+        "name": "Analytics Dashboard",
+        "kind": "ui",
+        "col": 3,
+        "row": 0,
+        "sub": "Visualizations & KPIs",
+        "x": 720,
+        "y": 50
+      },
+      {
+        "id": "rec_api",
+        "name": "Recommendation API",
+        "kind": "service",
+        "col": 3,
+        "row": 1,
+        "sub": "Optimized Routes",
+        "x": 720,
+        "y": 190
       }
     ],
     "edges": [
       {
-        "from": "wms",
+        "from": "wms_db",
         "to": "data_ingest",
-        "label": "Read Data",
-        "dashed": false
+        "label": "Read Activity Logs"
       },
       {
         "from": "data_ingest",
         "to": "raw_data_store",
-        "label": "Write Raw",
-        "dashed": false
+        "label": "Store Raw Data"
       },
       {
         "from": "raw_data_store",
-        "to": "data_proc",
-        "label": "Process Raw",
-        "dashed": false
+        "to": "path_optimizer",
+        "label": "Historical Orders"
       },
       {
-        "from": "data_proc",
-        "to": "analytics_db",
-        "label": "Write Clean",
-        "dashed": false
+        "from": "warehouse_model",
+        "to": "path_optimizer",
+        "label": "Layout & Locations"
       },
       {
-        "from": "analytics_db",
-        "to": "opt_engine",
-        "label": "Input Data",
-        "dashed": false
+        "from": "path_optimizer",
+        "to": "sim_engine",
+        "label": "Proposed Paths"
       },
       {
-        "from": "analytics_db",
-        "to": "reporting_svc",
-        "label": "Query Data",
-        "dashed": false
+        "from": "sim_engine",
+        "to": "analytics_ui",
+        "label": "Simulation Results"
       },
       {
-        "from": "opt_engine",
-        "to": "reporting_svc",
-        "label": "Provide Recs",
-        "dashed": false
+        "from": "raw_data_store",
+        "to": "analytics_ui",
+        "label": "Current Performance"
       },
       {
-        "from": "reporting_svc",
-        "to": "dashboard_ui",
-        "label": "API Calls",
-        "dashed": false
+        "from": "path_optimizer",
+        "to": "rec_api",
+        "label": "Deliver Optimized Path"
       },
       {
-        "from": "dashboard_ui",
-        "to": "opt_engine",
-        "label": "Trigger Re-opt",
+        "from": "rec_api",
+        "to": "analytics_ui",
+        "label": "Display Routes",
         "dashed": true
       },
       {
-        "from": "dashboard_ui",
-        "to": "reporting_svc",
-        "label": "User Interaction",
+        "from": "data_ingest",
+        "to": "warehouse_model",
+        "label": "Update Layout",
         "dashed": true
       }
     ]
@@ -189,56 +181,51 @@
   "sprint": [
     {
       "day": "Day 1-2",
-      "title": "WMS Data Connector & Initial Ingestion",
-      "deliv": "Working script ingesting raw picker movement and order data into a staging database."
+      "title": "WMS Data Connector & Schema Definition",
+      "deliv": "Working script ingesting sample WMS pick data into a raw data store, with schema defined."
     },
     {
       "day": "Day 3-4",
-      "title": "Data Model & Cleaning Pipeline",
-      "deliv": "Defined schema for picker paths and orders; automated cleaning script producing structured data."
+      "title": "Basic Path Reconstruction & Visualization",
+      "deliv": "A script that plots a single picker's historical path on a simplified grid representation of the warehouse."
     },
     {
       "day": "Day 5-6",
-      "title": "Baseline Path Analysis Metrics",
-      "deliv": "Computed metrics for average picker distance per order and total distance per shift from historical data."
+      "title": "Warehouse Layout Data Model & Ingestion",
+      "deliv": "Database with initial warehouse layout (aisles, shelves) and item locations, populated from provided data."
     },
     {
-      "day": "Day 7-8",
-      "title": "Interactive Path Visualizer Prototype",
-      "deliv": "Web-based map showing reconstructed picker paths for selected orders or pickers."
+      "day": "Day 7-9",
+      "title": "First-Pass Path Optimization Algorithm",
+      "deliv": "An algorithm that takes a list of pick locations and returns a shortest path, tested against a few manual examples."
     },
     {
-      "day": "Day 9-10",
-      "title": "Item Co-occurrence & Layout Hotspot Analysis",
-      "deliv": "Report identifying frequently picked item pairs and high-traffic warehouse areas."
+      "day": "Day 10-11",
+      "title": "Simulation Framework & Baseline Metrics",
+      "deliv": "A framework that can run the optimization algorithm on historical data and calculate total distance saved."
     },
     {
-      "day": "Day 11-12",
-      "title": "Greedy Route Optimization Proof-of-Concept",
-      "deliv": "Algorithm generating a single optimized pick path for a given order, showing distance reduction vs. baseline."
-    },
-    {
-      "day": "Day 13-14",
-      "title": "MVP Dashboard & Initial Findings Presentation",
-      "deliv": "Functional UI displaying baseline metrics, path visualization, and optimization prototype results for a sample set, presented to stakeholders."
+      "day": "Day 12-14",
+      "title": "Interactive Analytics Dashboard (MVP)",
+      "deliv": "Web dashboard displaying current picker travel distances, optimized distances, and a comparison for selected historical orders."
     }
   ],
   "risks": [
     {
-      "risk": "WMS data quality and granularity are insufficient for accurate path reconstruction or item location mapping.",
-      "mitigation": "Conduct a thorough data audit upfront, including sample data review with warehouse operations, to identify missing fields or inconsistencies; implement data validation checks during ingestion."
+      "risk": "WMS data lacks precise location timestamps or granular item pick events, making accurate path reconstruction difficult.",
+      "mitigation": "Conduct an early deep dive into WMS data logs with a WMS expert to confirm data availability and granularity. If insufficient, explore alternative data sources like scanner logs or picker GPS/RFID data."
     },
     {
-      "risk": "Warehouse layout changes frequently or is not consistently reflected in WMS data, making optimization models outdated.",
-      "mitigation": "Establish a clear process for automatic or manual updates of warehouse layout data; design the system to handle dynamic layout changes gracefully, perhaps by versioning layouts."
+      "risk": "Warehouse layout data (e.g., precise coordinates of shelves, aisles, and item bins) is incomplete, outdated, or unavailable.",
+      "mitigation": "Prioritize obtaining accurate layout CAD files or conducting a physical survey. Develop a user interface for manual layout adjustments and validation by warehouse staff."
     },
     {
-      "risk": "Picker behavior is highly variable and doesn't always follow 'optimal' paths for reasons not captured in data (e.g., ad-hoc tasks, equipment issues).",
-      "mitigation": "Involve pickers and supervisors in the design and validation phases to understand practical constraints; incorporate 'human factors' into optimization by allowing flexible pathing or feedback loops."
+      "risk": "Optimized paths might be theoretically efficient but impractical due to real-world constraints not captured in the model (e.g., congestion, temporary obstructions, picker preferences).",
+      "mitigation": "Incorporate a feedback loop from warehouse operations. Start with simulation, then pilot with a small group of pickers, gathering qualitative and quantitative feedback to refine the algorithm and model."
     },
     {
-      "risk": "The proposed optimization strategies (route changes, re-slotting) are met with resistance from warehouse staff or disrupt existing workflows too much.",
-      "mitigation": "Start with small-scale pilot programs and A/B testing in controlled environments; demonstrate clear benefits and involve key stakeholders early to build buy-in and gather feedback from the ground up."
+      "risk": "The WMS integration for pushing optimized routes back into operational systems is complex or requires significant custom development.",
+      "mitigation": "Early engagement with WMS vendor or internal WMS team to understand API capabilities and limitations. Design the recommendation API to be modular, allowing for manual input or phased integration."
     }
   ]
 }

@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, afterEach } from "vitest";
-import { rateLimit } from "./ratelimit";
+import { dailyBudget, rateLimit } from "./ratelimit";
 
 function fakeRedis(opts: { ttl?: number; throwOnIncr?: boolean } = {}) {
     const counts = new Map<string, number>();
@@ -98,5 +98,41 @@ describe("rateLimit", () => {
         const otherIp = await rateLimit(redis, "test", "5.6.7.8");
         expect(otherName).toBe("ok");
         expect(otherIp).toBe("ok");
+    });
+});
+
+describe("dailyBudget", () => {
+    const counter = () => {
+        const counts = new Map<string, number>();
+        return {
+            counts,
+            incr: vi.fn(async (k: string) => {
+                const n = (counts.get(k) ?? 0) + 1;
+                counts.set(k, n);
+                return n;
+            }),
+            expire: vi.fn(async () => 1),
+        };
+    };
+
+    it("allows calls up to the limit, then reports the day as spent", async () => {
+        const redis = counter();
+        const day = new Date("2026-09-29T10:00:00Z");
+        for (let i = 0; i < 3; i++) expect(await dailyBudget(redis, "t", 3, day)).toBe("ok");
+        expect(await dailyBudget(redis, "t", 3, day)).toBe("exhausted");
+        expect(redis.expire).toHaveBeenCalledOnce();
+    });
+
+    it("starts a fresh count on the next UTC day", async () => {
+        const redis = counter();
+        for (let i = 0; i < 4; i++) await dailyBudget(redis, "t", 3, new Date("2026-09-29T23:00:00Z"));
+        expect(await dailyBudget(redis, "t", 3, new Date("2026-09-30T00:01:00Z"))).toBe("ok");
+    });
+
+    it("fails open without a store or when the store throws", async () => {
+        expect(await dailyBudget(null, "t", 3)).toBe("unavailable");
+        const broken = { incr: vi.fn().mockRejectedValue(new Error("down")), expire: vi.fn() };
+        vi.spyOn(console, "error").mockImplementation(() => {});
+        expect(await dailyBudget(broken, "t", 3)).toBe("unavailable");
     });
 });

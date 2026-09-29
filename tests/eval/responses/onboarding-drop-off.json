@@ -1,203 +1,159 @@
 {
   "scope": [
     {
-      "q": "What specific user actions or states define a 'completed setup' versus an 'incomplete setup' within the product?",
-      "why": "Without a clear definition, we cannot accurately measure the problem or determine if any solution is successful."
+      "q": "What specific user actions or events define \"setup completion\" and where do users typically drop off in the existing funnel?",
+      "why": "Precisely defining success and identifying current drop-off points is critical to scope the problem and measure impact."
     },
     {
-      "q": "Beyond the current problematic analytics, what existing logs, database records, or system events could potentially provide a baseline for user progression through setup?",
-      "why": "Understanding all available data sources, however imperfect, helps us identify starting points and potential data gaps."
+      "q": "What existing data sources, if any, track user behavior during setup, and what are their reliability and accessibility characteristics?",
+      "why": "Understanding available data, even if imperfect, dictates initial data strategy and potential for historical analysis."
     },
     {
-      "q": "What is the primary business objective for improving setup completion, e.g., increased conversion to paid, higher initial engagement, or reduced support tickets?",
-      "why": "This will dictate the success metrics and help prioritize which parts of the setup flow to focus on first."
+      "q": "What are the top 2-3 most impactful product theories regarding signup drop-off that we should prioritize investigating?",
+      "why": "Focusing on key theories will ensure the solution directly addresses the most likely causes of the problem."
     }
   ],
   "decomposition": [
     {
       "id": "D1",
-      "title": "Define & Instrument Core Setup Events",
-      "why": "We need to precisely define the critical steps of the setup flow and implement reliable, granular event tracking for each."
+      "title": "Data Source Integration & Validation",
+      "why": "Establishing reliable access to all relevant user event data is fundamental before any analysis can begin."
     },
     {
       "id": "D2",
-      "title": "Build Robust Data Ingestion & Storage",
-      "why": "A solid foundation is required to reliably collect, store, and make raw event data accessible for processing."
+      "title": "Funnel Definition & Baselines",
+      "why": "Clearly defining the setup funnel steps and measuring current conversion rates provides a baseline for improvement."
     },
     {
       "id": "D3",
-      "title": "Develop Data Transformation & Analytics Pipeline",
-      "why": "Raw events need to be cleaned, structured, and aggregated into a usable format for analysis and reporting."
+      "title": "Behavioral Analytics Engine",
+      "why": "A system to process and query user event data is necessary to identify patterns and test hypotheses."
     },
     {
       "id": "D4",
-      "title": "Construct Setup Funnel & Drop-off Visualization",
-      "why": "Product needs a clear, actionable view of where users are abandoning setup to validate their theories and identify key problem areas."
+      "title": "Hypothesis Testing & Insights Generation",
+      "why": "This piece focuses on using the data to validate product theories and uncover root causes for drop-offs."
     },
     {
       "id": "D5",
-      "title": "Establish A/B Testing Framework for Interventions",
-      "why": "Once drop-off points are identified, we need a systematic way to test solutions and measure their impact on setup completion."
+      "title": "Dashboarding & Reporting",
+      "why": "Providing clear visualization of funnel performance and key metrics ensures ongoing monitoring and communication."
     }
   ],
   "architecture": {
     "components": [
       {
-        "id": "UserUI",
-        "name": "User Frontend",
-        "kind": "ui",
-        "sub": "Application where users perform setup actions.",
+        "id": "ext_db",
+        "name": "Existing DB",
+        "kind": "external",
         "col": 0,
-        "row": 1,
+        "row": 0,
+        "sub": "User data, old events",
         "x": 60,
-        "y": 190
+        "y": 50
       },
       {
-        "id": "EventSDK",
-        "name": "Event Tracking SDK",
-        "kind": "service",
-        "sub": "Client-side library for capturing user interactions.",
-        "col": 1,
-        "row": 1,
-        "x": 280,
-        "y": 190
-      },
-      {
-        "id": "IngestAPI",
-        "name": "Event Ingestion API",
-        "kind": "service",
-        "sub": "API endpoint for receiving raw event data.",
-        "col": 2,
-        "row": 1,
-        "x": 500,
-        "y": 190
-      },
-      {
-        "id": "RawEventDB",
-        "name": "Raw Event Store",
+        "id": "event_stream",
+        "name": "Event Stream",
         "kind": "data",
-        "sub": "Persistent storage for all raw, un-processed events.",
-        "col": 2,
-        "row": 2,
-        "x": 500,
-        "y": 330
-      },
-      {
-        "id": "ETLService",
-        "name": "ETL Processing Service",
-        "kind": "service",
-        "sub": "Transforms raw events into structured analytical data.",
-        "col": 3,
-        "row": 1,
-        "x": 720,
-        "y": 190
-      },
-      {
-        "id": "AnalyticsDB",
-        "name": "Analytics Data Mart",
-        "kind": "data",
-        "sub": "Clean, aggregated data optimized for querying.",
-        "col": 3,
-        "row": 2,
-        "x": 720,
-        "y": 330
-      },
-      {
-        "id": "Dashboard",
-        "name": "Analytics Dashboard",
-        "kind": "ui",
-        "sub": "Visualization tool for product team to monitor metrics.",
-        "col": 4,
-        "row": 1,
-        "x": 940,
-        "y": 190
-      },
-      {
-        "id": "ExperimentSvc",
-        "name": "Experimentation Service",
-        "kind": "service",
-        "sub": "Manages A/B test variants and feature flags.",
         "col": 1,
         "row": 0,
+        "sub": "Real-time user actions",
         "x": 280,
         "y": 50
       },
       {
-        "id": "ProductTeam",
-        "name": "Product Team",
-        "kind": "external",
-        "sub": "Stakeholders consuming insights and defining tests.",
-        "col": 4,
+        "id": "data_ingest",
+        "name": "Data Ingest Svc",
+        "kind": "service",
+        "col": 1,
+        "row": 1,
+        "sub": "Collect & clean events",
+        "x": 280,
+        "y": 190
+      },
+      {
+        "id": "event_store",
+        "name": "Event Data Lake",
+        "kind": "data",
+        "col": 2,
+        "row": 1,
+        "sub": "Raw & processed events",
+        "x": 500,
+        "y": 190
+      },
+      {
+        "id": "analytics_eng",
+        "name": "Analytics Engine",
+        "kind": "service",
+        "col": 2,
+        "row": 2,
+        "sub": "Query & aggregate data",
+        "x": 500,
+        "y": 330
+      },
+      {
+        "id": "fde_agent",
+        "name": "FDE Insights Agent",
+        "kind": "agent",
+        "col": 3,
+        "row": 1,
+        "sub": "Hypothesis testing",
+        "x": 720,
+        "y": 190
+      },
+      {
+        "id": "bi_tool",
+        "name": "BI Dashboard",
+        "kind": "ui",
+        "col": 3,
         "row": 0,
-        "x": 940,
+        "sub": "Funnel metrics, trends",
+        "x": 720,
         "y": 50
       }
     ],
     "edges": [
       {
-        "from": "UserUI",
-        "to": "EventSDK",
-        "label": "Triggers events",
+        "from": "ext_db",
+        "to": "data_ingest",
+        "label": "Historical Sync",
         "dashed": false
       },
       {
-        "from": "EventSDK",
-        "to": "IngestAPI",
-        "label": "Sends events",
+        "from": "event_stream",
+        "to": "data_ingest",
+        "label": "Stream Events",
         "dashed": false
       },
       {
-        "from": "IngestAPI",
-        "to": "RawEventDB",
-        "label": "Stores raw data",
+        "from": "data_ingest",
+        "to": "event_store",
+        "label": "Store Events",
         "dashed": false
       },
       {
-        "from": "RawEventDB",
-        "to": "ETLService",
-        "label": "Source data",
+        "from": "event_store",
+        "to": "analytics_eng",
+        "label": "Query Data",
         "dashed": false
       },
       {
-        "from": "ETLService",
-        "to": "AnalyticsDB",
-        "label": "Writes transformed data",
+        "from": "analytics_eng",
+        "to": "fde_agent",
+        "label": "Provide Data",
         "dashed": false
       },
       {
-        "from": "AnalyticsDB",
-        "to": "Dashboard",
-        "label": "Feeds visualizations",
+        "from": "analytics_eng",
+        "to": "bi_tool",
+        "label": "Populate Dashboard",
         "dashed": false
       },
       {
-        "from": "ExperimentSvc",
-        "to": "UserUI",
-        "label": "Controls UI variants",
-        "dashed": false
-      },
-      {
-        "from": "ProductTeam",
-        "to": "ExperimentSvc",
-        "label": "Defines experiments",
-        "dashed": false
-      },
-      {
-        "from": "ProductTeam",
-        "to": "Dashboard",
-        "label": "Views analytics",
-        "dashed": false
-      },
-      {
-        "from": "EventSDK",
-        "to": "ExperimentSvc",
-        "label": "Records variant assignment",
-        "dashed": true
-      },
-      {
-        "from": "UserUI",
-        "to": "ProductTeam",
-        "label": "User feedback (implicit)",
+        "from": "fde_agent",
+        "to": "bi_tool",
+        "label": "Share Findings",
         "dashed": true
       }
     ]
@@ -205,56 +161,46 @@
   "sprint": [
     {
       "day": "Day 1-2",
-      "title": "Define 'Setup Complete' & Event Schema",
-      "deliv": "Documented definition of setup completion, key steps, and a preliminary event tracking schema for each step."
+      "title": "Define Setup Funnel & Event Schema",
+      "deliv": "Documented definition of 'setup complete' and a proposed event schema for relevant user actions."
     },
     {
-      "day": "Day 3-4",
-      "title": "Implement Client-Side Event Tracking",
-      "deliv": "Working client-side SDK integrated into the signup/setup flow, sending mocked or test events to a local endpoint."
+      "day": "Day 3-5",
+      "title": "Integrate Core Event Data Sources",
+      "deliv": "Working data pipeline ingesting raw user events from existing systems into a temporary datastore."
     },
     {
-      "day": "Day 5-6",
-      "title": "Setup Event Ingestion & Raw Storage",
-      "deliv": "Operational API endpoint accepting events and persisting them to a raw event database; schema validation implemented."
+      "day": "Day 6-8",
+      "title": "Build Funnel Analytics Queries",
+      "deliv": "SQL queries or scripts to calculate conversion rates for each step of the defined setup funnel."
     },
     {
-      "day": "Day 7-8",
-      "title": "Develop Core ETL Pipeline",
-      "deliv": "Initial ETL job transforming raw signup/setup events into a clean, normalized table in the analytics data mart."
+      "day": "Day 9-11",
+      "title": "Initial Dashboard & Baseline Metrics",
+      "deliv": "Interactive dashboard showing current signup funnel performance and key drop-off points, with an established baseline."
     },
     {
-      "day": "Day 9-10",
-      "title": "Build Basic Funnel Dashboard",
-      "deliv": "Interactive dashboard visualizing the signup-to-setup completion funnel, showing drop-off rates at each defined step."
-    },
-    {
-      "day": "Day 11-12",
-      "title": "Integrate Experimentation Framework",
-      "deliv": "A/B testing service integrated with the frontend, capable of serving different UI variants for a specific test scenario."
-    },
-    {
-      "day": "Day 13-14",
-      "title": "Review Data & Plan First Experiment",
-      "deliv": "Internal review session with product team to analyze initial funnel data, identify a high-impact drop-off, and define the first A/B test."
+      "day": "Day 12-14",
+      "title": "Hypothesis Validation & Initial Insights",
+      "deliv": "Report on the validity of 1-2 product theories based on the new data, with specific evidence or counter-evidence."
     }
   ],
   "risks": [
     {
-      "risk": "Inaccurate or incomplete event tracking due to complex frontend interactions or edge cases.",
-      "mitigation": "Implement client-side validation, server-side data contract enforcement, and comprehensive end-to-end testing with real user flows."
+      "risk": "Existing instrumentation is too sparse or incorrect to reconstruct a reliable historical setup funnel.",
+      "mitigation": "Prioritize implementing new, robust event tracking for critical steps, acknowledging historical data limitations for early analysis."
     },
     {
-      "risk": "Product team's initial hypotheses about drop-off points are incorrect or not addressable through simple UI changes.",
-      "mitigation": "Prioritize initial data collection and visualization to validate or refine hypotheses before investing heavily in specific solutions or experiments."
+      "risk": "Product team's theories are vague or untestable with quantitative data.",
+      "mitigation": "Work closely with Product to refine theories into testable hypotheses with measurable metrics before data collection and analysis."
     },
     {
-      "risk": "Performance degradation on the client-side due to excessive or inefficient event tracking.",
-      "mitigation": "Implement asynchronous event sending, batching mechanisms, and monitor frontend performance metrics closely during and after deployment."
+      "risk": "Data privacy or security concerns complicate accessing or processing user behavior data.",
+      "mitigation": "Engage legal/security teams early to ensure compliance, potentially working with anonymized or aggregated data initially."
     },
     {
-      "risk": "Data privacy or compliance issues if sensitive user information is accidentally captured in events.",
-      "mitigation": "Conduct a thorough privacy review of all tracked data points, implement data masking/anonymization at the source, and ensure strict access controls on the raw event store."
+      "risk": "Technical debt in existing systems makes data extraction or integration unexpectedly difficult and time-consuming.",
+      "mitigation": "Start with high-priority, known-good data sources and progressively integrate others, clearly documenting blockers and dependencies."
     }
   ]
 }
