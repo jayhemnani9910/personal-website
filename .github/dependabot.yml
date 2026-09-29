@@ -13,6 +13,11 @@ updates:
       # Pinned on purpose: a new Playwright ships a new Chromium, which moves
       # the visual baselines. Bump it together with test:visual:update.
       - dependency-name: "@playwright/test"
+      # Majors are done by hand. The first batch (TypeScript 7, ESLint 10,
+      # lucide-react 1, @types/node 26) either broke the build or would type
+      # APIs the Node 24 runtime does not have.
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
   - package-ecosystem: github-actions
     directory: /
     schedule:
