@@ -113,3 +113,8 @@ An earlier draft of the LCP budget cited 84 ms, taken from a warm server hit
 repeatedly in a measurement loop. The test's own conditions include a cold
 `next start` that compiles on the first request, where the range is 160 to 224 ms.
 The budget uses the number the test actually produces.
+
+Update, 2026-09-30: the budget also caps document and fetch bytes, not only script
+and stylesheet bytes, and the script cap came down from 850 KB to 765 KB.
+Responses with an error status are no longer counted, and the LCP check fails if
+no LCP entry is recorded. `tests/perf/budget.spec.ts` has the measured numbers.
