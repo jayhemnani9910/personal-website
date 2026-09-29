@@ -27,7 +27,7 @@ export function Log({ entries }: { entries: LogEntry[] }) {
         {entries.map((e) => (
           <li
             key={`${e.when}-${e.org}`}
-            className="group grid grid-cols-[6rem_minmax(0,1fr)] gap-6 py-4 border-t border-tr-hairline"
+            className="group grid grid-cols-[6.5rem_minmax(0,1fr)] gap-6 py-4 border-t border-tr-hairline"
           >
             <span className={`${MONO} pt-[3px] transition-colors group-hover:text-tr-accent-ink`}>{e.when}</span>
             <div>

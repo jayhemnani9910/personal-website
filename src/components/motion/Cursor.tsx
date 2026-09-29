@@ -4,18 +4,26 @@ import { useEffect, useRef, useSyncExternalStore } from "react";
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
 
 const FINE_POINTER_QUERY = "(pointer: fine)";
+// Visitors who ask the OS for more contrast or forced colours are the ones most
+// likely to run an enlarged or high-contrast system pointer, which CSS cannot
+// see. They keep that pointer: no ring, no `cursor: none`.
+const OPT_OUT_QUERIES = ["(prefers-contrast: more)", "(forced-colors: active)"];
+const QUERIES = [FINE_POINTER_QUERY, ...OPT_OUT_QUERIES];
 
-function subscribeFinePointer(callback: () => void) {
-  const mql = window.matchMedia(FINE_POINTER_QUERY);
-  mql.addEventListener("change", callback);
-  return () => mql.removeEventListener("change", callback);
+function subscribeCursorAllowed(callback: () => void) {
+  const mqls = QUERIES.map((q) => window.matchMedia(q));
+  mqls.forEach((mql) => mql.addEventListener("change", callback));
+  return () => mqls.forEach((mql) => mql.removeEventListener("change", callback));
 }
 
-function getFinePointerSnapshot() {
-  return window.matchMedia(FINE_POINTER_QUERY).matches;
+function getCursorAllowedSnapshot() {
+  return (
+    window.matchMedia(FINE_POINTER_QUERY).matches &&
+    !OPT_OUT_QUERIES.some((q) => window.matchMedia(q).matches)
+  );
 }
 
-function getFinePointerServerSnapshot() {
+function getCursorAllowedServerSnapshot() {
   return false;
 }
 
@@ -23,8 +31,8 @@ function getFinePointerServerSnapshot() {
 // on the client's first paint, then syncs to the real value. Duplicated here
 // (rather than extracted to a shared hook) because this file must stand alone
 // per the build brief's file scope.
-function useFinePointer(): boolean {
-  return useSyncExternalStore(subscribeFinePointer, getFinePointerSnapshot, getFinePointerServerSnapshot);
+function useCursorAllowed(): boolean {
+  return useSyncExternalStore(subscribeCursorAllowed, getCursorAllowedSnapshot, getCursorAllowedServerSnapshot);
 }
 
 // Exported (along with LABEL_CHIP below) so the comp's spec is asserted
@@ -91,16 +99,17 @@ const CURSOR_STYLE = `
 
 // Custom cursor: a ring that follows the pointer directly (no lerp) and
 // resizes/recolours per kind over any [data-cursor="LABEL"] element it
-// hovers. Desktop-fine-pointer-only, and inert under reduced motion. The
-// markup always mounts (so `active` being false in tests, e.g. jsdom's
-// matchMedia stub, doesn't stop the ring/dot/label from rendering), but an
+// hovers. Desktop-fine-pointer-only, and inert under reduced motion, more
+// contrast and forced colours. The markup always mounts (so `active` being
+// false in tests, e.g. jsdom's matchMedia stub, doesn't stop the
+// ring/dot/label from rendering), but an
 // inactive visitor gets `display: none` on the root, same as the comp
 // (`display: s.fine && !s.reduce ? "block" : "none"`), so nothing is ever
 // laid out or painted for them and the tracking effect below is skipped too.
 export function Cursor() {
-  const finePointer = useFinePointer();
+  const cursorAllowed = useCursorAllowed();
   const prefersReducedMotion = usePrefersReducedMotion();
-  const active = finePointer && !prefersReducedMotion;
+  const active = cursorAllowed && !prefersReducedMotion;
 
   const cursorRef = useRef<HTMLDivElement>(null);
   const ringRef = useRef<HTMLDivElement>(null);
@@ -128,8 +137,15 @@ export function Cursor() {
     };
     applyKind("default");
 
+    // Hidden while the pointer is outside the window, where no mousemove
+    // arrives to move it, so it doesn't sit parked at the exit point.
+    let outside = false;
     const onMouseMove = (e: MouseEvent) => {
       cursor.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
+      if (outside) {
+        outside = false;
+        cursor.style.visibility = "";
+      }
     };
 
     // mouseover/mouseout (not mouseenter/mouseleave, which don't bubble) on
@@ -149,8 +165,13 @@ export function Cursor() {
     };
 
     const onMouseOut = (e: MouseEvent) => {
-      if (!activeEl) return;
       const related = e.relatedTarget;
+      // No related target: the pointer left the window (or entered an iframe).
+      if (!related) {
+        outside = true;
+        cursor.style.visibility = "hidden";
+      }
+      if (!activeEl) return;
       // Still inside the active target (moved to a descendant), not a real exit.
       if (related instanceof Node && activeEl.contains(related)) return;
       activeEl = null;
@@ -167,6 +188,7 @@ export function Cursor() {
       document.removeEventListener("mouseover", onMouseOver);
       document.removeEventListener("mouseout", onMouseOut);
       document.body.classList.remove("has-cursor");
+      cursor.style.visibility = "";
     };
   }, [active]);
 

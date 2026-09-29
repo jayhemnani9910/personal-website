@@ -36,6 +36,8 @@ export function WorkTable({ projects, total }: { projects: FeaturedProject[]; to
           id="work-h2"
           className="text-[length:var(--tr-t-h2)] leading-[var(--tr-lh-h2)] tracking-[-.025em] font-medium"
         >
+          {/* The count alone says nothing in a headings list. */}
+          <span className="sr-only">Selected work: </span>
           {projects.length} of {total}.
         </h2>
         <p className="max-w-[56ch] text-[length:var(--tr-t-body)] leading-[var(--tr-lh-body)] text-tr-text-mute [text-wrap:pretty]">
@@ -43,7 +45,8 @@ export function WorkTable({ projects, total }: { projects: FeaturedProject[]; to
         </p>
       </div>
 
-      <div className={`hidden lg:grid ${HEADER_COLS} gap-6 pb-[.6rem] border-b-2 border-tr-accent ${HEADER_MONO}`}>
+      {/* Visual only: each cell carries its own label, sr-only at this width. */}
+      <div aria-hidden="true" className={`hidden lg:grid ${HEADER_COLS} gap-6 pb-[.6rem] border-b-2 border-tr-accent ${HEADER_MONO}`}>
         <span>#</span>
         <span>PROJECT</span>
         <span>ARRIVED AS</span>
@@ -55,16 +58,22 @@ export function WorkTable({ projects, total }: { projects: FeaturedProject[]; to
         {projects.map((p) => (
           <li key={p.id} className="relative border-b border-tr-hairline">
             {/* Absolutely positioned, so it can follow the link in the DOM (needed for
-                the peer-hover selector below) without moving where it renders. */}
+                the peer-hover selector below) without moving where it renders.
+                The link is named by the title alone: the whole row as a link
+                name is a few hundred characters in a links list. */}
             <Link
               href={`/projects/${p.id}`}
+              aria-labelledby={`work-${p.id}-title`}
               data-cursor="OPEN"
               className={`peer group grid ${ROW_COLS} py-[1.35rem] items-start`}
             >
               <span className={`${MONO} text-tr-text-faint group-hover:text-tr-accent-ink`}>{p.num}</span>
 
               <span className="group-hover:translate-x-1.5 transition-transform">
-                <span className="block text-[length:var(--tr-t-h3)] leading-[var(--tr-lh-h3)] tracking-[-.02em] font-medium">
+                <span
+                  id={`work-${p.id}-title`}
+                  className="block text-[length:var(--tr-t-h3)] leading-[var(--tr-lh-h3)] tracking-[-.02em] font-medium"
+                >
                   {p.title}
                 </span>
                 <span className="flex flex-wrap gap-[.35rem] mt-[.6rem]">
@@ -80,17 +89,17 @@ export function WorkTable({ projects, total }: { projects: FeaturedProject[]; to
               </span>
 
               <span className="text-[13.5px] leading-[var(--tr-lh-prose)] text-tr-text-mute">
-                <span className={`${HEADER_MONO} lg:hidden block mb-[2px]`}>ARRIVED AS</span>
+                <span className={`${HEADER_MONO} lg:sr-only block mb-[2px]`}>ARRIVED AS</span>
                 {p.arrived}
               </span>
 
               <span className="text-[13.5px] leading-[var(--tr-lh-prose)]">
-                <span className={`${HEADER_MONO} lg:hidden block mb-[2px]`}>WHAT I DID</span>
+                <span className={`${HEADER_MONO} lg:sr-only block mb-[2px]`}>WHAT I DID</span>
                 {p.did}
               </span>
 
               <span className="text-[13.5px] leading-[var(--tr-lh-prose)] group-hover:text-tr-ok transition-colors">
-                <span className={`${HEADER_MONO} lg:hidden block mb-[2px]`}>WHAT CHANGED</span>
+                <span className={`${HEADER_MONO} lg:sr-only block mb-[2px]`}>WHAT CHANGED</span>
                 {p.changed}
               </span>
             </Link>
@@ -104,7 +113,9 @@ export function WorkTable({ projects, total }: { projects: FeaturedProject[]; to
 
       <Link href="/projects" data-cursor="OPEN" className="inline-flex items-center gap-[.6rem] mt-6 text-[13.5px] border-b border-tr-hairline pb-[2px]">
         {COPY.workMore(total - projects.length)}
-        <span className={MONO}>→</span>
+        <span aria-hidden="true" className={MONO}>
+          →
+        </span>
       </Link>
     </section>
   );

@@ -6,10 +6,11 @@ import { RESUME } from "@/data/resume";
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
 
 // The personal best lives in the resume data, so the card cannot drift from it.
+// No fallback number: visuals.test.tsx fails if the resume string stops parsing.
 const cubeAchievement = RESUME.education
   .flatMap((edu) => edu.achievements ?? [])
   .find((s) => s.startsWith("Rubik's Cube"));
-const CUBE_PB = cubeAchievement?.match(/([\d.]+)\s*sec/)?.[1] ?? "16.7";
+export const CUBE_PB = cubeAchievement?.match(/([\d.]+)\s*sec/)?.[1] ?? "";
 
 const IDLE_NOTE = "Personal best, official. Click to scramble, I promise I'm faster than this animation.";
 
@@ -38,6 +39,8 @@ const FACE_TRANSFORMS = [
 
 const SCRAMBLE_TICKS = 15;
 const SCRAMBLE_INTERVAL_MS = 120;
+const IDLE_SPIN_S = 14;
+const SCRAMBLE_SPIN_S = 1.2;
 
 function randomFace(): string[] {
   return Array.from({ length: 9 }, () => SOLVED_COLORS[Math.floor(Math.random() * 6)]);
@@ -53,9 +56,16 @@ export function MethodCube() {
   const [faces, setFaces] = useState<string[][] | null>(null);
   const [note, setNote] = useState(IDLE_NOTE);
   const [time, setTime] = useState(CUBE_PB);
-  const [speed, setSpeed] = useState("14s");
   const [scrambled, setScrambled] = useState(false);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const cubeRef = useRef<HTMLDivElement>(null);
+
+  // Swapping animation-duration makes the browser recompute the angle from
+  // the elapsed time, so the cube jumps. Changing the playback rate keeps the
+  // current angle and only changes how fast it turns from there.
+  const setSpin = (seconds: number) => {
+    cubeRef.current?.getAnimations?.()[0]?.updatePlaybackRate(IDLE_SPIN_S / seconds);
+  };
 
   useEffect(() => {
     return () => {
@@ -75,7 +85,7 @@ export function MethodCube() {
 
   const scramble = () => {
     if (intervalRef.current) return;
-    setSpeed("1.2s");
+    setSpin(SCRAMBLE_SPIN_S);
     setNote("scrambling…");
     setTime("0.00");
     setScrambled(false);
@@ -83,14 +93,16 @@ export function MethodCube() {
     let tick = 0;
     intervalRef.current = setInterval(() => {
       tick += 1;
-      setFaces(Array.from({ length: 6 }, randomFace));
+      // Reduced motion keeps the stickers solved: 15 random recolours in under
+      // two seconds is a flicker, not a calm view. The timer and notes still run.
+      if (!reduced) setFaces(Array.from({ length: 6 }, randomFace));
       setTime(((performance.now() - t0) / 1000).toFixed(2));
       if (tick >= SCRAMBLE_TICKS) {
         if (intervalRef.current) clearInterval(intervalRef.current);
         intervalRef.current = null;
         const elapsed = ((performance.now() - t0) / 1000).toFixed(2);
         setFaces(null);
-        setSpeed("14s");
+        setSpin(IDLE_SPIN_S);
         setTime(CUBE_PB);
         setNote(`Solved. Yours took ${elapsed} s of watching. Mine is still ${CUBE_PB}.`);
         setScrambled(true);
@@ -115,11 +127,12 @@ export function MethodCube() {
         style={{ perspective: "600px" }}
       >
         <div
+          ref={cubeRef}
           aria-hidden="true"
           className="relative h-[54px] w-[54px]"
           style={{
             transformStyle: "preserve-3d",
-            animation: reduced ? undefined : `v4-cube-idle ${speed} linear infinite`,
+            animation: reduced ? undefined : `v4-cube-idle ${IDLE_SPIN_S}s linear infinite`,
             transform: reduced ? "rotateX(-24deg) rotateY(-32deg)" : undefined,
           }}
         >
@@ -144,7 +157,9 @@ export function MethodCube() {
           {time}
           <span className="text-[length:var(--tr-t-small)] text-tr-text-mute"> s</span>
         </p>
-        <p className="mb-0 mt-2 text-[12.5px] leading-[var(--tr-lh-prose)] text-tr-text-mute">{note}</p>
+        <p aria-live="polite" className="mb-0 mt-2 text-[12.5px] leading-[var(--tr-lh-prose)] text-tr-text-mute">
+          {note}
+        </p>
         {scrambled && (
           <p className="mb-0 mt-1 text-[12.5px] leading-[var(--tr-lh-prose)] text-tr-text-mute">
             I wrote{" "}

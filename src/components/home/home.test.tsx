@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import { Hero } from "./Hero";
 import { WorkTable } from "./WorkTable";
 import { Method } from "./Method";
@@ -18,10 +18,10 @@ const LOG_FIXTURE = [
 ];
 
 describe("WorkTable", () => {
-  it("renders a link to every featured project, numbered 01 through 06", () => {
+  it("renders a link to every featured project, named by its title alone, numbered 01 through 06", () => {
     render(<WorkTable projects={FEATURED} total={27} />);
     for (const p of FEATURED) {
-      const link = screen.getByRole("link", { name: new RegExp(p.title.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")) });
+      const link = screen.getByRole("link", { name: p.title });
       expect(link.getAttribute("href")).toBe(`/projects/${p.id}`);
     }
     for (const p of FEATURED) {
@@ -38,7 +38,7 @@ describe("WorkTable", () => {
 
   it("renders the heading and footer link off the given counts", () => {
     render(<WorkTable projects={FEATURED} total={27} />);
-    expect(screen.getByRole("heading", { level: 2 }).textContent).toBe("6 of 27.");
+    expect(screen.getByRole("heading", { level: 2 }).textContent).toBe("Selected work: 6 of 27.");
     expect(screen.getByText(/The other 21, with filters/)).toBeDefined();
   });
 });
@@ -84,6 +84,23 @@ describe("HomeFooter", () => {
     expect(screen.getByText(SITE_CONFIG.copyright)).toBeDefined();
     expect(screen.queryByText(/MCP tools|Instrument Sans|Geist Mono/)).toBeNull();
   });
+
+  // Same jump as the masthead and rail: scroll, then move focus to the section
+  // and put its hash in the URL, which the cancelled hash navigation would have.
+  it("jumps back to the brief, moving focus there and setting the hash", () => {
+    render(
+      <>
+        <section id="brief">brief</section>
+        <HomeFooter />
+      </>
+    );
+    fireEvent.click(screen.getByRole("link", { name: "Back to top" }));
+    const brief = document.getElementById("brief")!;
+    expect(document.activeElement).toBe(brief);
+    expect(brief.getAttribute("tabindex")).toBe("-1");
+    expect(window.location.hash).toBe("#brief");
+    history.replaceState(null, "", "/");
+  });
 });
 
 describe("Hero", () => {
@@ -118,9 +135,12 @@ describe("Method", () => {
     for (const m of METHOD) {
       expect(screen.getByText(m.rule)).toBeDefined();
     }
-    const backLinks = screen.getAllByText(/^← /);
+    // The arrow is drawn but hidden from assistive tech, so each link is
+    // named by its project alone.
+    const backLinks = METHOD.map((m) => screen.getByRole("link", { name: m.from }));
     expect(backLinks.length).toBe(4);
-    const hrefs = backLinks.map((el) => el.closest("a")?.getAttribute("href")).sort();
+    for (const link of backLinks) expect(link.textContent).toMatch(/^← /);
+    const hrefs = backLinks.map((el) => el.getAttribute("href")).sort();
     expect(hrefs).toEqual(METHOD.map((m) => m.href).sort());
   });
 });

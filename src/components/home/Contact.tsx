@@ -45,7 +45,9 @@ export function Contact() {
               }`}
             >
               <span>{row.label}</span>
-              <span className="text-tr-text-mute">{row.handle} ↗</span>
+              <span className="text-tr-text-mute">
+                {row.handle} <span aria-hidden="true">↗</span>
+              </span>
             </a>
           ))}
         </div>

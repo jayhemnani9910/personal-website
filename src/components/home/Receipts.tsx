@@ -1,17 +1,18 @@
 "use client";
 
-import { useState } from "react";
+import { useId, useState } from "react";
 import Link from "next/link";
 import type { Route } from "next";
 import type { Receipt } from "@/data/home";
-import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
 
-const STAGGER_MS = 70;
-
+// No per-tile stagger: it ran at first paint, while RevealSection still held
+// the proof section at opacity 0, so anyone who scrolled here never saw it.
+// The section's own reveal is the entrance.
 export function Receipts({ receipts }: { receipts: Receipt[] }) {
-  const reduced = usePrefersReducedMotion();
   const [openIndex, setOpenIndex] = useState(-1);
   const open = openIndex >= 0 ? receipts[openIndex] : null;
+  const panelId = useId();
+  const titleId = useId();
 
   const toggle = (i: number) => setOpenIndex((current) => (current === i ? -1 : i));
 
@@ -29,12 +30,12 @@ export function Receipts({ receipts }: { receipts: Receipt[] }) {
               key={`${r.title}-${r.n}`}
               type="button"
               aria-expanded={isOpen}
+              aria-controls={panelId}
               data-cursor="PROOF"
               onClick={() => toggle(i)}
-              style={reduced ? undefined : { animationDelay: `${i * STAGGER_MS}ms` }}
               className={`group flex flex-col gap-[.9rem] p-[1.25rem_1.1rem] text-left focus-visible:-outline-offset-2 transition-colors ${
                 isOpen ? "bg-tr-surface-2" : "bg-tr-surface-1 hover:bg-tr-surface-2"
-              } ${reduced ? "" : "animate-[v4-line-in_.4s_cubic-bezier(.16,1,.3,1)_both]"}`}
+              }`}
             >
               <span
                 className={`text-[length:var(--tr-t-stat)] leading-[var(--tr-lh-numeral)] tracking-[-.04em] font-medium tabular-nums transition-colors ${
@@ -49,7 +50,7 @@ export function Receipts({ receipts }: { receipts: Receipt[] }) {
                   isOpen ? "text-tr-accent-ink" : "text-tr-text"
                 }`}
               >
-                {isOpen ? "▲ close" : `▼ ${r.cta}`}
+                <span aria-hidden="true">{isOpen ? "▲" : "▼"}</span> {isOpen ? "close" : r.cta}
               </span>
             </button>
           );
@@ -57,12 +58,19 @@ export function Receipts({ receipts }: { receipts: Receipt[] }) {
       </div>
 
       {open && (
-        <div className="grid gap-8 p-6 bg-tr-surface-1 border border-t-0 border-tr-hairline rounded-b-[var(--tr-r-lg)] lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)]">
+        <div
+          id={panelId}
+          role="region"
+          aria-labelledby={titleId}
+          className="grid gap-8 p-6 bg-tr-surface-1 border border-t-0 border-tr-hairline rounded-b-[var(--tr-r-lg)] lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)]"
+        >
           <div>
             <p className="m-0 mb-2 font-mono text-[length:var(--tr-t-mono)] tracking-[.1em] text-tr-text-mute">
               RECEIPT · {open.n}
             </p>
-            <p className="m-0 text-[17px] font-medium">{open.title}</p>
+            <p id={titleId} className="m-0 text-[17px] font-medium">
+              {open.title}
+            </p>
             <p className="mt-2 mb-0 text-tr-text-mute">{open.note}</p>
           </div>
           <ul className="list-none m-0 p-0 flex flex-col">
@@ -70,13 +78,17 @@ export function Receipts({ receipts }: { receipts: Receipt[] }) {
               const external = l.href.startsWith("https://");
               const inner = (
                 <>
-                  <span className="text-tr-ok font-mono text-[11px]">✓</span>
+                  <span aria-hidden="true" className="text-tr-ok font-mono text-[11px]">
+                    ✓
+                  </span>
                   {l.text}
                 </>
               );
+              // href alone is not unique: the tools receipt has three lines
+              // pointing at the same project page.
               return (
                 <li
-                  key={l.href}
+                  key={`${l.href}-${l.text}`}
                   className="grid grid-cols-[minmax(0,1fr)_auto] gap-4 py-[.6rem] border-t border-tr-hairline text-[13.5px]"
                 >
                   {external ? (

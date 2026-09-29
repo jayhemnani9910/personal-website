@@ -30,7 +30,7 @@ const IDLE_FRAMES: Array<{ arms: string; legs: string }> = [
 ];
 
 // ---- word pools ----
-const IDLE_WORDS = ["idle", "reading", "still here", "hello", "shipping", "thinking", "up to top"];
+const IDLE_WORDS = ["idle", "reading", "still here", "hello", "shipping", "thinking"];
 const INTERACTION_WORDS_CLICK = ["hi there", "press me", "^_^", "hello"];
 
 function pickRandom<T>(arr: T[]): T {
@@ -92,6 +92,9 @@ export function Buddy({ className }: BuddyProps) {
   // theme reaction: skip first mount
   const prevThemeRef = useRef<string | null>(null);
   const themeInteractionRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  // the click reaction's pending step, so a second click restarts the sequence
+  // instead of the first click's reset cutting the second one short
+  const clickTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // buddy element ref for bounding rect
   const buddyRef = useRef<HTMLDivElement>(null);
@@ -145,7 +148,17 @@ export function Buddy({ className }: BuddyProps) {
         }, 900);
       }, 250);
     }, 0);
+
+    return clearThemeTimers;
   }, [theme, clearThemeTimers, prefersReducedMotion]);
+
+  // ---- unmount: no reaction step may fire after Buddy is gone ----
+  useEffect(() => {
+    const clickTimer = clickTimerRef;
+    return () => {
+      if (clickTimer.current) clearTimeout(clickTimer.current);
+    };
+  }, []);
 
   // ---- cursor tracking ----
   useEffect(() => {
@@ -282,27 +295,38 @@ export function Buddy({ className }: BuddyProps) {
   // ---- click handler ----
   const handleClick = useCallback(() => {
     clearThemeTimers();
+    if (clickTimerRef.current) clearTimeout(clickTimerRef.current);
 
     const w = INTERACTION_WORDS_CLICK[clickWordIndexRef.current % INTERACTION_WORDS_CLICK.length];
     clickWordIndexRef.current += 1;
+
+    const settle = () => {
+      clickTimerRef.current = setTimeout(() => {
+        clickTimerRef.current = null;
+        setExpression(restingRef.current);
+        setWord(null);
+      }, 900);
+    };
 
     setExpression("surprised");
     setWord(null);
 
     if (!prefersReducedMotion) {
+      // The bounce class comes off on animationend (see the div below), not
+      // here: removing it at 120 ms cut the 280 ms bounce off mid-flight.
       setBouncing(true);
-      setTimeout(() => {
+      clickTimerRef.current = setTimeout(() => {
         setExpression("happy");
         setWord(w);
-        setBouncing(false);
-        setTimeout(() => {
-          setExpression(restingRef.current);
-          setWord(null);
-        }, 900);
+        settle();
       }, 120);
     } else {
+      // Still goes back to rest after the same beat. That is a state change,
+      // not motion, and nothing else would reset it: every idle loop is off
+      // under reduced motion.
       setExpression("happy");
       setWord(w);
+      settle();
     }
   }, [clearThemeTimers, prefersReducedMotion]);
 
@@ -350,6 +374,9 @@ export function Buddy({ className }: BuddyProps) {
       ref={buddyRef}
       className={cls}
       onClick={handleClick}
+      onAnimationEnd={(e) => {
+        if (e.animationName === "buddy-bounce") setBouncing(false);
+      }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       data-cursor="POKE"
