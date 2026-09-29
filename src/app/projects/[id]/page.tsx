@@ -99,7 +99,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
 
     return pageMetadata({
         title: project.title,
-        description: project.summary,
+        description: project.description ?? project.summary,
         path: `/projects/${id}`,
         type: "article",
         article: { tags: project.tags },

@@ -7,7 +7,7 @@
 export const SITE_CONFIG = {
   name: "Jay Hemnani",
   title: "Jay Hemnani | Software, Data and ML Engineer",
-  description: "Engineer who builds end-to-end: data pipelines, ML and computer vision systems, and the full-stack apps that put them in users' hands. Forward-deployed, data, ML and software roles. Available for full-time roles and freelance projects.",
+  description: "Available for full-time roles and freelance projects. Engineer who builds end-to-end: data pipelines, ML and computer vision systems, and full-stack apps.",
   url: "https://jayhemnani.in",
   
   // Social

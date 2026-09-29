@@ -3,7 +3,7 @@ import { pageMetadata } from "@/lib/page-metadata";
 
 const FDE_TITLE = "Forward Deployed Engineer";
 const FDE_DESCRIPTION =
-  "Jay Hemnani, an engineer targeting Forward Deployed Engineer (FDE) roles. Proof in agentic systems (LangGraph multi-agent), Model Context Protocol work, RAG, distributed systems, and fast 0-to-1 delivery, plus an honest plan for the customer-facing skill being built.";
+  "Jay Hemnani, open to Forward Deployed Engineer (FDE) roles. Proof in LangGraph multi-agent systems, Model Context Protocol work, RAG, and distributed systems.";
 
 export const metadata: Metadata = {
   ...pageMetadata({ title: FDE_TITLE, description: FDE_DESCRIPTION, path: "/fde", type: "profile" }),

@@ -111,6 +111,9 @@ export const ProjectSchema = z.strictObject({
     id: z.string(),
     title: z.string(),
     summary: z.string(),
+    // The search-result snippet (meta description). Only set when the summary
+    // falls outside about 70-160 characters; the page falls back to the summary.
+    description: z.string().optional(),
     role: z.string(),
     period: z.string().optional(),
     domain: z.string().optional(),
