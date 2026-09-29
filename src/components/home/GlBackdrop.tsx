@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
+import { isMotionReduced, usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
 import { useTheme } from "@/context/ThemeContext";
 
 // Ported from docs/design/portfolio-home/Portfolio Home.dc.html, initGL()
@@ -23,6 +23,10 @@ vec3 warm=vec3(1.,.93,.78);vec3 cool=vec3(.78,.86,1.);
 vec3 col=(warm*g1+cool*g2)/max(g1+g2,.001);
 gl_FragColor=vec4(c*col*max(a,0.),max(a,0.));}`;
 
+// The effect never passes about 9% alpha and drifts slowly, so 30 fps is
+// plenty; drawing at the display rate (up to 144 Hz) only burns GPU.
+const FRAME_MS = 1000 / 30;
+
 // Fixed full-viewport backdrop behind the page content. Reduced motion (OS
 // preference or reader mode) drops the canvas entirely, no context, no
 // listeners, nothing to pause.
@@ -41,7 +45,9 @@ export function GlBackdrop() {
   }, [theme]);
 
   useEffect(() => {
-    if (reduced) return;
+    // The live check covers the hydration render, where the hook still returns
+    // its server snapshot (false) even when motion is reduced.
+    if (reduced || isMotionReduced()) return;
     const canvas = canvasRef.current;
     if (!canvas) return;
     const gl = canvas.getContext("webgl", { alpha: true, premultipliedAlpha: true, antialias: false });
@@ -53,7 +59,7 @@ export function GlBackdrop() {
       if (!shader) return null;
       gl.shaderSource(shader, src);
       gl.compileShader(shader);
-      return shader;
+      return gl.getShaderParameter(shader, gl.COMPILE_STATUS) ? shader : null;
     };
     const vertexShader = compile(gl.VERTEX_SHADER, VERTEX_SHADER);
     const fragmentShader = compile(gl.FRAGMENT_SHADER, FRAGMENT_SHADER);
@@ -62,6 +68,8 @@ export function GlBackdrop() {
     gl.attachShader(program, vertexShader);
     gl.attachShader(program, fragmentShader);
     gl.linkProgram(program);
+    // A failed compile or link would leave the loop drawing nothing forever.
+    if (!gl.getProgramParameter(program, gl.LINK_STATUS)) return;
     gl.useProgram(program);
 
     const buffer = gl.createBuffer();
@@ -98,8 +106,13 @@ export function GlBackdrop() {
     let smx = window.innerWidth / 2;
     let smy = window.innerHeight / 2;
     let rafId = 0;
+    let last = -Infinity;
 
-    const draw = () => {
+    const draw = (now: number) => {
+      rafId = requestAnimationFrame(draw);
+      // 1 ms of slack so a 60 Hz display lands on every second frame.
+      if (now - last < FRAME_MS - 1) return;
+      last = now;
       const target = pointerRef.current;
       smx += (target.x - smx) * 0.08;
       smy += (target.y - smy) * 0.08;
@@ -111,26 +124,31 @@ export function GlBackdrop() {
       const col = themeRef.current === "dark" ? [1, 1, 1] : [0.1, 0.1, 0.12];
       gl.uniform3f(uC, col[0], col[1], col[2]);
       gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
-      rafId = requestAnimationFrame(draw);
     };
 
-    // A backgrounded tab must not keep a rAF loop running.
+    // A backgrounded tab must not keep a rAF loop running. The pending frame
+    // is cancelled before a new one is queued so there is only ever one loop,
+    // even when the page mounted hidden. A lost context stops the loop for good.
+    let lost = false;
     const onVisibilityChange = () => {
-      if (document.hidden) {
-        cancelAnimationFrame(rafId);
-      } else {
-        rafId = requestAnimationFrame(draw);
-      }
+      cancelAnimationFrame(rafId);
+      if (!document.hidden && !lost) rafId = requestAnimationFrame(draw);
+    };
+    const onContextLost = () => {
+      lost = true;
+      cancelAnimationFrame(rafId);
     };
     document.addEventListener("visibilitychange", onVisibilityChange);
+    canvas.addEventListener("webglcontextlost", onContextLost);
 
-    rafId = requestAnimationFrame(draw);
+    if (!document.hidden) rafId = requestAnimationFrame(draw);
 
     return () => {
       cancelAnimationFrame(rafId);
       window.removeEventListener("resize", resize);
       window.removeEventListener("pointermove", onPointerMove);
       document.removeEventListener("visibilitychange", onVisibilityChange);
+      canvas.removeEventListener("webglcontextlost", onContextLost);
     };
   }, [reduced]);
 
