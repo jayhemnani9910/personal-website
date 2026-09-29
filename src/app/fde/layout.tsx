@@ -1,13 +1,12 @@
 import type { Metadata } from "next";
-import { SITE_CONFIG } from "@/../content/site";
+import { pageMetadata } from "@/lib/page-metadata";
 
 const FDE_TITLE = "Forward Deployed Engineer";
 const FDE_DESCRIPTION =
   "Jay Hemnani, an engineer targeting Forward Deployed Engineer (FDE) roles. Proof in agentic systems (LangGraph multi-agent), Model Context Protocol work, RAG, distributed systems, and fast 0-to-1 delivery, plus an honest plan for the customer-facing skill being built.";
 
 export const metadata: Metadata = {
-  title: FDE_TITLE,
-  description: FDE_DESCRIPTION,
+  ...pageMetadata({ title: FDE_TITLE, description: FDE_DESCRIPTION, path: "/fde", type: "profile" }),
   keywords: [
     "Forward Deployed Engineer",
     "FDE",
@@ -25,60 +24,8 @@ export const metadata: Metadata = {
     "FDE India",
     "remote FDE",
   ],
-  alternates: {
-    canonical: "/fde",
-  },
-  openGraph: {
-    title: `${FDE_TITLE} | ${SITE_CONFIG.name}`,
-    description: FDE_DESCRIPTION,
-    url: `${SITE_CONFIG.url}/fde`,
-    siteName: SITE_CONFIG.name,
-    type: "profile",
-    locale: "en_US",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: `${FDE_TITLE} | ${SITE_CONFIG.name}`,
-    description: FDE_DESCRIPTION,
-    creator: SITE_CONFIG.twitterHandle,
-  },
-};
-
-const jsonLd = {
-  "@context": "https://schema.org",
-  "@type": "ProfilePage",
-  mainEntity: {
-    "@type": "Person",
-    name: SITE_CONFIG.name,
-    url: `${SITE_CONFIG.url}/fde`,
-    jobTitle: "Forward Deployed Engineer",
-    description: FDE_DESCRIPTION,
-    sameAs: [
-      SITE_CONFIG.social.github,
-      SITE_CONFIG.social.linkedin,
-      SITE_CONFIG.social.twitter,
-    ],
-    knowsAbout: [
-      "Forward Deployed Engineering",
-      "AI agents",
-      "Model Context Protocol",
-      "Retrieval-Augmented Generation",
-      "LangGraph",
-      "Distributed systems",
-      "Full-stack engineering",
-      "Data pipelines",
-    ],
-  },
 };
 
 export default function FDELayout({ children }: { children: React.ReactNode }) {
-  return (
-    <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
-      {children}
-    </>
-  );
+  return <>{children}</>;
 }

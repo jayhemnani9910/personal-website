@@ -1,14 +1,15 @@
 import Link from "next/link";
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/page-metadata";
 import { formatPostDate, getAllPosts, getAllProjects } from "@/lib/content";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Writing",
   description: "Essays and long-form project writeups by Jay Hemnani.",
-  alternates: { canonical: "/blog" },
-};
+  path: "/blog",
+});
 
 // Mono UI chrome: kickers and card labels. Matches the MONO convention used
 // across the v4 home sections (see Method.tsx, Hero.tsx, Contact.tsx).

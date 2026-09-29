@@ -9,6 +9,7 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import { SITE_CONFIG } from "@/../content/site";
 import { THEME_KEY } from "@/lib/storage";
 import { getAllProjects } from "@/lib/content";
+import { SITE_GRAPH, jsonLd } from "@/lib/json-ld";
 
 // Instrument Sans is a variable font, so no `weight` array: listing weights
 // makes next/font ship static instances instead of the variable face, which
@@ -75,33 +76,6 @@ export const metadata: Metadata = {
   },
 };
 
-const personJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "ProfilePage",
-  mainEntity: {
-    "@type": "Person",
-    name: SITE_CONFIG.name,
-    url: SITE_CONFIG.url,
-    jobTitle: "Forward Deployed Engineer",
-    description: SITE_CONFIG.description,
-    sameAs: [
-      SITE_CONFIG.social.github,
-      SITE_CONFIG.social.linkedin,
-      SITE_CONFIG.social.twitter,
-    ],
-    knowsAbout: [
-      "Forward Deployed Engineering",
-      "AI agents",
-      "Model Context Protocol",
-      "Retrieval-Augmented Generation",
-      "Computer Vision",
-      "Distributed systems",
-      "Full-stack engineering",
-      "Data pipelines",
-    ],
-  },
-};
-
 export default async function RootLayout({
   children,
 }: Readonly<{
@@ -118,7 +92,7 @@ export default async function RootLayout({
       <head>
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
+          dangerouslySetInnerHTML={{ __html: jsonLd(SITE_GRAPH) }}
         />
         {/* Inline script to prevent theme flash */}
         <script

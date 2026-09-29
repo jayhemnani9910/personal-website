@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/page-metadata";
 import Link from "next/link";
 import { CUBE_ACHIEVEMENT, RESUME } from "@/data/resume";
 import { MERGED_PRS, MERGED_PRS_SEARCH } from "@/data/home";
@@ -6,12 +7,13 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SkillGroups } from "./SkillGroups";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "About",
   description:
     "Resume, experience, publications, open-source contributions, and a few things worth knowing about Jay Hemnani.",
-  alternates: { canonical: "/resume" },
-};
+  path: "/resume",
+  type: "profile",
+});
 
 const RESUME_PDFS = [
   { label: "Forward-Deployed", file: "/resume/jay-hemnani-fde.pdf" },

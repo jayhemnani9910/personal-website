@@ -1,3 +1,5 @@
+import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/page-metadata";
 import { getAllProjects, getProject } from "@/lib/content";
 import { ProjectDetail, type DeepDiveProse } from "@/components/ProjectDetail";
 import { SiteHeader } from "@/components/SiteHeader";
@@ -84,29 +86,24 @@ export default async function ProjectPage({ params }: { params: Promise<{ id: st
     );
 }
 
-export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
     const { id } = await params;
     const project = await getProject(id);
 
     if (!project) {
         return {
             title: "Project Not Found",
+            robots: { index: false },
         };
     }
 
-    return {
+    return pageMetadata({
         title: project.title,
         description: project.summary,
-        alternates: {
-            canonical: `/projects/${id}`,
-        },
-        openGraph: {
-            title: project.title,
-            description: project.summary,
-            type: "article",
-            tags: project.tags,
-        },
-    };
+        path: `/projects/${id}`,
+        type: "article",
+        article: { tags: project.tags },
+    });
 }
 
 export async function generateStaticParams() {
