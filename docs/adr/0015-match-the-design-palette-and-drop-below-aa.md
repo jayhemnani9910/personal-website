@@ -129,3 +129,12 @@ palette edit that is not accompanied by an update to `RECORDED` and to this
 record fails the suite. A separate test in the same file names the exact 15
 pairs this record accepts below AA, so the cost stays visible in output on
 every run rather than only in this document.
+
+## Notes
+
+Superseded on 2026-09-29 by [ADR 0017](0017-lift-the-palette-to-wcag-aa.md),
+which took the exit named above for dark `text-faint` and lifted light
+`text-faint`, `ok` and `warn` to AA as well. The `RECORDED` ratio map and the
+list of fifteen accepted pairs that the Compliance section describes were
+removed then: `tokens.test.ts` now asserts 4.5:1 on every text pair instead.
+The ratios and Lighthouse scores above are left as measured on 2026-09-03.
