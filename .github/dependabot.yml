@@ -1,0 +1,22 @@
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    # One PR a week for routine bumps instead of one per package. Majors and
+    # security fixes still come on their own.
+    groups:
+      minor-and-patch:
+        update-types: [minor, patch]
+    ignore:
+      # Pinned on purpose: a new Playwright ships a new Chromium, which moves
+      # the visual baselines. Bump it together with test:visual:update.
+      - dependency-name: "@playwright/test"
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      actions:
+        patterns: ["*"]
