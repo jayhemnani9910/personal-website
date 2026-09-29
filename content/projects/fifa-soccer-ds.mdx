@@ -42,7 +42,7 @@ deepDive:
       detail: "FastAPI returns detections, tracklets, and overlays; the live path renders annotated frames in real time."
   components:
     - name: "YOLOv8n detection (src/detect/infer.py)"
-      purpose: "Stock COCO YOLOv8n via ultralytics. Robustly extracts boxes, confidences, and classes from results regardless of tensor backend, and writes overlay images. A soccer-tuned 4-class checkpoint is future work; the training pipeline and DVC stage exist."
+      purpose: "Stock COCO YOLOv8n via ultralytics. Robustly extracts boxes, confidences, and classes from results regardless of tensor backend, and writes overlay images. A soccer-tuned 4-class checkpoint is future work; the training script exists."
     - name: "ByteTrack runtime (src/track/)"
       purpose: "ByteTrack via the supervision library with Kalman prediction. Tuned for broadcast soccer: confidence 0.35, distance threshold 120px, max_age 20 frames for short-occlusion recovery."
     - name: "Interaction graph builder (src/graph/build_graph.py)"
@@ -52,7 +52,7 @@ deepDive:
     - name: "FastAPI service (src/api/main.py)"
       purpose: "REST endpoints for batch inference plus a live RTSP path with real-time overlay rendering."
     - name: "MLflow + DVC"
-      purpose: "MLflow logs metrics and parameters across runs; DVC versions datasets and declares the reproducible pipeline stages."
+      purpose: "MLflow logs metrics and parameters across runs; DVC declares the reproducible pipeline stage (analyze_frames) over its frames, weights, and parameters."
   keyDecisions:
     - decision: "Stock YOLOv8n (COCO person + ball) instead of waiting on a fine-tuned model"
       reasoning: "COCO's person and sports-ball classes already cover the core of player and ball detection, so the rest of the pipeline (tracking, graph, serving) could be built and validated on real footage immediately rather than blocking on annotation and training."
@@ -169,7 +169,7 @@ deepDive:
     - "MLflow plus DVC was enough. A lightweight, reproducible stack beat reaching for a managed MLOps platform on a solo project, with no vendor lock-in and a local-first workflow."
     - "Production CV is mostly plumbing. Video IO, backend-agnostic tensor handling, async serving, RTSP capture, and export paths took far more effort than the model code, and that is where a notebook prototype would have fallen over."
   futureWork:
-    - "Fine-tune and ship the soccer-specific YOLO checkpoint (player, goalkeeper, ball, referee) using the existing training pipeline and DVC stage."
+    - "Fine-tune and ship the soccer-specific YOLO checkpoint (player, goalkeeper, ball, referee) using the existing training script (src/detect/train_yolo.py)."
     - "Label tactical data and train the GraphSAGE role classifier so the scaffold produces real formation and role outputs."
     - "Homography and pitch calibration to map image coordinates to real pitch coordinates for distance-true graphs (calibration code exists in src/calib)."
     - "Team classification by jersey color to split tracks into home and away before graph construction."

@@ -68,7 +68,7 @@ export const FEATURED: FeaturedProject[] = [
     tags: ["vision", "video", "pipeline", "ml"],
     tech: ["YOLOv8", "ByteTrack", "DVC", "MLflow", "FastAPI"],
     arrived: "Match footage and a question: can we track every player and turn it into tactics?",
-    did: "Detection → multi-object tracking → tactical graph, wired as a 7-stage DVC pipeline with MLflow tracking and a FastAPI service.",
+    did: "Detection → multi-object tracking → tactical graph, wired as one reproducible DVC stage (analyze_frames) with MLflow tracking and a FastAPI service.",
     changed: "22 fps end to end. Reproducible from raw video with one command.",
   },
   {
@@ -288,7 +288,7 @@ export function buildReceipts(c: { projectCount: number; toolCount: number }): R
       label: "frames per second, soccer tracking, end to end",
       cta: "show pipeline",
       title: "FIFA Soccer DS",
-      note: "YOLOv8 detection, ByteTrack persistence, GraphSAGE scaffold. Seven DVC stages you can re-run.",
+      note: "YOLOv8 detection, ByteTrack persistence, GraphSAGE scaffold. One DVC stage (analyze_frames) you can re-run.",
       lines: [
         { text: "Project write-up and demo", meta: "/projects/fifa-soccer-ds", href: "/projects/fifa-soccer-ds" },
         {
@@ -343,7 +343,7 @@ export const METHOD: MethodRule[] = [
   {
     n: "02",
     rule: "Make it re-runnable before making it better.",
-    why: "Seven DVC stages from raw video. If a result can't be reproduced it isn't a result.",
+    why: "One DVC stage re-runs detection, tracking and the graph. If a result can't be reproduced it isn't a result.",
     from: "FIFA Soccer DS",
     href: "/projects/fifa-soccer-ds",
   },
