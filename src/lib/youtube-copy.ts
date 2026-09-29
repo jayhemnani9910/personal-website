@@ -13,7 +13,9 @@
 //
 // src/lib/youtube.test.ts asserts every channel in the JSON has an entry here.
 
-export type ChannelCopy = { tagline: string; about: string };
+// `showVideos: false` hides the long-form row: the AI channel's long uploads
+// are FC gaming clips from before it became an AI channel.
+export type ChannelCopy = { tagline: string; about: string; showVideos?: boolean };
 
 export const CHANNEL_COPY: Record<string, ChannelCopy> = {
   // JH-Analytics | 2.0 — @jhanalytics2.0
@@ -21,6 +23,7 @@ export const CHANNEL_COPY: Record<string, ChannelCopy> = {
     tagline: "AI news, translated for data people.",
     about:
       "A faceless shorts channel that takes what just happened in AI and pulls out the one mechanism that matters: the failure mode, the cost math, the benchmark that holds up. One claim per video, under 90 seconds, no hype. The current run is the Failure Report series: what broke, why, and the fix.",
+    showVideos: false,
   },
   // JodnaniPlays — @jodnaniplays (formerly @jhanalytics)
   UCRAV0VDSxngptEo5SY4nKcw: {

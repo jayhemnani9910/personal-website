@@ -9,10 +9,10 @@ interface SkillGroup {
 
 const MONO = "font-[family-name:var(--ff-mono)]";
 
-// The design's copy ("Click a group to see where it was used") points at a
+// The design's copy ("Click a group to see where it was used") pointed at a
 // "USED IN · <sentence>" line per group. resume.ts carries no such field, and
 // nothing here invents where a skill was actually used, so that line is
-// omitted rather than fabricated.
+// omitted rather than fabricated, and the page copy says what the click does.
 export function SkillGroups({ groups }: { groups: SkillGroup[] }) {
   const [active, setActive] = useState(0);
   const current = groups[active];
@@ -36,8 +36,9 @@ export function SkillGroups({ groups }: { groups: SkillGroup[] }) {
           </button>
         ))}
       </div>
+      {/* Polite live region, so the swap is not silent to a screen reader. */}
       {current ? (
-        <div className="mt-6 flex flex-wrap gap-2">
+        <div aria-live="polite" className="mt-6 flex flex-wrap gap-2">
           {current.items.map((item) => (
             <span
               key={item}

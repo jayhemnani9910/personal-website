@@ -38,7 +38,13 @@ function DurationPill({ sec }: { sec: number }) {
 
 function ShortCard({ item }: { item: YouTubeItem }) {
   return (
-    <a href={`https://www.youtube.com/watch?v=${item.id}`} target="_blank" rel="noopener noreferrer" className={CARD}>
+    <a
+      href={`https://www.youtube.com/watch?v=${item.id}`}
+      target="_blank"
+      rel="noopener noreferrer"
+      data-cursor="OPEN"
+      className={CARD}
+    >
       <div className="relative aspect-[9/16] bg-tr-surface-2">
         <Image
           src={item.thumb}
@@ -61,7 +67,13 @@ function ShortCard({ item }: { item: YouTubeItem }) {
 
 function VideoCard({ item }: { item: YouTubeItem }) {
   return (
-    <a href={`https://www.youtube.com/watch?v=${item.id}`} target="_blank" rel="noopener noreferrer" className={CARD}>
+    <a
+      href={`https://www.youtube.com/watch?v=${item.id}`}
+      target="_blank"
+      rel="noopener noreferrer"
+      data-cursor="OPEN"
+      className={CARD}
+    >
       <div className="relative aspect-video bg-tr-surface-2">
         <Image
           src={item.thumb}
@@ -96,6 +108,7 @@ function ChannelButton({
       type="button"
       aria-pressed={selected}
       onClick={onSelect}
+      data-cursor="SWITCH"
       className={`min-w-[220px] text-left flex flex-col gap-[.15rem] px-4 py-[.7rem] rounded-[var(--tr-r-md)] border transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] ${
         selected ? "border-tr-accent bg-tr-surface-1" : "border-tr-hairline bg-transparent hover:border-tr-accent"
       }`}
@@ -131,6 +144,7 @@ export function YouTubeShowcase({ data }: { data: YouTubeData }) {
             href={channel.url}
             target="_blank"
             rel="noopener noreferrer"
+            data-cursor="OPEN"
             className="inline-block mt-3 text-tr-text-mute border-b border-tr-hairline hover:text-tr-accent-ink hover:border-tr-accent transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)]"
           >
             {channel.url} ↗
@@ -150,7 +164,7 @@ export function YouTubeShowcase({ data }: { data: YouTubeData }) {
         </div>
       )}
 
-      {channel.videos.length > 0 && (
+      {copy?.showVideos !== false && channel.videos.length > 0 && (
         <div className="mt-10">
           <h3 className={`${MONO} mb-3`}>VIDEOS · LATEST</h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
