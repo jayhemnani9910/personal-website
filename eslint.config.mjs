@@ -17,10 +17,8 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
-    "v1-old-site/**",
     "docs/**",
-    // Scratch files written by the remember plugin, at the repo root and
-    // inside the practice-problem folders. Not ours, and not code.
+    // Scratch files written by the remember plugin. Not ours, and not code.
     "**/.remember/**",
     // Playwright's own output. Both are gitignored, but ESLint reads the
     // working tree rather than the index, so after any test:visual or
@@ -30,6 +28,9 @@ const eslintConfig = defineConfig([
     // is a thing to forget.
     "playwright-report/**",
     "test-results/**",
+    // Local audit output (gitignored), not project code.
+    ".audit/**",
+    "graphify-out/**",
   ]),
 ]);
 

@@ -32,3 +32,14 @@ describe("showcase hero assets", () => {
         expect(existsSync(path.join(process.cwd(), "public", hero.replace(/^\//, "")))).toBe(true);
     });
 });
+
+describe("showcase WebMCP tools table", () => {
+    it("lists exactly the tools the site registers, in order, with the same kinds", async () => {
+        const { SHOWCASE_PROJECTS } = await import("@/lib/showcase");
+        const { WEBMCP_TOOLS } = await import("@/lib/webmcp-tools");
+        const demo = SHOWCASE_PROJECTS["webmcp-portfolio"]?.demo;
+        expect(demo?.kind).toBe("tools");
+        const rows = demo && demo.kind === "tools" ? demo.tools : [];
+        expect(rows.map((r) => [r.name, r.kind])).toEqual(WEBMCP_TOOLS.map((t) => [t.name, t.kind]));
+    });
+});

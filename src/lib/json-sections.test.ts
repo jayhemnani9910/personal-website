@@ -172,3 +172,19 @@ describe("bare scalars at the end of the object", () => {
     expect(run('{"a": [1]}{"b": [2]}').map((s) => s.key)).toEqual(["a"]);
   });
 });
+
+describe("JsonSectionExtractor text after the object", () => {
+  // The route parses `text` whole at the end, so it must not depend on how the
+  // network split the body: trailing bytes are dropped whether they arrive with
+  // the closing brace or after it.
+  it("keeps the same text under every chunking", () => {
+    const doc = '{"a":[1]} {"b":[2]}';
+    const texts = new Set<string>();
+    for (let size = 1; size <= doc.length; size++) {
+      const x = new JsonSectionExtractor();
+      for (let i = 0; i < doc.length; i += size) x.push(doc.slice(i, i + size));
+      texts.add(x.text);
+    }
+    expect([...texts]).toEqual(['{"a":[1]}']);
+  });
+});

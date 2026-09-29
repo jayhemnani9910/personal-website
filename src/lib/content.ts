@@ -3,7 +3,7 @@ import path from "path";
 import matter from "gray-matter";
 import { ProjectSchema, PostSchema, Project, Post, calculateReadingTime } from "./definitions";
 
-export type ProjectSummary = Pick<Project, "id" | "title" | "summary" | "role" | "period" | "domain" | "tags" | "tech" | "featured" | "priority" | "github" | "links">;
+export type ProjectSummary = Pick<Project, "id" | "title" | "summary" | "role" | "period" | "domain" | "tags" | "tech" | "priority" | "github" | "links">;
 
 const CONTENT_DIR = path.join(process.cwd(), "content");
 
@@ -25,6 +25,23 @@ export interface ProjectWithContent extends Project {
      * rendered now, by the project route, above the numbered sections.
      */
     content: string;
+}
+
+let projectIds: ReadonlySet<string> | null = null;
+
+/**
+ * The ids of every project page, from the file names alone (no parsing), read
+ * once per server instance. /api/views uses it so only real projects can get a
+ * counter: any other well-formed slug used to create a permanent Redis key.
+ */
+export function getProjectIds(): ReadonlySet<string> {
+    projectIds ??= new Set(
+        fs
+            .readdirSync(path.join(CONTENT_DIR, "projects"))
+            .filter((f) => f.endsWith(".mdx"))
+            .map((f) => f.replace(/\.mdx$/, "")),
+    );
+    return projectIds;
 }
 
 export async function getProject(slug: string): Promise<ProjectWithContent | null> {
@@ -95,7 +112,6 @@ export async function getProjectSummaries(): Promise<ProjectSummary[]> {
         domain: p.domain,
         tags: p.tags,
         tech: p.tech,
-        featured: p.featured,
         priority: p.priority,
         github: p.github,
         links: p.links,

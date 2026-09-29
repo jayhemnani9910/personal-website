@@ -105,7 +105,6 @@ deepDive:
     - "Comparing search strategies only means something on a hard enough environment, a turbulent, noisy plume is what makes the bio-inspired strategies earn their place over a plain gradient follower."
     - "Reimplementing the simulator in the browser was worth the duplication: a research idea people can run themselves lands very differently from a paper plus static plots."
     - "Keeping it compact and deterministic was a feature, the value is a repeatable sandbox, not a sprawling framework."
-featured: false
 priority: 18
 ---
 A compact project pairing a short whitepaper with a runnable simulator for autonomous search. It implements five strategies, random walk, Levy flight, gradient ascent, surge-cast, and swarm stigmergy, as interchangeable behaviors over one agent model, and runs them in a plume environment that can be static or turbulent (drifting Gaussian puffs with sensing noise). A leaderboard runner scores the strategies across repeated trials and conditions and produces plots, and the same model is reimplemented in JavaScript so the Digital Lab runs live in the browser with no backend. It is deliberately small and deterministic enough to reproduce.

@@ -1,32 +1,35 @@
 /**
- * WebMCP Integration
+ * WebMCP integration: the tools this site offers to an AI agent running in the
+ * visitor's browser, through the WebMCP API (document.modelContext).
  *
- * Exposes structured tools via the W3C WebMCP API (navigator.modelContext)
- * so AI agents can query portfolio data, search projects, and interact
- * with the site programmatically.
- *
- * Chrome 146+ with WebMCP flag enabled required.
- * @see https://webmcp.dev
+ * The API is a W3C Web Machine Learning Community Group draft, behind
+ * chrome://flags/#enable-webmcp-testing in Chrome. Its shape changed while it
+ * was being drafted: tools take an `execute` callback, `registerTool` returns a
+ * promise, and a tool is removed by aborting the AbortSignal it was registered
+ * with (provideContext, clearContext and unregisterTool are gone). This file
+ * follows the current draft and the Chrome docs.
+ * @see https://github.com/webmachinelearning/webmcp
  */
 
-// Extend Navigator for WebMCP API (Chrome 146 Canary)
+import { WEBMCP_TOOLS } from "@/lib/webmcp-tools";
+import { THEME_KEY, writeStorage } from "@/lib/storage";
+import { setReaderMode } from "@/lib/reader-mode";
+
+export interface ModelContextTool {
+  name: string;
+  description: string;
+  inputSchema?: Record<string, unknown>;
+  execute: (args: Record<string, unknown>) => Promise<unknown>;
+  annotations?: { readOnlyHint?: boolean };
+}
+
+interface ModelContext {
+  registerTool(tool: ModelContextTool, options?: { signal?: AbortSignal }): Promise<void>;
+}
+
 declare global {
-  interface Navigator {
-    modelContext?: {
-      registerTool(config: {
-        name: string;
-        description: string;
-        inputSchema: Record<string, unknown>;
-        handler: (args: Record<string, unknown>) => Promise<unknown>;
-      }): void;
-      unregisterTool(name: string): void;
-      provideContext(config: {
-        name: string;
-        description: string;
-        content: string;
-      }): void;
-      clearContext(name: string): void;
-    };
+  interface Document {
+    modelContext?: ModelContext;
   }
 }
 
@@ -78,53 +81,34 @@ export interface ResumeData {
 }
 
 export interface SiteData {
+  /** The origin every URL handed to an agent is built from (SITE_CONFIG.url). */
+  siteUrl: string;
   projects: ProjectData[];
   resume: ResumeData;
   social: Record<string, string>;
   experiments: { id: string; title: string; description: string; tags: string[]; progress?: number }[];
 }
 
-/**
- * The tools registered below, in registration order. Single source of truth:
- * unregisterWebMCPTools walks this list, and every place in the UI that quotes
- * a tool count reads WEBMCP_TOOL_COUNT rather than typing a number. The count
- * is asserted against the actual registerTool calls in webmcp.test.ts, so this
- * array cannot silently drift from what the site really registers.
- */
-export const WEBMCP_TOOL_NAMES = [
-  "search_projects",
-  "get_project",
-  "get_resume",
-  "search_skills",
-  "get_contact",
-  "list_experiments",
-  "toggle_theme",
-  "switch_mode",
-] as const;
 
-export const WEBMCP_TOOL_COUNT = WEBMCP_TOOL_NAMES.length;
-
-/** Check if WebMCP is available in the browser */
+/** True when the browser exposes the WebMCP API. */
 export function isWebMCPAvailable(): boolean {
-  return typeof navigator !== "undefined" && "modelContext" in navigator && navigator.modelContext !== undefined;
+  return typeof document !== "undefined" && document.modelContext !== undefined;
 }
 
-/** Register all portfolio tools with WebMCP */
-export function registerWebMCPTools(data: SiteData): void {
-  const mc = navigator.modelContext;
-  if (!mc) return;
+const READ_ONLY = new Set<string>(WEBMCP_TOOLS.filter((t) => t.kind === "read").map((t) => t.name));
 
-  // Provide site context
-  mc.provideContext({
-    name: "site_info",
-    description: "Jay Hemnani's portfolio website, a Forward Deployed Engineer's personal site",
-    content: `This is Jay Hemnani's portfolio at jayhemnani.in. Jay is a Forward Deployed Engineer with experience in ML/AI, full-stack development, and data pipelines. The site showcases ${data.projects.length} projects across domains like sports analytics, computer vision, distributed systems, and more.`,
-  });
+/**
+ * The site's tools, in the registry's order. Pure: nothing touches the browser
+ * until an agent calls `execute`, so tests can build and run them directly.
+ */
+export function buildTools(data: SiteData): ModelContextTool[] {
+  const url = (path: string) => `${data.siteUrl}${path}`;
+  const tools: ModelContextTool[] = [];
 
   // Tool 1: Search projects
-  mc.registerTool({
+  tools.push({
     name: "search_projects",
-    description: "Search Jay's projects by query text, technology, tags, or domain. Returns matching projects with summaries.",
+    description: `Search the ${data.projects.length} projects on Jay Hemnani's portfolio (${data.siteUrl}) by query text, technology, tags, or domain. Returns matching projects with summaries.`,
     inputSchema: {
       type: "object",
       properties: {
@@ -138,7 +122,7 @@ export function registerWebMCPTools(data: SiteData): void {
         featured_only: { type: "boolean", description: "Only return featured projects" },
       },
     },
-    handler: async (args) => {
+    execute: async (args) => {
       let results = [...data.projects];
       const q = (args.query as string)?.toLowerCase();
       const tech = (args.tech as string)?.toLowerCase();
@@ -175,14 +159,14 @@ export function registerWebMCPTools(data: SiteData): void {
           tech: p.tech,
           tags: p.tags,
           domain: p.domain,
-          url: `https://jayhemnani.in/projects/${p.id}`,
+          url: url(`/projects/${p.id}`),
         })),
       };
     },
   });
 
   // Tool 2: Get project details
-  mc.registerTool({
+  tools.push({
     name: "get_project",
     description: "Get full details of a specific project by its ID, including challenge, solution, impact, and tech stack.",
     inputSchema: {
@@ -192,21 +176,21 @@ export function registerWebMCPTools(data: SiteData): void {
       },
       required: ["id"],
     },
-    handler: async (args) => {
+    execute: async (args) => {
       const project = data.projects.find((p) => p.id === args.id);
       if (!project) {
         return { error: `Project '${args.id}' not found. Use search_projects to find available projects.` };
       }
       return {
         ...project,
-        url: `https://jayhemnani.in/projects/${project.id}`,
+        url: url(`/projects/${project.id}`),
         github: project.github || null,
       };
     },
   });
 
   // Tool 3: Get resume
-  mc.registerTool({
+  tools.push({
     name: "get_resume",
     description: "Get Jay's resume data: experience, education, skills, and core competencies.",
     inputSchema: {
@@ -219,7 +203,7 @@ export function registerWebMCPTools(data: SiteData): void {
         },
       },
     },
-    handler: async (args) => {
+    execute: async (args) => {
       const section = (args.section as string) || "all";
       const r = data.resume;
 
@@ -251,7 +235,7 @@ export function registerWebMCPTools(data: SiteData): void {
   });
 
   // Tool 4: Search skills
-  mc.registerTool({
+  tools.push({
     name: "search_skills",
     description: "Search Jay's technical skills by category or keyword.",
     inputSchema: {
@@ -259,12 +243,12 @@ export function registerWebMCPTools(data: SiteData): void {
       properties: {
         category: {
           type: "string",
-          description: "Skill category: Languages, Data, ML/AI, MLOps, Cloud, Visualization",
+          description: `Skill category: ${data.resume.skills.map((s) => s.category).join(", ")}`,
         },
         query: { type: "string", description: "Search for a specific skill by name" },
       },
     },
-    handler: async (args) => {
+    execute: async (args) => {
       const cat = (args.category as string)?.toLowerCase();
       const q = (args.query as string)?.toLowerCase();
       let skills = data.resume.skills;
@@ -286,22 +270,22 @@ export function registerWebMCPTools(data: SiteData): void {
   });
 
   // Tool 5: Get contact info
-  mc.registerTool({
+  tools.push({
     name: "get_contact",
     description: "Get Jay's contact information and social links.",
     inputSchema: { type: "object", properties: {} },
-    handler: async () => {
+    execute: async () => {
       return {
         name: data.resume.name,
         email: data.resume.contact.email,
         social: data.social,
-        website: "https://jayhemnani.in",
+        website: data.siteUrl,
       };
     },
   });
 
   // Tool 6: List experiments
-  mc.registerTool({
+  tools.push({
     name: "list_experiments",
     description: "List what Jay is currently building, exploring, or watching in the lab.",
     inputSchema: {
@@ -310,7 +294,7 @@ export function registerWebMCPTools(data: SiteData): void {
         query: { type: "string", description: "Search experiments by title or tags" },
       },
     },
-    handler: async (args) => {
+    execute: async (args) => {
       let experiments = [...data.experiments];
       const q = (args.query as string)?.toLowerCase();
 
@@ -328,7 +312,7 @@ export function registerWebMCPTools(data: SiteData): void {
   });
 
   // Tool 7: Toggle theme
-  mc.registerTool({
+  tools.push({
     name: "toggle_theme",
     description: "Toggle the site between light and dark theme, or set a specific theme.",
     inputSchema: {
@@ -337,7 +321,7 @@ export function registerWebMCPTools(data: SiteData): void {
         theme: { type: "string", enum: ["light", "dark", "toggle"], description: "Theme to set (default: toggle)" },
       },
     },
-    handler: async (args) => {
+    execute: async (args) => {
       const current = document.documentElement.getAttribute("data-theme") || "dark";
       const requested = args.theme as string;
       let newTheme: string;
@@ -349,17 +333,17 @@ export function registerWebMCPTools(data: SiteData): void {
       }
 
       document.documentElement.setAttribute("data-theme", newTheme);
-      localStorage.setItem("theme", newTheme);
+      writeStorage(THEME_KEY, newTheme);
 
       // Dispatch storage event so ThemeContext picks it up
-      window.dispatchEvent(new StorageEvent("storage", { key: "theme", newValue: newTheme }));
+      window.dispatchEvent(new StorageEvent("storage", { key: THEME_KEY, newValue: newTheme }));
 
       return { previous: current, current: newTheme };
     },
   });
 
   // Tool 8: Toggle reader mode
-  mc.registerTool({
+  tools.push({
     name: "switch_mode",
     description:
       "Toggle reader mode: a calm, high-readability view that turns off the site's motion and cinematic chrome (custom cursor, preloader, smooth-scroll, scroll reveals). Use 'reader' for the accessible reading view, 'default' to restore the full experience. Applies immediately, no reload.",
@@ -374,15 +358,9 @@ export function registerWebMCPTools(data: SiteData): void {
       },
       required: ["mode"],
     },
-    handler: async (args) => {
+    execute: async (args) => {
       const on = (args.mode as string) === "reader";
-
-      localStorage.setItem("reader-mode", on ? "on" : "off");
-      if (on) document.documentElement.dataset.reader = "on";
-      else delete document.documentElement.dataset.reader;
-      // usePrefersReducedMotion listens for this and drops every motion
-      // primitive into its static path (same signal path as the OS setting).
-      window.dispatchEvent(new Event("readermodechange"));
+      setReaderMode(on);
 
       return {
         mode: on ? "reader" : "default",
@@ -393,13 +371,26 @@ export function registerWebMCPTools(data: SiteData): void {
       };
     },
   });
+
+  for (const tool of tools) {
+    if (READ_ONLY.has(tool.name)) tool.annotations = { readOnlyHint: true };
+  }
+  return tools;
 }
 
-/** Unregister all tools */
-export function unregisterWebMCPTools(): void {
-  const mc = navigator.modelContext;
+/**
+ * Register every tool. Each registration is awaited separately and a failure
+ * only drops that tool: the API is experimental, so nothing here may throw
+ * into the page. Aborting `signal` unregisters them all.
+ */
+export async function registerWebMCPTools(data: SiteData, signal: AbortSignal): Promise<void> {
+  const mc = document.modelContext;
   if (!mc) return;
-
-  WEBMCP_TOOL_NAMES.forEach((name) => mc.unregisterTool(name));
-  mc.clearContext("site_info");
+  await Promise.all(
+    buildTools(data).map((tool) =>
+      Promise.resolve()
+        .then(() => mc.registerTool(tool, { signal }))
+        .catch((err) => console.warn(`[webmcp] could not register ${tool.name}:`, err instanceof Error ? err.message : err)),
+    ),
+  );
 }

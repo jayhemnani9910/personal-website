@@ -14,10 +14,11 @@
 // rather than something to notice by eye.
 //
 // Nothing in this file makes a network call. The live runner is
-// scripts/eval-fde.mjs; these functions grade whatever it brings back, which is
-// what lets the grader itself be unit-tested in CI without a key.
+// src/lib/fde-eval.live.test.ts (`npm run eval:fde`); these functions grade
+// whatever it brings back, which is what lets the grader itself be unit-tested
+// in CI without a key.
 
-import { PROMPT_LEAK_MARKERS } from "./fde-prompt";
+import { containsPromptLeak } from "./fde-prompt";
 
 export interface GoldenBrief {
   id: string;
@@ -43,13 +44,13 @@ export const GOLDEN_BRIEFS: GoldenBrief[] = [
     id: "support-tickets",
     brief:
       "We have a customer support team drowning in tickets and no real idea which ones actually matter. Something should help them.",
-    domainTerms: ["ticket", "support", "customer", "triage", "queue", "agent"],
+    domainTerms: ["ticket", "support", "customer", "triage", "queue", "backlog"],
   },
   {
     id: "contract-review",
     brief:
       "Our legal team reviews about 400 vendor contracts a quarter by hand. We want to speed that up but we cannot be wrong about liability clauses.",
-    domainTerms: ["contract", "legal", "clause", "vendor", "review", "liability"],
+    domainTerms: ["contract", "legal", "clause", "vendor", "redline", "liability"],
   },
   {
     id: "warehouse-picking",
@@ -67,7 +68,7 @@ export const GOLDEN_BRIEFS: GoldenBrief[] = [
     id: "fraud-signals",
     brief:
       "Chargebacks went up 40 percent last quarter. The fraud team says they can see patterns but cannot act fast enough.",
-    domainTerms: ["fraud", "chargeback", "transaction", "risk", "signal", "review"],
+    domainTerms: ["fraud", "chargeback", "transaction", "risk", "dispute", "merchant"],
   },
   {
     id: "internal-search",
@@ -79,13 +80,13 @@ export const GOLDEN_BRIEFS: GoldenBrief[] = [
     id: "churn-early-warning",
     brief:
       "We usually find out a customer is leaving when they tell us. Success managers want a heads up but they do not trust a score with no reason attached.",
-    domainTerms: ["churn", "customer", "success", "account", "signal", "renewal"],
+    domainTerms: ["churn", "customer", "success", "account", "retention", "renewal"],
   },
   {
     id: "field-technician",
     brief:
       "Field techs call the depot constantly to ask which part fits which unit. The manuals exist as thousands of scanned PDFs.",
-    domainTerms: ["technician", "field", "part", "manual", "pdf", "equipment"],
+    domainTerms: ["technician", "repair", "part", "manual", "pdf", "equipment"],
   },
   {
     id: "grant-compliance",
@@ -105,20 +106,18 @@ export const GOLDEN_BRIEFS: GoldenBrief[] = [
 export const VALID_KINDS = ["ui", "service", "agent", "data", "external"];
 
 /**
- * Phrases the prompt explicitly rules out. It bans "AI might be inaccurate" as a
- * risk by name and "what's your budget" as a scope question by name, and both
- * are what a model reaches for when it has not engaged with the problem.
+ * Phrases the prompt explicitly rules out, and only those. It bans "AI might be
+ * inaccurate" as a risk by name and "what's your budget" as a scope question by
+ * name. Variants of those two, nothing more: a specific risk that mentions data
+ * quality, or a hard question about a timeline, is not a regression.
  */
-export const GENERIC_RISK_PHRASES = [
-  "ai might be inaccurate",
-  "ai may be inaccurate",
-  "model may be inaccurate",
-  "data quality issues",
-  "scope creep",
-  "lack of user adoption",
-];
+export const GENERIC_RISK_PHRASES = ["ai might be inaccurate", "ai may be inaccurate", "model may be inaccurate"];
 
-export const LAZY_QUESTION_PHRASES = ["your budget", "what is the budget", "what's the budget", "your timeline"];
+export const LAZY_QUESTION_PHRASES = ["your budget", "what is the budget", "what's the budget"];
+
+/** How many characters fit in a diagram box: the limits the prompt states. */
+export const MAX_NAME_CHARS = 18;
+export const MAX_SUB_CHARS = 24;
 
 export interface Check {
   id: string;
@@ -138,13 +137,19 @@ const isFilled = (s: unknown): boolean => typeof s === "string" && s.trim().leng
 // failures that way. See the contract-review fixture in fde-eval.test.ts.
 const isId = (s: unknown): boolean => typeof s === "string" && s.trim().length > 0;
 
-/** Every string in the payload, flattened, lowercased. Used for text-level checks. */
+// Fields that are labels or fixed vocabulary, not prose the model wrote about
+// this problem. `kind: "agent"` used to count as the support brief's "agent".
+const NON_PROSE_KEYS = new Set(["id", "kind", "day", "from", "to", "col", "row", "dashed"]);
+
+/** Every prose string in the payload, flattened, lowercased. Used for text-level checks. */
 export function allText(payload: Record<string, unknown>): string {
   const out: string[] = [];
   const walk = (v: unknown) => {
     if (typeof v === "string") out.push(v);
     else if (Array.isArray(v)) v.forEach(walk);
-    else if (v && typeof v === "object") Object.values(v).forEach(walk);
+    else if (v && typeof v === "object") {
+      for (const [k, x] of Object.entries(v)) if (!NON_PROSE_KEYS.has(k)) walk(x);
+    }
   };
   walk(payload);
   return out.join("\n").toLowerCase();
@@ -239,6 +244,25 @@ export function gradeSim(payload: any, golden: GoldenBrief): Check[] {
       offGrid.length === 0 ? "all components inside col 0-3, row 0-2" : `${offGrid.length} components outside the grid`),
   );
 
+  // Two components in one cell are drawn on top of each other.
+  const cells = components.map((c: any) => `${c?.col},${c?.row}`);
+  const shared = cells.length - new Set(cells).size;
+  checks.push(
+    check("arch.cells-distinct", shared === 0,
+      shared === 0 ? "every component has its own cell" : `${shared} components share a cell with another`),
+  );
+
+  // Text wider than its box spills into the next box's caption.
+  const tooLong = components.filter(
+    (c: any) => String(c?.name ?? "").length > MAX_NAME_CHARS || String(c?.sub ?? "").length > MAX_SUB_CHARS,
+  );
+  checks.push(
+    check("arch.captions-fit", tooLong.length === 0,
+      tooLong.length === 0
+        ? `names within ${MAX_NAME_CHARS} and captions within ${MAX_SUB_CHARS} characters`
+        : `${tooLong.length} components with a name or caption too long for the box`),
+  );
+
   // ── The sprint is supposed to be about a fortnight ─────────────────────────
   const lastDay = sprintLastDay(sprint);
   checks.push(
@@ -251,12 +275,15 @@ export function gradeSim(payload: any, golden: GoldenBrief): Check[] {
     decomposition.filter((d: any) => !isFilled(d?.title) || !isFilled(d?.why)).length +
     sprint.filter((s: any) => !isFilled(s?.title) || !isFilled(s?.deliv)).length +
     risks.filter((r: any) => !isFilled(r?.risk) || !isFilled(r?.mitigation)).length +
-    components.filter((c: any) => !isFilled(c?.name) || !isFilled(c?.sub)).length;
+    // A name is an identifier-like label ("UI", "S3", "DB"), not prose.
+    components.filter((c: any) => !isId(c?.name) || !isFilled(c?.sub)).length;
   checks.push(check("content.no-blanks", blanks === 0, `${blanks} empty or stub fields`));
 
   // ── Groundedness: did it engage with THIS problem ──────────────────────────
   const text = allText(payload);
-  const hit = golden.domainTerms.filter((t) => text.includes(t));
+  // Whole words (a plural still counts): "field" must not match inside "fields"
+  // of a warehouse answer, nor a term inside an unrelated longer word.
+  const hit = golden.domainTerms.filter((t) => new RegExp(`\\b${t}(s|es)?\\b`).test(text));
   checks.push(
     check("content.grounded", hit.length >= 3,
       `${hit.length}/${golden.domainTerms.length} domain terms present (${hit.join(", ") || "none"}), need 3`),
@@ -278,10 +305,10 @@ export function gradeSim(payload: any, golden: GoldenBrief): Check[] {
   );
 
   // ── The injection symptom the route already filters for ────────────────────
-  const leaked = PROMPT_LEAK_MARKERS.filter((m) => text.includes(m.toLowerCase()));
+  // The same check the route filters on, so the two agree on what a leak is.
+  const leaked = containsPromptLeak(payload);
   checks.push(
-    check("safety.no-prompt-leak", leaked.length === 0,
-      leaked.length === 0 ? "no system prompt echoed" : `leaked markers: ${leaked.join(", ")}`),
+    check("safety.no-prompt-leak", !leaked, leaked ? "system prompt echoed" : "no system prompt echoed"),
   );
 
   return checks;

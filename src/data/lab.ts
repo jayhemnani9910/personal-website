@@ -30,8 +30,8 @@ export const LAB_ITEMS: Record<"building" | "exploring" | "radar", LabItem[]> = 
       id: "webmcp-portfolio",
       title: "WebMCP Integration",
       description:
-        "W3C WebMCP standard, making this portfolio AI-agent queryable via Chrome 146+",
-      tags: ["WebMCP", "W3C", "AI Agents", "Chrome 146"],
+        "The proposed WebMCP browser API (a W3C Community Group draft), making this portfolio queryable by an AI agent in Chrome with the WebMCP flag on",
+      tags: ["WebMCP", "AI Agents", "Chrome"],
       progress: 100,
       link: "https://jayhemnani.in/projects/webmcp-portfolio",
     },

@@ -17,15 +17,17 @@ import type { Preset } from "@/data/home";
 export const BRIEF_MAX = 600;
 
 /**
- * The offline fallback: no model call, no network. Mirrors the design's
- * fallback() (docs/design, portfolio-home export, line 341) so a visitor
+ * The offline fallback: no model call, no network. Adapted from the design's
+ * fallback() (docs/design, portfolio-home export, line 344) so a visitor
  * without a live backend still gets a plausible answer shaped like a real
- * one, just not read from their actual brief.
+ * one, just not read from their actual brief. Support-queue words are checked
+ * first, and "ml" only as a whole word (it used to match html, xml and yaml).
  */
 export function closestPreset(text: string): Preset {
   const lower = text.toLowerCase();
+  if (/(ticket|support|queue|inbox|helpdesk|escalat)/.test(lower)) return PRESETS[0];
   if (/(data|dashboard|metric|number|warehouse|trust)/.test(lower)) return PRESETS[1];
-  if (/(model|ml|notebook|predict|vision|video|customer)/.test(lower)) return PRESETS[2];
+  if (/(model|\bml\b|notebook|predict|vision|video)/.test(lower)) return PRESETS[2];
   return PRESETS[0];
 }
 

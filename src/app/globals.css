@@ -50,49 +50,15 @@
      for what the machine sees. The first is a sans now rather than a serif,
      which is the v4 concept (ADR 0014). Newsreader and JetBrains Mono are gone
      from the build entirely, so nothing can fall back to them by accident. */
-  --ff-display: var(--font-instrument), system-ui, sans-serif;
   --ff-body: var(--font-instrument), system-ui, sans-serif;
   --ff-mono: var(--font-geist-mono), ui-monospace, monospace;
   --font-sans: var(--ff-body);
   --font-mono: var(--ff-mono);
 
-  /* Spacing (8px base) */
-  --space-1: 8px;
-  --space-2: 16px;
-  --space-3: 24px;
-  --space-4: 32px;
-  --space-6: 48px;
-  --space-8: 64px;
-  --space-12: 96px;
-  --space-16: 128px;
-
-  /* Editorial layout rhythm */
-  --gutter: clamp(20px, 4vw, 56px);
-  --margin: clamp(24px, 6vw, 96px);
-  --section-pad: clamp(64px, 10vw, 144px);
-
-  /* Editorial type sizes */
-  --t-eyebrow: 11px;
-  --t-body: 16px;
-  --t-deck: 19px;
-  --t-h3: clamp(24px, 2.6vw, 34px);
-  --t-h2: clamp(36px, 4.4vw, 64px);
-  --t-h1: clamp(64px, 10vw, 168px);
-
   /* Radius */
   --radius-sm: 8px;
   --radius-md: 12px;
   --radius-lg: 16px;
-
-  /* Transitions */
-  --transition: 200ms ease;
-
-  /* Hero orbs */
-  --orb-opacity-1: 0.10;
-  --orb-opacity-2: 0.06;
-
-  /* Glass / neon tokens (lab + architecture viz, restyled later) */
-  --glass-border: var(--tr-hairline);
 
   /* Dark is the only default (ADR 0015): bare :root is the unauthenticated
      visitor's UA colour scheme, so it must say dark, not light. */
@@ -105,9 +71,6 @@
   --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
   --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
   --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.5);
-
-  --orb-opacity-1: 0.22;
-  --orb-opacity-2: 0.15;
 
   color-scheme: dark;
 }
@@ -128,67 +91,6 @@ body {
   color: var(--text-primary);
   -webkit-font-smoothing: antialiased;
   line-height: 1.5;
-}
-
-/* ═══════════════════════════════════════════════════════════════
-   CARDS
-   ═══════════════════════════════════════════════════════════════ */
-
-.card {
-  background: var(--bg-primary);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  transition: var(--transition);
-}
-
-[data-theme="dark"] .card {
-  background: rgba(255, 255, 255, 0.03);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-}
-
-.card:hover {
-  border-color: var(--tr-hairline);
-  box-shadow: var(--shadow-md);
-}
-
-/* ═══════════════════════════════════════════════════════════════
-   CHIPS
-   ═══════════════════════════════════════════════════════════════ */
-
-.chip {
-  display: inline-flex;
-  padding: 4px 12px;
-  font-size: 12px;
-  font-weight: 500;
-  background: var(--bg-secondary);
-  color: var(--text-secondary);
-  border-radius: 100px;
-}
-
-/* ═══════════════════════════════════════════════════════════════
-   FORMS
-   ═══════════════════════════════════════════════════════════════ */
-
-.input {
-  width: 100%;
-  padding: 12px 16px;
-  font-size: 17px;
-  background: var(--bg-secondary);
-  border: 1px solid transparent;
-  border-radius: var(--radius-sm);
-  color: var(--text-primary);
-  transition: var(--transition);
-}
-
-.input:focus {
-  outline: none;
-  border-color: var(--tr-accent);
-  background: var(--bg-primary);
-}
-
-.input::placeholder {
-  color: var(--text-muted);
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -292,44 +194,6 @@ body {
 [data-reader="on"] .role-cycle__item:first-child { opacity: 1; }
 
 /* ═══════════════════════════════════════════════════════════════
-   ANIMATIONS
-   ═══════════════════════════════════════════════════════════════ */
-
-@keyframes fadeSlideUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-@keyframes slideRight {
-  0%, 100% { transform: translateX(-100%); }
-  50% { transform: translateX(100%); }
-}
-
-@keyframes shake {
-  0%, 100% { transform: translateX(0); }
-  25% { transform: translateX(-4px); }
-  75% { transform: translateX(4px); }
-}
-
-.animate-shake {
-  animation: shake 0.3s ease-in-out infinite;
-}
-
-.scrollbar-hide { scrollbar-width: none; }
-.scrollbar-hide::-webkit-scrollbar { display: none; }
-
-/* ═══════════════════════════════════════════════════════════════
    SCROLLBAR
    ═══════════════════════════════════════════════════════════════ */
 
@@ -378,17 +242,7 @@ html.lenis {
   user-select: none; white-space: nowrap;
   outline: none;
 }
-.buddy:focus-visible {
-  outline: 2px solid var(--tr-accent); outline-offset: 2px; border-radius: 2px;
-}
-.buddy--mini { font-size: 12px; }
 .buddy--full { font-size: 14px; display: block; }
-.buddy-prompt { color: var(--tr-accent); }
-.buddy-face { color: var(--tr-text); }
-.buddy-word {
-  color: var(--tr-text-mute); font-size: 0.9em;
-  margin-left: 4px; white-space: nowrap;
-}
 /* full-body sprite art (not scoped to .editorial: the redesigned home + colophon
    use the --tr-* classes, not .editorial, so this must apply globally or the
    {"\n"} newlines collapse and the robot renders as one garbled line) */
@@ -443,31 +297,6 @@ html.lenis {
 @media (prefers-reduced-motion: reduce) {
   .buddy--bounce { animation: none; }
 }
-
-/* ─── Keyframes (all namespaced fde-*) ─────────────────────────── */
-@keyframes fde-pulse {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50%       { opacity: 0.4; transform: scale(0.7); }
-}
-@keyframes fde-shimmer {
-  0%   { transform: translateX(-100%); }
-  100% { transform: translateX(100%); }
-}
-@keyframes fde-typeIn {
-  from { opacity: 0; transform: translateY(4px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-@keyframes fde-fadeUp {
-  from { opacity: 0; transform: translateY(12px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-@keyframes fde-blink {
-  50% { opacity: 0; }
-}
-@keyframes fde-spin {
-  to { transform: rotate(360deg); }
-}
-/* ─────────────────────────────── end FDE simulation page ───── */
 
 /* ═══════════════════════════════════════════════════════════════
    TWO READERS — token layer (redesign v3, Phase 1)
@@ -566,14 +395,12 @@ html.lenis {
   --tr-lh-h3: 1.15;       /* sub-headings and card titles */
   --tr-lh-body: 1.5;      /* body prose and code */
   --tr-lh-prose: 1.45;    /* long-form reading: blog post bodies */
-  --tr-lh-loose: 1.8;     /* the hero's // asides, per the comp */
   --tr-lh-tight: 1.2;     /* the footer's ascii mascot, per the comp */
   --tr-lh-card: 1.35;     /* receipt card labels: 16.875px at 12.5px, per the comp */
   --tr-lh-mail: 1.05;     /* the contact email display, per the comp */
   --tr-lh-shell: 1.75;    /* the terminal shell body, per the comp */
 
   /* ---- spacing: 4px-based ramp, theme-independent ---- */
-  --tr-s-1: 0.25rem;   /* 4px */
   --tr-s-2: 0.5rem;    /* 8px */
   --tr-s-3: 0.75rem;   /* 12px */
   --tr-s-4: 1rem;      /* 16px */
@@ -582,18 +409,14 @@ html.lenis {
   --tr-s-8: 3rem;      /* 48px */
   --tr-s-10: 4rem;     /* 64px */
   --tr-s-12: 6rem;     /* 96px */
-  --tr-s-16: 8rem;     /* 128px */
 
   /* ---- radius: hard-edged concept, no large radii ---- */
-  --tr-r-none: 0;
   --tr-r-sm: 4px;
   --tr-r-md: 6px;
   --tr-r-lg: 10px;
   --tr-r-xl: 12px;
 
   /* ---- z-index ladder (ascending) ---- */
-  --tr-z-base: 0;          /* normal document flow */
-  --tr-z-sticky: 10;       /* in-section sticky elements */
   --tr-z-masthead: 50;     /* site header, above page content */
   --tr-z-overlay: 80;      /* modals, drawers, scrims */
   --tr-z-cursor: 90;       /* custom reticle cursor */
@@ -601,10 +424,7 @@ html.lenis {
 
   /* ---- motion: one signature curve everywhere ---- */
   --tr-ease: cubic-bezier(0.16, 1, 0.3, 1);   /* expo-out: fast departure, long settle */
-  --tr-dur-fast: 150ms;
   --tr-dur-base: 300ms;
-  --tr-dur-slow: 600ms;    /* entrances must FINISH by here */
-  --tr-stagger: 40ms;
 
   /* Elevation rule (this concept's dark-UI physics): on a near-black
      background a drop shadow is invisible, so elevation is a LIGHTER
@@ -666,7 +486,6 @@ textarea::placeholder, input::placeholder { color: var(--tr-text-faint); }
 @keyframes v4-caret { 50%, 100% { opacity: 0; } }
 @keyframes v4-line-in { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
 @keyframes v4-cube-idle { from { transform: rotateX(-24deg) rotateY(0deg); } to { transform: rotateX(-24deg) rotateY(360deg); } }
-@keyframes v4-wiggle { 0%, 100% { transform: rotate(0); } 25% { transform: rotate(-6deg); } 75% { transform: rotate(6deg); } }
 
 /* Expose color tokens to Tailwind utilities (bg-tr-bg, text-tr-accent, …).
    "inline" so utilities stay theme-reactive instead of freezing at the

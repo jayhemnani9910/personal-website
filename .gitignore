@@ -48,8 +48,6 @@ lint_output.txt
 CLAUDE.md
 AGENTS.md
 
-# Generated GitHub profile graphs
-profile-3d-contrib/
 
 # Local planning docs
 TODO-*.md
@@ -69,3 +67,7 @@ TODO-*.md
 /playwright-report/
 /blob-report/
 /playwright/.cache/
+
+# /audit outputs
+/graphify-out/
+/.audit/

@@ -1,86 +1,111 @@
 {
-  "endpoint": "https://jayhemnani.in/api/fde-sim",
-  "recordedAt": "2026-08-21",
+  "endpoint": "http://127.0.0.1:3101/api/fde-sim",
+  "recordedAt": "2026-09-29",
   "model": "gemini-2.5-flash",
   "totals": {
-    "passed": 169,
-    "total": 170
+    "passed": 184,
+    "total": 190
   },
   "briefs": [
     {
       "id": "support-tickets",
-      "cached": true,
-      "passed": 17,
-      "total": 17,
-      "failed": []
+      "cached": false,
+      "passed": 18,
+      "total": 19,
+      "failed": [
+        {
+          "id": "arch.captions-fit",
+          "detail": "5 components with a name or caption too long for the box"
+        }
+      ]
     },
     {
       "id": "contract-review",
-      "cached": true,
-      "passed": 17,
-      "total": 17,
+      "cached": false,
+      "passed": 19,
+      "total": 19,
       "failed": []
     },
     {
       "id": "warehouse-picking",
-      "cached": true,
-      "passed": 17,
-      "total": 17,
-      "failed": []
+      "cached": false,
+      "passed": 18,
+      "total": 19,
+      "failed": [
+        {
+          "id": "arch.captions-fit",
+          "detail": "1 components with a name or caption too long for the box"
+        }
+      ]
     },
     {
       "id": "clinical-notes",
-      "cached": true,
-      "passed": 17,
-      "total": 17,
+      "cached": false,
+      "passed": 19,
+      "total": 19,
       "failed": []
     },
     {
       "id": "fraud-signals",
-      "cached": true,
-      "passed": 17,
-      "total": 17,
-      "failed": []
+      "cached": false,
+      "passed": 18,
+      "total": 19,
+      "failed": [
+        {
+          "id": "arch.captions-fit",
+          "detail": "4 components with a name or caption too long for the box"
+        }
+      ]
     },
     {
       "id": "internal-search",
-      "cached": true,
-      "passed": 17,
-      "total": 17,
-      "failed": []
+      "cached": false,
+      "passed": 18,
+      "total": 19,
+      "failed": [
+        {
+          "id": "arch.captions-fit",
+          "detail": "2 components with a name or caption too long for the box"
+        }
+      ]
     },
     {
       "id": "churn-early-warning",
-      "cached": true,
-      "passed": 17,
-      "total": 17,
-      "failed": []
+      "cached": false,
+      "passed": 18,
+      "total": 19,
+      "failed": [
+        {
+          "id": "arch.captions-fit",
+          "detail": "4 components with a name or caption too long for the box"
+        }
+      ]
     },
     {
       "id": "field-technician",
-      "cached": true,
-      "passed": 17,
-      "total": 17,
-      "failed": []
+      "cached": false,
+      "passed": 18,
+      "total": 19,
+      "failed": [
+        {
+          "id": "arch.captions-fit",
+          "detail": "4 components with a name or caption too long for the box"
+        }
+      ]
     },
     {
       "id": "grant-compliance",
-      "cached": true,
-      "passed": 17,
-      "total": 17,
+      "cached": false,
+      "passed": 19,
+      "total": 19,
       "failed": []
     },
     {
       "id": "onboarding-drop-off",
-      "cached": true,
-      "passed": 16,
-      "total": 17,
-      "failed": [
-        {
-          "id": "arch.grid-bounds",
-          "detail": "2 components outside the grid"
-        }
-      ]
+      "cached": false,
+      "passed": 19,
+      "total": 19,
+      "failed": []
     }
   ]
 }

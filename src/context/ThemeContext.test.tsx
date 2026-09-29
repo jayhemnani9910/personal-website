@@ -1,6 +1,7 @@
 import { describe, expect, it, afterEach } from "vitest";
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import { ThemeProvider, useTheme } from "./ThemeContext";
+import { THEME_KEY } from "@/lib/storage";
 
 // ADR 0015: dark is the only default now, the OS preference is not consulted
 // for a first-time visitor. This is the kind of thing that regresses silently
@@ -29,11 +30,13 @@ function ThemeProbe() {
   return <span data-testid="theme">{theme}</span>;
 }
 
+// The stub vitest.setup.ts installs (every query false), put back after each
+// test so an override here cannot change what later tests in this file see.
+const setupMatchMedia = window.matchMedia;
+
 afterEach(() => {
   localStorage.clear();
-  // Restore the light-OS stub vitest.setup.ts installs globally, so an
-  // override made by one test can't leak into the next file.
-  mockPrefersColorScheme(false);
+  Object.defineProperty(window, "matchMedia", { writable: true, configurable: true, value: setupMatchMedia });
 });
 
 describe("ThemeProvider default resolution", () => {
@@ -61,7 +64,7 @@ describe("ThemeProvider default resolution", () => {
   });
 
   it("still honours an explicitly stored theme", () => {
-    localStorage.setItem("theme", "light");
+    localStorage.setItem(THEME_KEY, "light");
     mockPrefersColorScheme(true);
     render(
       <ThemeProvider>
@@ -69,5 +72,48 @@ describe("ThemeProvider default resolution", () => {
       </ThemeProvider>,
     );
     expect(screen.getByTestId("theme").textContent).toBe("light");
+  });
+});
+
+describe("ThemeProvider persistence", () => {
+  function Toggle() {
+    const { theme, toggleTheme } = useTheme();
+    return <button onClick={toggleTheme}>{theme}</button>;
+  }
+
+  it("does not save the default, so a stored value always means a choice", () => {
+    render(
+      <ThemeProvider>
+        <Toggle />
+      </ThemeProvider>,
+    );
+    expect(localStorage.getItem(THEME_KEY)).toBeNull();
+  });
+
+  it("saves the theme when the visitor toggles it", () => {
+    render(
+      <ThemeProvider>
+        <Toggle />
+      </ThemeProvider>,
+    );
+    fireEvent.click(screen.getByRole("button"));
+    expect(localStorage.getItem(THEME_KEY)).toBe("light");
+  });
+
+  it("survives a browser that blocks storage", () => {
+    const original = Storage.prototype.getItem;
+    Storage.prototype.getItem = () => {
+      throw new DOMException("blocked", "SecurityError");
+    };
+    try {
+      render(
+        <ThemeProvider>
+          <ThemeProbe />
+        </ThemeProvider>,
+      );
+      expect(screen.getByTestId("theme").textContent).toBe("dark");
+    } finally {
+      Storage.prototype.getItem = original;
+    }
   });
 });

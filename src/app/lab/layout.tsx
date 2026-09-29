@@ -1,10 +1,9 @@
 import type { Metadata } from "next";
 import { SITE_CONFIG } from "@/../content/site";
 
-// /lab/page.tsx is "use client" (it owns the tablist state), and a client
-// component cannot export metadata. Without this layout the route shipped with
-// no title, no description and no canonical, while still being listed in
-// sitemap.ts. Same split /fde already uses.
+// The route's metadata. It lives here from when /lab/page.tsx was a client
+// component (which cannot export metadata); only the tablist (LabTabs) is
+// client code now. Same split /fde uses.
 const LAB_TITLE = "Lab";
 const LAB_DESCRIPTION =
   "Things Jay Hemnani is building, exploring, and keeping an eye on. Half-finished on purpose, shown anyway.";

@@ -8,6 +8,7 @@ import { useState, useRef } from "react";
 import type { Preset } from "./fdeData";
 import { PRESETS, PHASES } from "./fdeData";
 import { FdeSimulation } from "./FdeSimulation";
+import { scrollBehavior } from "@/lib/scroll";
 
 const MONO = "font-[family-name:var(--ff-mono)]";
 
@@ -38,7 +39,7 @@ export function FdeConsole() {
 
   const scrollToSim = () => {
     setTimeout(() => {
-      simRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      simRef.current?.scrollIntoView({ behavior: scrollBehavior(), block: 'start' });
     }, 80);
   };
 

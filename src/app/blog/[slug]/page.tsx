@@ -178,63 +178,63 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
   const categoryLabel = post.category.charAt(0).toUpperCase() + post.category.slice(1);
 
   return (
-    <main id="main-content" className="bg-tr-bg text-tr-text">
+    <>
       <SiteHeader />
+      <main id="main-content" className="bg-tr-bg text-tr-text">
+        <article className="px-[clamp(1rem,4vw,2rem)] pt-[clamp(2.5rem,5vw,4rem)] pb-[var(--tr-s-12)]">
+          <div className="mx-auto max-w-[68ch]">
+            <Link href="/blog" data-cursor="OPEN" className={`${backLinkClass} mb-[var(--tr-s-8)]`}>
+              <ArrowLeft className="h-3 w-3" />
+              Back to writing
+            </Link>
 
-      <article className="px-[clamp(1rem,4vw,2rem)] pt-[clamp(2.5rem,5vw,4rem)] pb-[var(--tr-s-12)]">
-        <div className="mx-auto max-w-[68ch]">
-          <Link href="/blog" data-cursor="OPEN" className={`${backLinkClass} mb-[var(--tr-s-8)]`}>
-            <ArrowLeft className="h-3 w-3" />
-            Back to writing
-          </Link>
+            <header className="mb-[var(--tr-s-8)] border-b border-tr-hairline pb-[var(--tr-s-6)]">
+              <p className={`mb-[var(--tr-s-3)] ${MONO} text-[length:var(--tr-t-mono)] tracking-[.1em] text-tr-text-faint`}>
+                /WRITING · {categoryLabel.toUpperCase()}
+              </p>
 
-          <header className="mb-[var(--tr-s-8)] border-b border-tr-hairline pb-[var(--tr-s-6)]">
-            <p className={`mb-[var(--tr-s-3)] ${MONO} text-[length:var(--tr-t-mono)] tracking-[.1em] text-tr-text-faint`}>
-              /WRITING · {categoryLabel.toUpperCase()}
-            </p>
+              <h1 className="mb-[var(--tr-s-4)] text-[length:var(--tr-t-display-sm)] leading-[var(--tr-lh-display)] tracking-[-.035em] font-medium text-tr-text">
+                {post.title}
+              </h1>
 
-            <h1 className="mb-[var(--tr-s-4)] text-[length:var(--tr-t-display-sm)] leading-[var(--tr-lh-display)] tracking-[-.035em] font-medium text-tr-text">
-              {post.title}
-            </h1>
+              <div className={`flex flex-wrap items-center ${MONO} text-[length:var(--tr-t-mono-sm)] text-tr-text-mute`}>
+                <time dateTime={post.date}>{fmtDate(post.date)}</time>
+                {post.readingTime && (
+                  <>
+                    <Divider />
+                    <span>{post.readingTime} min read</span>
+                  </>
+                )}
+              </div>
 
-            <div className={`flex flex-wrap items-center ${MONO} text-[length:var(--tr-t-mono-sm)] text-tr-text-mute`}>
-              <time dateTime={post.date}>{fmtDate(post.date)}</time>
-              {post.readingTime && (
-                <>
-                  <Divider />
-                  <span>{post.readingTime} min read</span>
-                </>
+              {post.tags.length > 0 && (
+                <div className="mt-4 flex flex-wrap gap-2">
+                  {post.tags.map((tag) => (
+                    <span
+                      key={tag}
+                      className={`rounded-[var(--tr-r-sm)] border border-tr-hairline px-1.5 py-0.5 ${MONO} text-[length:var(--tr-t-mono-sm)] text-tr-text-mute`}
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
               )}
+            </header>
+
+            <div>
+              <MDXRemote source={post.content} components={mdxComponents} />
             </div>
 
-            {post.tags.length > 0 && (
-              <div className="mt-4 flex flex-wrap gap-2">
-                {post.tags.map((tag) => (
-                  <span
-                    key={tag}
-                    className={`rounded-[var(--tr-r-sm)] border border-tr-hairline px-1.5 py-0.5 ${MONO} text-[length:var(--tr-t-mono-sm)] text-tr-text-mute`}
-                  >
-                    {tag}
-                  </span>
-                ))}
-              </div>
-            )}
-          </header>
-
-          <div>
-            <MDXRemote source={post.content} components={mdxComponents} />
+            <footer className="mt-[var(--tr-s-10)] border-t border-tr-hairline pt-[var(--tr-s-6)]">
+              <Link href="/blog" data-cursor="OPEN" className={backLinkClass}>
+                <ArrowLeft className="h-3 w-3" />
+                More writing
+              </Link>
+            </footer>
           </div>
-
-          <footer className="mt-[var(--tr-s-10)] border-t border-tr-hairline pt-[var(--tr-s-6)]">
-            <Link href="/blog" data-cursor="OPEN" className={backLinkClass}>
-              <ArrowLeft className="h-3 w-3" />
-              More writing
-            </Link>
-          </footer>
-        </div>
-      </article>
-
+        </article>
+      </main>
       <SiteFooter />
-    </main>
+    </>
   );
 }

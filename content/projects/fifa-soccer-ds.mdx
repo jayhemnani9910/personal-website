@@ -18,7 +18,6 @@ impact:
   - "Detection and tracking run on real La Liga footage at 22 FPS on an RTX 3070-class 8GB GPU."
   - "GraphSAGE role classifier is scaffolded and inference-wired (trained weights pending), feeding off the tracklet graph."
   - "Each stage logs to MLflow and runs standalone or as one unified pipeline; Dockerized."
-featured: true
 priority: 1
 deepDive:
   context: "Commercial sports-analytics platforms lean on manual tagging teams that spend hundreds of hours per match, so only elite leagues get full coverage and lower-tier, youth, and amateur footage go unanalyzed. This project is an honest attempt at the automation path: get the production-grade plumbing right (detection, tracking, graph construction, MLOps) on real broadcast footage first, then layer trained tactical models on top. The detection and tracking stages work today on real La Liga clips; the tactical GNN is a wired scaffold waiting on labelled training data."

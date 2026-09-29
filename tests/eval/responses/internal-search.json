@@ -1,225 +1,209 @@
 {
   "scope": [
     {
-      "q": "What is the required fidelity of access control enforcement, specifically regarding group-based permissions from each source, and how should conflicts be resolved?",
-      "why": "Access control is critical for enterprise search to prevent unauthorized data exposure, and reconciling disparate permission models is a complex engineering challenge."
+      "q": "What specific types of information (e.g., technical specs, HR policies, marketing assets) are most critical for employees to find quickly, and how frequently do they need to access it?",
+      "why": "Understanding the high-value information types and access patterns helps prioritize data sources and search relevance criteria."
     },
     {
-      "q": "Beyond simple keyword search, what advanced query capabilities are essential, e.g., filtering by document type, author, date range, or content within specific channels?",
-      "why": "This defines the complexity of the search engine and user interface, determining if we need basic full-text search or a more sophisticated faceted search experience."
+      "q": "What are the current pain points beyond just 'not finding anything,' such as specific search failures, time wasted, or critical decisions delayed due to lack of information?",
+      "why": "Identifying concrete negative impacts helps quantify the problem and define success metrics beyond simple search functionality."
     },
     {
-      "q": "What is the expected real-time latency for new content to become searchable across all sources, especially for ephemeral platforms like Slack where information decay is rapid?",
-      "why": "Real-time indexing is a significant engineering challenge, particularly across multiple diverse sources, and directly impacts the perceived freshness and utility of search results."
+      "q": "Are there any existing access control mechanisms or data sensitivity requirements (e.g., GDPR, HIPAA) that must be maintained when centralizing or indexing this information?",
+      "why": "Data security and compliance are non-negotiable and will heavily influence architecture, indexing, and display of search results."
     }
   ],
   "decomposition": [
     {
       "id": "D1",
-      "title": "Source Data Connectors & Ingestion Pipelines",
-      "why": "Each distinct data source (Confluence, Drive, Slack, Wiki) requires a dedicated mechanism to extract, transform, and load its content into a unified system."
+      "title": "Data Source Connectors & Indexing",
+      "why": "This piece focuses on robustly extracting and processing data from disparate, unstructured sources."
     },
     {
       "id": "D2",
-      "title": "Unified Indexing & Search Engine Core",
-      "why": "A central, optimized index is required to store all ingested data and power fast, relevant search queries across all sources."
+      "title": "Search & Retrieval Service",
+      "why": "This subproblem is dedicated to the core search logic, query processing, and result ranking."
     },
     {
       "id": "D3",
-      "title": "Access Control & Permissions Synchronization",
-      "why": "Ensuring users only see content they are authorized for, consistent with original source permissions, is a fundamental and complex security requirement."
+      "title": "User Interface & Experience",
+      "why": "This covers how users interact with the search system and consume the results effectively."
     },
     {
       "id": "D4",
-      "title": "Search User Interface & API Gateway",
-      "why": "Users need a single, intuitive interface to interact with the search system, backed by a robust API for query processing and result presentation."
+      "title": "Access Control & Permissions Sync",
+      "why": "Ensuring users only see information they are authorized to access is a critical, standalone security concern."
     },
     {
       "id": "D5",
-      "title": "Relevance Ranking & User Feedback Loop",
-      "why": "Initial search results will likely be suboptimal without mechanisms to tune relevance and incorporate user behavior for continuous improvement."
+      "title": "Monitoring & Analytics",
+      "why": "This is crucial for understanding system performance, user behavior, and identifying areas for improvement."
     }
   ],
   "architecture": {
     "components": [
       {
-        "id": "confluence_agent",
-        "name": "Confluence Ingestion Agent",
-        "kind": "agent",
-        "sub": "Extracts and transforms data from Confluence.",
+        "id": "User",
+        "name": "End User",
+        "kind": "external",
         "col": 0,
-        "row": 0,
+        "row": 1,
+        "sub": "Employee searching for docs",
         "x": 60,
-        "y": 50
+        "y": 190
       },
       {
-        "id": "drive_agent",
-        "name": "Drive Ingestion Agent",
-        "kind": "agent",
-        "sub": "Extracts and transforms data from Google Drive.",
-        "col": 1,
-        "row": 0,
-        "x": 280,
-        "y": 50
-      },
-      {
-        "id": "slack_agent",
-        "name": "Slack Ingestion Agent",
-        "kind": "agent",
-        "sub": "Extracts and transforms data from Slack.",
-        "col": 2,
-        "row": 0,
-        "x": 500,
-        "y": 50
-      },
-      {
-        "id": "wiki_agent",
-        "name": "Wiki Ingestion Agent",
-        "kind": "agent",
-        "sub": "Scrapes or extracts content from the legacy wiki.",
-        "col": 3,
-        "row": 0,
-        "x": 720,
-        "y": 50
-      },
-      {
-        "id": "search_ui",
+        "id": "UI",
         "name": "Search UI",
         "kind": "ui",
-        "sub": "User-facing application to query results.",
-        "col": 0,
-        "row": 1,
-        "x": 60,
-        "y": 190
-      },
-      {
-        "id": "api_gw",
-        "name": "API Gateway",
-        "kind": "service",
-        "sub": "Entry point for all search requests and data ingestion triggers.",
         "col": 1,
         "row": 1,
+        "sub": "Web/Desktop Interface",
         "x": 280,
         "y": 190
       },
       {
-        "id": "search_orchestrator",
-        "name": "Search Orchestration Service",
+        "id": "SearchSvc",
+        "name": "Search Service",
         "kind": "service",
-        "sub": "Coordinates queries, ranking, and result assembly.",
         "col": 2,
         "row": 1,
+        "sub": "Query Processing & Ranking",
         "x": 500,
         "y": 190
       },
       {
-        "id": "unified_index",
-        "name": "Unified Search Index",
+        "id": "IndexDB",
+        "name": "Search Index",
         "kind": "data",
-        "sub": "Stores all indexed content and metadata.",
         "col": 3,
         "row": 1,
+        "sub": "Indexed Document Store",
         "x": 720,
         "y": 190
       },
       {
-        "id": "idp",
-        "name": "Identity Provider",
+        "id": "ConnectorSvc",
+        "name": "Connector Service",
+        "kind": "service",
+        "col": 2,
+        "row": 0,
+        "sub": "Data Extraction & Prep",
+        "x": 500,
+        "y": 50
+      },
+      {
+        "id": "ACLSync",
+        "name": "ACL Sync Service",
+        "kind": "service",
+        "col": 2,
+        "row": 2,
+        "sub": "Permissions Resolver",
+        "x": 500,
+        "y": 330
+      },
+      {
+        "id": "Confluence",
+        "name": "Confluence",
         "kind": "external",
-        "sub": "Manages user authentication and group memberships.",
+        "col": 0,
+        "row": 0,
+        "sub": "Document Management",
+        "x": 60,
+        "y": 50
+      },
+      {
+        "id": "Drive",
+        "name": "Google Drive",
+        "kind": "external",
         "col": 0,
         "row": 2,
+        "sub": "File Storage",
         "x": 60,
         "y": 330
       },
       {
-        "id": "authz_svc",
-        "name": "Authorization Service",
-        "kind": "service",
-        "sub": "Centralized permission checking and mapping.",
-        "col": 1,
+        "id": "Analytics",
+        "name": "Analytics DB",
+        "kind": "data",
+        "col": 3,
         "row": 2,
-        "x": 280,
+        "sub": "Usage & Performance Logs",
+        "x": 720,
         "y": 330
       }
     ],
     "edges": [
       {
-        "from": "confluence_agent",
-        "to": "api_gw",
-        "label": "Ingest Data",
-        "dashed": false
-      },
-      {
-        "from": "drive_agent",
-        "to": "api_gw",
-        "label": "Ingest Data",
-        "dashed": false
-      },
-      {
-        "from": "slack_agent",
-        "to": "api_gw",
-        "label": "Ingest Data",
-        "dashed": false
-      },
-      {
-        "from": "wiki_agent",
-        "to": "api_gw",
-        "label": "Ingest Data",
-        "dashed": false
-      },
-      {
-        "from": "api_gw",
-        "to": "unified_index",
-        "label": "Index Write",
-        "dashed": false
-      },
-      {
-        "from": "api_gw",
-        "to": "authz_svc",
-        "label": "Ingest Permissions",
-        "dashed": false
-      },
-      {
-        "from": "search_ui",
-        "to": "api_gw",
-        "label": "User Query",
-        "dashed": false
-      },
-      {
-        "from": "api_gw",
-        "to": "search_orchestrator",
-        "label": "Forward Query",
-        "dashed": false
-      },
-      {
-        "from": "search_orchestrator",
-        "to": "unified_index",
+        "from": "User",
+        "to": "UI",
         "label": "Search Query",
         "dashed": false
       },
       {
-        "from": "unified_index",
-        "to": "search_orchestrator",
+        "from": "UI",
+        "to": "SearchSvc",
+        "label": "API Request",
+        "dashed": false
+      },
+      {
+        "from": "SearchSvc",
+        "to": "IndexDB",
+        "label": "Retrieve Results",
+        "dashed": false
+      },
+      {
+        "from": "IndexDB",
+        "to": "SearchSvc",
         "label": "Search Results",
         "dashed": false
       },
       {
-        "from": "search_orchestrator",
-        "to": "authz_svc",
-        "label": "Permission Check",
+        "from": "ConnectorSvc",
+        "to": "IndexDB",
+        "label": "Write Index",
         "dashed": false
       },
       {
-        "from": "authz_svc",
-        "to": "idp",
-        "label": "User Group Lookup",
+        "from": "Confluence",
+        "to": "ConnectorSvc",
+        "label": "Extract Data",
         "dashed": true
       },
       {
-        "from": "idp",
-        "to": "authz_svc",
-        "label": "Sync User Roles",
+        "from": "Drive",
+        "to": "ConnectorSvc",
+        "label": "Extract Data",
+        "dashed": true
+      },
+      {
+        "from": "SearchSvc",
+        "to": "ACLSync",
+        "label": "Check Permissions",
+        "dashed": false
+      },
+      {
+        "from": "ACLSync",
+        "to": "SearchSvc",
+        "label": "Authorized Docs",
+        "dashed": false
+      },
+      {
+        "from": "UI",
+        "to": "Analytics",
+        "label": "Log Events",
+        "dashed": true
+      },
+      {
+        "from": "SearchSvc",
+        "to": "Analytics",
+        "label": "Log Events",
+        "dashed": true
+      },
+      {
+        "from": "IndexDB",
+        "to": "Analytics",
+        "label": "Log Index Health",
         "dashed": true
       }
     ]
@@ -227,56 +211,56 @@
   "sprint": [
     {
       "day": "Day 1-2",
-      "title": "Core Platform Setup & Basic Search API",
-      "deliv": "Deployed search service endpoint returning static test data, with basic authentication implemented."
+      "title": "Core Search Service & Basic Indexing",
+      "deliv": "HTTP endpoint that accepts a query and returns dummy results from a hardcoded list."
     },
     {
       "day": "Day 3-4",
-      "title": "Confluence Ingestion MVP",
-      "deliv": "Confluence content successfully indexed and searchable via API, demonstrating full-text search capability for one source."
+      "title": "Confluence Connector & Initial Indexing",
+      "deliv": "Service that connects to Confluence API, extracts page titles and content, and populates a local index (e.g., Elasticsearch)."
     },
     {
       "day": "Day 5-6",
-      "title": "Google Drive Ingestion MVP",
-      "deliv": "Google Drive content indexed and searchable via API, alongside Confluence, including basic document metadata."
+      "title": "Basic Search UI & Result Display",
+      "deliv": "Web page with a search bar that submits queries to the search service and displays actual indexed Confluence results."
     },
     {
       "day": "Day 7-8",
-      "title": "Slack Ingestion MVP & Real-time Hooks",
-      "deliv": "Recent Slack messages indexed via API, with a proof-of-concept for real-time updates using webhooks."
+      "title": "Google Drive Connector & Indexing",
+      "deliv": "Service to connect to Google Drive API, extract file metadata and text content, and integrate into the search index."
     },
     {
       "day": "Day 9-10",
-      "title": "Basic Search UI & Integration",
-      "deliv": "Functional web UI allowing keyword search across all indexed sources, displaying results with basic metadata."
+      "title": "Access Control Integration (Confluence)",
+      "deliv": "Search results for Confluence content are filtered based on the querying user's Confluence permissions."
     },
     {
       "day": "Day 11-12",
-      "title": "Wiki Content Extraction & Indexing",
-      "deliv": "Initial batch of legacy wiki content successfully ingested and searchable, addressing the most critical sections."
+      "title": "Result Ranking & Relevance Tuning",
+      "deliv": "Implement basic ranking algorithms (e.g., TF-IDF, freshness) and allow configuration of relevance boosters."
     },
     {
       "day": "Day 13-14",
-      "title": "Basic Access Control & Demo Prep",
-      "deliv": "Search results filtered based on simple user permissions for one source (e.g., Confluence), ready for an internal stakeholder demo."
+      "title": "Deployment & Basic Monitoring",
+      "deliv": "System deployed to staging environment with basic uptime and error logging for all services and connectors."
     }
   ],
   "risks": [
     {
-      "risk": "Unforeseen complexities or lack of API access for the 'very old wiki,' making content ingestion difficult or impossible.",
-      "mitigation": "Prioritize an initial manual export/ingestion for critical wiki content; explore specialized web scraping tools with human oversight for remaining content if no API exists."
+      "risk": "Poor data quality or inconsistent formatting across sources will lead to irrelevant search results.",
+      "mitigation": "Implement a data profiling step during connector development to identify common data issues and build robust pre-processing pipelines to normalize content before indexing."
     },
     {
-      "risk": "Maintaining real-time or near real-time synchronization across all data sources, especially for dynamic platforms like Slack, leading to stale search results.",
-      "mitigation": "Implement webhook-driven updates for sources supporting them (e.g., Slack); for others, develop robust incremental sync mechanisms with clear refresh intervals and monitoring."
+      "risk": "Complex or granular access control requirements across different platforms may be difficult to replicate accurately in the search service.",
+      "mitigation": "Start with a simplified access model (e.g., 'if you can access the source, you can see the result') and iteratively add more granular permissions, leveraging native platform APIs where possible, with a dedicated ACL sync service."
     },
     {
-      "risk": "Inconsistent or conflicting access control policies across different source systems, resulting in unauthorized data exposure or blocked legitimate access.",
-      "mitigation": "Design a centralized permission mapping service; conduct thorough security audits and user acceptance testing with diverse user roles against real data sets."
+      "risk": "Users may not adopt the new search tool if it doesn't provide a significantly better experience than existing fragmented methods.",
+      "mitigation": "Conduct user interviews early and frequently to gather feedback on UI, search relevance, and desired features, iterating on the design based on their input."
     },
     {
-      "risk": "Poor search relevance due to diverse content formats, lack of metadata, or user query ambiguity, leading to continued user frustration.",
-      "mitigation": "Implement initial NLP techniques for content enrichment; establish a user feedback mechanism within the UI to collect relevance signals, and track query analytics to identify common search failures."
+      "risk": "Legacy systems (like the 'very old wiki') may lack APIs or structured access for data extraction, making integration difficult or impossible.",
+      "mitigation": "Prioritize connectors for systems with known APIs. For the old wiki, investigate manual export options or consider a one-time migration to a supported platform if direct integration is infeasible."
     }
   ]
 }

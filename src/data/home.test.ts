@@ -17,7 +17,7 @@ import { RESUME } from "./resume";
 
 const PROJECTS_DIR = join(process.cwd(), "content/projects");
 const FEATURED_IDS = new Set(FEATURED.map((p) => p.id));
-const RECEIPTS = buildReceipts({ projectCount: 27, toolCount: 8 });
+const RECEIPTS = buildReceipts({ projectCount: 41, toolCount: 13 });
 const HERO = buildHero();
 
 const ALL_TEXT = JSON.stringify({
@@ -96,8 +96,8 @@ describe("home data", () => {
 
   it("wires the project and tool counts into the receipts, not literals", () => {
     expect(RECEIPTS).toHaveLength(6);
-    expect(RECEIPTS[0].n).toBe("27");
-    expect(RECEIPTS[RECEIPTS.length - 1].n).toBe("8");
+    expect(RECEIPTS[0].n).toBe("41");
+    expect(RECEIPTS[RECEIPTS.length - 1].n).toBe("13");
   });
 
   it("LOG_NOTES keys match real employers, one note each way", () => {

@@ -111,7 +111,6 @@ deepDive:
     - "A good desktop utility is mostly ergonomics: the tray-plus-global-hotkey design is what makes voice-to-text feel instant rather than like launching an app."
     - "Targeting Wayland and X11 together is more work up front but avoids the classic Linux trap of a tool that only runs on one half of desktops."
     - "Splitting a small Go app into single-purpose packages kept the record-transcribe-deliver cycle easy to follow, even with audio, network, and UI all in play."
-featured: false
 priority: 20
 ---
 Voxt is a voice-to-text clipboard tool for Linux, written in Go. Press a configurable global hotkey (default F9), speak, and the transcription is copied to your clipboard with a desktop notification. It records audio via PortAudio, transcribes through Groq's Whisper (whisper-large-v3) with optional Llama formatting and retry-on-rate-limit, lives in the system tray, keeps a SQLite history of every transcription, and works on both Wayland and X11. The codebase is a clean small-Go-app layout, each concern (audio, hotkey, transcribe, clipboard, notify, tray, db) is its own package wired together in main.

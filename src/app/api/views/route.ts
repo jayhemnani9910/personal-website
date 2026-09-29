@@ -1,10 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getRedis } from "@/lib/kv";
+import { clientIp } from "@/lib/client-ip";
+import { rateLimit } from "@/lib/ratelimit";
+import { getProjectIds } from "@/lib/content";
 
-// Slugs are content ids/kebab-case; cap charset and length so the value can't
-// be used to create arbitrary KV keys.
-const isValidSlug = (s: unknown): s is string =>
-    typeof s === "string" && /^[a-z0-9-]{1,80}$/.test(s);
+// Only a real project gets a counter. A well-formed but made-up slug used to
+// create a permanent `views:` key, so anyone could grow the store at will.
+const isValidSlug = (s: unknown): s is string => typeof s === "string" && getProjectIds().has(s);
+
+// A store error is not a count. Answering `{ count: 0 }` published "0 views"
+// on the page and marked the view as counted, so it was never retried.
+const storeUnavailable = () => NextResponse.json({ error: "store-unavailable" }, { status: 503 });
 
 // Fallback for local dev without a store configured. It mirrors the Redis
 // semantics below, including the dedup, so behaviour observed locally is the
@@ -41,20 +47,9 @@ function pruneLocalSeen(now: number): void {
 // whose own copy says it publishes load-bearing numbers rather than vanity ones.
 const DEDUP_WINDOW_SECONDS = 60 * 60 * 24;
 
-// Platform-set client IP only. The left-most x-forwarded-for entry is supplied
-// by the caller, so keying on it would let anyone mint unlimited fresh identities
-// and defeat the dedup entirely. Same reasoning as the fde-sim rate limiter.
-function clientIp(request: NextRequest): string {
-    return (
-        request.headers.get("x-real-ip")?.trim() ||
-        request.headers.get("x-forwarded-for")?.split(",").pop()?.trim() ||
-        "anon"
-    );
-}
-
 export async function GET(request: NextRequest) {
     const slug = request.nextUrl.searchParams.get("slug");
-    if (!isValidSlug(slug)) return NextResponse.json({ count: 0 });
+    if (!isValidSlug(slug)) return NextResponse.json({ error: "unknown slug" }, { status: 400 });
 
     const redis = getRedis();
     if (redis) {
@@ -62,7 +57,7 @@ export async function GET(request: NextRequest) {
             const count = (await redis.get<number>(`views:${slug}`)) || 0;
             return NextResponse.json({ count });
         } catch {
-            return NextResponse.json({ count: 0 });
+            return storeUnavailable();
         }
     }
     return NextResponse.json({ count: localViews.get(slug) || 0 });
@@ -72,7 +67,13 @@ export async function POST(request: NextRequest) {
     try {
         const { slug } = await request.json();
         if (!isValidSlug(slug)) {
-            return NextResponse.json({ error: "slug required" }, { status: 400 });
+            return NextResponse.json({ error: "unknown slug" }, { status: 400 });
+        }
+
+        // Generous for a reader moving through projects, tight for a loop.
+        const ip = clientIp(request.headers);
+        if ((await rateLimit(getRedis(), "views", ip, { limit: 30 })) === "limited") {
+            return NextResponse.json({ error: "rate_limited" }, { status: 429 });
         }
 
         const redis = getRedis();
@@ -81,7 +82,7 @@ export async function POST(request: NextRequest) {
                 // SET NX on the dedup key is the whole guard: it succeeds once per
                 // visitor per slug per day, and only that first success increments.
                 // Repeat callers get the current total back, so the UI still renders.
-                const seenKey = `viewed:${slug}:${clientIp(request)}`;
+                const seenKey = `viewed:${slug}:${ip}`;
                 const first = await redis.set(seenKey, 1, { nx: true, ex: DEDUP_WINDOW_SECONDS });
 
                 if (!first) {
@@ -92,11 +93,11 @@ export async function POST(request: NextRequest) {
                 const count = await redis.incr(`views:${slug}`);
                 return NextResponse.json({ count, counted: true });
             } catch {
-                return NextResponse.json({ count: 0 });
+                return storeUnavailable();
             }
         }
 
-        const seenKey = `viewed:${slug}:${clientIp(request)}`;
+        const seenKey = `viewed:${slug}:${ip}`;
         const now = Date.now();
         const expiry = localSeen.get(seenKey);
 

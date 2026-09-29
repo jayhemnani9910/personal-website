@@ -1,7 +1,7 @@
 /* FDE Simulation data: ported from the prototype (presets.jsx + sim.jsx + app.jsx).
    Verbatim copy of the content; no em-dashes introduced. */
 
-import { WEBMCP_TOOL_COUNT } from '@/lib/webmcp';
+import { WEBMCP_TOOL_COUNT } from '@/lib/webmcp-tools';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -149,8 +149,8 @@ export const RECEIPTS: Receipt[] = [
     phase: 'PHASE 04 · PLAN',
     title: 'Shipping zero-to-something-working fast.',
     project: 'WEBMCP PORTFOLIO + ANTHROPIC SDK PR',
-    desc: `Made jayhemnani.in agent-queryable via the W3C WebMCP standard: ${WEBMCP_TOOL_COUNT} tools, in production, on the surface FDE postings now call table-stakes. Separately: a merged PR into the Anthropic MCP Python SDK. Both are about shipping precise work fast in unfamiliar code.`,
-    link: { label: 'try jayhemnani.in with any MCP client', href: 'https://jayhemnani.in' },
+    desc: `Made jayhemnani.in agent-queryable via the proposed WebMCP browser API (a W3C Community Group draft): ${WEBMCP_TOOL_COUNT} tools, in production, on the surface FDE postings now call table-stakes. Separately: a merged PR into the Anthropic MCP Python SDK. Both are about shipping precise work fast in unfamiliar code.`,
+    link: { label: 'see the tools an agent can call', href: '/projects/webmcp-portfolio' },
   },
   {
     phase: 'PHASE 05 · RISKS + EVALS',
@@ -454,10 +454,10 @@ export const PROOFS: ProofItem[] = [
     id: 'II',
     cat: 'Protocols / connective tissue',
     project: 'WebMCP Portfolio',
-    title: { pre: 'Made my own site ', em: 'agent-queryable', post: ' via W3C WebMCP.' },
+    title: { pre: 'Made my own site ', em: 'agent-queryable', post: ' via WebMCP.' },
     body: `${WEBMCP_TOOL_COUNT} tools in production. Early implementation on the exact surface OpenAI / Anthropic / Google FDE postings now call table-stakes.`,
-    stack: ['W3C WebMCP', `${WEBMCP_TOOL_COUNT} tools`, 'production'],
-    link: { label: 'try with any MCP client', href: 'https://jayhemnani.in' },
+    stack: ['WebMCP (W3C CG draft)', `${WEBMCP_TOOL_COUNT} tools`, 'production'],
+    link: { label: 'see the tools an agent can call', href: '/projects/webmcp-portfolio' },
   },
   {
     id: 'III',

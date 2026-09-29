@@ -127,7 +127,6 @@ deepDive:
     - "A 3-tier split only pays off if the data tier is split too: matching MySQL, MongoDB, and Redis to transactions, analytics, and caching is most of the design."
     - "A semantic cache turns an LLM from a per-request cost into something closer to a memoized function for similar queries, which is a cheap, large win on a chat-style feature."
     - "Hiding infrastructure like Kafka behind an interface with an in-memory implementation is what makes parallel team development actually work."
-featured: false
 priority: 8
 ---
 A team-built, 3-tier travel metasearch and booking platform modeled on Kayak (flights, hotels, car rentals). A React client talks through an API gateway (JWT auth, rate limiting, routing) to Node/Express middleware services, user, search (MongoDB + Redis cache), and booking (transactional, with inventory control), over a data tier that splits work across MySQL (OLTP), MongoDB (analytics and logs), and Redis (caching). A separate Python FastAPI service adds the AI layer: a concierge chat agent, deal scoring, and bundle and price-analysis APIs, fronted by a semantic cache that reuses LLM responses for similar queries and a rule-based intent parser that uses OpenAI only when available. Kafka carries cross-service events, with an interface-based in-memory implementation for local development.

@@ -7,7 +7,7 @@ import { EASE, DUR } from "@/lib/motion-tokens";
 import { DividerBuddy } from "./DividerBuddy";
 
 // framer-motion's `ease` prop wants an exact 4-tuple, not the `number[]` a
-// spread of EASE widens to (the same fix Reveal.tsx and Stagger.tsx carry).
+// spread of EASE widens to.
 const CUBIC_EASE: [number, number, number, number] = [EASE[0], EASE[1], EASE[2], EASE[3]];
 
 // Presentational on purpose: a div, not a section. Every content component in
@@ -34,22 +34,19 @@ export function RevealSection({ className, divider, children }: RevealSectionPro
   // sections without a rule keep the exact box they had.
   const cls = [slot ? "relative" : "", className ?? ""].filter(Boolean).join(" ") || undefined;
 
-  if (reduced) {
-    return (
-      <div className={cls}>
-        {slot}
-        {children}
-      </div>
-    );
-  }
-
+  // One element in both modes, so the reduced-motion switch after hydration
+  // changes props only and the section nodes the rail and Buddy observe stay
+  // the same nodes. Reduced: shown at once, no scroll trigger. `tr-reveal` is
+  // what the no-JS rule in the root layout un-hides.
+  const shown = { opacity: 1, y: 0 };
   return (
     <m.div
-      className={cls}
+      className={["tr-reveal", cls].filter(Boolean).join(" ")}
       initial={{ opacity: 0, y: 28 }}
-      whileInView={{ opacity: 1, y: 0 }}
+      animate={reduced ? shown : undefined}
+      whileInView={reduced ? undefined : shown}
       viewport={{ once: true, margin: "0px 0px -12% 0px" }}
-      transition={{ duration: DUR.slow, ease: CUBIC_EASE }}
+      transition={reduced ? { duration: 0 } : { duration: DUR.slow, ease: CUBIC_EASE }}
     >
       {slot}
       {children}

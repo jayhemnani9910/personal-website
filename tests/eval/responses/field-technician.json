@@ -1,209 +1,183 @@
 {
   "scope": [
     {
-      "q": "What is the acceptable latency for a field technician to receive an accurate part recommendation, and what are the specific consequences of a wrong recommendation?",
-      "why": "Understanding the performance requirements and the cost of error will guide the choice of retrieval methods, validation steps, and overall system architecture."
+      "q": "What is the acceptable latency and accuracy for part lookup, considering technicians are often on-site in potentially low-connectivity areas?",
+      "why": "This determines the technical approach for data processing (e.g., local vs. cloud inference) and the robustness required for the solution."
     },
     {
-      "q": "Beyond 'which part fits which unit,' are there other types of queries or relationships technicians need, such as compatibility with other parts, installation instructions, or common troubleshooting tips?",
-      "why": "Clarifying the full range of desired information retrieval will define the scope of data extraction and the complexity of the underlying knowledge model."
+      "q": "Are there existing digital systems that catalog units and parts, even if not linked, or is the entire source of truth within these scanned PDFs?",
+      "why": "Understanding existing data sources helps determine if we need to build a knowledge graph from scratch or integrate with partial existing structured data."
     },
     {
-      "q": "Are there existing digital indices, part numbers, or unit identifiers in any system that can be cross-referenced or used as a 'ground truth' to validate information extracted from the scanned PDFs?",
-      "why": "Leveraging any structured data would significantly reduce the reliance on potentially error-prone OCR and information extraction from unstructured text."
+      "q": "What is the expected volume of daily queries, and how many unique parts and units are covered across the thousands of PDFs?",
+      "why": "This impacts the scalability requirements for the backend processing and retrieval systems, as well as the scope of data ingestion."
     }
   ],
   "decomposition": [
     {
       "id": "D1",
-      "title": "Document Ingestion & OCR Pipeline",
-      "why": "Converting thousands of scanned PDFs into machine-readable text is the foundational step for any further processing."
+      "title": "Document Ingestion & OCR",
+      "why": "This foundational step converts unstructured image-based PDFs into searchable text and extracts initial metadata."
     },
     {
       "id": "D2",
-      "title": "Information Extraction & Structuring",
-      "why": "Identifying and extracting key entities like units, parts, and their relationships from raw text is crucial for building a queryable knowledge base."
+      "title": "Information Extraction & Knowledge Graph Construction",
+      "why": "This involves identifying entities (parts, units) and relationships from the extracted text to build a structured, queryable knowledge base."
     },
     {
       "id": "D3",
-      "title": "Knowledge Graph Construction & Persistence",
-      "why": "Storing the extracted, structured data in a robust, query-optimized format is necessary for efficient retrieval and complex relationship queries."
+      "title": "Search & Retrieval Engine",
+      "why": "This component enables efficient querying against the knowledge graph to find relevant parts for specific units or vice-versa."
     },
     {
       "id": "D4",
-      "title": "Natural Language Query & Retrieval Service",
-      "why": "Enabling field technicians to ask questions in plain language and receive relevant answers requires a robust interface and search logic."
+      "title": "User Interface & Interaction Layer",
+      "why": "This provides a simple, intuitive way for field technicians to submit queries and receive answers on their devices."
     },
     {
       "id": "D5",
-      "title": "Human-in-the-Loop Validation & Feedback System",
-      "why": "Given the potential for OCR and extraction errors, a mechanism for human review and continuous improvement is essential for accuracy and trust."
+      "title": "Feedback & Improvement Loop",
+      "why": "This is crucial for capturing user feedback and system performance to continuously refine extraction models and search accuracy."
     }
   ],
   "architecture": {
     "components": [
       {
-        "id": "ext_pdfs",
-        "name": "Legacy PDF Manuals",
-        "kind": "external",
-        "sub": "Thousands of scanned, unstructured documents.",
-        "col": 0,
-        "row": 0,
-        "x": 60,
-        "y": 50
-      },
-      {
-        "id": "ocr_proc",
-        "name": "OCR Processor Service",
-        "kind": "service",
-        "sub": "Converts scanned images into searchable text.",
-        "col": 0,
-        "row": 1,
-        "x": 60,
-        "y": 190
-      },
-      {
-        "id": "doc_store",
-        "name": "Document Store",
+        "id": "pdf_storage",
+        "name": "PDF Storage",
         "kind": "data",
-        "sub": "Stores raw PDFs and OCR'd text.",
+        "col": 0,
+        "row": 0,
+        "sub": "Raw scanned manuals",
+        "x": 60,
+        "y": 50
+      },
+      {
+        "id": "ocr_service",
+        "name": "OCR Service",
+        "kind": "service",
         "col": 1,
         "row": 0,
+        "sub": "Extracts text from PDFs",
         "x": 280,
         "y": 50
       },
       {
-        "id": "info_ext",
-        "name": "Information Extraction Agent",
+        "id": "kg_builder",
+        "name": "KG Builder Agent",
         "kind": "agent",
-        "sub": "Identifies entities (units, parts) and relationships.",
-        "col": 1,
-        "row": 1,
-        "x": 280,
-        "y": 190
+        "col": 2,
+        "row": 0,
+        "sub": "Extracts entities & relations",
+        "x": 500,
+        "y": 50
       },
       {
-        "id": "kg_db",
+        "id": "knowledge_graph",
         "name": "Knowledge Graph DB",
         "kind": "data",
-        "sub": "Stores structured unit-part relationships.",
-        "col": 2,
-        "row": 1,
-        "x": 500,
-        "y": 190
-      },
-      {
-        "id": "query_api",
-        "name": "Query API Service",
-        "kind": "service",
-        "sub": "Exposes endpoint for technician queries.",
-        "col": 2,
+        "col": 3,
         "row": 0,
-        "x": 500,
+        "sub": "Structured parts/units data",
+        "x": 720,
         "y": 50
       },
       {
-        "id": "llm_coord",
-        "name": "LLM Coordinator",
-        "kind": "agent",
-        "sub": "Interprets natural language, queries KG, formats answers.",
+        "id": "tech_app",
+        "name": "Technician App",
+        "kind": "ui",
+        "col": 0,
+        "row": 2,
+        "sub": "Mobile UI for queries",
+        "x": 60,
+        "y": 330
+      },
+      {
+        "id": "query_service",
+        "name": "Query Service",
+        "kind": "service",
+        "col": 1,
+        "row": 2,
+        "sub": "Processes user requests",
+        "x": 280,
+        "y": 330
+      },
+      {
+        "id": "search_engine",
+        "name": "Search Engine",
+        "kind": "service",
         "col": 2,
         "row": 2,
+        "sub": "Retrieves answers from KG",
         "x": 500,
         "y": 330
       },
       {
-        "id": "tech_ui",
-        "name": "Field Tech UI",
-        "kind": "ui",
-        "sub": "Web/mobile interface for technicians.",
+        "id": "feedback_mod",
+        "name": "Feedback Module",
+        "kind": "service",
         "col": 3,
-        "row": 0,
+        "row": 2,
+        "sub": "Collects user ratings/corrections",
         "x": 720,
-        "y": 50
-      },
-      {
-        "id": "feedback_ui",
-        "name": "Feedback & Validation UI",
-        "kind": "ui",
-        "sub": "Allows human review and correction of extracted data.",
-        "col": 3,
-        "row": 1,
-        "x": 720,
-        "y": 190
+        "y": 330
       }
     ],
     "edges": [
       {
-        "from": "ext_pdfs",
-        "to": "ocr_proc",
-        "label": "Ingest PDFs",
-        "dashed": false
+        "from": "pdf_storage",
+        "to": "ocr_service",
+        "label": "PDFs for processing"
       },
       {
-        "from": "ocr_proc",
-        "to": "doc_store",
-        "label": "Store OCR Text",
-        "dashed": false
+        "from": "ocr_service",
+        "to": "kg_builder",
+        "label": "OCR'd text"
       },
       {
-        "from": "doc_store",
-        "to": "info_ext",
-        "label": "Read Text",
-        "dashed": false
+        "from": "kg_builder",
+        "to": "knowledge_graph",
+        "label": "Populates"
       },
       {
-        "from": "info_ext",
-        "to": "kg_db",
-        "label": "Populate Graph",
-        "dashed": false
+        "from": "tech_app",
+        "to": "query_service",
+        "label": "User query"
       },
       {
-        "from": "tech_ui",
-        "to": "query_api",
-        "label": "Send Query",
-        "dashed": false
+        "from": "query_service",
+        "to": "search_engine",
+        "label": "Search request"
       },
       {
-        "from": "query_api",
-        "to": "llm_coord",
-        "label": "Process NL Query",
-        "dashed": false
+        "from": "search_engine",
+        "to": "knowledge_graph",
+        "label": "Query KG"
       },
       {
-        "from": "llm_coord",
-        "to": "kg_db",
-        "label": "Graph Query",
-        "dashed": false
+        "from": "knowledge_graph",
+        "to": "search_engine",
+        "label": "Results"
       },
       {
-        "from": "kg_db",
-        "to": "llm_coord",
-        "label": "Query Results",
-        "dashed": false
+        "from": "search_engine",
+        "to": "query_service",
+        "label": "Answer"
       },
       {
-        "from": "llm_coord",
-        "to": "query_api",
-        "label": "Formatted Answer",
-        "dashed": false
+        "from": "query_service",
+        "to": "tech_app",
+        "label": "Display answer"
       },
       {
-        "from": "query_api",
-        "to": "tech_ui",
-        "label": "Display Answer",
-        "dashed": false
+        "from": "tech_app",
+        "to": "feedback_mod",
+        "label": "User feedback"
       },
       {
-        "from": "feedback_ui",
-        "to": "info_ext",
-        "label": "Correct Extractions",
-        "dashed": true
-      },
-      {
-        "from": "feedback_ui",
-        "to": "kg_db",
-        "label": "Update Graph",
+        "from": "feedback_mod",
+        "to": "kg_builder",
+        "label": "Improve KG (dashed)",
         "dashed": true
       }
     ]
@@ -211,56 +185,56 @@
   "sprint": [
     {
       "day": "Day 1-2",
-      "title": "Core OCR & Document Ingestion",
-      "deliv": "OCR pipeline processing 100 sample PDFs with text output stored in Document Store, basic error logging."
+      "title": "Set up Ingestion Pipeline & Basic OCR",
+      "deliv": "A functional script that can OCR a sample PDF and output raw text."
     },
     {
       "day": "Day 3-4",
-      "title": "Initial Information Extraction Model",
-      "deliv": "Prototype extraction agent identifying 'Unit' and 'Part' entities from sample OCR text, outputting JSON relations."
+      "title": "Develop Entity Extraction Models",
+      "deliv": "A trained model that can identify 'part numbers' and 'unit models' from OCR'd text with reasonable accuracy on a test set."
     },
     {
       "day": "Day 5-6",
-      "title": "Knowledge Graph MVP & Population",
-      "deliv": "Knowledge graph schema defined and populated with extracted data from 50 sample documents, queryable via programmatic API."
+      "title": "Implement Knowledge Graph Schema & Ingestion",
+      "deliv": "A defined knowledge graph schema and a script that ingests extracted entities and relationships from sample data into a graph database."
     },
     {
       "day": "Day 7-8",
-      "title": "Basic Query API & Field Tech UI",
-      "deliv": "Frontend UI allowing text input and displaying hardcoded responses; backend API receiving queries and returning dummy data."
+      "title": "Build Core Search API",
+      "deliv": "A REST API endpoint that takes a 'unit model' and returns associated 'part numbers' from the knowledge graph."
     },
     {
       "day": "Day 9-10",
-      "title": "NLQ Integration with Knowledge Graph",
-      "deliv": "End-to-end flow: Tech UI query -> LLM Coordinator -> KG query -> formatted answer displayed in UI for a few specific part-unit questions."
+      "title": "Prototype Technician UI (Mobile Web)",
+      "deliv": "A basic web-based UI accessible on mobile that can submit a query to the API and display the results."
     },
     {
       "day": "Day 11-12",
-      "title": "Human-in-the-Loop Feedback Prototype",
-      "deliv": "Admin UI allowing review and correction of 10 extracted relationships, with updates reflected in the Knowledge Graph."
+      "title": "Initial Data Load & Testing",
+      "deliv": "200-500 PDFs processed end-to-end, with a functional UI for querying their contents and basic accuracy validation."
     },
     {
       "day": "Day 13-14",
-      "title": "Pilot Demo & Metrics",
-      "deliv": "Live demonstration of the end-to-end system with 20 key unit-part queries, presenting initial accuracy and latency metrics."
+      "title": "Feedback Mechanism & Refinement",
+      "deliv": "A button in the UI to mark an answer as 'helpful' or 'unhelpful', logging feedback for future model retraining."
     }
   ],
   "risks": [
     {
-      "risk": "Low OCR accuracy on older, low-resolution scanned PDFs leading to missing or incorrect entity extraction.",
-      "mitigation": "Implement a tiered OCR strategy, using advanced models for poor quality scans and a human-in-the-loop validation step for entities with low confidence scores."
+      "risk": "Poor OCR quality on older, low-resolution scanned manuals leads to inaccurate text extraction and poor downstream results.",
+      "mitigation": "Implement pre-processing steps (e.g., de-skewing, noise reduction) and use multiple OCR engines to compare results, falling back to human review for critical pages."
     },
     {
-      "risk": "Inconsistent naming conventions or ambiguous descriptions across thousands of manuals making entity resolution difficult.",
-      "mitigation": "Develop a canonical entity mapping service, leveraging fuzzy matching and potentially an LLM to normalize part/unit names, with a dedicated review process for high-ambiguity cases."
+      "risk": "Inconsistent terminology and formatting across thousands of diverse manuals makes entity and relationship extraction difficult and error-prone.",
+      "mitigation": "Develop robust, adaptable NLP models using few-shot learning or rule-based systems for common patterns, and implement a human-in-the-loop validation process for high-confidence extractions."
     },
     {
-      "risk": "Scalability issues when processing thousands of large PDF files, leading to excessively long ingestion times.",
-      "mitigation": "Design a distributed, parallel processing pipeline for OCR and extraction, prioritizing high-demand manuals first, and implementing robust retry mechanisms."
+      "risk": "Scalability issues with processing thousands of PDFs and building a large knowledge graph within acceptable timeframes.",
+      "mitigation": "Utilize distributed processing frameworks (e.g., Spark) for OCR and extraction, and optimize graph database indexing strategies for efficient storage and querying."
     },
     {
-      "risk": "Field tech adoption is low due to perceived inaccuracy or slow response times of the system.",
-      "mitigation": "Conduct early and frequent user testing with field techs, incorporating their feedback directly into UI/UX and relevance tuning, and providing clear confidence scores with answers."
+      "risk": "Field technicians struggle with a new interface or receive irrelevant results, leading to low adoption and continued calls to the depot.",
+      "mitigation": "Conduct early user testing with a small group of technicians to gather feedback on UI/UX and search relevance, iterating quickly on design and model improvements."
     }
   ]
 }

@@ -3,15 +3,17 @@
   "version": "0.1.0",
   "private": true,
   "engines": {
-    "node": ">=24.0.0"
+    "node": "24.x"
   },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint",
-    "test": "vitest",
+    "lint": "eslint --max-warnings 0",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "test:run": "vitest run",
+    "typecheck": "next typegen && tsc --noEmit",
     "test:visual": "next build && playwright test --project=dark --project=light",
     "test:visual:update": "next build && playwright test --project=dark --project=light --update-snapshots",
     "test:perf": "next build && playwright test --project=perf",
@@ -20,32 +22,32 @@
     "eval:fde:update": "FDE_EVAL_LIVE=1 FDE_EVAL_UPDATE=1 vitest run src/lib/fde-eval.live.test.ts"
   },
   "dependencies": {
-    "@upstash/redis": "^1.38.2",
+    "@upstash/redis": "^1.39.0",
     "@vercel/analytics": "^2.0.1",
     "@vercel/speed-insights": "^2.0.0",
-    "framer-motion": "^13.1.0",
+    "framer-motion": "^13.4.5",
     "gray-matter": "^4.0.3",
     "lenis": "^1.3.15",
     "lucide-react": "^0.554.0",
-    "next": "^16.0.10",
+    "next": "^16.3.6",
     "next-mdx-remote": "^6.0.0",
-    "react": "19.2.0",
-    "react-dom": "19.2.0",
-    "zod": "^4.1.12"
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "zod": "^4.6.5"
   },
   "devDependencies": {
     "@playwright/test": "^1.62.1",
     "@tailwindcss/postcss": "^4",
-    "@testing-library/dom": "^10.4.1",
-    "@testing-library/react": "^16.3.0",
-    "@types/node": "^24.13.3",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
+    "@testing-library/dom": "^10.4.2",
+    "@testing-library/react": "^16.3.3",
+    "@types/node": "^24.19.0",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
     "eslint": "^9.39.5",
-    "eslint-config-next": "^16.0.10",
+    "eslint-config-next": "^16.3.6",
     "jsdom": "^29.1.1",
     "tailwindcss": "^4",
     "typescript": "^6.0.3",
-    "vitest": "^4.0.13"
+    "vitest": "^4.1.11"
   }
 }

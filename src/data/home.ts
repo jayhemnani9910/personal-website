@@ -1,17 +1,16 @@
 /**
  * Copy and structured data for the v4 home page (see docs/design/portfolio-home).
  * Every count that can drift from the real content (project count, MCP tool
- * count, essay count, years of experience) arrives as a function argument
- * computed at build time, never a literal baked into this file.
+ * count, essay count) arrives as a function argument computed at build time,
+ * never a literal baked into this file.
  *
- * One claim from the design export was dropped because nothing in the repo
- * backs it: the "project 19" aside in the cube-scramble copy (no such project
- * exists). It does not survive here. The "4 YRS" experience chip, previously
- * dropped for the same reason, is now computable: src/lib/experience.ts sums
- * the role spans in resume.ts, so it arrives here the same way the other
- * counts do.
+ * Two claims from the design export were dropped because nothing in the repo
+ * backs them: the "project 19" aside in the cube-scramble copy (no such project
+ * exists) and the "4 YRS" experience chip.
  */
 import type { Route } from "next";
+import { SITE_CONFIG } from "@/../content/site";
+import { WEBMCP_TOOLS, WEBMCP_TOOL_COUNT } from "@/lib/webmcp-tools";
 
 export type FeaturedProject = {
   id: string;
@@ -99,8 +98,8 @@ export const FEATURED: FeaturedProject[] = [
     tags: ["web", "agents", "standards"],
     tech: ["TypeScript", "Next.js 16", "WebMCP"],
     arrived: "Could a portfolio be read by a machine as easily as by a person?",
-    did: "Registered 8 tools on navigator.modelContext: search, résumé, skills, contact, experiments, theme, mode.",
-    changed: "An agent in Chrome 146+ reads this site without scraping it.",
+    did: `Registered ${WEBMCP_TOOL_COUNT} tools with the WebMCP browser API: search, résumé, skills, contact, experiments, theme, mode.`,
+    changed: "An agent in Chrome, with the WebMCP flag on, reads this site without scraping it.",
   },
   {
     id: "biotech-accelerator",
@@ -311,19 +310,26 @@ export function buildReceipts(c: { projectCount: number; toolCount: number }): R
       n: String(c.toolCount),
       label: "MCP tools an agent can call on this page right now",
       cta: "list tools",
-      title: "navigator.modelContext",
+      title: "document.modelContext",
       note: "Registered in webmcp.ts and asserted by a test, so the count can't drift from the code.",
-      lines: [
-        {
-          text: "search_projects · get_project · get_resume · search_skills",
-          meta: "webmcp.ts · read",
-          href: "/projects/webmcp-portfolio",
-        },
-        { text: "get_contact · list_experiments", meta: "webmcp.ts · read", href: "/projects/webmcp-portfolio" },
-        { text: "toggle_theme · switch_mode", meta: "webmcp.ts · write", href: "/projects/webmcp-portfolio" },
-      ],
+      lines: toolLines(),
     },
   ];
+}
+
+// The tool receipt's lines, built from the registry so a new tool shows up
+// here without anyone retyping the list: read tools four to a line, then the
+// write tools.
+function toolLines(): ReceiptLine[] {
+  const href = "/projects/webmcp-portfolio" as const;
+  const read = WEBMCP_TOOLS.filter((t) => t.kind === "read").map((t) => t.name);
+  const write = WEBMCP_TOOLS.filter((t) => t.kind === "write").map((t) => t.name);
+  const lines: ReceiptLine[] = [];
+  for (let i = 0; i < read.length; i += 4) {
+    lines.push({ text: read.slice(i, i + 4).join(" · "), meta: "webmcp.ts · read", href });
+  }
+  if (write.length) lines.push({ text: write.join(" · "), meta: "webmcp.ts · write", href });
+  return lines;
 }
 
 export const METHOD: MethodRule[] = [
@@ -421,7 +427,7 @@ export const COPY = {
   contactLabel: "ONE INBOX",
   contactDeck:
     "Looking for software, data and ML roles, forward-deployed ones included. Send the vague version, that's the point.",
-  footerLine: "© 2026 Jay Hemnani",
+  footerLine: SITE_CONFIG.copyright,
   idleNote: "You get back a scope, an architecture, a plan and the risks, plus the projects that prove it.",
   offlineNote:
     "Offline right now, so this is the closest saved example rather than a reading of your brief. The live version calls a model.",

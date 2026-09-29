@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getRedis } from "@/lib/kv";
-import { rateLimit } from "@/lib/ratelimit";
+import { dailyBudget, rateLimit } from "@/lib/ratelimit";
+import { clientIp } from "@/lib/client-ip";
 import { FEATURED } from "@/data/home";
 import type { DecomposeOutput } from "@/data/home";
 import {
@@ -16,6 +17,10 @@ export const maxDuration = 30;
 
 /** Named once: the cache fingerprint has to see the same value the calls use. */
 const MODEL = "gemini-2.5-flash";
+
+// Model calls allowed per UTC day across every visitor (decision D11). Past it
+// the answer is "unavailable", which the page meets with its saved examples.
+const DAILY_MODEL_CALLS = 200;
 
 const FEATURED_IDS = new Set(FEATURED.map((p) => p.id));
 
@@ -89,16 +94,7 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ engine: "preset", out: preset.out }, { status: 200 });
     }
 
-    // Trust the platform-set client IP: x-real-ip, or the right-most (last
-    // hop) x-forwarded-for value. The left-most value is client-supplied and
-    // spoofable, so using it would let an attacker rotate fake IPs to bypass
-    // the limit. Copied from fde-sim's route.
-    const ip =
-        request.headers.get("x-real-ip")?.trim() ||
-        request.headers.get("x-forwarded-for")?.split(",").pop()?.trim() ||
-        "anon";
-
-    const limit = await rateLimit(getRedis(), "decompose", ip);
+    const limit = await rateLimit(getRedis(), "decompose", clientIp(request.headers));
     if (limit === "limited") {
         return NextResponse.json({ error: "rate_limited" }, { status: 429 });
     }
@@ -112,6 +108,10 @@ export async function POST(request: NextRequest) {
     const apiKey = process.env.GEMINI_API_KEY;
     if (!apiKey) {
         console.error("[decompose] GEMINI_API_KEY is not set; live decomposition is disabled");
+        return NextResponse.json({ error: "unavailable" }, { status: 503 });
+    }
+    if ((await dailyBudget(getRedis(), "decompose", DAILY_MODEL_CALLS)) === "exhausted") {
+        console.error("[decompose] daily model budget spent; serving saved examples");
         return NextResponse.json({ error: "unavailable" }, { status: 503 });
     }
 
@@ -138,8 +138,15 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ error: "unavailable" }, { status: 503 });
     }
 
-    const data = await res.json();
-    const raw: string = data?.candidates?.[0]?.content?.parts?.[0]?.text ?? "";
+    let raw: string;
+    try {
+        const data = await res.json();
+        raw = data?.candidates?.[0]?.content?.parts?.[0]?.text ?? "";
+    } catch (err) {
+        // A 200 whose body is not JSON, or a connection dropped mid-body.
+        console.error("[decompose] gemini body unreadable:", err instanceof Error ? err.message : err);
+        return NextResponse.json({ error: "unavailable" }, { status: 503 });
+    }
 
     let parsed: unknown;
     try {
@@ -157,7 +164,8 @@ export async function POST(request: NextRequest) {
 
     const out: DecomposeOutput = {
         ...result.data,
-        match: result.data.match.filter((id) => FEATURED_IDS.has(id)).slice(0, 2),
+        // Deduped: the same project named twice rendered two identical links.
+        match: [...new Set(result.data.match)].filter((id) => FEATURED_IDS.has(id)).slice(0, 2),
     };
 
     await writeCache(key, out);

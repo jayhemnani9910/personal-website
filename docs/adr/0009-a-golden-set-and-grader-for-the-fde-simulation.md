@@ -112,3 +112,20 @@ Not covered, and worth naming rather than implying: there is no LLM judge. The
 book asks for one to score accuracy and tone. Everything here is deterministic
 and lexical, which catches contract drift and domain-free answers, and will not
 notice an answer that is well-formed, on-topic and simply not very good.
+
+**Correction, 2026-09-29.** Two statements above were wrong, and the grader has
+changed to match what the prompt states:
+
+- An off-grid component (col 4) is not harmless. FdeArchDiagram sizes its
+  viewBox from the components it is given, so an extra column widens the canvas
+  and, on a fixed-width container, shrinks every label about 20%.
+- The tone lists banned more than the prompt does ("data quality issues",
+  "scope creep", "lack of user adoption", "your timeline"). They now hold only
+  variants of the two phrases the prompt bans by name.
+
+The grader also gained `arch.cells-distinct` and `arch.captions-fit`, reads
+groundedness from prose fields only with whole-word matching, and shares the
+route's leak check. The golden set was re-recorded on 2026-09-29 with thinking
+off (ADR 0012) and the new caption limits: 184/190, the six failures all
+`arch.captions-fit`, carried in the baseline as known issues.
+

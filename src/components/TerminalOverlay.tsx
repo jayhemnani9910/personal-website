@@ -8,7 +8,9 @@ import { useRouter } from "next/navigation";
 import { EASE, DUR } from "@/lib/motion-tokens";
 import { FEATURED, buildReceipts } from "@/data/home";
 import { SITE_CONFIG } from "@/../content/site";
-import { WEBMCP_TOOL_COUNT } from "@/lib/webmcp";
+import { WEBMCP_TOOL_COUNT } from "@/lib/webmcp-tools";
+import { scrollBehavior } from "@/lib/scroll";
+import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
 
 // All available commands for tab-completion. `exit` is not advertised in
 // `help` or the chip row (the design has no such command), but it is kept
@@ -53,6 +55,8 @@ const INITIAL_LINES: Line[] = [
 
 export function TerminalOverlay({ projectCount }: { projectCount: number }) {
     const { isOpen, closeTerminal } = useTerminal();
+    // The 24px slide is motion; under reduced motion or reader mode it only fades.
+    const slide = usePrefersReducedMotion() ? 0 : 24;
     const { theme, toggleTheme } = useTheme();
     const [input, setInput] = useState("");
     const [history, setHistory] = useState<Line[]>(INITIAL_LINES);
@@ -119,7 +123,7 @@ export function TerminalOverlay({ projectCount }: { projectCount: number }) {
     }, [isOpen, closeTerminal]);
 
     useEffect(() => {
-        bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+        bottomRef.current?.scrollIntoView({ behavior: scrollBehavior() });
     }, [history]);
 
     const handleCommand = useCallback((raw: string) => {
@@ -283,9 +287,9 @@ export function TerminalOverlay({ projectCount }: { projectCount: number }) {
         <AnimatePresence>
             {isOpen && (
                 <m.div
-                    initial={{ opacity: 0, y: 24 }}
+                    initial={{ opacity: 0, y: slide }}
                     animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: 24 }}
+                    exit={{ opacity: 0, y: slide }}
                     transition={{ duration: DUR.base, ease: EASE }}
                     className="fixed inset-0 z-[var(--tr-z-overlay)] flex items-end justify-center bg-black/40 px-[clamp(1rem,4vw,2rem)] pb-6"
                     onClick={closeTerminal}

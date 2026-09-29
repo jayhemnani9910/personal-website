@@ -2,17 +2,21 @@ import { getAllProjects } from "@/lib/content";
 import { RESUME } from "@/data/resume";
 import { SITE_CONFIG } from "@/../content/site";
 import { LAB_EXPERIMENTS } from "@/data/lab";
-import { WebMCPProvider } from "./WebMCPProvider";
+import { FEATURED } from "@/data/home";
 import type { SiteData } from "@/lib/webmcp";
 
+const FEATURED_IDS = new Set(FEATURED.map((f) => f.id));
+
 /**
- * Server component that loads site data at build time
- * and passes it to the WebMCPProvider client component.
+ * Everything the WebMCP tools answer from, built at build time. Served as a
+ * static JSON file (src/app/site-data.json) and fetched only by a browser that
+ * has the WebMCP API, rather than inlined into every page's HTML.
  */
-export async function WebMCPLoader() {
+export async function buildSiteData(): Promise<SiteData> {
   const projects = await getAllProjects();
 
-  const data: SiteData = {
+  return {
+    siteUrl: SITE_CONFIG.url,
     projects: projects.map((p) => ({
       id: p.id,
       title: p.title,
@@ -22,7 +26,8 @@ export async function WebMCPLoader() {
       domain: p.domain,
       tags: p.tags,
       tech: p.tech,
-      featured: p.featured,
+      // The home page's six are the one featured list (not an MDX flag).
+      featured: FEATURED_IDS.has(p.id),
       priority: p.priority,
       github: p.github,
       challenge: p.challenge,
@@ -61,6 +66,4 @@ export async function WebMCPLoader() {
     social: SITE_CONFIG.social,
     experiments: LAB_EXPERIMENTS,
   };
-
-  return <WebMCPProvider data={data} />;
 }

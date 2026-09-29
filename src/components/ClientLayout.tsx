@@ -1,10 +1,10 @@
 "use client";
 
+import { useState } from "react";
+import dynamic from "next/dynamic";
 import { ReactLenis } from "lenis/react";
-import { TerminalProvider } from "@/context/TerminalContext";
-import { TerminalOverlay } from "@/components/TerminalOverlay";
+import { TerminalProvider, useTerminal } from "@/context/TerminalContext";
 import { SkipLink } from "@/components/SkipLink";
-import { ScrollToTop } from "@/components/ScrollToTop";
 import { TransitionLayout } from "@/components/TransitionLayout";
 import { MotionProvider } from "@/components/motion/MotionProvider";
 import { Preloader } from "@/components/motion/Preloader";
@@ -13,19 +13,25 @@ import { ReaderMode } from "@/components/ReaderMode";
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
 import { usePathname } from "next/navigation";
 
+// The shell renders nothing until it is opened, and off the home page the only
+// way in is a keyboard shortcut (Ctrl/Cmd+K or backtick, handled in
+// TerminalContext). So it is not in any page's first-load JS: it comes down the
+// first time it opens and stays mounted after that.
+const TerminalOverlay = dynamic(() => import("@/components/TerminalOverlay").then((m) => m.TerminalOverlay), {
+    ssr: false,
+});
+
+function LazyTerminal({ projectCount }: { projectCount: number }) {
+    const { isOpen } = useTerminal();
+    const [opened, setOpened] = useState(false);
+    if (isOpen && !opened) setOpened(true);
+    return opened ? <TerminalOverlay projectCount={projectCount} /> : null;
+}
+
 export function ClientLayout({ children, projectCount }: { children: React.ReactNode; projectCount: number }) {
     const prefersReducedMotion = usePrefersReducedMotion();
     const pathname = usePathname();
-    const isLanding = pathname === "/";
-
-    const content = (
-        <TerminalProvider>
-            <TerminalOverlay projectCount={projectCount} />
-            <TransitionLayout>
-                {children}
-            </TransitionLayout>
-        </TerminalProvider>
-    );
+    const smoothScroll = pathname === "/" && !prefersReducedMotion;
 
     return (
         <MotionProvider>
@@ -36,15 +42,18 @@ export function ClientLayout({ children, projectCount }: { children: React.React
             <ReaderMode />
             <Preloader />
             <Cursor />
-            <ScrollToTop />
             <SkipLink />
-            {prefersReducedMotion || !isLanding ? (
-                content
-            ) : (
-                <ReactLenis root options={{ lerp: 0.05, duration: 1.2, smoothWheel: true }}>
-                    {content}
-                </ReactLenis>
-            )}
+            {/* Lenis in root mode drives the document scroller, so it does not
+                need to wrap the page. As a childless sibling it can come and go
+                (home only, never under reduced motion) without changing the
+                tree above the page, which used to remount everything on every
+                navigation into or out of /. `duration` is the one tuning knob:
+                with it set, Lenis ignores `lerp`. */}
+            {smoothScroll && <ReactLenis root options={{ duration: 1.2 }} />}
+            <TerminalProvider>
+                <LazyTerminal projectCount={projectCount} />
+                <TransitionLayout>{children}</TransitionLayout>
+            </TerminalProvider>
         </MotionProvider>
     );
 }

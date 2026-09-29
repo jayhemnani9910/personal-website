@@ -3,10 +3,11 @@ import { Instrument_Sans, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ClientLayout } from "@/components/ClientLayout";
 import { ThemeProvider } from "@/context/ThemeContext";
-import { WebMCPLoader } from "@/components/WebMCPLoader";
+import { WebMCPProvider } from "@/components/WebMCPProvider";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { SITE_CONFIG } from "@/../content/site";
+import { THEME_KEY } from "@/lib/storage";
 import { getAllProjects } from "@/lib/content";
 
 // Instrument Sans is a variable font, so no `weight` array: listing weights
@@ -106,11 +107,10 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  // The shell overlay's `ls` command derives its "N more at /work" line from
-  // the real project count rather than a hardcoded number (see
-  // TerminalOverlay.tsx). It is a client component mounted on every route, so
-  // it cannot call the fs-backed getAllProjects() itself; this is the same
-  // server-fetch-then-prop pattern WebMCPLoader below already uses.
+  // The shell overlay's `ls` command derives its "N more" line from the real
+  // project count rather than a hardcoded number (see TerminalOverlay.tsx). It
+  // is a client component mounted on every route, so it cannot call the
+  // fs-backed getAllProjects() itself; the count comes down as a prop.
   const projectCount = (await getAllProjects()).length;
 
   return (
@@ -126,7 +126,7 @@ export default async function RootLayout({
             __html: `
               (function() {
                 try {
-                  var theme = localStorage.getItem('theme');
+                  var theme = localStorage.getItem('${THEME_KEY}');
                   if (theme !== 'dark' && theme !== 'light') {
                     theme = 'dark';
                   }
@@ -136,13 +136,20 @@ export default async function RootLayout({
             `,
           }}
         />
+        {/* framer-motion writes each home section's hidden starting state
+            (opacity 0) into the server HTML, and only JS reveals it. Without
+            JS, or if a chunk fails to load, un-hide them. Inert whenever
+            scripting is on. */}
+        <noscript>
+          <style>{".tr-reveal{opacity:1!important;transform:none!important}"}</style>
+        </noscript>
       </head>
       <body
         className="antialiased"
       >
         <ThemeProvider>
           <ClientLayout projectCount={projectCount}>{children}</ClientLayout>
-          <WebMCPLoader />
+          <WebMCPProvider />
           <Analytics />
           <SpeedInsights />
         </ThemeProvider>

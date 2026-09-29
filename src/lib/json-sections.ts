@@ -46,14 +46,13 @@ export class JsonSectionExtractor {
     if (this.done || !chunk) return out;
 
     for (const ch of chunk) {
+      // Nothing after the object's closing brace is kept, whether it arrived
+      // in the same chunk or a later one, so `text` (which the route parses
+      // whole at the end) does not depend on how the network split the body.
+      if (this.done) break;
+
       const i = this.buf.length;
       this.buf += ch;
-
-      // `done` can be set part-way through a chunk. Keep buffering, because the
-      // final whole-object parse reads `text`, but stop scanning: a second
-      // object in the same chunk would otherwise start emitting its keys as
-      // though they belonged to the first.
-      if (this.done) continue;
 
       // Inside a string, only the closing quote and escapes matter. Doing this
       // first is what stops a brace inside a value's text from moving `depth`.

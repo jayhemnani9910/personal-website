@@ -3,6 +3,7 @@ import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 import { GOLDEN_BRIEFS, gradeSim, scoreChecks, type Check } from "./fde-eval";
+import { GEMINI_MODEL } from "./fde-prompt";
 
 // The live half of the eval. It calls a real endpoint, so it does not run unless
 // asked: `npm run eval:fde`. Without FDE_EVAL_LIVE it skips, which is what
@@ -131,7 +132,7 @@ describe.skipIf(!LIVE)("fde-sim live eval", () => {
             // Passed in rather than read from the clock, so a rerun that changes
             // nothing produces no diff.
             recordedAt: process.env.FDE_EVAL_DATE ?? "unset",
-            model: "gemini-2.5-flash",
+            model: GEMINI_MODEL,
             totals,
             briefs: results.map((r) => ({
               id: r.id,

@@ -15,11 +15,14 @@ export type SimStreamEvent =
 
 /**
  * Encode one event. Newlines inside the payload would end the event early, so
- * the data is JSON, which cannot contain a raw newline.
+ * the data is JSON, which cannot contain a raw newline. JSON.stringify does
+ * leave U+2028 and U+2029 raw, and the client's frame regex treats those as
+ * line ends too, so they are escaped as well.
  */
 export function encodeSse(event: SimStreamEvent): string {
   const { type, ...rest } = event;
-  return `event: ${type}\ndata: ${JSON.stringify(rest)}\n\n`;
+  const data = JSON.stringify(rest).replace(/\u2028/g, "\\u2028").replace(/\u2029/g, "\\u2029");
+  return `event: ${type}\ndata: ${data}\n\n`;
 }
 
 /** Parse events out of an SSE byte stream, tolerating chunk boundaries anywhere. */
@@ -81,6 +84,16 @@ export function geminiChunkUsage(payload: string): { prompt: number; output: num
       prompt: Number(u.promptTokenCount ?? 0),
       output: Number(u.candidatesTokenCount ?? 0),
     };
+  } catch {
+    return null;
+  }
+}
+
+/** Why Gemini stopped (STOP, MAX_TOKENS, SAFETY...), when this chunk says. */
+export function geminiChunkFinishReason(payload: string): string | null {
+  try {
+    const reason = JSON.parse(payload)?.candidates?.[0]?.finishReason;
+    return typeof reason === "string" ? reason : null;
   } catch {
     return null;
   }

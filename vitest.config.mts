@@ -1,4 +1,5 @@
 
+import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
@@ -6,7 +7,7 @@ export default defineConfig({
   // imports a component fails to resolve, which is why the suite could only
   // ever cover leaf modules using relative imports.
   resolve: {
-    alias: { '@': new URL('./src/', import.meta.url).pathname },
+    alias: { '@': fileURLToPath(new URL('./src/', import.meta.url)) },
   },
   test: {
     environment: 'jsdom',

@@ -18,7 +18,6 @@ impact:
   - "Swap models or presets through config alone, enabling rapid A/B testing of model combinations."
   - "SigLIP text-image matching identifies players and teams zero-shot, without training on a specific roster."
   - "A documented framework with per-model demos and a config system built for research reproducibility."
-featured: true
 priority: 2
 deepDive:
   context: "Most soccer-vision projects wire one detector to one tracker to one classifier and ship that fixed chain. Research, though, is mostly about swapping pieces: does RF-DETR beat YOLO here, does SAM2 segmentation help identification, is SigLIP good enough to skip a trained roster model? This project is the framework that makes those experiments cheap. It integrates four pretrained models behind one orchestration layer with config-driven presets and pluggable fusion, so a model combination is a config change rather than a rewrite. It is composition and tooling, not a trained end product; the value is the harness."

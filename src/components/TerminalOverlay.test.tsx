@@ -22,7 +22,7 @@ vi.mock("next/navigation", () => ({
 
 import { TerminalOverlay } from "./TerminalOverlay";
 import { FEATURED, buildReceipts } from "@/data/home";
-import { WEBMCP_TOOL_COUNT } from "@/lib/webmcp";
+import { WEBMCP_TOOL_COUNT } from "@/lib/webmcp-tools";
 
 // The real project count as of this write-up (see src/data/home.test.ts,
 // which hardcodes the same number for the same reason: the overlay is a

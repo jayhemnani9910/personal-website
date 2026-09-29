@@ -91,9 +91,11 @@ describe("fde-sim golden set", () => {
   // If the prompt stops naming a kind, the grader is checking a rule that is no
   // longer stated, and a valid response would fail.
   it("grades against the component kinds the prompt actually names", () => {
-    for (const kind of VALID_KINDS) {
-      expect(SYSTEM_PROMPT, kind).toContain(kind);
-    }
+    // Parsed from the rule itself: a substring check passed for "ui" even with
+    // both kind lists deleted, because "ui" is inside "building".
+    const stated = SYSTEM_PROMPT.match(/"kind" must be one of: ([a-z, ]+)\./)?.[1];
+    expect(stated, "the prompt no longer states the kind list").toBeDefined();
+    expect(new Set(stated!.split(",").map((k) => k.trim()))).toEqual(new Set(VALID_KINDS));
   });
 });
 
@@ -118,6 +120,23 @@ describe("fde-sim grader", () => {
     ["count.sprint", (p: any) => p.sprint.splice(2)],
     ["count.risks", (p: any) => p.risks.pop()],
   ])("fails %s when the count leaves the stated range", (id, breakIt) => {
+    const p = goodPayload();
+    breakIt(p);
+    expect(failing(p)).toContain(id);
+  });
+
+  // The other side of each range: a loosened upper bound must fail too.
+  const grow = (list: any[], n: number) => {
+    while (list.length < n) list.push(structuredClone(list[0]));
+  };
+  it.each([
+    ["count.scope", (p: any) => grow(p.scope, 4)],
+    ["count.decomposition", (p: any) => grow(p.decomposition, 7)],
+    ["count.components", (p: any) => grow(p.architecture.components, 11)],
+    ["count.edges", (p: any) => grow(p.architecture.edges, 15)],
+    ["count.sprint", (p: any) => grow(p.sprint, 8)],
+    ["count.risks", (p: any) => grow(p.risks, 5)],
+  ])("fails %s when the count goes over the stated range", (id, breakIt) => {
     const p = goodPayload();
     breakIt(p);
     expect(failing(p)).toContain(id);
@@ -166,6 +185,9 @@ describe("fde-sim grader", () => {
     const p = goodPayload();
     p.architecture.components[0].col = 7;
     expect(failing(p)).toContain("arch.grid-bounds");
+    const q = goodPayload();
+    q.architecture.components[0].row = 3;
+    expect(failing(q)).toContain("arch.grid-bounds");
   });
 
   it("fails sprint.covers-14-days on a sprint that stops early", () => {
@@ -244,19 +266,22 @@ describe("recorded responses", () => {
     expect(score.failed.map((f) => `${f.id}: ${f.detail}`)).toEqual([]);
   });
 
-  // Kept failing on purpose: it is the only rule any of the ten live responses
-  // broke, and pinning it means a prompt change that fixes it will show up here.
-  //
-  // Stated accurately, because it would be easy to overstate: the model placed
-  // two components at col 4 where the prompt says 0 to 3, and nothing visibly
-  // breaks. FdeArchDiagram derives its viewBox from the components it is given
-  // (maxX = max(c.x + BOX_W) + PAD), so an extra column widens the canvas rather
-  // than pushing anything outside it. What this catches is the model drifting
-  // from an instruction, which is worth knowing before the drift reaches
-  // something that does not self-correct.
-  it("still catches the off-grid components in the onboarding response", () => {
-    const golden = GOLDEN_BRIEFS.find((b) => b.id === "onboarding-drop-off")!;
-    const failed = gradeSim(read("onboarding-drop-off"), golden).filter((c) => !c.ok);
-    expect(failed.map((f) => f.id)).toEqual(["arch.grid-bounds"]);
+  // The diagram rules, on a copy of a clean recording with one thing broken
+  // each, so the test does not depend on what the live model happened to do.
+  // What they protect, stated accurately: FdeArchDiagram derives its viewBox
+  // from the components it is given, so a component at col 4 widens the canvas
+  // and every label shrinks about 20% on a fixed-width container; two components
+  // in one cell draw on top of each other; a caption longer than the box spills
+  // into its neighbour.
+  it("catches off-grid cells, shared cells and captions too long for the box", () => {
+    const golden = GOLDEN_BRIEFS.find((b) => b.id === "contract-review")!;
+    const broken = structuredClone(read("contract-review"));
+    const [a, b, c] = broken.architecture.components;
+    a.col = 4;
+    c.col = b.col;
+    c.row = b.row;
+    b.sub = "a caption far longer than any box on the diagram can hold";
+    const failed = gradeSim(broken, golden).filter((x) => !x.ok).map((x) => x.id);
+    expect(failed).toEqual(["arch.grid-bounds", "arch.cells-distinct", "arch.captions-fit"]);
   });
 });

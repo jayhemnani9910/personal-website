@@ -20,6 +20,7 @@ export type SimOutcome =
   | "cache_hit"
   | "rate_limited"    // OUR limit, applied to the visitor
   | "no_runtime"      // GEMINI_API_KEY missing
+  | "over_budget"     // the day's model-call budget is spent; a preset is shown
   | "gave_up";        // both attempts failed, visitor got a 502
 
 // Malformed input is deliberately NOT an outcome here. That check runs before
@@ -40,7 +41,8 @@ export type SimFailure =
   | "leak"         // response echoed the system prompt
   | "shape"        // valid JSON, wrong shape
   | "unparseable"  // no JSON could be extracted
-  | "network";     // fetch threw
+  | "timeout"      // the attempt ran past its deadline
+  | "network";     // fetch or a body read threw
 
 const PREFIX = "fdesim";
 
@@ -107,9 +109,11 @@ export async function recordSim(redis: Redis | null, event: SimEvent): Promise<b
     if (event.outputTokens) pipe.incrby(keys.outputTokens, event.outputTokens);
     await pipe.exec();
     return true;
-  } catch {
-    // Deliberately silent. This runs on the response path of a route whose job
-    // is not to report on itself.
+  } catch (err) {
+    // Never throws: this runs on the response path of a route whose job is not
+    // to report on itself. But it logs, because a metric write failing quietly
+    // is the one failure this module exists to reveal.
+    console.error("[fde-sim] metrics write failed:", err instanceof Error ? err.message : err);
     return false;
   }
 }
@@ -142,8 +146,8 @@ export interface SimMetrics {
   tokens: { prompt: number; output: number; perAnsweredCall: number | null };
 }
 
-const OUTCOMES: SimOutcome[] = ["ok", "cache_hit", "rate_limited", "no_runtime", "gave_up"];
-const FAILURES: SimFailure[] = ["http_429", "http_5xx", "http_4xx", "empty", "leak", "shape", "unparseable", "network"];
+export const OUTCOMES: SimOutcome[] = ["ok", "cache_hit", "rate_limited", "no_runtime", "gave_up", "over_budget"];
+export const FAILURES: SimFailure[] = ["http_429", "http_5xx", "http_4xx", "empty", "leak", "shape", "unparseable", "network", "timeout"];
 
 /** Read the counters back. Returns null when no store is configured. */
 export async function readSimMetrics(redis: Redis | null): Promise<SimMetrics | null> {

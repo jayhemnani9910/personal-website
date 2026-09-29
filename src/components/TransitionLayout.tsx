@@ -1,8 +1,8 @@
 "use client";
 
-import { m, AnimatePresence } from "framer-motion";
+import { m } from "framer-motion";
 import { usePathname } from "next/navigation";
-import { ReactNode } from "react";
+import { ReactNode, useState } from "react";
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
 import { EASE, DUR } from "@/lib/motion-tokens";
 
@@ -17,24 +17,34 @@ const CUBIC_EASE: [number, number, number, number] = [EASE[0], EASE[1], EASE[2],
 const pageVariants = {
   initial: { opacity: 0, y: 12 },
   enter: { opacity: 1, y: 0, transition: { duration: DUR.slow, ease: CUBIC_EASE } },
-  exit: { opacity: 0, y: -8, transition: { duration: DUR.base, ease: CUBIC_EASE } },
 };
 
+// Enter-only. An exit animation needs AnimatePresence to keep the old page
+// mounted, but in the App Router the exiting copy re-renders with the new
+// route, so it only ever showed the new page twice (two <main>s, every effect
+// run twice). The element type never changes either, so the reduced-motion
+// switch after hydration cannot remount the page.
 export function TransitionLayout({ children }: TransitionLayoutProps) {
   const pathname = usePathname();
-  const prefersReducedMotion = usePrefersReducedMotion();
+  const reduced = usePrefersReducedMotion();
 
-  // Bypassed entirely under reduced motion: no wrapper, no AnimatePresence,
-  // nothing to opt out of.
-  if (prefersReducedMotion) {
-    return <>{children}</>;
+  // Count client navigations, so the first paint (server HTML) never starts
+  // hidden. Adjusting state during render is React's pattern for this.
+  const [lastPath, setLastPath] = useState(pathname);
+  const [navigations, setNavigations] = useState(0);
+  if (pathname !== lastPath) {
+    setLastPath(pathname);
+    setNavigations((n) => n + 1);
   }
 
   return (
-    <AnimatePresence mode="popLayout" initial={false}>
-      <m.div key={pathname} variants={pageVariants} initial="initial" animate="enter" exit="exit">
-        {children}
-      </m.div>
-    </AnimatePresence>
+    <m.div
+      key={pathname}
+      variants={pageVariants}
+      initial={navigations === 0 || reduced ? false : "initial"}
+      animate="enter"
+    >
+      {children}
+    </m.div>
   );
 }

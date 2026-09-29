@@ -1,14 +1,15 @@
 import { Resume } from "@/data/types";
+import { SITE_CONFIG } from "@/../content/site";
 
 export const RESUME: Resume = {
   name: "Jay Hemnani",
   tagline: "Software, Data and ML Engineer",
   summary: "End-to-end builder across data pipelines, ML systems, and distributed backends. Production experience spanning real-time streaming architectures, computer vision research, and full-stack applications, taking prototypes to production quickly.",
-  location: "Gujarat, India (Open to Relocate)",
+  location: "Gujarat, India",
   contact: {
-    email: "jayhemnani992000@gmail.com",
-    github: "https://github.com/jayhemnani9910",
-    linkedin: "https://linkedin.com/in/jayhemnani",
+    email: SITE_CONFIG.social.email,
+    github: SITE_CONFIG.social.github,
+    linkedin: SITE_CONFIG.social.linkedin,
   },
   coreCompetencies: [
     "Data pipeline design, ETL/ELT workflows, and streaming architectures",
