@@ -2,6 +2,7 @@
    Verbatim copy of the content; no em-dashes introduced. */
 
 import { WEBMCP_TOOL_COUNT } from '@/lib/webmcp-tools';
+import type { ArchComponent as WireComponent } from '@/lib/fde-payload';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -16,14 +17,8 @@ export interface DecompItem {
   why: string;
 }
 
-export interface ArchComponent {
-  id: string;
-  name: string;
-  kind: 'ui' | 'service' | 'agent' | 'data' | 'external';
-  x: number;
-  y: number;
-  sub?: string;
-}
+/** The server's component once the route has turned its col/row into pixels. */
+export type ArchComponent = Omit<WireComponent, 'col' | 'row' | 'x' | 'y'> & { x: number; y: number };
 
 export interface ArchEdge {
   from: string;
@@ -65,7 +60,7 @@ export interface Receipt {
   project: string;
   desc: string;
   note?: string;
-  link?: { label: string; href: string };
+  links?: { label: string; href: string }[];
 }
 
 export interface Phase {
@@ -99,7 +94,7 @@ export const NARRATION: Record<string, NarrationLine[]> = {
     { who: 'sys', text: "scope mode • not asking what your budget is. asking what kills this project if you don't decide." },
   ],
   decomp: [
-    { who: 'jay', text: "Five subproblems. Each one has a clean boundary, clean enough that you could give it to a different engineer and they'd know what done means." },
+    { who: 'jay', text: "The subproblems. Each one has a clean boundary, clean enough that you could give it to a different engineer and they'd know what done means." },
     { who: 'sys', text: "decomposition mode • this is the exact muscle the FDE \"decomposition\" interview tests." },
   ],
   arch: [
@@ -111,7 +106,7 @@ export const NARRATION: Record<string, NarrationLine[]> = {
     { who: 'sys', text: "sprint mode • every row has a measurable deliverable. \"plan a meeting\" doesn't count." },
   ],
   risks: [
-    { who: 'jay', text: "What I'm not telling your boss in the SOW. What I'm telling YOU now because if it bites us I want you to remember I said it." },
+    { who: 'jay', text: "The risks I'd name in the SOW. I'm telling YOU now because if one bites us I want you to remember I said it." },
     { who: 'sys', text: "risk register • specific to YOUR problem, not generic AI risks." },
   ],
   receipts: [
@@ -129,28 +124,31 @@ export const RECEIPTS: Receipt[] = [
     project: 'ELITE HOTEL GROUP · DATA ANALYST',
     desc: "Defined metrics and SLAs in working sessions with finance and operations. The clarifying-questions muscle this phase uses is the same muscle that turned vague \"we need better reporting\" into a structured forecasting + ETL system.",
     note: "Internal stakeholders, not external customers. Relevant practice, not full FDE-grade.",
-    link: { label: 'jayhemnani.in/resume', href: 'https://jayhemnani.in/resume' },
+    links: [{ label: 'jayhemnani.in/resume', href: 'https://jayhemnani.in/resume' }],
   },
   {
     phase: 'PHASE 02 · DECOMPOSE',
     title: 'Turning a vague spec into a working multi-agent system.',
     project: 'CAG DEEP RESEARCH',
     desc: "Built a 5-agent LangGraph research system in 10 days from a rough problem statement. Hexagonal architecture, verification loops, local + cloud LLM fallback. This is the decomposition this simulation just did, but on a real ambiguous brief.",
-    link: { label: 'github.com/jayhemnani9910', href: 'https://github.com/jayhemnani9910' },
+    links: [{ label: 'github.com/jayhemnani9910', href: 'https://github.com/jayhemnani9910' }],
   },
   {
     phase: 'PHASE 03 · ARCHITECT',
     title: 'Services · data flows · contracts · failure boundaries.',
-    project: 'KAYAK + AIRBNB CLONES',
-    desc: "Kayak metasearch: 3-tier distributed architecture. Node/Express services behind an API gateway, polyglot persistence (MySQL/Mongo/Redis), Kafka event streaming, Python FastAPI AI layer. Airbnb on Kubernetes microservices. The substrate FDE deployments run on.",
-    link: { label: 'kayak + airbnb on github', href: 'https://github.com/jayhemnani9910' },
+    project: 'KAYAK + AIRBNB CLONES · TEAM PROJECTS',
+    desc: "Both built with a team. Kayak metasearch: 3-tier distributed architecture. Node/Express services behind an API gateway, polyglot persistence (MySQL/Mongo/Redis), Kafka event streaming, Python FastAPI AI layer. Airbnb on Kubernetes microservices. The substrate FDE deployments run on.",
+    links: [
+      { label: 'kayak case study', href: '/projects/kayak-distributed' },
+      { label: 'airbnb case study', href: '/projects/airbnb-distributed' },
+    ],
   },
   {
     phase: 'PHASE 04 · PLAN',
     title: 'Shipping zero-to-something-working fast.',
     project: 'WEBMCP PORTFOLIO + ANTHROPIC SDK PR',
     desc: `Made jayhemnani.in agent-queryable via the proposed WebMCP browser API (a W3C Community Group draft): ${WEBMCP_TOOL_COUNT} tools, in production, on the surface FDE postings now call table-stakes. Separately: a merged PR into the Anthropic MCP Python SDK. Both are about shipping precise work fast in unfamiliar code.`,
-    link: { label: 'see the tools an agent can call', href: '/projects/webmcp-portfolio' },
+    links: [{ label: 'see the tools an agent can call', href: '/projects/webmcp-portfolio' }],
   },
   {
     phase: 'PHASE 05 · RISKS + EVALS',
@@ -158,7 +156,7 @@ export const RECEIPTS: Receipt[] = [
     project: "WHAT I'M ACTIVELY BUILDING",
     desc: "An eval harness on CAG Deep Research: 100 automated tests scoring hallucination, context adherence, token cost. Also a short technical post on MCP failure modes in production. The Day-2 ops thinking this phase used, made explicit and external.",
     note: "In progress, not yet shipped. Calling it out because pretending it's done would defeat the point of this whole simulation.",
-    link: { label: 'follow on github', href: 'https://github.com/jayhemnani9910' },
+    links: [{ label: 'follow on github', href: 'https://github.com/jayhemnani9910' }],
   },
 ];
 
@@ -197,7 +195,7 @@ export const PRESETS: Preset[] = [
         { id: 'cls', name: 'Classifier', kind: 'agent', x: 500, y: 60, sub: 'route + severity' },
         { id: 'que', name: 'Routing queue', kind: 'data', x: 720, y: 60, sub: 'by team + priority' },
         { id: 'rag', name: 'RAG draft agent', kind: 'agent', x: 280, y: 220, sub: 'docs + past tickets' },
-        { id: 'kb', name: 'Knowledge index', kind: 'data', x: 60, y: 220, sub: 'docs · resolved · embeddings' },
+        { id: 'kb', name: 'Knowledge index', kind: 'data', x: 60, y: 220, sub: 'docs · resolved tickets' },
         { id: 'ui', name: 'Agent console', kind: 'ui', x: 500, y: 220, sub: 'approve · edit · reject' },
         { id: 'evl', name: 'Eval harness', kind: 'service', x: 720, y: 220, sub: 'sample · score · alert' },
       ],
@@ -437,7 +435,7 @@ export interface ProofItem {
   title: ProofTitle;
   body: string;
   stack: string[];
-  link: { label: string; href: string };
+  links: { label: string; href: string }[];
 }
 
 export const PROOFS: ProofItem[] = [
@@ -448,7 +446,7 @@ export const PROOFS: ProofItem[] = [
     title: { pre: 'Vague spec -> working multi-agent in ', em: '10 days', post: '.' },
     body: 'Five-agent LangGraph research system, built from a rough problem statement. Hexagonal architecture, verification loops, local + cloud LLM fallback.',
     stack: ['LangGraph', '5 agents', 'hexagonal arch', 'verification'],
-    link: { label: 'github.com/jayhemnani9910', href: 'https://github.com/jayhemnani9910' },
+    links: [{ label: 'github.com/jayhemnani9910', href: 'https://github.com/jayhemnani9910' }],
   },
   {
     id: 'II',
@@ -457,7 +455,7 @@ export const PROOFS: ProofItem[] = [
     title: { pre: 'Made my own site ', em: 'agent-queryable', post: ' via WebMCP.' },
     body: `${WEBMCP_TOOL_COUNT} tools in production. Early implementation on the exact surface OpenAI / Anthropic / Google FDE postings now call table-stakes.`,
     stack: ['WebMCP (W3C CG draft)', `${WEBMCP_TOOL_COUNT} tools`, 'production'],
-    link: { label: 'see the tools an agent can call', href: '/projects/webmcp-portfolio' },
+    links: [{ label: 'see the tools an agent can call', href: '/projects/webmcp-portfolio' }],
   },
   {
     id: 'III',
@@ -466,15 +464,18 @@ export const PROOFS: ProofItem[] = [
     title: { pre: 'Walked into unfamiliar code and ', em: 'left it better', post: '.' },
     body: "A merged PR into the Anthropic MCP Python SDK. Also navigated vLLM (200k+ LOC) for a separate investigation. The exact muscle FDEs use in customer code.",
     stack: ['Anthropic SDK', 'vLLM (200k+ LOC)', 'merged'],
-    link: { label: 'modelcontextprotocol/python-sdk', href: 'https://github.com/modelcontextprotocol/python-sdk' },
+    links: [{ label: 'modelcontextprotocol/python-sdk', href: 'https://github.com/modelcontextprotocol/python-sdk' }],
   },
   {
     id: 'IV',
     cat: 'Distributed systems',
-    project: 'Kayak + Airbnb clones',
+    project: 'Kayak + Airbnb clones (team projects)',
     title: { pre: 'Services, data flows, contracts, ', em: 'failure boundaries', post: '.' },
     body: 'Kayak: 3-tier distributed architecture. Node/Express services behind API gateway, polyglot persistence (MySQL/Mongo/Redis), Kafka, FastAPI AI layer. Airbnb on Kubernetes microservices.',
     stack: ['Node', 'gateway', 'MySQL · Mongo · Redis', 'Kafka', 'FastAPI', 'K8s'],
-    link: { label: 'on github', href: 'https://github.com/jayhemnani9910' },
+    links: [
+      { label: 'kayak case study', href: '/projects/kayak-distributed' },
+      { label: 'airbnb case study', href: '/projects/airbnb-distributed' },
+    ],
   },
 ];

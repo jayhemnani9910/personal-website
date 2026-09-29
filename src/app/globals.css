@@ -15,36 +15,13 @@
 @source not "../../docs";
 
 /* ═══════════════════════════════════════════════════════════════
-   EDITORIAL DESIGN SYSTEM — warm paper, ink black, rust accent
-   Two families, per TWO READERS: Newsreader (display + body, what Jay says)
-   and JetBrains Mono (labels, what the machine sees)
+   FONTS AND BASE
+   Two families, per TWO READERS: Instrument Sans for what Jay says, Geist
+   Mono for what the machine sees. Colours live in the --tr-* token layer
+   below; nothing in this file defines a colour outside it.
    ═══════════════════════════════════════════════════════════════ */
 
 :root {
-  /* Older token names, kept because components still reference them by these
-     names (CodeBlock reads --border, --bg-tertiary, --text-muted). They are
-     aliases onto --tr-* now, declared once: --tr-* is already theme-aware on
-     this same element, so the alias resolves per theme without being repeated
-     in every theme block.
-
-     That repetition is what made them wrong before. These aliases pointed at
-     the warm editorial palette, and a custom property resolves var() where it
-     is DECLARED, so declaring them at :root froze the warm value here and the
-     page wrappers' overrides could never reach them. CodeBlock rendered warm
-     borders inside a cold page on every project route because of it. */
-  --bg-primary: var(--tr-bg);
-  --bg-secondary: var(--tr-surface-1);
-  --bg-tertiary: var(--tr-hairline);
-  --text-primary: var(--tr-text);
-  --text-secondary: var(--tr-text);
-  --text-muted: var(--tr-text-mute);
-  --border: var(--tr-hairline);
-
-  /* Shadows */
-  --shadow-sm: 0 1px 3px rgba(26, 24, 20, 0.05);
-  --shadow-md: 0 4px 12px rgba(26, 24, 20, 0.08);
-  --shadow-lg: 0 8px 24px rgba(26, 24, 20, 0.10);
-
   /* Typography
      Two families still, and the split is unchanged: one for what Jay says, one
      for what the machine sees. The first is a sans now rather than a serif,
@@ -55,40 +32,27 @@
   --font-sans: var(--ff-body);
   --font-mono: var(--ff-mono);
 
-  /* Radius */
-  --radius-sm: 8px;
-  --radius-md: 12px;
-  --radius-lg: 16px;
 
   /* Dark is the only default (ADR 0015): bare :root is the unauthenticated
      visitor's UA colour scheme, so it must say dark, not light. */
   color-scheme: dark;
 }
 
-/* Dark Theme — warm ink */
-[data-theme="dark"] {
-
-  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
-  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
-  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.5);
-
-  color-scheme: dark;
-}
 
 /* ═══════════════════════════════════════════════════════════════
    BASE
    ═══════════════════════════════════════════════════════════════ */
 
 html {
-  background: var(--bg-primary);
-  color: var(--text-primary);
+  background: var(--tr-bg);
+  color: var(--tr-text);
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 body {
   font-family: var(--font-sans);
-  background: var(--bg-primary);
-  color: var(--text-primary);
+  background: var(--tr-bg);
+  color: var(--tr-text);
   -webkit-font-smoothing: antialiased;
   line-height: 1.5;
 }
@@ -97,10 +61,8 @@ body {
    ACCESSIBILITY
    ═══════════════════════════════════════════════════════════════ */
 
-:focus-visible {
-  outline: 2px solid var(--tr-accent);
-  outline-offset: 2px;
-}
+/* In @layer base (below), so a utility such as -outline-offset-2 can still
+   adjust it where a control sits flush in an overflow-hidden grid. */
 
 .skip-link {
   position: fixed;
@@ -109,18 +71,22 @@ body {
   transform: translateX(-50%);
   z-index: 9999;
   padding: 12px 24px;
-  background: var(--bg-primary);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
+  background: var(--tr-bg);
+  border: 1px solid var(--tr-hairline);
+  border-radius: var(--tr-r-sm);
 }
 
 .skip-link:focus {
   top: 16px;
 }
 
+/* A 0.01ms duration alone leaves an infinite loop running (frozen at a random
+   phase or strobing), so the count goes to 1 as well: each loop ends on its
+   resting style. */
 @media (prefers-reduced-motion: reduce) {
-  * {
+  *, *::before, *::after {
     animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
 }
@@ -128,8 +94,9 @@ body {
 /* Reader mode (WebMCP switch_mode → 'reader'): a calm, static reading view.
    The motion primitives already drop out via usePrefersReducedMotion; this is
    the CSS backstop for anything animating purely in CSS. */
-[data-reader="on"] * {
+[data-reader="on"] *, [data-reader="on"] *::before, [data-reader="on"] *::after {
   animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
   transition-duration: 0.01ms !important;
   scroll-behavior: auto !important;
 }
@@ -226,10 +193,23 @@ html.lenis {
    PRINT
    ═══════════════════════════════════════════════════════════════ */
 
+/* Every element carries its own bg-tr-* / text-tr-* utility, so recolouring
+   <body> alone printed the dark theme. Printing swaps the tokens themselves:
+   white paper, black text, the readable light-theme accent. */
 @media print {
-  body {
-    background: white !important;
-    color: black !important;
+  :root, :root[data-theme="light"] {
+    --tr-bg: #FFFFFF;
+    --tr-surface-1: #FFFFFF;
+    --tr-surface-2: #F2F2F2;
+    --tr-hairline: #CCCCCC;
+    --tr-text: #000000;
+    --tr-text-mute: #333333;
+    --tr-text-faint: #555555;
+    --tr-accent: #7A6200;
+    --tr-accent-ink: #7A6200;
+    --tr-ok: #1B7A47;
+    --tr-warn: #A15818;
+    color-scheme: light;
   }
 }
 
@@ -299,35 +279,31 @@ html.lenis {
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   TWO READERS — token layer (redesign v3, Phase 1)
+   TWO READERS — the token layer, the site's one palette
 
-   New system, added alongside EDITORIAL above — NOT a replacement.
-   Eight pages still render on --paper/--ink/--accent/--rule and the
-   .editorial rules; those are untouched. Every token here is
-   prefixed --tr- so the two systems cannot collide while they
-   coexist. Values are measured, not eyeballed: see
-   redesign/TOKENS.md for the full WCAG contrast table and
-   src/lib/tokens.test.ts for the test that enforces it.
+   Every colour, size and duration is a --tr-* token. Contrast is
+   measured, not eyeballed: src/lib/tokens.test.ts holds every text
+   token to WCAG AA on every surface in both themes (ADR 0017).
 
    Dark is canonical: :root IS the dark palette, and
-   [data-theme="light"] overrides it — the inverse of the EDITORIAL
-   block above, where light is the :root default.
+   [data-theme="light"] overrides it.
    ═══════════════════════════════════════════════════════════════ */
 
 :root {
   /* ---- color: dark (canonical) ----
      Promoted from the .home-v4 scope on 2026-09-02, see ADR 0014. The accent
-     is yellow now; --tr-accent keeps its slot name for the moment. The palette
-     matches the design export exactly; ADR 0015 records the 15 pairs that fall
-     below AA as a result and why that was accepted. */
+     is yellow now; --tr-accent keeps its slot name for the moment. It is a
+     FILL colour (buttons, borders, rules, the selection); words and glyphs use
+     --tr-accent-ink (ADR 0016). Every text token clears AA (ADR 0017). */
   --tr-bg: #0B0C0F;
   --tr-surface-1: #111319;
   --tr-surface-2: #181B22;
   --tr-hairline: #23272F;
   --tr-text: #EDEFF3;
   --tr-text-mute: #98A0AC;
-  /* The design's own value. 3.39:1 on --tr-bg, below AA, accepted in ADR 0015. */
-  --tr-text-faint: #5F6673;
+  /* Lifted from the design's #5F6673 (3.39:1) to clear AA: 5.33 / 5.06 / 4.70
+     on bg / surface-1 / surface-2 (ADR 0017). */
+  --tr-text-faint: #7E8694;
   --tr-accent: #F4D53A;
   --tr-accent-hover: #FFE066;
   /* Accent-coloured TEXT. Split from --tr-accent because that token is tuned
@@ -441,7 +417,8 @@ html.lenis {
   --tr-hairline: #DADAD3;
   --tr-text: #111318;
   --tr-text-mute: #5A606B;
-  --tr-text-faint: #8B919B;
+  /* Darkened for AA (ADR 0017): 4.91 / 5.37 / 4.53. */
+  --tr-text-faint: #656B75;
   --tr-accent: #B08F00;
   --tr-accent-hover: #C9A400;
   /* 5.38:1 on bg, 5.87:1 on surface-1, 4.96:1 on surface-2. See the dark note. */
@@ -452,8 +429,9 @@ html.lenis {
      near-black gives 5.99:1 and 7.78:1, so the site's most prominent text pair
      stays above AA even though the palette as a whole no longer does. */
   --tr-on-accent: #111318;
-  --tr-ok: #1E8A50;
-  --tr-warn: #B8651B;
+  /* Both darkened for AA (ADR 0017): ok 4.90 / 5.36 / 4.52, warn 4.90 / 5.35 / 4.51. */
+  --tr-ok: #1B7A47;
+  --tr-warn: #A15818;
   --tr-accent-soft: rgba(176, 143, 0, .14);
   color-scheme: light;
   --tr-shadow-card: 0 30px 80px -50px rgba(0, 0, 0, .35);
@@ -462,13 +440,29 @@ html.lenis {
 
 /* No `prefers-color-scheme` rule, deliberately. The design is dark-canonical:
    `:root` is dark for everyone and light is reached only through the toggle,
-   which persists in localStorage. See ADR 0015. */
+   which persists in localStorage. See ADR 0015.
+
+   The same rule for Tailwind variants: `dark:` would otherwise mean the OS
+   setting, and there is no `light:` at all. Both follow the site's theme.
+   Dark is anything not explicitly light, so the no-JS default counts. */
+@custom-variant light (&:where([data-theme=light], [data-theme=light] *));
+@custom-variant dark (&:where(:root:not([data-theme=light]), :root:not([data-theme=light]) *));
+
+/* Windows High Contrast / forced colours replaces every colour with a system
+   colour, which erased the only cue for a selected chip, tab or rail entry.
+   An outline in the system highlight colour survives it. */
+@media (forced-colors: active) {
+  [aria-pressed="true"], [aria-selected="true"], [aria-current="location"], [aria-current="page"] {
+    outline: 2px solid Highlight;
+    outline-offset: -2px;
+  }
+}
 
 /* The v4 palette and type scale now live at :root above (ADR 0014's promotion
    step), so the scope class this concept shipped behind is gone. These are the
    element-level rules that came with it, unscoped now that every route is in
    this system. */
-::selection { background: var(--tr-accent); color: var(--tr-on-accent); }
+
 /* @layer base, not unlayered: Tailwind's utilities live in @layer utilities,
    which the framework declares after base, so a layered rule here still loses
    to any `text-tr-*` utility on the same <a>. Left unlayered, this plain
@@ -479,9 +473,13 @@ html.lenis {
    text no matter which --tr-text-* utility they carried). */
 @layer base {
   a { color: inherit; text-decoration: none; }
-  a:hover { color: var(--tr-accent); }
+  a:hover { color: var(--tr-accent-ink); }
+  /* The focus ring is drawn in accent-ink: the fill accent measured 2.84:1 in
+     light, under the 3:1 a focus indicator needs (WCAG 1.4.11). */
+  :focus-visible { outline: 2px solid var(--tr-accent-ink); outline-offset: 2px; }
+  ::selection { background: var(--tr-accent); color: var(--tr-on-accent); }
+  textarea::placeholder, input::placeholder { color: var(--tr-text-faint); }
 }
-textarea::placeholder, input::placeholder { color: var(--tr-text-faint); }
 
 @keyframes v4-caret { 50%, 100% { opacity: 0; } }
 @keyframes v4-line-in { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }

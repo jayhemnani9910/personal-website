@@ -3,7 +3,7 @@
 import { m } from "framer-motion";
 import type { ReactNode } from "react";
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
-import { EASE, DUR } from "@/lib/motion-tokens";
+import { EASE, DUR, REVEAL_INSET } from "@/lib/motion-tokens";
 import { DividerBuddy } from "./DividerBuddy";
 
 // framer-motion's `ease` prop wants an exact 4-tuple, not the `number[]` a
@@ -19,8 +19,8 @@ interface RevealSectionProps {
   className?: string;
   /**
    * Position of this section's opening rule among the page's five, if it has
-   * one. Buddy stands on whichever rule belongs to the section being read, and
-   * this wrapper is where he goes: its top edge and the section's rule are the
+   * one. Buddy stands on the last rule to enter the viewport, and this wrapper
+   * is where he goes: its top edge and the section's rule are the
    * same line, so the slot needs no measurement. Omit it and nothing renders.
    */
   divider?: number;
@@ -45,7 +45,7 @@ export function RevealSection({ className, divider, children }: RevealSectionPro
       initial={{ opacity: 0, y: 28 }}
       animate={reduced ? shown : undefined}
       whileInView={reduced ? undefined : shown}
-      viewport={{ once: true, margin: "0px 0px -12% 0px" }}
+      viewport={{ once: true, margin: `0px 0px ${REVEAL_INSET} 0px` }}
       transition={reduced ? { duration: 0 } : { duration: DUR.slow, ease: CUBIC_EASE }}
     >
       {slot}

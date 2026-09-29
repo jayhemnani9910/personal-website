@@ -1,6 +1,10 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { act, fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { FdeConsole } from "./FdeConsole";
+
+// jsdom implements no layout, so it has no scrollIntoView. The console scrolls
+// the panel into view 80ms after a run opens it.
+Element.prototype.scrollIntoView = () => {};
 
 // The console talks to /api/fde-sim, so every path below is a fetch outcome.
 // These are the branches a visitor actually hits when something is wrong, and
@@ -56,7 +60,8 @@ describe("FdeConsole failure paths", () => {
     render(<FdeConsole />);
     submit("a support team drowning in tickets");
 
-    await waitFor(() => expect(screen.getByRole("alert")).toBeDefined());
+    await waitFor(() => expect(screen.getByRole("alert").textContent).toMatch(/lost the connection/i));
+    expect(screen.getByRole("alert").textContent).not.toMatch(/trouble parsing/i);
     expect(screen.getByRole("button", { name: /run sim/i })).toBeDefined();
   });
 
@@ -87,12 +92,19 @@ describe("FdeConsole failure paths", () => {
 // can be read at about 13s instead of the whole answer at about 21s. These
 // cover what the console has to get right for that to be worth anything.
 
-/** A fetch whose body yields the given SSE text in the given chunks. */
-function mockStream(chunks: string[], status = 200) {
+/**
+ * A fetch whose body yields the given SSE text in the given chunks. With
+ * `hang`, the body then stays open, as a run still generating does.
+ */
+function mockStream(chunks: string[], status = 200, { hang = false } = {}) {
   const queue = [...chunks];
   const reader = {
-    read: async () =>
-      queue.length ? { done: false, value: queue.shift()! } : { done: true, value: undefined },
+    read: () =>
+      queue.length
+        ? Promise.resolve({ done: false, value: queue.shift()! })
+        : hang
+          ? new Promise<never>(() => {})
+          : Promise.resolve({ done: true, value: undefined }),
   };
   const f = vi.fn().mockResolvedValue({
     ok: status >= 200 && status < 300,
@@ -120,13 +132,15 @@ describe("FdeConsole streaming", () => {
 
   // The whole point: content on screen at the first section, not the last.
   it("shows the simulation on the first section rather than waiting for done", async () => {
-    mockStream([frame("section", { key: "scope", value: SCOPE })]);
+    mockStream([frame("section", { key: "scope", value: SCOPE })], 200, { hang: true });
     render(<FdeConsole />);
     submit("a support team drowning in tickets");
 
     await waitFor(() => expect(screen.getByText(SCOPE[0].q)).toBeDefined());
-    // No "done" was ever sent, so this is genuinely mid-stream.
+    // No "done" was ever sent and the body is still open, so this is
+    // genuinely mid-stream.
     expect(screen.getByRole("button", { name: /run sim/i })).toBeDefined();
+    expect(screen.getByRole("tab", { name: /risks/i }).getAttribute("title")).toBe("still generating");
   });
 
   it("leaves a section's tab shut until that section arrives", async () => {
@@ -188,5 +202,204 @@ describe("FdeConsole streaming", () => {
     submit("a support team drowning in tickets");
 
     await waitFor(() => expect(screen.getByRole("alert").textContent).toMatch(/needs a runtime/i));
+  });
+});
+
+// ── Error codes ──────────────────────────────────────────────────────────────
+// Each code the route sends means something different to do next, so each gets
+// its own message rather than all of them blaming the brief.
+
+describe("FdeConsole error messages", () => {
+  it("tells a visitor an upstream failure is not their brief's fault", async () => {
+    mockStream([frame("error", { error: "upstream" })]);
+    render(<FdeConsole />);
+    submit("a support team drowning in tickets");
+
+    await waitFor(() => expect(screen.getByRole("alert").textContent).toMatch(/try again in a minute/i));
+    expect(screen.getByRole("alert").textContent).not.toMatch(/more specific brief/i);
+  });
+
+  it("names the length limit on a bad-input answer", async () => {
+    mockFetch(400, { error: "bad-input" });
+    render(<FdeConsole />);
+    submit("a support team drowning in tickets");
+
+    await waitFor(() => expect(screen.getByRole("alert").textContent).toMatch(/2,000 characters/));
+  });
+
+  it("caps the brief at the length the route accepts", () => {
+    render(<FdeConsole />);
+    expect(screen.getByLabelText(/enter your problem brief/i).getAttribute("maxlength")).toBe("2000");
+  });
+
+  it("shows the run state in the console header", async () => {
+    mockStream([frame("error", { error: "parse" })]);
+    render(<FdeConsole />);
+    expect(document.body.textContent).toMatch(/● READY/);
+    submit("a support team drowning in tickets");
+
+    await waitFor(() => expect(document.body.textContent).toMatch(/● ERROR/));
+  });
+
+  it("does not pick a prepared example on filler words", async () => {
+    mockFetch(503, { error: "no-runtime" });
+    render(<FdeConsole />);
+    // Every word the sales preset shares with this brief is filler.
+    submit("We run a chain of clinics and doctors spend their evenings on notes. We want that time back.");
+
+    fireEvent.click(await screen.findByRole("button", { name: /closest prepared example/i }));
+    await waitFor(() => expect(document.body.textContent).toMatch(/DEMO/));
+    expect(document.body.textContent).not.toMatch(/sales engineers/i);
+  });
+});
+
+// ── Runs kept apart ──────────────────────────────────────────────────────────
+
+describe("FdeConsole runs", () => {
+  /** A stream the test feeds by hand, so it can act between sections. */
+  function controlledStream() {
+    const chunks: string[] = [];
+    let wake: (() => void) | null = null;
+    let ended = false;
+    const reader = {
+      read: async () => {
+        while (!chunks.length && !ended) await new Promise<void>((r) => (wake = r));
+        return chunks.length ? { done: false, value: chunks.shift()! } : { done: true, value: undefined };
+      },
+    };
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue({
+        ok: true,
+        status: 200,
+        body: { pipeThrough: () => ({ getReader: () => reader }) },
+        json: async () => ({}),
+      }),
+    );
+    return {
+      push: (chunk: string) => {
+        chunks.push(chunk);
+        wake?.();
+      },
+      end: () => {
+        ended = true;
+        wake?.();
+      },
+    };
+  }
+
+  const clickPreset = (chip: RegExp) => fireEvent.click(screen.getByRole("button", { name: chip }));
+
+  it("starts a live run after a preset from nothing", async () => {
+    mockStream([frame("section", { key: "scope", value: SCOPE })], 200, { hang: true });
+    render(<FdeConsole />);
+    clickPreset(/customer support deluge/i);
+    await waitFor(() => expect(document.body.textContent).toMatch(/DEMO/));
+
+    submit("a support team drowning in tickets");
+    await waitFor(() => expect(screen.getByText(SCOPE[0].q)).toBeDefined());
+
+    // Nothing of the preset may fill the tabs this run has not sent yet.
+    expect(document.body.textContent).toMatch(/\* LIVE/);
+    expect(screen.getByRole("tab", { name: /decompose/i })).toHaveProperty("disabled", true);
+    expect(screen.getByRole("tab", { name: /risks/i })).toHaveProperty("disabled", true);
+    expect(document.body.textContent).not.toMatch(/Of those ~2,000 tickets/);
+  });
+
+  it("stops generating when a run fails after some sections", async () => {
+    mockStream([frame("section", { key: "scope", value: SCOPE }), frame("error", { error: "parse" })]);
+    render(<FdeConsole />);
+    submit("a support team drowning in tickets");
+
+    await waitFor(() => expect(screen.getByRole("alert").textContent).toMatch(/trouble parsing/i));
+    // What arrived stays readable; what did not says so, rather than spinning.
+    expect(screen.getByText(SCOPE[0].q)).toBeDefined();
+    expect(screen.getByRole("tab", { name: /risks/i }).getAttribute("title")).toBe("not generated");
+    expect(document.body.textContent).not.toMatch(/STREAMING/);
+  });
+
+  it("treats a stream that ends without done as a failed run", async () => {
+    mockStream([frame("section", { key: "scope", value: SCOPE })]);
+    render(<FdeConsole />);
+    submit("a support team drowning in tickets");
+
+    await waitFor(() => expect(screen.getByRole("alert").textContent).toMatch(/lost the connection/i));
+    expect(screen.getByRole("tab", { name: /risks/i }).getAttribute("title")).toBe("not generated");
+  });
+
+  it("keeps a preset open when a later run fails before any section", async () => {
+    mockStream([frame("error", { error: "upstream" })]);
+    render(<FdeConsole />);
+    clickPreset(/contract review/i);
+    await waitFor(() => expect(document.body.textContent).toMatch(/DEMO/));
+
+    submit("a support team drowning in tickets");
+    await waitFor(() => expect(screen.getByRole("alert")).toBeDefined());
+    expect(screen.getByRole("tablist")).toBeDefined();
+    expect(document.body.textContent).toMatch(/DEMO/);
+  });
+
+  it("drops a live run's later sections once a preset is picked", async () => {
+    const stream = controlledStream();
+    render(<FdeConsole />);
+    submit("a support team drowning in tickets");
+    stream.push(frame("section", { key: "scope", value: SCOPE }));
+    await waitFor(() => expect(screen.getByText(SCOPE[0].q)).toBeDefined());
+
+    clickPreset(/field diagnostics/i);
+    await waitFor(() => expect(document.body.textContent).toMatch(/DEMO/));
+    await act(async () => {
+      stream.push(frame("section", { key: "decomposition", value: DECOMP }));
+      stream.end();
+    });
+
+    expect(document.body.textContent).not.toMatch(/\* LIVE/);
+    expect(screen.queryByRole("alert")).toBeNull();
+    expect(document.body.textContent).toMatch(/field technicians/i);
+  });
+
+  it("does not reopen the panel after exit", async () => {
+    const stream = controlledStream();
+    render(<FdeConsole />);
+    submit("a support team drowning in tickets");
+    stream.push(frame("section", { key: "scope", value: SCOPE }));
+    await waitFor(() => expect(screen.getByText(SCOPE[0].q)).toBeDefined());
+
+    fireEvent.click(screen.getByRole("button", { name: /exit sim/i }));
+    await act(async () => {
+      stream.push(frame("section", { key: "decomposition", value: DECOMP }));
+      stream.end();
+    });
+
+    expect(screen.queryByRole("tablist")).toBeNull();
+    expect(document.activeElement).toBe(screen.getByLabelText(/enter your problem brief/i));
+  });
+
+  it("opens every new run on the first tab", async () => {
+    render(<FdeConsole />);
+    clickPreset(/customer support deluge/i);
+    fireEvent.click(await screen.findByRole("tab", { name: /receipts/i }));
+    expect(screen.getByRole("tab", { name: /receipts/i }).getAttribute("aria-selected")).toBe("true");
+
+    clickPreset(/sales co-pilot/i);
+    await waitFor(() =>
+      expect(screen.getByRole("tab", { name: /scope/i }).getAttribute("aria-selected")).toBe("true"),
+    );
+  });
+
+  it("moves between tabs with the arrow keys", async () => {
+    render(<FdeConsole />);
+    clickPreset(/customer support deluge/i);
+    const tablist = await screen.findByRole("tablist");
+
+    fireEvent.keyDown(tablist, { key: "ArrowRight" });
+    const decompose = screen.getByRole("tab", { name: /decompose/i });
+    expect(decompose.getAttribute("aria-selected")).toBe("true");
+    expect(document.activeElement).toBe(decompose);
+    // One tab stop for the whole list.
+    expect(screen.getAllByRole("tab").filter((t) => t.tabIndex === 0)).toHaveLength(1);
+
+    fireEvent.keyDown(tablist, { key: "End" });
+    expect(screen.getByRole("tab", { name: /receipts/i }).getAttribute("aria-selected")).toBe("true");
   });
 });

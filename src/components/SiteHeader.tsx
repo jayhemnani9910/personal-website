@@ -25,7 +25,7 @@ const MONO = "font-[family-name:var(--ff-mono)] text-[length:var(--tr-t-mono)]";
 // Driven by the attribute rather than by state, for the same reason ThemeGlyph
 // is: the server cannot know the theme, so a state-driven transform mismatched
 // on hydration for every light-theme visitor.
-const ROTATE_IN_LIGHT = "[[data-theme=light]_&]:rotate-180";
+const ROTATE_IN_LIGHT = "light:rotate-180";
 
 /** `meta` is the page's own count line, shown to the left of the theme toggle. */
 export function SiteHeader({ meta }: { meta?: string }) {

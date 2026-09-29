@@ -3,11 +3,16 @@ import Link from "next/link";
 import type { Route } from "next";
 import { METHOD, COPY } from "@/data/home";
 
-const MONO = 'font-[family-name:var(--ff-mono)] text-[length:var(--tr-t-mono)] tracking-[.1em] text-tr-text-mute';
+// No colour in this constant: an element with two text-tr-* colours gets
+// whichever Tailwind emits last, not whichever is written last.
+const MONO_TYPE = 'font-[family-name:var(--ff-mono)] text-[length:var(--tr-t-mono)] tracking-[.1em]';
 
 /** `children` is the WCA cube card slot, a client component owned by another agent. */
 export function Method({ children }: { children: ReactNode }) {
-  const [methodH2Lead, methodH2Rest] = COPY.methodH2.split(", ");
+  // Split at the first ", " only, so a later comma stays in the second line.
+  const comma = COPY.methodH2.indexOf(", ");
+  const methodH2Lead = COPY.methodH2.slice(0, comma);
+  const methodH2Rest = COPY.methodH2.slice(comma + 2);
 
   return (
     <section
@@ -36,7 +41,7 @@ export function Method({ children }: { children: ReactNode }) {
             key={m.n}
             className="group bg-tr-surface-1 hover:bg-tr-surface-2 transition-colors p-6 min-h-[210px] flex flex-col gap-4"
           >
-            <span className={`${MONO} text-tr-accent`}>{m.n}</span>
+            <span className={`${MONO_TYPE} text-tr-accent-ink`}>{m.n}</span>
             {/* --tr-t-h3 computes to 19.2px at 1280px where the comp draws this
                 card heading at 17.92px, so it gets its own fluid token
                 (--tr-t-card-h) rather than the h3 token, which stays reserved
@@ -55,7 +60,7 @@ export function Method({ children }: { children: ReactNode }) {
               data-cursor="OPEN"
               className="mt-auto font-[family-name:var(--ff-mono)] text-[length:var(--tr-t-mono)] tracking-normal text-tr-text-mute hover:text-tr-accent-ink"
             >
-              ← {m.from}
+              <span aria-hidden="true">←</span> {m.from}
             </Link>
           </li>
         ))}

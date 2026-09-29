@@ -1,10 +1,15 @@
 import { z } from "zod";
 
+// Every object schema here is strict: an unknown key fails the parse instead of
+// being silently dropped, so a misspelt or retired field (ADR 0004's
+// `architecture` block, a component `description`) breaks the build rather
+// than vanishing from the page.
+
 // ============================================================================
 // CODE SNIPPET SCHEMA (for technical deep dives)
 // Supports various field name combinations
 // ============================================================================
-const CodeSnippetSchema = z.object({
+const CodeSnippetSchema = z.strictObject({
     title: z.string().optional(),
     label: z.string().optional(),
     language: z.string().optional(),
@@ -16,7 +21,7 @@ const CodeSnippetSchema = z.object({
 // Supports various field name combinations from different agents
 const LearningSchema = z.union([
     z.string(),
-    z.object({
+    z.strictObject({
         insight: z.string().optional(),
         learning: z.string().optional(),
         lesson: z.string().optional(),
@@ -28,7 +33,7 @@ const LearningSchema = z.union([
 // Component can be a string or structured object
 const ComponentSchema = z.union([
     z.string(),
-    z.object({
+    z.strictObject({
         name: z.string(),
         purpose: z.string().optional(),
         details: z.string().optional(),
@@ -36,7 +41,7 @@ const ComponentSchema = z.union([
 ]);
 
 // Key decision supports various field name variations
-const KeyDecisionSchema = z.object({
+const KeyDecisionSchema = z.strictObject({
     decision: z.string(),
     reasoning: z.string().optional(),
     rationale: z.string().optional(),
@@ -47,7 +52,7 @@ const KeyDecisionSchema = z.object({
 // ============================================================================
 // DEEP DIVE SCHEMA (progressive disclosure content)
 // ============================================================================
-const DeepDiveSchema = z.object({
+const DeepDiveSchema = z.strictObject({
     // Section 1: Extended problem context (why this matters)
     context: z.string().optional(),
 
@@ -58,12 +63,15 @@ const DeepDiveSchema = z.object({
         z.string(),
         z.array(ComponentSchema)
     ]).optional(),
-    // dataFlow can be a string or an array of objects with step/detail
+    // dataFlow can be a string or an array of objects with step/detail.
+    // `component` names the entry in `components` that the step shows, by its
+    // exact name (content.test.ts checks that every one resolves).
     dataFlow: z.union([
         z.string(),
-        z.array(z.object({
+        z.array(z.strictObject({
             step: z.string(),
             detail: z.string().optional(),
+            component: z.string().optional(),
         }))
     ]).optional(),
 
@@ -80,7 +88,7 @@ const DeepDiveSchema = z.object({
     ]).optional(),
 
     // Section 5: Results deep dive
-    metrics: z.array(z.object({
+    metrics: z.array(z.strictObject({
         value: z.string(),
         label: z.string(),
         context: z.string().optional(),
@@ -99,7 +107,7 @@ const DeepDiveSchema = z.object({
 // ============================================================================
 // PROJECT SCHEMA
 // ============================================================================
-export const ProjectSchema = z.object({
+export const ProjectSchema = z.strictObject({
     id: z.string(),
     title: z.string(),
     summary: z.string(),
@@ -113,7 +121,9 @@ export const ProjectSchema = z.object({
     impact: z.array(z.string()),
     priority: z.number().optional(),
     github: z.string().url().optional(),
-    links: z.record(z.string(), z.string()).nullable().transform(v => v || undefined).optional(),
+    // These go straight into href. Only http(s): plain .url() would still
+    // accept a javascript: URL.
+    links: z.record(z.string(), z.url({ protocol: /^https?$/ })).nullable().transform(v => v || undefined).optional(),
     deepDive: DeepDiveSchema.optional(),
 });
 
@@ -124,10 +134,12 @@ export type Project = z.infer<typeof ProjectSchema>;
 // ============================================================================
 // BLOG POST SCHEMA
 // ============================================================================
-export const PostSchema = z.object({
+export const PostSchema = z.strictObject({
     slug: z.string(),
     title: z.string(),
-    date: z.string(),
+    // YYYY-MM-DD. gray-matter turns an unquoted `date: 2026-10-01` into a Date,
+    // so that form is accepted too and normalised to the same string.
+    date: z.union([z.iso.date(), z.date().transform((d) => d.toISOString().slice(0, 10))]),
     summary: z.string(),
     excerpt: z.string().optional(),
     tags: z.array(z.string()).default([]),
@@ -138,8 +150,14 @@ export const PostSchema = z.object({
 
 export type Post = z.infer<typeof PostSchema>;
 
+// Counts the prose only: code fences and tags (inline SVG markup included,
+// whose attributes would otherwise count as words) are dropped first.
 export function calculateReadingTime(content: string): number {
     const wordsPerMinute = 200;
-    const wordCount = content.split(/\s+/).length;
+    const prose = content
+        .replace(/```[\s\S]*?```/g, " ")
+        .replace(/<[^>]*>/g, " ")
+        .trim();
+    const wordCount = prose ? prose.split(/\s+/).length : 0;
     return Math.ceil(wordCount / wordsPerMinute);
 }

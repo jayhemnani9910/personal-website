@@ -25,14 +25,18 @@ deepDive:
   architecture: "Three encoder branches feed one fusion layer. ProtT5 encodes the amino-acid sequence, a 1D SpectralCNN encodes the VDOS spectrum, and a ChemBERTa-plus-fingerprint encoder handles substrate SMILES. The VDOS spectrum is produced upstream: a structure goes through ANM or GNM normal mode analysis with ProDy, the eigenvalues are converted to vibrational frequencies, and Lorentzian broadening turns the discrete modes into a continuous 1000-point spectrum. TriModalFusion projects all three branches to a shared dimension and combines them with softmax gate weights from a small gating network, so each modality's contribution is learned per sample. A regression head maps the fused vector to log(k_cat), and the gate weights are returned alongside for inspection. The Quantum Data Decoder core also carries graph (GATv2) and CNN encoders and Novozymes/CAFA5 dataset loaders for the stability and function tasks."
   dataFlow:
     - step: "Structure to normal mode analysis"
+      component: "ANMAnalyzer / GNMCalculator"
       detail: "ANM/GNM (ProDy) coarse-grains the protein to a C-alpha spring network and solves for the lowest normal modes."
     - step: "Modes to VDOS spectrum"
+      component: "VibroEnzymePipeline (VDOS engine)"
       detail: "Eigenvalues convert to vibrational frequencies; Lorentzian broadening yields a continuous 1000-point density-of-states spectrum."
     - step: "Three encoders run in parallel"
       detail: "ProtT5 on sequence, SpectralCNN on the VDOS spectrum, ChemBERTa + DRFP on substrate SMILES."
     - step: "Gated tri-modal fusion"
+      component: "TriModalFusion"
       detail: "A gating network emits softmax weights over the three branches; each is projected to a shared dimension and combined."
     - step: "Regression head to log(k_cat)"
+      component: "VibroPredictHybrid"
       detail: "The fused vector predicts catalytic turnover; the per-sample gate weights are returned for interpretability."
   components:
     - name: "ANMAnalyzer / GNMCalculator"

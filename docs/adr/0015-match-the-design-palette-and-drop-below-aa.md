@@ -1,6 +1,7 @@
 # 0015. Match the design palette and drop below AA
 
-- **Status:** Accepted
+- **Status:** Superseded
+- **Superseded by:** [ADR 0017](0017-lift-the-palette-to-wcag-aa.md)
 - **Date:** 2026-09-03
 - **Supersedes (in part):** [ADR 0001](0001-two-readers-as-the-single-design-concept.md) (the theme default no longer follows `prefers-color-scheme`; dark is unconditional now, only the toggle changes it) and [ADR 0014](0014-adopt-the-v4-home-as-a-scoped-island.md) (the four lifted values this record names are reverted to the design's own, so 0014's "accessibility at 100 is a constraint the design does not get to override" no longer holds)
 

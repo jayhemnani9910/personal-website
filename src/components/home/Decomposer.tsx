@@ -7,8 +7,9 @@ import { FEATURED, PRESETS, COPY } from "@/data/home";
 import type { DecomposeOutput } from "@/data/home";
 import { BRIEF_MAX, closestPreset, findPreset } from "@/lib/presets";
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
+import { useShellIntent } from "@/lib/shell-intent";
 
-type Engine = "idle" | "thinking" | "preset" | "model" | "offline";
+type Engine = "idle" | "thinking" | "preset" | "model" | "offline" | "limited" | "too_long";
 
 type ColumnKey = "scope" | "architecture" | "plan" | "risks";
 
@@ -22,12 +23,24 @@ const COLUMNS: { key: ColumnKey; n: string; label: string }[] = [
   { key: "risks", n: "03", label: "RISKS" },
 ];
 
+// The dot is drawn separately and hidden from assistive tech, so the status
+// region below announces "live model", not "black circle live model".
 const ENGINE_META: Record<Engine, { text: string; className: string }> = {
   idle: { text: "idle", className: "text-tr-text-faint" },
-  thinking: { text: "● decomposing…", className: "text-tr-accent" },
-  preset: { text: "● preset", className: "text-tr-ok" },
-  model: { text: "● live model", className: "text-tr-ok" },
-  offline: { text: "● closest preset (offline)", className: "text-tr-accent" },
+  thinking: { text: "decomposing…", className: "text-tr-accent-ink" },
+  preset: { text: "preset", className: "text-tr-ok" },
+  model: { text: "live model", className: "text-tr-ok" },
+  offline: { text: "closest preset (offline)", className: "text-tr-accent-ink" },
+  limited: { text: "closest preset (rate limited)", className: "text-tr-accent-ink" },
+  too_long: { text: "closest preset (brief too long)", className: "text-tr-accent-ink" },
+};
+
+// Each fallback says why the answer is a saved example, not a reading of the
+// brief: a network failure, the per-minute limit, or a brief over the cap.
+const FALLBACK_NOTE: Partial<Record<Engine, string>> = {
+  offline: COPY.offlineNote,
+  limited: COPY.limitedNote,
+  too_long: COPY.tooLongNote(BRIEF_MAX),
 };
 
 const LINE_ANIM = "animate-[v4-line-in_.4s_cubic-bezier(.16,1,.3,1)_both]";
@@ -37,6 +50,7 @@ const LINE_ANIM = "animate-[v4-line-in_.4s_cubic-bezier(.16,1,.3,1)_both]";
 // target for the v4:brief event below), and a second element sharing that id
 // would be invalid HTML. This id is only for the label association.
 const BRIEF_FIELD_ID = "brief-input";
+const BRIEF_COUNT_ID = "brief-count";
 
 export function Decomposer() {
   const reduced = usePrefersReducedMotion();
@@ -45,9 +59,15 @@ export function Decomposer() {
   const [out, setOut] = useState<DecomposeOutput | null>(null);
   const [shown, setShown] = useState(0);
   const revealTimer = useRef<ReturnType<typeof setInterval> | null>(null);
+  // Bumped by every run and by unmount. A model answer that comes back after
+  // a newer run started (or after the visitor left) sees a different number
+  // and is dropped instead of overwriting the newer output.
+  const runId = useRef(0);
 
   useEffect(() => {
+    const runs = runId;
     return () => {
+      runs.current += 1;
       if (revealTimer.current) clearInterval(revealTimer.current);
     };
   }, []);
@@ -71,6 +91,9 @@ export function Decomposer() {
   };
 
   const runWithText = async (text: string) => {
+    const id = ++runId.current;
+    if (revealTimer.current) clearInterval(revealTimer.current);
+    revealTimer.current = null;
     setEngine("thinking");
     setOut(null);
     setShown(0);
@@ -85,20 +108,27 @@ export function Decomposer() {
 
     let nextOut: DecomposeOutput;
     let nextEngine: Engine;
+    let fallback: Engine = "offline";
     try {
       const res = await fetch("/api/decompose", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ brief: text }),
       });
-      if (!res.ok) throw new Error(`status ${res.status}`);
+      if (!res.ok) {
+        const code = ((await res.json().catch(() => null)) as { error?: string } | null)?.error;
+        if (code === "rate_limited") fallback = "limited";
+        else if (code === "too_long") fallback = "too_long";
+        throw new Error(`status ${res.status}`);
+      }
       const body = (await res.json()) as { out: DecomposeOutput; engine: Engine };
       nextOut = body.out;
       nextEngine = body.engine;
     } catch {
       nextOut = closestPreset(text).out;
-      nextEngine = "offline";
+      nextEngine = fallback;
     }
+    if (id !== runId.current) return;
     setOut(nextOut);
     setEngine(nextEngine);
     startReveal();
@@ -122,8 +152,13 @@ export function Decomposer() {
     window.addEventListener("v4:brief", onExternalBrief);
     return () => window.removeEventListener("v4:brief", onExternalBrief);
   }, []);
+  useShellIntent("brief"); // a `brief` typed in the shell on another page
+
+  const thinking = engine === "thinking";
 
   const run = () => {
+    // One model call at a time: a double click would spend two rate-limit slots.
+    if (thinking) return;
     const text = brief.trim() || PRESETS[0].text;
     if (!brief.trim()) setBrief(text);
     runWithText(text);
@@ -142,6 +177,7 @@ export function Decomposer() {
   };
 
   const started = engine !== "idle";
+  const fallbackNote = out ? FALLBACK_NOTE[engine] : undefined;
   const matches =
     out && shown >= REVEAL_TOTAL
       ? out.match.map((id) => FEATURED.find((p) => p.id === id)).filter((p): p is (typeof FEATURED)[number] => !!p)
@@ -153,10 +189,13 @@ export function Decomposer() {
       style={{ boxShadow: "var(--tr-shadow-card)" }}
     >
       <div className="h-10 px-4 flex items-center gap-2 border-b border-tr-hairline font-mono text-[length:var(--tr-t-mono-xs)] text-tr-text-mute">
-        <span className="text-tr-accent">◆</span>
+        <span className="text-tr-accent-ink">◆</span>
         <span>decompose</span>
         <span className="text-tr-text-mute">· incoming brief</span>
-        <span className={`ml-auto ${ENGINE_META[engine].className}`}>{ENGINE_META[engine].text}</span>
+        <span role="status" className={`ml-auto ${ENGINE_META[engine].className}`}>
+          {engine !== "idle" && <span aria-hidden="true">● </span>}
+          {ENGINE_META[engine].text}
+        </span>
       </div>
 
       <div className="p-4">
@@ -170,8 +209,9 @@ export function Decomposer() {
           value={brief}
           onChange={(e) => setBrief(e.target.value)}
           onKeyDown={onBriefKey}
+          aria-describedby={BRIEF_COUNT_ID}
           placeholder="e.g. our support team is drowning in tickets and nobody knows which ones matter"
-          className="w-full resize-none border-0 outline-none bg-transparent text-tr-text text-[17px] leading-[var(--tr-lh-prose)]"
+          className="w-full resize-none border-0 bg-transparent text-tr-text text-[17px] leading-[var(--tr-lh-prose)] focus-visible:outline-offset-4"
         />
         <div className="flex flex-wrap items-center gap-2 mt-3">
           {PRESETS.map((p) => (
@@ -184,20 +224,35 @@ export function Decomposer() {
               {p.short}
             </button>
           ))}
+          {/* maxLength cuts a long paste silently; the count shows it happened. */}
+          <span
+            id={BRIEF_COUNT_ID}
+            className={`ml-auto font-mono text-[length:var(--tr-t-mono-xs)] tabular-nums ${
+              brief.length >= BRIEF_MAX ? "text-tr-accent-ink" : "text-tr-text-faint"
+            }`}
+          >
+            {brief.length}/{BRIEF_MAX}
+            <span className="sr-only"> characters</span>
+          </span>
+          {/* aria-disabled, not disabled: a disabled button drops keyboard focus. */}
           <button
             type="button"
             data-cursor="RUN"
             onClick={run}
-            className="ml-auto inline-flex items-center gap-2 h-[34px] px-4 rounded-[var(--tr-r-md)] bg-tr-accent text-tr-on-accent text-[12.5px] font-semibold"
+            aria-disabled={thinking}
+            className="inline-flex items-center gap-2 h-[34px] px-4 rounded-[var(--tr-r-md)] bg-tr-accent text-tr-on-accent text-[12.5px] font-semibold aria-disabled:opacity-60 aria-disabled:cursor-wait"
           >
-            Run <span className="font-mono font-normal opacity-70">⌘↵</span>
+            Run{" "}
+            <span aria-hidden="true" className="font-mono font-normal opacity-70">
+              ⌘↵
+            </span>
           </button>
         </div>
       </div>
 
       {started && (
         <div className="border-t border-tr-hairline bg-tr-bg">
-          <div className="grid gap-px bg-tr-hairline sm:grid-cols-2 lg:grid-cols-4">
+          <div aria-busy={thinking} className="grid gap-px bg-tr-hairline sm:grid-cols-2 lg:grid-cols-4">
             {COLUMNS.map((col, ci) => {
               const items = out ? out[col.key].filter((_, i) => ci * 3 + i < shown) : [];
               const active = (shown < REVEAL_TOTAL && Math.floor(shown / 3) === ci) || (engine === "thinking" && ci === 0);
@@ -205,7 +260,7 @@ export function Decomposer() {
                 <div key={col.key} className="bg-tr-bg p-4 min-h-[200px]">
                   <p
                     className={`m-0 mb-3 font-mono text-[length:var(--tr-t-mono-sm)] tracking-[.1em] ${
-                      active ? "text-tr-accent" : "text-tr-text-faint"
+                      active ? "text-tr-accent-ink" : "text-tr-text-faint"
                     }`}
                   >
                     {col.n} {col.label}
@@ -243,7 +298,10 @@ export function Decomposer() {
                   data-cursor="OPEN"
                   className="border-b border-tr-hairline pb-[1px] hover:border-tr-accent"
                 >
-                  {project.title} <span className="text-tr-text-faint">↗</span>
+                  {project.title}{" "}
+                  <span aria-hidden="true" className="text-tr-text-faint">
+                    ↗
+                  </span>
                 </Link>
               ))}
             </div>
@@ -257,9 +315,9 @@ export function Decomposer() {
         </p>
       )}
 
-      {engine === "offline" && out && (
-        <p className="m-0 border-t border-tr-hairline py-[.7rem] px-4 font-mono text-[length:var(--tr-t-mono)] text-tr-accent">
-          {COPY.offlineNote}
+      {fallbackNote && (
+        <p className="m-0 border-t border-tr-hairline py-[.7rem] px-4 font-mono text-[length:var(--tr-t-mono)] text-tr-accent-ink">
+          {fallbackNote}
         </p>
       )}
     </div>

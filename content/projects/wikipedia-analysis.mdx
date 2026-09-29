@@ -2,6 +2,7 @@
 title: "Wikipedia Analysis"
 summary: "URL → scrape → tokenize → top frequent words with visuals."
 role: "Concept"
+domain: "Student work"
 tags: ["python", "flask", "nlp", "web"]
 tech: ["Python", "Flask", "BeautifulSoup", "HTML/CSS"]
 challenge: "Quickly summarize long articles."
@@ -17,31 +18,36 @@ deepDive:
 
   components:
     - name: "Web Scraper"
-      description: "BeautifulSoup-based extractor that navigates Wikipedia's DOM structure to isolate article content from navigation, sidebars, and metadata. Handles various Wikipedia page layouts including disambiguation pages, redirect pages, and standard articles."
+      purpose: "BeautifulSoup-based extractor that navigates Wikipedia's DOM structure to isolate article content from navigation, sidebars, and metadata. Handles various Wikipedia page layouts including disambiguation pages, redirect pages, and standard articles."
 
     - name: "Text Processor"
-      description: "NLP pipeline that performs tokenization, lowercasing, stopword removal, and frequency analysis. Uses NLTK's stopword corpus extended with Wikipedia-specific terms like 'wikipedia', 'reference', 'edit' to filter out noise and focus on content-rich terms."
+      purpose: "NLP pipeline that performs tokenization, lowercasing, stopword removal, and frequency analysis. Uses NLTK's stopword corpus extended with Wikipedia-specific terms like 'wikipedia', 'reference', 'edit' to filter out noise and focus on content-rich terms."
 
     - name: "Visualization Engine"
-      description: "Generates bar charts and word clouds showing term frequencies. Uses Chart.js for interactive charts that allow users to hover over bars to see exact counts, making it easy to identify dominant themes at a glance."
+      purpose: "Generates bar charts and word clouds showing term frequencies. Uses Chart.js for interactive charts that allow users to hover over bars to see exact counts, making it easy to identify dominant themes at a glance."
 
     - name: "Flask API"
-      description: "Lightweight REST endpoint that accepts Wikipedia URLs, orchestrates the scraping and analysis pipeline, and returns JSON data containing top terms and their frequencies for frontend rendering."
+      purpose: "Lightweight REST endpoint that accepts Wikipedia URLs, orchestrates the scraping and analysis pipeline, and returns JSON data containing top terms and their frequencies for frontend rendering."
 
   dataFlow:
     - step: "User Input"
+      component: "Flask API"
       detail: "User submits Wikipedia article URL through the web interface. URL validation ensures it's a proper Wikipedia domain to prevent scraping arbitrary websites."
 
     - step: "Content Extraction"
+      component: "Web Scraper"
       detail: "BeautifulSoup fetches the page and parses the HTML, targeting the main content div (#mw-content-text) while excluding infoboxes, reference sections, and navigation elements to get pure article text."
 
     - step: "Text Normalization"
+      component: "Text Processor"
       detail: "Raw HTML is converted to plain text, stripped of special characters and numbers. Text is lowercased and split into individual tokens using whitespace and punctuation as delimiters."
 
     - step: "Filtering & Counting"
+      component: "Text Processor"
       detail: "Tokens are filtered against an expanded stopword list (common words like 'the', 'is', 'at' plus Wikipedia-specific terms). Remaining tokens are counted using a frequency distribution, with the top 20-30 terms selected for visualization."
 
     - step: "Visualization Rendering"
+      component: "Visualization Engine"
       detail: "Frequency data is passed to Chart.js which renders an interactive bar chart. The chart displays terms on the x-axis and occurrence counts on the y-axis, with colors indicating relative frequency intensity."
 
   keyDecisions:

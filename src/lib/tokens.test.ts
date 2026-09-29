@@ -3,7 +3,7 @@ import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 
-// Contrast guard for the palette (see redesign/TOKENS.md).
+// Contrast guard for the palette (ADR 0017: every text token clears AA).
 //
 // This test parses the REAL stylesheet. An earlier version mirrored the hexes
 // as literals in this file, which made it vacuous: setting --tr-accent to a
@@ -22,9 +22,9 @@ const CSS = readFileSync(
 /**
  * Pull the --tr-* declarations out of one rule block.
  *
- * globals.css contains TWO design systems while the redesign is in flight, so
- * there are several `:root` blocks. Only the Two Readers ones declare `--tr-`
- * tokens, hence the guard on the body.
+ * globals.css has more than one `:root` block (fonts, tokens, print). Only the
+ * token layer declares `--tr-` hex values outside @media print, hence the
+ * guard on the body and the exact selector match.
  */
 function paletteFor(selector: string): Record<string, string> {
   const out: Record<string, string> = {};
@@ -43,13 +43,10 @@ const LIGHT = paletteFor(':root[data-theme="light"]');
 
 const REQUIRED = ["bg", "surface-1", "surface-2", "text", "text-mute", "text-faint", "accent", "accent-ink", "accent-hover", "on-accent", "ok", "warn"] as const;
 const SURFACES = ["bg", "surface-1", "surface-2"] as const;
-// `ok` joined this list when the v4 system was promoted to :root (ADR 0014):
-// it is the live/verified green, and it carries text on all three surfaces.
-// `accent-ink` joined it when the work table's column headers went yellow: it
-// exists precisely because `accent` is a fill colour that fails as letterforms
-// in light, so the whole reason it is a separate token is a contrast one and it
-// has to be measured here or the split is decorative.
-const TEXT_TOKENS = ["text", "text-mute", "text-faint", "accent", "accent-ink", "ok", "warn"] as const;
+// Every token that colours words. `accent` is not one of them: it is the fill
+// colour (buttons, borders, rules), and words in the accent use `accent-ink`
+// (ADR 0016), which a test below enforces across src/.
+const TEXT_TOKENS = ["text", "text-mute", "text-faint", "accent-ink", "ok", "warn"] as const;
 const AA_MIN = 4.5;
 
 function channelLuminance(channel8bit: number): number {
@@ -75,7 +72,7 @@ describe("token parsing (guards the contrast suite against going vacuous)", () =
   it.each([
     ["dark", DARK],
     ["light", LIGHT],
-  ])("%s: parsed all 8 --tr- tokens out of globals.css", (theme, palette) => {
+  ])(`%s: parsed all ${REQUIRED.length} --tr- tokens out of globals.css`, (theme, palette) => {
     const missing = REQUIRED.filter((k) => !palette[k]);
     expect(missing, `${theme}: could not parse ${missing.join(", ")} from globals.css`).toEqual([]);
   });
@@ -227,128 +224,39 @@ for (const [theme, palette] of [["dark", DARK], ["light", LIGHT]] as const) {
   cases.push({ theme, fg: "on-accent", bg: "accent-hover", palette });
 }
 
-// The v4 home (ADR 0014) adds one foreground not present in the base
-// palettes: --tr-ok, a status colour used nowhere else. It is deliberately
-// NOT added to TEXT_TOKENS above: :root and :root[data-theme="light"] don't
-// declare --tr-ok, so contrastRatio would receive undefined and return NaN.
-
-// This used to assert 4.5:1 on every pair. ADR 0015 replaced that rule with the
-// design's exact palette, which puts 12 pairs below AA. Deleting the suite would
-// mean a future edit could drift the palette with nothing noticing, so it now
-// pins the measured ratio of every pair instead. A change of more than 0.05
-// fails, and RECORDED is the list of what we knowingly accepted.
-//
-// To change a colour on purpose: edit globals.css, run this file, and paste the
-// reported ratio in. The point is that it cannot happen by accident.
-const RECORDED: Record<string, number> = {
-  "dark:text on bg": 16.99,
-  "dark:text on surface-1": 16.13,
-  "dark:text on surface-2": 14.97,
-  "dark:text-mute on bg": 7.41,
-  "dark:text-mute on surface-1": 7.04,
-  "dark:text-mute on surface-2": 6.53,
-  "dark:text-faint on bg": 3.39,
-  "dark:text-faint on surface-1": 3.21,
-  "dark:text-faint on surface-2": 2.98,
-  "dark:accent on bg": 13.44,
-  "dark:accent on surface-1": 12.75,
-  "dark:accent on surface-2": 11.84,
-  // Same yellow as the accent in dark; the split only bites in light.
-  "dark:accent-ink on bg": 13.44,
-  "dark:accent-ink on surface-1": 12.75,
-  "dark:accent-ink on surface-2": 11.84,
-  "dark:ok on bg": 11.98,
-  "dark:ok on surface-1": 11.37,
-  "dark:ok on surface-2": 10.55,
-  "dark:warn on bg": 9.40,
-  "dark:warn on surface-1": 8.92,
-  "dark:warn on surface-2": 8.28,
-  "dark:on-accent on accent": 13.44,
-  "dark:on-accent on accent-hover": 15.00,
-  "light:text on bg": 17.01,
-  "light:text on surface-1": 18.58,
-  "light:text on surface-2": 15.68,
-  "light:text-mute on bg": 5.79,
-  "light:text-mute on surface-1": 6.32,
-  "light:text-mute on surface-2": 5.34,
-  "light:text-faint on bg": 2.90,
-  "light:text-faint on surface-1": 3.17,
-  "light:text-faint on surface-2": 2.68,
-  // The darker gold that exists so accent-coloured text is legible here: 5.38:1
-  // against the 2.84:1 the fill accent manages on the same background.
-  "light:accent-ink on bg": 5.38,
-  "light:accent-ink on surface-1": 5.87,
-  "light:accent-ink on surface-2": 4.96,
-  "light:accent on bg": 2.84,
-  "light:accent on surface-1": 3.10,
-  "light:accent on surface-2": 2.62,
-  "light:ok on bg": 4.00,
-  "light:ok on surface-1": 4.37,
-  "light:ok on surface-2": 3.69,
-  "light:warn on bg": 3.91,
-  "light:warn on surface-1": 4.27,
-  "light:warn on surface-2": 3.60,
-  "light:on-accent on accent": 5.99,
-  "light:on-accent on accent-hover": 7.78,
-};
-
-/** Pairs below AA, listed so the cost is visible in the test output. */
-const BELOW_AA = Object.entries(RECORDED)
-  .filter(([, r]) => r < AA_MIN)
-  .map(([k]) => k)
-  .sort();
-
-describe("Two Readers token contrast (pinned to ADR 0015, not to AA)", () => {
-  it.each(cases)("$theme: $fg on $bg holds its recorded ratio", ({ theme, fg, bg, palette }) => {
-    const key = `${theme}:${fg} on ${bg}`;
-    const recorded = RECORDED[key];
-    expect(recorded, `${key} has no recorded ratio; add one to RECORDED`).toBeDefined();
+describe("Two Readers token contrast (ADR 0017: WCAG AA everywhere)", () => {
+  it.each(cases)("$theme: $fg on $bg clears AA", ({ theme, fg, bg, palette }) => {
     const ratio = contrastRatio(palette[fg], palette[bg]);
-    expect(
-      ratio,
-      `${key} is ${ratio.toFixed(2)}, recorded ${recorded}. If this change was ` +
-        `deliberate, update RECORDED and say so in ADR 0015.`,
-    ).toBeCloseTo(recorded, 1);
+    expect(ratio, `${theme}: ${fg} on ${bg} is ${ratio.toFixed(2)}:1, under ${AA_MIN}:1`).toBeGreaterThanOrEqual(AA_MIN);
   });
 
-  // Guards the guard: a typo'd key would make the pin above vacuous for that
-  // pair, because `cases` and RECORDED would simply never meet.
-  it("records a ratio for every case the suite generates", () => {
-    const missing = cases
-      .map(({ theme, fg, bg }) => `${theme}:${fg} on ${bg}`)
-      .filter((k) => RECORDED[k] === undefined);
-    expect(missing, `RECORDED is missing: ${missing.join(", ")}`).toEqual([]);
-    expect(Object.keys(RECORDED)).toHaveLength(cases.length);
-  });
-
-  it("accepts exactly the 15 sub-AA pairs ADR 0015 signed off", () => {
-    expect(BELOW_AA).toEqual([
-      "dark:text-faint on bg",
-      "dark:text-faint on surface-1",
-      "dark:text-faint on surface-2",
-      "light:accent on bg",
-      "light:accent on surface-1",
-      "light:accent on surface-2",
-      "light:ok on bg",
-      "light:ok on surface-1",
-      "light:ok on surface-2",
-      "light:text-faint on bg",
-      "light:text-faint on surface-1",
-      "light:text-faint on surface-2",
-      "light:warn on bg",
-      "light:warn on surface-1",
-      "light:warn on surface-2",
-    ]);
-  });
-
-  // The Run button's label. The palette as a whole dropped below AA; this pair
-  // deliberately did not, and it is the one that would be worst to lose.
-  it("keeps the accent-background label above AA in both themes", () => {
-    for (const theme of ["dark", "light"] as const) {
-      for (const bg of ["accent", "accent-hover"] as const) {
-        const key = `${theme}:on-accent on ${bg}`;
-        expect(RECORDED[key], `${key} must stay >= ${AA_MIN}`).toBeGreaterThanOrEqual(AA_MIN);
-      }
+  // WCAG 1.4.11: a focus indicator needs 3:1 against what it sits on. The ring
+  // is drawn in accent-ink (globals.css, :focus-visible).
+  it.each(["dark", "light"] as const)("%s: the focus ring clears 3:1 on every surface", (theme) => {
+    const palette = theme === "dark" ? DARK : LIGHT;
+    for (const bg of SURFACES) {
+      expect(contrastRatio(palette["accent-ink"], palette[bg])).toBeGreaterThanOrEqual(3);
     }
+  });
+});
+
+// `text-tr-accent` is the fill token used as a text colour, which measured
+// 2.84:1 in light. Words and glyphs take `text-tr-accent-ink` (ADR 0016).
+describe("accent-coloured text uses accent-ink", () => {
+  it("no component colours text with the fill accent", () => {
+    const SRC = resolve(dirname(fileURLToPath(import.meta.url)), "..");
+    const walk = (dir: string): string[] =>
+      readdirSync(dir, { withFileTypes: true }).flatMap((e) => {
+        const p = join(dir, e.name);
+        if (e.isDirectory()) return walk(p);
+        return /\.(tsx|ts)$/.test(e.name) && !/\.test\.tsx?$/.test(e.name) ? [p] : [];
+      });
+    const offenders = walk(SRC).flatMap((file) =>
+      readFileSync(file, "utf8")
+        .split("\n")
+        .map((line, i) => (/text-tr-accent(?![-\w])/.test(line) ? `${file.replace(SRC, "src")}:${i + 1}` : null))
+        .filter((x): x is string => x !== null),
+    );
+    expect(offenders, `use text-tr-accent-ink:\n  ${offenders.join("\n  ")}`).toEqual([]);
   });
 });

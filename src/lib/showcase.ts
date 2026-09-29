@@ -1,16 +1,14 @@
-// Per-project showcase config. A project listed here renders as a technical
-// showcase (tabbed) instead of the standard dossier. Plain module (no
+// Per-project extras for the project page: an architecture diagram (`arch`)
+// and a demo block (`demo`), both rendered by ProjectDetail. Plain module (no
 // "use client") so server components can read it without RSC turning it into
 // a client reference.
 
 import { WEBMCP_TOOL_COUNT } from "@/lib/webmcp-tools";
 
 export type ShowcaseDemo =
-  | { kind: "iframe"; url: string }
   | {
       kind: "compare";
       pairs: { before: string; after: string; label?: string }[];
-      liveUrl?: string;
     }
   | {
       kind: "report";
@@ -27,61 +25,17 @@ export type ShowcaseDemo =
     };
 
 export type ShowcaseConfig = {
-  hero?: string;
-  heroTag?: string;
-  heroFit?: "cover" | "contain";
   arch?: string;
   demo?: ShowcaseDemo;
 };
 
 export const SHOWCASE_PROJECTS: Record<string, ShowcaseConfig> = {
-  "tailor-measurement-app": {
-    hero: "/projects/tailor/offline.png",
-    heroTag: "offline-first · React · Firebase",
-    // Demo: iframe a live Firebase URL once Jay provides it (set links.demo in MDX)
-  },
-  "receiptlens-minicpm-v46": {
-    hero: "/projects/receiptlens/ocr.png",
-    heroTag: "MiniCPM-V · on-device · iOS",
-    // No demo: iOS app, nothing to iframe
-  },
-  "voxt": {
-    hero: "/projects/voxt/flow.png",
-    heroTag: "Go · Whisper · Wayland+X11",
-    // No demo: Linux desktop app, nothing to iframe
-  },
-  "unified-search": {
-    hero: "/projects/unisearch/strategies.png",
-    heroTag: "5 strategies · turbulent plume",
-    // Demo tab iframes the live in-browser simulator (from MDX links.demo)
-  },
-  "longitudinal-mets-validation": {
-    hero: "/projects/mets/pipeline.png",
-    heroTag: "NHANES · Fine-Gray · external validation",
-    // Demo tab iframes the GitHub Pages landing (from MDX links.demo)
-  },
-  "data-clean-env": {
-    hero: "/projects/dataclean/loop.png",
-    heroTag: "OpenEnv · RL · data cleaning",
-    // Demo: iframe a live Hugging Face Space once Jay provides the URL (set links.demo in MDX)
-  },
-  "travel-booking-platform": {
-    hero: "/projects/travel/mesh.png",
-    heroTag: "14 services · Kafka · k8s",
-    // Demo tab iframes the GitHub Pages docs (from MDX links.demo)
-  },
   "stock-data-platform": {
-    hero: "/projects/stock/dashboard.png",
-    heroTag: "Live dashboard",
     arch: "/projects/stock/architecture.png",
-    // demo falls back to links.demo (iframe) from the MDX
   },
   "fifa-soccer-ds": {
-    hero: "/projects/fifa/overlay_5.jpg",
-    heroTag: "YOLOv8 + ByteTrack",
     demo: {
       kind: "compare",
-      liveUrl: "https://jayhemnani9910.github.io/fifa-soccer-ds/",
       pairs: [
         { before: "/projects/fifa/input_5.jpg", after: "/projects/fifa/overlay_5.jpg", label: "RMA vs BAR" },
         { before: "/projects/fifa/input_8.jpg", after: "/projects/fifa/overlay_8.jpg" },
@@ -90,56 +44,10 @@ export const SHOWCASE_PROJECTS: Record<string, ShowcaseConfig> = {
       ],
     },
   },
-  "soccer-vision-research": {
-    hero: "/projects/svr/pipeline.png",
-    heroTag: "RF-DETR · SAM2 · SigLIP",
-    // Demo tab iframes the live landing page (from MDX links.demo)
-  },
   "biotech-accelerator": {
-    hero: "/projects/bio/pipeline.png",
-    heroFit: "contain",
-    heroTag: "LangGraph · UniProt · PDB · ChEMBL",
     arch: "/projects/bio/architecture.png",
-    // Demo tab iframes the live site (from MDX links.demo)
-  },
-  "kayak-distributed": {
-    hero: "/projects/kayak/tiers.png",
-    heroTag: "3-tier · semantic cache",
-    // No demo: not hosted (local 3-tier app)
-  },
-  "airbnb-distributed": {
-    hero: "/projects/airbnb/services.png",
-    heroTag: "microservices · Kafka · k8s",
-    // No demo: not hosted (local Docker/k8s app)
-  },
-  "diabetes-stacking": {
-    hero: "/projects/diabetes/stacking.png",
-    heroTag: "6 base models · RF meta-learner",
-    // No demo: research notebook, no live app
-  },
-  "scheduling-visualizer": {
-    hero: "/projects/scheduling/gantt.png",
-    heroTag: "9 algorithms · Gantt",
-    // Demo tab iframes the live app (from MDX links.demo)
-  },
-  "rubiks-timer": {
-    // hero: "/projects/rubiks/app.png",  // enable once a fresh screenshot is placed
-    heroTag: "Three.js · WASM solver",
-    // Demo tab iframes the live app (from MDX links.demo)
-  },
-  "webcrawler": {
-    hero: "/projects/webcrawler/pipeline.png",
-    heroTag: "ArchiveBox · Merkle · OpenTimestamps",
-    // Demo tab iframes the GitHub Pages docs (from MDX links.demo)
-  },
-  "contextbox": {
-    hero: "/projects/contextbox/pipeline.png",
-    heroTag: "OCR · embeddings · Q&A",
-    // Demo tab iframes the live docs site (from MDX links.demo)
   },
   "webmcp-portfolio": {
-    hero: "/projects/webmcp/handshake.png",
-    heroTag: "navigator.modelContext",
     demo: {
       kind: "tools",
       note: `The ${WEBMCP_TOOL_COUNT} tools this site registers with the WebMCP browser API. An agent in Chrome with the WebMCP flag on calls them directly; here is the catalog and one sample call.`,
@@ -181,14 +89,7 @@ export const SHOWCASE_PROJECTS: Record<string, ShowcaseConfig> = {
       },
     },
   },
-  "nobel-dataintelligence": {
-    hero: "/projects/nobel/fusion.png",
-    heroTag: "ProtT5 · VDOS · ChemBERTa",
-    // Demo tab iframes the live site (from MDX links.demo)
-  },
   "revolu-idea": {
-    hero: "/projects/cag/flow.png",
-    heroTag: "Causal-Adversarial · LangGraph",
     demo: {
       kind: "report",
       title: "Impact of remote work on productivity",

@@ -2,6 +2,7 @@
 title: "Basic Banking System"
 summary: "Simple login + transactions with PHP backend."
 role: "Web Dev Intern"
+domain: "Student work"
 period: "Feb 2020"
 tags: ["web", "php"]
 tech: ["PHP", "MySQL", "HTML/CSS"]
@@ -29,16 +30,16 @@ deepDive:
 
   components:
     - name: "Authentication System"
-      description: "Login/logout flow with session management. Used PHP sessions to maintain user state and basic password hashing (md5 at the time - learned about bcrypt later)."
+      purpose: "Login/logout flow with session management. Used PHP sessions to maintain user state and basic password hashing (md5 at the time - learned about bcrypt later)."
 
     - name: "Transaction Module"
-      description: "Form-based money transfers between accounts. Implemented basic validation to prevent negative balances and self-transfers."
+      purpose: "Form-based money transfers between accounts. Implemented basic validation to prevent negative balances and self-transfers."
 
     - name: "Transaction History"
-      description: "Simple ledger view showing incoming and outgoing transfers. Basic SQL JOINs to fetch related user data."
+      purpose: "Simple ledger view showing incoming and outgoing transfers. Basic SQL JOINs to fetch related user data."
 
     - name: "Admin Dashboard"
-      description: "Overview page showing all users and their balances. First exposure to role-based access control concepts."
+      purpose: "Overview page showing all users and their balances. First exposure to role-based access control concepts."
 
   dataFlow: |
     1. User submits login credentials via POST request

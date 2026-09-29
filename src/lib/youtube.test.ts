@@ -36,17 +36,16 @@ describe("youtube.json contract", () => {
 
     it("uses ytimg thumbnails on every item", () => {
         for (const ch of data.channels) {
-            for (const item of [...ch.videos, ...ch.shorts, ...ch.live]) {
+            for (const item of [...ch.videos, ...ch.shorts]) {
                 expect(item.thumb.startsWith("https://i.ytimg.com/")).toBe(true);
             }
         }
     });
 
-    it("orders live tab: live, then upcoming, then past", () => {
-        const rank = (s?: string) => (s === "live" ? 0 : s === "upcoming" ? 1 : 2);
+    // Nothing renders live streams, so they are not part of the page's data.
+    it("carries no live-stream data", () => {
         for (const ch of data.channels) {
-            const ranks = ch.live.map((v) => rank(v.status));
-            expect(ranks).toEqual([...ranks].sort((a, b) => a - b));
+            expect(ch).not.toHaveProperty("live");
         }
     });
 });
@@ -58,6 +57,10 @@ describe("formatters", () => {
         expect(formatViews(5790)).toBe("5.8K");
         expect(formatViews(54110)).toBe("54K");
         expect(formatViews(1_200_000)).toBe("1.2M");
+        // Rounding boundary: these used to print "1000K".
+        expect(formatViews(999_499)).toBe("999K");
+        expect(formatViews(999_500)).toBe("1M");
+        expect(formatViews(999_999)).toBe("1M");
     });
     it("formats durations", () => {
         expect(formatDuration(0)).toBe("0:00");

@@ -12,8 +12,10 @@ import {
 } from "@/lib/youtube";
 import { CHANNEL_COPY } from "@/lib/youtube-copy";
 
-const MONO =
-  "font-[family-name:var(--ff-mono)] text-[length:var(--tr-t-mono-sm)] tracking-[.1em] text-tr-text-faint";
+// One colour class per element: two text-tr-* colours on the same element are
+// decided by Tailwind's output order, not by which one is written last.
+const MONO_TYPE = "font-[family-name:var(--ff-mono)] text-[length:var(--tr-t-mono-sm)] tracking-[.1em]";
+const MONO = `${MONO_TYPE} text-tr-text-faint`;
 
 const CARD =
   "block border border-tr-hairline rounded-[var(--tr-r-md)] overflow-hidden bg-tr-surface-1 hover:border-tr-accent transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)]";
@@ -36,7 +38,13 @@ function DurationPill({ sec }: { sec: number }) {
 
 function ShortCard({ item }: { item: YouTubeItem }) {
   return (
-    <a href={`https://www.youtube.com/watch?v=${item.id}`} target="_blank" rel="noopener noreferrer" className={CARD}>
+    <a
+      href={`https://www.youtube.com/watch?v=${item.id}`}
+      target="_blank"
+      rel="noopener noreferrer"
+      data-cursor="OPEN"
+      className={CARD}
+    >
       <div className="relative aspect-[9/16] bg-tr-surface-2">
         <Image
           src={item.thumb}
@@ -59,7 +67,13 @@ function ShortCard({ item }: { item: YouTubeItem }) {
 
 function VideoCard({ item }: { item: YouTubeItem }) {
   return (
-    <a href={`https://www.youtube.com/watch?v=${item.id}`} target="_blank" rel="noopener noreferrer" className={CARD}>
+    <a
+      href={`https://www.youtube.com/watch?v=${item.id}`}
+      target="_blank"
+      rel="noopener noreferrer"
+      data-cursor="OPEN"
+      className={CARD}
+    >
       <div className="relative aspect-video bg-tr-surface-2">
         <Image
           src={item.thumb}
@@ -94,12 +108,13 @@ function ChannelButton({
       type="button"
       aria-pressed={selected}
       onClick={onSelect}
+      data-cursor="SWITCH"
       className={`min-w-[220px] text-left flex flex-col gap-[.15rem] px-4 py-[.7rem] rounded-[var(--tr-r-md)] border transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] ${
         selected ? "border-tr-accent bg-tr-surface-1" : "border-tr-hairline bg-transparent hover:border-tr-accent"
       }`}
     >
       <span className="font-medium tracking-[-.01em]">{channel.title}</span>
-      <span className={`${MONO} tracking-normal text-tr-text-mute`}>
+      <span className={`${MONO_TYPE} tracking-normal text-tr-text-mute`}>
         {channel.handle} · {formatViews(channel.stats.subscribers)} subs · {formatViews(channel.stats.views)} views
       </span>
     </button>
@@ -124,12 +139,13 @@ export function YouTubeShowcase({ data }: { data: YouTubeData }) {
 
       <div className="grid lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] gap-[clamp(2rem,5vw,5rem)] mt-8 mb-8">
         <div>
-          <h2 className={`${MONO} text-tr-accent`}>{copy?.tagline ?? channel.title}</h2>
+          <h2 className={`${MONO_TYPE} text-tr-accent-ink`}>{copy?.tagline ?? channel.title}</h2>
           <a
             href={channel.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-block mt-3 text-tr-text-mute border-b border-tr-hairline hover:text-tr-accent hover:border-tr-accent transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)]"
+            data-cursor="OPEN"
+            className="inline-block mt-3 text-tr-text-mute border-b border-tr-hairline hover:text-tr-accent-ink hover:border-tr-accent transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)]"
           >
             {channel.url} ↗
           </a>
@@ -148,7 +164,7 @@ export function YouTubeShowcase({ data }: { data: YouTubeData }) {
         </div>
       )}
 
-      {channel.videos.length > 0 && (
+      {copy?.showVideos !== false && channel.videos.length > 0 && (
         <div className="mt-10">
           <h3 className={`${MONO} mb-3`}>VIDEOS · LATEST</h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">

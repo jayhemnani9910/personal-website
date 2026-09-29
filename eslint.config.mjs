@@ -31,6 +31,8 @@ const eslintConfig = defineConfig([
     // Local audit output (gitignored), not project code.
     ".audit/**",
     "graphify-out/**",
+    // Agent worktrees are full checkouts, .next builds included.
+    ".claude/**",
   ]),
 ]);
 

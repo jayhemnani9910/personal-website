@@ -4,18 +4,13 @@ import { ProjectsClient } from "./ProjectsClient";
 import type { ProjectSummary } from "@/lib/content";
 
 const base: Omit<ProjectSummary, "id" | "title" | "summary" | "domain" | "tech"> = {
-  role: "Builder",
   period: "2026",
-  tags: ["agents"],
-  priority: 1,
-  github: undefined,
-  links: {},
 };
 
 const PROJECTS: ProjectSummary[] = [
   { ...base, id: "flagship", title: "Flagship Pipeline", summary: "A streaming warehouse built on Kafka.", domain: "AI/ML", tech: ["Kafka", "Python"] },
   { ...base, id: "second", title: "Second Featured", summary: "Vision models over broadcast video.", domain: "Computer Vision", tech: ["YOLO"] },
-  { ...base, id: "old-thing", title: "Old Coursework", summary: "A Java desktop guessing game.", domain: undefined, tech: ["Java"] },
+  { ...base, id: "old-thing", title: "Old Coursework", summary: "A Java desktop guessing game.", domain: "Student work", tech: ["Java"] },
   { ...base, id: "other-old", title: "Another Archive Piece", summary: "Some PHP from a long time ago.", domain: undefined, tech: ["PHP"] },
 ];
 
@@ -67,6 +62,34 @@ describe("ProjectsClient: the work index table", () => {
 
     expect(screen.getByText(/nothing matches/i)).toBeDefined();
     expect(screen.queryByRole("link", { name: /Flagship Pipeline/ })).toBeNull();
+  });
+
+  it("names the active domain in the empty state and offers to clear it", () => {
+    render(<ProjectsClient projects={PROJECTS} />);
+
+    fireEvent.click(screen.getByRole("button", { name: /^Computer Vision/i }));
+    fireEvent.change(screen.getByLabelText(/search projects/i), { target: { value: "kafka" } });
+
+    expect(screen.getByText(/nothing in Computer Vision matches/i)).toBeDefined();
+    fireEvent.click(screen.getByRole("button", { name: /search every domain/i }));
+    expect(screen.getByText("Flagship Pipeline")).toBeDefined();
+  });
+
+  it("never suggests the term that just failed", () => {
+    render(<ProjectsClient projects={PROJECTS} />);
+    fireEvent.change(screen.getByLabelText(/search projects/i), { target: { value: "langgraph" } });
+
+    const empty = screen.getByText(/nothing matches/i);
+    expect(empty.textContent).toContain("kafka");
+    expect(empty.textContent).not.toMatch(/like.*langgraph/);
+  });
+
+  it("labels student work explicitly, and does not file a domainless project under it", () => {
+    render(<ProjectsClient projects={PROJECTS} />);
+    const rowOf = (title: string) => screen.getByRole("link", { name: new RegExp(title) });
+
+    expect(rowOf("Old Coursework").textContent).toContain("Student work");
+    expect(rowOf("Another Archive Piece").textContent).not.toContain("Student work");
   });
 
   it("marks the active filter with aria-pressed", () => {

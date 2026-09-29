@@ -191,3 +191,12 @@ export const RESUME: Resume = {
     }
   ]
 };
+
+/**
+ * The Rubik's Cube line of the education achievements, found by its prefix
+ * rather than its position, so reordering the list cannot print a different
+ * achievement in its place. /resume's "Off the clock" line reads it.
+ */
+export const CUBE_ACHIEVEMENT = RESUME.education
+  .flatMap((edu) => edu.achievements ?? [])
+  .find((s) => s.startsWith("Rubik's Cube"));

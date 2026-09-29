@@ -15,8 +15,20 @@ export const metadata: Metadata = {
 const MONO =
   "font-[family-name:var(--ff-mono)] text-[length:var(--tr-t-mono-sm)] tracking-[.1em] text-tr-text-faint";
 
+// YouTubeShowcase shows at most 6 shorts and 4 videos per channel. Trimming
+// here keeps the rest out of the client component's payload.
+const SHOWN = { shorts: 6, videos: 4 };
+
 export default function YouTubePage() {
-  const data = getYouTubeData();
+  const full = getYouTubeData();
+  const data = {
+    ...full,
+    channels: full.channels.map((c) => ({
+      ...c,
+      shorts: c.shorts.slice(0, SHOWN.shorts),
+      videos: c.videos.slice(0, SHOWN.videos),
+    })),
+  };
   const channelCount = data.channels.length;
   const totalUploads = data.channels.reduce((sum, c) => sum + c.stats.videos, 0);
 

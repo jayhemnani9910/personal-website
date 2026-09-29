@@ -431,4 +431,8 @@ export const COPY = {
   idleNote: "You get back a scope, an architecture, a plan and the risks, plus the projects that prove it.",
   offlineNote:
     "Offline right now, so this is the closest saved example rather than a reading of your brief. The live version calls a model.",
+  limitedNote:
+    "That's the limit of live runs for this minute, so this is the closest saved example rather than a reading of your brief. Try again in a minute.",
+  tooLongNote: (max: number) =>
+    `That brief is over ${max} characters, so this is the closest saved example rather than a reading of it. Trim it and run again.`,
 };

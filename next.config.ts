@@ -15,8 +15,6 @@ const cspReportOnly = [
   "img-src 'self' data: https://avatars.githubusercontent.com",
   "font-src 'self'",
   "connect-src 'self' https://va.vercel-scripts.com https://vitals.vercel-insights.com",
-  // Live project demos are embedded as iframes from these hosts.
-  "frame-src 'self' https://*.github.io https://*.hf.space",
 ].join("; ");
 
 const securityHeaders = [

@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { Metadata } from "next";
-import { getAllPosts, getAllProjects } from "@/lib/content";
+import { formatPostDate, getAllPosts, getAllProjects } from "@/lib/content";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 
@@ -14,9 +14,6 @@ export const metadata: Metadata = {
 // across the v4 home sections (see Method.tsx, Hero.tsx, Contact.tsx).
 const MONO =
   "font-[family-name:var(--ff-mono)] text-[length:var(--tr-t-mono-sm)] tracking-[.1em] text-tr-text-faint";
-
-const fmtDate = (date: string) =>
-  new Date(date).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" });
 
 export default async function WritingPage() {
   const posts = await getAllPosts();
@@ -58,9 +55,9 @@ export default async function WritingPage() {
                   className="group grid items-start gap-[clamp(1rem,3vw,2.5rem)] py-[clamp(1.5rem,3vw,2.5rem)] no-underline lg:grid-cols-[8rem_minmax(0,1fr)_5rem]"
                 >
                   <div className="font-[family-name:var(--ff-mono)] leading-relaxed text-tr-text-faint">
-                    <span className="block">{fmtDate(post.date)}</span>
+                    <span className="block">{formatPostDate(post.date)}</span>
                     {post.readingTime && (
-                      <span className="block text-tr-text-faint transition-colors group-hover:text-tr-accent">
+                      <span className="block text-tr-text-faint transition-colors group-hover:text-tr-accent-ink">
                         {post.readingTime} min
                       </span>
                     )}
@@ -85,7 +82,7 @@ export default async function WritingPage() {
                     )}
                   </div>
 
-                  <span className="font-[family-name:var(--ff-mono)] text-tr-text-faint transition-colors group-hover:text-tr-accent lg:text-right">
+                  <span className="font-[family-name:var(--ff-mono)] text-tr-text-faint transition-colors group-hover:text-tr-accent-ink lg:text-right">
                     read ↗
                   </span>
                 </Link>
@@ -113,7 +110,7 @@ export default async function WritingPage() {
                   key={p.id}
                   href={`/projects/${p.id}`}
                   data-cursor="OPEN"
-                  className="flex flex-col gap-2 bg-tr-surface-1 p-5 no-underline transition-colors hover:bg-tr-surface-2"
+                  className="flex flex-col gap-2 bg-tr-surface-1 p-5 no-underline transition-colors hover:bg-tr-surface-2 focus-visible:-outline-offset-2"
                 >
                   <span className={MONO}>DEEP DIVE</span>
                   <span className="font-medium tracking-[-.01em]">{p.title}</span>
@@ -124,7 +121,7 @@ export default async function WritingPage() {
               <Link
                 href="/projects"
                 data-cursor="OPEN"
-                className="flex flex-col gap-2 bg-tr-surface-1 p-5 no-underline transition-colors hover:bg-tr-surface-2"
+                className="flex flex-col gap-2 bg-tr-surface-1 p-5 no-underline transition-colors hover:bg-tr-surface-2 focus-visible:-outline-offset-2"
               >
                 <span className={MONO}>ALL {projects.length}</span>
                 <span className="font-medium tracking-[-.01em]">The index</span>

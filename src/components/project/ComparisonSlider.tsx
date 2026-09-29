@@ -28,7 +28,7 @@ export function ComparisonSlider({
     <div>
       <div className="flex flex-wrap items-center justify-between gap-3">
         <p className="font-[family-name:var(--ff-mono)] text-[length:var(--tr-t-mono)] tracking-[.05em] text-tr-text-faint">
-          <span aria-hidden="true" className="text-tr-accent">
+          <span aria-hidden="true" className="text-tr-accent-ink">
             ◆
           </span>{" "}
           INPUT FRAME → PIPELINE OUTPUT · drag
@@ -55,21 +55,24 @@ export function ComparisonSlider({
         )}
       </div>
 
+      {/* The range input is invisible, so its focus ring would be too: the
+          figure draws it instead while the input has keyboard focus. */}
       <figure
         data-testid="comparison-slider"
-        className="relative mt-4 aspect-video select-none overflow-hidden rounded-[var(--tr-r-lg)] border border-tr-hairline bg-tr-surface-1"
+        className="relative mt-4 aspect-video select-none overflow-hidden rounded-[var(--tr-r-lg)] border border-tr-hairline bg-tr-surface-1 has-[input:focus-visible]:outline-2 has-[input:focus-visible]:outline-offset-2 has-[input:focus-visible]:outline-tr-accent-ink"
       >
+        {/* The figure fills the 1280px content column. */}
         <Image
           src={active.after}
           alt={`${projectTitle}, ${pairLabel}: output after the pipeline runs on this frame`}
           fill
-          sizes="(max-width: 980px) 100vw, 820px"
+          sizes="(max-width: 1344px) 100vw, 1280px"
           className="object-cover"
         />
         {/* These two corner labels sit on top of a photograph, where a --tr-*
             token can't promise contrast against arbitrary imagery underneath.
-            A fixed dark scrim with white text is the one hex exception on
-            this page, reserved for exactly this case. */}
+            A fixed dark scrim with white text is the one hard-coded colour on
+            project pages, reserved for exactly this case. */}
         <span
           className="absolute right-3 top-3 rounded px-2 py-1 font-[family-name:var(--ff-mono)] text-[11px] text-white"
           style={{ background: "rgba(0,0,0,.6)" }}
@@ -82,7 +85,7 @@ export function ComparisonSlider({
             src={active.before}
             alt={`${projectTitle}, ${pairLabel}: raw input frame before the pipeline runs`}
             fill
-            sizes="(max-width: 980px) 100vw, 820px"
+            sizes="(max-width: 1344px) 100vw, 1280px"
             className="object-cover"
           />
           <span
@@ -116,6 +119,7 @@ export function ComparisonSlider({
           max={100}
           step={1}
           value={pos}
+          aria-valuetext={`${pos}% raw input`}
           onChange={(e) => setPos(Number(e.target.value))}
           className="absolute inset-0 h-full w-full cursor-ew-resize appearance-none opacity-0"
         />

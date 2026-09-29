@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { RESUME } from "@/data/resume";
+import { CUBE_ACHIEVEMENT, RESUME } from "@/data/resume";
 import { MERGED_PRS, MERGED_PRS_SEARCH } from "@/data/home";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
@@ -65,8 +65,15 @@ export default function AboutPage() {
               code. Then iOS, fraud models, consulting, finance pipelines. The pattern: I get handed the
               vague part, and I come back with something that runs.
             </p>
-            <p className={`${MONO} mt-4 text-[length:var(--tr-t-mono-sm)] text-tr-text-faint`}>
-              {RESUME.location} · {RESUME.contact.email}
+            <p className={`${MONO} mt-4 text-[length:var(--tr-t-mono-sm)] text-tr-text-mute`}>
+              {RESUME.location} ·{" "}
+              <a
+                href={`mailto:${RESUME.contact.email}`}
+                data-cursor="OPEN"
+                className="underline decoration-tr-hairline decoration-1 underline-offset-4 transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] hover:text-tr-accent-ink hover:decoration-tr-accent"
+              >
+                {RESUME.contact.email}
+              </a>
             </p>
             <div className="mt-6 flex flex-wrap items-center gap-x-4 gap-y-2">
               <span className={`${MONO} text-[length:var(--tr-t-mono-sm)] uppercase text-tr-text-faint`}>
@@ -79,9 +86,10 @@ export default function AboutPage() {
                   target="_blank"
                   rel="noreferrer"
                   data-cursor="OPEN"
-                  className={`${MONO} text-[length:var(--tr-t-mono-sm)] uppercase text-tr-text-mute underline decoration-tr-hairline decoration-1 underline-offset-4 transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] hover:text-tr-accent hover:decoration-tr-accent`}
+                  className={`${MONO} text-[length:var(--tr-t-mono-sm)] uppercase text-tr-text-mute underline decoration-tr-hairline decoration-1 underline-offset-4 transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] hover:text-tr-accent-ink hover:decoration-tr-accent`}
                 >
                   {r.label}
+                  <span className="sr-only"> résumé (PDF, opens in a new tab)</span>
                 </a>
               ))}
             </div>
@@ -147,7 +155,7 @@ export default function AboutPage() {
             <div>
               <h2 className={H2}>Stack</h2>
               <p className="mt-4 max-w-[40ch] text-[length:var(--tr-t-body)] leading-[var(--tr-lh-body)] text-tr-text-mute">
-                Grouped the way the resume groups them. Click a group to see where it was used.
+                Grouped the way the resume groups them. Click a group to see what is in it.
               </p>
               <p className={`${MONO} mt-4 text-[length:var(--tr-t-mono-sm)] text-tr-text-faint`}>
                 {"// no percentage bars. nobody is 80% Python."}
@@ -196,9 +204,9 @@ export default function AboutPage() {
                           href={pub.link}
                           target="_blank"
                           rel="noreferrer"
-                          className="inline-flex min-h-6 items-center py-1 transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] hover:text-tr-accent"
+                          className="inline-flex min-h-6 items-center py-1 transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] hover:text-tr-accent-ink"
                         >
-                          ieeexplore ↗
+                          ieeexplore <span aria-hidden="true">↗</span>
                         </a>
                       ) : null}
                       {pub.github ? (
@@ -206,13 +214,13 @@ export default function AboutPage() {
                           href={pub.github}
                           target="_blank"
                           rel="noreferrer"
-                          className="inline-flex min-h-6 items-center py-1 transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] hover:text-tr-accent"
+                          className="inline-flex min-h-6 items-center py-1 transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] hover:text-tr-accent-ink"
                         >
-                          notebook ↗
+                          notebook <span aria-hidden="true">↗</span>
                         </a>
                       ) : null}
                       {gap ? (
-                        <p className="border border-tr-hairline rounded-[var(--tr-r-md)] px-3 py-2 text-tr-accent">
+                        <p className="border border-tr-hairline rounded-[var(--tr-r-md)] px-3 py-2 text-tr-accent-ink">
                           Published {gap.published}% · reproduced {gap.reproduced}%.
                         </p>
                       ) : null}
@@ -264,10 +272,10 @@ export default function AboutPage() {
                           href={pr.href}
                           target="_blank"
                           rel="noreferrer"
-                          className={`${MONO} inline-flex min-h-6 items-center gap-2 py-1 text-[length:var(--tr-t-mono-sm)] text-tr-text-mute transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] hover:text-tr-accent`}
+                          className={`${MONO} inline-flex min-h-6 items-center gap-2 py-1 text-[length:var(--tr-t-mono-sm)] text-tr-text-mute transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] hover:text-tr-accent-ink`}
                         >
                           <span>{pr.repo}</span>
-                          <span className="text-tr-text-faint">{pr.number} ↗</span>
+                          <span className="text-tr-text-faint">{pr.number} <span aria-hidden="true">↗</span></span>
                         </a>
                       </li>
                     ))}
@@ -276,9 +284,9 @@ export default function AboutPage() {
                     href={MERGED_PRS_SEARCH}
                     target="_blank"
                     rel="noreferrer"
-                    className={`${MONO} mt-2 inline-flex min-h-6 items-center py-1 text-[length:var(--tr-t-mono-sm)] text-tr-text-faint transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] hover:text-tr-accent`}
+                    className={`${MONO} mt-2 inline-flex min-h-6 items-center py-1 text-[length:var(--tr-t-mono-sm)] text-tr-text-faint transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] hover:text-tr-accent-ink`}
                   >
-                    verify all ↗
+                    verify all <span aria-hidden="true">↗</span>
                   </a>
                 </div>
                 <div className="mt-6">
@@ -286,11 +294,11 @@ export default function AboutPage() {
                     Off the clock
                   </p>
                   <p className="mt-2 text-[length:var(--tr-t-body)] leading-[var(--tr-lh-body)] text-tr-text-mute">
-                    {RESUME.education[0]?.achievements?.[0]}. Wrote{" "}
+                    {CUBE_ACHIEVEMENT}. Wrote{" "}
                     <Link
                       href="/projects/rubiks-timer"
                       data-cursor="OPEN"
-                      className="text-tr-text-mute underline decoration-tr-hairline decoration-1 underline-offset-4 transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] hover:text-tr-accent hover:decoration-tr-accent"
+                      className="text-tr-text-mute underline decoration-tr-hairline decoration-1 underline-offset-4 transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] hover:text-tr-accent-ink hover:decoration-tr-accent"
                     >
                       the timer
                     </Link>

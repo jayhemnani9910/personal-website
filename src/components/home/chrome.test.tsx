@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { render, screen, within, fireEvent } from "@testing-library/react";
+import { act, render, screen, within, fireEvent } from "@testing-library/react";
 import type { NavItem } from "@/data/home";
 import { SECTIONS } from "@/data/home";
 
@@ -33,7 +33,7 @@ vi.mock("@/hooks/usePrefersReducedMotion", () => ({
 import { HomeHeader } from "./HomeHeader";
 import { SectionRail } from "./SectionRail";
 import { RevealSection } from "./RevealSection";
-import { useScrollState } from "./useScrollState";
+import { useScrollProgress, useScrolled } from "./useScrollState";
 
 afterEach(() => {
   mockToggleTerminal.mockClear();
@@ -73,12 +73,22 @@ describe("HomeHeader", () => {
 });
 
 describe("SectionRail", () => {
-  it("renders an ol named Sections with five anchors matching the SECTIONS hashes", () => {
+  it("renders a nav named Sections with five anchors matching the SECTIONS hashes", () => {
     render(<SectionRail steps={SECTIONS} />);
-    const list = screen.getByRole("list", { name: "Sections" });
-    const links = within(list).getAllByRole("link");
+    const nav = screen.getByRole("navigation", { name: "Sections" });
+    const links = within(within(nav).getByRole("list")).getAllByRole("link");
     expect(links.length).toBe(SECTIONS.length);
     expect(links.map((l) => l.getAttribute("href"))).toEqual(SECTIONS.map((s) => s.href));
+  });
+
+  it("keeps the hidden rail out of the tab order until the page is scrolled", () => {
+    render(<SectionRail steps={SECTIONS} />);
+    const nav = screen.getByRole("navigation", { name: "Sections" });
+    expect(nav.hasAttribute("inert")).toBe(true);
+
+    setScrollY(400);
+    expect(nav.hasAttribute("inert")).toBe(false);
+    setScrollY(0);
   });
 });
 
@@ -112,11 +122,41 @@ describe("RevealSection", () => {
   });
 });
 
-describe("useScrollState", () => {
+function setScrollY(y: number) {
+  act(() => {
+    Object.defineProperty(window, "scrollY", { configurable: true, value: y });
+    window.dispatchEvent(new Event("scroll"));
+  });
+}
+
+describe("useScrolled / useScrollProgress", () => {
   function Probe() {
-    const { scrolled, progress } = useScrollState();
+    const scrolled = useScrolled();
+    const progress = useScrollProgress();
     return <div data-testid="probe">{String(scrolled)}:{progress}</div>;
   }
+
+  // The masthead shrinks 12px when `scrolled` flips, and scroll anchoring then
+  // moves scrollY by the same 12px. With a single 240px threshold that bounced
+  // the header forever; the band has to be wider than the 12px it causes.
+  it("flips with hysteresis wider than the masthead's 12px height change", () => {
+    render(<Probe />);
+    const scrolled = () => screen.getByTestId("probe").textContent?.split(":")[0];
+
+    setScrollY(245);
+    expect(scrolled()).toBe("false");
+    setScrollY(253);
+    expect(scrolled()).toBe("true");
+    setScrollY(241); // the header shrank and anchoring pulled the page up 12px
+    expect(scrolled()).toBe("true");
+    setScrollY(235);
+    expect(scrolled()).toBe("true");
+    setScrollY(227);
+    expect(scrolled()).toBe("false");
+    setScrollY(239); // the header grew and anchoring pushed the page down 12px
+    expect(scrolled()).toBe("false");
+    setScrollY(0);
+  });
 
   it("returns a stable snapshot across renders with no intervening scroll event", () => {
     expect(() =>

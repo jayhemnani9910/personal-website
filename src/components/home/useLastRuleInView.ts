@@ -1,13 +1,14 @@
 "use client";
 
 import { useCallback, useRef, useSyncExternalStore } from "react";
+import { REVEAL_INSET } from "@/lib/motion-tokens";
 
 /**
  * How far a section's opening rule has to be inside the bottom of the viewport
- * before it counts as arrived. At zero the handover lands on the exact pixel
- * the rule appears, which puts Buddy on a line that has not been drawn yet.
+ * before it counts as arrived: the same inset RevealSection fades the section
+ * in at. Any shallower and Buddy lands on a line that has not been drawn yet.
  */
-const ARRIVAL_INSET = "-6%";
+const ARRIVAL_INSET = REVEAL_INSET;
 
 function getServerSnapshot() {
   return -1;
@@ -28,9 +29,9 @@ function getServerSnapshot() {
  * correctly on the way back up.
  *
  * When nothing intersects, the index is left where it was rather than reset.
- * That happens on a section taller than the viewport (the work section is
- * around 3950px on a phone), and dropping Buddy for the duration would be
- * worse than leaving him on the rule that is nearest, just off screen.
+ * The targets are whole sections, so a tall one still intersects while it is
+ * being read; nothing intersects only up in the hero, above the first rule,
+ * where keeping the last index (or -1 on a fresh load) is what the guard is for.
  */
 export function useLastRuleInView(ids: readonly string[]): number {
   const indexRef = useRef(-1);

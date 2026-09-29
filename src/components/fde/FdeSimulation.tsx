@@ -3,12 +3,14 @@
 /* FDE Simulation workspace: phase tabs, narration side panel, 6 phase content
    renderers. Ported from sim.jsx and reskinned to editorial theme. */
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+import type { KeyboardEvent } from "react";
 import type { Preset } from "./fdeData";
 import { PHASES, NARRATION, RECEIPTS } from "./fdeData";
 import { FdeArchDiagram } from "./FdeArchDiagram";
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
 import { SITE_CONFIG } from "@/../content/site";
+import { SECTION_ORDER } from "@/lib/fde-payload";
 
 interface Props {
   /** Partial while a live run streams. Presets and cache hits arrive complete. */
@@ -22,7 +24,8 @@ interface Props {
 
 const MONO = "font-[family-name:var(--ff-mono)]";
 
-const SECTION_KEYS: (keyof Preset)[] = ['scope', 'decomposition', 'architecture', 'sprint', 'risks'];
+// The server's list, so a renamed or added section cannot drift out of step here.
+const SECTION_KEYS: readonly (keyof Preset)[] = SECTION_ORDER;
 
 // Which payload key each phase tab needs before it has anything to show.
 // `receipts` is the closing summary, so it waits for the whole answer.
@@ -84,12 +87,36 @@ export function FdeSimulation({ payload, brief, source, onExit, streaming = fals
   const nextReady = phase < PHASES.length - 1 && sectionReady(payload, PHASES[phase + 1].key);
   const prev = () => setPhase(p => Math.max(p - 1, 0));
 
+  // Tabs pattern: one tab stop, arrows/Home/End move between the tabs that
+  // have something behind them. The current phase is always one of those.
+  const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
+  const onTabKey = (e: KeyboardEvent) => {
+    const ready = PHASES.flatMap((p, i) => (sectionReady(payload, p.key) ? [i] : []));
+    const at = ready.indexOf(phase);
+    let target: number;
+    switch (e.key) {
+      case 'ArrowRight': target = ready[(at + 1) % ready.length]; break;
+      case 'ArrowLeft': target = ready[(at - 1 + ready.length) % ready.length]; break;
+      case 'Home': target = ready[0]; break;
+      case 'End': target = ready[ready.length - 1]; break;
+      default: return;
+    }
+    e.preventDefault();
+    setPhase(target);
+    tabRefs.current[target]?.focus();
+  };
+
+  // Always mounted, so screen readers hear when a tab is waiting on its section.
+  const awaiting = streaming && !sectionReady(payload, currentKey)
+    ? `generating ${PHASES[phase].title.toLowerCase()}`
+    : '';
+
   return (
     <div className="overflow-hidden rounded-[var(--tr-r-md)] border border-tr-hairline bg-tr-surface-1">
       {/* Head */}
-      <div className="grid grid-cols-[auto_1fr_auto] items-center gap-4 border-b border-tr-hairline bg-tr-surface-2 px-5 py-3.5">
+      <div className="grid grid-cols-[auto_minmax(0,1fr)] items-center gap-x-4 gap-y-2 sm:grid-cols-[auto_minmax(0,1fr)_auto] border-b border-tr-hairline bg-tr-surface-2 px-5 py-3.5">
         <button
-          className={`whitespace-nowrap rounded-[var(--tr-r-sm)] border border-tr-hairline px-2.5 py-1.5 ${MONO} text-[length:var(--tr-t-mono-sm)] tracking-[.06em] text-tr-text transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] hover:border-tr-accent hover:text-tr-accent`}
+          className={`whitespace-nowrap rounded-[var(--tr-r-sm)] border border-tr-hairline px-2.5 py-1.5 ${MONO} text-[length:var(--tr-t-mono-sm)] tracking-[.06em] text-tr-text transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] hover:border-tr-accent hover:text-tr-accent-ink`}
           onClick={onExit}
           type="button"
         >
@@ -98,23 +125,25 @@ export function FdeSimulation({ payload, brief, source, onExit, streaming = fals
         <div className="min-w-0 overflow-hidden text-ellipsis whitespace-nowrap text-[length:var(--tr-t-h3)] italic text-tr-text" title={brief}>
           &ldquo;{brief}&rdquo;
         </div>
-        <div className={`whitespace-nowrap ${MONO} text-[length:var(--tr-t-mono-sm)] tracking-[.1em] text-tr-text-mute`}>
+        {/* On a phone the status drops to its own row rather than squeezing the brief to nothing. */}
+        <div className={`col-span-2 sm:col-span-1 sm:whitespace-nowrap ${MONO} text-[length:var(--tr-t-mono-sm)] tracking-[.1em] text-tr-text-mute`}>
           {source === 'live' ? '* LIVE · ' : '◆ DEMO · '}
           PHASE {PHASES[phase].num} · {PHASES[phase].status.toUpperCase()}
         </div>
       </div>
 
       {/* Phase tabs */}
-      <div className="grid grid-cols-3 border-b border-tr-hairline bg-tr-surface-1 sm:grid-cols-6" role="tablist" aria-label="Simulation phases">
+      <div className="grid grid-cols-3 border-b border-tr-hairline bg-tr-surface-1 sm:grid-cols-6" role="tablist" aria-label="Simulation phases" onKeyDown={onTabKey}>
         {PHASES.map((p, i) => {
           const ready = sectionReady(payload, p.key);
           const state = i === phase ? 'active' : (i < phase ? 'done' : 'pending');
           return (
             <button
               key={p.key}
+              ref={(el) => { tabRefs.current[i] = el; }}
               className={`border-b-2 border-r border-r-tr-hairline px-3.5 py-3.5 text-left ${MONO} text-[length:var(--tr-t-mono-sm)] tracking-[.06em] transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] last:border-r-0 disabled:cursor-not-allowed ${
                 state === 'active'
-                  ? 'border-b-tr-accent bg-tr-surface-2 text-tr-accent'
+                  ? 'border-b-tr-accent bg-tr-surface-2 text-tr-accent-ink'
                   : state === 'done'
                     ? 'border-b-transparent text-tr-text hover:bg-tr-surface-2'
                     : 'border-b-transparent text-tr-text-faint hover:enabled:bg-tr-surface-2 hover:enabled:text-tr-text'
@@ -122,14 +151,15 @@ export function FdeSimulation({ payload, brief, source, onExit, streaming = fals
               data-state={state}
               role="tab"
               aria-selected={i === phase}
-              aria-controls={`fde-panel-${p.key}`}
+              aria-controls="fde-panel"
+              tabIndex={i === phase ? 0 : -1}
               onClick={() => setPhase(i)}
               type="button"
               // Opening a tab whose section has not arrived would show an empty
               // panel, so it stays shut until there is something behind it.
               disabled={!ready}
               aria-disabled={!ready}
-              title={ready ? undefined : 'still generating'}
+              title={ready ? undefined : streaming ? 'still generating' : 'not generated'}
             >
               <span>{state === 'done' && ready ? '✓ ' : ''}{p.num}</span>
               <span className="mt-0.5 block text-[length:var(--tr-t-small)] font-medium text-tr-text">{p.title}</span>
@@ -142,11 +172,12 @@ export function FdeSimulation({ payload, brief, source, onExit, streaming = fals
       <div className="grid min-h-[520px] grid-cols-1 lg:grid-cols-[1fr_320px]">
         <div
           className="min-w-0 overflow-x-hidden px-5 py-6 sm:px-9 sm:py-8"
-          id={`fde-panel-${currentKey}`}
+          id="fde-panel"
           role="tabpanel"
           aria-label={`Phase ${PHASES[phase].title}`}
         >
-          <PhaseContent phase={currentKey} payload={payload} streaming={streaming} />
+          <p className="sr-only" aria-live="polite">{awaiting}</p>
+          <PhaseContent phase={currentKey} payload={payload} streaming={streaming} source={source} />
 
           <div className="mt-8 flex flex-wrap items-center justify-between gap-3.5 border-t border-tr-hairline pt-5">
             <button
@@ -174,22 +205,22 @@ export function FdeSimulation({ payload, brief, source, onExit, streaming = fals
         <aside
           className={`border-t border-tr-hairline bg-tr-surface-2 px-5 py-6 ${MONO} text-[length:var(--tr-t-mono-sm)] leading-[var(--tr-lh-body)] text-tr-text lg:border-l lg:border-t-0 lg:px-6 lg:py-7`}
         >
-          <h3 className="mb-3.5 text-[length:var(--tr-t-mono-sm)] uppercase tracking-[.18em] text-tr-accent">{"// Jay, narrating"}</h3>
+          <h3 className="mb-3.5 text-[length:var(--tr-t-mono-sm)] uppercase tracking-[.18em] text-tr-accent-ink">{"// Jay, narrating"}</h3>
           {narration.slice(0, narrationVisible).map((n, i) => (
             <div key={`${phase}-${i}`} className={`mb-2.5 ${n.who === 'sys' ? 'text-tr-text-mute' : ''}`}>
-              <span className={`mr-1.5 ${n.who === 'sys' ? 'text-tr-text-faint' : 'text-tr-accent'}`}>{n.who === 'jay' ? '$ jay' : '~ sys'}</span>
+              <span className={`mr-1.5 ${n.who === 'sys' ? 'text-tr-text-faint' : 'text-tr-accent-ink'}`}>{n.who === 'jay' ? '$ jay' : '~ sys'}</span>
               <span>{n.text}</span>
             </div>
           ))}
 
           <hr className="my-6 border-0 border-t border-tr-hairline" />
 
-          <h3 className="mb-3.5 text-[length:var(--tr-t-mono-sm)] uppercase tracking-[.18em] text-tr-accent">{"// Brief"}</h3>
+          <h3 className="mb-3.5 text-[length:var(--tr-t-mono-sm)] uppercase tracking-[.18em] text-tr-accent-ink">{"// Brief"}</h3>
           <div className="italic text-tr-text-mute">&quot;{brief}&quot;</div>
 
           <hr className="my-6 border-0 border-t border-tr-hairline" />
 
-          <h3 className="mb-3.5 text-[length:var(--tr-t-mono-sm)] uppercase tracking-[.18em] text-tr-accent">{"// Stack"}</h3>
+          <h3 className="mb-3.5 text-[length:var(--tr-t-mono-sm)] uppercase tracking-[.18em] text-tr-accent-ink">{"// Stack"}</h3>
           <div className="text-tr-text-mute">
             LangGraph · MCP · RAG<br />
             Python · FastAPI · Node<br />
@@ -206,12 +237,12 @@ export function FdeSimulation({ payload, brief, source, onExit, streaming = fals
 
 const PHASE_TITLE = `mb-2 max-w-[22ch] text-[length:var(--tr-t-h2)] leading-[var(--tr-lh-h2)] tracking-[-.01em] font-medium text-tr-text`;
 const PHASE_SUB = `mb-7 ${MONO} text-[length:var(--tr-t-mono-sm)] tracking-[.04em] text-tr-text-mute`;
-const EM = "italic text-tr-accent";
+const EM = "italic text-tr-accent-ink";
 
 /** Shown in the panel for a section that has not arrived yet. */
 function AwaitingSection({ title }: { title: string }) {
   return (
-    <div className={`flex items-center gap-2.5 py-6 ${MONO} text-[length:var(--tr-t-mono)] text-tr-text-mute`} aria-live="polite">
+    <div className={`flex items-center gap-2.5 py-6 ${MONO} text-[length:var(--tr-t-mono)] text-tr-text-mute`} aria-hidden="true">
       <span className="h-4 w-4 shrink-0 animate-spin rounded-full border-2 border-tr-hairline border-t-tr-accent" aria-hidden="true" />
       <span>
         generating {title.toLowerCase()}
@@ -225,7 +256,8 @@ function PhaseContent({
   phase,
   payload,
   streaming,
-}: { phase: string; payload: Partial<Preset>; streaming: boolean }) {
+  source,
+}: { phase: string; payload: Partial<Preset>; streaming: boolean; source: 'preset' | 'live' }) {
   // Every branch below indexes into a section. While streaming, one may not be
   // there yet, and an unguarded .map on undefined takes the whole page down.
   if (!sectionReady(payload, phase)) {
@@ -242,11 +274,11 @@ function PhaseContent({
           <div className={PHASE_SUB}>{"// scoping. before any building, before any architecture, before anything."}</div>
           {(payload.scope ?? []).map((s, i) => (
             <div key={i} className="grid grid-cols-[2.5rem_1fr] gap-4 border-t border-tr-hairline py-[18px] last:border-b">
-              <div className="pt-1 text-[length:var(--tr-t-stat)] italic leading-[var(--tr-lh-numeral)] text-tr-accent">Q{i + 1}</div>
+              <div className="pt-1 text-[length:var(--tr-t-stat)] italic leading-[var(--tr-lh-numeral)] text-tr-accent-ink">Q{i + 1}</div>
               <div>
                 <div className="max-w-[50ch] text-[length:var(--tr-t-h3)] leading-[var(--tr-lh-h3)] text-tr-text">{s.q}</div>
                 <div className={`mt-1.5 flex gap-1 ${MONO} text-[length:var(--tr-t-mono-sm)] tracking-[.04em] text-tr-text-mute`}>
-                  <span className="text-tr-accent" aria-hidden="true">{"//"}</span>
+                  <span className="text-tr-accent-ink" aria-hidden="true">{"//"}</span>
                   <span>{s.why}</span>
                 </div>
               </div>
@@ -268,7 +300,7 @@ function PhaseContent({
                 key={d.id}
                 className="grid grid-cols-[3.75rem_1fr] items-start gap-[18px] rounded-[var(--tr-r-sm)] border-l-2 border-tr-accent bg-tr-surface-2 px-4 py-3.5"
               >
-                <div className={`pt-0.5 ${MONO} text-[length:var(--tr-t-mono-sm)] tracking-[.08em] text-tr-accent`}>{d.id}</div>
+                <div className={`pt-0.5 ${MONO} text-[length:var(--tr-t-mono-sm)] tracking-[.08em] text-tr-accent-ink`}>{d.id}</div>
                 <div>
                   <div className="mb-1 font-medium text-tr-text">{d.title}</div>
                   <div className={`${MONO} text-[length:var(--tr-t-mono-sm)] leading-[var(--tr-lh-body)] text-tr-text-mute`}>{d.why}</div>
@@ -303,11 +335,11 @@ function PhaseContent({
                 key={i}
                 className="grid grid-cols-[6.25rem_1fr] items-start gap-[18px] rounded-[var(--tr-r-sm)] border border-tr-hairline bg-tr-surface-2 px-[18px] py-4"
               >
-                <div className={`pt-0.5 ${MONO} text-[length:var(--tr-t-mono-sm)] tracking-[.08em] text-tr-accent`}>{s.day}</div>
+                <div className={`pt-0.5 ${MONO} text-[length:var(--tr-t-mono-sm)] tracking-[.08em] text-tr-accent-ink`}>{s.day}</div>
                 <div>
                   <div className="mb-1.5 font-medium text-tr-text">{s.title}</div>
                   <div className={`${MONO} text-[length:var(--tr-t-mono-sm)] leading-[var(--tr-lh-body)] text-tr-text-mute`}>
-                    <span className="text-tr-accent">deliverable: </span>
+                    <span className="text-tr-accent-ink">deliverable: </span>
                     {s.deliv}
                   </div>
                 </div>
@@ -331,11 +363,11 @@ function PhaseContent({
                 className="grid grid-cols-1 gap-[22px] rounded-[var(--tr-r-sm)] border border-tr-hairline border-l-2 border-l-tr-accent bg-tr-surface-2 px-[18px] py-4 sm:grid-cols-2"
               >
                 <div>
-                  <h5 className={`mb-2 ${MONO} text-[length:var(--tr-t-mono-sm)] uppercase tracking-[.16em] text-tr-accent`}>Risk</h5>
+                  <h3 className={`mb-2 ${MONO} text-[length:var(--tr-t-mono-sm)] uppercase tracking-[.16em] text-tr-accent-ink`}>Risk</h3>
                   <p className="text-tr-text">{r.risk}</p>
                 </div>
                 <div>
-                  <h5 className={`mb-2 ${MONO} text-[length:var(--tr-t-mono-sm)] uppercase tracking-[.16em] text-tr-accent`}>Mitigation</h5>
+                  <h3 className={`mb-2 ${MONO} text-[length:var(--tr-t-mono-sm)] uppercase tracking-[.16em] text-tr-accent-ink`}>Mitigation</h3>
                   <p className="text-tr-text">{r.mitigation}</p>
                 </div>
               </div>
@@ -354,36 +386,43 @@ function PhaseContent({
           <div className="grid grid-cols-1 gap-3.5 sm:grid-cols-2">
             {RECEIPTS.map((r, i) => (
               <div key={i} className="rounded-[var(--tr-r-sm)] border border-tr-hairline bg-tr-surface-2 px-5 py-[18px]">
-                <div className={`mb-2.5 ${MONO} text-[length:var(--tr-t-mono-sm)] tracking-[.14em] text-tr-accent`}>{r.phase}</div>
-                <div className={`mb-2 ${MONO} text-[length:var(--tr-t-mono-sm)] tracking-[.06em] text-tr-accent`}>{r.project}</div>
+                <div className={`mb-2.5 ${MONO} text-[length:var(--tr-t-mono-sm)] tracking-[.14em] text-tr-accent-ink`}>{r.phase}</div>
+                <div className={`mb-2 ${MONO} text-[length:var(--tr-t-mono-sm)] tracking-[.06em] text-tr-accent-ink`}>{r.project}</div>
                 <h3 className="mb-2 text-[length:var(--tr-t-h3)] leading-[var(--tr-lh-h3)] font-medium text-tr-text">{r.title}</h3>
                 <p className="mb-3 leading-[var(--tr-lh-prose)] text-tr-text">{r.desc}</p>
                 {r.note && (
                   <div className={`mb-3 border-l-2 border-tr-accent pl-2.5 ${MONO} text-[length:var(--tr-t-mono-sm)] text-tr-text-faint`}>
-                    <span className="tracking-[.1em] text-tr-accent">note / </span>
+                    <span className="tracking-[.1em] text-tr-accent-ink">note / </span>
                     {r.note}
                   </div>
                 )}
-                {r.link && (
-                  <a
-                    className={`${MONO} border-b border-dashed border-tr-hairline pb-px text-[length:var(--tr-t-mono-sm)] text-tr-text no-underline transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] hover:border-tr-accent hover:text-tr-accent`}
-                    href={r.link.href}
-                    {...(r.link.href.startsWith("http") ? { target: "_blank", rel: "noreferrer" } : {})}
-                  >
-                    ↗ {r.link.label}
-                  </a>
+                {r.links && (
+                  <div className="flex flex-wrap gap-x-4 gap-y-1.5">
+                    {r.links.map((l) => (
+                      <a
+                        key={l.href}
+                        className={`${MONO} border-b border-dashed border-tr-hairline pb-px text-[length:var(--tr-t-mono-sm)] text-tr-text no-underline transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] hover:border-tr-accent hover:text-tr-accent-ink`}
+                        href={l.href}
+                        {...(l.href.startsWith("http") ? { target: "_blank", rel: "noreferrer" } : {})}
+                      >
+                        ↗ {l.label}
+                      </a>
+                    ))}
+                  </div>
                 )}
               </div>
             ))}
           </div>
 
           <div className="mt-9 rounded-[var(--tr-r-md)] border border-dashed border-tr-accent bg-tr-surface-2 px-7 py-6 text-[length:var(--tr-t-h3)] leading-[var(--tr-lh-h3)] italic text-tr-text">
-            You just experienced what a 30-minute scoping call with me feels like, on your real problem.
+            {source === 'live'
+              ? 'You just experienced what a 30-minute scoping call with me feels like, on your real problem.'
+              : 'That was a prepared example of a 30-minute scoping call with me. Bring your real problem and it gets the same treatment.'}
             <br />
-            <span className="text-tr-accent">If that landed → </span>
+            <span className="text-tr-accent-ink">If that landed → </span>
             <a
               href={`mailto:${SITE_CONFIG.social.email}`}
-              className="not-italic text-tr-accent underline decoration-current underline-offset-2"
+              className="not-italic text-tr-accent-ink underline decoration-current underline-offset-2"
             >
               {SITE_CONFIG.social.email}
             </a>

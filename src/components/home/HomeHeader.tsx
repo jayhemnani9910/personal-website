@@ -1,14 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import { useLenis } from "lenis/react";
 import { useState, type MouseEvent } from "react";
 import type { NavItem } from "@/data/home";
 import { useTheme } from "@/context/ThemeContext";
 import { ThemeGlyph } from "@/components/ThemeGlyph";
 import { useTerminal } from "@/context/TerminalContext";
-import { scrollToTarget } from "@/lib/scroll";
-import { useScrollState } from "./useScrollState";
+import { useJump } from "./useJump";
+import { useScrollProgress, useScrolled } from "./useScrollState";
 
 type Pill = { x: number; w: number } | null;
 
@@ -16,16 +15,12 @@ const ROW_CLASS =
   "block leading-5 transition-transform duration-[450ms] ease-[var(--tr-ease)] group-hover:-translate-y-5";
 
 export function HomeHeader({ nav }: { nav: NavItem[] }) {
-  const { scrolled, progress } = useScrollState();
+  const scrolled = useScrolled();
+  const progress = useScrollProgress();
   const { toggleTheme } = useTheme();
   const { toggleTerminal } = useTerminal();
-  const lenis = useLenis();
+  const jump = useJump();
   const [pill, setPill] = useState<Pill>(null);
-
-  const jump = (href: string) => (e: MouseEvent<HTMLAnchorElement>) => {
-    e.preventDefault();
-    scrollToTarget(href, lenis);
-  };
 
   const handlePillEnter = (e: MouseEvent<HTMLAnchorElement>) => {
     const navEl = e.currentTarget.closest("nav");
@@ -51,9 +46,9 @@ export function HomeHeader({ nav }: { nav: NavItem[] }) {
           className="group relative block h-5 min-w-[11ch] overflow-hidden text-[13px] font-semibold tracking-[-.01em] text-tr-text"
         >
           <span className={ROW_CLASS}>Jay Hemnani</span>
-          <span className={`${ROW_CLASS} font-mono font-normal text-tr-accent`}>
+          <span aria-hidden="true" className={`${ROW_CLASS} font-mono font-normal text-tr-accent-ink`}>
             jay@hemnani ~{" "}
-            <span aria-hidden="true" className="animate-[v4-caret_1s_steps(1)_infinite]">
+            <span className="animate-[v4-caret_1s_steps(1)_infinite]">
               ▌
             </span>
           </span>
@@ -77,7 +72,7 @@ export function HomeHeader({ nav }: { nav: NavItem[] }) {
                 <span className="block leading-[30px] transition-transform duration-[400ms] ease-[var(--tr-ease)] group-hover:-translate-y-[30px]">
                   {item.label}
                 </span>
-                <span className="block font-mono text-[11px] leading-[30px] tracking-[.06em] text-tr-accent transition-transform duration-[400ms] ease-[var(--tr-ease)] group-hover:-translate-y-[30px]">
+                <span className="block font-mono text-[11px] leading-[30px] tracking-[.06em] text-tr-accent-ink transition-transform duration-[400ms] ease-[var(--tr-ease)] group-hover:-translate-y-[30px]">
                   {item.alt}
                 </span>
               </>
@@ -108,7 +103,7 @@ export function HomeHeader({ nav }: { nav: NavItem[] }) {
             aria-label="Toggle theme"
             data-cursor="FLIP"
             onClick={toggleTheme}
-            className="h-[30px] w-[30px] rounded-[var(--tr-r-md)] border border-tr-hairline text-tr-text-mute transition-[transform,color,border-color] duration-500 ease-[var(--tr-ease)] hover:border-tr-accent hover:text-tr-text [[data-theme=light]_&]:rotate-180"
+            className="h-[30px] w-[30px] rounded-[var(--tr-r-md)] border border-tr-hairline text-tr-text-mute transition-[transform,color,border-color] duration-500 ease-[var(--tr-ease)] hover:border-tr-accent hover:text-tr-text light:rotate-180"
           >
             <ThemeGlyph />
           </button>
