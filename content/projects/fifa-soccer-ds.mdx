@@ -148,7 +148,7 @@ deepDive:
                 for conv in self.convs:
                     x = self.dropout(F.relu(conv(x, edge_index)))
                 return self.classifier(x)
-      explanation: "The tactical head: a GraphSAGE stack that aggregates each player's graph neighborhood into role logits. It is inference-ready and wired into the full pipeline, but ships untrained, training it on labeled tactical data is the open milestone."
+      explanation: "The tactical head: a GraphSAGE stack that aggregates each player's graph neighborhood into role logits. It is inference-ready and wired into the full pipeline, but ships untrained: training it on labeled tactical data is the open milestone."
   metrics:
     - value: "22 FPS"
       label: "real-time inference"

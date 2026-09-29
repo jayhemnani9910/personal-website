@@ -9,7 +9,7 @@ tech: ["React", "Redux", "Node.js", "MongoDB", "Kafka", "FastAPI", "Docker", "Ku
 github: "https://github.com/vrushabh05/Lab1_distributed_system"
 links:
   code: "https://github.com/vrushabh05/Lab1_distributed_system"
-challenge: "An Airbnb-style app has clearly separable concerns, travelers, owners, properties, bookings, that fight each other inside a single codebase as it grows. The project's goal was to take a working monolith and re-architect it into independent services that communicate asynchronously, so a slow or failing service degrades the system instead of taking it down, and to make the whole thing deployable on Kubernetes."
+challenge: "An Airbnb-style app has clearly separable concerns (travelers, owners, properties, bookings) that fight each other inside a single codebase as it grows. The project's goal was to take a working monolith and re-architect it into independent services that communicate asynchronously, so a slow or failing service degrades the system instead of taking it down, and to make the whole thing deployable on Kubernetes."
 solution:
   - "A React + Redux + Vite frontend (Tailwind) with feature slices for auth, properties, bookings, favorites, and the owner dashboard, talking to the backend over a small API layer."
   - "Four Node/Express microservices, traveler, owner, property, and booking, each with its own responsibility and MongoDB data, deployable independently."
