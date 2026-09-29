@@ -9,7 +9,10 @@ const MONO_TYPE = 'font-[family-name:var(--ff-mono)] text-[length:var(--tr-t-mon
 
 /** `children` is the WCA cube card slot, a client component owned by another agent. */
 export function Method({ children }: { children: ReactNode }) {
-  const [methodH2Lead, methodH2Rest] = COPY.methodH2.split(", ");
+  // Split at the first ", " only, so a later comma stays in the second line.
+  const comma = COPY.methodH2.indexOf(", ");
+  const methodH2Lead = COPY.methodH2.slice(0, comma);
+  const methodH2Rest = COPY.methodH2.slice(comma + 2);
 
   return (
     <section
@@ -57,7 +60,7 @@ export function Method({ children }: { children: ReactNode }) {
               data-cursor="OPEN"
               className="mt-auto font-[family-name:var(--ff-mono)] text-[length:var(--tr-t-mono)] tracking-normal text-tr-text-mute hover:text-tr-accent-ink"
             >
-              ← {m.from}
+              <span aria-hidden="true">←</span> {m.from}
             </Link>
           </li>
         ))}
