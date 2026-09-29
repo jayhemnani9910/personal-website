@@ -1,73 +1,69 @@
-<div align="center">
+# jayhemnani.in
 
-# Jay Hemnani
+Source for [jayhemnani.in](https://jayhemnani.in), Jay Hemnani's portfolio: the
+project catalogue, writing, résumé, YouTube channel page, and the `/fde` page
+with its live scoping simulation.
 
-**I build things: data pipelines, ML models, web apps, whatever the problem needs.**
+Next.js 16 (App Router), React 19, TypeScript, Tailwind CSS v4. Content is MDX.
+Hosted on Vercel.
 
-[![Open to Work](https://img.shields.io/badge/Open_to_Work-16a34a?style=for-the-badge&logoColor=white)](#connect)
-[![Portfolio](https://img.shields.io/badge/jayhemnani.in-0a84ff?style=for-the-badge&logo=safari&logoColor=white)](https://jayhemnani.in)
+## Run it
 
-![Python](https://img.shields.io/badge/Python-3776AB?style=flat-square&logo=python&logoColor=white)
-![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=flat-square&logo=typescript&logoColor=white)
-![Go](https://img.shields.io/badge/Go-00ADD8?style=flat-square&logo=go&logoColor=white)
-![SQL](https://img.shields.io/badge/SQL-4479A1?style=flat-square&logo=postgresql&logoColor=white)
-![Kafka](https://img.shields.io/badge/Kafka-231F20?style=flat-square&logo=apachekafka&logoColor=white)
-![PyTorch](https://img.shields.io/badge/PyTorch-EE4C2C?style=flat-square&logo=pytorch&logoColor=white)
-![AWS](https://img.shields.io/badge/AWS-232F3E?style=flat-square&logo=amazonwebservices&logoColor=white)
-![Docker](https://img.shields.io/badge/Docker-2496ED?style=flat-square&logo=docker&logoColor=white)
+Node 24 is required (`engine-strict` is on, so npm refuses other versions).
 
-</div>
+```sh
+nvm use 24
+npm ci
+npm run dev          # http://localhost:3000
+```
 
----
+The site runs with no environment variables. Without them the AI features fall
+back to saved examples and the view counter keeps counts in memory.
 
-### About
+## Environment
 
-Forward Deployed Engineer who goes end-to-end, from designing streaming architectures and training ML models to shipping the frontend that puts it in someone's hands. I care about building things that work in production, not just in notebooks.
+Put local values in `.env.local` (gitignored).
 
-Based in India, open to relocate. Currently looking for roles where I can build at the intersection of data and product.
+| Variable | Used by | Without it |
+|---|---|---|
+| `GEMINI_API_KEY` | `/api/fde-sim`, `/api/decompose` | Both routes say no model is available; the home decomposer falls back to saved examples and `/fde` keeps its presets |
+| `UPSTASH_REDIS_REST_URL`, `UPSTASH_REDIS_REST_TOKEN` (or the older `KV_REST_API_URL`, `KV_REST_API_TOKEN`) | View counts, rate limits, the daily model budget, FDE metrics | Views are counted in memory; rate limits, the budget and metrics are off |
+| `FDE_EVAL_ENDPOINT` | `npm run eval:fde` | Defaults to the production `/api/fde-sim` |
+| `FDE_EVAL_DATE` | `npm run eval:fde:update` | The recorded baseline says `unset` |
 
----
+## Check it
 
-### Featured Projects
+```sh
+npm run lint         # ESLint, fails on any warning
+npm run typecheck    # route types, then tsc
+npm test             # unit and component tests (Vitest)
+npm run build
+npm run test:perf    # bundle and first-paint budgets (Playwright)
+npm run test:visual  # screenshot comparison in both themes (Playwright)
+npm run eval:fde     # live quality check of the simulation against the golden set
+```
 
-**[FIFA Soccer DS](https://jayhemnani.in/projects/fifa-soccer-ds)**: Football tracking pipeline with YOLOv8 detection and ByteTrack multi-object tracking, served over FastAPI with ONNX/TensorRT export and an MLflow + DVC workflow.
+CI (`.github/workflows/ci.yml`) runs lint, typecheck, tests, build, the perf
+budget and `npm audit` on every push and pull request. `eval:fde` calls the
+model, so it only runs by hand.
 
-**[Stock Data Platform](https://jayhemnani.in/projects/stock-data-platform)**: Distributed market-data platform with real-time OHLC ingestion, candlestick charting, and multi-symbol streaming behind a live dashboard.
+## Layout
 
-27 projects total, from computer vision research to distributed systems to on-device ML.
+| Path | What is there |
+|---|---|
+| `content/projects/*.mdx` | One file per project: frontmatter for the catalogue, body for the write-up |
+| `content/blog/*.mdx` | Posts |
+| `content/site.ts` | Name, links and handles used across the site |
+| `src/data/` | Home, résumé, lab and YouTube data |
+| `src/app/` | Routes, API routes, metadata, sitemap |
+| `src/components/` | UI, grouped by page (`home/`, `fde/`, `project/`) |
+| `src/lib/` | Content loading, schemas, the AI prompts and their guards, rate limits |
+| `scripts/fetch-youtube.mjs` | Refreshes `src/data/youtube.json` (needs the owner's OAuth token) |
+| `tests/` | Playwright suites (visual, perf) and the eval golden set |
+| `docs/adr/` | Architecture decision records: why the site is built the way it is |
 
-**[See all projects →](https://jayhemnani.in/projects)**
+## Decisions
 
----
-
-### What I Work With
-
-`Data Engineering` · `Machine Learning` · `Full-Stack Web` · `Sports Analytics`
-`Distributed Systems` · `Computer Vision` · `Streaming Pipelines` · `Cloud Infrastructure`
-
----
-
-### GitHub
-
-<div align="center">
-
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/jayhemnani9910/jayhemnani9910/output/github-snake-dark.svg?v=1">
-  <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/jayhemnani9910/jayhemnani9910/output/github-snake.svg?v=1">
-  <img alt="Snake eating my contribution graph" src="https://raw.githubusercontent.com/jayhemnani9910/jayhemnani9910/output/github-snake.svg?v=1">
-</picture>
-
-</div>
-
----
-
-### Connect
-
-<div align="center">
-
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://linkedin.com/in/jayhemnani)
-[![Email](https://img.shields.io/badge/Email-EA4335?style=for-the-badge&logo=gmail&logoColor=white)](mailto:jayhemnani992000@gmail.com)
-[![Portfolio](https://img.shields.io/badge/Portfolio-000000?style=for-the-badge&logo=safari&logoColor=white)](https://jayhemnani.in)
-[![Twitter](https://img.shields.io/badge/Twitter-1DA1F2?style=for-the-badge&logo=twitter&logoColor=white)](https://twitter.com/jayhemnani)
-
-</div>
+The reasoning behind the design, the palette, the AI routes and the test setup
+is in [`docs/adr/`](docs/adr/README.md). Read the index before changing any of
+them.

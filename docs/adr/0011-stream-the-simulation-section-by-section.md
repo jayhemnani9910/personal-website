@@ -2,6 +2,7 @@
 
 - **Status:** Accepted
 - **Date:** 2026-08-21
+- **Amended by:** [ADR 0013](0013-retry-a-streamed-simulation-while-nothing-has-been-sent.md) (the retry paragraph was rewritten in place to match it; 0013 is the record of that change)
 - **Related:** ADR 0010 (the counters that measured the problem and now measure the fix)
 
 ## Context

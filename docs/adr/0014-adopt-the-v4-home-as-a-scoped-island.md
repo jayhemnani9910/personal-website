@@ -9,7 +9,8 @@
 
 A Claude Design project delivered six screens on 2026-09-01: Portfolio Home,
 Work Index, Project Detail, Writing, About, Channel. They are saved verbatim
-under `docs/design/`. Only the home screen is being built now; the other five
+under `docs/design/`. (Amended 2026-09-29: only the home screen was saved,
+under `docs/design/portfolio-home/`; the other five were not kept.) Only the home screen is being built now; the other five
 follow in later phases.
 
 The home screen keeps the idea ADR 0001 named, that a page has a human reader
@@ -121,6 +122,11 @@ absolute URL or a known site route.
 
 `tests/perf/budget.spec.ts` holds the home page's script and stylesheet bytes
 and the exact font-file count.
+
+Note, 2026-09-29: the scope and two of the guards above are gone. `.home-v4` was
+removed when every page moved to v4, so `tokens.test.ts` reads two palettes, not
+four, and checks each text pair against WCAG AA (ADR 0017). The visual suite
+allows `maxDiffPixels: 20` (`playwright.config.ts`), not 0.
 
 ## Notes
 

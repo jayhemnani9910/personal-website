@@ -2,6 +2,7 @@
 
 - **Status:** Accepted
 - **Date:** 2026-08-19
+- **Amended by:** [ADR 0014](0014-adopt-the-v4-home-as-a-scoped-island.md) (the `.editorial` and `.fde` selectors this record keeps were deleted when every page moved to v4)
 - **Supersedes:** [ADR 0002](0002-keep-the-legacy-editorial-css-behind-a-token-override.md)
 - **Related:** ADR 0001 (the palette), ADR 0006 (the coverage that made this safe)
 
