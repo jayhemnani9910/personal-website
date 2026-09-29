@@ -187,13 +187,17 @@ describe("MethodCube", () => {
 
     fireEvent.click(screen.getByRole("button", { name: "Scramble the cube" }));
     expect(screen.getByText(/scrambling/i)).toBeDefined();
+    // The time display runs a stopwatch while scrambling, in place of the PB.
+    expect(screen.getByText("0.00")).toBeDefined();
+    expect(screen.queryByText(CUBE_PB)).toBeNull();
 
     act(() => {
       vi.advanceTimersByTime(2000);
     });
 
-    const note = screen.getByText(/^Solved\./);
-    expect(note).toBeDefined();
+    // 15 ticks of 120 ms on the fake clock, then back to the PB.
+    expect(screen.getByText(`Solved. Yours took 1.80 s of watching. Mine is still ${CUBE_PB}.`)).toBeDefined();
+    expect(screen.getByText(CUBE_PB)).toBeDefined();
 
     const link = screen.getByRole("link", { name: /the timer app/i });
     expect(link.getAttribute("href")).toBe("/projects/rubiks-timer");
