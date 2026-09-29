@@ -1,5 +1,5 @@
 import { getAllProjects, getProject } from "@/lib/content";
-import { ProjectDetail } from "@/components/ProjectDetail";
+import { ProjectDetail, type DeepDiveProse } from "@/components/ProjectDetail";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { ViewCounter } from "@/components/ViewCounter";
@@ -8,9 +8,9 @@ import { MDXRemote } from "next-mdx-remote/rsc";
 import type { JSX } from "react";
 
 /**
- * The project body is short overview prose. It is rendered here, in the server
- * component, because MDXRemote is server-only and ProjectDetail is a client
- * component; it receives the finished node.
+ * The project body is short overview prose. It is rendered here, in the route,
+ * because MDXRemote is an async server component; ProjectDetail receives the
+ * finished node.
  *
  * Headings are demoted by one level so the page keeps exactly one h1 (the
  * project title) and heading order stays sequential, whatever an author writes.
@@ -21,10 +21,16 @@ const overviewComponents = {
     h1: (props: JSX.IntrinsicElements["h1"]) => <h2 {...props} />,
     h2: (props: JSX.IntrinsicElements["h2"]) => <h3 {...props} />,
     h3: (props: JSX.IntrinsicElements["h3"]) => <h4 {...props} />,
-    a: (props: JSX.IntrinsicElements["a"]) => (
-        <a target="_blank" rel="noreferrer" {...props} />
-    ),
+    // Only an absolute http(s) link opens a new tab; a site path or a
+    // #fragment stays in this one.
+    a: (props: JSX.IntrinsicElements["a"]) =>
+        /^https?:\/\//.test(props.href ?? "") ? <a target="_blank" rel="noreferrer" {...props} /> : <a {...props} />,
 };
+
+// Deep-dive sections authored as one markdown string instead of structured
+// items. Parsed as plain markdown ("md"), not MDX, so a stray < or { in the
+// text is prose rather than a compile error.
+const PROSE_SECTIONS = ["context", "architecture", "components", "dataFlow", "keyDecisions", "codeSnippets", "learnings"] as const;
 
 export default async function ProjectPage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
@@ -36,8 +42,8 @@ export default async function ProjectPage({ params }: { params: Promise<{ id: st
 
     // Every project renders through the same v4 template now; the old
     // tabbed ProjectShowcase path is gone. Order and neighbours come from
-    // the same priority-then-id sort the work index uses, so "01 / 27" and
-    // the prev/next footer agree with what /projects shows.
+    // the same priority-then-id sort the work index uses, so the "01 / N"
+    // counter and the prev/next footer agree with what /projects shows.
     const allProjects = await getAllProjects();
     const index = allProjects.findIndex((p) => p.id === id);
     const total = allProjects.length;
@@ -46,6 +52,16 @@ export default async function ProjectPage({ params }: { params: Promise<{ id: st
     const overview = project.content.trim() ? (
         <MDXRemote source={project.content} components={overviewComponents} />
     ) : null;
+
+    const prose: DeepDiveProse = {};
+    for (const key of PROSE_SECTIONS) {
+        const text = project.deepDive?.[key];
+        if (typeof text === "string" && text.trim()) {
+            prose[key] = (
+                <MDXRemote source={text} components={overviewComponents} options={{ mdxOptions: { format: "md" } }} />
+            );
+        }
+    }
 
     const meta = `${String(index + 1).padStart(2, "0")} / ${total}`;
 
@@ -56,6 +72,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ id: st
                 <ProjectDetail
                     project={project}
                     overview={overview}
+                    prose={prose}
                     nextProject={{ id: next.id, title: next.title, index: allProjects.indexOf(next) + 1 }}
                 />
                 <div className="mx-auto flex max-w-[1280px] items-center justify-end px-[clamp(1rem,4vw,2rem)] py-6">

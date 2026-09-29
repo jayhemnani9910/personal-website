@@ -9,7 +9,6 @@ export type YouTubeItem = {
     durationSec: number;
     views: number;
     thumb: string;
-    status?: "live" | "upcoming";
 };
 
 export type YouTubeChannel = {
@@ -20,7 +19,6 @@ export type YouTubeChannel = {
     stats: { subscribers: number; views: number; videos: number };
     videos: YouTubeItem[];
     shorts: YouTubeItem[];
-    live: YouTubeItem[];
 };
 
 export type YouTubeData = {
@@ -31,9 +29,11 @@ export type YouTubeData = {
 const compact = (x: number): string =>
     x < 10 ? x.toFixed(1).replace(/\.0$/, "") : String(Math.round(x));
 
+// The M cut-off is 999,500, not 1,000,000: anything from there rounds to
+// "1000" thousands, so it reads as 1M instead.
 export function formatViews(n: number): string {
     if (n < 1000) return String(n);
-    if (n < 1_000_000) return `${compact(n / 1000)}K`;
+    if (n < 999_500) return `${compact(n / 1000)}K`;
     return `${compact(n / 1_000_000)}M`;
 }
 

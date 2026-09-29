@@ -1,8 +1,11 @@
 "use client";
 
 import { useRef, useState, type KeyboardEvent } from "react";
-import { Github } from "lucide-react";
+import Link from "next/link";
+import type { Route } from "next";
+import { ArrowRight, Github } from "lucide-react";
 import { LAB_ITEMS, type LabItem } from "@/data/lab";
+import { SITE_CONFIG } from "@/../content/site";
 
 type TabKey = "building" | "exploring" | "radar";
 
@@ -14,6 +17,8 @@ const TABS: { key: TabKey; label: string }[] = [
 
 const MONO = "font-[family-name:var(--ff-mono)]";
 const CONTAINER = "mx-auto max-w-[1280px] px-[clamp(1rem,4vw,2rem)]";
+const LINK =
+  "text-tr-text-mute transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] hover:text-tr-accent-ink";
 
 // Calm mono status derived from the tab plus (for Building) the progress value.
 // Never the accent: the active tab is the page's single at-rest accent, so a status
@@ -27,6 +32,9 @@ function statusFor(tab: TabKey, progress?: number): string {
 function LabCard({ item, tab }: { item: LabItem; tab: TabKey }) {
   const { progress } = item;
   const status = statusFor(tab, progress);
+  // A link on this site (the data keeps it absolute for WebMCP) opens its
+  // page in place; any other link is a GitHub repo.
+  const sitePath = item.link?.startsWith(`${SITE_CONFIG.url}/`) ? item.link.slice(SITE_CONFIG.url.length) : null;
   const showBar = progress !== undefined && progress < 100;
 
   return (
@@ -35,18 +43,27 @@ function LabCard({ item, tab }: { item: LabItem; tab: TabKey }) {
         <span className={`${MONO} text-[length:var(--tr-t-mono-sm)] uppercase tracking-[.08em] text-tr-text-mute`}>
           {status}
         </span>
-        {item.link && (
+        {sitePath ? (
+          <Link
+            href={sitePath as Route}
+            aria-label={`${item.title}: project page`}
+            data-cursor="OPEN"
+            className={LINK}
+          >
+            <ArrowRight aria-hidden="true" className="h-4 w-4" />
+          </Link>
+        ) : item.link ? (
           <a
             href={item.link}
             target="_blank"
             rel="noreferrer"
             aria-label={`${item.title} on GitHub`}
             data-cursor="OPEN"
-            className="text-tr-text-mute transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] hover:text-tr-accent-ink"
+            className={LINK}
           >
             <Github aria-hidden="true" className="h-4 w-4" />
           </a>
-        )}
+        ) : null}
       </div>
 
       {/* A plain paragraph, not a heading: these cards sit inside a tabpanel

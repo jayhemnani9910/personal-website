@@ -12,11 +12,14 @@ interface ProjectsClientProps {
   projects: ProjectSummary[];
 }
 
-// Five of the catalogue's entries declare no domain in their frontmatter:
-// early coursework kept for context rather than pitched. They, and any entry
-// explicitly marked "Student work", render their domain cell a shade fainter
+// Early coursework is kept for context rather than pitched, and is marked with
+// the domain "Student work" in its frontmatter (a missing domain means only
+// "not filed yet", not student work). Its domain cell is a shade fainter
 // instead of dropping opacity on already-muted text.
-const isStudentWork = (domain?: string) => !domain || domain === "Student work";
+const isStudentWork = (domain?: string) => domain === "Student work";
+
+// The empty state's hints. One that equals the failed query is left out.
+const SUGGESTIONS = ["kafka", "yolo", "langgraph"];
 
 export function ProjectsClient({ projects }: ProjectsClientProps) {
   const [filter, setFilter] = useState("all");
@@ -53,7 +56,10 @@ export function ProjectsClient({ projects }: ProjectsClientProps) {
   return (
     <>
       {/* Filter bar */}
-      <section className={`sticky top-14 z-[30] bg-tr-bg border-b border-tr-hairline ${SHELL} pt-4 pb-6`}>
+      {/* Sticky only from lg up: on a phone the search box and the wrapping
+          domain chips are several rows tall, and pinned they would cover
+          about half the screen. */}
+      <section className={`lg:sticky lg:top-14 z-[30] bg-tr-bg border-b border-tr-hairline ${SHELL} pt-4 pb-6`}>
         <div className={`${WRAP} flex flex-wrap items-center gap-2`}>
           {/* The search box shows focus on its frame; the bare input inside keeps outline-none. */}
           <div className="flex h-8 min-w-[240px] items-center gap-2 rounded-[var(--tr-r-md)] border border-tr-hairline bg-tr-surface-1 px-3 focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-tr-accent-ink">
@@ -105,12 +111,23 @@ export function ProjectsClient({ projects }: ProjectsClientProps) {
             <span>PROJECT</span>
             <span>ONE LINE</span>
             <span>DOMAIN</span>
-            <span className="text-right">YEAR</span>
+            <span className="text-right">PERIOD</span>
           </div>
 
           {visible.length === 0 ? (
             <p className={`py-[var(--tr-s-8)] text-[length:var(--tr-t-mono)] text-tr-text-faint ${MONO}`}>
-              nothing matches &quot;{query}&quot;. try a stack name like kafka, yolo, langgraph
+              nothing {filter === "all" ? "" : `in ${filter} `}matches &quot;{query}&quot;.{" "}
+              {filter === "all" ? (
+                `try a stack name like ${SUGGESTIONS.filter((s) => s !== q).join(", ")}`
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => setFilter("all")}
+                  className="text-tr-accent-ink underline decoration-tr-hairline underline-offset-4 hover:decoration-tr-accent"
+                >
+                  search every domain
+                </button>
+              )}
             </p>
           ) : (
             <ol className="list-none">
@@ -128,7 +145,7 @@ export function ProjectsClient({ projects }: ProjectsClientProps) {
                     <div>
                       {/* A plain span, not a heading: this is one row of a data table, not a
                           document section, and the page carries exactly one <h1> and no <h2>s
-                          for these 27 rows to nest under. WorkTable.tsx (the home page's version
+                          for these rows to nest under. WorkTable.tsx (the home page's version
                           of this same table) makes the same call. */}
                       <span className="block text-[length:var(--tr-t-h3)] leading-[var(--tr-lh-h3)] tracking-[-.015em] font-medium">
                         {p.title}

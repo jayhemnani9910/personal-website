@@ -23,6 +23,7 @@ vi.mock("next/navigation", () => ({
 import { TerminalOverlay } from "./TerminalOverlay";
 import { FEATURED, buildReceipts } from "@/data/home";
 import { WEBMCP_TOOL_COUNT } from "@/lib/webmcp-tools";
+import { useShellIntent } from "@/lib/shell-intent";
 
 // The real project count as of this write-up (see src/data/home.test.ts,
 // which hardcodes the same number for the same reason: the overlay is a
@@ -146,7 +147,7 @@ describe("TerminalOverlay v4 commands", () => {
     for (const p of FEATURED) {
       expect(dialog.textContent).toContain(p.title);
     }
-    expect(dialog.textContent).toContain(`${PROJECT_COUNT - FEATURED.length} more at /work`);
+    expect(dialog.textContent).toContain(`${PROJECT_COUNT - FEATURED.length} more at /projects`);
   });
 
   it("receipts prints every receipt's figure and label, not its title", () => {
@@ -211,5 +212,139 @@ describe("TerminalOverlay v4 commands", () => {
     type("whoami");
     expect(mockPush).not.toHaveBeenCalled();
     expect(screen.getByLabelText("Terminal command input")).toBeDefined();
+  });
+
+  it("echoes an empty prompt on a bare Enter instead of wiping the log", () => {
+    renderOpen();
+    type("");
+    expect(screen.getByText(/this is a real shell/)).toBeDefined();
+    expect(screen.getByRole("log").children).toHaveLength(3);
+  });
+
+  it("puts command output in a log region, apart from the input", () => {
+    renderOpen();
+    type("whoami");
+    const log = screen.getByRole("log");
+    expect(log.textContent).toContain("Jay Hemnani");
+    expect(log.contains(screen.getByLabelText("Terminal command input"))).toBe(false);
+  });
+});
+
+// From any page but /, the home page's listeners do not exist yet when the
+// command runs, so an event fired then is lost. The intent is carried across
+// the navigation instead, and the home page takes it on mount.
+describe("TerminalOverlay brief and cube off the home page", () => {
+  beforeEach(() => {
+    window.history.pushState({}, "", "/projects");
+    window.sessionStorage.clear();
+  });
+
+  afterEach(() => {
+    window.history.pushState({}, "", "/");
+  });
+
+  function Home() {
+    useShellIntent("brief");
+    useShellIntent("cube");
+    return null;
+  }
+
+  it("brief navigates to /#brief and the home page replays it on mount", () => {
+    renderOpen();
+    const seen: string[] = [];
+    const onBrief = (e: Event) => seen.push((e as CustomEvent<string>).detail);
+    window.addEventListener("v4:brief", onBrief);
+
+    type("brief we have data nobody trusts");
+    act(() => {
+      vi.advanceTimersByTime(200);
+    });
+    expect(mockPush).toHaveBeenCalledWith("/#brief");
+    expect(seen).toEqual([]);
+
+    render(<Home />);
+    expect(seen).toEqual(["we have data nobody trusts"]);
+
+    // Taken once: a later visit to / does not run it again.
+    render(<Home />);
+    expect(seen).toHaveLength(1);
+    window.removeEventListener("v4:brief", onBrief);
+  });
+
+  it("cube navigates to /#method and the home page replays it on mount", () => {
+    renderOpen();
+    let fired = 0;
+    const onCube = () => {
+      fired += 1;
+    };
+    window.addEventListener("v4:cube", onCube);
+
+    type("cube");
+    expect(mockPush).toHaveBeenCalledWith("/#method");
+    expect(fired).toBe(0);
+
+    render(<Home />);
+    expect(fired).toBe(1);
+    window.removeEventListener("v4:cube", onCube);
+  });
+});
+
+// jsdom has no layout, so offsetParent is always null and the focus trap's list
+// of focusable elements was always empty: the trap never ran in tests. Stubbing
+// offsetParent lets it run.
+describe("TerminalOverlay Tab handling", () => {
+  const original = Object.getOwnPropertyDescriptor(HTMLElement.prototype, "offsetParent");
+
+  beforeEach(() => {
+    Object.defineProperty(HTMLElement.prototype, "offsetParent", {
+      configurable: true,
+      get() {
+        return this.parentNode;
+      },
+    });
+  });
+
+  afterEach(() => {
+    if (original) Object.defineProperty(HTMLElement.prototype, "offsetParent", original);
+  });
+
+  it("completes a command on Tab and keeps focus in the input", () => {
+    renderOpen();
+    const input = screen.getByLabelText("Terminal command input") as HTMLInputElement;
+    input.focus();
+    fireEvent.change(input, { target: { value: "he" } });
+    fireEvent.keyDown(input, { key: "Tab" });
+
+    expect(input.value).toBe("help");
+    expect(document.activeElement).toBe(input);
+  });
+
+  it("leaves Tab alone when there is nothing to complete", () => {
+    renderOpen();
+    const input = screen.getByLabelText("Terminal command input");
+    input.focus();
+    fireEvent.change(input, { target: { value: "help" } });
+
+    const tab = new KeyboardEvent("keydown", { key: "Tab", bubbles: true, cancelable: true });
+    act(() => {
+      input.dispatchEvent(tab);
+    });
+    // The input is the dialog's last focusable element, so the trap wraps
+    // focus to the first one, as it should for an ordinary Tab.
+    expect(document.activeElement).toBe(screen.getByRole("button", { name: /esc/ }));
+  });
+
+  it("does not swallow Shift+Tab in the input", () => {
+    renderOpen();
+    const input = screen.getByLabelText("Terminal command input");
+    input.focus();
+    fireEvent.change(input, { target: { value: "he" } });
+
+    const shiftTab = new KeyboardEvent("keydown", { key: "Tab", shiftKey: true, bubbles: true, cancelable: true });
+    act(() => {
+      input.dispatchEvent(shiftTab);
+    });
+    expect(shiftTab.defaultPrevented).toBe(false);
+    expect((input as HTMLInputElement).value).toBe("he");
   });
 });

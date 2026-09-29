@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { RESUME } from "@/data/resume";
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
+import { useShellIntent } from "@/lib/shell-intent";
 
 // The personal best lives in the resume data, so the card cannot drift from it.
 // No fallback number: visuals.test.tsx fails if the resume string stops parsing.
@@ -115,6 +116,9 @@ export function MethodCube() {
   useEffect(() => {
     scrambleRef.current = scramble;
   });
+  // A `cube` typed in the shell on another page. After the effect above, so
+  // the ref holds the real scramble by the time it runs.
+  useShellIntent("cube");
 
   return (
     <div className="grid grid-cols-[auto_minmax(0,1fr)] items-center gap-6 rounded-[var(--tr-r-md)] border border-tr-hairline bg-tr-bg p-5">
