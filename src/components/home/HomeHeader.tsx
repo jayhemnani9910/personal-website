@@ -51,7 +51,7 @@ export function HomeHeader({ nav }: { nav: NavItem[] }) {
           className="group relative block h-5 min-w-[11ch] overflow-hidden text-[13px] font-semibold tracking-[-.01em] text-tr-text"
         >
           <span className={ROW_CLASS}>Jay Hemnani</span>
-          <span className={`${ROW_CLASS} font-mono font-normal text-tr-accent`}>
+          <span className={`${ROW_CLASS} font-mono font-normal text-tr-accent-ink`}>
             jay@hemnani ~{" "}
             <span aria-hidden="true" className="animate-[v4-caret_1s_steps(1)_infinite]">
               ▌
@@ -77,7 +77,7 @@ export function HomeHeader({ nav }: { nav: NavItem[] }) {
                 <span className="block leading-[30px] transition-transform duration-[400ms] ease-[var(--tr-ease)] group-hover:-translate-y-[30px]">
                   {item.label}
                 </span>
-                <span className="block font-mono text-[11px] leading-[30px] tracking-[.06em] text-tr-accent transition-transform duration-[400ms] ease-[var(--tr-ease)] group-hover:-translate-y-[30px]">
+                <span className="block font-mono text-[11px] leading-[30px] tracking-[.06em] text-tr-accent-ink transition-transform duration-[400ms] ease-[var(--tr-ease)] group-hover:-translate-y-[30px]">
                   {item.alt}
                 </span>
               </>
@@ -108,7 +108,7 @@ export function HomeHeader({ nav }: { nav: NavItem[] }) {
             aria-label="Toggle theme"
             data-cursor="FLIP"
             onClick={toggleTheme}
-            className="h-[30px] w-[30px] rounded-[var(--tr-r-md)] border border-tr-hairline text-tr-text-mute transition-[transform,color,border-color] duration-500 ease-[var(--tr-ease)] hover:border-tr-accent hover:text-tr-text [[data-theme=light]_&]:rotate-180"
+            className="h-[30px] w-[30px] rounded-[var(--tr-r-md)] border border-tr-hairline text-tr-text-mute transition-[transform,color,border-color] duration-500 ease-[var(--tr-ease)] hover:border-tr-accent hover:text-tr-text light:rotate-180"
           >
             <ThemeGlyph />
           </button>

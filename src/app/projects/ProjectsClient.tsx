@@ -55,8 +55,9 @@ export function ProjectsClient({ projects }: ProjectsClientProps) {
       {/* Filter bar */}
       <section className={`sticky top-14 z-[30] bg-tr-bg border-b border-tr-hairline ${SHELL} pt-4 pb-6`}>
         <div className={`${WRAP} flex flex-wrap items-center gap-2`}>
-          <div className="flex h-8 min-w-[240px] items-center gap-2 rounded-[var(--tr-r-md)] border border-tr-hairline bg-tr-surface-1 px-3">
-            <span aria-hidden="true" className={`${MONO} text-tr-accent`}>
+          {/* The search box shows focus on its frame; the bare input inside keeps outline-none. */}
+          <div className="flex h-8 min-w-[240px] items-center gap-2 rounded-[var(--tr-r-md)] border border-tr-hairline bg-tr-surface-1 px-3 focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-tr-accent-ink">
+            <span aria-hidden="true" className={`${MONO} text-tr-accent-ink`}>
               /
             </span>
             <label htmlFor="project-search" className="sr-only">

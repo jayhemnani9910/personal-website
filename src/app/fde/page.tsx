@@ -24,7 +24,7 @@ export default function FDEPage() {
         {/* ========== HERO ========== */}
         <header className={`${CONTAINER} pt-[clamp(2.5rem,5vw,4rem)] pb-10`}>
           <div className="mb-6 flex flex-wrap items-center gap-2">
-            <span className={`${BADGE} border-tr-accent bg-[color-mix(in_srgb,var(--tr-accent)_12%,transparent)] text-tr-accent`}>
+            <span className={`${BADGE} border-tr-accent bg-[color-mix(in_srgb,var(--tr-accent)_12%,transparent)] text-tr-accent-ink`}>
               <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-current" aria-hidden="true" />
               FDE.SIM.v1 · interactive
             </span>
@@ -33,7 +33,7 @@ export default function FDEPage() {
           </div>
 
           <h1 className="max-w-[16ch] text-[length:var(--tr-t-display-sm)] leading-[var(--tr-lh-display)] tracking-[-.035em] font-medium text-tr-text">
-            Stop reading. <span className="italic text-tr-accent">Brief me</span>.
+            Stop reading. <span className="italic text-tr-accent-ink">Brief me</span>.
           </h1>
 
           <p className="mt-6 max-w-[60ch] text-tr-text-mute [text-wrap:pretty]">
@@ -55,7 +55,7 @@ export default function FDEPage() {
               <p className={`${MONO} text-[length:var(--tr-t-mono)] tracking-[.1em] text-tr-text-faint`}>/02 · RECEIPTS</p>
               <div>
                 <h2 className={H2}>
-                  The simulation above isn&apos;t <span className="italic text-tr-accent">vibes</span>. Here&apos;s the
+                  The simulation above isn&apos;t <span className="italic text-tr-accent-ink">vibes</span>. Here&apos;s the
                   engineering substrate it runs on.
                 </h2>
                 <p className="mt-4 max-w-[48ch] text-tr-text-mute">
@@ -68,13 +68,13 @@ export default function FDEPage() {
             <div className="grid gap-px overflow-hidden rounded-[var(--tr-r-lg)] border border-tr-hairline bg-tr-hairline sm:grid-cols-2">
               {PROOFS.map((p) => (
                 <div key={p.id} className="flex flex-col gap-3 bg-tr-surface-1 p-6">
-                  <span className="text-[length:var(--tr-t-stat)] italic leading-[var(--tr-lh-numeral)] text-tr-accent">{p.id}</span>
+                  <span className="text-[length:var(--tr-t-stat)] italic leading-[var(--tr-lh-numeral)] text-tr-accent-ink">{p.id}</span>
                   <span className={`${MONO} text-[length:var(--tr-t-mono-sm)] uppercase tracking-[.14em] text-tr-text-faint`}>
                     {p.cat} · {p.project}
                   </span>
                   <h3 className="max-w-[22ch] text-[length:var(--tr-t-h3)] leading-[var(--tr-lh-h3)] font-medium text-tr-text">
                     {p.title.pre}
-                    <span className="italic text-tr-accent">{p.title.em}</span>
+                    <span className="italic text-tr-accent-ink">{p.title.em}</span>
                     {p.title.post}
                   </h3>
                   <p className="text-tr-text-mute">{p.body}</p>
@@ -89,7 +89,7 @@ export default function FDEPage() {
                     ))}
                   </div>
                   <a
-                    className={`mt-auto w-fit border-b border-dashed border-tr-hairline pb-px ${MONO} text-[length:var(--tr-t-mono-sm)] text-tr-text no-underline transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] hover:border-tr-accent hover:text-tr-accent`}
+                    className={`mt-auto w-fit border-b border-dashed border-tr-hairline pb-px ${MONO} text-[length:var(--tr-t-mono-sm)] text-tr-text no-underline transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] hover:border-tr-accent hover:text-tr-accent-ink`}
                     href={p.link.href}
                     {...(p.link.href.startsWith("http") ? { target: "_blank", rel: "noreferrer" } : {})}
                   >
@@ -108,7 +108,7 @@ export default function FDEPage() {
               <p className={`${MONO} text-[length:var(--tr-t-mono)] tracking-[.1em] text-tr-text-faint`}>/03 · CANDID</p>
               <div>
                 <h2 className={H2}>
-                  Notes on <span className="italic text-tr-accent">fit</span>.
+                  Notes on <span className="italic text-tr-accent-ink">fit</span>.
                 </h2>
                 <p className="mt-4 max-w-[48ch] text-tr-text-mute">
                   The version where I&apos;m honest about what I can claim, and what I can&apos;t. Yet.
@@ -131,11 +131,11 @@ export default function FDEPage() {
                 </p>
               </div>
               <div className="border-t-2 border-tr-accent pt-6">
-                <h3 className={`mb-4 ${MONO} text-[length:var(--tr-t-mono-sm)] uppercase tracking-[.14em] text-tr-accent`}>
+                <h3 className={`mb-4 ${MONO} text-[length:var(--tr-t-mono-sm)] uppercase tracking-[.14em] text-tr-accent-ink`}>
                   What I haven&apos;t yet
                 </h3>
                 <p className="text-[length:var(--tr-t-h3)] leading-[var(--tr-lh-h3)] text-tr-text">
-                  The full FDE customer lifecycle in an <span className="italic text-tr-accent">external</span>{" "}
+                  The full FDE customer lifecycle in an <span className="italic text-tr-accent-ink">external</span>{" "}
                   environment. Internal stakeholder delivery isn&apos;t the same as external customer delivery. I
                   won&apos;t pretend otherwise.
                 </p>
@@ -173,7 +173,7 @@ function FdeContact() {
       <div className={`${CONTAINER} py-[clamp(3rem,6vw,5rem)]`}>
         <div className={`grid gap-[clamp(2rem,5vw,5rem)] ${TWO_COL} items-end`}>
           <h2 className="text-[length:var(--tr-t-display-sm)] leading-[var(--tr-lh-display)] tracking-[-.03em] font-medium text-tr-text">
-            If the simulation made you think, <span className="italic text-tr-accent">say so</span>.
+            If the simulation made you think, <span className="italic text-tr-accent-ink">say so</span>.
           </h2>
           <p className="max-w-[46ch] text-tr-text-mute">
             Fastest path: email. I read every one. If you ran the sim on a real problem and it sparked an idea, send
@@ -189,15 +189,15 @@ function FdeContact() {
                   {l.lbl}
                 </span>
                 <span
-                  className={`min-w-0 [overflow-wrap:anywhere] text-[length:var(--tr-t-h3)] font-medium transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] group-hover:text-tr-accent ${
-                    l.primary ? "italic text-tr-accent" : "text-tr-text"
+                  className={`min-w-0 [overflow-wrap:anywhere] text-[length:var(--tr-t-h3)] font-medium transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] group-hover:text-tr-accent-ink ${
+                    l.primary ? "italic text-tr-accent-ink" : "text-tr-text"
                   }`}
                 >
                   {l.val}
                 </span>
                 <span
                   aria-hidden="true"
-                  className={`${MONO} text-tr-accent transition-transform duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] group-hover:translate-x-1 group-hover:-translate-y-1`}
+                  className={`${MONO} text-tr-accent-ink transition-transform duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] group-hover:translate-x-1 group-hover:-translate-y-1`}
                 >
                   ↗
                 </span>

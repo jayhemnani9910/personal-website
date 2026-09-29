@@ -24,10 +24,10 @@ const COLUMNS: { key: ColumnKey; n: string; label: string }[] = [
 
 const ENGINE_META: Record<Engine, { text: string; className: string }> = {
   idle: { text: "idle", className: "text-tr-text-faint" },
-  thinking: { text: "● decomposing…", className: "text-tr-accent" },
+  thinking: { text: "● decomposing…", className: "text-tr-accent-ink" },
   preset: { text: "● preset", className: "text-tr-ok" },
   model: { text: "● live model", className: "text-tr-ok" },
-  offline: { text: "● closest preset (offline)", className: "text-tr-accent" },
+  offline: { text: "● closest preset (offline)", className: "text-tr-accent-ink" },
 };
 
 const LINE_ANIM = "animate-[v4-line-in_.4s_cubic-bezier(.16,1,.3,1)_both]";
@@ -153,7 +153,7 @@ export function Decomposer() {
       style={{ boxShadow: "var(--tr-shadow-card)" }}
     >
       <div className="h-10 px-4 flex items-center gap-2 border-b border-tr-hairline font-mono text-[length:var(--tr-t-mono-xs)] text-tr-text-mute">
-        <span className="text-tr-accent">◆</span>
+        <span className="text-tr-accent-ink">◆</span>
         <span>decompose</span>
         <span className="text-tr-text-mute">· incoming brief</span>
         <span className={`ml-auto ${ENGINE_META[engine].className}`}>{ENGINE_META[engine].text}</span>
@@ -171,7 +171,7 @@ export function Decomposer() {
           onChange={(e) => setBrief(e.target.value)}
           onKeyDown={onBriefKey}
           placeholder="e.g. our support team is drowning in tickets and nobody knows which ones matter"
-          className="w-full resize-none border-0 outline-none bg-transparent text-tr-text text-[17px] leading-[var(--tr-lh-prose)]"
+          className="w-full resize-none border-0 bg-transparent text-tr-text text-[17px] leading-[var(--tr-lh-prose)] focus-visible:outline-offset-4"
         />
         <div className="flex flex-wrap items-center gap-2 mt-3">
           {PRESETS.map((p) => (
@@ -205,7 +205,7 @@ export function Decomposer() {
                 <div key={col.key} className="bg-tr-bg p-4 min-h-[200px]">
                   <p
                     className={`m-0 mb-3 font-mono text-[length:var(--tr-t-mono-sm)] tracking-[.1em] ${
-                      active ? "text-tr-accent" : "text-tr-text-faint"
+                      active ? "text-tr-accent-ink" : "text-tr-text-faint"
                     }`}
                   >
                     {col.n} {col.label}
@@ -258,7 +258,7 @@ export function Decomposer() {
       )}
 
       {engine === "offline" && out && (
-        <p className="m-0 border-t border-tr-hairline py-[.7rem] px-4 font-mono text-[length:var(--tr-t-mono)] text-tr-accent">
+        <p className="m-0 border-t border-tr-hairline py-[.7rem] px-4 font-mono text-[length:var(--tr-t-mono)] text-tr-accent-ink">
           {COPY.offlineNote}
         </p>
       )}

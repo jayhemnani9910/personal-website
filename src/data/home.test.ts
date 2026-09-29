@@ -152,7 +152,10 @@ describe("home data", () => {
   });
 
   it("carries the role titles the hero cycles through, most specific first", () => {
-    expect(ROLES.length).toBeGreaterThan(1);
+    // Exactly eight: the tr-role-cycle keyframes in globals.css give each title
+    // a 1/8 slot (visible 1.5-10.5%, gone by 12.5%). Seven would leave blank
+    // gaps and nine would overlap two titles; change the keyframes with it.
+    expect(ROLES.length).toBe(8);
     expect(ROLES[0]).toBe("FORWARD DEPLOYED ENGINEER");
     expect(new Set(ROLES).size).toBe(ROLES.length);
     // Every title renders into one fixed-width slot, so a stray lowercase entry

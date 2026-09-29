@@ -9,8 +9,9 @@ const ROLE_SECONDS = 2.4;
  *
  * Deliberately CSS-only. A timer in React would mean client state, a
  * `"use client"` boundary around a line of static text, and a first paint that
- * disagrees with the server-rendered HTML. Stacked absolute spans driven by one
- * keyframe animation with staggered negative delays cost none of that: the
+ * disagrees with the server-rendered HTML. Spans stacked in one grid cell and
+ * driven by one keyframe animation with staggered positive delays cost none of
+ * that: the
  * markup is server-rendered, every title is in the document, and the animation
  * is a paint-only opacity change.
  *
@@ -19,7 +20,7 @@ const ROLE_SECONDS = 2.4;
  * reads the range once instead of being interrupted every few seconds by a
  * region that changes on a timer.
  *
- * Reduced motion and reader mode both collapse it to that same static list,
+ * Reduced motion and reader mode both collapse it to the first title alone,
  * handled in globals.css next to the keyframes rather than here, because the
  * reader-mode signal is a `data-` attribute on `<html>` and not a media query.
  */

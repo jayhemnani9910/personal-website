@@ -56,11 +56,11 @@ export function DataFlowStrip({ flow, components: structuredComponents }: { flow
                   type="button"
                   aria-pressed={selected}
                   onClick={() => setActiveStage(i)}
-                  className={`flex min-h-24 w-full flex-col gap-2 p-4 text-left transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] ${
+                  className={`flex min-h-24 w-full flex-col gap-2 p-4 text-left focus-visible:-outline-offset-2 transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] ${
                     selected ? "bg-tr-bg" : "bg-tr-surface-1 hover:bg-tr-surface-2"
                   }`}
                 >
-                  <span className={`${MONO} text-[length:var(--tr-t-mono-sm)] ${selected ? "text-tr-accent" : "text-tr-text-faint"}`}>
+                  <span className={`${MONO} text-[length:var(--tr-t-mono-sm)] ${selected ? "text-tr-accent-ink" : "text-tr-text-faint"}`}>
                     {pad(i + 1)}
                   </span>
                   <span className="text-[length:var(--tr-t-small)] font-medium text-tr-text">{f.step}</span>
@@ -88,7 +88,7 @@ export function DataFlowStrip({ flow, components: structuredComponents }: { flow
               <p className={LABEL}>COMPONENT</p>
               {matchedComponent ? (
                 <div className="mt-2">
-                  <code className={`${MONO} text-[length:var(--tr-t-mono-sm)] text-tr-accent`}>{matchedComponent.name}</code>
+                  <code className={`${MONO} text-[length:var(--tr-t-mono-sm)] text-tr-accent-ink`}>{matchedComponent.name}</code>
                   {matchedComponent.purpose && (
                     <p className="mt-2 text-[length:var(--tr-t-small)] text-tr-text-mute">{matchedComponent.purpose}</p>
                   )}

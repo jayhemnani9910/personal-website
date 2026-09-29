@@ -186,17 +186,17 @@ export function FdeConsole() {
             </div>
             <span>fde.sim: awaiting customer brief</span>
           </div>
-          <span className="text-tr-accent">● READY</span>
+          <span className="text-tr-accent-ink">● READY</span>
         </div>
 
         <div className="px-6 py-7 sm:px-8">
           <div className={`mb-3.5 ${MONO} text-[length:var(--tr-t-mono-sm)] tracking-[.04em] text-tr-text-mute`}>
-            <span className="text-tr-accent" aria-hidden="true">❯ </span>
+            <span className="text-tr-accent-ink" aria-hidden="true">❯ </span>
             tell me what you want built. ambiguity is fine, that&apos;s the point.
           </div>
 
           <textarea
-            className="min-h-[84px] w-full resize-none border-0 bg-transparent py-1 text-[length:var(--tr-t-h3)] leading-[var(--tr-lh-h3)] tracking-[-.005em] text-tr-text outline-none placeholder:italic placeholder:text-tr-text-faint"
+            className="min-h-[84px] w-full resize-none border-0 bg-transparent py-1 text-[length:var(--tr-t-h3)] leading-[var(--tr-lh-h3)] tracking-[-.005em] text-tr-text focus-visible:outline-offset-4 placeholder:italic placeholder:text-tr-text-faint"
             value={briefInput}
             onChange={e => setBriefInput(e.target.value)}
             onKeyDown={e => {
@@ -215,7 +215,7 @@ export function FdeConsole() {
               {PRESETS.map(p => (
                 <button
                   key={p.id}
-                  className={`whitespace-nowrap rounded-full border border-tr-hairline px-2.5 py-1 ${MONO} text-[length:var(--tr-t-mono-sm)] text-tr-text transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] hover:border-tr-accent hover:text-tr-accent`}
+                  className={`whitespace-nowrap rounded-full border border-tr-hairline px-2.5 py-1 ${MONO} text-[length:var(--tr-t-mono-sm)] text-tr-text transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] hover:border-tr-accent hover:text-tr-accent-ink`}
                   onClick={() => startPreset(p)}
                   type="button"
                 >
@@ -269,11 +269,11 @@ export function FdeConsole() {
               className={`mt-4 border-l-2 border-tr-accent bg-[color-mix(in_srgb,var(--tr-accent)_12%,transparent)] px-3.5 py-3 ${MONO} text-[length:var(--tr-t-mono)] leading-[var(--tr-lh-body)] text-tr-text`}
               role="alert"
             >
-              <span className="tracking-[.1em] text-tr-accent">ERROR · </span>
+              <span className="tracking-[.1em] text-tr-accent-ink">ERROR · </span>
               {error}
               <div className="mt-2.5">
                 <button
-                  className={`whitespace-nowrap rounded-full border border-tr-hairline px-2.5 py-1 ${MONO} text-[length:var(--tr-t-mono-sm)] text-tr-text transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] hover:border-tr-accent hover:text-tr-accent`}
+                  className={`whitespace-nowrap rounded-full border border-tr-hairline px-2.5 py-1 ${MONO} text-[length:var(--tr-t-mono-sm)] text-tr-text transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] hover:border-tr-accent hover:text-tr-accent-ink`}
                   type="button"
                   onClick={() => startPreset(closestPreset(briefInput))}
                 >

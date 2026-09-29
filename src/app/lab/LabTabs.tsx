@@ -42,7 +42,7 @@ function LabCard({ item, tab }: { item: LabItem; tab: TabKey }) {
             rel="noreferrer"
             aria-label={`${item.title} on GitHub`}
             data-cursor="OPEN"
-            className="text-tr-text-mute transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] hover:text-tr-accent"
+            className="text-tr-text-mute transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] hover:text-tr-accent-ink"
           >
             <Github aria-hidden="true" className="h-4 w-4" />
           </a>
@@ -131,7 +131,7 @@ export function LabTabs() {
               onKeyDown={(e) => onTabKeyDown(e, i)}
               className={`-mb-px flex items-center gap-2 border-b-2 pb-3 text-[length:var(--tr-t-mono)] uppercase tracking-[.04em] transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] ${
                 selected
-                  ? "border-tr-accent text-tr-accent"
+                  ? "border-tr-accent text-tr-accent-ink"
                   : "border-transparent text-tr-text-mute hover:text-tr-text"
               }`}
             >

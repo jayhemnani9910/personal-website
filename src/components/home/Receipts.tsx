@@ -32,13 +32,13 @@ export function Receipts({ receipts }: { receipts: Receipt[] }) {
               data-cursor="PROOF"
               onClick={() => toggle(i)}
               style={reduced ? undefined : { animationDelay: `${i * STAGGER_MS}ms` }}
-              className={`group flex flex-col gap-[.9rem] p-[1.25rem_1.1rem] text-left transition-colors ${
+              className={`group flex flex-col gap-[.9rem] p-[1.25rem_1.1rem] text-left focus-visible:-outline-offset-2 transition-colors ${
                 isOpen ? "bg-tr-surface-2" : "bg-tr-surface-1 hover:bg-tr-surface-2"
               } ${reduced ? "" : "animate-[v4-line-in_.4s_cubic-bezier(.16,1,.3,1)_both]"}`}
             >
               <span
                 className={`text-[length:var(--tr-t-stat)] leading-[var(--tr-lh-numeral)] tracking-[-.04em] font-medium tabular-nums transition-colors ${
-                  isOpen ? "text-tr-accent" : "text-tr-text group-hover:text-tr-accent-ink"
+                  isOpen ? "text-tr-accent-ink" : "text-tr-text group-hover:text-tr-accent-ink"
                 }`}
               >
                 {r.n}
@@ -46,7 +46,7 @@ export function Receipts({ receipts }: { receipts: Receipt[] }) {
               <span className="text-[12.5px] leading-[var(--tr-lh-card)] text-tr-text-mute">{r.label}</span>
               <span
                 className={`mt-auto font-mono text-[length:var(--tr-t-mono-sm)] ${
-                  isOpen ? "text-tr-accent" : "text-tr-text"
+                  isOpen ? "text-tr-accent-ink" : "text-tr-text"
                 }`}
               >
                 {isOpen ? "▲ close" : `▼ ${r.cta}`}

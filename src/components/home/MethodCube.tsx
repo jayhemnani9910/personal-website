@@ -148,7 +148,7 @@ export function MethodCube() {
         {scrambled && (
           <p className="mb-0 mt-1 text-[12.5px] leading-[var(--tr-lh-prose)] text-tr-text-mute">
             I wrote{" "}
-            <Link href="/projects/rubiks-timer" className="underline hover:text-tr-accent">
+            <Link href="/projects/rubiks-timer" className="underline hover:text-tr-accent-ink">
               the timer app
             </Link>
             .

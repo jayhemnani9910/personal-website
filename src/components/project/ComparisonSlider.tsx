@@ -28,7 +28,7 @@ export function ComparisonSlider({
     <div>
       <div className="flex flex-wrap items-center justify-between gap-3">
         <p className="font-[family-name:var(--ff-mono)] text-[length:var(--tr-t-mono)] tracking-[.05em] text-tr-text-faint">
-          <span aria-hidden="true" className="text-tr-accent">
+          <span aria-hidden="true" className="text-tr-accent-ink">
             ◆
           </span>{" "}
           INPUT FRAME → PIPELINE OUTPUT · drag
@@ -68,8 +68,8 @@ export function ComparisonSlider({
         />
         {/* These two corner labels sit on top of a photograph, where a --tr-*
             token can't promise contrast against arbitrary imagery underneath.
-            A fixed dark scrim with white text is the one hex exception on
-            this page, reserved for exactly this case. */}
+            A fixed dark scrim with white text is the one hard-coded colour on
+            project pages, reserved for exactly this case. */}
         <span
           className="absolute right-3 top-3 rounded px-2 py-1 font-[family-name:var(--ff-mono)] text-[11px] text-white"
           style={{ background: "rgba(0,0,0,.6)" }}

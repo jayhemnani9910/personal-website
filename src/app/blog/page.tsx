@@ -60,7 +60,7 @@ export default async function WritingPage() {
                   <div className="font-[family-name:var(--ff-mono)] leading-relaxed text-tr-text-faint">
                     <span className="block">{fmtDate(post.date)}</span>
                     {post.readingTime && (
-                      <span className="block text-tr-text-faint transition-colors group-hover:text-tr-accent">
+                      <span className="block text-tr-text-faint transition-colors group-hover:text-tr-accent-ink">
                         {post.readingTime} min
                       </span>
                     )}
@@ -85,7 +85,7 @@ export default async function WritingPage() {
                     )}
                   </div>
 
-                  <span className="font-[family-name:var(--ff-mono)] text-tr-text-faint transition-colors group-hover:text-tr-accent lg:text-right">
+                  <span className="font-[family-name:var(--ff-mono)] text-tr-text-faint transition-colors group-hover:text-tr-accent-ink lg:text-right">
                     read ↗
                   </span>
                 </Link>
@@ -113,7 +113,7 @@ export default async function WritingPage() {
                   key={p.id}
                   href={`/projects/${p.id}`}
                   data-cursor="OPEN"
-                  className="flex flex-col gap-2 bg-tr-surface-1 p-5 no-underline transition-colors hover:bg-tr-surface-2"
+                  className="flex flex-col gap-2 bg-tr-surface-1 p-5 no-underline transition-colors hover:bg-tr-surface-2 focus-visible:-outline-offset-2"
                 >
                   <span className={MONO}>DEEP DIVE</span>
                   <span className="font-medium tracking-[-.01em]">{p.title}</span>
@@ -124,7 +124,7 @@ export default async function WritingPage() {
               <Link
                 href="/projects"
                 data-cursor="OPEN"
-                className="flex flex-col gap-2 bg-tr-surface-1 p-5 no-underline transition-colors hover:bg-tr-surface-2"
+                className="flex flex-col gap-2 bg-tr-surface-1 p-5 no-underline transition-colors hover:bg-tr-surface-2 focus-visible:-outline-offset-2"
               >
                 <span className={MONO}>ALL {projects.length}</span>
                 <span className="font-medium tracking-[-.01em]">The index</span>

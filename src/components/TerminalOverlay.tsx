@@ -30,7 +30,7 @@ const TEXT_COLOR: Record<ColorKey, string> = {
     text: "text-tr-text",
     mute: "text-tr-text-mute",
     faint: "text-tr-text-faint",
-    accent: "text-tr-accent",
+    accent: "text-tr-accent-ink",
     ok: "text-tr-ok",
 };
 
@@ -299,7 +299,7 @@ export function TerminalOverlay({ projectCount }: { projectCount: number }) {
                         role="dialog"
                         aria-modal="true"
                         aria-label="jay's shell"
-                        className="w-[min(880px,100%)] overflow-hidden rounded-[var(--tr-r-xl)] border border-tr-hairline bg-tr-surface-1 shadow-[0_40px_100px_-30px_rgba(0,0,0,.7)]"
+                        className="w-[min(880px,100%)] overflow-hidden rounded-[var(--tr-r-xl)] border border-tr-hairline bg-tr-surface-1 shadow-[var(--tr-shadow-modal)]"
                         onClick={(e) => e.stopPropagation()}
                     >
                         {/* Window header */}
@@ -314,7 +314,7 @@ export function TerminalOverlay({ projectCount }: { projectCount: number }) {
                             <button
                                 type="button"
                                 onClick={closeTerminal}
-                                className="ml-auto cursor-pointer border-0 bg-transparent text-tr-text-mute hover:text-tr-accent"
+                                className="ml-auto cursor-pointer border-0 bg-transparent text-tr-text-mute hover:text-tr-accent-ink"
                             >
                                 esc ✕
                             </button>
@@ -354,7 +354,7 @@ export function TerminalOverlay({ projectCount }: { projectCount: number }) {
                             ))}
 
                             <div className="grid grid-cols-[1.4rem_minmax(0,1fr)] items-center gap-[.4rem]">
-                                <span className="text-tr-accent">❯</span>
+                                <span className="text-tr-accent-ink">❯</span>
                                 <input
                                     ref={inputRef}
                                     type="text"
@@ -362,7 +362,7 @@ export function TerminalOverlay({ projectCount }: { projectCount: number }) {
                                     onChange={(e) => setInput(e.target.value)}
                                     onKeyDown={handleKeyDown}
                                     placeholder="type something, or hit a chip above"
-                                    className="border-0 bg-transparent p-0 text-tr-text outline-none"
+                                    className="border-0 bg-transparent p-0 text-tr-text"
                                     spellCheck={false}
                                     autoComplete="off"
                                     aria-label="Terminal command input"

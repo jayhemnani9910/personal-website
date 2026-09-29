@@ -11,8 +11,8 @@ export function SiteFooter() {
       <div className="mx-auto flex max-w-[1280px] flex-wrap justify-between gap-4 px-[clamp(1rem,4vw,2rem)] py-6 font-[family-name:var(--ff-mono)] text-[length:var(--tr-t-mono)] text-tr-text-faint">
         <span>{SITE_CONFIG.copyright}</span>
         <span className="flex gap-6">
-          <ReaderToggle className="hover:text-tr-accent" />
-          <Link href="/" data-cursor="OPEN" className="hover:text-tr-accent">
+          <ReaderToggle className="hover:text-tr-accent-ink" />
+          <Link href="/" data-cursor="OPEN" className="hover:text-tr-accent-ink">
             ← home
           </Link>
         </span>

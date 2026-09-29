@@ -16,10 +16,10 @@
 export function ThemeGlyph() {
   return (
     <>
-      <span aria-hidden="true" className="[[data-theme=light]_&]:hidden">
+      <span aria-hidden="true" className="light:hidden">
         ◐
       </span>
-      <span aria-hidden="true" className="hidden [[data-theme=light]_&]:inline">
+      <span aria-hidden="true" className="hidden light:inline">
         ◑
       </span>
     </>

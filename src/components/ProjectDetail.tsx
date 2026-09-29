@@ -84,7 +84,7 @@ export function ProjectDetail({
     factCells.push({
       label: "CODE",
       value: (
-        <a href={project.github} target="_blank" rel="noreferrer" data-cursor="OPEN" className="hover:text-tr-accent">
+        <a href={project.github} target="_blank" rel="noreferrer" data-cursor="OPEN" className="hover:text-tr-accent-ink">
           GitHub ↗
         </a>
       ),
@@ -94,7 +94,7 @@ export function ProjectDetail({
     factCells.push({
       label: "DEMO",
       value: (
-        <a href={links.demo} target="_blank" rel="noreferrer" data-cursor="OPEN" className="hover:text-tr-accent">
+        <a href={links.demo} target="_blank" rel="noreferrer" data-cursor="OPEN" className="hover:text-tr-accent-ink">
           Live ↗
         </a>
       ),
@@ -106,7 +106,7 @@ export function ProjectDetail({
       {/* ── Breadcrumb ── */}
       <nav aria-label="Breadcrumb" className={`${SHELL} pt-[clamp(1.5rem,3vw,2rem)]`}>
         <div className={`${WRAP} ${MONO} text-[length:var(--tr-t-mono)] text-tr-text-faint`}>
-          <Link href="/projects" data-cursor="OPEN" className="hover:text-tr-accent">
+          <Link href="/projects" data-cursor="OPEN" className="hover:text-tr-accent-ink">
             /work
           </Link>
           <span> / {project.id}</span>
@@ -155,7 +155,7 @@ export function ProjectDetail({
         <section className={`${SHELL} pb-[clamp(2rem,5vw,4rem)]`}>
           <div className={WRAP}>
             <p className={`${LABEL} mb-3`}>OVERVIEW</p>
-            <div className="max-w-[62ch] text-[length:var(--tr-t-body)] leading-[var(--tr-lh-prose)] text-tr-text-mute [&_a]:text-tr-accent [&_a]:underline [&_a]:decoration-tr-hairline [&_a]:underline-offset-4 [&_h2]:mt-8 [&_h2]:text-[length:var(--tr-t-h3)] [&_h2]:leading-[var(--tr-lh-h3)] [&_h2]:font-medium [&_h2]:text-tr-text [&_h3]:mt-6 [&_h3]:font-medium [&_h3]:text-tr-text [&_li]:mt-2 [&_p+p]:mt-4 [&_strong]:font-medium [&_strong]:text-tr-text [&_ul]:mt-4 [&_ul]:list-disc [&_ul]:pl-5">
+            <div className="max-w-[62ch] text-[length:var(--tr-t-body)] leading-[var(--tr-lh-prose)] text-tr-text-mute [&_a]:text-tr-accent-ink [&_a]:underline [&_a]:decoration-tr-hairline [&_a]:underline-offset-4 [&_h2]:mt-8 [&_h2]:text-[length:var(--tr-t-h3)] [&_h2]:leading-[var(--tr-lh-h3)] [&_h2]:font-medium [&_h2]:text-tr-text [&_h3]:mt-6 [&_h3]:font-medium [&_h3]:text-tr-text [&_li]:mt-2 [&_p+p]:mt-4 [&_strong]:font-medium [&_strong]:text-tr-text [&_ul]:mt-4 [&_ul]:list-disc [&_ul]:pl-5">
               {overview}
             </div>
           </div>
@@ -188,7 +188,7 @@ export function ProjectDetail({
                 key={i}
                 className="grid gap-2 border-b border-tr-hairline py-[1.1rem] lg:grid-cols-[minmax(0,1fr)_5rem_minmax(0,1.6fr)] lg:items-baseline lg:gap-6"
               >
-                <code className={`${MONO} text-[length:var(--tr-t-small)] text-tr-accent`}>{t.name}</code>
+                <code className={`${MONO} text-[length:var(--tr-t-small)] text-tr-accent-ink`}>{t.name}</code>
                 {/* read and write are distinguished by the word itself, not a
                     second saturated colour: the accent-only rule means status
                     tokens (ok/warn) are reserved for verified/gap semantics
@@ -206,7 +206,7 @@ export function ProjectDetail({
             <div className="mt-8 grid gap-6 sm:grid-cols-2">
               <div className="min-w-0 overflow-hidden rounded-[var(--tr-r-lg)] border border-tr-hairline bg-tr-bg">
                 <p className={`${LABEL} border-b border-tr-hairline px-4 py-2`}>
-                  AGENT CALLS <code className="text-tr-accent">{demo.sample.tool}</code>
+                  AGENT CALLS <code className="text-tr-accent-ink">{demo.sample.tool}</code>
                 </p>
                 <pre className="min-w-0 overflow-x-auto p-4 text-[length:var(--tr-t-mono-sm)] leading-[var(--tr-lh-body)] text-tr-text">
                   <code>{demo.sample.request}</code>
@@ -260,7 +260,7 @@ export function ProjectDetail({
                 target="_blank"
                 rel="noreferrer"
                 data-cursor="OPEN"
-                className={`${MONO} mt-6 inline-block text-[length:var(--tr-t-mono)] text-tr-text-mute hover:text-tr-accent`}
+                className={`${MONO} mt-6 inline-block text-[length:var(--tr-t-mono)] text-tr-text-mute hover:text-tr-accent-ink`}
               >
                 Run it yourself on GitHub ↗
               </a>
@@ -285,7 +285,7 @@ export function ProjectDetail({
             <ol className="list-none">
               {project.solution.map((item, i) => (
                 <li key={i} className="mt-3 flex gap-3">
-                  <span className={`${MONO} shrink-0 text-tr-accent`}>{pad(i + 1)}</span>
+                  <span className={`${MONO} shrink-0 text-tr-accent-ink`}>{pad(i + 1)}</span>
                   <span className="text-tr-text">{item}</span>
                 </li>
               ))}
@@ -461,7 +461,7 @@ export function ProjectDetail({
           <Link
             href="/projects"
             data-cursor="OPEN"
-            className={`${MONO} text-[length:var(--tr-t-mono)] text-tr-text-mute hover:text-tr-accent`}
+            className={`${MONO} text-[length:var(--tr-t-mono)] text-tr-text-mute hover:text-tr-accent-ink`}
           >
             ← all work
           </Link>
@@ -470,7 +470,7 @@ export function ProjectDetail({
             <span className={`${MONO} block text-[length:var(--tr-t-mono-sm)] tracking-[.1em] text-tr-text-faint`}>
               NEXT · {pad(nextProject.index)}
             </span>
-            <span className="mt-1 block text-[length:var(--tr-t-h3)] leading-[var(--tr-lh-h3)] font-medium text-tr-text group-hover:text-tr-accent">
+            <span className="mt-1 block text-[length:var(--tr-t-h3)] leading-[var(--tr-lh-h3)] font-medium text-tr-text group-hover:text-tr-accent-ink">
               {nextProject.title} →
             </span>
           </Link>

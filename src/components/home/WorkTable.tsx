@@ -2,7 +2,10 @@ import Link from "next/link";
 import type { FeaturedProject } from "@/data/home";
 import { COPY } from "@/data/home";
 
-const MONO = 'font-[family-name:var(--ff-mono)] text-[length:var(--tr-t-mono-sm)] tracking-[.1em] text-tr-text-faint';
+// One colour class per element: two text-tr-* colours on the same element are
+// decided by Tailwind's output order, not by which one is written last.
+const MONO_TYPE = 'font-[family-name:var(--ff-mono)] text-[length:var(--tr-t-mono-sm)] tracking-[.1em]';
+const MONO = `${MONO_TYPE} text-tr-text-faint`;
 // The four column headers are the key to reading every row under them, so they
 // are the one place on this page that gets the accent as letterforms. At
 // --tr-t-mono-sm in --tr-text-faint they measured 3.39:1 and the eye slid past
@@ -58,7 +61,7 @@ export function WorkTable({ projects, total }: { projects: FeaturedProject[]; to
               data-cursor="OPEN"
               className={`peer group grid ${ROW_COLS} py-[1.35rem] items-start`}
             >
-              <span className={`${MONO} text-tr-text-faint group-hover:text-tr-accent`}>{p.num}</span>
+              <span className={`${MONO} text-tr-text-faint group-hover:text-tr-accent-ink`}>{p.num}</span>
 
               <span className="group-hover:translate-x-1.5 transition-transform">
                 <span className="block text-[length:var(--tr-t-h3)] leading-[var(--tr-lh-h3)] tracking-[-.02em] font-medium">
@@ -68,7 +71,7 @@ export function WorkTable({ projects, total }: { projects: FeaturedProject[]; to
                   {p.tech.map((t) => (
                     <span
                       key={t}
-                      className={`${MONO} border border-tr-hairline rounded-[var(--tr-r-sm)] px-1.5 py-0.5 text-tr-text-mute tracking-normal`}
+                      className={`${MONO_TYPE} border border-tr-hairline rounded-[var(--tr-r-sm)] px-1.5 py-0.5 text-tr-text-mute tracking-normal`}
                     >
                       {t}
                     </span>
