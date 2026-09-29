@@ -1,7 +1,8 @@
-import { readFileSync, readdirSync, statSync } from "node:fs";
+import { execFileSync } from "node:child_process";
+import { existsSync, readFileSync } from "node:fs";
 import { join, extname } from "node:path";
 import { describe, expect, it } from "vitest";
-// Relative, not "@/...": vitest.config.mts defines no path aliases.
+// Relative, not "@/...": content/ sits outside src/, the only folder "@" maps.
 import { SITE_CONFIG } from "../../content/site";
 
 // www.jayhemnani.in redirects to the apex jayhemnani.in, so the www host is
@@ -12,17 +13,20 @@ import { SITE_CONFIG } from "../../content/site";
 // The apex/www roles are the reverse of what they were on the old .me domain.
 const CANONICAL_HOST = "https://jayhemnani.in";
 
-function walk(dir: string, out: string[] = []): string[] {
-    for (const entry of readdirSync(dir)) {
-        const p = join(dir, entry);
-        if (statSync(p).isDirectory()) {
-            if (entry === "node_modules" || entry === ".next") continue;
-            walk(p, out);
-        } else if ([".ts", ".tsx", ".mdx", ".txt"].includes(extname(p))) {
-            out.push(p);
-        }
-    }
-    return out;
+// Any host but the canonical one: the www host, the http:// forms of the site,
+// and the old jayhemnani.me domain, which expired on 2026-08-24, so a stray
+// link to it can land on a page someone else now owns.
+const STRAY_HOST = /https:\/\/www\.jayhemnani\.in|http:\/\/(?:www\.)?jayhemnani\.in|jayhemnani\.me\b/;
+
+// Every text file the repo tracks or would track. Asking git rather than
+// walking the tree leaves out everything .gitignore does: node_modules, .next,
+// .claude, .audit, graphify-out and the local TODO-*.md notes.
+function textFiles(): string[] {
+    return execFileSync("git", ["ls-files", "--cached", "--others", "--exclude-standard"], { encoding: "utf8" })
+        .split("\n")
+        .filter((f) => [".ts", ".tsx", ".mdx", ".md", ".txt", ".json", ".css"].includes(extname(f)))
+        .map((f) => join(process.cwd(), f))
+        .filter((f) => existsSync(f)); // a tracked file deleted but not yet staged
 }
 
 describe("canonical host", () => {
@@ -30,20 +34,20 @@ describe("canonical host", () => {
         expect(SITE_CONFIG.url).toBe(CANONICAL_HOST);
     });
 
-    it("no source or content file emits a www URL", () => {
-        const roots = ["src", "content", "public"].map((d) => join(process.cwd(), d));
+    it("no file links the site on any host but the canonical one", () => {
+        const files = textFiles();
         const offenders: string[] = [];
 
-        for (const root of roots) {
-            for (const file of walk(root)) {
-                // This test file necessarily contains the string it forbids.
-                if (file.endsWith("site-url.test.ts")) continue;
-                const text = readFileSync(file, "utf8");
-                for (const [i, line] of text.split("\n").entries()) {
-                    // A www URL is the redirecting host, never the canonical one.
-                    if (/https:\/\/www\.jayhemnani\.in/.test(line)) {
-                        offenders.push(`${file.replace(process.cwd() + "/", "")}:${i + 1}`);
-                    }
+        // Guards the scan itself: an empty listing would pass vacuously.
+        expect(files).toContain(join(process.cwd(), "src/data/youtube.json"));
+
+        for (const file of files) {
+            // This test file necessarily contains the string it forbids.
+            if (file.endsWith("site-url.test.ts")) continue;
+            const text = readFileSync(file, "utf8");
+            for (const [i, line] of text.split("\n").entries()) {
+                if (STRAY_HOST.test(line)) {
+                    offenders.push(`${file.replace(process.cwd() + "/", "")}:${i + 1}`);
                 }
             }
         }

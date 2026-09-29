@@ -10,10 +10,11 @@ name: CI
 #   tokens.test.ts      WCAG contrast against the real globals.css, no hardcoded
 #                       line heights, no source dir hidden from Tailwind by .gitignore
 #   webmcp.test.ts      tool-name array matches the real registerTool calls
-#   showcase.test.ts    every enabled hero image path resolves
+#   showcase.test.ts    every architecture image and compare frame resolves
 #   fde-prompt.test.ts  system prompt and visitor brief stay in separate channels
 #   adr.test.ts         the decision records stay well-formed and indexed
-#   perf budget         JS, CSS and font-file counts for the home route (ADR 0008)
+#   perf budget         script, CSS, document and fetch bytes, font-file count
+#                       and LCP for the home route (ADR 0008)
 
 on:
   push:

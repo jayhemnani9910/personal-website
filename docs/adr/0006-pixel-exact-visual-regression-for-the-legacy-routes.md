@@ -128,3 +128,11 @@ Two things the harness does not cover, stated so they are not assumed:
   coverage. They are also not about to be rewritten.
 - Interaction and animation. Motion is switched off on purpose to make the shots
   deterministic, so nothing here checks that a transition looks right.
+
+**Update, 2026-09-30.** The counts above are out of date, and so is the first
+gap. `tests/visual/token-routes.spec.ts` baselines home, /projects, /blog, /lab
+and /resume, so the token-class pages do have visual coverage. The suite is now
+28 tests, 14 per theme, with 22 committed baselines (11 per theme, about 9.8MB).
+The legacy port this record unblocked is done (see the header of
+`legacy-css.spec.ts`), and a runner or environment change fails every
+screenshot, not 18.

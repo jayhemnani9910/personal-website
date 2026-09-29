@@ -26,7 +26,13 @@ const ROUTE = "/";
 // a budget that fails on rounding gets raised until it means nothing, and one
 // with no headroom is the same thing with extra steps.
 const BUDGET = {
-  scriptBytes: 850 * 1024,     // measured 765.7 KB, then 718.2 KB on 2026-09-02, then 693.0 KB on 2026-09-03
+  // Set at 850 KB against 765.7 KB and never lowered after the drops, which
+  // left room to put 150 KB back unnoticed. Lowered on 2026-09-30.
+  scriptBytes: 765 * 1024,     // measured 765.7 KB, then 718.2 KB on 2026-09-02, then 693.0 KB on 2026-09-03, then 695.9 KB on 2026-09-30
+  // The home page's HTML, and the RSC payloads Next prefetches for the links
+  // in view. Neither had a budget until 2026-09-30.
+  documentBytes: 135 * 1024,   // measured 121.4 KB on 2026-09-30
+  fetchBytes: 100 * 1024,      // measured 90.1 KB on 2026-09-30
   // A moving number, so the history matters: 95 KB under the editorial system,
   // 110 KB for the day the v4 home shipped a second palette beside it, 105 KB
   // once ADR 0014's promotion put one palette back at :root. Now 65 KB, because
@@ -58,17 +64,23 @@ type Load = {
 };
 
 async function measure(page: Page, origin: string): Promise<Load> {
-  const seen: { type: string; size: number }[] = [];
+  const reads: Promise<{ type: string; size: number }>[] = [];
 
-  page.on("response", async (res) => {
+  page.on("response", (res) => {
     if (!res.url().startsWith(origin)) return;
-    let size = 0;
-    try {
-      size = (await res.body()).length;
-    } catch {
-      // Redirects and aborted requests have no body. They carry no weight either.
-    }
-    seen.push({ type: res.request().resourceType(), size });
+    // Error pages are not what the route ships. Under `next start` the two
+    // Vercel scripts in layout.tsx have no handler and come back as the 404
+    // page typed 'script'. Chromium hands back an empty body for them today,
+    // but a count that depends on that is counting the not-found page.
+    if (res.status() >= 400 || new URL(res.url()).pathname.startsWith("/_vercel/")) return;
+    const type = res.request().resourceType();
+    reads.push(
+      res.body().then(
+        (body) => ({ type, size: body.length }),
+        // Redirects and aborted requests have no body. They carry no weight either.
+        () => ({ type, size: 0 }),
+      ),
+    );
   });
 
   await page.goto(ROUTE, { waitUntil: "networkidle" });
@@ -85,6 +97,8 @@ async function measure(page: Page, origin: string): Promise<Load> {
       }),
   );
 
+  // A body read can still be in flight after networkidle. Sum only once all land.
+  const seen = await Promise.all(reads);
   const byType: Record<string, number> = {};
   for (const r of seen) byType[r.type] = (byType[r.type] ?? 0) + r.size;
 
@@ -116,6 +130,16 @@ test("the home route stays inside its performance budget", async ({ page, baseUR
     `JS on first load is ${kb(load.byType.script ?? 0)}, over the ${kb(BUDGET.scriptBytes)} budget`,
   ).toBeLessThanOrEqual(BUDGET.scriptBytes);
 
+  expect(
+    load.byType.document ?? 0,
+    `HTML is ${kb(load.byType.document ?? 0)}, over the ${kb(BUDGET.documentBytes)} budget`,
+  ).toBeLessThanOrEqual(BUDGET.documentBytes);
+
+  expect(
+    load.byType.fetch ?? 0,
+    `Prefetched RSC payloads are ${kb(load.byType.fetch ?? 0)}, over the ${kb(BUDGET.fetchBytes)} budget`,
+  ).toBeLessThanOrEqual(BUDGET.fetchBytes);
+
   // The site ran two stylesheets at once for a month (ADR 0002). This is the
   // number that notices a third.
   expect(
@@ -144,6 +168,9 @@ test("the home route paints promptly", async ({ page, baseURL }) => {
   test.skip(!!process.env.CI, "LCP on a shared runner is noise; see the comment above");
 
   const load = await measure(page, baseURL!);
+  // 0 means no LCP entry arrived inside the observer's window, and 0 would
+  // otherwise pass any budget.
+  expect(load.lcpMs, "no largest-contentful-paint entry was recorded").toBeGreaterThan(0);
   expect(
     load.lcpMs,
     `LCP is ${load.lcpMs}ms against localhost, over the ${BUDGET.lcpMs}ms budget`,

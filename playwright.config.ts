@@ -1,11 +1,13 @@
 import { defineConfig } from "@playwright/test";
 
-// Visual regression harness. It exists for one job: ADR 0002 says the remaining
-// legacy `.editorial` and `.fde` rules get ported to token classes once there is
-// visual coverage of both routes in both themes, and this is that coverage.
+// Visual regression harness, plus the perf budget. It started for one job, the
+// legacy `.editorial` and `.fde` port in ADR 0002, which is done. It now
+// baselines the /projects/[id] variants and /fde (legacy-css.spec.ts) and the
+// home, projects, blog, lab and resume pages (token-routes.spec.ts), in both
+// themes.
 //
-// It runs against a production build rather than `next dev`, because the port
-// changes CSS and dev-mode output is not what visitors get.
+// It runs against a production build rather than `next dev`, because a CSS
+// change in dev-mode output is not what visitors get.
 
 const PORT = 3100; // not 3000: a dev server on the default port must not be
 // screenshotted by accident, and `reuseExistingServer` is off for the same reason.
@@ -86,7 +88,7 @@ export default defineConfig({
 
 // NOT wired into .github/workflows/ci.yml, deliberately. These baselines are
 // pixel-exact against this machine's Chromium build and font rendering, so a
-// GitHub runner would fail all 18 on differences that are not regressions.
+// GitHub runner would fail every screenshot on differences that are not regressions.
 // Running them in CI means running them in the official Playwright container and
 // generating the baselines in that same container. Worth doing, not done yet;
 // wiring it up half-way would produce a red build that everyone learns to ignore.

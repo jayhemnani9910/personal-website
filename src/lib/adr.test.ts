@@ -21,11 +21,10 @@ const README = readFileSync(join(ADR_DIR, "README.md"), "utf8");
 
 const read = (file: string) => readFileSync(join(ADR_DIR, file), "utf8");
 
-// Richards & Ford, Fundamentals of Software Architecture, ch. 21. Compliance
-// and Notes are part of the format too, but Retirement condition is optional
-// and only 0002 carries one, so the required set is the five that every record
-// must answer.
-const REQUIRED_SECTIONS = ["## Context", "## Decision", "## Consequences", "## Compliance"];
+// Richards & Ford, Fundamentals of Software Architecture, ch. 21, as listed in
+// docs/adr/README.md. Retirement condition is optional and only 0002 carries
+// one, so the required set is the five sections every record must answer.
+const REQUIRED_SECTIONS = ["## Context", "## Decision", "## Consequences", "## Compliance", "## Notes"];
 
 const STATUSES = ["Proposed", "Accepted", "Superseded"];
 
@@ -73,10 +72,14 @@ describe("architecture decision records", () => {
   });
 
   // A superseded record that does not say what replaced it leaves a reader on a
-  // decision that is no longer in force with no way forward.
+  // decision that is no longer in force with no way forward. The link has to be
+  // on the Superseded by line, to a record that exists and came later: any other
+  // link in the body (the record it replaced, a related one) is not a way on.
   it.each(RECORDS)("%s links forward if it is superseded", (file) => {
     const body = read(file);
     if (!/^- \*\*Status:\*\* Superseded/m.test(body)) return;
-    expect(body).toMatch(/\]\(\d{4}-[^)]+\.md\)/);
+    const next = body.match(/^- \*\*Superseded by:\*\* .*\]\((\d{4}-[^)]+\.md)\)/m)?.[1];
+    expect(RECORDS).toContain(next);
+    expect(Number(next!.slice(0, 4))).toBeGreaterThan(Number(file.slice(0, 4)));
   });
 });

@@ -174,10 +174,13 @@ describe("TerminalOverlay v4 commands", () => {
   it("help lists the home page commands", () => {
     renderOpen();
     type("help");
-    const dialog = screen.getByRole("dialog");
-    expect(dialog.textContent).toContain("brief");
-    expect(dialog.textContent).toContain("receipts");
-    expect(dialog.textContent).toContain("cube");
+    // The chip row always shows brief, receipts and cube, so check the log,
+    // and for lines only help prints.
+    const log = screen.getByRole("log");
+    expect(log.textContent).toContain("things that work here:");
+    expect(log.textContent).toContain("run the decomposer on your problem");
+    expect(log.textContent).toContain("every number on this page, with source");
+    expect(log.textContent).toContain("cube · joke");
   });
 
   it("renders a chip row whose entries are runnable commands", () => {
@@ -211,6 +214,8 @@ describe("TerminalOverlay v4 commands", () => {
     renderOpen();
     type("whoami");
     expect(mockPush).not.toHaveBeenCalled();
+    expect(screen.getByText(/you, however, remain a mystery/)).toBeDefined();
+    expect(screen.queryByText(/command not found/)).toBeNull();
     expect(screen.getByLabelText("Terminal command input")).toBeDefined();
   });
 

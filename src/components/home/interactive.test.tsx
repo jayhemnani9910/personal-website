@@ -4,9 +4,9 @@ import { PRESETS, FEATURED, COPY } from "@/data/home";
 import type { Receipt } from "@/data/home";
 import { BRIEF_MAX, closestPreset } from "@/lib/decompose";
 
-// jsdom implements neither scrollIntoView (used by the v4:brief event
-// listener) nor IntersectionObserver. Stubbed here rather than in the shared
-// vitest.setup.ts, same reasoning as chrome.test.tsx / visuals.test.tsx.
+// jsdom implements no scrollIntoView, which the v4:brief event listener calls.
+// Stubbed here rather than in the shared vitest.setup.ts, same reasoning as
+// chrome.test.tsx / visuals.test.tsx.
 Element.prototype.scrollIntoView = vi.fn();
 
 const mockReduced = vi.fn();
@@ -270,6 +270,30 @@ describe("Decomposer", () => {
     // No vi.useFakeTimers()/advanceTimersByTime anywhere in this test: if the
     // component still relied on the interval, this would fail.
     expect(screen.getByText(PRESETS[0].out.risks[2])).toBeDefined();
+    expect(mockFetch).not.toHaveBeenCalled();
+  });
+
+  // The shell's `brief` command reaches the Decomposer only through this event.
+  it("takes a v4:brief event: fills the field, scrolls to the section and runs it", () => {
+    mockReduced.mockReturnValue(true);
+    global.fetch = mockFetch as unknown as typeof fetch;
+    const scroll = vi.mocked(Element.prototype.scrollIntoView);
+    scroll.mockClear();
+
+    render(
+      <section id="brief">
+        <Decomposer />
+      </section>
+    );
+    act(() => {
+      window.dispatchEvent(new CustomEvent("v4:brief", { detail: PRESETS[1].text }));
+    });
+
+    expect((screen.getByLabelText(/your brief/i) as HTMLTextAreaElement).value).toBe(PRESETS[1].text);
+    expect(scroll).toHaveBeenCalledTimes(1);
+    expect(scroll.mock.contexts[0]).toBe(document.getElementById("brief"));
+    expect(screen.getByRole("status").textContent).toContain("preset");
+    expect(screen.getByText(PRESETS[1].out.scope[0])).toBeDefined();
     expect(mockFetch).not.toHaveBeenCalled();
   });
 
