@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/page-metadata";
 import { getProjectSummaries } from "@/lib/content";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
@@ -8,14 +9,12 @@ const MONO = "font-[family-name:var(--ff-mono)]";
 const SHELL = "px-[clamp(1rem,4vw,2rem)]";
 const WRAP = "mx-auto max-w-[1280px]";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
     title: "The Work",
     description:
         "The full project catalogue: production systems, research prototypes, and a few honest experiments, filterable by domain.",
-    alternates: {
-        canonical: "/projects",
-    },
-};
+    path: "/projects",
+});
 
 export default async function ProjectsPage() {
     const projects = await getProjectSummaries();

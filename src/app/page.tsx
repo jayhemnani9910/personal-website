@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { HomeV4 } from "@/components/home/HomeV4";
+import { PROFILE_PAGE, jsonLd } from "@/lib/json-ld";
 
 export const metadata: Metadata = {
   alternates: { canonical: "/" },
@@ -11,5 +12,10 @@ export const revalidate = 3600;
 // HomeV4 reads the content itself, so the counts it needs stay next to the
 // markup that interpolates them rather than being threaded through here.
 export default function Home() {
-  return <HomeV4 />;
+  return (
+    <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(PROFILE_PAGE) }} />
+      <HomeV4 />
+    </>
+  );
 }

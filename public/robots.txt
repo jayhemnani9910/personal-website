@@ -7,7 +7,6 @@ Allow: /
 # Sitemap location
 Sitemap: https://jayhemnani.in/sitemap.xml
 
-# Disallow build artifacts and internal paths
-Disallow: /_next/
+# Internal endpoints. /_next/ stays crawlable: pages need its CSS, JS and images.
 Disallow: /api/
 

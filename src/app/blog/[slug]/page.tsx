@@ -6,6 +6,8 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/page-metadata";
+import { blogPosting, jsonLd } from "@/lib/json-ld";
 import { MDXRemote } from "next-mdx-remote/rsc";
 
 const MONO = "font-[family-name:var(--ff-mono)]";
@@ -116,23 +118,16 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const post = await getPost(slug);
 
   if (!post) {
-    return { title: "Post Not Found" };
+    return { title: "Post Not Found", robots: { index: false } };
   }
 
-  return {
+  return pageMetadata({
     title: post.title,
     description: post.summary,
-    alternates: {
-      canonical: `/blog/${slug}`,
-    },
-    openGraph: {
-      title: post.title,
-      description: post.summary,
-      type: "article",
-      publishedTime: post.date,
-      tags: post.tags,
-    },
-  };
+    path: `/blog/${slug}`,
+    type: "article",
+    article: { publishedTime: post.date, tags: post.tags },
+  });
 }
 
 export async function generateStaticParams() {
@@ -154,6 +149,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
 
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(blogPosting(post)) }} />
       <SiteHeader />
       <main id="main-content" className="bg-tr-bg text-tr-text">
         <article className="px-[clamp(1rem,4vw,2rem)] pt-[clamp(2.5rem,5vw,4rem)] pb-[var(--tr-s-12)]">
