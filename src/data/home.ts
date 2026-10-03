@@ -236,6 +236,12 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
     href: "https://github.com/modular/modular/pull/6954",
     landed: "https://github.com/modular/modular/commit/39b94179d6c9c5be6334888f119fcb51469c3ad0",
   },
+  { repo: "lightpanda-io/browser", number: "#3716", href: "https://github.com/lightpanda-io/browser/pull/3716" },
+  { repo: "lightpanda-io/browser", number: "#3717", href: "https://github.com/lightpanda-io/browser/pull/3717" },
+  { repo: "lightpanda-io/browser", number: "#3718", href: "https://github.com/lightpanda-io/browser/pull/3718" },
+  { repo: "lightpanda-io/browser", number: "#3719", href: "https://github.com/lightpanda-io/browser/pull/3719" },
+  { repo: "lightpanda-io/browser", number: "#3721", href: "https://github.com/lightpanda-io/browser/pull/3721" },
+  { repo: "lightpanda-io/browser", number: "#3722", href: "https://github.com/lightpanda-io/browser/pull/3722" },
 ];
 
 /**
@@ -245,7 +251,7 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
  * marks merged, so not #6954: see the Copybara note on MERGED_PRS.
  */
 export const MERGED_PRS_SEARCH = `https://github.com/search?q=${encodeURIComponent(
-  ["is:pr", "is:merged", "author:jayhemnani9910", ...MERGED_PRS.map((pr) => `repo:${pr.repo}`)].join(" "),
+  ["is:pr", "is:merged", "author:jayhemnani9910", ...new Set(MERGED_PRS.map((pr) => `repo:${pr.repo}`))].join(" "),
 )}&type=pullrequests`;
 
 /** How many of MERGED_PRS that search finds, e.g. "3 of 4". */
