@@ -133,8 +133,8 @@ describe("home data", () => {
     const q = url.searchParams.get("q")!;
     for (const pr of MERGED_PRS) expect(q).toContain(`repo:${pr.repo}`);
     // #6954 landed through Copybara, so GitHub shows it closed and the search
-    // cannot find it: the label must not claim all four.
-    expect(MERGED_PRS_SEARCH_LABEL).toBe("3 of 4");
+    // cannot find it: the label must not claim all ten.
+    expect(MERGED_PRS_SEARCH_LABEL).toBe("9 of 10");
     expect(MERGED_PRS.find((pr) => pr.number === "#6954")?.landed).toMatch(/^https:\/\/github\.com\/modular\/modular\/commit\//);
   });
 
