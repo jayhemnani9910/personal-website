@@ -64,53 +64,57 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
+    let slug: unknown;
     try {
-        const { slug } = await request.json();
-        if (!isValidSlug(slug)) {
-            return NextResponse.json({ error: "unknown slug" }, { status: 400 });
-        }
-
-        // Generous for a reader moving through projects, tight for a loop.
-        const ip = clientIp(request.headers);
-        if ((await rateLimit(getRedis(), "views", ip, { limit: 30 })) === "limited") {
-            return NextResponse.json({ error: "rate_limited" }, { status: 429 });
-        }
-
-        const redis = getRedis();
-        if (redis) {
-            try {
-                // SET NX on the dedup key is the whole guard: it succeeds once per
-                // visitor per slug per day, and only that first success increments.
-                // Repeat callers get the current total back, so the UI still renders.
-                const seenKey = `viewed:${slug}:${ip}`;
-                const first = await redis.set(seenKey, 1, { nx: true, ex: DEDUP_WINDOW_SECONDS });
-
-                if (!first) {
-                    const count = (await redis.get<number>(`views:${slug}`)) || 0;
-                    return NextResponse.json({ count, counted: false });
-                }
-
-                const count = await redis.incr(`views:${slug}`);
-                return NextResponse.json({ count, counted: true });
-            } catch {
-                return storeUnavailable();
-            }
-        }
-
-        const seenKey = `viewed:${slug}:${ip}`;
-        const now = Date.now();
-        const expiry = localSeen.get(seenKey);
-
-        if (expiry !== undefined && expiry > now) {
-            return NextResponse.json({ count: localViews.get(slug) || 0, counted: false });
-        }
-
-        pruneLocalSeen(now);
-        localSeen.set(seenKey, now + DEDUP_WINDOW_SECONDS * 1000);
-        const current = localViews.get(slug) || 0;
-        localViews.set(slug, current + 1);
-        return NextResponse.json({ count: current + 1, counted: true });
+        ({ slug } = await request.json());
     } catch {
         return NextResponse.json({ error: "invalid body" }, { status: 400 });
     }
+    if (!isValidSlug(slug)) {
+        return NextResponse.json({ error: "unknown slug" }, { status: 400 });
+    }
+
+    // Generous for a reader moving through projects, tight for a loop.
+    const ip = clientIp(request.headers);
+    if ((await rateLimit(getRedis(), "views", ip, { limit: 30 })) === "limited") {
+        return NextResponse.json({ error: "rate_limited" }, { status: 429 });
+    }
+
+    const seenKey = `viewed:${slug}:${ip}`;
+    const redis = getRedis();
+    if (redis) {
+        let first: unknown = null;
+        try {
+            // SET NX on the dedup key is the whole guard: it succeeds once per
+            // visitor per slug per day, and only that first success increments.
+            // Repeat callers get the current total back, so the UI still renders.
+            first = await redis.set(seenKey, 1, { nx: true, ex: DEDUP_WINDOW_SECONDS });
+
+            if (!first) {
+                const count = (await redis.get<number>(`views:${slug}`)) || 0;
+                return NextResponse.json({ count, counted: false });
+            }
+
+            const count = await redis.incr(`views:${slug}`);
+            return NextResponse.json({ count, counted: true });
+        } catch {
+            // The dedup key is set but the view was not counted. Without this,
+            // the client's retry would be told it already counted, for a day.
+            if (first) await redis.del(seenKey).catch(() => {});
+            return storeUnavailable();
+        }
+    }
+
+    const now = Date.now();
+    const expiry = localSeen.get(seenKey);
+
+    if (expiry !== undefined && expiry > now) {
+        return NextResponse.json({ count: localViews.get(slug) || 0, counted: false });
+    }
+
+    pruneLocalSeen(now);
+    localSeen.set(seenKey, now + DEDUP_WINDOW_SECONDS * 1000);
+    const current = localViews.get(slug) || 0;
+    localViews.set(slug, current + 1);
+    return NextResponse.json({ count: current + 1, counted: true });
 }

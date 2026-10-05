@@ -32,7 +32,7 @@ export function RevealSection({ className, divider, children }: RevealSectionPro
   const slot = divider === undefined ? null : <DividerBuddy index={divider} />;
   // `relative` only when there is something to position against it, so the
   // sections without a rule keep the exact box they had.
-  const cls = [slot ? "relative" : "", className ?? ""].filter(Boolean).join(" ") || undefined;
+  const cls = ["tr-reveal", slot && "relative", className].filter(Boolean).join(" ");
 
   // One element in both modes, so the reduced-motion switch after hydration
   // changes props only and the section nodes the rail and Buddy observe stay
@@ -41,7 +41,7 @@ export function RevealSection({ className, divider, children }: RevealSectionPro
   const shown = { opacity: 1, y: 0 };
   return (
     <m.div
-      className={["tr-reveal", cls].filter(Boolean).join(" ")}
+      className={cls}
       initial={{ opacity: 0, y: 28 }}
       animate={reduced ? shown : undefined}
       whileInView={reduced ? undefined : shown}

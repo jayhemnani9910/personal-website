@@ -36,36 +36,24 @@ function DurationPill({ sec }: { sec: number }) {
   );
 }
 
-function ShortCard({ item }: { item: YouTubeItem }) {
-  return (
-    <a
-      href={`https://www.youtube.com/watch?v=${item.id}`}
-      target="_blank"
-      rel="noopener noreferrer"
-      data-cursor="OPEN"
-      className={CARD}
-    >
-      <div className="relative aspect-[9/16] bg-tr-surface-2">
-        <Image
-          src={item.thumb}
-          alt=""
-          fill
-          sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 16vw"
-          className="object-cover"
-        />
-        <DurationPill sec={item.durationSec} />
-      </div>
-      <div className="p-2">
-        <p className="line-clamp-2 text-[12.5px] leading-[var(--tr-lh-h3)]">{item.title}</p>
-        <p className={`${MONO} mt-1 tracking-normal`}>
-          {formatViews(item.views)} views · {formatDate(item.publishedAt)}
-        </p>
-      </div>
-    </a>
-  );
-}
+// What differs between a Short (9:16, six to a row) and a video (16:9, four to a row).
+const CARD_VARIANTS = {
+  short: {
+    aspect: "aspect-[9/16]",
+    sizes: "(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 16vw",
+    body: "p-2",
+    title: "text-[12.5px]",
+  },
+  video: {
+    aspect: "aspect-video",
+    sizes: "(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw",
+    body: "p-3",
+    title: "text-[13.5px]",
+  },
+};
 
-function VideoCard({ item }: { item: YouTubeItem }) {
+function ItemCard({ item, variant }: { item: YouTubeItem; variant: keyof typeof CARD_VARIANTS }) {
+  const v = CARD_VARIANTS[variant];
   return (
     <a
       href={`https://www.youtube.com/watch?v=${item.id}`}
@@ -74,18 +62,12 @@ function VideoCard({ item }: { item: YouTubeItem }) {
       data-cursor="OPEN"
       className={CARD}
     >
-      <div className="relative aspect-video bg-tr-surface-2">
-        <Image
-          src={item.thumb}
-          alt=""
-          fill
-          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-          className="object-cover"
-        />
+      <div className={`relative ${v.aspect} bg-tr-surface-2`}>
+        <Image src={item.thumb} alt="" fill sizes={v.sizes} className="object-cover" />
         <DurationPill sec={item.durationSec} />
       </div>
-      <div className="p-3">
-        <p className="line-clamp-2 text-[13.5px] leading-[var(--tr-lh-h3)]">{item.title}</p>
+      <div className={v.body}>
+        <p className={`line-clamp-2 ${v.title} leading-[var(--tr-lh-h3)]`}>{item.title}</p>
         <p className={`${MONO} mt-1 tracking-normal`}>
           {formatViews(item.views)} views · {formatDate(item.publishedAt)}
         </p>
@@ -158,7 +140,7 @@ export function YouTubeShowcase({ data }: { data: YouTubeData }) {
           <h3 className={`${MONO} mb-3`}>SHORTS · LATEST</h3>
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
             {channel.shorts.slice(0, 6).map((item) => (
-              <ShortCard key={item.id} item={item} />
+              <ItemCard key={item.id} item={item} variant="short" />
             ))}
           </div>
         </div>
@@ -169,7 +151,7 @@ export function YouTubeShowcase({ data }: { data: YouTubeData }) {
           <h3 className={`${MONO} mb-3`}>VIDEOS · LATEST</h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
             {channel.videos.slice(0, 4).map((item) => (
-              <VideoCard key={item.id} item={item} />
+              <ItemCard key={item.id} item={item} variant="video" />
             ))}
           </div>
         </div>

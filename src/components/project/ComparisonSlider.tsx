@@ -22,6 +22,7 @@ export function ComparisonSlider({
   const [pos, setPos] = useState(50);
   const sliderId = useId();
   const active = pairs[activeIndex];
+  if (!active) return null;
   const pairLabel = active.label ?? `frame ${activeIndex + 1}`;
 
   return (

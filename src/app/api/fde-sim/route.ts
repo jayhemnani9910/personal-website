@@ -289,6 +289,12 @@ async function streamGenerate(
             console.error(`[fde-sim] could not extract JSON from stream (finishReason=${finishReason ?? "none"})`);
             return fail("unparseable");
         }
+        // The section check above skips undeclared keys, but they still reach
+        // the cache, so the whole object is checked before it is stored.
+        if (containsPromptLeak(parsed)) {
+            console.error("[fde-sim] streamed response echoed prompt text");
+            return fail("leak");
+        }
         if (!isSimPayload(parsed)) {
             console.error(`[fde-sim] streamed response failed shape check (${sections.text.length} chars)`);
             return fail("shape");

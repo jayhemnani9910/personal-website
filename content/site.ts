@@ -31,7 +31,7 @@ export const SITE_CONFIG = {
     youtube: "@jhanalytics2.0",
   },
 
-  // Built when the page renders, so both footers stay current each year.
+  // Evaluated at build time: both footers show the build year until the next deploy.
   copyright: `© ${new Date().getFullYear()} Jay Hemnani`,
 } as const;
 

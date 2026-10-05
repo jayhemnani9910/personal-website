@@ -1,14 +1,30 @@
 "use client";
 
 import { useId, useState } from "react";
+import { H2, LABEL, MONO, SHELL, WRAP, pad } from "./styles";
 
-const MONO = "font-[family-name:var(--ff-mono)]";
-const SHELL = "px-[clamp(1rem,4vw,2rem)]";
-const WRAP = "mx-auto max-w-[1280px]";
-const H2 = "text-[length:var(--tr-t-h2)] leading-[var(--tr-lh-h2)] tracking-[-.025em] font-medium text-tr-text";
-const LABEL = `${MONO} text-[length:var(--tr-t-mono-sm)] tracking-[.1em] text-tr-text-faint`;
+// The strip's column counts (grid-cols-2 sm:grid-cols-3 lg:grid-cols-6), each
+// with its col-span classes written out in full so Tailwind finds them.
+const COLUMNS = [
+  { cols: 2, span: ["", "col-span-1", "col-span-2"] },
+  { cols: 3, span: ["", "sm:col-span-1", "sm:col-span-2", "sm:col-span-3"] },
+  { cols: 6, span: ["", "lg:col-span-1", "lg:col-span-2", "lg:col-span-3", "lg:col-span-4", "lg:col-span-5", "lg:col-span-6"] },
+];
 
-const pad = (n: number) => String(n).padStart(2, "0");
+// The grid lines are gap-px over a hairline background, so a short last row
+// shows that background as empty cells. Spanning the last stage over the rest
+// of its row fills them. A breakpoint only gets a class when its span differs
+// from the one it inherits from the breakpoint below.
+function lastStageSpan(stages: number) {
+  let inherited = 1;
+  return COLUMNS.flatMap(({ cols, span }) => {
+    const rest = stages % cols;
+    const s = rest === 0 ? 1 : cols - rest + 1;
+    if (s === inherited) return [];
+    inherited = s;
+    return [span[s]];
+  }).join(" ");
+}
 
 export type DataFlowStep = { step: string; detail?: string; component?: string };
 export type ComponentObj = { name: string; purpose?: string; details?: string };
@@ -26,6 +42,7 @@ export function DataFlowStrip({ flow, components }: { flow: DataFlowStep[]; comp
   if (!selectedFlow) return null;
   const mapsComponents = flow.some((f) => f.component);
   const component = components.find((c) => c.name === selectedFlow.component);
+  const lastSpan = lastStageSpan(flow.length);
 
   return (
     <section className="border-t border-tr-hairline bg-tr-surface-1 py-[clamp(2rem,5vw,4rem)]">
@@ -38,13 +55,8 @@ export function DataFlowStrip({ flow, components }: { flow: DataFlowStep[]; comp
         <ol className="mt-6 grid list-none grid-cols-2 gap-px overflow-hidden rounded-[var(--tr-r-lg)] border border-tr-hairline bg-tr-hairline sm:grid-cols-3 lg:grid-cols-6">
           {flow.map((f, i) => {
             const selected = i === activeStage;
-            // The grid lines are gap-px over a hairline background, so a
-            // short last row shows that background as an empty cell. Five
-            // stages (most strips) leave exactly one at 2, 3 and 6 columns;
-            // spanning the last stage over two fills it at all three.
-            const fill = flow.length === 5 && i === 4 ? "col-span-2" : "";
             return (
-              <li key={i} className={fill}>
+              <li key={i} className={i === flow.length - 1 ? lastSpan : ""}>
                 <button
                   type="button"
                   aria-pressed={selected}

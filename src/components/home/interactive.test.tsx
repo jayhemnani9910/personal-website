@@ -297,6 +297,27 @@ describe("Decomposer", () => {
     expect(mockFetch).not.toHaveBeenCalled();
   });
 
+  it("ignores a v4:brief event while a model call is in flight", async () => {
+    mockReduced.mockReturnValue(false);
+    const late = deferred<unknown>();
+    mockFetch.mockReturnValueOnce(late.promise);
+    global.fetch = mockFetch as unknown as typeof fetch;
+
+    render(<Decomposer />);
+    const field = screen.getByLabelText(/your brief/i);
+    fireEvent.change(field, { target: { value: "some brief nobody has seen" } });
+    fireEvent.click(screen.getByRole("button", { name: /run/i }));
+    act(() => {
+      window.dispatchEvent(new CustomEvent("v4:brief", { detail: "another brief nobody has seen" }));
+    });
+    expect(mockFetch).toHaveBeenCalledTimes(1);
+    expect((field as HTMLTextAreaElement).value).toBe("some brief nobody has seen");
+
+    await act(async () => {
+      late.resolve({ ok: true, status: 200, json: async () => ({ engine: "model", out: PRESETS[2].out }) });
+    });
+  });
+
   it("gives the textarea an accessible name", () => {
     mockReduced.mockReturnValue(false);
     render(<Decomposer />);

@@ -2,16 +2,13 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { RESUME } from "@/data/resume";
+import { CUBE_ACHIEVEMENT } from "@/data/resume";
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
 import { useShellIntent } from "@/lib/shell-intent";
 
 // The personal best lives in the resume data, so the card cannot drift from it.
 // No fallback number: visuals.test.tsx fails if the resume string stops parsing.
-const cubeAchievement = RESUME.education
-  .flatMap((edu) => edu.achievements ?? [])
-  .find((s) => s.startsWith("Rubik's Cube"));
-export const CUBE_PB = cubeAchievement?.match(/([\d.]+)\s*sec/)?.[1] ?? "";
+export const CUBE_PB = CUBE_ACHIEVEMENT?.match(/([\d.]+)\s*sec/)?.[1] ?? "";
 
 const IDLE_NOTE = "Personal best, official. Click to scramble, I promise I'm faster than this animation.";
 
@@ -77,9 +74,14 @@ export function MethodCube() {
   // The shell's `cube` command drives this from anywhere on the page. Kept in
   // a ref for the same reason the Decomposer does it: the listener registers
   // once, and a stale closure would scramble against last render's state.
+  // It scrolls to the section itself, as the Decomposer does: the shell's hash
+  // write moves nothing when the URL is already at #method.
   const scrambleRef = useRef<() => void>(() => {});
   useEffect(() => {
-    const run = () => scrambleRef.current();
+    const run = () => {
+      document.getElementById("method")?.scrollIntoView();
+      scrambleRef.current();
+    };
     window.addEventListener("v4:cube", run);
     return () => window.removeEventListener("v4:cube", run);
   }, []);

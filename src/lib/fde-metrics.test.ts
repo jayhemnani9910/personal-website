@@ -210,7 +210,7 @@ describe("readSimMetrics", () => {
 
   it("tolerates a null row from mget", async () => {
     const redis = {
-      mget: async () => [null, null, null, null, null, ...Array(FAILURE_COUNT).fill(null)],
+      mget: async () => [...Array(OUTCOME_COUNT).fill(null), ...Array(FAILURE_COUNT).fill(null)],
       lrange: async () => [],
       get: async () => null,
     } as unknown as Redis;

@@ -10,9 +10,10 @@ const MONO_TYPE = 'font-[family-name:var(--ff-mono)] text-[length:var(--tr-t-mon
 /** `children` is the WCA cube card slot, a client component owned by another agent. */
 export function Method({ children }: { children: ReactNode }) {
   // Split at the first ", " only, so a later comma stays in the second line.
+  // With no ", " at all, the whole heading is one line.
   const comma = COPY.methodH2.indexOf(", ");
-  const methodH2Lead = COPY.methodH2.slice(0, comma);
-  const methodH2Rest = COPY.methodH2.slice(comma + 2);
+  const methodH2Lead = comma < 0 ? null : COPY.methodH2.slice(0, comma);
+  const methodH2Rest = comma < 0 ? COPY.methodH2 : COPY.methodH2.slice(comma + 2);
 
   return (
     <section
@@ -25,8 +26,12 @@ export function Method({ children }: { children: ReactNode }) {
           id="method-h2"
           className="text-[length:var(--tr-t-h2)] leading-[var(--tr-lh-h2)] tracking-[-.025em] font-medium [text-wrap:balance]"
         >
-          {methodH2Lead},
-          <br />
+          {methodH2Lead !== null && (
+            <>
+              {methodH2Lead},
+              <br />
+            </>
+          )}
           {methodH2Rest}
         </h2>
         <p className="mt-5 max-w-[40ch] text-[length:var(--tr-t-body)] leading-[var(--tr-lh-body)] text-tr-text-mute [text-wrap:pretty]">

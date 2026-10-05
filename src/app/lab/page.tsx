@@ -1,3 +1,5 @@
+import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/page-metadata";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SITE_CONFIG } from "@/../content/site";
@@ -6,6 +8,13 @@ import { LabTabs } from "./LabTabs";
 const MONO = "font-[family-name:var(--ff-mono)]";
 const CONTAINER = "mx-auto max-w-[1280px] px-[clamp(1rem,4vw,2rem)]";
 const TWO_COL = "lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]";
+
+export const metadata: Metadata = pageMetadata({
+  title: "Lab",
+  description:
+    "Things Jay Hemnani is building, exploring, and keeping an eye on. Half-finished on purpose, shown anyway.",
+  path: "/lab",
+});
 
 export default function LabPage() {
   return (

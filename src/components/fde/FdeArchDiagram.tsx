@@ -111,7 +111,8 @@ export function FdeArchDiagram({ architecture }: Props) {
   const drawn = edges.flatMap((e, i) => {
     const f = byId[e.from];
     const t = byId[e.to];
-    if (!f || !t) return [];
+    // A self-loop has no curve to draw: it would run under its own box.
+    if (!f || !t || f === t) return [];
     // Opposite edges would share one curve, and one label would hide the other.
     const offset = pairs.has(`${e.to}>${e.from}`) ? (e.from < e.to ? REVERSE_OFFSET : -REVERSE_OFFSET) : 0;
     const { d, labelX, labelY } = pathFor(f, t, offset);

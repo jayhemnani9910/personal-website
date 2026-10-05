@@ -49,7 +49,8 @@ export default async function ProjectPage({ params }: { params: Promise<{ id: st
     const allProjects = await getAllProjects();
     const index = allProjects.findIndex((p) => p.id === id);
     const total = allProjects.length;
-    const next = allProjects[(index + 1) % total];
+    const nextIndex = (index + 1) % total;
+    const next = allProjects[nextIndex];
 
     const overview = project.content.trim() ? (
         <MDXRemote source={project.content} components={overviewComponents} />
@@ -75,7 +76,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ id: st
                     project={project}
                     overview={overview}
                     prose={prose}
-                    nextProject={{ id: next.id, title: next.title, index: allProjects.indexOf(next) + 1 }}
+                    nextProject={{ id: next.id, title: next.title, index: nextIndex + 1 }}
                 />
                 <div className="mx-auto flex max-w-[1280px] items-center justify-end px-[clamp(1rem,4vw,2rem)] py-6">
                     <ViewCounter slug={id} />

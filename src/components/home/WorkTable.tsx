@@ -67,7 +67,7 @@ export function WorkTable({ projects, total }: { projects: FeaturedProject[]; to
               data-cursor="OPEN"
               className={`peer group grid ${ROW_COLS} py-[1.35rem] items-start`}
             >
-              <span className={`${MONO} text-tr-text-faint group-hover:text-tr-accent-ink`}>{p.num}</span>
+              <span className={`${MONO} group-hover:text-tr-accent-ink`}>{p.num}</span>
 
               <span className="group-hover:translate-x-1.5 transition-transform">
                 <span

@@ -35,6 +35,20 @@ describe("Buddy", () => {
     expect(bubble(container)).not.toContain("press me");
   });
 
+  it("keeps a click reaction's face through a scroll", () => {
+    vi.useFakeTimers();
+    const { container } = render(<Buddy />);
+
+    fireEvent.click(sprite(container));
+    advance(200);
+    fireEvent.scroll(window);
+    advance(200); // the scroll frame and its 150 ms settle
+    expect(container.querySelector(".buddy-eye--reacting")).not.toBeNull();
+
+    advance(900);
+    expect(container.querySelector(".buddy-eye--reacting")).toBeNull();
+  });
+
   it("returns to rest after a click under reduced motion", () => {
     mockReduced.mockReturnValue(true);
     vi.useFakeTimers();

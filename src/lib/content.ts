@@ -12,6 +12,34 @@ const CONTENT_DIR = path.join(process.cwd(), "content");
 // never be used to build a path outside the content dir (e.g. via "../").
 const isSafeSlug = (slug: string): boolean => /^[a-z0-9-]+$/.test(slug);
 
+/**
+ * Every .mdx in a content dir, loaded, with the body dropped. List views never
+ * render the body, and carrying it would ship every item's prose into the
+ * payload of every list page.
+ */
+async function loadAllWithoutContent<T extends { content: string }>(
+    dir: string,
+    load: (slug: string) => Promise<T | null>,
+): Promise<Omit<T, "content">[]> {
+    if (!fs.existsSync(dir)) {
+        return [];
+    }
+
+    const filenames = fs.readdirSync(dir);
+    const items: (Omit<T, "content"> | null)[] = await Promise.all(
+        filenames
+            .filter((name) => name.endsWith(".mdx"))
+            .map(async (name): Promise<Omit<T, "content"> | null> => {
+                const item = await load(name.replace(/\.mdx$/, ""));
+                if (!item) return null;
+                const { content, ...meta } = item;
+                void content; // explicit omit to satisfy lint
+                return meta;
+            })
+    );
+    return items.filter((i): i is Omit<T, "content"> => i !== null);
+}
+
 // ============================================================================
 // PROJECT CONTENT
 // ============================================================================
@@ -68,38 +96,14 @@ export async function getProject(slug: string): Promise<ProjectWithContent | nul
 }
 
 export async function getAllProjects(): Promise<Project[]> {
-    const projectsDir = path.join(CONTENT_DIR, "projects");
-
-    if (!fs.existsSync(projectsDir)) {
-        return [];
-    }
-
-    const filenames = fs.readdirSync(projectsDir);
-    const projects = await Promise.all(
-        filenames
-            .filter((name) => name.endsWith(".mdx"))
-            .map(async (name) => {
-                const slug = name.replace(/\.mdx$/, "");
-                const project = await getProject(slug);
-                // List views never render the body, and carrying it would ship
-                // every project's prose into the payload of every grid page.
-                if (project) {
-                    const { content, ...meta } = project;
-                    void content; // explicit omit to satisfy lint
-                    return meta;
-                }
-                return null;
-            })
-    );
+    const projects = await loadAllWithoutContent(path.join(CONTENT_DIR, "projects"), getProject);
 
     // Sorted by priority, then by id. Most projects declare no priority, so
     // without the tiebreak they all compare equal and Array.sort leaves them in
     // readdirSync order, which the filesystem does not promise to keep stable.
     // The grid could therefore come out in a different order on a different
     // machine, or after an unrelated file was touched.
-    return projects
-        .filter((p): p is Project => p !== null)
-        .sort((a, b) => (a.priority ?? 99) - (b.priority ?? 99) || a.id.localeCompare(b.id));
+    return projects.sort((a, b) => (a.priority ?? 99) - (b.priority ?? 99) || a.id.localeCompare(b.id));
 }
 
 export async function getProjectSummaries(): Promise<ProjectSummary[]> {
@@ -153,34 +157,12 @@ export async function getPost(slug: string): Promise<PostWithContent | null> {
 }
 
 export async function getAllPosts(): Promise<Post[]> {
-    const postsDir = path.join(CONTENT_DIR, "blog");
-    type PostListItem = Omit<PostWithContent, "content">;
-
-    if (!fs.existsSync(postsDir)) {
-        return [];
-    }
-
-    const filenames = fs.readdirSync(postsDir);
-    const posts = await Promise.all(
-        filenames
-            .filter((name) => name.endsWith(".mdx"))
-            .map(async (name) => {
-                const slug = name.replace(/\.mdx$/, "");
-                const post = await getPost(slug);
-                // Return without content for list views
-                if (post) {
-                    const { content, ...postMeta } = post;
-                    void content; // explicit omit to satisfy lint
-                    return postMeta;
-                }
-                return null;
-            })
-    );
+    const posts = await loadAllWithoutContent(path.join(CONTENT_DIR, "blog"), getPost);
 
     // Newest first; the slug tiebreak keeps same-day posts in a fixed order
     // (see the project sort above).
     return posts
-        .filter((p): p is PostListItem => p !== null && !p.draft)
+        .filter((p) => !p.draft)
         .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime() || a.slug.localeCompare(b.slug));
 }
 

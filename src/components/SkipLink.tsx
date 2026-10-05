@@ -19,7 +19,7 @@ export function SkipLink() {
     const main = document.querySelector("main");
     if (!main) return;
     main.tabIndex = -1;
-    main.focus();
+    main.focus({ preventScroll: true });
     scrollToTarget(main, lenis, -80);
   };
 

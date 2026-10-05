@@ -17,5 +17,4 @@ export const WEBMCP_TOOLS = [
   { name: "switch_mode", kind: "write" },
 ] as const;
 
-export const WEBMCP_TOOL_NAMES = WEBMCP_TOOLS.map((t) => t.name);
 export const WEBMCP_TOOL_COUNT = WEBMCP_TOOLS.length;

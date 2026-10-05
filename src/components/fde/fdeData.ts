@@ -2,20 +2,13 @@
    Verbatim copy of the content; no em-dashes introduced. */
 
 import { WEBMCP_TOOL_COUNT } from '@/lib/webmcp-tools';
-import type { ArchComponent as WireComponent } from '@/lib/fde-payload';
+import type { ArchComponent as WireComponent, SimPayload } from '@/lib/fde-payload';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
-export interface ScopeQuestion {
-  q: string;
-  why: string;
-}
+export type ScopeQuestion = SimPayload['scope'][number];
 
-export interface DecompItem {
-  id: string;
-  title: string;
-  why: string;
-}
+export type DecompItem = SimPayload['decomposition'][number];
 
 /** The server's component once the route has turned its col/row into pixels. */
 export type ArchComponent = Omit<WireComponent, 'col' | 'row' | 'x' | 'y'> & { x: number; y: number };
@@ -32,16 +25,9 @@ export interface Architecture {
   edges: ArchEdge[];
 }
 
-export interface SprintRow {
-  day: string;
-  title: string;
-  deliv: string;
-}
+export type SprintRow = SimPayload['sprint'][number];
 
-export interface RiskRow {
-  risk: string;
-  mitigation: string;
-}
+export type RiskRow = SimPayload['risks'][number];
 
 export interface Preset {
   id: string;
