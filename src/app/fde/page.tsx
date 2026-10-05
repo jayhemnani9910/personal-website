@@ -1,6 +1,6 @@
 /* FDE page: server component wrapper. Replaces the old static page.
    Interactive console is a client island. Static sections (Proofs, Fit, Contact)
-   are plain server JSX. layout.tsx is untouched (provides metadata + JSON-LD). */
+   are plain server JSX. layout.tsx provides the metadata. */
 
 import Link from "next/link";
 import type { Route } from "next";

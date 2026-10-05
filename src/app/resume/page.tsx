@@ -27,6 +27,8 @@ const MONO = "font-[family-name:var(--ff-mono)]";
 const CONTAINER = "mx-auto max-w-[1280px] px-[clamp(1rem,4vw,2rem)]";
 const TWO_COL = "lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]";
 const H2 = "text-[length:var(--tr-t-h2)] leading-[var(--tr-lh-h2)] tracking-[-.025em] font-medium text-tr-text";
+const UNDERLINE_LINK = "underline decoration-tr-hairline decoration-1 underline-offset-4 transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] hover:text-tr-accent-ink hover:decoration-tr-accent";
+const OUT_LINK = "inline-flex min-h-6 items-center py-1 transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] hover:text-tr-accent-ink";
 
 // A company's first role row carries its anchor (e.g. /resume#amnex), which
 // the home page's receipts link to.
@@ -62,7 +64,7 @@ export default function AboutPage() {
               <a
                 href={`mailto:${RESUME.contact.email}`}
                 data-cursor="OPEN"
-                className="underline decoration-tr-hairline decoration-1 underline-offset-4 transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] hover:text-tr-accent-ink hover:decoration-tr-accent"
+                className={UNDERLINE_LINK}
               >
                 {RESUME.contact.email}
               </a>
@@ -78,7 +80,7 @@ export default function AboutPage() {
                   target="_blank"
                   rel="noreferrer"
                   data-cursor="OPEN"
-                  className={`${MONO} text-[length:var(--tr-t-mono-sm)] uppercase text-tr-text-mute underline decoration-tr-hairline decoration-1 underline-offset-4 transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] hover:text-tr-accent-ink hover:decoration-tr-accent`}
+                  className={`${MONO} text-[length:var(--tr-t-mono-sm)] uppercase text-tr-text-mute ${UNDERLINE_LINK}`}
                 >
                   {r.label}
                   <span className="sr-only"> résumé (PDF, opens in a new tab)</span>
@@ -197,7 +199,7 @@ export default function AboutPage() {
                           href={pub.link}
                           target="_blank"
                           rel="noreferrer"
-                          className="inline-flex min-h-6 items-center py-1 transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] hover:text-tr-accent-ink"
+                          className={OUT_LINK}
                         >
                           ieeexplore <span aria-hidden="true">↗</span>
                         </a>
@@ -207,7 +209,7 @@ export default function AboutPage() {
                           href={pub.github}
                           target="_blank"
                           rel="noreferrer"
-                          className="inline-flex min-h-6 items-center py-1 transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] hover:text-tr-accent-ink"
+                          className={OUT_LINK}
                         >
                           notebook <span aria-hidden="true">↗</span>
                         </a>
@@ -265,7 +267,7 @@ export default function AboutPage() {
                           href={pr.href}
                           target="_blank"
                           rel="noreferrer"
-                          className={`${MONO} inline-flex min-h-6 items-center gap-2 py-1 text-[length:var(--tr-t-mono-sm)] text-tr-text-mute transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] hover:text-tr-accent-ink`}
+                          className={`${MONO} ${OUT_LINK} gap-2 text-[length:var(--tr-t-mono-sm)] text-tr-text-mute`}
                         >
                           <span>{pr.repo}</span>
                           <span className="text-tr-text-faint">{pr.number} <span aria-hidden="true">↗</span></span>
@@ -277,7 +279,7 @@ export default function AboutPage() {
                             href={pr.landed}
                             target="_blank"
                             rel="noreferrer"
-                            className={`${MONO} inline-flex min-h-6 items-center py-1 text-[length:var(--tr-t-mono-sm)] text-tr-text-faint transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] hover:text-tr-accent-ink`}
+                            className={`${MONO} ${OUT_LINK} text-[length:var(--tr-t-mono-sm)] text-tr-text-faint`}
                           >
                             closed, landed as a commit <span aria-hidden="true">↗</span>
                           </a>
@@ -289,7 +291,7 @@ export default function AboutPage() {
                     href={MERGED_PRS_SEARCH}
                     target="_blank"
                     rel="noreferrer"
-                    className={`${MONO} mt-2 inline-flex min-h-6 items-center py-1 text-[length:var(--tr-t-mono-sm)] text-tr-text-faint transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] hover:text-tr-accent-ink`}
+                    className={`${MONO} ${OUT_LINK} mt-2 text-[length:var(--tr-t-mono-sm)] text-tr-text-faint`}
                   >
                     verify {MERGED_PRS_SEARCH_LABEL} on GitHub <span aria-hidden="true">↗</span>
                   </a>
@@ -303,7 +305,7 @@ export default function AboutPage() {
                     <Link
                       href="/projects/rubiks-timer"
                       data-cursor="OPEN"
-                      className="text-tr-text-mute underline decoration-tr-hairline decoration-1 underline-offset-4 transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] hover:text-tr-accent-ink hover:decoration-tr-accent"
+                      className={`text-tr-text-mute ${UNDERLINE_LINK}`}
                     >
                       the timer
                     </Link>

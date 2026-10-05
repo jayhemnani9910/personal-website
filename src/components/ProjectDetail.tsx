@@ -6,17 +6,11 @@ import { SHOWCASE_PROJECTS } from "@/lib/showcase";
 import { CodeBlock } from "./CodeBlock";
 import { ComparisonSlider } from "./project/ComparisonSlider";
 import { DataFlowStrip } from "./project/DataFlowStrip";
+import { H2, LABEL, MONO, SHELL, WRAP, pad } from "./project/styles";
 
-const MONO = "font-[family-name:var(--ff-mono)]";
-const SHELL = "px-[clamp(1rem,4vw,2rem)]";
-const WRAP = "mx-auto max-w-[1280px]";
-const H2 = "text-[length:var(--tr-t-h2)] leading-[var(--tr-lh-h2)] tracking-[-.025em] font-medium text-tr-text";
-const LABEL = `${MONO} text-[length:var(--tr-t-mono-sm)] tracking-[.1em] text-tr-text-faint`;
 // Markdown prose from a deep-dive string (lists, bold, the odd fenced block).
 const PROSE =
   "max-w-[62ch] text-[length:var(--tr-t-body)] leading-[var(--tr-lh-prose)] text-tr-text-mute [&>*+*]:mt-4 [&_a]:text-tr-accent-ink [&_a]:underline [&_a]:decoration-tr-hairline [&_a]:underline-offset-4 [&_code]:font-[family-name:var(--ff-mono)] [&_code]:text-[length:var(--tr-t-mono-sm)] [&_li]:mt-2 [&_ol]:list-decimal [&_ol]:pl-5 [&_pre]:overflow-x-auto [&_pre]:rounded-[var(--tr-r-md)] [&_pre]:border [&_pre]:border-tr-hairline [&_pre]:bg-tr-bg [&_pre]:p-4 [&_strong]:font-medium [&_strong]:text-tr-text [&_ul]:list-disc [&_ul]:pl-5";
-
-const pad = (n: number) => String(n).padStart(2, "0");
 
 import type { ComponentObj, DataFlowStep } from "./project/DataFlowStrip";
 type MetricObj = { value: string; label: string; context?: string };

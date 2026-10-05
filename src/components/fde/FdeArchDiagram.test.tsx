@@ -60,6 +60,16 @@ describe("FdeArchDiagram", () => {
     expect(y < 50 || y > 50 + 78).toBe(true);
   });
 
+  it("draws no edge or label for a self-loop", () => {
+    const arch: Architecture = {
+      components: [box("a", "Search API", 60, 50)],
+      edges: [{ from: "a", to: "a", label: "retry" }],
+    };
+    const { container } = render(<FdeArchDiagram architecture={arch} />);
+    expect(container.querySelector("svg path[marker-end]")).toBeNull();
+    expect([...container.querySelectorAll("svg text")].map((t) => t.textContent)).not.toContain("retry");
+  });
+
   it("lists components and flows for screen readers", () => {
     const arch: Architecture = {
       components: [box("a", "Search API", 60, 50), box("b", "Index", 280, 50)],

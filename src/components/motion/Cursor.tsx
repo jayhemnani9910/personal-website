@@ -188,6 +188,7 @@ export function Cursor() {
       document.removeEventListener("mouseover", onMouseOver);
       document.removeEventListener("mouseout", onMouseOut);
       document.body.classList.remove("has-cursor");
+      cursor.classList.remove("is-hover");
       cursor.style.visibility = "";
     };
   }, [active]);

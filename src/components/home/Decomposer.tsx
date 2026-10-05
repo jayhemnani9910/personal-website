@@ -134,17 +134,22 @@ export function Decomposer() {
     startReveal();
   };
 
+  const thinking = engine === "thinking";
+
   // Kept current every render so the v4:brief listener below (registered
   // once, on mount) always calls the latest closure instead of a stale one.
   const runWithTextRef = useRef(runWithText);
+  const thinkingRef = useRef(thinking);
   useEffect(() => {
     runWithTextRef.current = runWithText;
+    thinkingRef.current = thinking;
   });
 
   useEffect(() => {
     const onExternalBrief = (e: Event) => {
       const detail = (e as CustomEvent).detail;
-      if (typeof detail !== "string") return;
+      // Same rule as run(): one model call at a time.
+      if (typeof detail !== "string" || thinkingRef.current) return;
       setBrief(detail);
       document.getElementById("brief")?.scrollIntoView();
       runWithTextRef.current(detail);
@@ -153,8 +158,6 @@ export function Decomposer() {
     return () => window.removeEventListener("v4:brief", onExternalBrief);
   }, []);
   useShellIntent("brief"); // a `brief` typed in the shell on another page
-
-  const thinking = engine === "thinking";
 
   const run = () => {
     // One model call at a time: a double click would spend two rate-limit slots.
@@ -255,7 +258,7 @@ export function Decomposer() {
           <div aria-busy={thinking} className="grid gap-px bg-tr-hairline sm:grid-cols-2 lg:grid-cols-4">
             {COLUMNS.map((col, ci) => {
               const items = out ? out[col.key].filter((_, i) => ci * 3 + i < shown) : [];
-              const active = (shown < REVEAL_TOTAL && Math.floor(shown / 3) === ci) || (engine === "thinking" && ci === 0);
+              const active = shown < REVEAL_TOTAL && Math.floor(shown / 3) === ci;
               return (
                 <div key={col.key} className="bg-tr-bg p-4 min-h-[200px]">
                   <p

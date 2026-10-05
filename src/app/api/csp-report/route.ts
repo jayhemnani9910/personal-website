@@ -9,7 +9,9 @@ const MAX_REPORTS = 10;
 
 type Violation = { directive: string; blocked: string; page: string };
 
-const str = (v: unknown) => (typeof v === "string" ? v.slice(0, 200) : "");
+// Control characters are flattened so a report cannot write extra log lines.
+const str = (v: unknown) =>
+  typeof v === "string" ? v.replace(/[\x00-\x1f\x7f]/g, " ").slice(0, 200) : "";
 
 /** Both wire formats: report-uri sends one {"csp-report": {...}}, report-to
  * sends an array of {type, body: {...}}. */

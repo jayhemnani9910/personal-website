@@ -123,9 +123,9 @@ export const ProjectSchema = z.strictObject({
     solution: z.array(z.string()),
     impact: z.array(z.string()),
     priority: z.number().optional(),
-    github: z.string().url().optional(),
-    // These go straight into href. Only http(s): plain .url() would still
-    // accept a javascript: URL.
+    // github and links go straight into href. Only http(s): plain .url() would
+    // still accept a javascript: URL.
+    github: z.url({ protocol: /^https?$/ }).optional(),
     links: z.record(z.string(), z.url({ protocol: /^https?$/ })).nullable().transform(v => v || undefined).optional(),
     deepDive: DeepDiveSchema.optional(),
 });

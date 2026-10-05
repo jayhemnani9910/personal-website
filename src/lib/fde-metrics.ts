@@ -132,6 +132,22 @@ export function percentile(samples: number[], p: number): number | null {
   return sorted[Math.min(Math.max(rank, 1), sorted.length) - 1];
 }
 
+interface LatencyWindow {
+  samples: number;
+  p50: number | null;
+  p95: number | null;
+  p99: number | null;
+}
+
+function summarize(samples: number[]): LatencyWindow {
+  return {
+    samples: samples.length,
+    p50: percentile(samples, 50),
+    p95: percentile(samples, 95),
+    p99: percentile(samples, 99),
+  };
+}
+
 export interface SimMetrics {
   outcomes: Record<string, number>;
   failures: Record<string, number>;
@@ -140,9 +156,9 @@ export interface SimMetrics {
     cacheHitRate: number | null;
     upstreamFailures: number;
   };
-  latencyMs: { samples: number; p50: number | null; p95: number | null; p99: number | null };
+  latencyMs: LatencyWindow;
   /** Streaming path only. Empty until something streams. */
-  timeToFirstSectionMs: { samples: number; p50: number | null; p95: number | null; p99: number | null };
+  timeToFirstSectionMs: LatencyWindow;
   tokens: { prompt: number; output: number; perAnsweredCall: number | null };
 }
 
@@ -182,18 +198,8 @@ export async function readSimMetrics(redis: Redis | null): Promise<SimMetrics | 
       cacheHitRate: served > 0 ? Number((outcomes.cache_hit / served).toFixed(3)) : null,
       upstreamFailures: FAILURES.reduce((sum, f) => sum + failures[f], 0),
     },
-    latencyMs: {
-      samples: ms.length,
-      p50: percentile(ms, 50),
-      p95: percentile(ms, 95),
-      p99: percentile(ms, 99),
-    },
-    timeToFirstSectionMs: {
-      samples: ttfs.length,
-      p50: percentile(ttfs, 50),
-      p95: percentile(ttfs, 95),
-      p99: percentile(ttfs, 99),
-    },
+    latencyMs: summarize(ms),
+    timeToFirstSectionMs: summarize(ttfs),
     tokens: {
       prompt: num(promptTokens),
       output: num(outputTokens),

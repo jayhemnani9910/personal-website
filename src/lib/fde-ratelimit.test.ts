@@ -1,4 +1,4 @@
-import { describe, expect, it, vi, beforeEach } from "vitest";
+import { describe, expect, it, vi, beforeEach, afterEach } from "vitest";
 
 /**
  * Exercises the rate limiter through the real POST handler, because the limiter
@@ -54,6 +54,13 @@ async function post(ip = "203.0.113.7") {
 describe("fde-sim rate limiting", () => {
   beforeEach(() => {
     vi.resetModules();
+    // A key exported in the shell would otherwise send the requests that get
+    // past the limiter to the real Gemini API.
+    vi.stubEnv("GEMINI_API_KEY", "");
+  });
+
+  afterEach(() => {
+    vi.unstubAllEnvs();
   });
 
   it("lets the first request of a window through and sets a TTL", async () => {

@@ -60,10 +60,17 @@ export function containsPromptLeak(value: unknown): boolean {
  * Wrap a visitor's brief in the data tags, with any copy of those tags inside it
  * removed first. Without that, a brief containing "</customer_brief>" closes the
  * data block early and everything after it sits outside the region the system
- * prompt calls data. Both AI routes build their user turn through this.
+ * prompt calls data. The strip repeats until nothing changes, so a nested tag
+ * cannot reassemble into a real one. Both AI routes build their user turn
+ * through this.
  */
 export function fenceBrief(brief: string): string {
-  const clean = brief.replace(/<\s*\/?\s*customer_brief\s*>/gi, "");
+  let clean = brief;
+  let prev;
+  do {
+    prev = clean;
+    clean = clean.replace(/<\s*\/?\s*customer_brief\s*>/gi, "");
+  } while (clean !== prev);
   return `<customer_brief>\n${clean}\n</customer_brief>\n\nReturn the JSON now.`;
 }
 

@@ -156,8 +156,6 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
     notFound();
   }
 
-  const categoryLabel = post.category.charAt(0).toUpperCase() + post.category.slice(1);
-
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(blogPosting(post)) }} />
@@ -172,7 +170,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
 
             <header className="mb-[var(--tr-s-8)] border-b border-tr-hairline pb-[var(--tr-s-6)]">
               <p className={`mb-[var(--tr-s-3)] ${MONO} text-[length:var(--tr-t-mono)] tracking-[.1em] text-tr-text-faint`}>
-                /WRITING · {categoryLabel.toUpperCase()}
+                /WRITING · {post.category.toUpperCase()}
               </p>
 
               <h1 className="mb-[var(--tr-s-4)] text-[length:var(--tr-t-display-sm)] leading-[var(--tr-lh-display)] tracking-[-.035em] font-medium text-tr-text">

@@ -8,7 +8,7 @@ import {
   METHOD,
   LOG_NOTES,
   SECTIONS,
-  buildHero,
+  HERO,
   ROLES,
   COPY,
   buildNav,
@@ -21,7 +21,6 @@ import { RESUME, companyAnchor, parsePublishedVsReproduced } from "./resume";
 const PROJECTS_DIR = join(process.cwd(), "content/projects");
 const FEATURED_IDS = new Set(FEATURED.map((p) => p.id));
 const RECEIPTS = buildReceipts({ projectCount: 41, toolCount: 13 });
-const HERO = buildHero();
 
 const ALL_TEXT = JSON.stringify({
   FEATURED,

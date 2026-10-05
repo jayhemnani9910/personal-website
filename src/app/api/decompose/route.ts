@@ -34,6 +34,14 @@ const RECIPE = { model: MODEL, body: buildDecomposeBody("") };
 
 const CACHE_TTL_SECONDS = 60 * 60 * 24 * 7; // 7 days
 
+// Under maxDuration, so a slow upstream ends in the route's 503 rather than the
+// platform's timeout.
+const GEMINI_TIMEOUT_MS = 25_000;
+
+// Every failure past validation looks the same to the page: it falls back to
+// its saved examples. Each path logs its own reason first.
+const unavailable = () => NextResponse.json({ error: "unavailable" }, { status: 503 });
+
 async function readCache(key: string): Promise<DecomposeOutput | null> {
     const redis = getRedis();
     if (!redis) return null;
@@ -108,11 +116,11 @@ export async function POST(request: NextRequest) {
     const apiKey = process.env.GEMINI_API_KEY;
     if (!apiKey) {
         console.error("[decompose] GEMINI_API_KEY is not set; live decomposition is disabled");
-        return NextResponse.json({ error: "unavailable" }, { status: 503 });
+        return unavailable();
     }
     if ((await dailyBudget(getRedis(), "decompose", DAILY_MODEL_CALLS)) === "exhausted") {
         console.error("[decompose] daily model budget spent; serving saved examples");
-        return NextResponse.json({ error: "unavailable" }, { status: 503 });
+        return unavailable();
     }
 
     let res: Response;
@@ -126,16 +134,17 @@ export async function POST(request: NextRequest) {
                 method: "POST",
                 headers: { "Content-Type": "application/json", "x-goog-api-key": apiKey },
                 body: JSON.stringify(buildDecomposeBody(brief)),
+                signal: AbortSignal.timeout(GEMINI_TIMEOUT_MS),
             },
         );
     } catch (err) {
         console.error("[decompose] gemini request failed:", err instanceof Error ? err.message : err);
-        return NextResponse.json({ error: "unavailable" }, { status: 503 });
+        return unavailable();
     }
 
     if (!res.ok) {
         console.error(`[decompose] gemini http ${res.status} ${res.statusText}`);
-        return NextResponse.json({ error: "unavailable" }, { status: 503 });
+        return unavailable();
     }
 
     let raw: string;
@@ -145,7 +154,7 @@ export async function POST(request: NextRequest) {
     } catch (err) {
         // A 200 whose body is not JSON, or a connection dropped mid-body.
         console.error("[decompose] gemini body unreadable:", err instanceof Error ? err.message : err);
-        return NextResponse.json({ error: "unavailable" }, { status: 503 });
+        return unavailable();
     }
 
     let parsed: unknown;
@@ -153,13 +162,13 @@ export async function POST(request: NextRequest) {
         parsed = extractJson(raw);
     } catch (err) {
         console.error("[decompose] could not extract JSON from response:", err instanceof Error ? err.message : err);
-        return NextResponse.json({ error: "unavailable" }, { status: 503 });
+        return unavailable();
     }
 
     const result = DecomposeOutputSchema.safeParse(parsed);
     if (!result.success) {
         console.error(`[decompose] response failed schema check: ${result.error.message}`);
-        return NextResponse.json({ error: "unavailable" }, { status: 503 });
+        return unavailable();
     }
 
     const out: DecomposeOutput = {

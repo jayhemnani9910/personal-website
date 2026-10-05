@@ -84,12 +84,12 @@ route rather than a `localStorage` key nothing reads.
 
 ## Compliance
 
-`src/lib/webmcp.test.ts` is the guard. It asserts that `WEBMCP_TOOL_NAMES`
+`src/lib/webmcp.test.ts` is the guard. It asserts that `WEBMCP_TOOLS`
 matches the actual `registerTool` calls in names and order, that the count
 matches, that there are no duplicates, and that `content/projects/webmcp-portfolio.mdx`
 quotes the same number the code registers.
 
-`WEBMCP_TOOL_NAMES` and `WEBMCP_TOOL_COUNT` are the single source of truth for
+`WEBMCP_TOOLS` and `WEBMCP_TOOL_COUNT` are the single source of truth for
 the count. Every place the number appears in the UI interpolates
 `WEBMCP_TOOL_COUNT` rather than writing a literal. Two hardcoded literals were
 found on the home page on 2026-08-17 and replaced; the test now covers the MDX

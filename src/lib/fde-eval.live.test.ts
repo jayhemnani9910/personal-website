@@ -39,7 +39,6 @@ const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 interface RunResult {
   id: string;
   cached: boolean;
-  status: number;
   checks: Check[];
 }
 
@@ -90,7 +89,7 @@ describe.skipIf(!LIVE)("fde-sim live eval", () => {
             ? gradeSim(call.body, golden)
             : [{ id: "http.ok", ok: false, detail: `endpoint returned ${call.status}` }];
 
-        results.push({ id: golden.id, cached: call.cached, status: call.status, checks });
+        results.push({ id: golden.id, cached: call.cached, checks });
 
         if (call.body && UPDATE) {
           writeFileSync(
@@ -134,12 +133,16 @@ describe.skipIf(!LIVE)("fde-sim live eval", () => {
             recordedAt: process.env.FDE_EVAL_DATE ?? "unset",
             model: GEMINI_MODEL,
             totals,
-            briefs: results.map((r) => ({
-              id: r.id,
-              cached: r.cached,
-              ...scoreChecks(r.checks),
-              failed: scoreChecks(r.checks).failed.map((f) => ({ id: f.id, detail: f.detail })),
-            })),
+            briefs: results.map((r) => {
+              const s = scoreChecks(r.checks);
+              return {
+                id: r.id,
+                cached: r.cached,
+                passed: s.passed,
+                total: s.total,
+                failed: s.failed.map((f) => ({ id: f.id, detail: f.detail })),
+              };
+            }),
           },
           null,
           2,

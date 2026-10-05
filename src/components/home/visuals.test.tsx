@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { act, fireEvent, render, screen } from "@testing-library/react";
-import { RESUME } from "@/data/resume";
+import { CUBE_ACHIEVEMENT } from "@/data/resume";
 import { GlBackdrop } from "./GlBackdrop";
 import { CUBE_PB, MethodCube } from "./MethodCube";
 
@@ -134,13 +134,10 @@ describe("GlBackdrop", () => {
 describe("MethodCube", () => {
   it("renders the label and the personal best parsed from the resume", () => {
     mockReduced.mockReturnValue(false);
-    const achievement = RESUME.education
-      .flatMap((edu) => edu.achievements ?? [])
-      .find((s) => s.startsWith("Rubik's Cube"));
     // No fallback number in the component: if the resume wording stops
     // parsing, this is where it shows.
     expect(CUBE_PB).toMatch(/^\d+(\.\d+)?$/);
-    expect(achievement).toContain(CUBE_PB);
+    expect(CUBE_ACHIEVEMENT).toContain(CUBE_PB);
 
     render(<MethodCube />);
     expect(screen.getByText("OFF THE CLOCK · WCA")).toBeDefined();
@@ -171,6 +168,24 @@ describe("MethodCube", () => {
     render(<MethodCube />);
     fireEvent.click(screen.getByRole("button", { name: "Scramble the cube" }));
     expect(screen.getByText(/scrambling/i).getAttribute("aria-live")).toBe("polite");
+  });
+
+  // The shell's `cube` sets #method, which moves nothing when the URL is
+  // already there, so the handler scrolls for itself.
+  it("scrolls to the method section and scrambles on a v4:cube event", () => {
+    mockReduced.mockReturnValue(false);
+    const scroll = vi.fn();
+    Element.prototype.scrollIntoView = scroll;
+    render(
+      <section id="method">
+        <MethodCube />
+      </section>
+    );
+    act(() => {
+      window.dispatchEvent(new Event("v4:cube"));
+    });
+    expect(scroll.mock.contexts[0]).toBe(document.getElementById("method"));
+    expect(screen.getByText(/scrambling/i)).toBeDefined();
   });
 
   it("renders exactly one scramble button", () => {

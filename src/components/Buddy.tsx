@@ -80,6 +80,9 @@ export function Buddy({ className }: BuddyProps) {
   const scrollTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   // whether scroll is currently driving the expression
   const scrollActiveRef = useRef(false);
+  // whether a click or theme reaction is showing: cursor, scroll and blink then
+  // leave the visible face alone until the reaction's last step clears it
+  const reactingRef = useRef(false);
 
   // rAF gate refs
   const rafPendingMouseRef = useRef(false);
@@ -99,18 +102,10 @@ export function Buddy({ className }: BuddyProps) {
   // buddy element ref for bounding rect
   const buddyRef = useRef<HTMLDivElement>(null);
 
-  // idle word timer refs
-  const idleWordShowTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const idleWordClearTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  // blink timer ref
-  const blinkTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  // idle frame interval ref
-  const idleFrameIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
-
   // ---- helpers ----
   const setResting = useCallback((expr: Expression) => {
     restingRef.current = expr;
-    if (!scrollActiveRef.current) {
+    if (!scrollActiveRef.current && !reactingRef.current) {
       setExpression(expr);
     }
   }, []);
@@ -119,6 +114,8 @@ export function Buddy({ className }: BuddyProps) {
     if (themeInteractionRef.current) {
       clearTimeout(themeInteractionRef.current);
       themeInteractionRef.current = null;
+      // a theme reaction cut short never reaches the step that clears this
+      reactingRef.current = false;
     }
   }, []);
 
@@ -137,12 +134,14 @@ export function Buddy({ className }: BuddyProps) {
     const interactionWord = theme === "dark" ? "ooh, dark" : "bright!";
 
     themeInteractionRef.current = setTimeout(() => {
+      reactingRef.current = true;
       setExpression("surprised");
       setWord(null);
       themeInteractionRef.current = setTimeout(() => {
         setExpression("happy");
         setWord(interactionWord);
         themeInteractionRef.current = setTimeout(() => {
+          reactingRef.current = false;
           setExpression(restingRef.current);
           setWord(null);
         }, 900);
@@ -211,12 +210,12 @@ export function Buddy({ className }: BuddyProps) {
           lastScrollYRef.current = current;
 
           scrollActiveRef.current = true;
-          setExpression(delta > 0 ? "down" : "up");
+          if (!reactingRef.current) setExpression(delta > 0 ? "down" : "up");
 
           if (scrollTimerRef.current) clearTimeout(scrollTimerRef.current);
           scrollTimerRef.current = setTimeout(() => {
             scrollActiveRef.current = false;
-            setExpression(restingRef.current);
+            if (!reactingRef.current) setExpression(restingRef.current);
           }, 150);
         });
       }
@@ -233,13 +232,14 @@ export function Buddy({ className }: BuddyProps) {
   useEffect(() => {
     if (prefersReducedMotion) return;
 
+    let timer: ReturnType<typeof setTimeout>;
     const scheduleBlink = () => {
       const delay = 4000 + Math.random() * 2000;
-      blinkTimerRef.current = setTimeout(() => {
-        if (!scrollActiveRef.current) {
+      timer = setTimeout(() => {
+        if (!scrollActiveRef.current && !reactingRef.current) {
           setExpression("blink");
-          blinkTimerRef.current = setTimeout(() => {
-            setExpression(restingRef.current);
+          timer = setTimeout(() => {
+            if (!reactingRef.current) setExpression(restingRef.current);
             scheduleBlink();
           }, 140);
         } else {
@@ -250,21 +250,20 @@ export function Buddy({ className }: BuddyProps) {
 
     scheduleBlink();
 
-    return () => {
-      const bt = blinkTimerRef.current;
-      if (bt) clearTimeout(bt);
-    };
+    return () => clearTimeout(timer);
   }, [prefersReducedMotion]);
 
   // ---- idle word loop ----
   useEffect(() => {
     if (prefersReducedMotion) return;
 
+    let showTimer: ReturnType<typeof setTimeout>;
+    let clearTimer: ReturnType<typeof setTimeout>;
     const scheduleWord = () => {
       const delay = 8000 + Math.random() * 6000;
-      idleWordShowTimerRef.current = setTimeout(() => {
+      showTimer = setTimeout(() => {
         setWord(pickRandom(IDLE_WORDS));
-        idleWordClearTimerRef.current = setTimeout(() => {
+        clearTimer = setTimeout(() => {
           setWord(null);
           scheduleWord();
         }, 3000);
@@ -274,8 +273,8 @@ export function Buddy({ className }: BuddyProps) {
     scheduleWord();
 
     return () => {
-      if (idleWordShowTimerRef.current) clearTimeout(idleWordShowTimerRef.current);
-      if (idleWordClearTimerRef.current) clearTimeout(idleWordClearTimerRef.current);
+      clearTimeout(showTimer);
+      clearTimeout(clearTimer);
     };
   }, [prefersReducedMotion]);
 
@@ -283,13 +282,11 @@ export function Buddy({ className }: BuddyProps) {
   useEffect(() => {
     if (prefersReducedMotion) return;
 
-    idleFrameIntervalRef.current = setInterval(() => {
+    const interval = setInterval(() => {
       setIdleFrame((f) => (f === 0 ? 1 : 0));
     }, 600);
 
-    return () => {
-      if (idleFrameIntervalRef.current) clearInterval(idleFrameIntervalRef.current);
-    };
+    return () => clearInterval(interval);
   }, [prefersReducedMotion]);
 
   // ---- click handler ----
@@ -303,11 +300,13 @@ export function Buddy({ className }: BuddyProps) {
     const settle = () => {
       clickTimerRef.current = setTimeout(() => {
         clickTimerRef.current = null;
+        reactingRef.current = false;
         setExpression(restingRef.current);
         setWord(null);
       }, 900);
     };
 
+    reactingRef.current = true;
     setExpression("surprised");
     setWord(null);
 

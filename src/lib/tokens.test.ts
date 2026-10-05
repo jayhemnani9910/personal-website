@@ -19,6 +19,20 @@ const CSS = readFileSync(
   "utf8",
 ).replace(/\/\*[\s\S]*?\*\//g, ""); // strip comments: they can contain braces
 
+const SRC = resolve(dirname(fileURLToPath(import.meta.url)), "..");
+
+/** Every .ts/.tsx source file under src/. */
+function walk(dir: string): string[] {
+  return readdirSync(dir, { withFileTypes: true }).flatMap((e) => {
+    const p = join(dir, e.name);
+    if (e.isDirectory()) return walk(p);
+    // Skip test files: this one documents the broken forms in its comments,
+    // and would otherwise flag itself.
+    if (/\.test\.tsx?$/.test(e.name)) return [];
+    return /\.tsx?$/.test(e.name) ? [p] : [];
+  });
+}
+
 /**
  * Pull the --tr-* declarations out of one rule block.
  *
@@ -107,19 +121,6 @@ describe("token parsing (guards the contrast suite against going vacuous)", () =
 // rather than a bug. Nothing failed: not lint, not the build, not the type
 // checker. Only measuring the computed style in a browser caught it.
 describe("type scale is actually applied (Tailwind silently drops the un-hinted form)", () => {
-  const SRC = resolve(dirname(fileURLToPath(import.meta.url)), "..");
-
-  function walk(dir: string): string[] {
-    return readdirSync(dir, { withFileTypes: true }).flatMap((e) => {
-      const p = join(dir, e.name);
-      if (e.isDirectory()) return walk(p);
-      // Skip test files: this one documents the broken form in a comment above,
-      // and would otherwise flag itself.
-      if (/\.test\.tsx?$/.test(e.name)) return [];
-      return /\.tsx?$/.test(e.name) ? [p] : [];
-    });
-  }
-
   it("no file uses the un-hinted font-size form without `length:`", () => {
     const offenders: string[] = [];
     for (const file of walk(SRC)) {
@@ -243,13 +244,6 @@ describe("Two Readers token contrast (ADR 0017: WCAG AA everywhere)", () => {
 // 2.84:1 in light. Words and glyphs take `text-tr-accent-ink` (ADR 0016).
 describe("accent-coloured text uses accent-ink", () => {
   it("no component colours text with the fill accent", () => {
-    const SRC = resolve(dirname(fileURLToPath(import.meta.url)), "..");
-    const walk = (dir: string): string[] =>
-      readdirSync(dir, { withFileTypes: true }).flatMap((e) => {
-        const p = join(dir, e.name);
-        if (e.isDirectory()) return walk(p);
-        return /\.(tsx|ts)$/.test(e.name) && !/\.test\.tsx?$/.test(e.name) ? [p] : [];
-      });
     const offenders = walk(SRC).flatMap((file) =>
       readFileSync(file, "utf8")
         .split("\n")

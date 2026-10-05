@@ -23,6 +23,10 @@ const redis = {
     data.set(k, n);
     return n;
   }),
+  del: vi.fn(async (k: string) => {
+    data.delete(k);
+    return 1;
+  }),
   expire: vi.fn(async () => 1),
   ttl: vi.fn(async () => 60),
 };
@@ -73,5 +77,16 @@ describe("/api/views", () => {
     expect(res.status).toBe(503);
     expect(await res.json()).not.toHaveProperty("count");
     expect((await get("voxt")).status).toBe(503);
+  });
+
+  it("lets a retry count the view when the increment failed", async () => {
+    const incr = redis.incr.getMockImplementation()!;
+    redis.incr.mockImplementation(async (k: string) => {
+      if (k.startsWith("views:")) throw new Error("store down");
+      return incr(k);
+    });
+    expect((await post("voxt")).status).toBe(503);
+    redis.incr.mockImplementation(incr);
+    expect(await (await post("voxt")).json()).toEqual({ count: 1, counted: true });
   });
 });

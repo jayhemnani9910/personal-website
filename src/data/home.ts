@@ -430,13 +430,11 @@ export const ROLES = [
   "FULL-STACK ENGINEER",
 ] as const;
 
-export function buildHero() {
-  return {
-    status: ["GUJARAT, IN", "OPEN TO WORK"],
-    h1: "Give me the vague version.",
-    deck: "Briefs never arrive clean. Paste one the way it actually shows up and watch how I take it apart, then see what I've already shipped that looks like it.",
-  };
-}
+export const HERO = {
+  status: ["GUJARAT, IN", "OPEN TO WORK"],
+  h1: "Give me the vague version.",
+  deck: "Briefs never arrive clean. Paste one the way it actually shows up and watch how I take it apart, then see what I've already shipped that looks like it.",
+};
 
 export const COPY = {
   proofH2: "Numbers with receipts.",

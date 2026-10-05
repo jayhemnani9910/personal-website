@@ -90,12 +90,10 @@ export interface SiteData {
 }
 
 
-/** True when the browser exposes the WebMCP API. */
-export function isWebMCPAvailable(): boolean {
-  return typeof document !== "undefined" && document.modelContext !== undefined;
-}
-
 const READ_ONLY = new Set<string>(WEBMCP_TOOLS.filter((t) => t.kind === "read").map((t) => t.name));
+
+/** A text argument, lowercased. An agent can send any type, so a non-string is ignored. */
+const lower = (v: unknown) => (typeof v === "string" ? v.toLowerCase() : undefined);
 
 /**
  * The site's tools, in the registry's order. Pure: nothing touches the browser
@@ -124,10 +122,10 @@ export function buildTools(data: SiteData): ModelContextTool[] {
     },
     execute: async (args) => {
       let results = [...data.projects];
-      const q = (args.query as string)?.toLowerCase();
-      const tech = (args.tech as string)?.toLowerCase();
-      const tag = (args.tag as string)?.toLowerCase();
-      const domain = (args.domain as string)?.toLowerCase();
+      const q = lower(args.query);
+      const tech = lower(args.tech);
+      const tag = lower(args.tag);
+      const domain = lower(args.domain);
 
       if (q) {
         results = results.filter(
@@ -249,8 +247,8 @@ export function buildTools(data: SiteData): ModelContextTool[] {
       },
     },
     execute: async (args) => {
-      const cat = (args.category as string)?.toLowerCase();
-      const q = (args.query as string)?.toLowerCase();
+      const cat = lower(args.category);
+      const q = lower(args.query);
       let skills = data.resume.skills;
 
       if (cat) {
@@ -296,7 +294,7 @@ export function buildTools(data: SiteData): ModelContextTool[] {
     },
     execute: async (args) => {
       let experiments = [...data.experiments];
-      const q = (args.query as string)?.toLowerCase();
+      const q = lower(args.query);
 
       if (q) {
         experiments = experiments.filter(

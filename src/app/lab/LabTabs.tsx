@@ -7,7 +7,7 @@ import { ArrowRight, Github } from "lucide-react";
 import { LAB_ITEMS, type LabItem } from "@/data/lab";
 import { SITE_CONFIG } from "@/../content/site";
 
-type TabKey = "building" | "exploring" | "radar";
+type TabKey = keyof typeof LAB_ITEMS;
 
 const TABS: { key: TabKey; label: string }[] = [
   { key: "building", label: "Building" },

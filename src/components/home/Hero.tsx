@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { buildHero } from "@/data/home";
+import { HERO } from "@/data/home";
 import { RoleCycle } from "./RoleCycle";
 
 // Status line (rotating role / location / live badge). The comp set this at
@@ -13,8 +13,6 @@ const STATUS_MONO =
  * owned by another agent) rendered to the right of the h1 + deck.
  */
 export function Hero({ children }: { children: ReactNode }) {
-  const HERO = buildHero();
-
   return (
     <section
       id="brief"

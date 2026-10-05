@@ -85,7 +85,7 @@ export function Preloader() {
     );
   }, [clearTimers]);
 
-  const active = shouldPlay && !finished && !prefersReducedMotion;
+  const active = shouldPlay && !finished;
 
   // Run the typewriter while the scrim is active. The first character is scheduled
   // via setTimeout, not called synchronously here, so NO setState runs synchronously
@@ -95,16 +95,12 @@ export function Preloader() {
 
     let i = 0;
     const typeChar = () => {
-      try {
-        setTypedLength(i);
-        i += 1;
-        if (i <= FULL_TEXT.length) {
-          timeoutsRef.current.push(setTimeout(typeChar, TYPE_INTERVAL_MS));
-        } else {
-          timeoutsRef.current.push(setTimeout(finish, HOLD_MS));
-        }
-      } catch {
-        finish();
+      setTypedLength(i);
+      i += 1;
+      if (i <= FULL_TEXT.length) {
+        timeoutsRef.current.push(setTimeout(typeChar, TYPE_INTERVAL_MS));
+      } else {
+        timeoutsRef.current.push(setTimeout(finish, HOLD_MS));
       }
     };
     timeoutsRef.current.push(setTimeout(typeChar, TYPE_INTERVAL_MS));
