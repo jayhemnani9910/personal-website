@@ -1,7 +1,9 @@
 /* FDE page: server component wrapper. Replaces the old static page.
    Interactive console is a client island. Static sections (Proofs, Fit, Contact)
-   are plain server JSX. layout.tsx provides the metadata. */
+   are plain server JSX. */
 
+import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/page-metadata";
 import Link from "next/link";
 import type { Route } from "next";
 import { SITE_CONFIG } from "@/../content/site";
@@ -15,6 +17,33 @@ const CONTAINER = "mx-auto max-w-[1280px] px-[clamp(1rem,4vw,2rem)]";
 const TWO_COL = "lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]";
 const H2 = "text-[length:var(--tr-t-h2)] leading-[var(--tr-lh-h2)] tracking-[-.025em] font-medium text-tr-text";
 const BADGE = `inline-flex items-center gap-[7px] whitespace-nowrap rounded-full border px-3 py-1 ${MONO} text-[length:var(--tr-t-mono-sm)] tracking-[.04em]`;
+
+export const metadata: Metadata = {
+  ...pageMetadata({
+    title: "Forward Deployed Engineer",
+    description:
+      "Jay Hemnani, open to Forward Deployed Engineer (FDE) roles. Proof in LangGraph multi-agent systems, Model Context Protocol work, RAG, and distributed systems.",
+    path: "/fde",
+    type: "profile",
+  }),
+  keywords: [
+    "Forward Deployed Engineer",
+    "FDE",
+    "Forward Deployed Software Engineer",
+    "Applied AI Engineer",
+    "AI agents",
+    "agentic AI",
+    "Model Context Protocol",
+    "MCP",
+    "RAG",
+    "LangGraph",
+    "distributed systems",
+    "full-stack engineer",
+    "Jay Hemnani",
+    "FDE India",
+    "remote FDE",
+  ],
+};
 
 export default function FDEPage() {
   return (
