@@ -240,8 +240,13 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "lightpanda-io/browser", number: "#3717", href: "https://github.com/lightpanda-io/browser/pull/3717" },
   { repo: "lightpanda-io/browser", number: "#3718", href: "https://github.com/lightpanda-io/browser/pull/3718" },
   { repo: "lightpanda-io/browser", number: "#3719", href: "https://github.com/lightpanda-io/browser/pull/3719" },
+  { repo: "lightpanda-io/browser", number: "#3720", href: "https://github.com/lightpanda-io/browser/pull/3720" },
   { repo: "lightpanda-io/browser", number: "#3721", href: "https://github.com/lightpanda-io/browser/pull/3721" },
   { repo: "lightpanda-io/browser", number: "#3722", href: "https://github.com/lightpanda-io/browser/pull/3722" },
+  { repo: "lightpanda-io/browser", number: "#3761", href: "https://github.com/lightpanda-io/browser/pull/3761" },
+  { repo: "lightpanda-io/browser", number: "#3762", href: "https://github.com/lightpanda-io/browser/pull/3762" },
+  { repo: "Effect-TS/effect", number: "#8752", href: "https://github.com/Effect-TS/effect/pull/8752" },
+  { repo: "Effect-TS/effect", number: "#8753", href: "https://github.com/Effect-TS/effect/pull/8753" },
 ];
 
 /**
