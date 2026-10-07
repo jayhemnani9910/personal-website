@@ -29,12 +29,18 @@ const TWO_COL = "lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]";
 const H2 = "text-[length:var(--tr-t-h2)] leading-[var(--tr-lh-h2)] tracking-[-.025em] font-medium text-tr-text";
 const UNDERLINE_LINK = "underline decoration-tr-hairline decoration-1 underline-offset-4 transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] hover:text-tr-accent-ink hover:decoration-tr-accent";
 const OUT_LINK = "inline-flex min-h-6 items-center py-1 transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] hover:text-tr-accent-ink";
+// OUT_LINK for every link inside the PR list, written once on the <ul>.
+const PR_LIST_LINKS = "[&_a]:inline-flex [&_a]:min-h-6 [&_a]:items-center [&_a]:py-1 [&_a]:transition-colors [&_a]:duration-[var(--tr-dur-base)] [&_a]:ease-[var(--tr-ease)] [&_a]:hover:text-tr-accent-ink";
 
 // A company's first role row carries its anchor (e.g. /resume#amnex), which
 // the home page's receipts link to.
 const roles = RESUME.experience.flatMap((company) =>
   company.roles.map((role, i) => ({ company, role, anchor: i === 0 ? companyAnchor(company.name) : undefined }))
 );
+
+// One row per repo, not per PR. Home prefetches this page, and a row per PR
+// repeated its class strings into the RSC payload until it broke the budget.
+const prsByRepo = Map.groupBy(MERGED_PRS, (pr) => pr.repo);
 
 export default function AboutPage() {
   return (
@@ -260,30 +266,30 @@ export default function AboutPage() {
                     {MERGED_PRS.length} merged pull requests to repositories not my own, by repo and
                     number so the diff can be read directly.
                   </p>
-                  <ul className="mt-3 flex flex-col gap-2">
-                    {MERGED_PRS.map((pr) => (
-                      <li key={pr.href} className="flex flex-wrap items-center gap-x-3">
-                        <a
-                          href={pr.href}
-                          target="_blank"
-                          rel="noreferrer"
-                          className={`${MONO} ${OUT_LINK} gap-2 text-[length:var(--tr-t-mono-sm)] text-tr-text-mute`}
-                        >
-                          <span>{pr.repo}</span>
-                          <span className="text-tr-text-faint">{pr.number} <span aria-hidden="true">↗</span></span>
-                        </a>
-                        {/* Closed on GitHub, not merged: Modular lands outside PRs
-                            with Copybara, so the commit is the proof it went in. */}
-                        {pr.landed ? (
-                          <a
-                            href={pr.landed}
-                            target="_blank"
-                            rel="noreferrer"
-                            className={`${MONO} ${OUT_LINK} text-[length:var(--tr-t-mono-sm)] text-tr-text-faint`}
-                          >
-                            closed, landed as a commit <span aria-hidden="true">↗</span>
-                          </a>
-                        ) : null}
+                  <ul className={`${MONO} ${PR_LIST_LINKS} mt-3 flex flex-col gap-2 text-[length:var(--tr-t-mono-sm)] text-tr-text-faint`}>
+                    {[...prsByRepo].map(([repo, prs]) => (
+                      <li key={repo} className="flex flex-wrap items-center gap-x-3">
+                        <span className="text-tr-text-mute">{repo}</span>
+                        {prs.map((pr) => {
+                          const link = (
+                            <a key={pr.href} href={pr.href} target="_blank" rel="noreferrer">
+                              {pr.number} <span aria-hidden="true">↗</span>
+                            </a>
+                          );
+                          // Closed on GitHub, not merged: Modular lands outside PRs with
+                          // Copybara, so the commit is the proof it went in. Kept on one
+                          // line with its PR so the note can't wrap onto the next one.
+                          return pr.landed ? (
+                            <span key={pr.href} className="flex gap-x-3">
+                              {link}
+                              <a href={pr.landed} target="_blank" rel="noreferrer">
+                                (closed, landed as a commit <span aria-hidden="true">↗</span>)
+                              </a>
+                            </span>
+                          ) : (
+                            link
+                          );
+                        })}
                       </li>
                     ))}
                   </ul>
