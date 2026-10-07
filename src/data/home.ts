@@ -217,11 +217,12 @@ export const PRESETS: Preset[] = [
  * verified claim drifts into an unverified one. Sourced from
  * the job-search MASTER_PROFILE.md section 7, which is the canonical list.
  *
- * modular/modular #6954 shows as Closed on GitHub rather than Merged, because
- * Modular lands outside contributions with Copybara instead of pressing merge.
- * It landed in commit 39b94179d6c9c5be6334888f119fcb51469c3ad0 on 2026-09-02,
- * which the modularbot comment on the PR states, so that commit is linked as
- * `landed`. That is also why it does not appear in MERGED_PRS_SEARCH below.
+ * modular/modular #6954 and #6967 show as Closed on GitHub rather than Merged,
+ * because Modular lands outside contributions with Copybara instead of pressing
+ * merge. They landed in commits 39b94179d6c9c5be6334888f119fcb51469c3ad0 on
+ * 2026-09-02 and 71437b1e23b7aae926295767f38162e300608953 on 2026-09-17, which
+ * the modularbot comments on the PRs state, so those commits are linked as
+ * `landed`. That is also why they do not appear in MERGED_PRS_SEARCH below.
  *
  * A2UI #407 was merged under google/A2UI; the repo has since moved to
  * a2ui-project/a2ui, so the name and link use its current home.
@@ -236,6 +237,12 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
     href: "https://github.com/modular/modular/pull/6954",
     landed: "https://github.com/modular/modular/commit/39b94179d6c9c5be6334888f119fcb51469c3ad0",
   },
+  {
+    repo: "modular/modular",
+    number: "#6967",
+    href: "https://github.com/modular/modular/pull/6967",
+    landed: "https://github.com/modular/modular/commit/71437b1e23b7aae926295767f38162e300608953",
+  },
   { repo: "lightpanda-io/browser", number: "#3716", href: "https://github.com/lightpanda-io/browser/pull/3716" },
   { repo: "lightpanda-io/browser", number: "#3717", href: "https://github.com/lightpanda-io/browser/pull/3717" },
   { repo: "lightpanda-io/browser", number: "#3718", href: "https://github.com/lightpanda-io/browser/pull/3718" },
@@ -245,15 +252,23 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "lightpanda-io/browser", number: "#3722", href: "https://github.com/lightpanda-io/browser/pull/3722" },
   { repo: "lightpanda-io/browser", number: "#3761", href: "https://github.com/lightpanda-io/browser/pull/3761" },
   { repo: "lightpanda-io/browser", number: "#3762", href: "https://github.com/lightpanda-io/browser/pull/3762" },
+  { repo: "lightpanda-io/browser", number: "#3819", href: "https://github.com/lightpanda-io/browser/pull/3819" },
   { repo: "Effect-TS/effect", number: "#8752", href: "https://github.com/Effect-TS/effect/pull/8752" },
   { repo: "Effect-TS/effect", number: "#8753", href: "https://github.com/Effect-TS/effect/pull/8753" },
+  { repo: "Effect-TS/effect", number: "#8857", href: "https://github.com/Effect-TS/effect/pull/8857" },
+  { repo: "Effect-TS/effect", number: "#8858", href: "https://github.com/Effect-TS/effect/pull/8858" },
+  { repo: "Effect-TS/effect", number: "#8877", href: "https://github.com/Effect-TS/effect/pull/8877" },
+  { repo: "Effect-TS/effect", number: "#8878", href: "https://github.com/Effect-TS/effect/pull/8878" },
+  { repo: "caddyserver/caddy", number: "#8159", href: "https://github.com/caddyserver/caddy/pull/8159" },
+  { repo: "caddyserver/caddy", number: "#8160", href: "https://github.com/caddyserver/caddy/pull/8160" },
+  { repo: "p-e-w/heretic", number: "#482", href: "https://github.com/p-e-w/heretic/pull/482" },
 ];
 
 /**
  * The PRs above in one GitHub search, for anyone who wants to check the list.
  * A github.com/search URL loads without signing in (github.com/pulls does not),
  * and the repo: qualifiers keep it to these repos. It finds the ones GitHub
- * marks merged, so not #6954: see the Copybara note on MERGED_PRS.
+ * marks merged, so not #6954 or #6967: see the Copybara note on MERGED_PRS.
  */
 export const MERGED_PRS_SEARCH = `https://github.com/search?q=${encodeURIComponent(
   ["is:pr", "is:merged", "author:jayhemnani9910", ...new Set(MERGED_PRS.map((pr) => `repo:${pr.repo}`))].join(" "),
