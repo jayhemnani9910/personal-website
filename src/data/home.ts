@@ -262,6 +262,8 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "caddyserver/caddy", number: "#8159", href: "https://github.com/caddyserver/caddy/pull/8159" },
   { repo: "caddyserver/caddy", number: "#8160", href: "https://github.com/caddyserver/caddy/pull/8160" },
   { repo: "p-e-w/heretic", number: "#482", href: "https://github.com/p-e-w/heretic/pull/482" },
+  { repo: "morluto/rea", number: "#890", href: "https://github.com/morluto/rea/pull/890" },
+  { repo: "morluto/rea", number: "#891", href: "https://github.com/morluto/rea/pull/891" },
 ];
 
 /**
