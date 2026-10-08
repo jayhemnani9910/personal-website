@@ -131,9 +131,9 @@ describe("home data", () => {
     expect(url.searchParams.get("type")).toBe("pullrequests");
     const q = url.searchParams.get("q")!;
     for (const pr of MERGED_PRS) expect(q).toContain(`repo:${pr.repo}`);
-    // #6954 and #6967 landed through Copybara, so GitHub shows them closed and
-    // the search cannot find them: the label must not claim them all.
-    expect(MERGED_PRS_SEARCH_LABEL).toBe("28 of 30");
+    // #6954, #6967 and #7235 landed through Copybara, so GitHub shows them
+    // closed and the search cannot find them: the label must not claim them all.
+    expect(MERGED_PRS_SEARCH_LABEL).toBe("32 of 35");
     expect(MERGED_PRS.find((pr) => pr.number === "#6954")?.landed).toMatch(/^https:\/\/github\.com\/modular\/modular\/commit\//);
   });
 

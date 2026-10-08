@@ -217,11 +217,12 @@ export const PRESETS: Preset[] = [
  * verified claim drifts into an unverified one. Sourced from
  * the job-search MASTER_PROFILE.md section 7, which is the canonical list.
  *
- * modular/modular #6954 and #6967 show as Closed on GitHub rather than Merged,
- * because Modular lands outside contributions with Copybara instead of pressing
- * merge. They landed in commits 39b94179d6c9c5be6334888f119fcb51469c3ad0 on
- * 2026-09-02 and 71437b1e23b7aae926295767f38162e300608953 on 2026-09-17, which
- * the modularbot comments on the PRs state, so those commits are linked as
+ * modular/modular #6954, #6967 and #7235 show as Closed on GitHub rather than
+ * Merged, because Modular lands outside contributions with Copybara instead of
+ * pressing merge. They landed in commits 39b94179d6c9c5be6334888f119fcb51469c3ad0
+ * on 2026-09-02, 71437b1e23b7aae926295767f38162e300608953 on 2026-09-17 and
+ * 189bd1393e2c35bfe777c97b1b3c8b1a31be8f8e on 2026-10-08, which the modularbot
+ * comments on the PRs state, so those commits are linked as
  * `landed`. That is also why they do not appear in MERGED_PRS_SEARCH below.
  *
  * A2UI #407 was merged under google/A2UI; the repo has since moved to
@@ -268,13 +269,23 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "lightpanda-io/browser", number: "#3818", href: "https://github.com/lightpanda-io/browser/pull/3818" },
   { repo: "caddyserver/caddy", number: "#8149", href: "https://github.com/caddyserver/caddy/pull/8149" },
   { repo: "lightpanda-io/browser", number: "#3831", href: "https://github.com/lightpanda-io/browser/pull/3831" },
+  { repo: "AlexsJones/llmfit", number: "#1113", href: "https://github.com/AlexsJones/llmfit/pull/1113" },
+  { repo: "AlexsJones/llmfit", number: "#1120", href: "https://github.com/AlexsJones/llmfit/pull/1120" },
+  { repo: "mvanhorn/last30days-skill", number: "#1191", href: "https://github.com/mvanhorn/last30days-skill/pull/1191" },
+  { repo: "mvanhorn/last30days-skill", number: "#1195", href: "https://github.com/mvanhorn/last30days-skill/pull/1195" },
+  {
+    repo: "modular/modular",
+    number: "#7235",
+    href: "https://github.com/modular/modular/pull/7235",
+    landed: "https://github.com/modular/modular/commit/189bd1393e2c35bfe777c97b1b3c8b1a31be8f8e",
+  },
 ];
 
 /**
  * The PRs above in one GitHub search, for anyone who wants to check the list.
  * A github.com/search URL loads without signing in (github.com/pulls does not),
  * and the repo: qualifiers keep it to these repos. It finds the ones GitHub
- * marks merged, so not #6954 or #6967: see the Copybara note on MERGED_PRS.
+ * marks merged, so not #6954, #6967 or #7235: see the Copybara note on MERGED_PRS.
  */
 export const MERGED_PRS_SEARCH = `https://github.com/search?q=${encodeURIComponent(
   ["is:pr", "is:merged", "author:jayhemnani9910", ...new Set(MERGED_PRS.map((pr) => `repo:${pr.repo}`))].join(" "),
