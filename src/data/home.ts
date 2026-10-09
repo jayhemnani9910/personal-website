@@ -279,6 +279,13 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
     href: "https://github.com/modular/modular/pull/7235",
     landed: "https://github.com/modular/modular/commit/189bd1393e2c35bfe777c97b1b3c8b1a31be8f8e",
   },
+  { repo: "caddyserver/caddy", number: "#8169", href: "https://github.com/caddyserver/caddy/pull/8169" },
+  { repo: "Effect-TS/effect", number: "#8952", href: "https://github.com/Effect-TS/effect/pull/8952" },
+  { repo: "lightpanda-io/browser", number: "#3873", href: "https://github.com/lightpanda-io/browser/pull/3873" },
+  { repo: "caddyserver/caddy", number: "#8150", href: "https://github.com/caddyserver/caddy/pull/8150" },
+  { repo: "morluto/rea", number: "#1216", href: "https://github.com/morluto/rea/pull/1216" },
+  { repo: "AlexsJones/llmfit", number: "#1121", href: "https://github.com/AlexsJones/llmfit/pull/1121" },
+  { repo: "morluto/rea", number: "#1215", href: "https://github.com/morluto/rea/pull/1215" },
 ];
 
 /**
