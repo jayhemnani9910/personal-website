@@ -94,7 +94,7 @@ export function ProjectDetail({
     factCells.push({
       label,
       value: (
-        <a href={href} target="_blank" rel="noreferrer" data-cursor="OPEN" className="hover:text-tr-accent-ink">
+        <a href={href} target="_blank" rel="noreferrer" className="hover:text-tr-accent-ink">
           {text}
         </a>
       ),
@@ -111,7 +111,7 @@ export function ProjectDetail({
       {/* ── Breadcrumb ── */}
       <nav aria-label="Breadcrumb" className={`${SHELL} pt-[clamp(1.5rem,3vw,2rem)]`}>
         <div className={`${WRAP} ${MONO} text-[length:var(--tr-t-mono)] text-tr-text-faint`}>
-          <Link href="/projects" data-cursor="OPEN" className="hover:text-tr-accent-ink">
+          <Link href="/projects" className="hover:text-tr-accent-ink">
             /work
           </Link>
           <span> / {project.id}</span>
@@ -264,7 +264,6 @@ export function ProjectDetail({
                 href={demo.sourceUrl}
                 target="_blank"
                 rel="noreferrer"
-                data-cursor="OPEN"
                 className={`${MONO} mt-6 inline-block text-[length:var(--tr-t-mono)] text-tr-text-mute hover:text-tr-accent-ink`}
               >
                 Run it yourself on GitHub ↗
@@ -522,13 +521,12 @@ export function ProjectDetail({
         <div className={`${WRAP} flex items-center justify-between gap-4 py-8`}>
           <Link
             href="/projects"
-            data-cursor="OPEN"
             className={`${MONO} text-[length:var(--tr-t-mono)] text-tr-text-mute hover:text-tr-accent-ink`}
           >
             ← all work
           </Link>
 
-          <Link href={`/projects/${nextProject.id}`} data-cursor="OPEN" className="group text-right">
+          <Link href={`/projects/${nextProject.id}`} className="group text-right">
             <span className={`${MONO} block text-[length:var(--tr-t-mono-sm)] tracking-[.1em] text-tr-text-faint`}>
               NEXT · {pad(nextProject.index)}
             </span>

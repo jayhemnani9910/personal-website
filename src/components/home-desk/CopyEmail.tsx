@@ -16,7 +16,7 @@ export function CopyEmail({ email }: { email: string }) {
     <button
       type="button"
       onClick={copy}
-      className="my-2 mb-3.5 block cursor-copy text-left text-[length:clamp(24px,5vw,72px)] font-extrabold leading-none tracking-[-0.04em] [overflow-wrap:anywhere] hover:text-desk-butter"
+      className="my-2 mb-3.5 block cursor-copy text-left text-[length:clamp(24px,5vw,72px)] font-extrabold leading-none tracking-[-0.04em] [overflow-wrap:anywhere] hover:text-tr-butter"
     >
       {user}
       <wbr />@{host}

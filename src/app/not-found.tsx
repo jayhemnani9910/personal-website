@@ -32,14 +32,12 @@ export default function NotFound() {
             <div className="mt-8 flex flex-wrap gap-3">
               <Link
                 href="/"
-                data-cursor="OPEN"
                 className={`inline-flex items-center justify-center bg-tr-accent px-[1.5em] py-[.875em] text-tr-on-accent ${MONO} text-[length:var(--tr-t-mono)] uppercase tracking-[.04em] no-underline transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] hover:bg-tr-accent-hover`}
               >
                 Home
               </Link>
               <Link
                 href="/projects"
-                data-cursor="OPEN"
                 className={`inline-flex items-center justify-center border border-tr-hairline px-[1.5em] py-[.875em] ${MONO} text-[length:var(--tr-t-mono)] uppercase tracking-[.04em] text-tr-text-mute no-underline transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] hover:text-tr-text`}
               >
                 Projects

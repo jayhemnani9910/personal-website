@@ -59,9 +59,10 @@ describe("TerminalOverlay chrome", () => {
     expect(screen.getByText(/try a chip above/)).toBeDefined();
   });
 
-  it("offers the theme chip the design has and we were missing", () => {
+  it("offers the eggs chip, and no theme chip now there is one theme", () => {
     renderOpen();
-    expect(screen.getByRole("button", { name: "theme" })).toBeDefined();
+    expect(screen.getByRole("button", { name: "eggs" })).toBeDefined();
+    expect(screen.queryByRole("button", { name: "theme" })).toBeNull();
   });
 });
 
@@ -92,6 +93,17 @@ describe("TerminalOverlay v4 commands", () => {
     }
   });
 
+  it("eggs lists the home page's secrets, naming only the ones found", () => {
+    localStorage.setItem("jh_eggs", JSON.stringify(["cube"]));
+    renderOpen();
+    type("eggs");
+    const log = screen.getByRole("log");
+    expect(log.textContent).toContain("1/5 secrets found");
+    expect(log.textContent).toContain("Scrambler");
+    expect(log.textContent).not.toContain("Yeet");
+    localStorage.clear();
+  });
+
   it("rm refuses", () => {
     renderOpen();
     type("rm -rf .");
@@ -106,7 +118,7 @@ describe("TerminalOverlay v4 commands", () => {
     const log = screen.getByRole("log");
     expect(log.textContent).toContain("things that work here:");
     expect(log.textContent).toContain("every number on this page, with source");
-    expect(log.textContent).toContain("theme · joke");
+    expect(log.textContent).toContain("contact · joke");
   });
 
   it("renders a chip row whose entries are runnable commands", () => {

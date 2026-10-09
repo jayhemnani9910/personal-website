@@ -3,25 +3,26 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { m, AnimatePresence } from "framer-motion";
 import { useTerminal } from "@/context/TerminalContext";
-import { useTheme } from "@/context/ThemeContext";
 import { EASE, DUR } from "@/lib/motion-tokens";
 import { FEATURED, buildReceipts } from "@/data/home";
 import { SITE_CONFIG } from "@/../content/site";
 import { WEBMCP_TOOL_COUNT } from "@/lib/webmcp-tools";
 import { scrollBehavior } from "@/lib/scroll";
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
+import { readEggs } from "@/components/home-desk/deskStore";
+import { SECRETS } from "@/components/home-desk/secrets";
 
 // All available commands for tab-completion. `exit` is not advertised in
 // `help` or the chip row (the design has no such command), but it is kept
 // working: see the Enter handler below.
 const COMMANDS = [
     "help", "whoami", "ls", "open", "receipts", "contact",
-    "theme", "joke", "sudo", "rm", "clear", "exit",
+    "eggs", "joke", "sudo", "rm", "clear", "exit",
 ];
 
 // Shown above the input. Each is a command the shell actually runs, so the
 // row doubles as the discoverable half of `help`.
-const CHIPS = ["help", "ls", "open 1", "receipts", "joke", "theme"];
+const CHIPS = ["help", "ls", "receipts", "eggs", "joke"];
 
 type ColorKey = "text" | "mute" | "faint" | "accent" | "ok";
 
@@ -49,14 +50,13 @@ const err = (text: string): Line => line(text, "text", "✗", "accent");
 // The shell's greeting, printed once on mount.
 const INITIAL_LINES: Line[] = [
     line("hey. this is a real shell, minus the part where you can break anything.", "text", "☺", "accent"),
-    line("try a chip above, or type `help`"),
+    line("try a chip above, or type `eggs`"),
 ];
 
 export function TerminalOverlay({ projectCount }: { projectCount: number }) {
     const { isOpen, closeTerminal } = useTerminal();
     // The 24px slide is motion; under reduced motion or reader mode it only fades.
     const slide = usePrefersReducedMotion() ? 0 : 24;
-    const { theme, toggleTheme } = useTheme();
     const [input, setInput] = useState("");
     const [history, setHistory] = useState<Line[]>(INITIAL_LINES);
     const inputRef = useRef<HTMLInputElement>(null);
@@ -159,7 +159,8 @@ export function TerminalOverlay({ projectCount }: { projectCount: number }) {
                     info(`${"ls".padEnd(15)}the six featured projects`),
                     info(`${"open <1-6>".padEnd(15)}one project, in three lines`),
                     info(`${"receipts".padEnd(15)}every number on this page, with source`),
-                    line("whoami · contact · theme · joke · clear"),
+                    info(`${"eggs".padEnd(15)}the home page's secrets, found and not`),
+                    line("whoami · contact · joke · clear"),
                 ];
                 break;
             case "whoami":
@@ -195,10 +196,14 @@ export function TerminalOverlay({ projectCount }: { projectCount: number }) {
                     line(`${SITE_CONFIG.social.github.replace(/^https:\/\//, "")} · ${SITE_CONFIG.social.linkedin.replace(/^https:\/\//, "")}`),
                 ];
                 break;
-            case "theme": {
-                const next = theme === "dark" ? "light" : "dark";
-                toggleTheme();
-                out = [ok(`theme → ${next}. your retinas thank you. or not.`)];
+            case "eggs": {
+                const found = readEggs();
+                out = [
+                    line(`${found.length}/${SECRETS.length} secrets found on the home page.`, "mute", "★", "accent"),
+                    ...SECRETS.map((s) =>
+                        found.includes(s.id) ? ok(`${s.title.padEnd(12)}${s.hint}`) : info(`${"???".padEnd(12)}${s.hint}`),
+                    ),
+                ];
                 break;
             }
             case "joke":
@@ -220,7 +225,7 @@ export function TerminalOverlay({ projectCount }: { projectCount: number }) {
 
         setHistory((prev) => [...prev, echo, ...out]);
         setInput("");
-    }, [closeTerminal, projectCount, theme, toggleTheme]);
+    }, [closeTerminal, projectCount]);
 
     const handleKeyDown = (e: React.KeyboardEvent) => {
         if (e.key === "Enter") {

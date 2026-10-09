@@ -135,7 +135,6 @@ export function ProjectsClient({ projects }: ProjectsClientProps) {
                 <li key={p.id} className="border-t border-tr-hairline">
                   <Link
                     href={`/projects/${p.id}`}
-                    data-cursor="OPEN"
                     className="group grid gap-[.6rem_1rem] py-[1.1rem] items-start lg:grid-cols-[3rem_minmax(0,1.2fr)_minmax(0,2fr)_9rem_5rem] lg:gap-6 hover:bg-[linear-gradient(90deg,var(--tr-surface-1)_0,transparent_100%)]"
                   >
                     <span className={`text-[length:var(--tr-t-mono-sm)] text-tr-text-faint ${MONO}`}>

@@ -53,7 +53,6 @@ export default function LabPage() {
             </div>
             <a
               href={`mailto:${SITE_CONFIG.social.email}`}
-              data-cursor="OPEN"
               className="flex flex-col border border-tr-hairline bg-tr-bg px-5 py-4 no-underline transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] hover:border-tr-accent"
             >
               <span className={`${MONO} text-[length:var(--tr-t-mono-sm)] uppercase tracking-[.08em] text-tr-text-mute`}>

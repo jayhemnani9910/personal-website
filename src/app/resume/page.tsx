@@ -69,7 +69,6 @@ export default function AboutPage() {
               {RESUME.location} ·{" "}
               <a
                 href={`mailto:${RESUME.contact.email}`}
-                data-cursor="OPEN"
                 className={UNDERLINE_LINK}
               >
                 {RESUME.contact.email}
@@ -85,7 +84,6 @@ export default function AboutPage() {
                   href={r.file}
                   target="_blank"
                   rel="noreferrer"
-                  data-cursor="OPEN"
                   className={`${MONO} text-[length:var(--tr-t-mono-sm)] uppercase text-tr-text-mute ${UNDERLINE_LINK}`}
                 >
                   {r.label}
@@ -310,7 +308,6 @@ export default function AboutPage() {
                     {CUBE_ACHIEVEMENT}. Wrote{" "}
                     <Link
                       href="/projects/rubiks-timer"
-                      data-cursor="OPEN"
                       className={`text-tr-text-mute ${UNDERLINE_LINK}`}
                     >
                       the timer

@@ -3,7 +3,6 @@ import type { Route } from "next";
 import { getAllProjects } from "@/lib/content";
 import { FEATURED, HOUSE_RULES, DAILY_FACTS, CUBE_PB, buildDeskStats, buildLogEntries } from "@/data/home";
 import { SITE_CONFIG } from "@/../content/site";
-import { DESK_FONTS } from "./fonts";
 import { SecretsProvider } from "./SecretsProvider";
 import { DeskNav } from "./DeskNav";
 import { PhysicsPlayground } from "./PhysicsPlayground";
@@ -12,10 +11,11 @@ import { CubeCard } from "./CubeCard";
 import { Guestbook } from "./Guestbook";
 import { CopyEmail } from "./CopyEmail";
 import { Greeting, VisitCount } from "./Visits";
+import { ReaderToggle } from "@/components/ReaderToggle";
 
 const SECTION = "mx-auto max-w-[1200px] px-[clamp(16px,4vw,48px)] py-[60px]";
 const H2 = "text-[length:clamp(32px,4.5vw,56px)] font-extrabold tracking-[-0.035em] leading-none";
-const DOTS = ["var(--desk-tomato)", "var(--desk-butter)", "var(--desk-sky)", "var(--desk-mint)", "var(--desk-lilac)", "var(--desk-pink)"];
+const DOTS = ["var(--tr-accent)", "var(--tr-butter)", "var(--tr-sky)", "var(--tr-mint)", "var(--tr-lilac)", "var(--tr-pink)"];
 
 const NUMBER_WORDS = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen"];
 const TENS = ["", "", "twenty", "thirty", "forty", "fifty", "sixty", "seventy", "eighty", "ninety"];
@@ -56,23 +56,23 @@ export async function HomeDesk() {
   const shy = projectCount - featured.length;
 
   return (
-    <div className={`desk ${DESK_FONTS} min-h-screen bg-desk-paper font-desk text-desk-ink antialiased`}>
+    <div className="min-h-screen bg-tr-bg text-tr-text">
       <SecretsProvider>
         <DeskNav />
 
         <main id="main-content">
           <header className="mx-auto max-w-[1200px] px-[clamp(16px,4vw,48px)] pb-8 pt-[clamp(40px,7vw,90px)]">
             <Greeting />
-            <h1 className="text-[length:clamp(44px,8vw,112px)] font-extrabold leading-[var(--desk-lh-display)] tracking-[-0.045em] [text-wrap:balance]">
+            <h1 className="text-[length:clamp(44px,8vw,112px)] font-extrabold leading-[var(--tr-lh-display)] tracking-[-0.045em] [text-wrap:balance]">
               I take the vague version and ship the{" "}
-              <span className="rounded-md bg-desk-butter px-[0.12em] [box-decoration-break:clone]">real one.</span>
+              <span className="rounded-md bg-tr-butter px-[0.12em] [box-decoration-break:clone]">real one.</span>
             </h1>
             <div className="mt-7 flex flex-wrap items-end justify-between gap-6">
-              <p className="max-w-[520px] text-[length:clamp(17px,1.6vw,20px)] leading-[var(--desk-lh-lede)] text-desk-ink-2 [text-wrap:pretty]">
+              <p className="max-w-[520px] text-[length:clamp(17px,1.6vw,20px)] leading-[var(--tr-lh-body)] text-tr-text-mute [text-wrap:pretty]">
                 Jay Hemnani. Forward-deployed engineer from Gujarat. Data pipelines, ML, agents, and occasionally a
                 Rubik&apos;s cube. Currently <b>open to work</b> and, apparently, to building toys for my own homepage.
               </p>
-              <p aria-hidden="true" className="font-desk-mono text-[12px] text-desk-muted">
+              <p aria-hidden="true" className="font-mono text-[12px] text-tr-text-faint">
                 ↓ grab a tile. throw it. they don&apos;t mind.
               </p>
             </div>
@@ -82,10 +82,10 @@ export async function HomeDesk() {
           <TodayPick projects={picks} facts={DAILY_FACTS} />
 
           <section aria-label="By the numbers" className="mx-auto max-w-[1200px] px-[clamp(16px,4vw,48px)] pb-10 pt-5">
-            <dl className="grid grid-cols-[repeat(auto-fit,minmax(150px,1fr))] border-y-[1.5px] border-desk-ink">
+            <dl className="grid grid-cols-[repeat(auto-fit,minmax(150px,1fr))] border-y-[1.5px] border-tr-hairline">
               {buildDeskStats({ projectCount }).map((s) => (
                 <div key={s.label} className="flex flex-col-reverse py-[22px] pr-4">
-                  <dt className="mt-1.5 text-[14px] leading-[var(--desk-lh-label)] text-desk-muted">{s.label}</dt>
+                  <dt className="mt-1.5 text-[14px] leading-[var(--tr-lh-card)] text-tr-text-faint">{s.label}</dt>
                   <dd className="text-[length:clamp(36px,4vw,52px)] font-extrabold leading-none tracking-[-0.04em]">{s.n}</dd>
                 </div>
               ))}
@@ -96,7 +96,7 @@ export async function HomeDesk() {
             <h2 id="work-h2" className={`${H2} mb-2`}>
               Things I&apos;ve shipped
             </h2>
-            <p className="mb-7 text-[17px] text-desk-muted">
+            <p className="mb-7 text-[17px] text-tr-text-faint">
               {capitalise(inWords(featured.length))} of {inWords(projectCount)}. The other{" "}
               <Link href="/projects" className="underline">
                 {inWords(shy)} are shy
@@ -108,18 +108,18 @@ export async function HomeDesk() {
                 <li key={p.id} className="flex">
                   <Link
                     href={`/projects/${p.id}` as Route}
-                    className="desk-card flex w-full flex-col gap-3.5 rounded-[18px] border-[1.5px] border-desk-ink bg-desk-card p-6 hover:text-desk-ink"
+                    className="desk-card flex w-full flex-col gap-3.5 rounded-[18px] border-[1.5px] border-tr-hairline bg-tr-surface-1 p-6 hover:text-tr-text"
                   >
                     <span className="flex items-center justify-between">
-                      <span className="font-desk-mono text-[12px] text-desk-muted">{p.num}</span>
-                      <span aria-hidden="true" className="size-3.5 rounded-full border-[1.5px] border-desk-ink" style={{ background: DOTS[i % DOTS.length] }} />
+                      <span className="font-mono text-[12px] text-tr-text-faint">{p.num}</span>
+                      <span aria-hidden="true" className="size-3.5 rounded-full border-[1.5px] border-tr-hairline" style={{ background: DOTS[i % DOTS.length] }} />
                     </span>
-                    <span className="text-[26px] font-extrabold leading-[var(--desk-lh-title)] tracking-[-0.025em]">{p.title}</span>
-                    <span className="font-desk-hand text-[22px] leading-[var(--desk-lh-hand)] text-desk-tomato">&ldquo;{p.arrived}&rdquo;</span>
-                    <span className="text-[15px] leading-normal text-desk-ink-2">{p.changed}</span>
+                    <span className="text-[26px] font-extrabold leading-[var(--tr-lh-h3)] tracking-[-0.025em]">{p.title}</span>
+                    <span className="font-hand text-[24px] leading-[var(--tr-lh-hand)] text-tr-accent-hand">&ldquo;{p.arrived}&rdquo;</span>
+                    <span className="text-[15px] leading-normal text-tr-text-mute">{p.changed}</span>
                     <span className="mt-auto flex flex-wrap gap-1.5">
                       {p.tech.slice(0, 4).map((t) => (
-                        <span key={t} className="rounded-md bg-desk-paper px-2 py-[3px] font-desk-mono text-[11px]">
+                        <span key={t} className="rounded-md bg-tr-bg px-2 py-[3px] font-mono text-[11px]">
                           {t}
                         </span>
                       ))}
@@ -135,16 +135,16 @@ export async function HomeDesk() {
               <h2 id="rules-h2" className={`${H2} mb-2.5`}>
                 House rules
               </h2>
-              <p className="mb-7 max-w-[420px] text-[17px] text-desk-muted">Each one cost me a project to learn. You get them free.</p>
+              <p className="mb-7 max-w-[420px] text-[17px] text-tr-text-faint">Each one cost me a project to learn. You get them free.</p>
               <CubeCard pb={CUBE_PB} />
             </div>
             <ul className="grid grid-cols-[repeat(auto-fit,minmax(220px,1fr))] gap-4">
               {HOUSE_RULES.map((r) => (
-                <li key={r.n} className="flex flex-col gap-2 rounded-[14px] border-[1.5px] border-desk-ink bg-desk-card p-5">
-                  <span className="font-desk-hand text-[28px] leading-none text-desk-tomato">{r.n}</span>
-                  <h3 className="text-[20px] font-bold leading-[var(--desk-lh-snug)] tracking-[-0.02em]">{r.title}</h3>
-                  <p className="text-[14px] leading-normal text-desk-ink-2">{r.why}</p>
-                  <p className="mt-1 font-desk-mono text-[11px] text-desk-muted">learned on: {r.from}</p>
+                <li key={r.n} className="flex flex-col gap-2 rounded-[14px] border-[1.5px] border-tr-hairline bg-tr-surface-1 p-5">
+                  <span className="font-hand text-[28px] leading-none text-tr-accent-hand">{r.n}</span>
+                  <h3 className="text-[20px] font-bold leading-[var(--tr-lh-h2)] tracking-[-0.02em]">{r.title}</h3>
+                  <p className="text-[14px] leading-normal text-tr-text-mute">{r.why}</p>
+                  <p className="mt-1 font-mono text-[11px] text-tr-text-faint">learned on: {r.from}</p>
                 </li>
               ))}
             </ul>
@@ -156,13 +156,13 @@ export async function HomeDesk() {
             </h2>
             <ol>
               {buildLogEntries().map((j) => (
-                <li key={j.org} className="grid gap-1 border-t-[1.5px] border-desk-ink py-[18px] sm:grid-cols-[minmax(110px,180px)_minmax(0,1fr)] sm:gap-5">
-                  <p className="pt-1 font-desk-mono text-[13px] text-desk-muted">{j.when}</p>
+                <li key={j.org} className="grid gap-1 border-t-[1.5px] border-tr-hairline py-[18px] sm:grid-cols-[minmax(110px,180px)_minmax(0,1fr)] sm:gap-5">
+                  <p className="pt-1 font-mono text-[13px] text-tr-text-faint">{j.when}</p>
                   <div>
                     <h3 className="text-[21px] font-bold tracking-[-0.02em]">
-                      {j.role} <span className="font-normal text-desk-muted">@ {j.org}</span>
+                      {j.role} <span className="font-normal text-tr-text-faint">@ {j.org}</span>
                     </h3>
-                    <p className="mt-1 text-[15px] leading-normal text-desk-ink-2">{j.what}</p>
+                    <p className="mt-1 text-[15px] leading-normal text-tr-text-mute">{j.what}</p>
                   </div>
                 </li>
               ))}
@@ -171,36 +171,38 @@ export async function HomeDesk() {
 
           <Guestbook />
 
-          <section id="hi" aria-labelledby="hi-h2" className="mt-[60px] bg-desk-ink text-desk-paper">
+          <section id="hi" aria-labelledby="hi-h2" className="ink-panel mt-[60px] bg-tr-text text-tr-on-ink">
             <div className="mx-auto max-w-[1200px] px-[clamp(16px,4vw,48px)] pb-10 pt-[clamp(60px,9vw,110px)]">
-              <h2 id="hi-h2" className="font-desk-hand text-[28px] font-normal text-desk-butter">
+              <h2 id="hi-h2" className="font-hand text-[28px] font-normal text-tr-butter">
                 got a vague brief?
               </h2>
               <CopyEmail email={social.email} />
-              <p className="font-desk-mono text-[13px] text-desk-muted-dark">click to copy · software, data &amp; ML roles, forward-deployed included</p>
+              <p className="font-mono text-[13px] text-tr-on-ink-mute">click to copy · software, data &amp; ML roles, forward-deployed included</p>
               <ul className="mt-10 flex flex-wrap gap-3">
                 {SOCIALS.map((s) => (
                   <li key={s.label}>
                     <a
                       href={s.href}
-                      className="inline-block rounded-full border-[1.5px] border-desk-line-dark px-4 py-2.5 font-desk-mono text-[14px] text-desk-paper hover:border-desk-butter hover:text-desk-butter"
+                      className="inline-block rounded-full border-[1.5px] border-tr-on-ink-line px-4 py-2.5 font-mono text-[14px] text-tr-on-ink hover:border-tr-butter hover:text-tr-butter"
                     >
                       {s.label} <span aria-hidden="true">↗</span>
                     </a>
                   </li>
                 ))}
               </ul>
-              <nav aria-label="Site" className="mt-10 flex flex-wrap gap-x-5 gap-y-2 font-desk-mono text-[13px]">
+              <nav aria-label="Site" className="mt-10 flex flex-wrap gap-x-5 gap-y-2 font-mono text-[13px]">
                 {PAGES.map((p) => (
-                  <Link key={p.href} href={p.href} className="text-desk-paper underline hover:text-desk-butter">
+                  <Link key={p.href} href={p.href} className="text-tr-on-ink underline hover:text-tr-butter">
                     {p.label}
                   </Link>
                 ))}
               </nav>
-              <footer className="mt-16 flex flex-wrap justify-between gap-3 font-desk-mono text-[12px] text-desk-faint-dark">
+              <footer className="mt-16 flex flex-wrap justify-between gap-3 font-mono text-[12px] text-tr-on-ink-faint">
                 <p>
                   {SITE_CONFIG.copyright}
                   <VisitCount />
+                  {" · "}
+                  <ReaderToggle className="cursor-pointer hover:text-tr-butter" />
                 </p>
                 <p aria-hidden="true">psst. ↑ ↑ ↓ ↓ ← → ← → b a</p>
               </footer>

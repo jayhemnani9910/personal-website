@@ -8,8 +8,8 @@ import { useDesk } from "./SecretsProvider";
 const LETTERS = ["J", "A", "Y"];
 const WORDS = ["python", "kafka", "langgraph", "airflow", "pytorch", "sql", "next.js", "rubik's"];
 const STORM = ["wheee", "sql", "dbt", "oops", "k8s", "pandas", "ship it", "λ", "GPU", "chai"];
-const LETTER_BG = ["var(--desk-tomato)", "var(--desk-ink)", "var(--desk-sky)"];
-const WORD_BG = ["var(--desk-tomato)", "var(--desk-butter)", "var(--desk-sky)", "var(--desk-mint)", "var(--desk-lilac)", "var(--desk-pink)"];
+const LETTER_BG = ["var(--tr-accent)", "var(--tr-text)", "var(--tr-sky)"];
+const WORD_BG = ["var(--tr-accent)", "var(--tr-butter)", "var(--tr-sky)", "var(--tr-mint)", "var(--tr-lilac)", "var(--tr-pink)"];
 
 const GRAVITY = 0.55;
 const AIR = 0.995;
@@ -19,9 +19,9 @@ const WALL_BOUNCE = -0.6;
 const MAX_THROW = 45;
 const FLING_SPEED = 38;
 
-const TILE = "absolute left-0 top-0 flex select-none items-center justify-center border-[1.5px] border-desk-ink shadow-[3px_3px_0_var(--desk-ink)] [touch-action:none] [will-change:transform]";
-const LETTER = "size-[72px] rounded-[14px] text-[52px] sm:size-24 sm:rounded-[18px] sm:text-[68px] font-desk font-extrabold";
-const WORD = "rounded-full px-3 py-2 text-[13px] sm:px-4 sm:py-2.5 sm:text-[15px] font-desk-mono font-semibold whitespace-nowrap";
+const TILE = "absolute left-0 top-0 flex select-none items-center justify-center border-[1.5px] border-tr-hairline shadow-[3px_3px_0_var(--tr-text)] [touch-action:none] [will-change:transform]";
+const LETTER = "size-[72px] rounded-[14px] text-[52px] sm:size-24 sm:rounded-[18px] sm:text-[68px] font-extrabold";
+const WORD = "rounded-full px-3 py-2 text-[13px] sm:px-4 sm:py-2.5 sm:text-[15px] font-mono font-semibold whitespace-nowrap";
 
 type Body = {
   el: HTMLDivElement;
@@ -77,7 +77,7 @@ export function PhysicsPlayground() {
       const bg = letter ? LETTER_BG[bodies.length % LETTER_BG.length] : pick(WORD_BG);
       el.className = `${TILE} ${letter ? LETTER : WORD} ${reduced ? "" : "cursor-grab"}`;
       el.style.background = bg;
-      el.style.color = bg === "var(--desk-ink)" ? "var(--desk-butter)" : "var(--desk-ink)";
+      el.style.color = bg === "var(--tr-text)" ? "var(--tr-butter)" : "var(--tr-text)";
       el.textContent = label;
       host.appendChild(el);
 
@@ -282,7 +282,7 @@ export function PhysicsPlayground() {
     <div
       ref={hostRef}
       aria-hidden="true"
-      className="relative mt-[22px] h-[340px] overflow-hidden rounded-[20px] border-[1.5px] border-desk-ink bg-desk-card bg-[radial-gradient(var(--desk-dot)_1px,transparent_1px)] bg-size-[22px_22px] shadow-[6px_6px_0_var(--desk-ink)]"
+      className="relative mt-[22px] h-[340px] overflow-hidden rounded-[20px] border-[1.5px] border-tr-hairline bg-tr-surface-1 bg-[radial-gradient(var(--tr-dot-grid)_1px,transparent_1px)] bg-size-[22px_22px] shadow-[6px_6px_0_var(--tr-text)]"
     />
   );
 }

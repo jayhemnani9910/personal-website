@@ -31,7 +31,7 @@ export function untilMidnight(d: Date): string {
   return `${hh}h ${String(mm).padStart(2, "0")}m ${String(ss).padStart(2, "0")}s`;
 }
 
-const MONO_LABEL = "mb-1.5 font-desk-mono text-[11px] text-desk-muted-dark";
+const MONO_LABEL = "mb-1.5 font-mono text-[11px] text-tr-on-ink-mute";
 
 export function TodayPick({ projects, facts }: { projects: PickProject[]; facts: string[] }) {
   const seconds = useSyncExternalStore(subscribeClock, getClock, getServerClock);
@@ -48,9 +48,9 @@ export function TodayPick({ projects, facts }: { projects: PickProject[]; facts:
         <h2 id="today-h2" className="text-[length:clamp(32px,4.5vw,56px)] font-extrabold tracking-[-0.035em]">
           Today&apos;s pick
         </h2>
-        <p className="font-desk-mono text-[13px] text-desk-muted">
+        <p className="font-mono text-[13px] text-tr-text-faint">
           changes in{" "}
-          <span className="font-semibold text-desk-ink" suppressHydrationWarning>
+          <span className="font-semibold text-tr-text" suppressHydrationWarning>
             {now ? untilMidnight(now) : "--h --m --s"}
           </span>
         </p>
@@ -59,42 +59,42 @@ export function TodayPick({ projects, facts }: { projects: PickProject[]; facts:
       <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,320px),1fr))] gap-5">
         <Link
           href={`/projects/${project.id}` as Route}
-          className="flex min-w-0 flex-col gap-4 rounded-[20px] bg-desk-ink p-[clamp(22px,3vw,36px)] text-desk-paper hover:text-desk-paper md:col-span-2"
+          className="ink-panel flex min-w-0 flex-col gap-4 rounded-[20px] bg-tr-text p-[clamp(22px,3vw,36px)] text-tr-on-ink hover:text-tr-on-ink md:col-span-2"
         >
-          <p className="font-desk-mono text-[12px] text-desk-butter">
+          <p className="font-mono text-[12px] text-tr-butter">
             project of the day{now && ` · ${now.toLocaleDateString(undefined, { day: "numeric", month: "short" })}`}
           </p>
-          <h3 className="text-[length:clamp(30px,3.6vw,46px)] font-extrabold leading-none tracking-[-0.03em] underline decoration-transparent decoration-2 underline-offset-4 transition-colors hover:decoration-desk-tomato">
+          <h3 className="text-[length:clamp(30px,3.6vw,46px)] font-extrabold leading-none tracking-[-0.03em] underline decoration-transparent decoration-2 underline-offset-4 transition-colors hover:decoration-tr-accent">
             {project.title}
           </h3>
           <div className="grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-5">
             <div>
               <p className={MONO_LABEL}>THE BRIEF</p>
-              <p className="text-[17px] leading-[var(--desk-lh-lede)]">{project.brief}</p>
+              <p className="text-[17px] leading-[var(--tr-lh-body)]">{project.brief}</p>
             </div>
             <div>
               <p className={MONO_LABEL}>WHAT CHANGED</p>
-              <p className="text-[17px] leading-[var(--desk-lh-lede)]">{project.changed}</p>
+              <p className="text-[17px] leading-[var(--tr-lh-body)]">{project.changed}</p>
             </div>
           </div>
           <ul className="flex flex-wrap gap-2">
             {project.tags.map((t) => (
-              <li key={t} className="rounded-full border border-desk-line-dark px-2.5 py-1 font-desk-mono text-[12px]">
+              <li key={t} className="rounded-full border border-tr-on-ink-line px-2.5 py-1 font-mono text-[12px]">
                 {t}
               </li>
             ))}
           </ul>
         </Link>
 
-        <div className="flex rotate-[1.5deg] flex-col gap-3 rounded-[20px] border-[1.5px] border-desk-ink bg-desk-butter p-[26px]">
-          <p className="font-desk-mono text-[12px]">useless fact #{factIndex + 1}</p>
-          <p aria-live="polite" className="font-desk-hand text-[30px] leading-[var(--desk-lh-hand)]">
+        <div className="flex rotate-[1.5deg] flex-col gap-3 rounded-[20px] border-[1.5px] border-tr-hairline bg-tr-butter p-[26px]">
+          <p className="font-mono text-[12px]">useless fact #{factIndex + 1}</p>
+          <p aria-live="polite" className="font-hand text-[30px] leading-[var(--tr-lh-hand)]">
             {facts[factIndex]}
           </p>
           <button
             type="button"
             onClick={() => setFactOffset((o) => o + 1)}
-            className="mt-auto cursor-pointer self-start rounded-full border-[1.5px] border-desk-ink bg-desk-card px-3 py-2 font-desk-mono text-[12px]"
+            className="mt-auto cursor-pointer self-start rounded-full border-[1.5px] border-tr-hairline bg-tr-surface-1 px-3 py-2 font-mono text-[12px]"
           >
             one more →
           </button>

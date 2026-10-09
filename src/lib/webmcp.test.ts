@@ -3,7 +3,7 @@ import { join } from "node:path";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { WEBMCP_TOOLS, WEBMCP_TOOL_COUNT } from "./webmcp-tools";
 import { buildTools, registerWebMCPTools, type ModelContextTool, type SiteData } from "./webmcp";
-import { READER_KEY, THEME_KEY } from "./storage";
+import { READER_KEY } from "./storage";
 
 const DATA: SiteData = {
     siteUrl: "https://example.test",
@@ -119,14 +119,6 @@ describe("WebMCP tools", () => {
     it("get_contact points at the site origin", async () => {
         const res = (await tool("get_contact").execute({})) as { website: string };
         expect(res.website).toBe("https://example.test");
-    });
-
-    it("toggle_theme applies and saves the theme", async () => {
-        document.documentElement.setAttribute("data-theme", "dark");
-        const res = (await tool("toggle_theme").execute({})) as { current: string };
-        expect(res.current).toBe("light");
-        expect(document.documentElement.getAttribute("data-theme")).toBe("light");
-        expect(localStorage.getItem(THEME_KEY)).toBe("light");
     });
 
     it("switch_mode turns reader mode on and announces it", async () => {

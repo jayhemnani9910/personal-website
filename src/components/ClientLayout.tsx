@@ -7,8 +7,6 @@ import { TerminalProvider, useTerminal } from "@/context/TerminalContext";
 import { SkipLink } from "@/components/SkipLink";
 import { TransitionLayout } from "@/components/TransitionLayout";
 import { MotionProvider } from "@/components/motion/MotionProvider";
-import { Preloader } from "@/components/motion/Preloader";
-import { Cursor } from "@/components/motion/Cursor";
 import { ReaderMode } from "@/components/ReaderMode";
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
 import { usePathname } from "next/navigation";
@@ -36,15 +34,7 @@ export function ClientLayout({ children, projectCount }: { children: React.React
 
     return (
         <MotionProvider>
-            {/* Overlays: both self-gate to nothing under reduced motion / touch,
-                and neither wraps page content (the preloader is a sibling scrim
-                that paints over already-rendered content, the cursor is a fixed
-                reticle). Order does not matter since both are position:fixed. */}
             <ReaderMode />
-            {/* The Desk home is a light, hands-on page with its own playground,
-                so neither the dark cold open nor the reticle belongs on it. */}
-            {!isHome && <Preloader />}
-            {!isHome && <Cursor />}
             <SkipLink />
             {/* Lenis in root mode drives the document scroller, so it does not
                 need to wrap the page. As a childless sibling it can come and go

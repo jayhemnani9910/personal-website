@@ -12,17 +12,17 @@ links:
   code: "https://github.com/jayhemnani9910/personal-website"
 challenge: "AI agents that use a website have to scrape its DOM and click buttons, which is brittle, slow, and breaks the moment a layout changes. The emerging WebMCP browser API takes a different route: a site registers structured tools that an agent calls directly, with JSON Schema inputs and typed JSON results. This project works out what it takes to expose a real, content-heavy site through that API."
 solution:
-  - "Registers 8 structured tools on this site through the WebMCP browser API (document.modelContext): project search, single-project lookup, resume, skills, contact, lab experiments, and two that change the page (theme and reader mode)."
+  - "Registers 7 structured tools on this site through the WebMCP browser API (document.modelContext): project search, single-project lookup, resume, skills, contact, lab experiments, and one that changes the page (reader mode)."
   - "Each tool ships a JSON Schema for its inputs and returns typed JSON with canonical jayhemnani.in URLs, so an agent gets structured data instead of parsing rendered HTML."
   - "Progressive enhancement: the site works normally everywhere, and the tools register only when the browser exposes the API (Chrome 146+ with the WebMCP flag), and aborting one signal on cleanup unregisters them all."
   - "Site data (projects, resume, socials, lab) is built once into a static /site-data.json. The browser fetches it, and the tool code, only after it finds the API, so other visitors download neither."
 impact:
   - "Turns the portfolio into a queryable surface: an agent can search every project, pull the full resume, list skills, and read what Jay is currently building, all as structured JSON."
-  - "Two of the tools carry real side effects (theme toggle and reader-mode switch), so WebMCP acts as a control surface, not just a read API."
+  - "One of the tools carries a real side effect (the reader-mode switch), so WebMCP acts as a control surface, not just a read API."
   - "Doubles as a working reference for an early-stage browser standard, with the whole registration layer in one typed module."
 deepDive:
   context: "The WebMCP proposal lets a website expose tools to an AI agent the same way an MCP server exposes them to a model: a name, a description, a JSON Schema for inputs, and an execute callback that returns structured data. Instead of screenshotting or scraping this site, an agent can call search_projects or get_resume and get clean JSON back. The API is new, document.modelContext behind a flag in Chrome 146, so part of the work was simply learning how the registration lifecycle behaves on a real Next.js site rather than inventing a new data layer."
-  architecture: "The integration is two layers. A static route (/site-data.json) is built once at build time: it reads projects from the MDX content loader, the resume object, social links from site config, and lab experiments, and shapes them into one typed SiteData object. A client component (WebMCPProvider) checks on mount whether document.modelContext exists. Only if it does, it fetches that file and the tool module, then registers the eight tools with one AbortSignal; its cleanup aborts the signal, which unregisters them all. Each tool is a name, a human-readable description, a JSON Schema input definition, and an async execute callback that filters or transforms the in-memory SiteData. Six read tools return JSON; two write tools change the DOM and localStorage and fire an event the site already listens for (a storage event for the theme, readermodechange for reader mode), so the page updates live."
+  architecture: "The integration is two layers. A static route (/site-data.json) is built once at build time: it reads projects from the MDX content loader, the resume object, social links from site config, and lab experiments, and shapes them into one typed SiteData object. A client component (WebMCPProvider) checks on mount whether document.modelContext exists. Only if it does, it fetches that file and the tool module, then registers the seven tools with one AbortSignal; its cleanup aborts the signal, which unregisters them all. Each tool is a name, a human-readable description, a JSON Schema input definition, and an async execute callback that filters or transforms the in-memory SiteData. Six read tools return JSON; the write tool changes the DOM and localStorage and fires readermodechange, an event the site already listens for, so the page updates live."
   dataFlow:
     - step: "Build writes the site data"
       component: "site-data.json route"
@@ -32,28 +32,28 @@ deepDive:
       detail: "WebMCPProvider runs an effect that returns at once unless document.modelContext exists; only then does it fetch /site-data.json and the tool module."
     - step: "Tools register"
       component: "registerWebMCPTools"
-      detail: "registerWebMCPTools registers the 8 tools, each with a JSON Schema and an execute callback closed over SiteData, all tied to one AbortSignal. A tool that fails to register is logged and skipped."
+      detail: "registerWebMCPTools registers the 7 tools, each with a JSON Schema and an execute callback closed over SiteData, all tied to one AbortSignal. A tool that fails to register is logged and skipped."
     - step: "Agent calls a tool"
       component: "search_projects / get_project"
       detail: "The browser calls the tool's execute with the supplied args; read tools return structured JSON with canonical jayhemnani.in URLs."
     - step: "Write tools change the page"
-      component: "toggle_theme / switch_mode"
-      detail: "toggle_theme sets data-theme and dispatches a storage event; switch_mode sets data-reader and dispatches readermodechange. Both update the page live; on unmount the provider aborts the signal, which unregisters every tool."
+      component: "switch_mode"
+      detail: "switch_mode sets data-reader and dispatches readermodechange, so the page updates live; on unmount the provider aborts the signal, which unregisters every tool."
   components:
     - name: "site-data.json route"
       purpose: "Built once at build time: reads projects, resume, socials, and lab data and serves the typed SiteData as a static file."
     - name: "WebMCPProvider (client)"
       purpose: "On mount, guards on API availability, fetches the data and tool code, registers the tools, and aborts their signal on cleanup. Renders nothing."
     - name: "registerWebMCPTools"
-      purpose: "The registration layer: defines all 8 tools with their JSON Schemas and execute callbacks, and registers each one on its own so one failure cannot drop the rest."
+      purpose: "The registration layer: defines all 7 tools with their JSON Schemas and execute callbacks, and registers each one on its own so one failure cannot drop the rest."
     - name: "search_projects / get_project"
       purpose: "Read tools over the project set: free-text and faceted search (tech, tag, domain, featured), and full single-project detail by ID."
     - name: "get_resume / search_skills / get_contact"
       purpose: "Read tools over the resume: sectioned resume data, skill search by category or keyword, and contact plus social links."
     - name: "list_experiments"
       purpose: "Read tool over the lab: what Jay is currently building, exploring, or watching."
-    - name: "toggle_theme / switch_mode"
-      purpose: "Write tools: change the site theme or reader mode via localStorage and a dispatched event (storage for the theme, readermodechange for reader mode), so WebMCP also acts as a control surface."
+    - name: "switch_mode"
+      purpose: "The write tool: turns reader mode on or off via localStorage and a dispatched readermodechange event, so WebMCP also acts as a control surface."
   keyDecisions:
     - decision: "Expose tools through WebMCP rather than an llms.txt file or a separate API"
       reasoning: "WebMCP gives an agent typed, callable tools inside the page it is already on, with JSON Schema inputs and structured returns, which removes the scraping and clicking layer entirely. A static text file or a standalone REST API would not be discoverable from the browsing session."
@@ -110,26 +110,18 @@ deepDive:
           return () => controller.abort();      // unregisters every tool
         }, []);
       explanation: "The site renders normally for every visitor. The data and the tool code are fetched, and the tools registered, only when document.modelContext is present. The effect's cleanup aborts the signal they were registered with, which unregisters them, so the lifecycle follows React's mount and unmount."
-    - title: "Two of the tools change the page, not just read it"
+    - title: "One of the tools changes the page, not just reads it"
       language: "typescript"
       code: |
-        // toggle_theme execute
-        const current = document.documentElement.getAttribute("data-theme") || "dark";
-        const newTheme =
-          args.theme === "light" || args.theme === "dark"
-            ? args.theme
-            : current === "dark" ? "light" : "dark";
-
-        document.documentElement.setAttribute("data-theme", newTheme);
-        writeStorage(THEME_KEY, newTheme);
-        // storage event so the site's React ThemeContext picks it up
-        window.dispatchEvent(new StorageEvent("storage", { key: THEME_KEY, newValue: newTheme }));
-        return { previous: current, current: newTheme };
-      explanation: "Six read tools, two write tools. An agent can flip the theme, which dispatches a storage event the site's theme context already listens for, or turn on reader mode, which dispatches readermodechange. Either way WebMCP becomes a control surface rather than only a query layer."
+        // switch_mode execute
+        const on = args.mode === "reader";
+        setReaderMode(on); // sets data-reader, saves it, fires readermodechange
+        return { mode: on ? "reader" : "default", reader: on };
+      explanation: "Six read tools, one write tool. An agent can turn on reader mode, which dispatches readermodechange, an event the site's motion layer already listens for. That makes WebMCP a control surface rather than only a query layer."
   metrics:
-    - value: "8 tools"
+    - value: "7 tools"
       label: "registered"
-      context: "6 read · 2 write, via document.modelContext"
+      context: "6 read · 1 write, via document.modelContext"
     - value: "JSON Schema"
       label: "typed inputs"
       context: "structured JSON returns, no DOM scraping"
@@ -145,4 +137,4 @@ deepDive:
     - "A tool that changes the page is as interesting as one that reads it. Theme and mode tools turn the site into something an agent can operate, not only query."
 priority: 2
 ---
-This portfolio registers structured tools through the WebMCP browser API (`document.modelContext`), so an AI agent can query it directly instead of scraping the DOM. Eight tools let an agent search every project, read the full resume, list skills and lab experiments, and even change the site's theme or reader mode, each with a JSON Schema for inputs and typed JSON results. The site works normally for everyone; the tools register only when the browser exposes the API (Chrome 146+ with the WebMCP flag) and unregister on cleanup. The site data is a static file built at build time, fetched only by browsers that have the API.
+This portfolio registers structured tools through the WebMCP browser API (`document.modelContext`), so an AI agent can query it directly instead of scraping the DOM. Seven tools let an agent search every project, read the full resume, list skills and lab experiments, and even switch the site into reader mode, each with a JSON Schema for inputs and typed JSON results. The site works normally for everyone; the tools register only when the browser exposes the API (Chrome 146+ with the WebMCP flag) and unregister on cleanup. The site data is a static file built at build time, fetched only by browsers that have the API.

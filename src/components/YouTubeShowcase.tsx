@@ -59,7 +59,6 @@ function ItemCard({ item, variant }: { item: YouTubeItem; variant: keyof typeof 
       href={`https://www.youtube.com/watch?v=${item.id}`}
       target="_blank"
       rel="noopener noreferrer"
-      data-cursor="OPEN"
       className={CARD}
     >
       <div className={`relative ${v.aspect} bg-tr-surface-2`}>
@@ -90,7 +89,6 @@ function ChannelButton({
       type="button"
       aria-pressed={selected}
       onClick={onSelect}
-      data-cursor="SWITCH"
       className={`min-w-[220px] text-left flex flex-col gap-[.15rem] px-4 py-[.7rem] rounded-[var(--tr-r-md)] border transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] ${
         selected ? "border-tr-accent bg-tr-surface-1" : "border-tr-hairline bg-transparent hover:border-tr-accent"
       }`}
@@ -126,7 +124,6 @@ export function YouTubeShowcase({ data }: { data: YouTubeData }) {
             href={channel.url}
             target="_blank"
             rel="noopener noreferrer"
-            data-cursor="OPEN"
             className="inline-block mt-3 text-tr-text-mute border-b border-tr-hairline hover:text-tr-accent-ink hover:border-tr-accent transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)]"
           >
             {channel.url} ↗

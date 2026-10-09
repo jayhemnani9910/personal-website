@@ -2,6 +2,7 @@
 
 - **Status:** Accepted
 - **Date:** 2026-09-06
+- **Amended by:** [ADR 0018](0018-adopt-the-desk-design-site-wide.md) (the split now holds for tomato; the yellow values are gone)
 
 ## Context
 

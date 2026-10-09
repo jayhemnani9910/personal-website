@@ -19,7 +19,7 @@ const ERRORS: Record<string, string> = {
 };
 const FALLBACK_ERROR = "The fridge door is stuck. Try again in a minute.";
 
-const INPUT = "min-w-0 rounded-xl border-[1.5px] border-desk-ink bg-desk-card px-3.5 py-3 text-[16px]";
+const INPUT = "min-w-0 rounded-xl border-[1.5px] border-tr-hairline bg-tr-surface-1 px-3.5 py-3 text-[16px]";
 
 export function Guestbook() {
   const { say } = useDesk();
@@ -79,7 +79,7 @@ export function Guestbook() {
         <h2 id="guestbook-h2" className="text-[length:clamp(32px,4.5vw,56px)] font-extrabold tracking-[-0.035em]">
           Leave a sticky
         </h2>
-        <p className="font-desk-mono text-[13px] text-desk-muted">
+        <p className="font-mono text-[13px] text-tr-text-faint">
           {notes === null ? "counting notes…" : `${count} ${count === 1 ? "note" : "notes"} on the fridge`}
         </p>
       </div>
@@ -112,7 +112,7 @@ export function Guestbook() {
         <button
           type="submit"
           disabled={pending}
-          className="desk-press cursor-pointer rounded-xl border-[1.5px] border-desk-ink bg-desk-tomato px-5 py-3 text-[16px] font-bold text-desk-card shadow-[3px_3px_0_var(--desk-ink)] disabled:cursor-wait disabled:opacity-70"
+          className="desk-press cursor-pointer rounded-xl border-[1.5px] border-tr-hairline bg-tr-accent px-5 py-3 text-[16px] font-bold text-tr-on-accent shadow-[3px_3px_0_var(--tr-text)] disabled:cursor-wait disabled:opacity-70"
         >
           stick it
         </button>
@@ -129,8 +129,8 @@ export function Guestbook() {
               className="desk-sticky flex min-h-[130px] flex-col gap-2.5 px-4 pb-3.5 pt-[18px] shadow-[0_8px_14px_-8px_rgba(29,26,22,0.45)]"
               style={{ background: STICKY[k % STICKY.length], ["--rot" as string]: `${((k * 37) % 9) - 4}deg` }}
             >
-              <p className="flex-1 font-desk-hand text-[23px] leading-[var(--desk-lh-hand)] [overflow-wrap:anywhere]">{n.msg}</p>
-              <p className="font-desk-mono text-[11px]">— {n.name}</p>
+              <p className="flex-1 font-hand text-[23px] leading-[var(--tr-lh-hand)] [overflow-wrap:anywhere]">{n.msg}</p>
+              <p className="font-mono text-[11px]">— {n.name}</p>
             </li>
           );
         })}

@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { SECRETS, useDesk } from "./SecretsProvider";
+import { useDesk } from "./SecretsProvider";
+import { SECRETS } from "./secrets";
 import { useJump } from "./useJump";
 
 const ANCHORS = [
@@ -40,7 +41,7 @@ export function DeskNav() {
     <>
       <nav
         aria-label="Page"
-        className="sticky top-0 z-20 flex items-center justify-between gap-4 border-b-[1.5px] border-desk-ink bg-desk-paper/92 px-[clamp(16px,4vw,48px)] py-3.5 backdrop-blur-[8px]"
+        className="sticky top-0 z-20 flex items-center justify-between gap-4 border-b-[1.5px] border-tr-hairline bg-tr-bg/92 px-[clamp(16px,4vw,48px)] py-3.5 backdrop-blur-[8px]"
       >
         <button
           type="button"
@@ -48,9 +49,9 @@ export function DeskNav() {
           aria-label="jay.hemnani"
           className="cursor-pointer select-none text-[20px] font-extrabold tracking-[-0.02em]"
         >
-          jay<span className="text-desk-tomato">.</span>hemnani
+          jay<span aria-hidden="true" className="text-tr-accent-hand">.</span>hemnani
         </button>
-        <div className="hidden flex-wrap gap-[clamp(12px,3vw,28px)] font-desk-mono text-[13px] sm:flex">
+        <div className="hidden flex-wrap gap-[clamp(12px,3vw,28px)] font-mono text-[13px] sm:flex">
           {ANCHORS.map((a) => (
             <a key={a.href} href={a.href} onClick={jump(a.href)}>
               {a.label}
@@ -63,7 +64,7 @@ export function DeskNav() {
           onClick={() => setOpen((v) => !v)}
           aria-expanded={open}
           aria-controls="desk-secrets"
-          className="desk-press cursor-pointer rounded-full border-[1.5px] border-desk-ink bg-desk-butter px-3 py-[7px] font-desk-mono text-[12px] shadow-[2px_2px_0_var(--desk-ink)] [--desk-press:2px]"
+          className="desk-press cursor-pointer rounded-full border-[1.5px] border-tr-hairline bg-tr-butter px-3 py-[7px] font-mono text-[12px] shadow-[2px_2px_0_var(--tr-text)] [--desk-press:2px]"
         >
           secrets {eggs.length}/{SECRETS.length}
         </button>
@@ -72,14 +73,14 @@ export function DeskNav() {
       <div
         id="desk-secrets"
         hidden={!open}
-        className="fixed right-[clamp(16px,4vw,48px)] top-16 z-30 w-[min(300px,calc(100vw-32px))] rounded-[14px] border-[1.5px] border-desk-ink bg-desk-card p-[18px] shadow-[5px_5px_0_var(--desk-ink)]"
+        className="fixed right-[clamp(16px,4vw,48px)] top-16 z-30 w-[min(300px,calc(100vw-32px))] rounded-[14px] border-[1.5px] border-tr-hairline bg-tr-surface-1 p-[18px] shadow-[5px_5px_0_var(--tr-text)]"
       >
-        <p className="mb-2.5 font-desk-mono text-[11px] uppercase tracking-[0.08em] text-desk-muted">hidden around this page</p>
+        <p className="mb-2.5 font-mono text-[11px] uppercase tracking-[0.08em] text-tr-text-faint">hidden around this page</p>
         <ul>
           {SECRETS.map((s) => {
             const got = eggs.includes(s.id);
             return (
-              <li key={s.id} className="flex items-start gap-2.5 border-t border-dashed border-desk-dash py-2">
+              <li key={s.id} className="flex items-start gap-2.5 border-t border-dashed border-tr-rule-soft py-2">
                 <span aria-hidden="true" className="w-[18px] text-[16px]">
                   {got ? "★" : "☆"}
                 </span>
@@ -88,7 +89,7 @@ export function DeskNav() {
                     {got ? s.title : "???"}
                     <span className="sr-only">{got ? " (found)" : " (not found yet)"}</span>
                   </p>
-                  <p className="text-[13px] text-desk-muted">{s.hint}</p>
+                  <p className="text-[13px] text-tr-text-faint">{s.hint}</p>
                 </div>
               </li>
             );

@@ -17,21 +17,21 @@ export function CubeCard({ pb }: { pb: string }) {
   };
 
   return (
-    <div className="flex items-center gap-5 rounded-[18px] border-[1.5px] border-dashed border-desk-ink bg-desk-card p-5">
+    <div className="flex items-center gap-5 rounded-[18px] border-[1.5px] border-dashed border-tr-hairline bg-tr-surface-1 p-5">
       <button
         type="button"
         onClick={scramble}
         aria-label="Scramble the cube face"
-        className="desk-cube grid shrink-0 cursor-pointer grid-cols-[repeat(3,26px)] gap-[3px] rounded-lg bg-desk-ink p-[5px]"
+        className="desk-cube grid shrink-0 cursor-pointer grid-cols-[repeat(3,26px)] gap-[3px] rounded-lg bg-tr-text p-[5px]"
       >
         {cells.map((c, i) => (
           <span key={i} className="size-[26px] rounded-[4px] transition-colors duration-[250ms]" style={{ background: c }} />
         ))}
       </button>
       <div>
-        <p className="font-desk-mono text-[11px] text-desk-muted">PERSONAL BEST · WCA OFFICIAL</p>
+        <p className="font-mono text-[11px] text-tr-text-faint">PERSONAL BEST · WCA OFFICIAL</p>
         <p className="text-[34px] font-extrabold tracking-[-0.03em]">{pb}s</p>
-        <p aria-live="polite" className="text-[14px] text-desk-muted">
+        <p aria-live="polite" className="text-[14px] text-tr-text-faint">
           {solved ? "Click the face to scramble it. I promise I'm faster than this." : `Scrambled. Give me ${pb} seconds.`}
         </p>
       </div>

@@ -1,8 +1,9 @@
 import { Bricolage_Grotesque, Caveat, JetBrains_Mono } from "next/font/google";
 
-// The Desk page's three voices. Loaded here rather than in the root layout so
-// only the home page downloads them. All three are variable fonts, so no
-// `weight` arrays: listing weights makes next/font ship static instances.
+// The site's three voices (ADR 0018): Bricolage Grotesque for the page,
+// JetBrains Mono for labels and meta, Caveat for the handwritten asides. All
+// three are variable fonts, so no `weight` arrays: listing weights makes
+// next/font ship static instances instead of the variable face.
 const bricolage = Bricolage_Grotesque({
   subsets: ["latin"],
   axes: ["opsz"],
@@ -22,4 +23,4 @@ const caveat = Caveat({
   variable: "--font-caveat",
 });
 
-export const DESK_FONTS = `${bricolage.variable} ${jetbrains.variable} ${caveat.variable}`;
+export const FONT_VARIABLES = `${bricolage.variable} ${jetbrains.variable} ${caveat.variable}`;

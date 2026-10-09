@@ -1,5 +1,5 @@
 import { test, expect } from "@playwright/test";
-import { prepare, settle, themeOf } from "./_helpers";
+import { prepare, settle } from "./_helpers";
 
 // Baselines for the routes that already run on `--tr-*` token classes.
 //
@@ -22,8 +22,8 @@ const ROUTES = [
 ] as const;
 
 for (const route of ROUTES) {
-  test(`${route.name} renders unchanged`, async ({ page, colorScheme }) => {
-    await prepare(page, themeOf(colorScheme));
+  test(`${route.name} renders unchanged`, async ({ page }) => {
+    await prepare(page);
     await settle(page, route.path);
     await expect(page).toHaveScreenshot(`${route.name}.png`, { fullPage: true });
   });

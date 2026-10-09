@@ -69,7 +69,6 @@ function LabCard({ item, tab }: { item: LabItem; tab: TabKey }) {
           <Link
             href={sitePath as Route}
             aria-label={`${item.title}: project page`}
-            data-cursor="OPEN"
             className={LINK}
           >
             <ArrowRight aria-hidden="true" className="h-4 w-4" />
@@ -80,7 +79,6 @@ function LabCard({ item, tab }: { item: LabItem; tab: TabKey }) {
             target="_blank"
             rel="noreferrer"
             aria-label={`${item.title} on GitHub`}
-            data-cursor="OPEN"
             className={LINK}
           >
             <GithubIcon className="h-4 w-4" />

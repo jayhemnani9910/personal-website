@@ -2,16 +2,7 @@
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode, type RefObject } from "react";
 import { EGGS_KEY, countVisit, parseEggs, readEggs, useStored, writeStored } from "./deskStore";
-
-export type SecretId = "fling" | "cube" | "logo" | "hello" | "konami";
-
-export const SECRETS: { id: SecretId; title: string; hint: string }[] = [
-  { id: "fling", title: "Yeet", hint: "Throw a tile. Really throw it." },
-  { id: "cube", title: "Scrambler", hint: "Something in House rules is clickable." },
-  { id: "logo", title: "Persistent", hint: "Knock on the logo. A few times." },
-  { id: "hello", title: "Polite", hint: "Just type hello. Anywhere." },
-  { id: "konami", title: "Old soul", hint: "The footer knows." },
-];
+import { SECRETS, type SecretId } from "./secrets";
 
 /** What the playground lets the rest of the page do to it. */
 export type PlaygroundHandle = { storm: () => void; wave: () => void };
@@ -105,7 +96,7 @@ export function SecretsProvider({ children }: { children: ReactNode }) {
         className="pointer-events-none fixed inset-x-0 bottom-7 z-40 flex justify-center px-4"
       >
         {toast && (
-          <p className="max-w-full rounded-full border-[1.5px] border-desk-ink bg-desk-butter px-5 py-3 text-[15px] font-semibold text-desk-ink shadow-[4px_4px_0_var(--desk-ink)]">
+          <p className="max-w-full rounded-full border-[1.5px] border-tr-hairline bg-tr-butter px-5 py-3 text-[15px] font-semibold text-tr-text shadow-[4px_4px_0_var(--tr-text)]">
             {toast}
           </p>
         )}

@@ -51,7 +51,6 @@ export default async function WritingPage() {
               <li key={post.slug} className="border-b border-tr-hairline">
                 <Link
                   href={`/blog/${post.slug}`}
-                  data-cursor="OPEN"
                   className="group grid items-start gap-[clamp(1rem,3vw,2.5rem)] py-[clamp(1.5rem,3vw,2.5rem)] no-underline lg:grid-cols-[8rem_minmax(0,1fr)_5rem]"
                 >
                   <div className="font-[family-name:var(--ff-mono)] leading-relaxed text-tr-text-faint">
@@ -109,7 +108,6 @@ export default async function WritingPage() {
                 <Link
                   key={p.id}
                   href={`/projects/${p.id}`}
-                  data-cursor="OPEN"
                   className="flex flex-col gap-2 bg-tr-surface-1 p-5 no-underline transition-colors hover:bg-tr-surface-2 focus-visible:-outline-offset-2"
                 >
                   <span className={MONO}>DEEP DIVE</span>
@@ -120,7 +118,6 @@ export default async function WritingPage() {
 
               <Link
                 href="/projects"
-                data-cursor="OPEN"
                 className="flex flex-col gap-2 bg-tr-surface-1 p-5 no-underline transition-colors hover:bg-tr-surface-2 focus-visible:-outline-offset-2"
               >
                 <span className={MONO}>ALL {projects.length}</span>

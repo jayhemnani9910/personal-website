@@ -3,8 +3,8 @@ import { defineConfig } from "@playwright/test";
 // Visual regression harness, plus the perf budget. It started for one job, the
 // legacy `.editorial` and `.fde` port in ADR 0002, which is done. It now
 // baselines the /projects/[id] variants and /fde (legacy-css.spec.ts) and the
-// home, projects, blog, lab and resume pages (token-routes.spec.ts), in both
-// themes.
+// home, projects, blog, lab and resume pages (token-routes.spec.ts), on the
+// one paper palette (ADR 0018).
 //
 // It runs against a production build rather than `next dev`, because a CSS
 // change in dev-mode output is not what visitors get.
@@ -38,8 +38,7 @@ export default defineConfig({
       // while a regression stays a fixed size. Moving one legacy rule's padding by
       // 2px changed ~1000 pixels and the whole suite passed.
       //
-      // At threshold 0 the measured run-to-run noise floor is 4 pixels, on light
-      // theme only. 20 sits five times above that floor and roughly fifty times
+      // At threshold 0 the measured run-to-run noise floor was 4 pixels. 20 sits five times above that floor and roughly fifty times
       // below the smallest real regression tested.
       threshold: 0,
       maxDiffPixels: 20,
@@ -54,23 +53,19 @@ export default defineConfig({
     browserName: "chromium",
     viewport: { width: 1280, height: 900 },
     deviceScaleFactor: 1,
-    // Turns off the preloader, the reticle cursor, every reveal and stagger, and
-    // Lenis, because all of them read usePrefersReducedMotion(). See ADR 0003.
+    // Settles the home page's tiles into a still pile, turns off every hover
+    // tilt and Lenis, because all of them read usePrefersReducedMotion().
+    // See ADR 0003.
     // Nested under contextOptions because that is where this version puts it;
     // viewport and colorScheme are top-level test options, reducedMotion is not.
     contextOptions: { reducedMotion: "reduce" },
     trace: "retain-on-failure",
   },
 
-  // Both themes are first-class (ADR 0001), and the legacy routes get their
-  // palette by custom-property inheritance through a wrapper class (ADR 0002),
-  // which is exactly the mechanism a port would disturb. One project each.
+  // Paper is the only theme (ADR 0018), so one visual project.
   projects: [
-    { name: "dark", testDir: "./tests/visual", use: { colorScheme: "dark" } },
-    { name: "light", testDir: "./tests/visual", use: { colorScheme: "light" } },
-    // The budget measures bytes, which do not have a theme. Running it twice
-    // would double the wall clock and assert the same numbers.
-    { name: "perf", testDir: "./tests/perf", use: { colorScheme: "dark" } },
+    { name: "paper", testDir: "./tests/visual", use: { colorScheme: "light" } },
+    { name: "perf", testDir: "./tests/perf", use: { colorScheme: "light" } },
   ],
 
   webServer: {

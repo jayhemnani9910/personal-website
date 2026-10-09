@@ -240,7 +240,7 @@ function FdeContact() {
             // The essay and the resume are pages on this site: same tab, client-side.
             if (l.internal) {
               return (
-                <Link key={l.lbl} href={l.href as Route} data-cursor="OPEN" className={className}>
+                <Link key={l.lbl} href={l.href as Route} className={className}>
                   {row}
                 </Link>
               );
@@ -251,7 +251,6 @@ function FdeContact() {
                 key={l.lbl}
                 href={l.href}
                 {...(external ? { target: "_blank", rel: "noreferrer" } : {})}
-                data-cursor="OPEN"
                 className={className}
               >
                 {row}

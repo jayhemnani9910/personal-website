@@ -17,7 +17,7 @@ export function greetingFor(visits: number): string {
 export function Greeting() {
   const visits = useVisits();
   return (
-    <p className="mb-2 inline-block min-h-[1.2em] -rotate-2 font-desk-hand text-[26px] text-desk-tomato">
+    <p className="mb-2 inline-block min-h-[1.2em] -rotate-2 font-hand text-[26px] text-tr-accent-hand">
       {visits === null ? " " : greetingFor(visits)}
     </p>
   );

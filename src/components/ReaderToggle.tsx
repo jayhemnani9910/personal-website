@@ -20,7 +20,6 @@ export function ReaderToggle({ className }: { className?: string }) {
       type="button"
       aria-pressed={on}
       onClick={() => setReaderMode(!on)}
-      data-cursor="TOGGLE"
       className={className}
     >
       reader mode: {on ? "on" : "off"}

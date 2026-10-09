@@ -13,7 +13,6 @@ export const WEBMCP_TOOLS = [
   { name: "search_skills", kind: "read" },
   { name: "get_contact", kind: "read" },
   { name: "list_experiments", kind: "read" },
-  { name: "toggle_theme", kind: "write" },
   { name: "switch_mode", kind: "write" },
 ] as const;
 

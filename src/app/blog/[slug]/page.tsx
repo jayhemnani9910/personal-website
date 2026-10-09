@@ -163,7 +163,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
       <main id="main-content" className="bg-tr-bg text-tr-text">
         <article className="px-[clamp(1rem,4vw,2rem)] pt-[clamp(2.5rem,5vw,4rem)] pb-[var(--tr-s-12)]">
           <div className="mx-auto max-w-[68ch]">
-            <Link href="/blog" data-cursor="OPEN" className={`${backLinkClass} mb-[var(--tr-s-8)]`}>
+            <Link href="/blog" className={`${backLinkClass} mb-[var(--tr-s-8)]`}>
               <ArrowLeft className="h-3 w-3" />
               Back to writing
             </Link>
@@ -206,7 +206,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
             </div>
 
             <footer className="mt-[var(--tr-s-10)] border-t border-tr-hairline pt-[var(--tr-s-6)]">
-              <Link href="/blog" data-cursor="OPEN" className={backLinkClass}>
+              <Link href="/blog" className={backLinkClass}>
                 <ArrowLeft className="h-3 w-3" />
                 More writing
               </Link>
