@@ -41,8 +41,6 @@ type Body = {
   ly: number;
 };
 
-const pick = <T,>(list: T[]) => list[Math.floor(Math.random() * list.length)];
-
 /**
  * The hero's tile box: letters and skills that fall in, stack, and can be
  * grabbed and thrown. A plain requestAnimationFrame loop writing transforms
@@ -74,7 +72,7 @@ export function PhysicsPlayground() {
     const addTile = (label: string, kind: "letter" | "word") => {
       const el = document.createElement("div");
       const letter = kind === "letter";
-      const bg = letter ? LETTER_BG[bodies.length % LETTER_BG.length] : pick(WORD_BG);
+      const bg = letter ? LETTER_BG[bodies.length % LETTER_BG.length] : WORD_BG[bodies.length % WORD_BG.length];
       el.className = `${TILE} ${letter ? LETTER : WORD} ${reduced ? "" : "cursor-grab"}`;
       el.style.background = bg;
       el.style.color = bg === "var(--tr-text)" ? "var(--tr-butter)" : "var(--tr-text)";

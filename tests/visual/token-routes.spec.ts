@@ -10,11 +10,11 @@ import { prepare, settle } from "./_helpers";
 // outside /projects/[id] and /fde needs the pages outside them under test to be
 // worth calling invisible.
 //
-// The home page carries the six featured figures, which are SVG drawn with
-// custom properties inline rather than with classes, so they are the part most
-// likely to move and the least likely to be noticed.
+// The home page draws its tiles, dots and cube with inline custom properties
+// rather than classes, so they are the part most likely to move and the least
+// likely to be noticed.
 const ROUTES = [
-  { path: "/", name: "home", why: "the six featured figures, drawn with inline custom properties" },
+  { path: "/", name: "home", why: "the tiles, dots and cube, drawn with inline custom properties" },
   { path: "/projects", name: "projects-index", why: "the catalogue: two bands, filter chips, cards" },
   { path: "/blog", name: "blog-index", why: "prose list styling" },
   { path: "/lab", name: "lab", why: "the tablist" },

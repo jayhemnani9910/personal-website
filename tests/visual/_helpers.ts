@@ -7,6 +7,9 @@ const VIEWS_STUB = { count: 42, counted: false };
 
 /** Put the page in a state where two runs produce identical pixels. */
 export async function prepare(page: Page) {
+  // The home page picks its project and fact by day and counts down to
+  // midnight every second. A fixed clock holds both still.
+  await page.clock.setFixedTime(new Date("2026-10-10T12:00:00"));
   // Two reasons, and the second is the important one. The counter renders
   // whatever number the API returns, so a live value makes every shot differ.
   // And an unstubbed run POSTs to /api/views on every mount of every project
