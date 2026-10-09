@@ -5,6 +5,7 @@ import { ProjectDetail, type DeepDiveProse } from "@/components/ProjectDetail";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { ViewCounter } from "@/components/ViewCounter";
+import { SHELL, WRAP } from "@/components/desk";
 import { notFound } from "next/navigation";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import type { JSX } from "react";
@@ -78,7 +79,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ id: st
                     prose={prose}
                     nextProject={{ id: next.id, title: next.title, index: nextIndex + 1 }}
                 />
-                <div className="mx-auto flex max-w-[1280px] items-center justify-end px-[clamp(1rem,4vw,2rem)] py-6">
+                <div className={`${WRAP} ${SHELL} flex justify-end pb-6`}>
                     <ViewCounter slug={id} />
                 </div>
             </main>

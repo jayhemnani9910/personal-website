@@ -2,15 +2,16 @@
 
 /* FDE Console: brief textarea, preset buttons, submit. Handles live and preset
    simulation activation, routes custom briefs to /api/fde-sim.
-   Ported from app.jsx, reskinned to editorial theme. */
+   Ported from app.jsx, reskinned to the Desk design. */
 
 import { useState, useRef, useEffect } from "react";
 import type { Preset } from "./fdeData";
 import { PRESETS, PHASES } from "./fdeData";
 import { FdeSimulation } from "./FdeSimulation";
 import { scrollBehavior } from "@/lib/scroll";
+import { BTN_PRIMARY, DOT, DOTS, PILL } from "@/components/desk";
 
-const MONO = "font-[family-name:var(--ff-mono)]";
+const PRESET_PILL = `${PILL} cursor-pointer whitespace-nowrap hover:bg-tr-butter`;
 
 /** The route rejects anything longer with 400 bad-input. */
 const MAX_BRIEF = 2000;
@@ -255,28 +256,28 @@ export function FdeConsole() {
   return (
     <div>
       {/* Brief card */}
-      <div className="overflow-hidden rounded-[var(--tr-r-md)] border border-tr-hairline bg-tr-surface-1">
-        <div className={`flex items-center justify-between gap-4 border-b border-tr-hairline bg-tr-surface-2 px-5 py-3 ${MONO} text-[length:var(--tr-t-mono-sm)] tracking-[.04em] text-tr-text-mute`}>
+      <div className="overflow-hidden rounded-[var(--tr-r-2xl)] border-[1.5px] border-tr-hairline bg-tr-surface-1 shadow-[var(--tr-shadow-card)]">
+        <div className="flex items-center justify-between gap-4 border-b-[1.5px] border-tr-hairline bg-tr-surface-2 px-5 py-3 font-mono text-[12px] text-tr-text-mute">
           <div className="flex items-center gap-3">
             <div className="flex gap-1.5" aria-hidden="true">
-              <span className="h-[9px] w-[9px] rounded-full bg-tr-hairline" />
-              <span className="h-[9px] w-[9px] rounded-full bg-tr-hairline" />
-              <span className="h-[9px] w-[9px] rounded-full bg-tr-hairline" />
+              {DOTS.slice(0, 3).map((c) => (
+                <span key={c} className={`${DOT} size-3`} style={{ background: c }} />
+              ))}
             </div>
             <span>fde.sim: {status.label}</span>
           </div>
-          <span className="text-tr-accent-ink">● {status.badge}</span>
+          <span className="whitespace-nowrap text-tr-accent-ink">● {status.badge}</span>
         </div>
 
-        <div className="px-6 py-7 sm:px-8">
-          <div className={`mb-3.5 ${MONO} text-[length:var(--tr-t-mono-sm)] tracking-[.04em] text-tr-text-mute`}>
+        <div className="px-5 py-6 sm:px-8 sm:py-7">
+          <div className="mb-3.5 font-mono text-[12px] text-tr-text-mute">
             <span className="text-tr-accent-ink" aria-hidden="true">❯ </span>
             tell me what you want built. ambiguity is fine, that&apos;s the point.
           </div>
 
           <textarea
             ref={briefRef}
-            className="min-h-[84px] w-full resize-none border-0 bg-transparent py-1 text-[length:var(--tr-t-h3)] leading-[var(--tr-lh-h3)] tracking-[-.005em] text-tr-text focus-visible:outline-offset-4 placeholder:italic placeholder:text-tr-text-faint"
+            className="min-h-[96px] w-full resize-none rounded-[var(--tr-r-md)] border-[1.5px] border-tr-hairline bg-tr-surface-1 px-4 py-3 text-[20px] font-semibold leading-[var(--tr-lh-h2)] tracking-[-0.01em] text-tr-text placeholder:font-normal focus-visible:outline-offset-2"
             value={briefInput}
             onChange={e => setBriefInput(e.target.value)}
             onKeyDown={e => {
@@ -288,15 +289,15 @@ export function FdeConsole() {
             aria-label="Enter your problem brief"
           />
 
-          <div className="mt-4 flex flex-wrap items-center justify-between gap-4 border-t border-dashed border-tr-hairline pt-3.5">
-            <div className="flex flex-wrap items-center gap-1.5">
-              <span className={`mr-2 ${MONO} text-[length:var(--tr-t-mono-sm)] tracking-[.04em] text-tr-text-mute`} aria-hidden="true">
+          <div className="mt-4 flex flex-wrap items-center justify-between gap-4 border-t-[1.5px] border-dashed border-tr-rule-soft pt-4">
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="mr-1 font-mono text-[12px] text-tr-text-mute" aria-hidden="true">
                 or start with:
               </span>
               {PRESETS.map(p => (
                 <button
                   key={p.id}
-                  className={`whitespace-nowrap rounded-full border border-tr-hairline px-2.5 py-1 ${MONO} text-[length:var(--tr-t-mono-sm)] text-tr-text transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] hover:border-tr-accent hover:text-tr-accent-ink`}
+                  className={PRESET_PILL}
                   onClick={() => startPreset(p)}
                   type="button"
                 >
@@ -305,7 +306,7 @@ export function FdeConsole() {
               ))}
             </div>
             <button
-              className={`whitespace-nowrap rounded-[var(--tr-r-sm)] bg-tr-accent px-4 py-2.5 ${MONO} text-[length:var(--tr-t-mono-sm)] font-semibold uppercase tracking-[.04em] text-tr-on-accent transition-opacity duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] disabled:cursor-not-allowed disabled:opacity-40`}
+              className={`${BTN_PRIMARY} cursor-pointer whitespace-nowrap font-mono text-[13px] disabled:cursor-not-allowed disabled:opacity-40`}
               onClick={startCustom}
               disabled={!briefInput.trim() || loading}
               type="button"
@@ -316,14 +317,14 @@ export function FdeConsole() {
 
           {/* Phase strip preview */}
           <div
-            className={`mt-4 flex flex-wrap items-center gap-1.5 ${MONO} text-[length:var(--tr-t-mono-sm)] tracking-[.04em] text-tr-text-mute`}
+            className="mt-5 flex flex-wrap items-center gap-1.5 font-mono text-[12px] text-tr-text-mute"
             aria-label="Simulation phases overview"
           >
             <span className="mr-1.5 text-tr-text-faint">flow:</span>
             {PHASES.map((p, i) => (
               <span key={p.key} className="inline-flex items-center gap-1.5">
                 <span className="inline-flex items-center gap-1.5">
-                  <span className="inline-flex h-[18px] w-[18px] items-center justify-center rounded-full border border-tr-hairline bg-tr-hairline text-[10px] text-tr-text-mute">
+                  <span className="inline-flex size-[20px] items-center justify-center rounded-full border-[1.5px] border-tr-hairline bg-tr-surface-2 text-[10px] text-tr-text">
                     {i + 1}
                   </span>
                   {p.title.toLowerCase()}
@@ -339,8 +340,8 @@ export function FdeConsole() {
               already filled is often never announced. */}
           <div aria-live="polite">
             {loading && (
-              <div className={`flex items-center gap-2.5 py-6 ${MONO} text-[length:var(--tr-t-mono)] text-tr-text-mute`}>
-                <span className="h-4 w-4 shrink-0 animate-spin rounded-full border-2 border-tr-hairline border-t-tr-accent" aria-hidden="true" />
+              <div className="flex items-center gap-2.5 py-6 font-mono text-[13px] text-tr-text-mute">
+                <span className="size-4 shrink-0 animate-spin rounded-full border-2 border-tr-surface-2 border-t-tr-accent" aria-hidden="true" />
                 <span>
                   routing your brief through the agent
                   <span className="animate-pulse" aria-hidden="true">...</span>
@@ -351,14 +352,14 @@ export function FdeConsole() {
 
           {error && (
             <div
-              className={`mt-4 border-l-2 border-tr-accent bg-[color-mix(in_srgb,var(--tr-accent)_12%,transparent)] px-3.5 py-3 ${MONO} text-[length:var(--tr-t-mono)] leading-[var(--tr-lh-body)] text-tr-text`}
+              className="mt-4 rounded-r-[var(--tr-r-md)] border-l-[3px] border-tr-accent bg-tr-accent-soft px-4 py-3 font-mono text-[13px] leading-[var(--tr-lh-body)] text-tr-text"
               role="alert"
             >
-              <span className="tracking-[.1em] text-tr-accent-ink">ERROR · </span>
+              <span className="text-tr-accent-ink">ERROR · </span>
               {error}
               <div className="mt-2.5">
                 <button
-                  className={`whitespace-nowrap rounded-full border border-tr-hairline px-2.5 py-1 ${MONO} text-[length:var(--tr-t-mono-sm)] text-tr-text transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] hover:border-tr-accent hover:text-tr-accent-ink`}
+                  className={PRESET_PILL}
                   type="button"
                   onClick={() => startPreset(closestPreset(briefInput))}
                 >

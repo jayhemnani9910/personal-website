@@ -84,7 +84,7 @@ export async function HomeDesk() {
           <section aria-label="By the numbers" className="mx-auto max-w-[1200px] px-[clamp(16px,4vw,48px)] pb-10 pt-5">
             <dl className="grid grid-cols-[repeat(auto-fit,minmax(150px,1fr))] border-y-[1.5px] border-tr-hairline">
               {buildDeskStats({ projectCount }).map((s) => (
-                <div key={s.label} className="flex flex-col-reverse py-[22px] pr-4">
+                <div key={s.label} className="flex flex-col-reverse justify-end py-[22px] pr-4">
                   <dt className="mt-1.5 text-[14px] leading-[var(--tr-lh-card)] text-tr-text-faint">{s.label}</dt>
                   <dd className="text-[length:clamp(36px,4vw,52px)] font-extrabold leading-none tracking-[-0.04em]">{s.n}</dd>
                 </div>

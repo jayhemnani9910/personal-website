@@ -11,10 +11,10 @@ export const LAB_ITEMS: Record<"building" | "exploring" | "radar", LabItem[]> = 
   building: [
     {
       id: "website-v4",
-      title: "Portfolio V4",
+      title: "Portfolio, Desk edition",
       description:
-        "This website - sans and mono on a yellow accent, a live brief decomposer on the home page, AI-queryable via WebMCP",
-      tags: ["Next.js 16", "Framer Motion", "WebGL"],
+        "This website: paper, ink and tomato, throwable tiles on the home page, a sticky-note guestbook, AI-queryable via WebMCP",
+      tags: ["Next.js 16", "Upstash", "WebMCP"],
       progress: 100,
       link: "https://github.com/jayhemnani9910/personal-website",
     },

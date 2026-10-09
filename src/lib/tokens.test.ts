@@ -207,7 +207,7 @@ for (const fg of TEXT_TOKENS) {
 // and ink-2 go on it. Faint measures 4.28 there and is not allowed.
 cases.push({ fg: "text", bg: "butter" }, { fg: "text-mute", bg: "butter" });
 // Ink panels: today's pick, the contact band, footers, code, the terminal.
-for (const fg of ["on-ink", "on-ink-mute", "on-ink-faint", "butter", "accent"]) cases.push({ fg, bg: "text" });
+for (const fg of ["on-ink", "on-ink-mute", "on-ink-faint", "butter", "accent", "mint"]) cases.push({ fg, bg: "text" });
 // The primary button's label on its fill, at rest and under the pointer. This
 // is why --tr-on-accent is ink: card-white on tomato is 3.57:1.
 cases.push({ fg: "on-accent", bg: "accent" }, { fg: "on-accent", bg: "accent-hover" });

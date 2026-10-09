@@ -11,6 +11,7 @@ import { scrollBehavior } from "@/lib/scroll";
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
 import { readEggs } from "@/components/home-desk/deskStore";
 import { SECRETS } from "@/components/home-desk/secrets";
+import { DOT, DOTS } from "@/components/desk";
 
 // All available commands for tab-completion. `exit` is not advertised in
 // `help` or the chip row (the design has no such command), but it is kept
@@ -24,14 +25,20 @@ const COMMANDS = [
 // row doubles as the discoverable half of `help`.
 const CHIPS = ["help", "ls", "receipts", "eggs", "joke"];
 
-type ColorKey = "text" | "mute" | "faint" | "accent" | "ok";
+type ColorKey = "text" | "mute" | "faint" | "accent" | "ok" | "err";
 
+// The shell is an ink panel, so every colour is an on-ink one. Tomato is a fill
+// on paper (3.11:1) but clears 4.78:1 on ink, so the error glyph may wear it;
+// tokens.test.ts checks that pair.
 const TEXT_COLOR: Record<ColorKey, string> = {
-    text: "text-tr-text",
-    mute: "text-tr-text-mute",
-    faint: "text-tr-text-faint",
-    accent: "text-tr-accent-ink",
-    ok: "text-tr-ok",
+    text: "text-tr-on-ink",
+    mute: "text-tr-on-ink-mute",
+    faint: "text-tr-on-ink-faint",
+    accent: "text-tr-butter",
+    ok: "text-tr-mint",
+    // Tomato on ink is 4.78:1, checked in tokens.test.ts. The utility form is
+    // spelled out because the fill-accent text utility is banned on paper.
+    err: "text-[color:var(--tr-accent)]",
 };
 
 type Line = { text: string; color: ColorKey; icon: string; iconColor: ColorKey };
@@ -45,7 +52,7 @@ const line = (text: string, color: ColorKey = "mute", icon = " ", iconColor: Col
 const ok = (text: string): Line => line(text, "text", "✓", "ok");
 const info = (text: string): Line => line(text, "text", "·", "faint");
 const warn = (text: string): Line => line(text, "mute", "!", "accent");
-const err = (text: string): Line => line(text, "text", "✗", "accent");
+const err = (text: string): Line => line(text, "text", "✗", "err");
 
 // The shell's greeting, printed once on mount.
 const INITIAL_LINES: Line[] = [
@@ -276,7 +283,7 @@ export function TerminalOverlay({ projectCount }: { projectCount: number }) {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: slide }}
                     transition={{ duration: DUR.base, ease: EASE }}
-                    className="fixed inset-0 z-[var(--tr-z-overlay)] flex items-end justify-center bg-black/40 px-[clamp(1rem,4vw,2rem)] pb-6"
+                    className="fixed inset-0 z-[var(--tr-z-overlay)] flex items-end justify-center bg-tr-text/45 px-[clamp(1rem,4vw,2rem)] pb-6"
                     onClick={closeTerminal}
                 >
                     <div
@@ -288,23 +295,25 @@ export function TerminalOverlay({ projectCount }: { projectCount: number }) {
                         // unless an ancestor opts out, so without this the page
                         // behind the modal scrolled instead of the log.
                         data-lenis-prevent
-                        className="w-[min(880px,100%)] overflow-hidden rounded-[var(--tr-r-xl)] border border-tr-hairline bg-tr-surface-1 shadow-[var(--tr-shadow-modal)]"
+                        // An ink shadow would vanish against the scrim, so this
+                        // one panel throws a butter one.
+                        className="ink-panel w-[min(880px,100%)] overflow-hidden rounded-[var(--tr-r-2xl)] border-[1.5px] border-tr-on-ink-line bg-tr-text text-tr-on-ink shadow-[8px_8px_0_var(--tr-butter)]"
                         onClick={(e) => e.stopPropagation()}
                     >
                         {/* Window header */}
-                        <div className="flex h-11 items-center gap-3 border-b border-tr-hairline px-4 font-mono text-[length:var(--tr-t-mono)] text-tr-text-mute">
-                            <span aria-hidden="true" className="flex gap-[5px]">
-                                <i className="block h-[9px] w-[9px] rounded-full bg-[#FF5F57]" />
-                                <i className="block h-[9px] w-[9px] rounded-full bg-[#FEBC2E]" />
-                                <i className="block h-[9px] w-[9px] rounded-full bg-[#28C840]" />
+                        <div className="flex h-12 items-center gap-3 border-b-[1.5px] border-tr-on-ink-line px-4 font-mono text-[13px] text-tr-on-ink-mute">
+                            <span aria-hidden="true" className="flex gap-1.5">
+                                {DOTS.slice(0, 3).map((c) => (
+                                    <i key={c} className={`${DOT} size-3`} style={{ background: c }} />
+                                ))}
                             </span>
-                            <span className="text-tr-text">{"jay's shell"}</span>
-                            <span className="text-tr-text-faint">· no sudo required</span>
+                            <span className="font-semibold text-tr-on-ink">{"jay's shell"}</span>
+                            <span className="hidden text-tr-on-ink-faint sm:inline">· no sudo required</span>
                             <button
                                 type="button"
                                 onClick={closeTerminal}
                                 aria-label="Close shell"
-                                className="ml-auto cursor-pointer border-0 bg-transparent text-tr-text-mute hover:text-tr-accent-ink"
+                                className="ml-auto cursor-pointer border-0 bg-transparent text-tr-on-ink-mute hover:text-tr-butter"
                             >
                                 <span aria-hidden="true">esc ✕</span>
                             </button>
@@ -313,13 +322,13 @@ export function TerminalOverlay({ projectCount }: { projectCount: number }) {
                         {/* Chips: the discoverable half of `help`. Each runs a
                             real command, so nothing here can drift from the
                             dispatcher above. */}
-                        <div className="flex flex-wrap gap-[.4rem] border-b border-tr-hairline bg-tr-bg px-4 py-3">
+                        <div className="flex flex-wrap gap-2 border-b-[1.5px] border-tr-on-ink-line px-4 py-3">
                             {CHIPS.map((chip) => (
                                 <button
                                     key={chip}
                                     type="button"
                                     onClick={() => handleCommand(chip)}
-                                    className="h-[26px] cursor-pointer rounded-full border border-tr-hairline bg-tr-surface-1 px-[.65rem] font-mono text-[length:var(--tr-t-mono-xs)] text-tr-text-mute hover:border-tr-accent hover:text-tr-text"
+                                    className="cursor-pointer rounded-full border-[1.5px] border-tr-on-ink-line px-3 py-1 font-mono text-[12px] text-tr-on-ink hover:border-tr-butter hover:text-tr-butter"
                                 >
                                     {chip}
                                 </button>
@@ -349,7 +358,7 @@ export function TerminalOverlay({ projectCount }: { projectCount: number }) {
                             </div>
 
                             <div className="grid grid-cols-[1.4rem_minmax(0,1fr)] items-center gap-[.4rem]">
-                                <span className="text-tr-accent-ink">❯</span>
+                                <span className="text-tr-butter">❯</span>
                                 <input
                                     ref={inputRef}
                                     type="text"
@@ -357,7 +366,7 @@ export function TerminalOverlay({ projectCount }: { projectCount: number }) {
                                     onChange={(e) => setInput(e.target.value)}
                                     onKeyDown={handleKeyDown}
                                     placeholder="type something, or hit a chip above"
-                                    className="border-0 bg-transparent p-0 text-tr-text"
+                                    className="border-0 bg-transparent p-0 text-tr-on-ink placeholder:text-tr-on-ink-faint"
                                     spellCheck={false}
                                     autoComplete="off"
                                     aria-label="Terminal command input"

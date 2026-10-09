@@ -406,7 +406,7 @@ export const PRESETS: Preset[] = [
   },
 ];
 
-// ─── Proofs data (JSX-free; title stored as { pre, em, post } for partial italic) ──
+// ─── Proofs data (JSX-free; title stored as { pre, em, post } for the highlighted phrase) ──
 
 export interface ProofTitle {
   pre: string;

@@ -1,4 +1,4 @@
-/* FDE Architecture Diagram, ported from diagram.jsx, reskinned to editorial theme.
+/* FDE Architecture Diagram, ported from diagram.jsx, reskinned to the Desk design.
    SVG-only, no deps. Every colour is a --tr-* token. */
 
 import type { Architecture } from "./fdeData";
@@ -10,7 +10,7 @@ interface Props {
 const BOX_W = 168;
 const BOX_H = 78;
 const PAD = 30;
-// What fits inside BOX_W: the name is 14px Instrument, the caption 10px mono.
+// What fits inside BOX_W: the name is 13px Bricolage bold, the caption 10px mono.
 const NAME_MAX = 22;
 const SUB_MAX = 26;
 // How far apart opposite edges (A -> B and B -> A) are drawn.
@@ -26,18 +26,19 @@ function overlapsBox(x: number, y: number, halfW: number, halfH: number, b: Box)
   return x + halfW > b.x && x - halfW < b.x + BOX_W && y + halfH > b.y && y - halfH < b.y + BOX_H;
 }
 
-// kind -> { stroke, fill }. The fill is a faint color-mix tint of the stroke,
-// drawn over an opaque base so edges passing behind a box do not show through.
-// Accent is the only saturated colour, so node TYPES are encoded by neutral tier
-// + their mono labels, not by five hues. UI (the entry the human acts on) is the
-// one accent; the rest step down through the text tiers. Service and data share
-// a tier, so the legend lists them as one entry and the box header names which.
-const KIND_COLORS: Record<string, { stroke: string; fill: string }> = {
-  ui:       { stroke: 'var(--tr-accent)',   fill: 'color-mix(in srgb, var(--tr-accent) 8%, transparent)' },
-  agent:    { stroke: 'var(--tr-text)',      fill: 'color-mix(in srgb, var(--tr-text) 8%, transparent)' },
-  service:  { stroke: 'var(--tr-text-mute)', fill: 'color-mix(in srgb, var(--tr-text-mute) 6%, transparent)' },
-  data:     { stroke: 'var(--tr-text-mute)', fill: 'color-mix(in srgb, var(--tr-text-mute) 6%, transparent)' },
-  external: { stroke: 'var(--tr-text-faint)', fill: 'color-mix(in srgb, var(--tr-text-faint) 6%, transparent)' },
+// kind -> { stroke, fill, label }. The fill is drawn over an opaque card base so
+// edges passing behind a box do not show through. Tomato is the only saturated
+// colour, so node TYPES are encoded by ink tier + their mono labels, not by five
+// hues. UI (the entry the human acts on) is the one tomato; the rest step down
+// through the ink tiers. Service and data share a tier, so the legend lists them
+// as one entry and the box header names which. `label` is the header text: tomato
+// is a fill, so the UI header word is set in tomato-ink.
+const KIND_COLORS: Record<string, { stroke: string; fill: string; label: string }> = {
+  ui:       { stroke: 'var(--tr-accent)',     fill: 'var(--tr-accent-soft)', label: 'var(--tr-accent-ink)' },
+  agent:    { stroke: 'var(--tr-text)',       fill: 'var(--tr-surface-1)',   label: 'var(--tr-text)' },
+  service:  { stroke: 'var(--tr-text-mute)',  fill: 'var(--tr-surface-1)',   label: 'var(--tr-text-mute)' },
+  data:     { stroke: 'var(--tr-text-mute)',  fill: 'var(--tr-surface-1)',   label: 'var(--tr-text-mute)' },
+  external: { stroke: 'var(--tr-text-faint)', fill: 'var(--tr-surface-1)',   label: 'var(--tr-text-faint)' },
 };
 
 function pathFor(
@@ -96,7 +97,7 @@ export function FdeArchDiagram({ architecture }: Props) {
   // Math.max of nothing is -Infinity, which is not a viewBox.
   if (comps.length === 0) {
     return (
-      <p className="font-[family-name:var(--ff-mono)] text-[length:var(--tr-t-mono-sm)] text-tr-text-mute">
+      <p className="font-mono text-[12px] text-tr-text-mute">
         {"// no components to draw."}
       </p>
     );
@@ -132,7 +133,7 @@ export function FdeArchDiagram({ architecture }: Props) {
   });
 
   return (
-    <div className="fde-arch-canvas relative overflow-x-auto rounded-[var(--tr-r-sm)] border border-tr-hairline bg-tr-surface-2 p-5">
+    <div className="fde-arch-canvas relative overflow-x-auto rounded-[var(--tr-r-lg)] border-[1.5px] border-tr-hairline bg-tr-bg p-5">
       <svg
         viewBox={`0 0 ${maxX} ${maxY}`}
         width="100%"
@@ -159,8 +160,7 @@ export function FdeArchDiagram({ architecture }: Props) {
               d={d}
               fill="none"
               stroke={isDashed ? 'var(--tr-accent)' : 'var(--tr-text-faint)'}
-              strokeOpacity={isDashed ? 0.7 : 0.5}
-              strokeWidth={1.4}
+              strokeWidth={1.5}
               strokeDasharray={isDashed ? '5 4' : undefined}
               markerEnd={isDashed ? 'url(#fde-arr-d)' : 'url(#fde-arr)'}
               style={{ animation: `fde-dashIn 0.6s ease ${i * 0.06}s both` }}
@@ -178,7 +178,7 @@ export function FdeArchDiagram({ architecture }: Props) {
             >
               <title>{c.sub ? `${c.name}: ${c.sub}` : c.name}</title>
               {/* Opaque base, so an edge routed behind the box stays behind it */}
-              <rect x={c.x} y={c.y} width={BOX_W} height={BOX_H} fill="var(--tr-surface-2)" rx="3" />
+              <rect x={c.x} y={c.y} width={BOX_W} height={BOX_H} fill="var(--tr-surface-1)" rx="8" />
               <rect
                 x={c.x}
                 y={c.y}
@@ -186,8 +186,8 @@ export function FdeArchDiagram({ architecture }: Props) {
                 height={BOX_H}
                 fill={col.fill}
                 stroke={col.stroke}
-                strokeWidth="1.2"
-                rx="3"
+                strokeWidth="1.5"
+                rx="8"
               />
               {/* Kind tab header bar */}
               <rect
@@ -196,24 +196,24 @@ export function FdeArchDiagram({ architecture }: Props) {
                 width={BOX_W}
                 height={16}
                 fill={col.stroke}
-                opacity="0.18"
-                rx="3"
+                opacity="0.14"
+                rx="8"
               />
               <rect
                 x={c.x}
-                y={c.y + 10}
+                y={c.y + 8}
                 width={BOX_W}
-                height={6}
+                height={8}
                 fill={col.stroke}
-                opacity="0.18"
+                opacity="0.14"
               />
               <text
                 x={c.x + 9}
                 y={c.y + 11.5}
-                fontFamily="var(--font-geist-mono)"
+                fontFamily="var(--ff-mono)"
                 fontSize="9"
-                fill={col.stroke}
-                letterSpacing="0.14em"
+                fill={col.label}
+                letterSpacing="0.1em"
               >
                 {(c.kind || 'service').toUpperCase()}
               </text>
@@ -221,9 +221,9 @@ export function FdeArchDiagram({ architecture }: Props) {
               <text
                 x={c.x + BOX_W / 2}
                 y={c.y + 38}
-                fontFamily="var(--font-instrument)"
-                fontSize="14"
-                fontWeight="500"
+                fontFamily="var(--ff-body)"
+                fontSize="13"
+                fontWeight="700"
                 fill="var(--tr-text)"
                 textAnchor="middle"
               >
@@ -234,7 +234,7 @@ export function FdeArchDiagram({ architecture }: Props) {
                 <text
                   x={c.x + BOX_W / 2}
                   y={c.y + 56}
-                  fontFamily="var(--font-geist-mono)"
+                  fontFamily="var(--ff-mono)"
                   fontSize="10"
                   fill="var(--tr-text-mute)"
                   textAnchor="middle"
@@ -256,12 +256,12 @@ export function FdeArchDiagram({ architecture }: Props) {
                 width={e.label.length * 6.8 + 12}
                 height={16}
                 fill="var(--tr-bg)"
-                rx={2}
+                rx={4}
               />
               <text
                 x={labelX}
                 y={labelY + 3.5}
-                fontFamily="var(--font-geist-mono)"
+                fontFamily="var(--ff-mono)"
                 fontSize="10"
                 fill="var(--tr-text-mute)"
                 textAnchor="middle"
@@ -312,13 +312,13 @@ export function FdeArchDiagram({ architecture }: Props) {
 
       {/* A key to the drawing only, so hidden along with it. */}
       <div
-        className="mt-3.5 flex flex-wrap gap-3.5 font-[family-name:var(--ff-mono)] text-[length:var(--tr-t-mono-sm)] tracking-[.06em] text-tr-text-mute"
+        className="mt-3.5 flex flex-wrap gap-3.5 font-mono text-[11px] text-tr-text-mute"
         aria-hidden="true"
       >
-        <span><span className="mr-1.5 inline-block h-2.5 w-2.5 border align-middle" style={{ borderColor: 'var(--tr-accent)' }} />UI surface</span>
-        <span><span className="mr-1.5 inline-block h-2.5 w-2.5 border align-middle" style={{ borderColor: 'var(--tr-text)' }} />Agent / model</span>
-        <span><span className="mr-1.5 inline-block h-2.5 w-2.5 border align-middle" style={{ borderColor: 'var(--tr-text-mute)' }} />Service / data store</span>
-        <span><span className="mr-1.5 inline-block h-2.5 w-2.5 border align-middle" style={{ borderColor: 'var(--tr-text-faint)' }} />External system</span>
+        <span><span className="mr-1.5 inline-block size-2.5 rounded-[3px] border-[1.5px] align-middle" style={{ borderColor: 'var(--tr-accent)' }} />UI surface</span>
+        <span><span className="mr-1.5 inline-block size-2.5 rounded-[3px] border-[1.5px] align-middle" style={{ borderColor: 'var(--tr-text)' }} />Agent / model</span>
+        <span><span className="mr-1.5 inline-block size-2.5 rounded-[3px] border-[1.5px] align-middle" style={{ borderColor: 'var(--tr-text-mute)' }} />Service / data store</span>
+        <span><span className="mr-1.5 inline-block size-2.5 rounded-[3px] border-[1.5px] align-middle" style={{ borderColor: 'var(--tr-text-faint)' }} />External system</span>
         <span className="ml-auto">-- dashed = retrieve / feedback</span>
       </div>
     </div>

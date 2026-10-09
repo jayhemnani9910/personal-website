@@ -28,7 +28,8 @@ export const INK_PANEL = "ink-panel rounded-[var(--tr-r-2xl)] bg-tr-text text-tr
 
 export const PILL =
   "inline-flex items-center gap-1.5 rounded-full border-[1.5px] border-tr-hairline bg-tr-surface-1 px-3 py-1.5 font-mono text-[12px] text-tr-text hover:text-tr-text";
-export const PILL_ACTIVE = "bg-tr-butter shadow-[2px_2px_0_var(--tr-text)]";
+// Important, so it wins over PILL's card background when both are applied.
+export const PILL_ACTIVE = "bg-tr-butter! shadow-[2px_2px_0_var(--tr-text)]";
 
 export const BTN =
   "desk-press inline-flex items-center gap-2 rounded-[var(--tr-r-md)] border-[1.5px] border-tr-hairline bg-tr-surface-1 px-4 py-2.5 font-semibold text-tr-text shadow-[var(--tr-shadow-btn)] hover:text-tr-text";

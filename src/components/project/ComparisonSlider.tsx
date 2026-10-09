@@ -2,6 +2,7 @@
 
 import { useId, useState } from "react";
 import Image from "next/image";
+import { KICKER, PILL, PILL_ACTIVE } from "../desk";
 
 export type ComparisonPair = { before: string; after: string; label?: string };
 
@@ -28,7 +29,7 @@ export function ComparisonSlider({
   return (
     <div>
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <p className="font-[family-name:var(--ff-mono)] text-[length:var(--tr-t-mono)] tracking-[.05em] text-tr-text-faint">
+        <p className={KICKER}>
           <span aria-hidden="true" className="text-tr-accent-ink">
             ◆
           </span>{" "}
@@ -43,11 +44,7 @@ export function ComparisonSlider({
                 type="button"
                 aria-pressed={i === activeIndex}
                 onClick={() => setActiveIndex(i)}
-                className={`inline-flex h-7 items-center rounded-full border px-3 font-[family-name:var(--ff-mono)] text-[length:var(--tr-t-mono-sm)] transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] ${
-                  i === activeIndex
-                    ? "border-tr-accent bg-tr-accent text-tr-on-accent"
-                    : "border-tr-hairline text-tr-text-mute hover:border-tr-accent"
-                }`}
+                className={`cursor-pointer ${PILL} ${i === activeIndex ? PILL_ACTIVE : ""}`}
               >
                 {p.label ?? `Frame ${i + 1}`}
               </button>
@@ -60,14 +57,14 @@ export function ComparisonSlider({
           figure draws it instead while the input has keyboard focus. */}
       <figure
         data-testid="comparison-slider"
-        className="relative mt-4 aspect-video select-none overflow-hidden rounded-[var(--tr-r-lg)] border border-tr-hairline bg-tr-surface-1 has-[input:focus-visible]:outline-2 has-[input:focus-visible]:outline-offset-2 has-[input:focus-visible]:outline-tr-accent-ink"
+        className="relative mt-4 aspect-video select-none overflow-hidden rounded-[var(--tr-r-lg)] border-[1.5px] border-tr-hairline bg-tr-surface-1 shadow-[4px_4px_0_var(--tr-text)] has-[input:focus-visible]:outline-2 has-[input:focus-visible]:outline-offset-2 has-[input:focus-visible]:outline-tr-accent-ink"
       >
-        {/* The figure fills the 1280px content column. */}
+        {/* The figure fills the 1104px content column. */}
         <Image
           src={active.after}
           alt={`${projectTitle}, ${pairLabel}: output after the pipeline runs on this frame`}
           fill
-          sizes="(max-width: 1344px) 100vw, 1280px"
+          sizes="(max-width: 1200px) 100vw, 1104px"
           className="object-cover"
         />
         {/* These two corner labels sit on top of a photograph, where a --tr-*
@@ -75,7 +72,7 @@ export function ComparisonSlider({
             A fixed dark scrim with white text is the one hard-coded colour on
             project pages, reserved for exactly this case. */}
         <span
-          className="absolute right-3 top-3 rounded px-2 py-1 font-[family-name:var(--ff-mono)] text-[11px] text-white"
+          className="absolute right-3 top-3 rounded px-2 py-1 font-mono text-[11px] text-white"
           style={{ background: "rgba(0,0,0,.6)" }}
         >
           PIPELINE OUTPUT
@@ -86,11 +83,11 @@ export function ComparisonSlider({
             src={active.before}
             alt={`${projectTitle}, ${pairLabel}: raw input frame before the pipeline runs`}
             fill
-            sizes="(max-width: 1344px) 100vw, 1280px"
+            sizes="(max-width: 1200px) 100vw, 1104px"
             className="object-cover"
           />
           <span
-            className="absolute left-3 top-3 rounded px-2 py-1 font-[family-name:var(--ff-mono)] text-[11px] text-white"
+            className="absolute left-3 top-3 rounded px-2 py-1 font-mono text-[11px] text-white"
             style={{ background: "rgba(0,0,0,.6)" }}
           >
             RAW
@@ -99,12 +96,12 @@ export function ComparisonSlider({
 
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute inset-y-0 w-px bg-tr-accent"
+          className="pointer-events-none absolute inset-y-0 w-0.5 -translate-x-1/2 bg-tr-accent"
           style={{ left: `${pos}%` }}
         />
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute top-1/2 flex h-11 w-11 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-tr-accent font-[family-name:var(--ff-mono)] text-[13px] text-tr-on-accent"
+          className="pointer-events-none absolute top-1/2 flex h-11 w-11 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border-[1.5px] border-tr-hairline bg-tr-accent font-mono text-[13px] font-bold text-tr-on-accent shadow-[2px_2px_0_var(--tr-text)]"
           style={{ left: `${pos}%` }}
         >
           ‹&nbsp;›
