@@ -7,6 +7,9 @@ import { useDesk } from "./SecretsProvider";
 
 const LETTERS = ["J", "A", "Y"];
 const WORDS = ["python", "kafka", "langgraph", "airflow", "pytorch", "sql", "next.js", "rubik's"];
+// A phone-width box holds fewer before the pile buries the letters.
+const NARROW = 480;
+const NARROW_WORDS = 6;
 const STORM = ["wheee", "sql", "dbt", "oops", "k8s", "pandas", "ship it", "λ", "GPU", "chai"];
 const LETTER_BG = ["var(--tr-accent)", "var(--tr-text)", "var(--tr-sky)"];
 const WORD_BG = ["var(--tr-accent)", "var(--tr-butter)", "var(--tr-sky)", "var(--tr-mint)", "var(--tr-lilac)", "var(--tr-pink)"];
@@ -202,7 +205,7 @@ export function PhysicsPlayground() {
     };
 
     LETTERS.forEach((l) => addTile(l, "letter"));
-    WORDS.forEach((w) => addTile(w, "word"));
+    (host.clientWidth < NARROW ? WORDS.slice(0, NARROW_WORDS) : WORDS).forEach((w) => addTile(w, "word"));
 
     if (reduced) {
       pile();

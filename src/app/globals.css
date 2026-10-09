@@ -343,7 +343,13 @@ html.lenis {
    ═══════════════════════════════════════════════════════════════ */
 
 /* Pressed state for every hard-shadow button: it sinks onto its shadow. */
-.desk-press:active { transform: translate(var(--desk-press, 3px), var(--desk-press, 3px)); box-shadow: none; }
+.desk-press:not(:disabled):active { transform: translate(var(--desk-press, 3px), var(--desk-press, 3px)); box-shadow: none; }
+
+/* The butter highlight behind a phrase. Tight display leading lets a line's
+   background reach up into the line above, so the mark sits under its own
+   heading's glyphs: behind them, but inside the heading, never behind the page. */
+.desk-hl { position: relative; z-index: -1; }
+:has(> .desk-hl) { isolation: isolate; }
 
 /* Sticky notes sit at their own angle, set per note as --rot. */
 .desk-sticky { transform: rotate(var(--rot, 0deg)); }

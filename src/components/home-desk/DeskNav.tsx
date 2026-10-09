@@ -38,42 +38,39 @@ export function DeskNav() {
   };
 
   return (
-    <>
-      <nav
-        aria-label="Page"
-        className="sticky top-0 z-20 flex items-center justify-between gap-4 border-b-[1.5px] border-tr-hairline bg-tr-bg/92 px-[clamp(16px,4vw,48px)] py-3.5 backdrop-blur-[8px]"
+    <nav
+      aria-label="Page"
+      className="sticky top-0 z-20 flex flex-wrap items-center justify-between gap-x-4 gap-y-2 border-b-[1.5px] border-tr-hairline bg-tr-bg/92 px-[clamp(16px,4vw,48px)] py-3.5 backdrop-blur-[8px]"
+    >
+      <button
+        type="button"
+        onClick={knock}
+        aria-label="jay.hemnani"
+        className="cursor-pointer select-none text-[20px] font-extrabold tracking-[-0.02em]"
       >
-        <button
-          type="button"
-          onClick={knock}
-          aria-label="jay.hemnani"
-          className="cursor-pointer select-none text-[20px] font-extrabold tracking-[-0.02em]"
-        >
-          jay<span aria-hidden="true" className="text-tr-accent-hand">.</span>hemnani
-        </button>
-        <div className="hidden flex-wrap gap-[clamp(12px,3vw,28px)] font-mono text-[13px] sm:flex">
-          {ANCHORS.map((a) => (
-            <a key={a.href} href={a.href} onClick={jump(a.href)}>
-              {a.label}
-            </a>
-          ))}
-        </div>
-        <button
-          ref={chipRef}
-          type="button"
-          onClick={() => setOpen((v) => !v)}
-          aria-expanded={open}
-          aria-controls="desk-secrets"
-          className="desk-press cursor-pointer rounded-full border-[1.5px] border-tr-hairline bg-tr-butter px-3 py-[7px] font-mono text-[12px] shadow-[2px_2px_0_var(--tr-text)] [--desk-press:2px]"
-        >
-          secrets {eggs.length}/{SECRETS.length}
-        </button>
-      </nav>
-
+        jay<span aria-hidden="true" className="text-tr-accent-hand">.</span>hemnani
+      </button>
+      <div className="order-last flex w-full flex-wrap gap-x-[clamp(12px,3vw,28px)] gap-y-1 font-mono text-[13px] sm:order-none sm:w-auto">
+        {ANCHORS.map((a) => (
+          <a key={a.href} href={a.href} onClick={jump(a.href)}>
+            {a.label}
+          </a>
+        ))}
+      </div>
+      <button
+        ref={chipRef}
+        type="button"
+        onClick={() => setOpen((v) => !v)}
+        aria-expanded={open}
+        aria-controls="desk-secrets"
+        className="desk-press cursor-pointer rounded-full border-[1.5px] border-tr-hairline bg-tr-butter px-3 py-[7px] font-mono text-[12px] shadow-[2px_2px_0_var(--tr-text)] [--desk-press:2px]"
+      >
+        secrets {eggs.length}/{SECRETS.length}
+      </button>
       <div
         id="desk-secrets"
         hidden={!open}
-        className="fixed right-[clamp(16px,4vw,48px)] top-16 z-30 w-[min(300px,calc(100vw-32px))] rounded-[14px] border-[1.5px] border-tr-hairline bg-tr-surface-1 p-[18px] shadow-[5px_5px_0_var(--tr-text)]"
+        className="absolute right-[clamp(16px,4vw,48px)] top-full z-30 mt-2 w-[min(300px,calc(100vw-32px))] rounded-[14px] border-[1.5px] border-tr-hairline bg-tr-surface-1 p-[18px] shadow-[5px_5px_0_var(--tr-text)]"
       >
         <p className="mb-2.5 font-mono text-[11px] uppercase tracking-[0.08em] text-tr-text-faint">hidden around this page</p>
         <ul>
@@ -96,6 +93,6 @@ export function DeskNav() {
           })}
         </ul>
       </div>
-    </>
+    </nav>
   );
 }

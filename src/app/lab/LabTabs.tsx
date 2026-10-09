@@ -45,7 +45,7 @@ function LabCard({ item, tab }: { item: LabItem; tab: TabKey }) {
             aria-label={`${item.title}: project page`}
             className={LINK}
           >
-            <span aria-hidden="true" className="text-[16px] leading-none">→</span>
+            open <span aria-hidden="true">→</span>
           </Link>
         ) : item.link ? (
           <a

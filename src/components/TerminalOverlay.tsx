@@ -217,7 +217,7 @@ export function TerminalOverlay({ projectCount }: { projectCount: number }) {
                 out = [line("a data pipeline walks into a bar. the bartender says: we don't serve your type here. the pipeline casts itself to string.", "text", "☺", "accent")];
                 break;
             case "sudo":
-                out = [err("nice try. this shell runs on trust and yellow.")];
+                out = [err("nice try. this shell runs on trust and tomato.")];
                 break;
             case "rm":
                 out = [err("not a chance. it took me four years to build this.")];

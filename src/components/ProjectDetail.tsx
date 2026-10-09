@@ -15,10 +15,15 @@ const PROSE =
 
 // A figure's frame, matching ComparisonSlider's: ink, radius 14, a small hard shadow.
 const FIGURE = "overflow-hidden rounded-[var(--tr-r-lg)] border-[1.5px] border-tr-hairline bg-tr-surface-1 shadow-[4px_4px_0_var(--tr-text)]";
-// Text on an ink panel: the tools demo's request and response.
-const INK_PRE = "min-w-0 overflow-x-auto p-4 font-mono text-[12.5px] leading-[var(--tr-lh-body)] text-tr-on-ink";
+// Text on an ink panel: the tools demo's request and response. They are JSON,
+// so they wrap rather than scroll off the edge of a phone.
+const INK_PRE = "min-w-0 whitespace-pre-wrap p-4 font-mono text-[12.5px] leading-[var(--tr-lh-body)] text-tr-on-ink [overflow-wrap:anywhere]";
 
 import type { ComponentObj, DataFlowStep } from "./project/DataFlowStrip";
+
+/** The longest brief still set in Caveat; past this it is a paragraph, not an aside. */
+const HAND_MAX = 160;
+
 type MetricObj = { value: string; label: string; context?: string };
 type NeighborProject = { id: string; title: string; index: number };
 
@@ -280,12 +285,13 @@ export function ProjectDetail({
       )}
 
       {/* ── Arrived as / What I built / What changed ──
-          The brief is set in the hand the home page's project cards use, so a
-          card on / and its page say the same thing the same way. */}
+          A short brief is set in the hand the home page's project cards use, so
+          a card on / and its page say the same thing the same way. A long one
+          stays in print: a paragraph of handwriting is hard to read. */}
       <Ruled className="grid gap-[clamp(24px,4vw,48px)] sm:grid-cols-2 lg:grid-cols-3">
         <div>
           <h2 className={LABEL}>ARRIVED AS</h2>
-          <p className={`mt-3 ${HAND}`}>&ldquo;{project.challenge}&rdquo;</p>
+          <p className={`mt-3 ${project.challenge.length <= HAND_MAX ? HAND : LEDE}`}>&ldquo;{project.challenge}&rdquo;</p>
           {prose.context && <div className={`mt-4 ${PROSE}`}>{prose.context}</div>}
         </div>
 
@@ -443,7 +449,9 @@ export function ProjectDetail({
                       }`}
                     >
                       <dt className={`order-2 mt-2 text-[14px] leading-[var(--tr-lh-card)] text-tr-text-mute`}>{m.label}</dt>
-                      <dd className="order-1 text-[length:clamp(36px,4vw,52px)] font-extrabold leading-none tracking-[-0.04em] tabular-nums text-tr-text">
+                      <dd
+                        className={`order-1 ${/^\d/.test(m.value) ? "text-[length:clamp(36px,4vw,52px)]" : "text-[length:clamp(24px,2.6vw,32px)]"} font-extrabold leading-none tracking-[-0.04em] tabular-nums text-tr-text`}
+                      >
                         {m.value}
                       </dd>
                       {m.context && <dd className={`order-3 mt-1.5 ${MONO} text-[11px] text-tr-text-faint`}>{m.context}</dd>}

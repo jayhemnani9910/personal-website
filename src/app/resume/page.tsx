@@ -95,7 +95,7 @@ export default function AboutPage() {
                 </div>
                 <div className="min-w-0">
                   <h3 className="text-[21px] font-bold tracking-[-0.02em]">
-                    {role.title} <span className="font-normal text-tr-text-faint">@ {company.name}</span>
+                    {role.title} <span className="block font-normal text-tr-text-faint sm:inline">@ {company.name}</span>
                   </h3>
                   <ul className="mt-2 grid max-w-[72ch] gap-2">
                     {role.bullets.map((b, i) => (

@@ -14,7 +14,7 @@ import { PROOFS } from "@/components/fde/fdeData";
 import { CARD, CHIP, H1, H2, HIGHLIGHT, LABEL, LEDE, PILL, PILL_ACTIVE, SHELL, WRAP } from "@/components/desk";
 
 const TWO_COL = "lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]";
-const SECTION = `${WRAP} ${SHELL} py-[clamp(3rem,6vw,5rem)]`;
+const SECTION = `${WRAP} ${SHELL} py-[60px]`;
 
 export const metadata: Metadata = {
   ...pageMetadata({

@@ -14,7 +14,7 @@ export default function NotFound() {
     <div className="flex min-h-screen flex-col bg-tr-bg text-tr-text">
       <SiteHeader />
       <main id="main-content" className="flex flex-1 flex-col">
-        <div className={`${WRAP} ${SHELL} flex w-full flex-1 flex-col justify-center py-[clamp(48px,8vw,96px)]`}>
+        <div className={`${WRAP} ${SHELL} flex min-h-[60vh] w-full flex-col justify-center py-[clamp(48px,8vw,96px)]`}>
           <p className={KICKER}>/404 · no route</p>
 
           <h1 className={`${H1} mt-3`}>

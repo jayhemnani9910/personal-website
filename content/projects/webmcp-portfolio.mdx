@@ -134,7 +134,7 @@ deepDive:
   learnings:
     - "WebMCP reframes a site as a set of typed tools, not a page to scrape. The hard part is shaping existing content into clean tool inputs and returns, not the registration call itself."
     - "Progressive enhancement is non-negotiable for a flagged API: guard on availability, register on mount, abort the signal on cleanup, and the site stays normal for everyone else."
-    - "A tool that changes the page is as interesting as one that reads it. Theme and mode tools turn the site into something an agent can operate, not only query."
+    - "A tool that changes the page is as interesting as one that reads it. The reader-mode tool turns the site into something an agent can operate, not only query."
 priority: 2
 ---
 This portfolio registers structured tools through the WebMCP browser API (`document.modelContext`), so an AI agent can query it directly instead of scraping the DOM. Seven tools let an agent search every project, read the full resume, list skills and lab experiments, and even switch the site into reader mode, each with a JSON Schema for inputs and typed JSON results. The site works normally for everyone; the tools register only when the browser exposes the API (Chrome 146+ with the WebMCP flag) and unregister on cleanup. The site data is a static file built at build time, fetched only by browsers that have the API.

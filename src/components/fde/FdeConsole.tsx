@@ -306,7 +306,7 @@ export function FdeConsole() {
               ))}
             </div>
             <button
-              className={`${BTN_PRIMARY} cursor-pointer whitespace-nowrap font-mono text-[13px] disabled:cursor-not-allowed disabled:opacity-40`}
+              className={`${BTN_PRIMARY} cursor-pointer whitespace-nowrap font-mono text-[13px] disabled:translate-0 disabled:cursor-not-allowed disabled:bg-tr-surface-2 disabled:text-tr-text-faint disabled:shadow-none`}
               onClick={startCustom}
               disabled={!briefInput.trim() || loading}
               type="button"

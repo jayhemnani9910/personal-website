@@ -65,7 +65,7 @@ export async function HomeDesk() {
             <Greeting />
             <h1 className="text-[length:clamp(44px,8vw,112px)] font-extrabold leading-[var(--tr-lh-display)] tracking-[-0.045em] [text-wrap:balance]">
               I take the vague version and ship the{" "}
-              <span className="rounded-md bg-tr-butter px-[0.12em] [box-decoration-break:clone]">real one.</span>
+              <span className="desk-hl rounded-md bg-tr-butter px-[0.12em] [box-decoration-break:clone]">real one.</span>
             </h1>
             <div className="mt-7 flex flex-wrap items-end justify-between gap-6">
               <p className="max-w-[520px] text-[length:clamp(17px,1.6vw,20px)] leading-[var(--tr-lh-body)] text-tr-text-mute [text-wrap:pretty]">
@@ -160,7 +160,7 @@ export async function HomeDesk() {
                   <p className="pt-1 font-mono text-[13px] text-tr-text-faint">{j.when}</p>
                   <div>
                     <h3 className="text-[21px] font-bold tracking-[-0.02em]">
-                      {j.role} <span className="font-normal text-tr-text-faint">@ {j.org}</span>
+                      {j.role} <span className="block font-normal text-tr-text-faint sm:inline">@ {j.org}</span>
                     </h3>
                     <p className="mt-1 text-[15px] leading-normal text-tr-text-mute">{j.what}</p>
                   </div>
