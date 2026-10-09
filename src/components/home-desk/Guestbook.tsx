@@ -1,0 +1,140 @@
+"use client";
+
+import { useEffect, useState, type FormEvent } from "react";
+import { MSG_MAX, NAME_MAX } from "@/lib/guestbook";
+import { useDesk } from "./SecretsProvider";
+
+type WallNote = { name: string; msg: string; at: number };
+
+const STICKY = ["#ffd84d", "#ffc2b3", "#bfe3f5", "#cdeec9", "#e2d2fb"];
+
+// Shown only while the wall is empty, and signed by the one person it is true of.
+const EMPTY_NOTE: WallNote = { name: "jay", msg: "the fridge is empty. first sticky gets eternal glory (and a spot at the top).", at: 0 };
+
+const ERRORS: Record<string, string> = {
+  empty: "A blank sticky? Bold. Write something.",
+  rate_limited: "Easy there. The fridge is full for now. Try again in a bit.",
+  blocked: "That one won't stick. Try different words.",
+  too_long: `Stickies are small. ${MSG_MAX} characters, tops.`,
+};
+const FALLBACK_ERROR = "The fridge door is stuck. Try again in a minute.";
+
+const INPUT = "min-w-0 rounded-xl border-[1.5px] border-desk-ink bg-desk-card px-3.5 py-3 text-[16px]";
+
+export function Guestbook() {
+  const { say } = useDesk();
+  const [notes, setNotes] = useState<WallNote[] | null>(null);
+  const [name, setName] = useState("");
+  const [msg, setMsg] = useState("");
+  const [pending, setPending] = useState(false);
+
+  useEffect(() => {
+    let live = true;
+    fetch("/api/guestbook")
+      .then((r) => (r.ok ? r.json() : Promise.reject(new Error(String(r.status)))))
+      .then((data: { notes: WallNote[] }) => live && setNotes(data.notes))
+      .catch(() => live && setNotes([]));
+    return () => {
+      live = false;
+    };
+  }, []);
+
+  const submit = async (e: FormEvent) => {
+    e.preventDefault();
+    if (pending) return;
+    const text = msg.trim();
+    if (!text) return say(ERRORS.empty);
+
+    // Optimistic: the note goes up now and comes down again if the post fails.
+    const draft: WallNote = { name: name.trim() || "anonymous", msg: text, at: Date.now() };
+    setNotes((prev) => [draft, ...(prev ?? [])]);
+    setMsg("");
+    setPending(true);
+    try {
+      const r = await fetch("/api/guestbook", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ name, msg: text }),
+      });
+      const data: { note?: WallNote; error?: string } = await r.json().catch(() => ({}));
+      if (!r.ok || !data.note) throw new Error(data.error ?? "");
+      const saved = data.note;
+      setNotes((prev) => (prev ?? []).map((n) => (n === draft ? saved : n)));
+      say("Stuck to the fridge. Thanks!");
+    } catch (err) {
+      setNotes((prev) => (prev ?? []).filter((n) => n !== draft));
+      setMsg(text);
+      say(ERRORS[err instanceof Error ? err.message : ""] ?? FALLBACK_ERROR);
+    } finally {
+      setPending(false);
+    }
+  };
+
+  const wall = notes && notes.length > 0 ? notes : [EMPTY_NOTE];
+  const count = notes?.length ?? 0;
+
+  return (
+    <section id="guestbook" aria-labelledby="guestbook-h2" className="mx-auto max-w-[1200px] px-[clamp(16px,4vw,48px)] py-[60px]">
+      <div className="mb-6 flex flex-wrap items-baseline justify-between gap-3">
+        <h2 id="guestbook-h2" className="text-[length:clamp(32px,4.5vw,56px)] font-extrabold tracking-[-0.035em]">
+          Leave a sticky
+        </h2>
+        <p className="font-desk-mono text-[13px] text-desk-muted">
+          {notes === null ? "counting notes…" : `${count} ${count === 1 ? "note" : "notes"} on the fridge`}
+        </p>
+      </div>
+
+      <form onSubmit={submit} className="mb-7 flex flex-wrap gap-2.5">
+        <label className="sr-only" htmlFor="gb-name">
+          Your name
+        </label>
+        <input
+          id="gb-name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          placeholder="your name"
+          maxLength={NAME_MAX}
+          autoComplete="nickname"
+          className={`${INPUT} flex-[0_1_180px]`}
+        />
+        <label className="sr-only" htmlFor="gb-msg">
+          Your note
+        </label>
+        <input
+          id="gb-msg"
+          value={msg}
+          onChange={(e) => setMsg(e.target.value)}
+          placeholder="say something nice (or a bad joke)"
+          maxLength={MSG_MAX}
+          autoComplete="off"
+          className={`${INPUT} flex-[1_1_260px]`}
+        />
+        <button
+          type="submit"
+          disabled={pending}
+          className="desk-press cursor-pointer rounded-xl border-[1.5px] border-desk-ink bg-desk-tomato px-5 py-3 text-[16px] font-bold text-desk-card shadow-[3px_3px_0_var(--desk-ink)] disabled:cursor-wait disabled:opacity-70"
+        >
+          stick it
+        </button>
+      </form>
+
+      <ul className="grid grid-cols-[repeat(auto-fill,minmax(180px,1fr))] gap-[22px]">
+        {wall.map((n, i) => {
+          // Colour and tilt follow the note's position from the oldest, so a
+          // new note does not repaint every note already on the wall.
+          const k = wall.length - 1 - i;
+          return (
+            <li
+              key={`${n.at}-${k}`}
+              className="desk-sticky flex min-h-[130px] flex-col gap-2.5 px-4 pb-3.5 pt-[18px] shadow-[0_8px_14px_-8px_rgba(29,26,22,0.45)]"
+              style={{ background: STICKY[k % STICKY.length], ["--rot" as string]: `${((k * 37) % 9) - 4}deg` }}
+            >
+              <p className="flex-1 font-desk-hand text-[23px] leading-[var(--desk-lh-hand)] [overflow-wrap:anywhere]">{n.msg}</p>
+              <p className="font-desk-mono text-[11px]">— {n.name}</p>
+            </li>
+          );
+        })}
+      </ul>
+    </section>
+  );
+}

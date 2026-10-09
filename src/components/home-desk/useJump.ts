@@ -5,7 +5,7 @@ import type { MouseEvent } from "react";
 import { scrollToTarget } from "@/lib/scroll";
 
 /**
- * Click handler for in-page hash links (masthead, rail, footer). It glides
+ * Click handler for in-page hash links (the nav and the footer). It glides
  * through Lenis like the rest of the page, then does what the cancelled hash
  * navigation would have done: moves focus to the section, so the next Tab
  * starts there, and puts the hash in the URL, so the section can be linked.

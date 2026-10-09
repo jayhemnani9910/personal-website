@@ -37,11 +37,14 @@ export async function prepare(page: Page, theme: "dark" | "light") {
     }),
   );
 
-  // No test clicks "run sim" or types a brief into the home page's Decomposer,
-  // but a stray call to either would spend Gemini quota and return different
-  // prose every run.
+  // No test clicks "run sim", but a stray call would spend Gemini quota and
+  // return different prose every run.
   await page.route("**/api/fde-sim**", (route) => route.abort());
-  await page.route("**/api/decompose**", (route) => route.abort());
+  // The home page's guestbook reads the shared wall. An empty wall keeps the
+  // baseline stable and keeps tests from posting to the real one.
+  await page.route("**/api/guestbook**", (route) =>
+    route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify({ notes: [] }) }),
+  );
 }
 
 /** Navigate and wait for everything that moves pixels to have settled. */

@@ -1,17 +1,11 @@
 /**
- * Copy and structured data for the v4 home page (see docs/design/portfolio-home).
- * Every count that can drift from the real content (project count, MCP tool
- * count, essay count) arrives as a function argument computed at build time,
- * never a literal baked into this file.
- *
- * Two claims from the design export were dropped because nothing in the repo
- * backs them: the "project 19" aside in the cube-scramble copy (no such project
- * exists) and the "4 YRS" experience chip.
+ * Copy and structured data for the Desk home page (src/components/home-desk).
+ * Every count that can drift from the real content (project count, merged PRs,
+ * papers, the cube time) is derived from the content or the résumé, never a
+ * literal baked into this file.
  */
-import type { Route } from "next";
-import { SITE_CONFIG } from "@/../content/site";
 import { WEBMCP_TOOLS, WEBMCP_TOOL_COUNT } from "@/lib/webmcp-tools";
-import { RESUME, companyAnchor, parsePublishedVsReproduced } from "@/data/resume";
+import { RESUME, CUBE_ACHIEVEMENT, companyAnchor, parsePublishedVsReproduced } from "@/data/resume";
 
 export type FeaturedProject = {
   id: string;
@@ -24,16 +18,6 @@ export type FeaturedProject = {
   changed: string;
 };
 
-export type DecomposeOutput = {
-  scope: string[];
-  architecture: string[];
-  plan: string[];
-  risks: string[];
-  match: string[];
-};
-
-export type Preset = { short: string; text: string; out: DecomposeOutput };
-
 export type ReceiptLine = { text: string; meta: string; href: string };
 
 export type Receipt = {
@@ -44,22 +28,6 @@ export type Receipt = {
   note: string;
   lines: ReceiptLine[];
 };
-
-// next.config.ts sets typedRoutes, so a Link's href has to be a route the
-// compiler recognises. `Route` covers static routes, hashes and external URLs,
-// which is everything the nav and the rail use, so those are checked here.
-//
-// It cannot cover the method and receipt hrefs: those point at the dynamic
-// /projects/[id] route, and Next only accepts a dynamic route when the literal
-// is visible at the Link call site, which it is not once the value has been
-// through this module. Those two stay `string` and are cast at the call site.
-// What makes that safe is src/data/home.test.ts, which asserts every
-// /projects/... href in this file resolves to a real content/projects/*.mdx.
-export type MethodRule = { n: string; rule: string; why: string; from: string; href: string };
-
-export type NavItem = { label: string; alt: string; href: Route };
-
-export type SectionStep = { n: string; label: string; href: Route; id: string };
 
 export const FEATURED: FeaturedProject[] = [
   {
@@ -121,90 +89,6 @@ export const FEATURED: FeaturedProject[] = [
     arrived: "Protein stability prediction stuck on sequence alone.",
     did: "Fused sequence (ProtT5), a vibrational VDOS spectrum (SpectralCNN) and substrate chemistry (ChemBERTa + DRFP) through a learned gate.",
     changed: "Still predicts when no structure is available. Whether the vibrational branch helps is not benchmarked yet.",
-  },
-];
-
-export const PRESETS: Preset[] = [
-  {
-    short: "support tickets",
-    text: "our support team is drowning in tickets and nobody knows which ones actually matter",
-    out: {
-      scope: [
-        "Triage first: what does 'matters' mean to the team? SLA breach, churn risk, revenue?",
-        "Pull 90 days of tickets, outcomes, and who touched them.",
-        "Define a scored queue as the deliverable, not a model.",
-      ],
-      architecture: [
-        "Ingest tickets → normalise → urgency score → route to queue.",
-        "Start with rules + embeddings; a model only if the rules plateau.",
-        "Log every score with its inputs so drift is visible.",
-      ],
-      plan: [
-        "Week 1: scored queue on historical data, reviewed with two agents.",
-        "Week 2: live, shadow mode, compare against human triage.",
-        "Week 3: switch the queue; keep the human override.",
-      ],
-      risks: [
-        "Labels encode who was loud, not what mattered.",
-        "Priority inflation once people learn the score.",
-        "Silent drift when product changes the ticket form.",
-      ],
-      match: ["revolu-idea", "stock-data-platform"],
-    },
-  },
-  {
-    short: "untrusted numbers",
-    text: "we have plenty of data but nobody trusts the numbers in the dashboards",
-    out: {
-      scope: [
-        "Find the three numbers people argue about most.",
-        "Trace each one back to its source table and its owner.",
-        "Make agreement the deliverable, not a prettier chart.",
-      ],
-      architecture: [
-        "One warehouse with declared grain per table.",
-        "Star schema for the contested metrics; tests on every join.",
-        "Dashboards read only from certified marts.",
-      ],
-      plan: [
-        "Week 1: lineage for the three metrics, documented.",
-        "Week 2: rebuild them once, with tests, side by side with the old.",
-        "Week 3: retire the old; publish the definitions.",
-      ],
-      risks: [
-        "Two teams have two correct definitions.",
-        "Upstream schema changes with no contract.",
-        "The fix is political, not technical. Say so early.",
-      ],
-      match: ["stock-data-platform", "fifa-soccer-ds"],
-    },
-  },
-  {
-    short: "notebook → product",
-    text: "our ML model works in a notebook and we need it in front of customers next month",
-    out: {
-      scope: [
-        "Define 'works': on which data, at what latency, judged by whom?",
-        "Pick the smallest surface a customer can touch.",
-        "Reproducibility before performance.",
-      ],
-      architecture: [
-        "Versioned data + model (DVC), tracked runs (MLflow).",
-        "Inference behind a FastAPI service with a typed contract.",
-        "Export path (ONNX) decided now, not later.",
-      ],
-      plan: [
-        "Week 1: pipeline re-runs from raw data, end to end.",
-        "Week 2: service + one screen, internal users.",
-        "Week 3 to 4: shadow with real traffic; ship.",
-      ],
-      risks: [
-        "The notebook depends on one laptop's state.",
-        "Latency budget was never written down.",
-        "Nobody owns the model after launch.",
-      ],
-      match: ["fifa-soccer-ds", "nobel-dataintelligence"],
-    },
   },
 ];
 
@@ -294,14 +178,12 @@ export const MERGED_PRS_SEARCH = `https://github.com/search?q=${encodeURICompone
 /** How many of MERGED_PRS that search finds, e.g. "3 of 4". */
 export const MERGED_PRS_SEARCH_LABEL = `${MERGED_PRS.filter((pr) => !pr.landed).length} of ${MERGED_PRS.length}`;
 
-// METHOD[3] quotes the diabetes paper's two numbers. They are parsed out of
-// resume.ts the same way /resume parses them, so the two pages cannot disagree.
+// HOUSE_RULES[3] quotes the diabetes paper's two numbers. They are parsed out
+// of resume.ts the same way /resume parses them, so the two pages cannot disagree.
 const PAPER_GAP = RESUME.publications
   .map((pub) => parsePublishedVsReproduced(pub.description))
   .find((gap) => gap !== null);
 if (!PAPER_GAP) throw new Error("resume.ts: no publication states a published-vs-reproduced gap");
-
-const ROLE_COUNT = RESUME.experience.flatMap((company) => company.roles).length;
 
 export function buildReceipts(c: { projectCount: number; toolCount: number }): Receipt[] {
   return [
@@ -393,37 +275,6 @@ function toolLines(): ReceiptLine[] {
   return lines;
 }
 
-export const METHOD: MethodRule[] = [
-  {
-    n: "01",
-    rule: "Boring parts first.",
-    why: "Ingestion, schema, tests. The clever layer only earns its place once the dull one holds.",
-    from: "Stock Data Platform",
-    href: "/projects/stock-data-platform",
-  },
-  {
-    n: "02",
-    rule: "Make it re-runnable before making it better.",
-    why: "One DVC stage re-runs detection, tracking and the graph. If a result can't be reproduced it isn't a result.",
-    from: "FIFA Soccer DS",
-    href: "/projects/fifa-soccer-ds",
-  },
-  {
-    n: "03",
-    rule: "Argue with the model.",
-    why: "A supporter and an adversary per claim, then a judge. Agreement is not evidence.",
-    from: "CAG Deep Research",
-    href: "/projects/revolu-idea",
-  },
-  {
-    n: "04",
-    rule: "Publish the gap.",
-    why: `${PAPER_GAP.published}% in the paper; ${PAPER_GAP.reproduced}% in the committed notebook. Both numbers are on the résumé.`,
-    from: "Diabetes stacking, IEEE 2021",
-    href: "/projects/diabetes-stacking",
-  },
-];
-
 export const LOG_NOTES: Record<string, string> = {
   "Elite Hotel Group":
     "ETL in SQL + Python that cut manual prep 40%; occupancy and revenue dashboards; time-series demand forecasts for pricing.",
@@ -433,65 +284,78 @@ export const LOG_NOTES: Record<string, string> = {
   "Cactus Creatives Pvt. Ltd.": "First-responder comms platform on Azure microservices; CI/CD cut deploys 60%.",
 };
 
-export function buildNav(c: { projectCount: number; essayCount: number }): NavItem[] {
+/**
+ * The log, newest first, which is the order src/data/resume.ts already
+ * declares. Each employer's first role is the one the log shows; the note comes
+ * from LOG_NOTES, keyed by the employer name exactly as the resume spells it
+ * (home.test.ts asserts those keys match in both directions, so a renamed
+ * employer fails the test rather than rendering an empty line).
+ *
+ * `period` is optional on the Role type, so an entry without one is skipped
+ * rather than rendered with an empty date column.
+ */
+export function buildLogEntries() {
+  return RESUME.experience.flatMap((org) => {
+    const role = org.roles[0];
+    const when = role?.period?.label;
+    if (!role || !when) return [];
+    return [{ when, role: role.title, org: org.name, what: LOG_NOTES[org.name] ?? "" }];
+  });
+}
+
+/** The cube time from the résumé's achievements line, e.g. "16.7". */
+const cubeSeconds = CUBE_ACHIEVEMENT?.match(/([\d.]+)\s*sec/)?.[1];
+if (!cubeSeconds) throw new Error("resume.ts: the Rubik's Cube achievement has no time in seconds");
+export const CUBE_PB = cubeSeconds;
+
+export type DeskStat = { n: string; label: string };
+
+export function buildDeskStats(c: { projectCount: number }): DeskStat[] {
   return [
-    { label: "Work", alt: `${c.projectCount} shipped`, href: "/projects" },
-    { label: "Writing", alt: `${c.essayCount} essays`, href: "/blog" },
-    { label: "About", alt: "the log", href: "/resume" },
-    { label: "Channel", alt: "on video", href: "/youtube" },
+    { n: String(c.projectCount), label: "projects, each with a write-up" },
+    { n: String(MERGED_PRS.length), label: "pull requests merged upstream" },
+    { n: String(RESUME.publications.length), label: `IEEE papers (${RESUME.publications[0]?.year})` },
+    { n: "94%", label: "fraud-model precision on live data" },
+    { n: `${CUBE_PB}s`, label: "Rubik's PB, officially" },
   ];
 }
 
-export const SECTIONS: SectionStep[] = [
-  { n: "00", label: "brief", href: "#brief", id: "brief" },
-  { n: "01", label: "proof", href: "#proof", id: "proof" },
-  { n: "02", label: "work", href: "#work", id: "work" },
-  { n: "03", label: "method", href: "#method", id: "method" },
-  { n: "04", label: "contact", href: "#contact", id: "contact" },
+export type HouseRule = { n: string; title: string; why: string; from: string };
+
+export const HOUSE_RULES: HouseRule[] = [
+  {
+    n: "#1",
+    title: "Boring parts first.",
+    why: "Ingestion, schema, tests. The clever layer earns its place once the dull one holds.",
+    from: "Stock Data Platform",
+  },
+  {
+    n: "#2",
+    title: "Re-runnable, then better.",
+    why: "If a result can't be reproduced with one command, it isn't a result.",
+    from: "FIFA Soccer DS",
+  },
+  {
+    n: "#3",
+    title: "Argue with the model.",
+    why: "Agreement is not evidence. Give it an adversary and a judge.",
+    from: "CAG Deep Research",
+  },
+  {
+    n: "#4",
+    title: "Publish the gap.",
+    why: `${PAPER_GAP.published}% in the paper, ${PAPER_GAP.reproduced}% in the notebook. Both numbers live on the résumé.`,
+    from: `IEEE ${RESUME.publications[0]?.year}`,
+  },
 ];
 
-/**
- * The titles the hero cycles through. One person, eight labels that hiring
- * pages use for overlapping work, so the line rotates rather than picking one
- * and shrinking the range. ROLES[0] is what server-rendered HTML, a crawler and
- * a reduced-motion visitor see first, so it stays the most specific one.
- */
-export const ROLES = [
-  "FORWARD DEPLOYED ENGINEER",
-  "SOFTWARE ENGINEER",
-  "DATA ENGINEER",
-  "DATA SCIENTIST",
-  "DATA ANALYST",
-  "ML ENGINEER",
-  "AI ENGINEER",
-  "FULL-STACK ENGINEER",
-] as const;
-
-export const HERO = {
-  status: ["GUJARAT, IN", "OPEN TO WORK"],
-  h1: "Give me the vague version.",
-  deck: "Briefs never arrive clean. Paste one the way it actually shows up and watch how I take it apart, then see what I've already shipped that looks like it.",
-};
-
-export const COPY = {
-  proofH2: "Numbers with receipts.",
-  proofAside: "Every number here opens its sources. Click one.",
-  workDeck:
-    "Each one is written the same way on purpose: the problem as it arrived, what I actually did, what changed. If a line here can't be checked, it isn't here.",
-  workMore: (n: number) => `The other ${n}, with filters`,
-  methodH2: "How I work, with the project that taught me.",
-  methodDeck: "Principles are cheap. Each of these is attached to the place it cost me something.",
-  logH2: "The log.",
-  logDeck: `${ROLE_COUNT} roles, one habit: whichever part nobody wanted, I took it.`,
-  contactLabel: "ONE INBOX",
-  contactDeck:
-    "Looking for software, data and ML roles, forward-deployed ones included. Send the vague version, that's the point.",
-  footerLine: SITE_CONFIG.copyright,
-  idleNote: "You get back a scope, an architecture, a plan and the risks, plus the projects that prove it.",
-  offlineNote:
-    "Offline right now, so this is the closest saved example rather than a reading of your brief. The live version calls a model.",
-  limitedNote:
-    "That's the limit of live runs for this minute, so this is the closest saved example rather than a reading of your brief. Try again in a minute.",
-  tooLongNote: (max: number) =>
-    `That brief is over ${max} characters, so this is the closest saved example rather than a reading of it. Trim it and run again.`,
-};
+/** One a day, picked by day of the year; "one more" steps through the rest. */
+export const DAILY_FACTS = [
+  "I can solve a Rubik's cube faster than most people can find the white center.",
+  "My first internship shipped a first-responder comms platform. No pressure.",
+  'I have two IEEE papers and zero idea how to pronounce "IEEE" confidently.',
+  "This page has more easter eggs than tests. That's a lie. Probably.",
+  "A credit-fraud model of mine hit 94% precision. It still doesn't trust me.",
+  "I once wrote 23 Airflow DAGs and named exactly zero of them well.",
+  "Favourite bug: the one that only appeared on Tuesdays.",
+];

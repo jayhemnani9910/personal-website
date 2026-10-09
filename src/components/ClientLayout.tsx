@@ -31,7 +31,8 @@ function LazyTerminal({ projectCount }: { projectCount: number }) {
 export function ClientLayout({ children, projectCount }: { children: React.ReactNode; projectCount: number }) {
     const prefersReducedMotion = usePrefersReducedMotion();
     const pathname = usePathname();
-    const smoothScroll = pathname === "/" && !prefersReducedMotion;
+    const isHome = pathname === "/";
+    const smoothScroll = isHome && !prefersReducedMotion;
 
     return (
         <MotionProvider>
@@ -40,8 +41,10 @@ export function ClientLayout({ children, projectCount }: { children: React.React
                 that paints over already-rendered content, the cursor is a fixed
                 reticle). Order does not matter since both are position:fixed. */}
             <ReaderMode />
-            <Preloader />
-            <Cursor />
+            {/* The Desk home is a light, hands-on page with its own playground,
+                so neither the dark cold open nor the reticle belongs on it. */}
+            {!isHome && <Preloader />}
+            {!isHome && <Cursor />}
             <SkipLink />
             {/* Lenis in root mode drives the document scroller, so it does not
                 need to wrap the page. As a childless sibling it can come and go

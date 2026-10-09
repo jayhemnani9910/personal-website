@@ -101,65 +101,6 @@ body {
   scroll-behavior: auto !important;
 }
 
-/* ── The hero's rotating job title (RoleCycle.tsx) ──────────────────────────
-   Eight titles stacked in one grid cell, each fading in for its own slice of a
-   single shared loop. Positive animation-delays are correct here: an item's
-   base style is opacity 0, so before its turn arrives it is simply not painted,
-   and item N takes over exactly as item N-1 finishes.
-
-   The sizer reserves the width of the longest title. Without it the items after
-   the role on the status line would slide sideways eight times a loop.
-
-   Under reduced motion or reader mode the global rules above crush every
-   animation to 0.01ms, which would settle all eight items on their final
-   keyframe at once and paint them on top of each other. So both cases are
-   opted out explicitly and the first title is shown on its own. */
-.role-cycle {
-  display: inline-grid;
-  vertical-align: baseline;
-}
-
-.role-cycle > * {
-  grid-area: 1 / 1;
-}
-
-.role-cycle__sizer {
-  visibility: hidden;
-}
-
-/* The stack is itself a grid so all eight titles share one cell. Left as normal
-   inline flow they sat side by side, invisible at opacity 0 but still each
-   claiming their own width, which stretched the status line across the page. */
-.role-cycle__stack {
-  display: grid;
-}
-
-.role-cycle__stack > .role-cycle__item {
-  grid-area: 1 / 1;
-}
-
-.role-cycle__item {
-  opacity: 0;
-  animation-name: tr-role-cycle;
-  animation-timing-function: linear;
-  animation-iteration-count: infinite;
-  will-change: opacity;
-}
-
-@keyframes tr-role-cycle {
-  0%          { opacity: 0; }
-  1.5%, 10.5% { opacity: 1; }
-  12.5%, 100% { opacity: 0; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .role-cycle__item { animation: none !important; opacity: 0; }
-  .role-cycle__item:first-child { opacity: 1; }
-}
-
-[data-reader="on"] .role-cycle__item { animation: none !important; opacity: 0; }
-[data-reader="on"] .role-cycle__item:first-child { opacity: 1; }
-
 /* ═══════════════════════════════════════════════════════════════
    SCROLLBAR
    ═══════════════════════════════════════════════════════════════ */
@@ -481,9 +422,6 @@ html.lenis {
   textarea::placeholder, input::placeholder { color: var(--tr-text-faint); }
 }
 
-@keyframes v4-caret { 50%, 100% { opacity: 0; } }
-@keyframes v4-line-in { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
-@keyframes v4-cube-idle { from { transform: rotateX(-24deg) rotateY(0deg); } to { transform: rotateX(-24deg) rotateY(360deg); } }
 
 /* Expose color tokens to Tailwind utilities (bg-tr-bg, text-tr-accent, …).
    "inline" so utilities stay theme-reactive instead of freezing at the
@@ -502,4 +440,87 @@ html.lenis {
   --color-tr-on-accent: var(--tr-on-accent);
   --color-tr-ok: var(--tr-ok);
   --color-tr-warn: var(--tr-warn);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   DESK
+   The home page's paper palette (src/components/home-desk). Light only: the
+   page sets its own colour scheme rather than following data-theme. Hard
+   offset shadows, 1.5px ink borders, three type voices: Bricolage for the
+   page, JetBrains Mono for labels, Caveat for the asides.
+   ═══════════════════════════════════════════════════════════════ */
+
+:root {
+  --desk-paper: #f3ede2;
+  --desk-card: #fffdf8;
+  --desk-ink: #1d1a16;
+  --desk-ink-2: #3c362e;
+  --desk-muted: #6b6358;
+  --desk-muted-dark: #a89f92;
+  --desk-faint-dark: #8a8175;
+  --desk-line-dark: #5a5248;
+  --desk-dot: #d9cfbf;
+  --desk-dash: #cfc5b5;
+  --desk-tomato: #e8553a;
+  --desk-butter: #ffd84d;
+  --desk-sky: #7cc3e8;
+  --desk-mint: #9ed39a;
+  --desk-lilac: #c9a6f0;
+  --desk-pink: #f6a6c1;
+
+  --desk-lh-display: .92;
+  --desk-lh-title: 1.05;
+  --desk-lh-hand: 1.1;
+  --desk-lh-snug: 1.15;
+  --desk-lh-label: 1.35;
+  --desk-lh-lede: 1.45;
+
+  --desk-spring: cubic-bezier(.3, 1.6, .5, 1);
+}
+
+@theme inline {
+  --color-desk-paper: var(--desk-paper);
+  --color-desk-card: var(--desk-card);
+  --color-desk-ink: var(--desk-ink);
+  --color-desk-ink-2: var(--desk-ink-2);
+  --color-desk-muted: var(--desk-muted);
+  --color-desk-muted-dark: var(--desk-muted-dark);
+  --color-desk-faint-dark: var(--desk-faint-dark);
+  --color-desk-line-dark: var(--desk-line-dark);
+  --color-desk-dash: var(--desk-dash);
+  --color-desk-tomato: var(--desk-tomato);
+  --color-desk-butter: var(--desk-butter);
+  --font-desk: var(--font-bricolage), system-ui, sans-serif;
+  --font-desk-mono: var(--font-jetbrains), ui-monospace, monospace;
+  --font-desk-hand: var(--font-caveat), cursive;
+}
+
+/* The page behind the page: without this an overscroll bounce shows the dark
+   site background around the paper. */
+html:has(.desk) { background: var(--desk-paper); }
+
+@layer base {
+  .desk { color-scheme: light; }
+  .desk a { text-decoration-color: var(--desk-tomato); text-underline-offset: 3px; }
+  .desk a:hover { color: var(--desk-tomato); }
+  .desk :focus-visible { outline: 2px solid var(--desk-tomato); outline-offset: 2px; }
+  .desk ::selection { background: var(--desk-butter); color: var(--desk-ink); }
+  .desk input::placeholder { color: var(--desk-muted); }
+}
+
+/* Pressed state for every hard-shadow button: it sinks onto its shadow. */
+.desk-press:active { transform: translate(var(--desk-press, 3px), var(--desk-press, 3px)); box-shadow: none; }
+
+/* Sticky notes sit at their own angle, set per note as --rot. */
+.desk-sticky { transform: rotate(var(--rot, 0deg)); }
+.desk-card:hover { box-shadow: 6px 6px 0 var(--desk-ink); }
+
+/* Hover tilts. Motion only: under reduced motion or reader mode they stay put. */
+@media (prefers-reduced-motion: no-preference) {
+  :root:not([data-reader="on"]) .desk-card { transition: transform .2s var(--desk-spring), box-shadow .2s; }
+  :root:not([data-reader="on"]) .desk-card:hover { transform: translate(-4px, -4px) rotate(-1deg); }
+  :root:not([data-reader="on"]) .desk-cube { transition: transform .3s; }
+  :root:not([data-reader="on"]) .desk-cube:hover { transform: rotate(-8deg) scale(1.06); }
+  :root:not([data-reader="on"]) .desk-sticky { transition: transform .2s; }
+  :root:not([data-reader="on"]) .desk-sticky:hover { transform: rotate(0deg) scale(1.05); }
 }

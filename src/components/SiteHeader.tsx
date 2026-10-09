@@ -8,8 +8,8 @@ import { ThemeGlyph } from "@/components/ThemeGlyph";
 
 // The chrome every route except the home page wears, taken from the v4 design
 // screens (docs/design: Work Index, Writing, About, Channel and Project Detail
-// all carry this identical header). The home page keeps its own taller,
-// animated HomeHeader, which is part of that page's staging.
+// all carry this identical header). The home page has its own Desk nav
+// (src/components/home-desk/DeskNav.tsx).
 //
 // Four destinations, matching the design. /fde and /lab stay live and reachable
 // by URL but are not linked here (ADR 0014, decision D3).

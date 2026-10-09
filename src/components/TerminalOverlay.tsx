@@ -4,26 +4,24 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { m, AnimatePresence } from "framer-motion";
 import { useTerminal } from "@/context/TerminalContext";
 import { useTheme } from "@/context/ThemeContext";
-import { useRouter } from "next/navigation";
 import { EASE, DUR } from "@/lib/motion-tokens";
 import { FEATURED, buildReceipts } from "@/data/home";
 import { SITE_CONFIG } from "@/../content/site";
 import { WEBMCP_TOOL_COUNT } from "@/lib/webmcp-tools";
 import { scrollBehavior } from "@/lib/scroll";
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
-import { dispatchShellIntent, saveShellIntent, type ShellIntent } from "@/lib/shell-intent";
 
 // All available commands for tab-completion. `exit` is not advertised in
 // `help` or the chip row (the design has no such command), but it is kept
 // working: see the Enter handler below.
 const COMMANDS = [
-    "help", "brief", "whoami", "ls", "open", "receipts", "contact",
-    "theme", "cube", "joke", "sudo", "rm", "clear", "exit",
+    "help", "whoami", "ls", "open", "receipts", "contact",
+    "theme", "joke", "sudo", "rm", "clear", "exit",
 ];
 
 // Shown above the input. Each is a command the shell actually runs, so the
-// row doubles as the discoverable half of `help`. Verbatim from the design.
-const CHIPS = ["help", "brief we have data nobody trusts", "ls", "receipts", "cube", "joke", "theme"];
+// row doubles as the discoverable half of `help`.
+const CHIPS = ["help", "ls", "open 1", "receipts", "joke", "theme"];
 
 type ColorKey = "text" | "mute" | "faint" | "accent" | "ok";
 
@@ -48,10 +46,10 @@ const info = (text: string): Line => line(text, "text", "·", "faint");
 const warn = (text: string): Line => line(text, "mute", "!", "accent");
 const err = (text: string): Line => line(text, "text", "✗", "accent");
 
-// The shell's greeting, printed once on mount. Verbatim from the design.
+// The shell's greeting, printed once on mount.
 const INITIAL_LINES: Line[] = [
     line("hey. this is a real shell, minus the part where you can break anything.", "text", "☺", "accent"),
-    line("try a chip above, or type `brief we have data nobody trusts`"),
+    line("try a chip above, or type `help`"),
 ];
 
 export function TerminalOverlay({ projectCount }: { projectCount: number }) {
@@ -65,7 +63,6 @@ export function TerminalOverlay({ projectCount }: { projectCount: number }) {
     const bottomRef = useRef<HTMLDivElement>(null);
     const panelRef = useRef<HTMLDivElement>(null);
     const previouslyFocusedRef = useRef<HTMLElement | null>(null);
-    const router = useRouter();
 
     // Command history for arrow key navigation
     const cmdHistoryRef = useRef<string[]>([]);
@@ -129,19 +126,6 @@ export function TerminalOverlay({ projectCount }: { projectCount: number }) {
         bottomRef.current?.scrollIntoView({ behavior: scrollBehavior() });
     }, [history]);
 
-    // `brief` and `cube` act on the home page. On / its listeners are live, so
-    // the event goes straight to them; from anywhere else the intent is stored
-    // and / takes it on mount (see shell-intent.ts).
-    const runOnHome = useCallback((intent: ShellIntent, hash: string) => {
-        if (window.location.pathname === "/") {
-            dispatchShellIntent(intent);
-            window.location.hash = hash;
-        } else {
-            saveShellIntent(intent);
-            router.push(`/#${hash}`);
-        }
-    }, [router]);
-
     const handleCommand = useCallback((raw: string) => {
         const trimmed = raw.trim();
         // An empty line echoes an empty prompt, as a shell does. Only `clear`
@@ -172,24 +156,12 @@ export function TerminalOverlay({ projectCount }: { projectCount: number }) {
             case "help":
                 out = [
                     line("things that work here:", "mute", "?", "accent"),
-                    info(`${"brief <text>".padEnd(15)}run the decomposer on your problem`),
                     info(`${"ls".padEnd(15)}the six featured projects`),
                     info(`${"open <1-6>".padEnd(15)}one project, in three lines`),
                     info(`${"receipts".padEnd(15)}every number on this page, with source`),
-                    line("whoami · contact · theme · cube · joke · clear"),
+                    line("whoami · contact · theme · joke · clear"),
                 ];
                 break;
-            case "brief": {
-                const text = rest.replace(/^"|"$/g, "");
-                if (!text) {
-                    out = [warn("brief <your vague problem>. The vaguer the better, honestly.")];
-                    break;
-                }
-                out = [ok("Running the decomposer up top.")];
-                closeTerminal();
-                runOnHome({ kind: "brief", text }, "brief");
-                break;
-            }
             case "whoami":
                 out = [
                     ok("Jay Hemnani, Forward Deployed Engineer. Gujarat, IN. Relocating."),
@@ -229,11 +201,6 @@ export function TerminalOverlay({ projectCount }: { projectCount: number }) {
                 out = [ok(`theme → ${next}. your retinas thank you. or not.`)];
                 break;
             }
-            case "cube":
-                out = [ok("Scrambling the cube in section 03.")];
-                closeTerminal();
-                runOnHome({ kind: "cube" }, "method");
-                break;
             case "joke":
                 out = [line("a data pipeline walks into a bar. the bartender says: we don't serve your type here. the pipeline casts itself to string.", "text", "☺", "accent")];
                 break;
@@ -253,7 +220,7 @@ export function TerminalOverlay({ projectCount }: { projectCount: number }) {
 
         setHistory((prev) => [...prev, echo, ...out]);
         setInput("");
-    }, [closeTerminal, runOnHome, projectCount, theme, toggleTheme]);
+    }, [closeTerminal, projectCount, theme, toggleTheme]);
 
     const handleKeyDown = (e: React.KeyboardEvent) => {
         if (e.key === "Enter") {
