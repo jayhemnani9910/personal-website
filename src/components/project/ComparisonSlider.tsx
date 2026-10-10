@@ -6,7 +6,7 @@ import { KICKER, PILL, PILL_ACTIVE } from "../desk";
 
 const BADGE = "absolute top-3 rounded-[6px] bg-tr-text px-2 py-1 font-mono text-[11px] text-tr-on-ink";
 
-export type ComparisonPair = { before: string; after: string; label?: string };
+export type ComparisonPair = { before: string; after: string };
 
 /**
  * Drag-to-compare figure for a project's before/after frames. Position is
@@ -26,7 +26,7 @@ export function ComparisonSlider({
   const sliderId = useId();
   const active = pairs[activeIndex];
   if (!active) return null;
-  const pairLabel = active.label ?? `frame ${activeIndex + 1}`;
+  const pairLabel = `frame ${activeIndex + 1}`;
 
   return (
     <div>
@@ -48,7 +48,7 @@ export function ComparisonSlider({
                 onClick={() => setActiveIndex(i)}
                 className={`cursor-pointer ${PILL} ${i === activeIndex ? PILL_ACTIVE : ""}`}
               >
-                {p.label ?? `Frame ${i + 1}`}
+                Frame {i + 1}
               </button>
             ))}
           </div>

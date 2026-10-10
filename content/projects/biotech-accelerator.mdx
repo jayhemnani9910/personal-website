@@ -10,11 +10,11 @@ tech: ["Python", "LangGraph", "ProDy", "httpx", "Rich", "Docker"]
 github: "https://github.com/jayhemnani9910/biotech-accelerator"
 links:
   code: "https://github.com/jayhemnani9910/biotech-accelerator"
-  demo: "https://jayhemnani9910.github.io/biotech-accelerator/"
+  site: "https://jayhemnani9910.github.io/biotech-accelerator/"
 challenge: "Early-stage biotech research means stitching together protein databases, literature, structural models, and chemistry by hand before anyone can decide which experiment to run. The work is slow, easy to get wrong, and hard to reproduce."
 solution:
   - "A LangGraph-orchestrated pipeline that parses a research query and routes it through each source and normal-mode analysis (ANM/GNM) in sequence."
-  - "Each external source sits behind its own agent with a typed interface, so a failed lookup degrades gracefully instead of breaking the run."
+  - "Each external source sits behind its own adapter with a typed interface, so a failed lookup degrades gracefully instead of breaking the run."
   - "Normal-mode analysis via ProDy adds a structural/dynamics signal on top of sequence and literature evidence, which most query tools skip."
   - "Packaged in Docker for a reproducible run, with a Rich terminal UI for readable progress and output."
 impact:

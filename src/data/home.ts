@@ -253,7 +253,7 @@ export function buildReceipts(c: { projectCount: number; toolCount: number }): R
       lines: [
         { text: "Project write-up and demo", meta: "/projects/fifa-soccer-ds", href: "/projects/fifa-soccer-ds" },
         {
-          text: "Live before/after overlay",
+          text: "Project landing page",
           meta: "github.io",
           href: "https://jayhemnani9910.github.io/fifa-soccer-ds/",
         },

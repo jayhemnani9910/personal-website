@@ -8,7 +8,7 @@ import { WEBMCP_TOOL_COUNT } from "@/lib/webmcp-tools";
 export type ShowcaseDemo =
   | {
       kind: "compare";
-      pairs: { before: string; after: string; label?: string }[];
+      pairs: { before: string; after: string }[];
     }
   | {
       kind: "report";
@@ -33,7 +33,7 @@ export const SHOWCASE_PROJECTS: Record<string, ShowcaseConfig> = {
     demo: {
       kind: "compare",
       pairs: [
-        { before: "/projects/fifa/input_5.jpg", after: "/projects/fifa/overlay_5.jpg", label: "RMA vs BAR" },
+        { before: "/projects/fifa/input_5.jpg", after: "/projects/fifa/overlay_5.jpg" },
         { before: "/projects/fifa/input_8.jpg", after: "/projects/fifa/overlay_8.jpg" },
         { before: "/projects/fifa/input_10.jpg", after: "/projects/fifa/overlay_10.jpg" },
         { before: "/projects/fifa/input_15.jpg", after: "/projects/fifa/overlay_15.jpg" },

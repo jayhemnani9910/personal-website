@@ -10,7 +10,7 @@ tech: ["Python", "Flask", "ArchiveBox", "SQLite (FTS5)", "APScheduler", "Docker"
 github: "https://github.com/jayhemnani9910/webcrawler"
 links:
   code: "https://github.com/jayhemnani9910/webcrawler"
-  demo: "https://jayhemnani9910.github.io/webcrawler/"
+  site: "https://jayhemnani9910.github.io/webcrawler/"
 challenge: "Web content changes or disappears, and a plain archive does not prove that a snapshot is genuine or tell you what changed between versions. The goal was a service that discovers and snapshots pages on a schedule, detects content changes by hash, makes every captured version searchable, and can produce a verifiable record that a given version existed at a given time."
 solution:
   - "A four-stage core pipeline: discovery (sitemap parsing and internal-link crawling, robots-compliant) into ArchiveBox snapshots, then SHA-256 content-hash change detection, then SQLite FTS5 full-text search across every archived version."
