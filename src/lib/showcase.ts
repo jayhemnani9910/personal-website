@@ -54,7 +54,7 @@ export const SHOWCASE_PROJECTS: Record<string, ShowcaseConfig> = {
       tools: [
         { name: "search_projects", kind: "read", description: "Search projects by query, tech, tag, domain, or featured-only." },
         { name: "get_project", kind: "read", description: "Full details for one project by ID: challenge, solution, impact, stack." },
-        { name: "get_resume", kind: "read", description: "Resume data by section: experience, education, skills, competencies, contact." },
+        { name: "get_resume", kind: "read", description: "Resume data by section: experience, education, publications, skills, competencies, contact." },
         { name: "search_skills", kind: "read", description: "Technical skills by category or keyword." },
         { name: "get_contact", kind: "read", description: "Contact info and social links." },
         { name: "list_experiments", kind: "read", description: "What Jay is currently building, exploring, or watching in the lab." },

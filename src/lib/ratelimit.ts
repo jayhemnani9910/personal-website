@@ -61,10 +61,10 @@ interface CounterLike {
 }
 
 /**
- * A ceiling on model calls per UTC day, across all visitors. The per-IP limit
- * above only slows one caller; this bounds the bill when many IPs arrive at
- * once. Counted only for calls that actually go to the model (cache hits are
- * free). Same fail-open rule: a missing or broken store never blocks a visitor.
+ * A ceiling per UTC day, across all visitors, in whatever unit the caller
+ * counts (fde-sim counts runs). The per-IP limit above only slows one caller;
+ * this bounds the bill when many IPs arrive at once. Counted only for work that
+ * actually goes to the model (cache hits are free). Same fail-open rule: a missing or broken store never blocks a visitor.
  */
 export async function dailyBudget(
     redis: CounterLike | null,

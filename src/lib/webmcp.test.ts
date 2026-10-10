@@ -24,6 +24,7 @@ const DATA: SiteData = {
         ],
         experience: [],
         education: [],
+        publications: [{ title: "A paper", venue: "IEEE", year: "2021", link: "https://ieeexplore.ieee.org/document/1" }],
     },
     social: { github: "https://github.com/x" },
     experiments: [{ id: "e1", title: "Voice agent", description: "Talks back", tags: ["audio"] }],
@@ -120,6 +121,13 @@ describe("WebMCP tools", () => {
         expect(hit.url).toBe("https://example.test/projects/beta");
         const miss = (await tool("get_project").execute({ id: "nope" })) as { error: string };
         expect(miss.error).toMatch(/not found/);
+    });
+
+    it("get_resume returns the publications, alone and in the full resume", async () => {
+        const only = (await tool("get_resume").execute({ section: "publications" })) as { publications: { title: string }[] };
+        expect(only.publications.map((p) => p.title)).toEqual(["A paper"]);
+        const all = (await tool("get_resume").execute({})) as { publications: unknown[] };
+        expect(all.publications).toHaveLength(1);
     });
 
     it("get_resume returns the requested section", async () => {

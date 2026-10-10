@@ -62,6 +62,13 @@ export async function buildSiteData(): Promise<SiteData> {
         end: e.end,
         gpa: e.gpa,
       })),
+      publications: RESUME.publications.map((p) => ({
+        title: p.title,
+        venue: p.venue,
+        year: p.year,
+        description: p.description,
+        link: p.link,
+      })),
     },
     social: SITE_CONFIG.social,
     experiments: LAB_EXPERIMENTS,

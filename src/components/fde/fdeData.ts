@@ -116,7 +116,7 @@ export const RECEIPTS: Receipt[] = [
     phase: 'PHASE 02 · DECOMPOSE',
     title: 'Turning a vague spec into a working multi-agent system.',
     project: 'CAG DEEP RESEARCH',
-    desc: "Built a multi-agent LangGraph research system in 10 days from a rough problem statement. Hexagonal architecture, verification loops, local + cloud LLM fallback. This is the decomposition this simulation just did, but on a real ambiguous brief.",
+    desc: "Built a multi-agent LangGraph research system in 10 days from a rough problem statement. Hexagonal architecture, verification loops, local + cloud LLM providers, swappable by config. This is the decomposition this simulation just did, but on a real ambiguous brief.",
     links: [{ label: 'case study', href: '/projects/revolu-idea' }],
   },
   {
@@ -352,7 +352,7 @@ export const PRESETS: Preset[] = [
         why: "Different failure modes mean different conservativeness. A safety-relevant misdiagnosis means we need a \"we don't know, escalate\" path with low threshold.",
       },
       {
-        q: "How much labeled image data do we already have (historical work orders with photos and ground-truth outcomes)?",
+        q: "Do we already have labeled image data (historical work orders with photos and ground-truth outcomes)?",
         why: "If yes: fine-tune a vision model on it. If no: we're using a generalist VLM and the demo accuracy will be honest about uncertainty.",
       },
       {
@@ -395,7 +395,7 @@ export const PRESETS: Preset[] = [
       { day: 'Day 6-7', title: 'Playbook retrieval', deliv: 'for each predicted failure mode, retrieve next-steps doc + parts + safety warnings from existing playbook PDFs.' },
       { day: 'Day 8-9', title: 'Tech feedback capture', deliv: 'after-visit form: was the top prediction right? If no, what was the actual cause? Feeds back into case index.' },
       { day: 'Day 10-12', title: 'Offline + sync', deliv: 'local inference for the most-common 10 failure modes. Queue for the rest. Sync on reconnect.' },
-      { day: 'Day 13-14', title: 'Pilot with 5 techs over real visits', deliv: '5 techs · 1 week · all data captured. Daily review of predictions vs actual. Honest accuracy number at end.' },
+      { day: 'Day 13-14', title: 'Pilot with 5 techs over real visits', deliv: '5 techs · 2 days of real visits · all data captured. Daily review of predictions vs actual. Honest accuracy number at end.' },
     ],
     risks: [
       { risk: "VLM hallucinates a failure mode that doesn't exist for this pump model. Tech wastes a truck-roll on the wrong parts.", mitigation: 'Constrain output to a closed-set vocabulary of failure modes per equipment family. Unknown = "escalate to senior tech."' },
@@ -430,7 +430,7 @@ export const PROOFS: ProofItem[] = [
     cat: 'Agentic systems',
     project: 'CAG Deep Research',
     title: { pre: 'Vague spec -> working multi-agent in ', em: '10 days', post: '.' },
-    body: 'Multi-agent LangGraph research system, built from a rough problem statement. Hexagonal architecture, verification loops, local + cloud LLM fallback.',
+    body: 'Multi-agent LangGraph research system, built from a rough problem statement. Hexagonal architecture, verification loops, local + cloud LLM providers, swappable by config.',
     stack: ['LangGraph', 'multi-agent', 'hexagonal arch', 'verification'],
     links: [{ label: 'case study', href: '/projects/revolu-idea' }],
   },
@@ -439,7 +439,7 @@ export const PROOFS: ProofItem[] = [
     cat: 'Protocols / connective tissue',
     project: 'WebMCP Portfolio',
     title: { pre: 'Made my own site ', em: 'agent-queryable', post: ' via WebMCP.' },
-    body: `${WEBMCP_TOOL_COUNT} tools in production. Early implementation on the exact surface OpenAI / Anthropic / Google FDE postings now call table-stakes.`,
+    body: `${WEBMCP_TOOL_COUNT} tools in production. Early implementation on the exact surface Anthropic and Google FDE postings now call table-stakes.`,
     stack: ['WebMCP (W3C CG draft)', `${WEBMCP_TOOL_COUNT} tools`, 'production'],
     links: [{ label: 'see the tools an agent can call', href: '/projects/webmcp-portfolio' }],
   },

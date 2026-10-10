@@ -15,7 +15,8 @@ vi.mock("@/context/TerminalContext", () => ({
 
 
 import { TerminalOverlay } from "./TerminalOverlay";
-import { FEATURED, buildReceipts } from "@/data/home";
+import { FEATURED, MERGED_PRS_SEARCH_LABEL, buildReceipts } from "@/data/home";
+import { RESUME } from "@/data/resume";
 import { WEBMCP_TOOL_COUNT } from "@/lib/webmcp-tools";
 
 // A fixture count. The overlay is a client component and cannot read
@@ -90,9 +91,12 @@ describe("TerminalOverlay commands", () => {
     for (const r of receipts) {
       expect(dialog.textContent).toContain(`${r.n.padEnd(5)} ${r.label}`);
     }
-    // And each one names where it can be checked, as help promises.
-    expect(dialog.textContent?.match(/source: /g)).toHaveLength(receipts.length);
-    expect(dialog.textContent).toContain("source: ieeexplore.ieee.org");
+    // And each one names where it can be checked, as help promises: both
+    // papers, and the PR search with how much of the count it finds.
+    for (const pub of RESUME.publications) {
+      if (pub.link) expect(dialog.textContent).toContain(`source: ${pub.link.replace(/^https:\/\//, "")}`);
+    }
+    expect(dialog.textContent).toContain(`finds ${MERGED_PRS_SEARCH_LABEL}, the rest landed as commits`);
   });
 
   it("eggs lists the home page's secrets, naming only the ones found", () => {

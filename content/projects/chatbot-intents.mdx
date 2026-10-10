@@ -24,7 +24,7 @@ deepDive:
     The system follows a pipeline architecture from raw text input to predicted intent:
 
     **1. User Input → Preprocessing**
-    Raw user text undergoes normalization: lowercasing, tokenization (splitting into words), and stemming (reducing words to root forms using Porter Stemmer or similar). This reduces vocabulary size and improves generalization.
+    Raw user text undergoes normalization: lowercasing, tokenization (splitting into words), and stemming (reducing words to root forms with the Porter stemmer). This reduces vocabulary size and improves generalization.
 
     **2. Preprocessing → Feature Extraction**
     Processed tokens are converted into numerical representations using bag-of-words (BoW) encoding. Each word in the training vocabulary becomes a binary feature (1 if present, 0 if absent), creating a fixed-length vector that represents the input sentence.

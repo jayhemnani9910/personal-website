@@ -216,7 +216,11 @@ export function buildReceipts(c: { projectCount: number; toolCount: number }): R
           { text: pr.repo, meta: pr.number, href: pr.href },
           ...(pr.landed ? [{ text: `${pr.number} closed, landed as this commit`, meta: "commit", href: pr.landed }] : []),
         ]),
-        { text: "The merged ones, in one GitHub search", meta: MERGED_PRS_SEARCH_LABEL, href: MERGED_PRS_SEARCH },
+        {
+          text: `GitHub search for the merged ones: finds ${MERGED_PRS_SEARCH_LABEL}, the rest landed as commits`,
+          meta: MERGED_PRS_SEARCH_LABEL,
+          href: MERGED_PRS_SEARCH,
+        },
       ],
     },
     {

@@ -45,7 +45,7 @@ deepDive:
 
     - step: "Filtering & Counting"
       component: "Text Processor"
-      detail: "Tokens are filtered against an expanded stopword list (common words like 'the', 'is', 'at' plus Wikipedia-specific terms). Remaining tokens are counted using a frequency distribution, with the top 20-30 terms selected for visualization."
+      detail: "Tokens are filtered against an expanded stopword list (common words like 'the', 'is', 'at' plus Wikipedia-specific terms). Remaining tokens are counted using a frequency distribution, with the top 25 terms selected for visualization."
 
     - step: "Visualization Rendering"
       component: "Visualization Engine"
@@ -65,7 +65,7 @@ deepDive:
       tradeoff: "A hand-kept list: new meta terms have to be noticed and added by hand."
 
     - decision: "Top-N Frequency Display"
-      rationale: "Limited visualization to top 20-30 terms rather than showing all unique words. This decision focuses attention on the most significant themes while keeping charts readable. Long-tail words (appearing 1-2 times) add noise without insight."
+      rationale: "Limited visualization to the top 25 terms rather than showing all unique words. This decision focuses attention on the most significant themes while keeping charts readable. Long-tail words (appearing 1-2 times) add noise without insight."
       tradeoff: "A rare but telling word never reaches the chart."
 
   codeSnippets:
