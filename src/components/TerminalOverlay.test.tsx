@@ -141,6 +141,13 @@ describe("TerminalOverlay commands", () => {
     expect(log.textContent).toContain("command not found: frobnicate");
   });
 
+  it("holds the page still while open and closes on Escape", () => {
+    renderOpen();
+    expect(document.documentElement.style.overflow).toBe("hidden");
+    fireEvent.keyDown(document, { key: "Escape" });
+    expect(mockCloseTerminal).toHaveBeenCalled();
+  });
+
   it("rm refuses", () => {
     renderOpen();
     type("rm -rf .");

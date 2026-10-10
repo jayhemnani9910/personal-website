@@ -42,7 +42,9 @@ const TEXT_COLOR: Record<ColorKey, string> = {
     err: "text-[color:var(--tr-accent)]",
 };
 
-type Line = { text: string; color: ColorKey; icon: string; iconColor: ColorKey };
+// `lead` is a first column (a command, a project): beside the text on a wide
+// panel, above it on a phone, instead of space padding that wraps mid-column.
+type Line = { text: string; color: ColorKey; icon: string; iconColor: ColorKey; lead?: string };
 
 const line = (text: string, color: ColorKey = "mute", icon = " ", iconColor: ColorKey = "faint"): Line => ({
     text,
@@ -52,6 +54,7 @@ const line = (text: string, color: ColorKey = "mute", icon = " ", iconColor: Col
 });
 const ok = (text: string): Line => line(text, "text", "✓", "ok");
 const info = (text: string): Line => line(text, "text", "·", "faint");
+const pair = (lead: string, text: string): Line => ({ ...info(text), lead });
 const warn = (text: string): Line => line(text, "mute", "!", "accent");
 const err = (text: string): Line => line(text, "text", "✗", "err");
 
@@ -185,10 +188,10 @@ export function TerminalOverlay({ projectCount }: { projectCount: number }) {
             case "help":
                 out = [
                     line("things that work here:", "mute", "?", "accent"),
-                    info(`${"ls".padEnd(15)}the six featured projects`),
-                    info(`${"open <1-6>".padEnd(15)}one project, in three lines`),
-                    info(`${"receipts".padEnd(15)}the headline numbers, with their sources`),
-                    info(`${"eggs".padEnd(15)}the home page's secrets, found and not`),
+                    pair("ls", "the six featured projects"),
+                    pair("open <1-6>", "one project, in three lines"),
+                    pair("receipts", "the headline numbers, with their sources"),
+                    pair("eggs", "the home page's secrets, found and not"),
                     line("whoami · contact · joke · clear"),
                 ];
                 break;
@@ -201,7 +204,7 @@ export function TerminalOverlay({ projectCount }: { projectCount: number }) {
             case "ls": {
                 const more = projectCount - FEATURED.length;
                 out = [
-                    ...FEATURED.map((p) => info(`${p.num}  ${p.title.padEnd(26)} ${p.tech.slice(0, 3).join(", ")}`)),
+                    ...FEATURED.map((p) => pair(`${p.num}  ${p.title}`, p.tech.slice(0, 3).join(", "))),
                     line(`… ${more} more at /projects`),
                 ];
                 break;
@@ -393,7 +396,14 @@ export function TerminalOverlay({ projectCount }: { projectCount: number }) {
                                         className={`grid grid-cols-[1.4rem_minmax(0,1fr)] gap-[.4rem] whitespace-pre-wrap ${TEXT_COLOR[entry.color]}`}
                                     >
                                         <span aria-hidden="true" className={TEXT_COLOR[entry.iconColor]}>{entry.icon}</span>
-                                        <span className="min-w-0 [overflow-wrap:anywhere]">{entry.text}</span>
+                                        {entry.lead ? (
+                                            <span className="grid min-w-0 sm:grid-cols-[minmax(0,15rem)_minmax(0,1fr)] sm:gap-x-3">
+                                                <span>{entry.lead}</span>
+                                                <span className="pl-3 sm:pl-0 [overflow-wrap:anywhere]">{entry.text}</span>
+                                            </span>
+                                        ) : (
+                                            <span className="min-w-0 [overflow-wrap:anywhere]">{entry.text}</span>
+                                        )}
                                     </div>
                                 ))}
                             </div>
