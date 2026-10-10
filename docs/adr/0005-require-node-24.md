@@ -82,3 +82,10 @@ as separate ADRs because they are pins rather than architecture:
 `engine-strict` is set, and an open range like `>=24.0.0` lets Vercel move to
 the newest major it offers. Both are now closed: `engines.node` is `24.x`, and a
 committed `.npmrc` sets `engine-strict=true`, so an install on Node 20 fails.
+
+**Note, 2026-10-10.** The real floor inside 24 is now 24.15: jsdom 30's
+dependencies (`@asamuzakjp/css-color` and others) declare
+`^22.22.2 || ^24.15.0 || >=26.0.0`, so with `engine-strict` an `npm ci` on
+24.13 fails. `engines.node` stays `24.x`, because that is the form Vercel reads
+to pick the major; CI and `.nvmrc` resolve `24` to the newest 24.x, and the
+README says 24.15 or later.

@@ -9,7 +9,7 @@ Hosted on Vercel.
 
 ## Run it
 
-Node 24 is required (`engine-strict` is on, so npm refuses other versions).
+Node 24.15 or later in the 24 line is required (`engine-strict` is on, so npm refuses other versions, and the test dependencies need 24.15).
 
 ```sh
 nvm use 24

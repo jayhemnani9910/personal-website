@@ -137,3 +137,8 @@ and /resume, so the token-class pages do have visual coverage. The suite is now
 The legacy port this record unblocked is done (see the header of
 `legacy-css.spec.ts`), and a runner or environment change fails every
 screenshot, not 18.
+
+**Correction, 2026-10-10.** The tab sweep and the `v-*`/`k-*` classes are gone.
+The same guarantee is now asserted on data attributes: `legacy-css.spec.ts`
+checks that `[data-tool-kind]` (read and write) and `[data-verdict]` (all three
+verdicts) render, which survives any renaming of classes.
