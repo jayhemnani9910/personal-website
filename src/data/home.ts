@@ -177,6 +177,7 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "Effect-TS/effect", number: "#8987", href: "https://github.com/Effect-TS/effect/pull/8987" },
   { repo: "AlexsJones/llmfit", number: "#1125", href: "https://github.com/AlexsJones/llmfit/pull/1125" },
   { repo: "lightpanda-io/browser", number: "#3896", href: "https://github.com/lightpanda-io/browser/pull/3896" },
+  { repo: "pocket-id/pocket-id", number: "#1830", href: "https://github.com/pocket-id/pocket-id/pull/1830" },
 ];
 
 /**
