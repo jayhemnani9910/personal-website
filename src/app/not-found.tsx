@@ -6,7 +6,6 @@ import { BTN, BTN_PRIMARY, H1, HAND, HIGHLIGHT, KICKER, LEDE, SHELL, WRAP } from
 
 export const metadata: Metadata = {
   title: "Page not found",
-  robots: { index: false },
 };
 
 export default function NotFound() {

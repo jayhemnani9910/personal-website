@@ -116,7 +116,7 @@ export const RECEIPTS: Receipt[] = [
     phase: 'PHASE 02 · DECOMPOSE',
     title: 'Turning a vague spec into a working multi-agent system.',
     project: 'CAG DEEP RESEARCH',
-    desc: "Built a 5-agent LangGraph research system in 10 days from a rough problem statement. Hexagonal architecture, verification loops, local + cloud LLM fallback. This is the decomposition this simulation just did, but on a real ambiguous brief.",
+    desc: "Built a multi-agent LangGraph research system in 10 days from a rough problem statement. Hexagonal architecture, verification loops, local + cloud LLM fallback. This is the decomposition this simulation just did, but on a real ambiguous brief.",
     links: [{ label: 'github.com/jayhemnani9910', href: 'https://github.com/jayhemnani9910' }],
   },
   {
@@ -430,7 +430,7 @@ export const PROOFS: ProofItem[] = [
     cat: 'Agentic systems',
     project: 'CAG Deep Research',
     title: { pre: 'Vague spec -> working multi-agent in ', em: '10 days', post: '.' },
-    body: 'Five-agent LangGraph research system, built from a rough problem statement. Hexagonal architecture, verification loops, local + cloud LLM fallback.',
+    body: 'Multi-agent LangGraph research system, built from a rough problem statement. Hexagonal architecture, verification loops, local + cloud LLM fallback.',
     stack: ['LangGraph', '5 agents', 'hexagonal arch', 'verification'],
     links: [{ label: 'github.com/jayhemnani9910', href: 'https://github.com/jayhemnani9910' }],
   },
