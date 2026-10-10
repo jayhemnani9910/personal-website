@@ -49,7 +49,13 @@ export function Guestbook() {
   useEffect(() => {
     if (notes === null || userScrolled.current || !location.hash) return;
     const wall = document.getElementById("guestbook");
-    const target = document.getElementById(decodeURIComponent(location.hash.slice(1)));
+    let id = location.hash.slice(1);
+    try {
+      id = decodeURIComponent(id);
+    } catch {
+      // A malformed escape in a hand-typed link: look the raw hash up instead.
+    }
+    const target = document.getElementById(id);
     if (wall && target && wall.compareDocumentPosition(target) & Node.DOCUMENT_POSITION_FOLLOWING) {
       target.scrollIntoView({ block: "start" });
     }
@@ -59,7 +65,16 @@ export function Guestbook() {
     let live = true;
     fetch("/api/guestbook")
       .then((r) => (r.ok ? r.json() : Promise.reject(new Error(String(r.status)))))
-      .then((data: { notes: WallNote[] }) => live && setNotes(data.notes))
+      // A note posted while the wall was still loading is already up; keep it
+      // on top rather than letting the loaded list replace it.
+      .then((data: { notes: WallNote[] }) => {
+        if (!live) return;
+        setNotes((prev) => {
+          if (!prev?.length) return data.notes;
+          const mine = (n: WallNote) => prev.some((p) => p.at === n.at && p.msg === n.msg && p.name === n.name);
+          return [...prev, ...data.notes.filter((n) => !mine(n))];
+        });
+      })
       .catch(() => {
         if (!live) return;
         setNotes([]);

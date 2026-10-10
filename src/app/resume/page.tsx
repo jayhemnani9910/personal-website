@@ -33,7 +33,7 @@ const PR_LIST_LINKS = "[&_a]:inline-flex [&_a]:min-h-6 [&_a]:items-center [&_a]:
 const PDF_PILL = `${PILL} desk-press shadow-[2px_2px_0_var(--tr-text)] [--desk-press:2px]`;
 
 // A company's first role row carries its anchor (e.g. /resume#amnex), which
-// the home page's receipts link to.
+// the shell's receipts link to.
 const roles = RESUME.experience.flatMap((company) =>
   company.roles.map((role, i) => ({ company, role, anchor: i === 0 ? companyAnchor(company.name) : undefined }))
 );

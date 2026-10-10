@@ -22,9 +22,10 @@ const BLOCKED = /\b(fuck\w*|shit\w*|cunt\w*|bitch\w*|nigg\w*|fag\w*|retard\w*|wh
 /** Tags out, control characters out, whitespace collapsed. */
 export function clean(text: string): string {
   return text
+    // Only tag-shaped runs ("<b>", "</i>"), so "love it <3 -> more" survives.
     // `[^<>]`, not `[^>]`: on a run of "<" with no ">" the wider class rescans
     // to the end from every "<", which is quadratic in the input.
-    .replace(/<[^<>]*>/g, "")
+    .replace(/<\/?[a-z][^<>]*>/gi, "")
     .replace(/[\u0000-\u001f\u007f]/g, " ")
     .replace(/\s+/g, " ")
     .trim();

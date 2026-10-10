@@ -63,6 +63,7 @@ function closestPreset(brief: string): Preset {
 
 const PARSE_ERROR = "The agent had trouble parsing. Try a more specific brief, or pick a preset.";
 const NO_RUNTIME_ERROR = "The live agent needs a runtime (this only works on the hosted preview). Try one of the preset scenarios above: they're fully prepared.";
+const OVER_BUDGET_ERROR = "The live agent has used today's runs; it has a daily budget. Try again tomorrow, or see the closest prepared example.";
 const UPSTREAM_ERROR = "The model provider is busy or did not answer in time. Your brief is fine: try again in a minute, or see the closest prepared example.";
 const BAD_INPUT_ERROR = `A brief has to be between 1 and ${MAX_BRIEF.toLocaleString('en-US')} characters. Trim it and run it again.`;
 const NETWORK_ERROR = "Lost the connection to the agent before the run finished. Check your connection and try again, or see the closest prepared example.";
@@ -71,6 +72,7 @@ const NETWORK_ERROR = "Lost the connection to the agent before the run finished.
 function errorMessage(code: unknown): string {
   switch (code) {
     case 'no-runtime': return NO_RUNTIME_ERROR;
+    case 'over-budget': return OVER_BUDGET_ERROR;
     case 'upstream': return UPSTREAM_ERROR;
     case 'bad-input': return BAD_INPUT_ERROR;
     default: return PARSE_ERROR;

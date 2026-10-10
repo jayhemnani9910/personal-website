@@ -355,23 +355,23 @@ export async function POST(request: NextRequest) {
         return NextResponse.json(cached, { headers: { "x-sim-cache": "hit" } });
     }
 
-    // No model configured, or today's model budget spent: either way the
-    // visitor gets "no-runtime", which the console answers with the closest
-    // prepared example. The two are recorded separately.
-    const noRuntime = () =>
+    // No model configured ("no-runtime"), or today's run budget spent
+    // ("over-budget"): either way the console offers the closest prepared
+    // example, with copy that says which. The two are recorded separately.
+    const unavailable = (error: "no-runtime" | "over-budget") =>
         wantsStream
-            ? sseResponse((send) => send({ type: "error", error: "no-runtime" }))
-            : NextResponse.json({ error: "no-runtime" }, { status: 503 });
+            ? sseResponse((send) => send({ type: "error", error }))
+            : NextResponse.json({ error }, { status: 503 });
     const apiKey = process.env.GEMINI_API_KEY;
     if (!apiKey) {
         console.error("[fde-sim] GEMINI_API_KEY is not set; live simulation is disabled");
         await defer(() => recordSim(getRedis(), { outcome: "no_runtime" }));
-        return noRuntime();
+        return unavailable("no-runtime");
     }
     if ((await dailyBudget(getRedis(), "fde-sim", DAILY_RUNS)) === "exhausted") {
         console.error("[fde-sim] daily run budget spent; serving presets");
         await defer(() => recordSim(getRedis(), { outcome: "over_budget" }));
-        return noRuntime();
+        return unavailable("over-budget");
     }
 
     const geminiUrl =

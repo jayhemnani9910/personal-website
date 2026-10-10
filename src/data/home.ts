@@ -32,9 +32,7 @@ export type ReceiptLine = { text: string; meta: string; href: string };
 export type Receipt = {
   n: string;
   label: string;
-  cta: string;
   title: string;
-  note: string;
   lines: ReceiptLine[];
 };
 
@@ -104,8 +102,8 @@ export const FEATURED: FeaturedProject[] = [
 /**
  * The merged upstream pull requests, by repo and number.
  *
- * One list, two readers: the home page's proof ledger and the about page's
- * open-source block. It lives here rather than in resume.ts because resume.ts
+ * One list, two readers: the about page's open-source block and the shell's
+ * `receipts`. It lives here rather than in resume.ts because resume.ts
  * has no field for it, and duplicating these URLs across two pages is how a
  * verified claim drifts into an unverified one. Sourced from
  * the job-search MASTER_PROFILE.md section 7, which is the canonical list.
@@ -199,9 +197,7 @@ export function buildReceipts(c: { projectCount: number; toolCount: number }): R
     {
       n: String(c.projectCount),
       label: "projects in the archive, each with a write-up",
-      cta: "open index",
       title: "The archive",
-      note: "Computer vision, agentic AI, data platforms, on-device ML, a Go voice tool. Sorted by priority, then id.",
       lines: [
         { text: "Work index, filterable by domain and stack", meta: "/projects", href: "/projects" },
         {
@@ -214,9 +210,7 @@ export function buildReceipts(c: { projectCount: number; toolCount: number }): R
     {
       n: String(MERGED_PRS.length),
       label: "pull requests merged into ecosystem repositories",
-      cta: "show PRs",
       title: "Merged upstream",
-      note: "Small changes in large repos. Listed by repo and number so you can read the diff yourself.",
       lines: [
         ...MERGED_PRS.flatMap((pr) => [
           { text: pr.repo, meta: pr.number, href: pr.href },
@@ -228,9 +222,7 @@ export function buildReceipts(c: { projectCount: number; toolCount: number }): R
     {
       n: String(RESUME.publications.length),
       label: `peer-reviewed IEEE papers, ${RESUME.publications[0]?.year}`,
-      cta: "show papers",
       title: `IEEE AIMV ${RESUME.publications[0]?.year}`,
-      note: "The diabetes paper includes the honest gap between the published number and the reproducible notebook.",
       lines: RESUME.publications.flatMap((pub) =>
         pub.link ? [{ text: pub.title, meta: `ieeexplore ${pub.link.split("/").pop()}`, href: pub.link }] : [],
       ),
@@ -238,9 +230,7 @@ export function buildReceipts(c: { projectCount: number; toolCount: number }): R
     {
       n: "22",
       label: "frames per second, soccer detection and tracking",
-      cta: "show pipeline",
       title: "FIFA Soccer DS",
-      note: "YOLOv8 detection, ByteTrack persistence, GraphSAGE scaffold. One DVC stage (analyze_frames) you can re-run.",
       lines: [
         { text: "Project write-up and demo", meta: "/projects/fifa-soccer-ds", href: "/projects/fifa-soccer-ds" },
         {
@@ -253,17 +243,13 @@ export function buildReceipts(c: { projectCount: number; toolCount: number }): R
     {
       n: FRAUD_PRECISION,
       label: "precision, credit-fraud ensemble on live transaction data",
-      cta: "show role",
       title: "Amnex, 2022",
-      note: "Random Forest + XGBoost with SMOTE for imbalance. Internship, but it ran on real transactions.",
       lines: [{ text: "AI/ML Intern · Amnex · Gujarat", meta: "Jan-May 2022", href: `/resume#${companyAnchor("Amnex")}` }],
     },
     {
       n: String(c.toolCount),
       label: "MCP tools an agent can call on this page right now",
-      cta: "list tools",
       title: "document.modelContext",
-      note: "Registered in webmcp.ts and asserted by a test, so the count can't drift from the code.",
       lines: toolLines(),
     },
   ];

@@ -153,7 +153,10 @@ describe("TodayPick", () => {
     const live = document.querySelector('#today [aria-live="polite"]');
     expect(live?.textContent).toBe("");
     fireEvent.click(screen.getByRole("button", { name: /one more/ }));
-    expect(DAILY_FACTS).toContain(live?.textContent);
+    // The fact it announces is the one now on the card, not the one before.
+    const shown = document.querySelector("#today p.font-hand")?.textContent;
+    expect(DAILY_FACTS).toContain(shown);
+    expect(live?.textContent).toBe(shown);
   });
 });
 

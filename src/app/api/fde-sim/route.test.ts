@@ -179,13 +179,13 @@ describe("fde-sim streaming route", () => {
     ]);
   });
 
-  it("serves presets once the day's model budget is spent", async () => {
+  it("says the day's run budget is spent, apart from a missing runtime", async () => {
     const day = new Date().toISOString().slice(0, 10);
     counters.set(`budget:fde-sim:${day}`, 200);
     const fetchMock = vi.fn();
     vi.stubGlobal("fetch", fetchMock);
     const { events } = await run();
     expect(fetchMock).not.toHaveBeenCalled();
-    expect(events).toEqual([{ type: "error", data: { error: "no-runtime" } }]);
+    expect(events).toEqual([{ type: "error", data: { error: "over-budget" } }]);
   });
 });
