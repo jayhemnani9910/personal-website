@@ -4,7 +4,7 @@ import type { NextConfig } from "next";
 // this is safe to ship. Reports land in the function logs via /api/csp-report.
 // Promote to the enforcing "Content-Security-Policy" header once they are clean,
 // which will mean replacing 'unsafe-inline' with per-request nonces for the
-// inline theme-flash and JSON-LD scripts (needs middleware).
+// inline JSON-LD script (needs middleware).
 const cspReportOnly = [
   "default-src 'self'",
   "base-uri 'self'",

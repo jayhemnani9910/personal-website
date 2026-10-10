@@ -1,14 +1,8 @@
 @import "tailwindcss";
 
 /* Tailwind v4 auto-detects source files across the project and text-matches raw
-   file content for class candidates. `redesign/` is local-only scaffolding
-   (notes, evidence, the concept mockup) that documents class names in prose, so
-   Tailwind was compiling those prose strings into real utilities and choking on
-   them. It contains no app code, so exclude it. */
-@source not "../../redesign";
-
-/* Same reason as above: docs/ holds prose ABOUT the class names (plans, specs,
-   audits), including the malformed `text-[length:var(--tr-t-*)]` written as an
+   file content for class candidates. docs/ holds prose ABOUT the class names
+   (plans, specs, audits), including the malformed `text-[length:var(--tr-t-*)]` written as an
    example. Tailwind was compiling that literal into a real rule, which is where
    the build's "Unexpected token Delim('*')" CSS warnings came from. Prose about
    utilities is not a usage of them. */
@@ -206,31 +200,17 @@ html.lenis {
   /* Hard offset shadows, no blur: the Desk signature. A pressed control
      sinks onto its shadow (.desk-press). */
   --tr-shadow-card: 6px 6px 0 var(--tr-text);
-  --tr-shadow-modal: 8px 8px 0 var(--tr-text);
   --tr-shadow-btn: 3px 3px 0 var(--tr-text);
 
   /* ---- type scale (fluid) ---- */
-  --tr-t-display: clamp(2.75rem, 8vw, 7rem);
   /* Interior pages set their h1 smaller than the home page does: the home
      page opens on a statement, the index pages open on a label. */
   --tr-t-display-sm: clamp(2rem, 4.5vw, 3.5rem);
   --tr-t-h2: clamp(1.625rem, 3vw, 2.5rem);
-  --tr-t-h3: clamp(1.15rem, 1.5vw, 1.4rem);
-  --tr-t-card-h: clamp(1.1rem, 1.4vw, 1.3rem);
-  --tr-t-deck: clamp(1.05rem, 1.3vw, 1.25rem);
-  --tr-t-stat: clamp(2.25rem, 4vw, 3.25rem);
-  --tr-t-mail: clamp(1.5rem, 5vw, 4.5rem);
-  --tr-t-body: 15px;
-  --tr-t-small: 13.5px;
-  --tr-t-mono-lg: 13px;
-  --tr-t-mono: 12px;
-  --tr-t-mono-xs: 11.5px;
-  --tr-t-mono-sm: 11px;
 
   /* ---- line height (paired with the sizes above) ----
      tokens.test.ts fails the build on a raw `leading-[1.55]`-style value so
      leading cannot drift back into inline literals. */
-  --tr-lh-numeral: .85;   /* single-glyph stats */
   --tr-lh-display: .92;   /* display type */
   --tr-lh-h2: 1.15;       /* section headings, rule titles */
   --tr-lh-h3: 1.05;       /* card titles */
@@ -238,19 +218,8 @@ html.lenis {
   --tr-lh-prose: 1.55;    /* long-form reading: blog post bodies at 17px */
   --tr-lh-tight: 1.2;
   --tr-lh-card: 1.35;     /* small labels under figures */
-  --tr-lh-mail: 1.05;
   --tr-lh-shell: 1.75;    /* the terminal shell body */
   --tr-lh-hand: 1.1;      /* Caveat */
-
-  /* ---- spacing: 4px-based ramp ---- */
-  --tr-s-2: 0.5rem;    /* 8px */
-  --tr-s-3: 0.75rem;   /* 12px */
-  --tr-s-4: 1rem;      /* 16px */
-  --tr-s-5: 1.5rem;    /* 24px */
-  --tr-s-6: 2rem;      /* 32px */
-  --tr-s-8: 3rem;      /* 48px */
-  --tr-s-10: 4rem;     /* 64px */
-  --tr-s-12: 6rem;     /* 96px */
 
   /* ---- radius ---- */
   --tr-r-sm: 6px;      /* tags, chips */
@@ -305,8 +274,8 @@ html.lenis {
 
 
 /* Expose color tokens to Tailwind utilities (bg-tr-bg, text-tr-accent, …).
-   "inline" so utilities stay theme-reactive instead of freezing at the
-   :root (dark) default — see Tailwind v4 @theme docs. */
+   "inline" so a utility emits var(--tr-*) and reads it at use time, rather
+   than a value copied in at build — see Tailwind v4 @theme docs. */
 @theme inline {
   --color-tr-bg: var(--tr-bg);
   --color-tr-surface-1: var(--tr-surface-1);

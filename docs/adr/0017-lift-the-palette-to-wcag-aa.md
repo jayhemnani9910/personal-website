@@ -3,6 +3,7 @@
 - **Status:** Accepted
 - **Date:** 2026-09-29
 - **Supersedes:** [ADR 0015](0015-match-the-design-palette-and-drop-below-aa.md) (the design palette stays, but no text pair may fall below AA any more)
+- **Amended by:** [ADR 0018](0018-adopt-the-desk-design-site-wide.md) (one paper theme with Desk values; the AA rule and its test stay)
 
 ## Context
 

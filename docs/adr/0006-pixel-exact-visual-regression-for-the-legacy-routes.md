@@ -3,6 +3,7 @@
 - **Status:** Accepted
 - **Date:** 2026-08-19
 - **Related:** ADR 0002 (this satisfies its retirement condition)
+- **Amended by:** [ADR 0018](0018-adopt-the-desk-design-site-wide.md) (one paper theme, so one Playwright project, `paper`, and one set of baselines)
 
 ## Context
 

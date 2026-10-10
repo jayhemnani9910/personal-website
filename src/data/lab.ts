@@ -10,7 +10,7 @@ export interface LabItem {
 export const LAB_ITEMS: Record<"building" | "exploring" | "radar", LabItem[]> = {
   building: [
     {
-      id: "website-v4",
+      id: "website-desk",
       title: "Portfolio, Desk edition",
       description:
         "This website: paper, ink and tomato, throwable tiles on the home page, a sticky-note guestbook, AI-queryable via WebMCP",
