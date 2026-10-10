@@ -19,7 +19,7 @@ solution:
   - "A separate Python FastAPI AI service: a concierge chat agent, a deals-scoring background worker, plus bundles, price-analysis, watches, and quotes APIs, with a semantic cache for LLM responses and rule-based intent parsing that uses OpenAI only when available."
 impact:
   - "Clean separation of concerns across three tiers, so transactional booking (MySQL), analytics (MongoDB), and caching (Redis) each use the right store instead of forcing one database to do everything."
-  - "A semantic cache that returns a stored answer when a new query is similar enough (cosine > 0.85), cutting repeat LLM calls instead of re-asking the model every time."
+  - "A semantic cache that returns a stored answer when a new query is similar enough, cutting repeat LLM calls instead of re-asking the model every time."
   - "Designed for parallel team development: an interface-based Kafka client lets the system run on an in-memory queue locally and switch to a real broker by config alone."
 deepDive:
   context: "This was a team final project: a distributed system modeling Kayak's travel metasearch and booking, with flights, hotels, and car rentals, user bookings and payments, admin and analytics, and an agentic AI recommendation layer. It is organized as a textbook 3-tier system, client, middleware, data, with an additional Python AI service. My work centered on the back-end services and the AI layer (the semantic cache, intent parsing, and Kafka integration)."
@@ -52,7 +52,7 @@ deepDive:
     - name: "AI service (FastAPI)"
       purpose: "Concierge chat, a deals-scoring worker, and bundles/price/watches/quotes APIs over REST and WebSockets, isolated from the booking path."
     - name: "Semantic cache + intent parser"
-      purpose: "Caches LLM responses by embedding similarity (cosine > 0.85) in Redis, and parses queries with rules plus optional OpenAI, so the model is called less often."
+      purpose: "Caches LLM responses by embedding similarity in Redis, and parses queries with rules plus optional OpenAI, so the model is called less often."
     - name: "Kafka client (interface-based)"
       purpose: "A shared interface with both an in-memory implementation (for independent dev) and a real-broker implementation, swappable by config."
   keyDecisions:
@@ -60,7 +60,7 @@ deepDive:
       reasoning: "Bookings need transactions and joins (MySQL), analytics and logs are append-heavy and schema-flexible (MongoDB), and repeated searches just need to be fast (Redis). Using one database for all three would compromise at least one of those jobs, so each store is matched to its workload."
       alternatives: "A single database for everything (transactions and analytics and caching all fighting in one engine)."
     - decision: "Put a semantic cache in front of the LLM"
-      reasoning: "Travel queries repeat with small variations. Embedding each query and returning a cached answer when similarity clears a threshold (0.85) avoids paying for an LLM call on every near-duplicate, which matters for both latency and cost."
+      reasoning: "Travel queries repeat with small variations. Embedding each query and returning a cached answer when similarity clears a threshold avoids paying for an LLM call on every near-duplicate, which matters for both latency and cost."
       alternatives: "Exact-match caching (misses paraphrases); no cache (an LLM call for every query, however similar)."
     - decision: "Hide Kafka behind an interface with an in-memory implementation"
       reasoning: "On a team, not everyone can stand up a broker on day one. A KafkaInterface with an in-memory queue lets each person develop and test against simulated topics, then switch to the real broker by changing config, with no code changes."

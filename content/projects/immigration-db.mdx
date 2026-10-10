@@ -21,8 +21,6 @@ deepDive:
     - Time-sensitive deadlines and status transitions
     - Historical audit trails for compliance
 
-    The system needed to support immigration consultants managing hundreds of concurrent cases while maintaining data integrity and enabling fast queries for common operations like "show all cases with documents expiring in 30 days" or "find all dependents for applicant X."
-
   architecture: |
     **Database Design Approach:**
 
@@ -46,7 +44,7 @@ deepDive:
 
     **Normalization Decisions:**
     - Separated person data from case data to avoid duplication (one person can be in multiple cases)
-    - Created junction table for many-to-many relationships with additional attributes (role, primary_applicant flag)
+    - Created junction table for many-to-many relationships with additional attributes (role, is_primary flag)
     - Extracted case types and document types into lookup tables for referential integrity
 
   components: |
@@ -67,7 +65,7 @@ deepDive:
 
     **4. Data Integrity Mechanisms**
     - Foreign key constraints to maintain referential integrity
-    - `ON UPDATE CURRENT_TIMESTAMP` defaults for automatic timestamp updates (created_at, updated_at)
+    - `DEFAULT CURRENT_TIMESTAMP` on `created_at` and `ON UPDATE CURRENT_TIMESTAMP` on `updated_at` for automatic timestamps
     - Cascading deletes configured appropriately (CASCADE vs RESTRICT based on business rules)
 
   dataFlow: |
@@ -102,28 +100,28 @@ deepDive:
 
   keyDecisions:
     - decision: "Keep person data normalized, denormalize case counts in persons table"
-      rationale: "Person data changes infrequently but is queried often. Storing `active_case_count` avoids expensive COUNT queries while accepting occasional inconsistency risk."
-      tradeoff: "every case change has to keep `active_case_count` in step; a missed update shows a wrong count until it is recomputed."
+      rationale: "Person data changes infrequently but is queried often. Storing active_case_count avoids expensive COUNT queries while accepting occasional inconsistency risk."
+      tradeoff: "Every case change has to keep active_case_count in step; a missed update shows a wrong count until it is recomputed."
 
-    - decision: "Use `case_persons` junction table with `role` enum (applicant, dependent, sponsor, attorney)"
+    - decision: "Use case_persons junction table with role enum (applicant, dependent, sponsor, attorney)"
       rationale: "Allows flexibility for one person to have multiple roles in same case (e.g., sponsor and attorney) while maintaining clean schema."
-      tradeoff: "the role list is an ENUM, so a new role is a schema change (ALTER TABLE), not a row."
+      tradeoff: "The role list is an ENUM, so a new role is a schema change (ALTER TABLE), not a row."
 
-    - decision: "Store both `issue_date` and `expiration_date` rather than calculating on-the-fly"
+    - decision: "Store both issue_date and expiration_date rather than calculating on-the-fly"
       rationale: "Different document types have different validity periods, and some may be extended. Pre-calculating enables efficient index-based queries for deadline monitoring."
-      tradeoff: "an extension is an update to the stored date, and nothing in the schema stops a stored date from disagreeing with its document type's validity period."
+      tradeoff: "An extension is an update to the stored date, and nothing in the schema stops a stored date from disagreeing with its document type's validity period."
 
-    - decision: "Separate `case_status_history` table instead of JSON field in cases table"
+    - decision: "Separate case_status_history table instead of JSON field in cases table"
       rationale: "Enables SQL queries on historical data, maintains normalization, and allows efficient range queries (e.g., \"all cases that were pending in Q2 2023\")."
-      tradeoff: "every status change is two writes inside one transaction, and a case's history is a join away."
+      tradeoff: "Every status change is two writes inside one transaction, and a case's history is a join away."
 
     - decision: "MySQL with the InnoDB engine"
       rationale: "ACID compliance critical for immigration data integrity. Row-level locking supports concurrent case updates. Native support for foreign keys and transactions."
-      tradeoff: "the schema leans on MySQL specifics (ENUM columns, ON UPDATE CURRENT_TIMESTAMP), so moving to another database is a rewrite of those parts."
+      tradeoff: "The schema leans on MySQL specifics (ENUM columns, ON UPDATE CURRENT_TIMESTAMP), so moving to another database is a rewrite of those parts."
 
     - decision: "UTF-8 encoding for all text fields"
       rationale: "Immigration data includes names and addresses from diverse languages. UTF-8 ensures proper storage and sorting of international characters."
-      tradeoff: "utf8mb4 takes up to four bytes a character, so long indexed VARCHAR columns reach InnoDB's index-length limit sooner."
+      tradeoff: "In utf8mb4 a character takes up to four bytes, so long indexed VARCHAR columns reach InnoDB's index-length limit sooner."
 
   codeSnippets:
     - title: "Core Schema Definition"

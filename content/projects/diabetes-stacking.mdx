@@ -58,7 +58,7 @@ deepDive:
       reasoning: "A stack is only as good as its members. Running RandomizedSearchCV on five of the base classifiers first means the ensemble combines reasonable models rather than carrying weak defaults, and randomized search keeps tuning cheap across five models. Naive Bayes has little to tune and keeps a fixed var_smoothing."
       alternatives: "Stack untuned defaults (weaker base learners); exhaustive GridSearchCV (far more expensive across five models for little gain here)."
     - decision: "Evaluate on a fixed held-out split and report it honestly"
-      reasoning: "With 768 rows the result is sensitive to the split, so fixing the random_state keeps it reproducible. The stack's 73.59% test accuracy (76.91% train) is reported as it is, even though it ties the SVM and sits below four of the base models."
+      reasoning: "With 768 rows the result is sensitive to the split, so fixing the random_state keeps it reproducible. The stack's test accuracy is reported as it is."
       alternatives: "Report only the best-looking number (misleading on small data); skip a held-out set (no honest generalization estimate)."
   codeSnippets:
     - title: "Six base models (five tuned) stacked under a meta-learner"
@@ -78,7 +78,7 @@ deepDive:
 
         model = StackingClassifier(estimators=level0, final_estimator=level1, cv=4)
         model.fit(X_train, y_train.ravel())
-      explanation: "The six base classifiers (five tuned, plus Naive Bayes) are the level-0 estimators; the StackingClassifier runs them with 4-fold cross-validation and feeds their predictions to a Random Forest level-1 meta-learner that makes the final call. (The committed notebook uses a Random Forest as the meta-learner.)"
+      explanation: "The six base classifiers (five tuned, plus Naive Bayes) are the level-0 estimators; the StackingClassifier runs them with 4-fold cross-validation and feeds their predictions to a Random Forest level-1 meta-learner that makes the final call."
     - title: "A fixed split, so the number is reproducible"
       language: "python"
       code: |
@@ -111,4 +111,4 @@ deepDive:
     - "Fixing the split and reporting the held-out number as-is is the honest way to present a result that a different random seed would move."
 priority: 23
 ---
-A stacking ensemble for early diabetes prediction on the PIMA Indians dataset (768 patients, 8 clinical features), co-authored and published at IEEE AIMV 2021. Six base classifiers (Gaussian Naive Bayes, Random Forest, Decision Tree, SVM, an ANN and Logistic Regression, all but Naive Bayes tuned with randomized search) are combined as the level-0 estimators of a scikit-learn StackingClassifier (cv=4) whose Random Forest meta-learner makes the final prediction. The paper reports 82.68% accuracy. The committed notebook, re-run with fixed seeds, gets 73.59% on a 30% held-out test set (76.91% on training), where the stack ties the SVM and scores below four of the base models. The whole pipeline, data through evaluation, lives in that one notebook.
+A stacking ensemble for early diabetes prediction on the PIMA Indians dataset (768 patients, 8 clinical features), co-authored and published at IEEE AIMV 2021. Six base classifiers (Gaussian Naive Bayes, Random Forest, Decision Tree, SVM, an ANN and Logistic Regression, all but Naive Bayes tuned with randomized search) are combined as the level-0 estimators of a scikit-learn StackingClassifier (cv=4) whose Random Forest meta-learner makes the final prediction. The whole pipeline, data through evaluation, lives in one notebook.

@@ -143,9 +143,9 @@ deepDive:
     - value: "Hexagonal"
       label: "ports + adapters"
       context: "swappable search and LLM providers"
-    - value: "6"
+    - value: "7"
       label: "providers"
-      context: "DuckDuckGo / Tavily / Exa · Ollama / Groq / GitHub Models"
+      context: "DuckDuckGo / Tavily / Exa · Ollama / OpenAI-compatible / Groq / GitHub Models"
   learnings:
     - "Falsification beats confirmation. Giving each causal edge a dedicated adversary surfaced contradictions that a single synthesizing model would have smoothed over. The adversary is the most valuable agent in the system."
     - "Parallelism is easy; merging parallel state is not. Running red and blue teams with asyncio.gather was trivial, but getting their concurrent writes into LangGraph state without clobbering took custom reducers and separate evidence buffers."

@@ -14,7 +14,7 @@ impact:
   - "Snappy prototype for FAQs & utilities."
 deepDive:
   context: |
-    Intent classification is the cornerstone of conversational AI systems. When a user sends a message to a chatbot, the system must understand what the user wants to accomplish, their intent, before it can respond appropriately. This project tackles the fundamental challenge of building a lightweight, accurate intent classification system without relying on heavy infrastructure or cloud-based NLP services.
+    When a user sends a message to a chatbot, the system must understand what the user wants to accomplish, their intent, before it can respond appropriately. This project tackles the fundamental challenge of building a lightweight, accurate intent classification system without relying on heavy infrastructure or cloud-based NLP services.
 
     Traditional rule-based chatbots use keyword matching, which breaks down quickly with natural language variation. Modern approaches use machine learning to recognize patterns in language, enabling the bot to understand semantically similar phrases. This project demonstrates how to build an intent-based conversational agent using classical NLP techniques and neural networks, trained on a custom JSON corpus that maps example phrases to specific intents.
 
@@ -81,7 +81,7 @@ deepDive:
 
   keyDecisions:
     - decision: "Classical NLP over Transformers"
-      rationale: "Chose bag-of-words + neural network instead of BERT/GPT models to minimize computational overhead. This approach provides sub-50ms inference on CPU, making it suitable for lightweight deployment scenarios where heavy transformer models would be overkill."
+      rationale: "Chose bag-of-words + neural network instead of BERT/GPT models to minimize computational overhead, which suits lightweight deployment scenarios where heavy transformer models would be overkill."
       tradeoff: "Sacrifices semantic understanding of complex queries for speed and simplicity. Works well for domain-specific intents with clear patterns but struggles with highly ambiguous or context-dependent inputs."
 
     - decision: "Stemming vs. Lemmatization"
@@ -90,7 +90,7 @@ deepDive:
 
     - decision: "Modular JSON corpus architecture"
       rationale: "Designed intent definitions as standalone JSON objects rather than hardcoding logic. This enables non-technical users to update bot behavior by editing JSON without touching code."
-      tradeoff: "Requires retraining when intents change, adding a deployment step. However, training is fast enough (<1 minute on small datasets) that this isn't a major bottleneck."
+      tradeoff: "Requires retraining when intents change, adding a deployment step."
 
     - decision: "Confidence threshold with fallback"
       rationale: "Implemented confidence scoring to detect when the model is uncertain. Low-confidence predictions trigger generic fallback responses rather than potentially incorrect answers."
@@ -271,7 +271,7 @@ deepDive:
 
   learnings:
     - lesson: "Intent classification quality depends heavily on training data diversity"
-      detail: "The model performs well only when training patterns cover the variety of ways users express the same intent. Initially struggled with sparse training data, adding 3-5 more pattern variations per intent improved accuracy by ~20%. Data augmentation through paraphrasing and synonym replacement helped expand coverage without manual labeling."
+      detail: "The model performs well only when training patterns cover the variety of ways users express the same intent. Data augmentation through paraphrasing and synonym replacement helped expand coverage without manual labeling."
 
     - lesson: "Preprocessing consistency is critical between training and inference"
       detail: "Early bug: training data was stemmed but inference input wasn't, causing poor predictions. Learned to abstract preprocessing into reusable functions and validate that exact same pipeline runs during both training and deployment. Saved preprocessing configuration alongside model weights."

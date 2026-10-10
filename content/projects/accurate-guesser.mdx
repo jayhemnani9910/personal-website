@@ -17,7 +17,7 @@ deepDive:
   components:
     - name: "GameEngine"
       purpose: "Core game logic managing the secret number, guess validation, and scoring"
-      details: "Handles random number generation within configurable bounds, validates player guesses, maintains attempt counters, and calculates scoring based on accuracy and number of tries. Implements the state transitions and win/loss conditions."
+      details: "Handles random number generation within configurable bounds, validates player guesses, maintains attempt counters, and calculates scoring based on accuracy and number of tries. Implements the state transitions and win condition."
 
     - name: "GameUI (JFrame)"
       purpose: "Main window container orchestrating all visual components"
@@ -51,8 +51,8 @@ deepDive:
       tradeoff: "Checks sit in more than one layer, so changing a rule means changing it in each."
 
     - decision: "Modal dialogs for game state changes"
-      rationale: "Used JOptionPane for win/loss notifications and replay confirmations to create clear breakpoints in game flow. Modal dialogs ensure users acknowledge outcomes before proceeding, preventing accidental game resets and making state transitions explicit."
-      tradeoff: "Each dialog blocks the window until dismissed: an extra click at every win, loss, or replay."
+      rationale: "Used JOptionPane for win notifications and replay confirmations to create clear breakpoints in game flow. Modal dialogs ensure users acknowledge outcomes before proceeding, preventing accidental game resets and making state transitions explicit."
+      tradeoff: "Each dialog blocks the window until dismissed: an extra click at every win or replay."
 
   codeSnippets:
     - language: "java"
@@ -170,6 +170,6 @@ deepDive:
     - insight: "User Experience in Desktop Applications"
       description: "Discovered that technical correctness doesn't equal good UX. Early versions worked but felt clunky: no visual feedback during input, unclear win conditions, and abrupt state changes. Adding color-coded hints, smooth transitions, confirmation dialogs, and immediate input validation transformed the experience. Small UI details have outsized impact on perceived quality."
 ---
-Accurate Guesser is a classic number guessing game built with Java Swing that demonstrates fundamental desktop application development principles. Players attempt to guess a randomly generated number, receiving intelligent feedback after each attempt. Beyond being a fun game, this project serves as a comprehensive exploration of event-driven architecture, state management, and GUI programming patterns in Java.
+Accurate Guesser is a classic number guessing game built with Java Swing that demonstrates fundamental desktop application development principles. Players attempt to guess a randomly generated number, receiving intelligent feedback after each attempt. Beyond being a fun game, it is practice in event-driven architecture, state management, and GUI programming in Java.
 
 The application showcases clean separation between game logic and presentation, implements thorough input validation, and provides clear user feedback through responsive UI. It shows how a simple concept can teach foundational programming patterns.
