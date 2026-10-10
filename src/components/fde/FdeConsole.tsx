@@ -370,7 +370,14 @@ export function FdeConsole() {
                 <button
                   className={PRESET_PILL}
                   type="button"
-                  onClick={() => startPreset(closestPreset(briefInput))}
+                  onClick={() => {
+                    startPreset(closestPreset(briefInput));
+                    // This button goes away with the error; focus the sim's
+                    // selected tab instead of letting it fall to <body>.
+                    requestAnimationFrame(() =>
+                      simRef.current?.querySelector<HTMLElement>('[role="tab"][aria-selected="true"]')?.focus(),
+                    );
+                  }}
                 >
                   show the closest prepared example
                 </button>

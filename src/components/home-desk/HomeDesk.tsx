@@ -198,7 +198,7 @@ export async function HomeDesk() {
           <Guestbook />
 
           <section id="hi" aria-labelledby="hi-h2" className="ink-panel mt-[60px] bg-tr-text text-tr-on-ink">
-            <div className="mx-auto max-w-[1200px] px-[clamp(16px,4vw,48px)] pb-10 pt-[clamp(60px,9vw,110px)]">
+            <div className="mx-auto max-w-[1200px] px-[clamp(16px,4vw,48px)] pt-[clamp(60px,9vw,110px)]">
               <h2 id="hi-h2" className="font-hand text-[28px] font-normal text-tr-butter">
                 got a vague brief?
               </h2>
@@ -223,20 +223,26 @@ export async function HomeDesk() {
                   </Link>
                 ))}
               </nav>
-              <footer className="mt-16 flex flex-wrap justify-between gap-3 font-mono text-[12px] text-tr-on-ink-faint">
-                <p>
-                  {SITE_CONFIG.copyright}
-                  <VisitCount />
-                  {" · "}
-                  <ReaderToggle className="cursor-pointer hover:text-tr-butter" />
-                  {" · "}
-                  <ShellButton className="cursor-pointer hover:text-tr-butter" />
-                </p>
-                <p aria-hidden="true">psst. ↑ ↑ ↓ ↓ ← → ← → b a</p>
-              </footer>
             </div>
           </section>
         </main>
+        {/* Outside <main>, so / has a contentinfo landmark like every other
+            page. The same ink as the contact band above, so it reads as one. */}
+        <footer className="ink-panel bg-tr-text text-tr-on-ink">
+          <div className="mx-auto max-w-[1200px] px-[clamp(16px,4vw,48px)] pb-10">
+            <div className="flex flex-wrap justify-between gap-3 pt-16 font-mono text-[12px] text-tr-on-ink-faint">
+              <p>
+                {SITE_CONFIG.copyright}
+                <VisitCount />
+                {" · "}
+                <ReaderToggle className="cursor-pointer hover:text-tr-butter" />
+                {" · "}
+                <ShellButton className="cursor-pointer hover:text-tr-butter" />
+              </p>
+              <p aria-hidden="true">psst. ↑ ↑ ↓ ↓ ← → ← → b a</p>
+            </div>
+          </div>
+        </footer>
       </SecretsProvider>
     </div>
   );

@@ -41,12 +41,17 @@ export function Guestbook() {
   // in, the section is brought back into view, unless they have scrolled since.
   const userScrolled = useRef(false);
   useEffect(() => {
-    const mark = () => {
+    // Only input that scrolls: a wheel, a swipe, a scrolling key, or a press
+    // on the page's own scrollbar (its target is <html>). A tap or a Tab is
+    // not reading on, so it does not cancel the return.
+    const SCROLL_KEYS = new Set(["ArrowDown", "ArrowUp", "PageDown", "PageUp", "Home", "End", " "]);
+    const mark = (e: Event) => {
+      if (e instanceof KeyboardEvent && !SCROLL_KEYS.has(e.key)) return;
+      if (e.type === "pointerdown" && e.target !== document.documentElement) return;
       userScrolled.current = true;
     };
-    // pointerdown covers a scrollbar drag, which fires no wheel or touch event.
     const events = ["wheel", "touchmove", "keydown", "pointerdown"] as const;
-    events.forEach((e) => window.addEventListener(e, mark, { once: true, passive: true }));
+    events.forEach((e) => window.addEventListener(e, mark, { passive: true }));
     return () => events.forEach((e) => window.removeEventListener(e, mark));
   }, []);
   useEffect(() => {
@@ -60,7 +65,14 @@ export function Guestbook() {
     }
     const target = document.getElementById(id);
     if (wall && target && wall.compareDocumentPosition(target) & Node.DOCUMENT_POSITION_FOLLOWING) {
-      target.scrollIntoView({ block: "start" });
+      // From layout offsets, not getBoundingClientRect: after a client
+      // navigation the page is still sliding in (a 12px transform), and a
+      // measurement taken mid-slide lands that far off.
+      let top = 0;
+      for (let n: HTMLElement | null = target; n; n = n.offsetParent as HTMLElement | null) top += n.offsetTop;
+      const pad = Number.parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) || 0;
+      const margin = Number.parseFloat(getComputedStyle(target).scrollMarginTop) || 0;
+      window.scrollTo({ top: top - pad - margin });
     }
   }, [loaded]);
 
@@ -118,7 +130,8 @@ export function Guestbook() {
       say("Stuck to the fridge. Thanks!");
     } catch (err) {
       setNotes((prev) => (prev ?? []).filter((n) => n !== draft));
-      setMsg(text);
+      // Give the note back, unless something new was typed meanwhile.
+      setMsg((cur) => cur || text);
       say(ERRORS[err instanceof Error ? err.message : ""] ?? FALLBACK_ERROR);
     } finally {
       setPending(false);
