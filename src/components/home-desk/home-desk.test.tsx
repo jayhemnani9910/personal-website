@@ -135,6 +135,22 @@ describe("HomeDesk", () => {
     expect(status()).toBe("Secret 2/5 · Cheat code accepted. Tile storm incoming.");
   });
 
+  it("under reader mode the toasts don't promise tiles that stay still", async () => {
+    document.documentElement.dataset.reader = "on";
+    try {
+      await renderHome();
+      fireEvent.keyDown(document.body, { key: "h" });
+      [..."ello"].forEach((key) => fireEvent.keyDown(document.body, { key }));
+      expect(status()).toBe("Secret 1/5 · Hello yourself.");
+      ["ArrowUp", "ArrowUp", "ArrowDown", "ArrowDown", "ArrowLeft", "ArrowRight", "ArrowLeft", "ArrowRight", "b", "a"].forEach((key) =>
+        fireEvent.keyDown(document.body, { key }),
+      );
+      expect(status()).toBe("Secret 2/5 · Cheat code accepted.");
+    } finally {
+      delete document.documentElement.dataset.reader;
+    }
+  });
+
   it("a found secret only repeats its message the second time", async () => {
     await renderHome();
     const cube = screen.getByRole("button", { name: "Scramble the cube face" });
