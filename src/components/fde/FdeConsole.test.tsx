@@ -418,6 +418,23 @@ describe("FdeConsole keeps keyboard focus", () => {
     expect(document.activeElement).toBe(run);
   });
 
+  // The page scrolls to the sim, leaving the preset button under the sticky
+  // header, and each phase has its own height, so continue would land offscreen.
+  it("moves focus into the sim when a preset starts, and onto each new phase's tab", async () => {
+    render(<FdeConsole />);
+    const preset = screen.getByRole("button", { name: /customer support deluge/i });
+    preset.focus();
+    fireEvent.click(preset);
+    await waitFor(() => expect(document.activeElement).toBe(screen.getAllByRole("tab")[0]));
+    const next = screen.getByRole("button", { name: /continue/i });
+    next.focus();
+    await act(async () => {
+      fireEvent.click(next);
+      await new Promise((r) => requestAnimationFrame(() => r(null)));
+    });
+    expect(document.activeElement).toBe(screen.getAllByRole("tab")[1]);
+  });
+
   it("hands focus to the tab when continue or previous runs out at either end", async () => {
     render(<FdeConsole />);
     fireEvent.click(screen.getByRole("button", { name: /customer support deluge/i }));

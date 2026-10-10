@@ -133,196 +133,203 @@ export function FdeArchDiagram({ architecture }: Props) {
   });
 
   return (
-    // Scrolls sideways on a phone, so it is a named, focusable region; the svg
-    // itself is aria-hidden.
-    <div tabIndex={0} role="region" aria-label="Architecture diagram" className="fde-arch-canvas scroll-hint relative overflow-x-auto rounded-[var(--tr-r-lg)] border-[1.5px] border-tr-hairline bg-tr-bg p-5">
-      <svg
-        viewBox={`0 0 ${maxX} ${maxY}`}
-        width="100%"
-        style={{ maxWidth: maxX, height: 'auto', minWidth: 640 }}
-        aria-hidden="true"
-      >
-        <defs>
-          {/* Arrowhead for solid edges */}
-          <marker id="fde-arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
-            <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--tr-text-faint)" />
-          </marker>
-          {/* Arrowhead for dashed (retrieval/feedback) edges */}
-          <marker id="fde-arr-d" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
-            <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--tr-accent)" />
-          </marker>
-        </defs>
+    <>
+      {/* Below md the drawing is wider than the column: say so, as the blog's
+          diagrams do, since the edge shade alone is easy to miss on paper. */}
+      <p aria-hidden="true" className="mb-1.5 font-mono text-[11px] text-tr-text-faint md:hidden">
+        ← the diagram scrolls sideways →
+      </p>
+      {/* Scrolls sideways on a phone, so it is a named, focusable region; the
+          svg itself is aria-hidden. */}
+      <div tabIndex={0} role="region" aria-label="Architecture diagram" className="fde-arch-canvas scroll-hint relative overflow-x-auto rounded-[var(--tr-r-lg)] border-[1.5px] border-tr-hairline bg-tr-bg p-5">
+        <svg
+          viewBox={`0 0 ${maxX} ${maxY}`}
+          width="100%"
+          style={{ maxWidth: maxX, height: 'auto', minWidth: 640 }}
+          aria-hidden="true"
+        >
+          <defs>
+            {/* Arrowhead for solid edges */}
+            <marker id="fde-arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--tr-text-faint)" />
+            </marker>
+            {/* Arrowhead for dashed (retrieval/feedback) edges */}
+            <marker id="fde-arr-d" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--tr-accent)" />
+            </marker>
+          </defs>
 
-        {/* Edges, under the boxes */}
-        {drawn.map(({ e, i, d }) => {
-          const isDashed = !!e.dashed;
-          return (
-            <path
-              key={i}
-              d={d}
-              fill="none"
-              stroke={isDashed ? 'var(--tr-accent)' : 'var(--tr-text-faint)'}
-              strokeWidth={1.5}
-              strokeDasharray={isDashed ? '5 4' : undefined}
-              markerEnd={isDashed ? 'url(#fde-arr-d)' : 'url(#fde-arr)'}
-              style={{ animation: `fde-dashIn 0.6s ease ${i * 0.06}s both` }}
-            />
-          );
-        })}
+          {/* Edges, under the boxes */}
+          {drawn.map(({ e, i, d }) => {
+            const isDashed = !!e.dashed;
+            return (
+              <path
+                key={i}
+                d={d}
+                fill="none"
+                stroke={isDashed ? 'var(--tr-accent)' : 'var(--tr-text-faint)'}
+                strokeWidth={1.5}
+                strokeDasharray={isDashed ? '5 4' : undefined}
+                markerEnd={isDashed ? 'url(#fde-arr-d)' : 'url(#fde-arr)'}
+                style={{ animation: `fde-dashIn 0.6s ease ${i * 0.06}s both` }}
+              />
+            );
+          })}
 
-        {/* Boxes */}
-        {comps.map((c, i) => {
-          const col = KIND_COLORS[c.kind] || KIND_COLORS.service;
-          return (
-            <g
-              key={c.id}
-              style={{ animation: `fde-popIn 0.4s ease ${i * 0.05}s both` }}
-            >
-              <title>{c.sub ? `${c.name}: ${c.sub}` : c.name}</title>
-              {/* Opaque base, so an edge routed behind the box stays behind it */}
-              <rect x={c.x} y={c.y} width={BOX_W} height={BOX_H} fill="var(--tr-surface-1)" rx="8" />
-              <rect
-                x={c.x}
-                y={c.y}
-                width={BOX_W}
-                height={BOX_H}
-                fill={col.fill}
-                stroke={col.stroke}
-                strokeWidth="1.5"
-                rx="8"
-              />
-              {/* Kind tab header bar */}
-              <rect
-                x={c.x}
-                y={c.y}
-                width={BOX_W}
-                height={16}
-                fill={col.stroke}
-                opacity="0.14"
-                rx="8"
-              />
-              <rect
-                x={c.x}
-                y={c.y + 8}
-                width={BOX_W}
-                height={8}
-                fill={col.stroke}
-                opacity="0.14"
-              />
-              <text
-                x={c.x + 9}
-                y={c.y + 11.5}
-                fontFamily="var(--ff-mono)"
-                fontSize="9"
-                fill={col.label}
-                letterSpacing="0.1em"
+          {/* Boxes */}
+          {comps.map((c, i) => {
+            const col = KIND_COLORS[c.kind] || KIND_COLORS.service;
+            return (
+              <g
+                key={c.id}
+                style={{ animation: `fde-popIn 0.4s ease ${i * 0.05}s both` }}
               >
-                {(c.kind || 'service').toUpperCase()}
-              </text>
-              {/* Component name */}
-              <text
-                x={c.x + BOX_W / 2}
-                y={c.y + 38}
-                fontFamily="var(--ff-body)"
-                fontSize="13"
-                fontWeight="700"
-                fill="var(--tr-text)"
-                textAnchor="middle"
-              >
-                {clip(c.name, NAME_MAX)}
-              </text>
-              {/* Sub-label */}
-              {c.sub && (
+                <title>{c.sub ? `${c.name}: ${c.sub}` : c.name}</title>
+                {/* Opaque base, so an edge routed behind the box stays behind it */}
+                <rect x={c.x} y={c.y} width={BOX_W} height={BOX_H} fill="var(--tr-surface-1)" rx="8" />
+                <rect
+                  x={c.x}
+                  y={c.y}
+                  width={BOX_W}
+                  height={BOX_H}
+                  fill={col.fill}
+                  stroke={col.stroke}
+                  strokeWidth="1.5"
+                  rx="8"
+                />
+                {/* Kind tab header bar */}
+                <rect
+                  x={c.x}
+                  y={c.y}
+                  width={BOX_W}
+                  height={16}
+                  fill={col.stroke}
+                  opacity="0.14"
+                  rx="8"
+                />
+                <rect
+                  x={c.x}
+                  y={c.y + 8}
+                  width={BOX_W}
+                  height={8}
+                  fill={col.stroke}
+                  opacity="0.14"
+                />
+                <text
+                  x={c.x + 9}
+                  y={c.y + 11.5}
+                  fontFamily="var(--ff-mono)"
+                  fontSize="9"
+                  fill={col.label}
+                  letterSpacing="0.1em"
+                >
+                  {(c.kind || 'service').toUpperCase()}
+                </text>
+                {/* Component name */}
                 <text
                   x={c.x + BOX_W / 2}
-                  y={c.y + 56}
+                  y={c.y + 38}
+                  fontFamily="var(--ff-body)"
+                  fontSize="13"
+                  fontWeight="700"
+                  fill="var(--tr-text)"
+                  textAnchor="middle"
+                >
+                  {clip(c.name, NAME_MAX)}
+                </text>
+                {/* Sub-label */}
+                {c.sub && (
+                  <text
+                    x={c.x + BOX_W / 2}
+                    y={c.y + 56}
+                    fontFamily="var(--ff-mono)"
+                    fontSize="10"
+                    fill="var(--tr-text-mute)"
+                    textAnchor="middle"
+                  >
+                    {clip(c.sub, SUB_MAX)}
+                  </text>
+                )}
+              </g>
+            );
+          })}
+
+          {/* Edge labels, over everything */}
+          {drawn.map(({ e, i, labelX, labelY }) =>
+            e.label ? (
+              <g key={i} style={{ animation: `fde-fadeIn 0.4s ease ${0.3 + i * 0.06}s both` }}>
+                <rect
+                  x={labelX - e.label.length * 3.4 - 6}
+                  y={labelY - 8}
+                  width={e.label.length * 6.8 + 12}
+                  height={16}
+                  fill="var(--tr-bg)"
+                  rx={4}
+                />
+                <text
+                  x={labelX}
+                  y={labelY + 3.5}
                   fontFamily="var(--ff-mono)"
                   fontSize="10"
                   fill="var(--tr-text-mute)"
                   textAnchor="middle"
                 >
-                  {clip(c.sub, SUB_MAX)}
+                  {e.label}
                 </text>
-              )}
-            </g>
-          );
-        })}
+              </g>
+            ) : null
+          )}
 
-        {/* Edge labels, over everything */}
-        {drawn.map(({ e, i, labelX, labelY }) =>
-          e.label ? (
-            <g key={i} style={{ animation: `fde-fadeIn 0.4s ease ${0.3 + i * 0.06}s both` }}>
-              <rect
-                x={labelX - e.label.length * 3.4 - 6}
-                y={labelY - 8}
-                width={e.label.length * 6.8 + 12}
-                height={16}
-                fill="var(--tr-bg)"
-                rx={4}
-              />
-              <text
-                x={labelX}
-                y={labelY + 3.5}
-                fontFamily="var(--ff-mono)"
-                fontSize="10"
-                fill="var(--tr-text-mute)"
-                textAnchor="middle"
-              >
-                {e.label}
-              </text>
-            </g>
-          ) : null
-        )}
+          <style>{`
+            @keyframes fde-popIn {
+              from { opacity: 0; transform: translateY(8px) scale(0.96); }
+              to   { opacity: 1; transform: translateY(0) scale(1); }
+            }
+            @keyframes fde-fadeIn {
+              from { opacity: 0; }
+              to   { opacity: 1; }
+            }
+            @keyframes fde-dashIn {
+              from { stroke-dashoffset: 200; opacity: 0; }
+              to   { stroke-dashoffset: 0; opacity: 1; }
+            }
+            @media (prefers-reduced-motion: reduce) {
+              .fde-arch-canvas g,
+              .fde-arch-canvas path { animation: none !important; }
+            }
+          `}</style>
+        </svg>
 
-        <style>{`
-          @keyframes fde-popIn {
-            from { opacity: 0; transform: translateY(8px) scale(0.96); }
-            to   { opacity: 1; transform: translateY(0) scale(1); }
-          }
-          @keyframes fde-fadeIn {
-            from { opacity: 0; }
-            to   { opacity: 1; }
-          }
-          @keyframes fde-dashIn {
-            from { stroke-dashoffset: 200; opacity: 0; }
-            to   { stroke-dashoffset: 0; opacity: 1; }
-          }
-          @media (prefers-reduced-motion: reduce) {
-            .fde-arch-canvas g,
-            .fde-arch-canvas path { animation: none !important; }
-          }
-        `}</style>
-      </svg>
-
-      {/* The drawing is hidden from screen readers; this is what it says. */}
-      <div className="sr-only">
-        <ul aria-label="Components">
-          {comps.map(c => (
-            <li key={c.id}>{c.name} ({c.kind}){c.sub ? `: ${c.sub}` : ''}</li>
-          ))}
-        </ul>
-        {drawn.length > 0 && (
-          <ul aria-label="Flows">
-            {drawn.map(({ e, i, from, to }) => (
-              <li key={i}>
-                {from.name} → {to.name}{e.label ? `: ${e.label}` : ''}{e.dashed ? ' (retrieve / feedback)' : ''}
-              </li>
+        {/* The drawing is hidden from screen readers; this is what it says. */}
+        <div className="sr-only">
+          <ul aria-label="Components">
+            {comps.map(c => (
+              <li key={c.id}>{c.name} ({c.kind}){c.sub ? `: ${c.sub}` : ''}</li>
             ))}
           </ul>
-        )}
-      </div>
+          {drawn.length > 0 && (
+            <ul aria-label="Flows">
+              {drawn.map(({ e, i, from, to }) => (
+                <li key={i}>
+                  {from.name} → {to.name}{e.label ? `: ${e.label}` : ''}{e.dashed ? ' (retrieve / feedback)' : ''}
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
 
-      {/* A key to the drawing only, so hidden along with it. */}
-      <div
-        className="mt-3.5 flex flex-wrap gap-3.5 font-mono text-[11px] text-tr-text-mute"
-        aria-hidden="true"
-      >
-        <span><span className="mr-1.5 inline-block size-2.5 rounded-[3px] border-[1.5px] align-middle" style={{ borderColor: 'var(--tr-accent)' }} />UI surface</span>
-        <span><span className="mr-1.5 inline-block size-2.5 rounded-[3px] border-[1.5px] align-middle" style={{ borderColor: 'var(--tr-text)' }} />Agent / model</span>
-        <span><span className="mr-1.5 inline-block size-2.5 rounded-[3px] border-[1.5px] align-middle" style={{ borderColor: 'var(--tr-text-mute)' }} />Service / data store</span>
-        <span><span className="mr-1.5 inline-block size-2.5 rounded-[3px] border-[1.5px] align-middle" style={{ borderColor: 'var(--tr-text-faint)' }} />External system</span>
-        <span className="ml-auto">-- dashed = retrieve / feedback</span>
+        {/* A key to the drawing only, so hidden along with it. */}
+        <div
+          className="mt-3.5 flex flex-wrap gap-3.5 font-mono text-[11px] text-tr-text-mute"
+          aria-hidden="true"
+        >
+          <span><span className="mr-1.5 inline-block size-2.5 rounded-[3px] border-[1.5px] align-middle" style={{ borderColor: 'var(--tr-accent)' }} />UI surface</span>
+          <span><span className="mr-1.5 inline-block size-2.5 rounded-[3px] border-[1.5px] align-middle" style={{ borderColor: 'var(--tr-text)' }} />Agent / model</span>
+          <span><span className="mr-1.5 inline-block size-2.5 rounded-[3px] border-[1.5px] align-middle" style={{ borderColor: 'var(--tr-text-mute)' }} />Service / data store</span>
+          <span><span className="mr-1.5 inline-block size-2.5 rounded-[3px] border-[1.5px] align-middle" style={{ borderColor: 'var(--tr-text-faint)' }} />External system</span>
+          <span className="ml-auto">-- dashed = retrieve / feedback</span>
+        </div>
       </div>
-    </div>
+    </>
   );
 }

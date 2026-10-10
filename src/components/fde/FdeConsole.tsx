@@ -89,6 +89,7 @@ export function FdeConsole() {
   const [error, setError] = useState<string | null>(null);
   const simRef = useRef<HTMLDivElement>(null);
   const briefRef = useRef<HTMLTextAreaElement>(null);
+  const errorRef = useRef<HTMLDivElement>(null);
   // Only the latest live run may write to the panel. Exit, a preset or a new
   // run aborts the fetch and bumps the id, and a stale run drops its events.
   const runRef = useRef(0);
@@ -103,8 +104,11 @@ export function FdeConsole() {
 
   useEffect(() => () => abortRef.current?.abort(), []);
 
+  // Focus follows the scroll: the control that opened the sim ends up under
+  // the sticky header or above the viewport, so the sim's selected tab takes it.
   const scrollToSim = () => {
     setTimeout(() => {
+      simRef.current?.querySelector<HTMLElement>('[role="tab"][aria-selected="true"]')?.focus({ preventScroll: true });
       simRef.current?.scrollIntoView({ behavior: scrollBehavior(), block: 'start' });
     }, 80);
   };
@@ -131,8 +135,14 @@ export function FdeConsole() {
     let started = false;
     // A run that stops after some sections leaves the rest of its tabs empty:
     // they must stop saying "still generating".
+    // By then the page has scrolled to the sim, past the error box, so bring
+    // the box back. 'start', not 'nearest': a run that fails on its first
+    // chunk lands here while the scroll to the sim is still under way, and a
+    // no-op scroll would not stop it.
     const stopStreaming = () => {
-      if (started) setSimState((prev) => ({ ...prev, streaming: false }));
+      if (!started) return;
+      setSimState((prev) => ({ ...prev, streaming: false }));
+      setTimeout(() => errorRef.current?.scrollIntoView({ behavior: scrollBehavior(), block: 'start' }), 80);
     };
 
     try {
@@ -361,6 +371,7 @@ export function FdeConsole() {
 
           {error && (
             <div
+              ref={errorRef}
               className="mt-4 rounded-r-[var(--tr-r-md)] border-l-[3px] border-tr-accent bg-tr-accent-soft px-4 py-3 font-mono text-[13px] leading-[var(--tr-lh-body)] text-tr-text"
               role="alert"
             >
@@ -370,14 +381,7 @@ export function FdeConsole() {
                 <button
                   className={PRESET_PILL}
                   type="button"
-                  onClick={() => {
-                    startPreset(closestPreset(briefInput));
-                    // This button goes away with the error; focus the sim's
-                    // selected tab instead of letting it fall to <body>.
-                    requestAnimationFrame(() =>
-                      simRef.current?.querySelector<HTMLElement>('[role="tab"][aria-selected="true"]')?.focus(),
-                    );
-                  }}
+                  onClick={() => startPreset(closestPreset(briefInput))}
                 >
                   show the closest prepared example
                 </button>
