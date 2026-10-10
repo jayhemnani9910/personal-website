@@ -10,12 +10,16 @@ const localNotes: Note[] = [];
 
 const storeUnavailable = () => NextResponse.json({ error: "store-unavailable" }, { status: 503 });
 
+// Every home page view reads the wall. Ten seconds at the CDN turns a crowd into
+// one store read; the poster already sees their own note, optimistically.
+const WALL_CACHE = { headers: { "cache-control": "public, s-maxage=10, stale-while-revalidate=30" } };
+
 export async function GET() {
     const redis = getRedis();
-    if (!redis) return NextResponse.json({ notes: visible(localNotes.slice(0, SHOWN)) });
+    if (!redis) return NextResponse.json({ notes: visible(localNotes.slice(0, SHOWN)) }, WALL_CACHE);
     try {
         const notes = await redis.lrange<Note>(GUESTBOOK_KEY, 0, SHOWN - 1);
-        return NextResponse.json({ notes: visible(notes) });
+        return NextResponse.json({ notes: visible(notes) }, WALL_CACHE);
     } catch {
         return storeUnavailable();
     }

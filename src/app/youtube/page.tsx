@@ -6,6 +6,7 @@ import { YouTubeShowcase } from "@/components/YouTubeShowcase";
 import { H1, HIGHLIGHT, KICKER, LEDE, SHELL, WRAP } from "@/components/desk";
 import { getYouTubeData } from "@/lib/youtube-data";
 import { formatDate, formatViews } from "@/lib/youtube";
+import { CHANNEL_COPY } from "@/lib/youtube-copy";
 
 export const metadata: Metadata = pageMetadata({
   title: "Channel",
@@ -24,7 +25,8 @@ export default function YouTubePage() {
     ...full,
     channels: full.channels.map((c) => ({
       ...c,
-      shorts: c.shorts.slice(0, SHOWN.shorts),
+      // Hidden shorts come out before the trim, so the row stays full.
+      shorts: c.shorts.filter((s) => !CHANNEL_COPY[c.id]?.hideShorts?.includes(s.id)).slice(0, SHOWN.shorts),
       videos: c.videos.slice(0, SHOWN.videos),
     })),
   };

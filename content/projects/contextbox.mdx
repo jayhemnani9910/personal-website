@@ -18,7 +18,7 @@ solution:
   - "Semantic search with sentence-transformers (all-MiniLM-L6-v2) and cosine similarity over captures stored in SQLite, with a keyword fallback when the model is not installed."
   - "Question-answering over captured content via GitHub Models, with question-type classification, source attribution, and confidence levels, plus a privacy mode that encrypts sensitive captures with Fernet."
 impact:
-  - "A 27-module Python package (Click + Rich CLI) covering capture, extraction, semantic search, and AI Q&A, installable via pip with optional feature groups ([llm], [ocr], [youtube])."
+  - "A Python package (Click + Rich CLI) covering capture, extraction, semantic search, and AI Q&A, installable via pip with optional feature groups ([llm], [ocr], [youtube])."
   - "Graceful degradation throughout: heavy dependencies (sentence-transformers, OCR, YouTube) are optional, and each subsystem disables itself cleanly when its dependency is absent."
   - "Ships with a React documentation site (install, commands, API reference, demo) deployed on GitHub Pages, and is MIT-licensed."
 deepDive:
@@ -134,4 +134,4 @@ deepDive:
     - "Question classification plus source attribution makes LLM answers auditable: you can see which captures an answer came from, which is what makes a personal-knowledge tool trustworthy."
 priority: 6
 ---
-ContextBox is a CLI-first personal knowledge assistant in Python. It captures screenshots (with Tesseract OCR) and web, Wikipedia, and YouTube content into a local SQLite store, embeds everything with sentence-transformers (all-MiniLM-L6-v2) for semantic search, and answers questions over your captures via GitHub Models with question classification, source attribution, and confidence levels. It is a 27-module package with a Click + Rich CLI, optional feature groups so heavy dependencies stay optional, a Fernet-based privacy mode, and a React documentation site on GitHub Pages.
+ContextBox is a CLI-first personal knowledge assistant in Python. It captures screenshots (with Tesseract OCR) and web, Wikipedia, and YouTube content into a local SQLite store, embeds everything with sentence-transformers (all-MiniLM-L6-v2) for semantic search, and answers questions over your captures via GitHub Models. It is a 27-module package with a Click + Rich CLI, optional feature groups so heavy dependencies stay optional, a Fernet-based privacy mode, and a React documentation site on GitHub Pages.

@@ -48,5 +48,12 @@
     "tailwindcss": "^4",
     "typescript": "^6.0.3",
     "vitest": "^5.0.3"
+  },
+  "overrides": {
+    "gray-matter": {
+      "js-yaml": {
+        "argparse": "^2.0.1"
+      }
+    }
   }
 }

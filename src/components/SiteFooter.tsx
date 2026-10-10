@@ -3,6 +3,7 @@ import type { Route } from "next";
 import { SITE_CONFIG } from "@/../content/site";
 import { SHELL, WRAP } from "@/components/desk";
 import { ReaderToggle } from "./ReaderToggle";
+import { ShellButton } from "./ShellButton";
 
 const LINKS: { label: string; href: Route }[] = [
   { label: "home", href: "/" },
@@ -29,6 +30,10 @@ export function SiteFooter() {
           <span className="flex flex-wrap items-center gap-x-4 gap-y-2">
             <ReaderToggle className="cursor-pointer hover:text-tr-butter" />
             <span aria-hidden="true">·</span>
+            <ShellButton className="cursor-pointer hover:text-tr-butter" />
+            {/* Hidden on a phone, where the nav wraps under it and the dot
+                would hang at the end of the line. */}
+            <span aria-hidden="true" className="hidden sm:inline">·</span>
             <nav aria-label="Footer" className="flex flex-wrap gap-x-4 gap-y-2">
               {LINKS.map((l) => (
                 <Link key={l.href} href={l.href} className="hover:text-tr-butter">

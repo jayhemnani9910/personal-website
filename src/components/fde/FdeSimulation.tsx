@@ -82,12 +82,19 @@ export function FdeSimulation({ payload, brief, source, onExit, streaming = fals
     return () => timers.forEach(t => clearTimeout(t));
   }, [phase, prefersReducedMotion, narration.length]);
 
-  const next = () => setPhase(p => Math.min(p + 1, PHASES.length - 1));
+  // Focus moves to the new phase's tab. Phases differ in height, so the nav
+  // button the reader pressed would otherwise land offscreen, mid-way into the
+  // next phase, or disabled with focus dropped to <body>.
+  const goTo = (target: number) => {
+    setPhase(target);
+    requestAnimationFrame(() => tabRefs.current[target]?.focus());
+  };
+  const next = () => goTo(Math.min(phase + 1, PHASES.length - 1));
   // The tab for an unfinished section is disabled, so the nav button that walks
   // onto it has to be too. Without this the two controls disagree and one of
   // them lands the reader on a spinner.
   const nextReady = phase < PHASES.length - 1 && sectionReady(payload, PHASES[phase + 1].key);
-  const prev = () => setPhase(p => Math.max(p - 1, 0));
+  const prev = () => goTo(Math.max(phase - 1, 0));
 
   // Tabs pattern: one tab stop, arrows/Home/End move between the tabs that
   // have something behind them. The current phase is always one of those.
@@ -135,7 +142,7 @@ export function FdeSimulation({ payload, brief, source, onExit, streaming = fals
       </div>
 
       {/* Phase tabs */}
-      <div className="grid grid-cols-3 gap-2 border-b-[1.5px] border-tr-hairline px-5 py-4 sm:grid-cols-6" role="tablist" aria-label="Simulation phases" onKeyDown={onTabKey}>
+      <div className="grid grid-cols-2 gap-2 border-b-[1.5px] border-tr-hairline px-5 py-4 min-[420px]:grid-cols-3 sm:grid-cols-6" role="tablist" aria-label="Simulation phases" onKeyDown={onTabKey}>
         {PHASES.map((p, i) => {
           const ready = sectionReady(payload, p.key);
           const state = i === phase ? 'active' : (i < phase ? 'done' : 'pending');
@@ -407,7 +414,7 @@ function PhaseContent({
                         href={l.href}
                         {...(l.href.startsWith("http") ? { target: "_blank", rel: "noreferrer" } : {})}
                       >
-                        ↗ {l.label}
+                        <span aria-hidden="true">{l.href.startsWith("http") ? "↗" : "→"}</span> {l.label}
                       </a>
                     ))}
                   </div>

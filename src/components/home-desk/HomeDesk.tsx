@@ -7,15 +7,17 @@ import { SecretsProvider } from "./SecretsProvider";
 import { DeskNav } from "./DeskNav";
 import { PhysicsPlayground } from "./PhysicsPlayground";
 import { TodayPick } from "./TodayPick";
+import { dayOfYear } from "./day";
 import { CubeCard } from "./CubeCard";
 import { Guestbook } from "./Guestbook";
 import { CopyEmail } from "./CopyEmail";
 import { Greeting, VisitCount } from "./Visits";
 import { ReaderToggle } from "@/components/ReaderToggle";
+import { ShellButton } from "@/components/ShellButton";
+import { CHIP, DOTS } from "@/components/desk";
 
 const SECTION = "mx-auto max-w-[1200px] px-[clamp(16px,4vw,48px)] py-[60px]";
 const H2 = "text-[length:clamp(32px,4.5vw,56px)] font-extrabold tracking-[-0.035em] leading-none";
-const DOTS = ["var(--tr-accent)", "var(--tr-butter)", "var(--tr-sky)", "var(--tr-mint)", "var(--tr-lilac)", "var(--tr-pink)"];
 
 const NUMBER_WORDS = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen"];
 const TENS = ["", "", "twenty", "thirty", "forty", "fifty", "sixty", "seventy", "eighty", "ninety"];
@@ -25,6 +27,17 @@ export function inWords(n: number): string {
   if (n < 20) return NUMBER_WORDS[n];
   if (n < 100) return TENS[Math.floor(n / 10)] + (n % 10 ? `-${NUMBER_WORDS[n % 10]}` : "");
   return String(n);
+}
+
+/** Cut at a word, near the length a four-line clamp on the pick card shows. */
+const PICK_TEXT = 170;
+function clip(text: string): string {
+  if (text.length <= PICK_TEXT) return text;
+  let cut = text.slice(0, text.lastIndexOf(" ", PICK_TEXT));
+  // Never leave a "(" open: cut back to before it instead.
+  const open = cut.lastIndexOf("(");
+  if (open > cut.lastIndexOf(")")) cut = cut.slice(0, open).trimEnd();
+  return `${cut.replace(/[,;:.]$/, "")}…`;
 }
 
 const capitalise = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
@@ -40,7 +53,7 @@ const SOCIALS = [
 const PAGES: { label: string; href: Route }[] = [
   { label: "all projects", href: "/projects" },
   { label: "writing", href: "/blog" },
-  { label: "résumé", href: "/resume" },
+  { label: "about", href: "/resume" },
   { label: "channel", href: "/youtube" },
 ];
 
@@ -52,7 +65,20 @@ export async function HomeDesk() {
   // a 404. Filtering here means deleting content can only shorten the list.
   const ids = new Set(projects.map((p) => p.id));
   const featured = FEATURED.filter((f) => ids.has(f.id));
-  const picks = featured.map((p) => ({ id: p.id, title: p.title, brief: p.arrived, changed: p.changed, tags: p.tech.slice(0, 4) }));
+  // The daily pick is drawn from the projects the cards below do not show, so
+  // over a month it walks the visitor through the shy ones.
+  const featuredIds = new Set(featured.map((f) => f.id));
+  // Every pick ships, because the visitor's clock picks the day; the text is
+  // cut to what the card shows, so the list stays small in the page.
+  const picks = projects
+    .filter((p) => !featuredIds.has(p.id))
+    .map((p) => ({
+      id: p.id,
+      title: p.title,
+      brief: clip(p.description ?? p.summary),
+      changed: clip(p.impact[0] ?? p.challenge),
+      tags: p.tech.slice(0, 4),
+    }));
   const shy = projectCount - featured.length;
 
   return (
@@ -69,20 +95,20 @@ export async function HomeDesk() {
             </h1>
             <div className="mt-7 flex flex-wrap items-end justify-between gap-6">
               <p className="max-w-[520px] text-[length:clamp(17px,1.6vw,20px)] leading-[var(--tr-lh-body)] text-tr-text-mute [text-wrap:pretty]">
-                Jay Hemnani. Forward-deployed engineer from Gujarat. Data pipelines, ML, agents, and occasionally a
+                Jay Hemnani. Forward Deployed Engineer from Gujarat. Data pipelines, ML, agents, and occasionally a
                 Rubik&apos;s cube. Currently <b>open to work</b> and, apparently, to building toys for my own homepage.
               </p>
-              <p aria-hidden="true" className="font-mono text-[12px] text-tr-text-faint">
+              <p aria-hidden="true" className="desk-grab-hint font-mono text-[12px] text-tr-text-faint">
                 ↓ grab a tile. throw it. they don&apos;t mind.
               </p>
             </div>
             <PhysicsPlayground />
           </header>
 
-          <TodayPick projects={picks} facts={DAILY_FACTS} />
+          <TodayPick projects={picks} facts={DAILY_FACTS} renderedDay={dayOfYear(new Date())} />
 
           <section aria-label="By the numbers" className="mx-auto max-w-[1200px] px-[clamp(16px,4vw,48px)] pb-10 pt-5">
-            <dl className="grid grid-cols-[repeat(auto-fit,minmax(150px,1fr))] border-y-[1.5px] border-tr-hairline">
+            <dl className="grid grid-cols-[repeat(auto-fit,minmax(110px,1fr))] border-y-[1.5px] border-tr-hairline">
               {buildDeskStats({ projectCount }).map((s) => (
                 <div key={s.label} className="flex flex-col-reverse justify-end py-[22px] pr-4">
                   <dt className="mt-1.5 text-[14px] leading-[var(--tr-lh-card)] text-tr-text-faint">{s.label}</dt>
@@ -119,7 +145,7 @@ export async function HomeDesk() {
                     <span className="text-[15px] leading-normal text-tr-text-mute">{p.changed}</span>
                     <span className="mt-auto flex flex-wrap gap-1.5">
                       {p.tech.slice(0, 4).map((t) => (
-                        <span key={t} className="rounded-md bg-tr-bg px-2 py-[3px] font-mono text-[11px]">
+                        <span key={t} className={CHIP}>
                           {t}
                         </span>
                       ))}
@@ -172,7 +198,7 @@ export async function HomeDesk() {
           <Guestbook />
 
           <section id="hi" aria-labelledby="hi-h2" className="ink-panel mt-[60px] bg-tr-text text-tr-on-ink">
-            <div className="mx-auto max-w-[1200px] px-[clamp(16px,4vw,48px)] pb-10 pt-[clamp(60px,9vw,110px)]">
+            <div className="mx-auto max-w-[1200px] px-[clamp(16px,4vw,48px)] pt-[clamp(60px,9vw,110px)]">
               <h2 id="hi-h2" className="font-hand text-[28px] font-normal text-tr-butter">
                 got a vague brief?
               </h2>
@@ -197,18 +223,26 @@ export async function HomeDesk() {
                   </Link>
                 ))}
               </nav>
-              <footer className="mt-16 flex flex-wrap justify-between gap-3 font-mono text-[12px] text-tr-on-ink-faint">
-                <p>
-                  {SITE_CONFIG.copyright}
-                  <VisitCount />
-                  {" · "}
-                  <ReaderToggle className="cursor-pointer hover:text-tr-butter" />
-                </p>
-                <p aria-hidden="true">psst. ↑ ↑ ↓ ↓ ← → ← → b a</p>
-              </footer>
             </div>
           </section>
         </main>
+        {/* Outside <main>, so / has a contentinfo landmark like every other
+            page. The same ink as the contact band above, so it reads as one. */}
+        <footer className="ink-panel bg-tr-text text-tr-on-ink">
+          <div className="mx-auto max-w-[1200px] px-[clamp(16px,4vw,48px)] pb-10">
+            <div className="flex flex-wrap justify-between gap-3 pt-16 font-mono text-[12px] text-tr-on-ink-faint">
+              <p>
+                {SITE_CONFIG.copyright}
+                <VisitCount />
+                {" · "}
+                <ReaderToggle className="cursor-pointer hover:text-tr-butter" />
+                {" · "}
+                <ShellButton className="cursor-pointer hover:text-tr-butter" />
+              </p>
+              <p aria-hidden="true">psst. ↑ ↑ ↓ ↓ ← → ← → b a</p>
+            </div>
+          </div>
+        </footer>
       </SecretsProvider>
     </div>
   );

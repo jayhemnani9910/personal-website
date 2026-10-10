@@ -10,7 +10,7 @@ tech: ["R", "Python", "survival", "XGBoost", "renv"]
 github: "https://github.com/jayhemnani9910/longitudinal-mets-validation"
 links:
   code: "https://github.com/jayhemnani9910/longitudinal-mets-validation"
-  demo: "https://jayhemnani9910.github.io/longitudinal-mets-validation/"
+  site: "https://jayhemnani9910.github.io/longitudinal-mets-validation/"
 challenge: "Two recently published metabolic-syndrome risk scores were developed and tuned on Korean cohorts. The open question was whether they hold up out of sample: do they predict long-term mortality in a large, survey-sampled US population, and do they add anything over the clinical risk equations doctors already use? Answering that honestly means an external validation against a written analysis plan, not a re-fit on convenient data."
 solution:
   - "Implements five risk scores from scratch in R, the metabolic-syndrome-derived RMRS (a triangular-areal-similarity method) and a B9 decision tree, plus the ACC/AHA Pooled Cohort Equations, Framingham 2008, and FINDRISC as comparators, each with unit tests."
@@ -20,9 +20,9 @@ solution:
 impact:
   - "An honest, mixed result rather than a flattering one: for cardiovascular and all-cause mortality the established clinical equations dominate (Framingham 2008 reaches AUC 0.858 at 9.5 years for cardiovascular mortality versus 0.660 for RMRS), while for diabetes-related mortality RMRS competes with FINDRISC (AUC 0.752 vs 0.770) and adds modest incremental value (NRI and IDI confidence intervals exclude zero)."
   - "Localizes the B9 decision tree's weakness to transportability: a CART refit on held-out NHANES data recovers RMRS-level discrimination, so the Korean-calibrated splits, not the tree method, are the problem."
-  - "Fully reproducible, with the analysis plan in writing: a study protocol published with the code (retrospective, not a timestamped OSF registration), a 15-step R/Python pipeline, renv-pinned dependencies, and a Makefile that regenerates the cohort and every result table from raw NHANES."
+  - "Fully reproducible, with the analysis plan in writing: a study protocol published with the code, a 15-step R/Python pipeline, renv-pinned dependencies, and a Makefile that regenerates the cohort and every result table from raw NHANES."
 deepDive:
-  context: "Risk scores are usually celebrated on the data they were built on and rarely tested cleanly somewhere else. This project is an external validation: take two metabolic-syndrome risk scores from recent Korean-cohort papers and ask whether they generalize to a large US survey population followed for mortality, judged against the clinical equations already in use. The analysis plan is written up as a study protocol that ships with the code (a retrospective protocol, not a timestamped registration), and the headline is a nuanced, partly negative finding, which for a validation study is the point, not a disappointment."
+  context: "Risk scores are usually celebrated on the data they were built on and rarely tested cleanly somewhere else. This project is an external validation: take two metabolic-syndrome risk scores from recent Korean-cohort papers and ask whether they generalize to a large US survey population followed for mortality, judged against the clinical equations already in use. The analysis plan is written up as a study protocol that ships with the code, and the headline is a nuanced, partly negative finding, which for a validation study is the point, not a disappointment."
   architecture: "The codebase is an R project (with one Python step) organized as a numbered, reproducible pipeline. Early steps download NHANES and the Linked Mortality File, link them, and apply inclusion criteria to assemble the cohort. A scoring layer implements the five risk scores as independent, unit-tested functions. Survival steps fit survey-weighted Fine-Gray competing-risks and Cox models per outcome (all-cause, cardiovascular, diabetes-related), followed by calibration, decision-curve analysis, pairwise score comparisons, an XGBoost sensitivity ceiling, Table 1, subgroup analyses, and a 500-replicate bootstrap for confidence intervals. Utilities handle the NHANES survey design, competing-risks helpers, and decision-curve math. Dependencies are pinned with renv, the cohort and results regenerate from a Makefile, and the manuscript (LaTeX) draft and the study protocol live in the repo."
   dataFlow:
     - step: "Assemble the cohort"
@@ -49,8 +49,8 @@ deepDive:
       purpose: "The numbered, reproducible pipeline: download, link, score, model per outcome, calibrate, DCA, compare, XGBoost sensitivity, subgroups, bootstrap, and B9 refit."
     - name: "XGBoost sensitivity (Python)"
       purpose: "A gradient-boosted ceiling on the same five MetS inputs, to test whether the signal or the score form is the limit."
-    - name: "manuscript + prereg"
-      purpose: "A LaTeX manuscript draft and the written study protocol (retrospective, not a timestamped OSF registration), so the analysis plan and the write-up are versioned with the code."
+    - name: "manuscript + protocol"
+      purpose: "A LaTeX manuscript draft and the written study protocol, so the analysis plan and the write-up are versioned with the code."
     - name: "renv + Makefile"
       purpose: "Pinned dependencies and a one-command rebuild of the cohort and every result table from raw NHANES, for reproducibility."
   keyDecisions:

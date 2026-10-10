@@ -10,7 +10,7 @@ tech: ["Python", "Flask", "ArchiveBox", "SQLite (FTS5)", "APScheduler", "Docker"
 github: "https://github.com/jayhemnani9910/webcrawler"
 links:
   code: "https://github.com/jayhemnani9910/webcrawler"
-  demo: "https://jayhemnani9910.github.io/webcrawler/"
+  site: "https://jayhemnani9910.github.io/webcrawler/"
 challenge: "Web content changes or disappears, and a plain archive does not prove that a snapshot is genuine or tell you what changed between versions. The goal was a service that discovers and snapshots pages on a schedule, detects content changes by hash, makes every captured version searchable, and can produce a verifiable record that a given version existed at a given time."
 solution:
   - "A four-stage core pipeline: discovery (sitemap parsing and internal-link crawling, robots-compliant) into ArchiveBox snapshots, then SHA-256 content-hash change detection, then SQLite FTS5 full-text search across every archived version."
@@ -19,7 +19,7 @@ solution:
   - "Operational from the start: Docker Compose (with a production profile for Prometheus and Grafana) and systemd timer/service units, with health checks and metrics."
 impact:
   - "Turns ad-hoc archiving into a scheduled, queryable system: every version of a page is captured, hashed for change detection, and searchable by full text, faceted by site and date."
-  - "Provenance integrations degrade gracefully, OpenTimestamps and IPFS use the external tool when present and fall back to a safe local path otherwise, so the service runs without them and gains verifiability when they are available."
+  - "Provenance integrations degrade gracefully, OpenTimestamps and IPFS use the external tool when present and are skipped otherwise, with the content hash kept, so the service runs without them and gains verifiability when they are available."
   - "26 Python modules across crawling, archiving, search, Merkle/anchor provenance, and operations, with a test suite covering search, ArchiveBox integration, and Merkle ordering."
 deepDive:
   context: "A web archive is only useful if you can trust it and query it. This project started from two gaps in plain archiving: there is no record of what changed between two captures of a page, and there is no independent proof that a snapshot is authentic and was taken when it claims. Website Watcher addresses both: it hashes each version for change detection and builds a verifiable-provenance layer (Merkle trees plus OpenTimestamps anchoring) on top of ArchiveBox snapshots, while keeping everything searchable through SQLite FTS5."
@@ -152,4 +152,4 @@ deepDive:
     - "Hashing versions and rolling them into a Merkle tree turns a collection of snapshots into a tamper-evident sequence, which is the difference between an archive and a verifiable record."
 priority: 4
 ---
-Website Watcher is a website archiver and change-detection service. It discovers pages (sitemap and link crawling, robots-compliant), snapshots them with ArchiveBox, detects content changes with SHA-256 hashing, and indexes every version for SQLite FTS5 full-text search. On top it builds a verifiable-provenance layer, Merkle trees over version hashes plus OpenTimestamps anchoring and optional IPFS storage, each degrading gracefully when the external tool is absent. It ships as a 26-module Python service with a Flask UI and API, an APScheduler-driven CLI, and Docker Compose and systemd deployment with Prometheus metrics.
+Website Watcher discovers pages (sitemap and link crawling, robots-compliant), snapshots them with ArchiveBox, detects content changes with SHA-256 hashing, and indexes every version for SQLite FTS5 full-text search. On top it builds a verifiable-provenance layer, Merkle trees over version hashes plus OpenTimestamps anchoring and optional IPFS storage, each degrading gracefully when the external tool is absent. It ships as a 26-module Python service with a Flask UI and API, an APScheduler-driven CLI, and Docker Compose and systemd deployment with Prometheus metrics.

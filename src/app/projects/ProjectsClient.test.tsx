@@ -42,7 +42,7 @@ describe("ProjectsClient: the work index table", () => {
     expect(screen.queryByText("Old Coursework")).toBeNull();
   });
 
-  it("searches across title, summary and stack", () => {
+  it("searches across title, summary, domain and stack", () => {
     render(<ProjectsClient projects={PROJECTS} />);
     const box = screen.getByLabelText(/search projects/i);
 
@@ -57,6 +57,16 @@ describe("ProjectsClient: the work index table", () => {
     fireEvent.change(box, { target: { value: "python" } }); // tech only
     expect(screen.getByText("Flagship Pipeline")).toBeDefined();
     expect(screen.queryByText("Second Featured")).toBeNull();
+
+    // One probe per remaining field, each matching nothing else.
+    const only = (q: string, title: string) => {
+      fireEvent.change(box, { target: { value: q } });
+      expect(screen.getAllByRole("link", { name: /Flagship|Second|Old Coursework|Another Archive/ })).toHaveLength(1);
+      expect(screen.getByText(title)).toBeDefined();
+    };
+    only("archive piece", "Another Archive Piece"); // title only
+    only("broadcast", "Second Featured"); // summary only
+    only("student work", "Old Coursework"); // domain only
   });
 
   it("reports an empty result rather than rendering an empty table", () => {

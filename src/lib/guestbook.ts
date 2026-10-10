@@ -17,12 +17,15 @@ export type Note = { name: string; msg: string; at: number; hidden?: boolean };
 
 // Words that would make the wall unshowable. Kept short on purpose: this stops
 // the obvious, the rate limit stops the persistent, and LSET handles the rest.
-const BLOCKED = /\b(fuck\w*|shit\w*|cunt\w*|bitch\w*|nigg\w*|fag\w*|retard\w*|whore\w*|slut\w*|rape\w*)\b/i;
+const BLOCKED = /\b(fuck\w*|shit(s|ty|head|hole|show)?|cunts?|bitch(es|y)?|nigg(a|as|az|er|ers)|fag(s|got|gots)?|retard(s|ed)?|whores?|slut(s|ty)?|rap(e|ed|es|ist|ists))\b/i;
 
 /** Tags out, control characters out, whitespace collapsed. */
 export function clean(text: string): string {
   return text
-    .replace(/<[^>]*>/g, "")
+    // Only tag-shaped runs ("<b>", "</i>"), so "love it <3 -> more" survives.
+    // `[^<>]`, not `[^>]`: on a run of "<" with no ">" the wider class rescans
+    // to the end from every "<", which is quadratic in the input.
+    .replace(/<\/?[a-z][^<>]*>/gi, "")
     .replace(/[\u0000-\u001f\u007f]/g, " ")
     .replace(/\s+/g, " ")
     .trim();
@@ -36,6 +39,9 @@ export function parseNote(body: unknown): ParseResult {
   if (typeof rawMsg !== "string" || (rawName !== undefined && typeof rawName !== "string")) {
     return { ok: false, error: "invalid" };
   }
+  // Tags and spaces can shrink a note, but not by this much. Rejecting here
+  // keeps a huge body from being cleaned at all.
+  if ((rawName?.length ?? 0) > NAME_MAX * 4 || rawMsg.length > MSG_MAX * 4) return { ok: false, error: "too_long" };
   const name = clean(rawName ?? "");
   const msg = clean(rawMsg);
   if (!msg) return { ok: false, error: "empty" };

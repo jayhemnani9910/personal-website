@@ -11,7 +11,7 @@ import { readStorage, writeStorage } from "@/lib/storage";
 // `memory` holds a write only when storage refused it, so a browser that
 // blocks storage still keeps the count and the secrets for this page view.
 
-export const VISITS_KEY = "jh_visits";
+const VISITS_KEY = "jh_visits";
 export const EGGS_KEY = "jh_eggs";
 const SESSION_FLAG = "jh_visit_counted";
 

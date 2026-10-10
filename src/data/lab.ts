@@ -10,7 +10,7 @@ export interface LabItem {
 export const LAB_ITEMS: Record<"building" | "exploring" | "radar", LabItem[]> = {
   building: [
     {
-      id: "website-v4",
+      id: "website-desk",
       title: "Portfolio, Desk edition",
       description:
         "This website: paper, ink and tomato, throwable tiles on the home page, a sticky-note guestbook, AI-queryable via WebMCP",
@@ -64,7 +64,7 @@ export const LAB_ITEMS: Record<"building" | "exploring" | "radar", LabItem[]> = 
       id: "claude-sdk",
       title: "Claude Agent SDK",
       description:
-        "Building custom AI agents with Anthropic's new SDK",
+        "Building custom AI agents with Anthropic's SDK",
       tags: ["Anthropic", "Agents"],
     },
     {

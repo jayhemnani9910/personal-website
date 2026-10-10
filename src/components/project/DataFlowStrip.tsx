@@ -17,7 +17,6 @@ export function DataFlowStrip({ flow, components }: { flow: DataFlowStep[]; comp
   const panelId = useId();
   const selectedFlow = flow[activeStage];
   if (!selectedFlow) return null;
-  const mapsComponents = flow.some((f) => f.component);
   const component = components.find((c) => c.name === selectedFlow.component);
 
   return (
@@ -47,11 +46,16 @@ export function DataFlowStrip({ flow, components }: { flow: DataFlowStep[]; comp
                   <span className={`${MONO} text-[11px] ${selected ? "text-tr-text-mute" : "text-tr-text-faint"}`}>{pad(i + 1)}</span>
                   <span className="text-[14px] font-semibold leading-[var(--tr-lh-tight)] text-tr-text">{f.step}</span>
                 </button>
-                {i < flow.length - 1 && (
-                  <span aria-hidden="true" className="shrink-0 text-[18px] font-bold text-tr-text">
-                    →
-                  </span>
-                )}
+                {/* The last stage keeps an invisible arrow, so its card is as
+                    wide as the others rather than taking the arrow's space. On
+                    a phone, where two stages share a row, the arrows would
+                    point off the edge, so the numbers carry the order. */}
+                <span
+                  aria-hidden="true"
+                  className={`hidden shrink-0 text-[18px] font-bold text-tr-text sm:inline ${i === flow.length - 1 ? "invisible" : ""}`}
+                >
+                  →
+                </span>
               </li>
             );
           })}
@@ -59,7 +63,7 @@ export function DataFlowStrip({ flow, components }: { flow: DataFlowStep[]; comp
 
         {/* Polite live region: choosing a stage swaps this text, and a
             screen reader otherwise hears only "pressed". */}
-        <div id={panelId} aria-live="polite" className={`mt-5 grid gap-8 p-6 ${CARD} ${mapsComponents ? "lg:grid-cols-2" : ""}`}>
+        <div id={panelId} aria-live="polite" className={`mt-5 grid gap-8 p-6 ${CARD} ${component ? "lg:grid-cols-2" : ""}`}>
           <div>
             {selectedFlow.detail ? (
               <p className="text-[16px] leading-[var(--tr-lh-body)] text-tr-text">{selectedFlow.detail}</p>
@@ -68,19 +72,16 @@ export function DataFlowStrip({ flow, components }: { flow: DataFlowStep[]; comp
             )}
           </div>
 
-          {mapsComponents && (
+          {/* A stage with no component shows only its detail, full width. */}
+          {component && (
             <div>
               <p className={LABEL}>COMPONENT</p>
-              {component ? (
-                <div className="mt-2">
-                  <code className={`${MONO} text-[13px] font-semibold text-tr-text`}>{component.name}</code>
-                  {component.purpose && (
-                    <p className="mt-1.5 text-[14px] leading-normal text-tr-text-mute">{component.purpose}</p>
-                  )}
-                </div>
-              ) : (
-                <p className="mt-2 text-[14px] text-tr-text-faint">No component mapped to this stage.</p>
-              )}
+              <div className="mt-2">
+                <code className={`${MONO} text-[13px] font-semibold text-tr-text`}>{component.name}</code>
+                {component.purpose && (
+                  <p className="mt-1.5 text-[14px] leading-normal text-tr-text-mute">{component.purpose}</p>
+                )}
+              </div>
             </div>
           )}
         </div>

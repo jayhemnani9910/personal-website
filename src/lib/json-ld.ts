@@ -1,8 +1,8 @@
 import { SITE_CONFIG } from "@/../content/site";
 import { RESUME } from "@/data/resume";
 
-export const PERSON_ID = `${SITE_CONFIG.url}/#person`;
-export const WEBSITE_ID = `${SITE_CONFIG.url}/#website`;
+const PERSON_ID = `${SITE_CONFIG.url}/#person`;
+const WEBSITE_ID = `${SITE_CONFIG.url}/#website`;
 
 /** Emitted on every route: who the site is about, and the site itself. */
 export const SITE_GRAPH = {

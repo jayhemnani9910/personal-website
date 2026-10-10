@@ -88,7 +88,7 @@ export const NARRATION: Record<string, NarrationLine[]> = {
     { who: 'sys', text: "rendering • boxes are services and stores. dashed lines are retrieval / feedback. solid is request / response." },
   ],
   plan: [
-    { who: 'jay', text: "14 days. Real deliverables. Day 1-2 has to be something a human can observe was done." },
+    { who: 'jay', text: "14 days. Real deliverables. Day one has to be something a human can observe was done." },
     { who: 'sys', text: "sprint mode • every row has a measurable deliverable. \"plan a meeting\" doesn't count." },
   ],
   risks: [
@@ -110,14 +110,14 @@ export const RECEIPTS: Receipt[] = [
     project: 'ELITE HOTEL GROUP · DATA ANALYST',
     desc: "Defined metrics and SLAs in working sessions with finance and operations. The clarifying-questions muscle this phase uses is the same muscle that turned vague \"we need better reporting\" into a structured forecasting + ETL system.",
     note: "Internal stakeholders, not external customers. Relevant practice, not full FDE-grade.",
-    links: [{ label: 'jayhemnani.in/resume', href: 'https://jayhemnani.in/resume' }],
+    links: [{ label: 'the about page', href: '/resume' }],
   },
   {
     phase: 'PHASE 02 · DECOMPOSE',
     title: 'Turning a vague spec into a working multi-agent system.',
     project: 'CAG DEEP RESEARCH',
-    desc: "Built a 5-agent LangGraph research system in 10 days from a rough problem statement. Hexagonal architecture, verification loops, local + cloud LLM fallback. This is the decomposition this simulation just did, but on a real ambiguous brief.",
-    links: [{ label: 'github.com/jayhemnani9910', href: 'https://github.com/jayhemnani9910' }],
+    desc: "Built a multi-agent LangGraph research system in 10 days from a rough problem statement. Hexagonal architecture, verification loops, local + cloud LLM providers, swappable by config. This is the decomposition this simulation just did, but on a real ambiguous brief.",
+    links: [{ label: 'case study', href: '/projects/revolu-idea' }],
   },
   {
     phase: 'PHASE 03 · ARCHITECT',
@@ -234,7 +234,7 @@ export const PRESETS: Preset[] = [
       { id: 'D1', title: 'Prospect identity resolver', why: 'Given an email or LinkedIn URL, resolve to a canonical prospect ID across our CRM + LinkedIn + email history.' },
       { id: 'D2', title: 'Research orchestrator', why: 'Multi-step agent: read CRM history, pull LinkedIn, fetch recent news, query internal Slack archive, synthesize.' },
       { id: 'D3', title: 'Insight extraction', why: "Not just summarization: extract pain signals, recent triggers (funding rounds, exec hires), and competitor mentions." },
-      { id: 'D4', title: 'Slack + Gmail surface', why: "A /prep slash command in Slack. A Gmail add-on that side-panel'd previews the prospect when reading their email." },
+      { id: 'D4', title: 'Slack + Gmail surface', why: "A /prep slash command in Slack. A Gmail add-on that previews the prospect in a side panel while you read their email." },
       { id: 'D5', title: 'Feedback loop + sales rep ratings', why: "Every brief gets a \"useful / not useful / what was missing\" widget. That data tunes future briefs." },
     ],
     architecture: {
@@ -266,7 +266,7 @@ export const PRESETS: Preset[] = [
       ],
     },
     sprint: [
-      { day: 'Day 1-2', title: 'Identity resolver + happy-path eval', deliv: 'given email -> prospect_id with >95% precision on 50-prospect eval set across 4 source types.' },
+      { day: 'Day 1-2', title: 'Identity resolver + happy-path eval', deliv: 'given email → prospect_id with >95% precision on 50-prospect eval set across 4 source types.' },
       { day: 'Day 3-5', title: 'Research orchestrator v1', deliv: 'multi-step agent calling CRM + LinkedIn + news. Cached. Returns raw structured context per prospect.' },
       { day: 'Day 6-7', title: 'Insight extractor', deliv: 'turns raw context into a 6-bullet brief: who, what they care about, recent triggers, competitive context.' },
       { day: 'Day 8-9', title: 'Slack /prep slash command', deliv: '/prep email@company.com returns brief in <12s. Cached for 1hr.' },
@@ -291,7 +291,7 @@ export const PRESETS: Preset[] = [
       },
       {
         q: "What's the actual blocker: review speed, or consistency between reviewers? Different problems, different solutions.",
-        why: "Speed -> asynchronous batch processing. Consistency -> side-by-side reviewer assist. We optimize for the one that's killing you.",
+        why: "Speed → asynchronous batch processing. Consistency → side-by-side reviewer assist. We optimize for the one that's killing you.",
       },
       {
         q: "Who is the human reviewing AI output: paralegal, attorney, ops? Their reading speed determines the UX.",
@@ -300,7 +300,7 @@ export const PRESETS: Preset[] = [
     ],
     decomposition: [
       { id: 'D1', title: 'Playbook codification', why: "Convert your written + tribal playbook into structured, testable rules. Without this, AI judgments aren't auditable." },
-      { id: 'D2', title: 'Contract ingest + clause extraction', why: 'PDF/DOCX -> structured clauses with type tagging (indemnity, data, IP, term, etc.).' },
+      { id: 'D2', title: 'Contract ingest + clause extraction', why: 'PDF/DOCX → structured clauses with type tagging (indemnity, data, IP, term, etc.).' },
       { id: 'D3', title: 'Per-clause risk evaluator', why: 'For each clause, compare against the relevant playbook rule. Flag severity (block, negotiate, accept).' },
       { id: 'D4', title: 'Reviewer console', why: 'Side-by-side: contract on left, AI annotations on right, accept/reject/edit per flag. Audit trail.' },
       { id: 'D5', title: 'Audit + eval', why: 'Every AI judgment is reproducible (cite the rule + the clause). Sample 10% for blind human review monthly.' },
@@ -309,7 +309,7 @@ export const PRESETS: Preset[] = [
       components: [
         { id: 'up', name: 'Upload portal', kind: 'ui', x: 60, y: 60, sub: 'pdf · docx · email' },
         { id: 'pb', name: 'Playbook store', kind: 'data', x: 60, y: 240, sub: 'structured rules' },
-        { id: 'ing', name: 'Contract parser', kind: 'service', x: 280, y: 60, sub: 'pdf -> structured' },
+        { id: 'ing', name: 'Contract parser', kind: 'service', x: 280, y: 60, sub: 'pdf → structured' },
         { id: 'cl', name: 'Clause classifier', kind: 'agent', x: 280, y: 220, sub: 'type per clause' },
         { id: 'ev', name: 'Risk evaluator', kind: 'agent', x: 500, y: 140, sub: 'clause vs rule' },
         { id: 'rev', name: 'Reviewer console', kind: 'ui', x: 720, y: 140, sub: 'side-by-side' },
@@ -329,7 +329,7 @@ export const PRESETS: Preset[] = [
     },
     sprint: [
       { day: 'Day 1-3', title: 'Playbook codification workshop', deliv: "three sessions with legal. Output: structured rules doc with explicit thresholds. This is the keystone: if we skip it, the rest collapses." },
-      { day: 'Day 4-5', title: 'Contract parser + clause classifier', deliv: 'PDF/DOCX in -> typed clauses out. >90% F1 on 50-contract eval set.' },
+      { day: 'Day 4-5', title: 'Contract parser + clause classifier', deliv: 'PDF/DOCX in → typed clauses out. >90% F1 on 50-contract eval set.' },
       { day: 'Day 6-8', title: 'Risk evaluator v1', deliv: 'each clause judged against the relevant playbook rule with a severity + citation. Cited rule must be retrievable.' },
       { day: 'Day 9-11', title: 'Reviewer console', deliv: 'side-by-side UI. Accept / reject / edit per flag. Audit log on every action.' },
       { day: 'Day 12-13', title: 'Eval + shadow run', deliv: 'AI runs in shadow on 10 fresh contracts, legal does their normal review, we compare blind.' },
@@ -345,14 +345,14 @@ export const PRESETS: Preset[] = [
   {
     id: 'field',
     chip: 'Field diagnostics',
-    brief: "Our field technicians spend a lot of time diagnosing industrial pumps from on-site visits. They want a phone app: take a photo + describe symptoms -> AI gives them a probable failure mode and next steps.",
+    brief: "Our field technicians spend a lot of time diagnosing industrial pumps from on-site visits. They want a phone app: take a photo + describe symptoms → AI gives them a probable failure mode and next steps.",
     scope: [
       {
         q: "What's the actual cost of wrong diagnosis: wasted truck-roll, repeat visit, or worse (safety incident)?",
         why: "Different failure modes mean different conservativeness. A safety-relevant misdiagnosis means we need a \"we don't know, escalate\" path with low threshold.",
       },
       {
-        q: "How much labeled image data do we already have (historical work orders with photos and ground-truth outcomes)?",
+        q: "Do we already have labeled image data (historical work orders with photos and ground-truth outcomes)?",
         why: "If yes: fine-tune a vision model on it. If no: we're using a generalist VLM and the demo accuracy will be honest about uncertainty.",
       },
       {
@@ -362,7 +362,7 @@ export const PRESETS: Preset[] = [
     ],
     decomposition: [
       { id: 'D1', title: 'Mobile capture UX', why: 'Photo + voice notes + symptom checklist. Cheap to capture, structured enough for the model.' },
-      { id: 'D2', title: 'Multi-modal diagnostic model', why: 'Image + structured symptoms -> ranked probable failure modes with confidence. VLM + retrieval from past cases.' },
+      { id: 'D2', title: 'Multi-modal diagnostic model', why: 'Image + structured symptoms → ranked probable failure modes with confidence. VLM + retrieval from past cases.' },
       { id: 'D3', title: 'Next-steps playbook', why: 'For each failure mode, retrieve the documented next steps + parts list + safety warnings.' },
       { id: 'D4', title: 'Tech feedback loop', why: 'After visit: was the AI right? What was the actual failure? This becomes labeled training data.' },
       { id: 'D5', title: 'Connectivity handling', why: 'Offline queue for inference + sync when reconnected. Critical for remote sites.' },
@@ -395,7 +395,7 @@ export const PRESETS: Preset[] = [
       { day: 'Day 6-7', title: 'Playbook retrieval', deliv: 'for each predicted failure mode, retrieve next-steps doc + parts + safety warnings from existing playbook PDFs.' },
       { day: 'Day 8-9', title: 'Tech feedback capture', deliv: 'after-visit form: was the top prediction right? If no, what was the actual cause? Feeds back into case index.' },
       { day: 'Day 10-12', title: 'Offline + sync', deliv: 'local inference for the most-common 10 failure modes. Queue for the rest. Sync on reconnect.' },
-      { day: 'Day 13-14', title: 'Pilot with 5 techs over real visits', deliv: '5 techs · 1 week · all data captured. Daily review of predictions vs actual. Honest accuracy number at end.' },
+      { day: 'Day 13-14', title: 'Pilot with 5 techs over real visits', deliv: '5 techs · 2 days of real visits · all data captured. Daily review of predictions vs actual. Honest accuracy number at end.' },
     ],
     risks: [
       { risk: "VLM hallucinates a failure mode that doesn't exist for this pump model. Tech wastes a truck-roll on the wrong parts.", mitigation: 'Constrain output to a closed-set vocabulary of failure modes per equipment family. Unknown = "escalate to senior tech."' },
@@ -429,17 +429,17 @@ export const PROOFS: ProofItem[] = [
     id: 'I',
     cat: 'Agentic systems',
     project: 'CAG Deep Research',
-    title: { pre: 'Vague spec -> working multi-agent in ', em: '10 days', post: '.' },
-    body: 'Five-agent LangGraph research system, built from a rough problem statement. Hexagonal architecture, verification loops, local + cloud LLM fallback.',
-    stack: ['LangGraph', '5 agents', 'hexagonal arch', 'verification'],
-    links: [{ label: 'github.com/jayhemnani9910', href: 'https://github.com/jayhemnani9910' }],
+    title: { pre: 'Vague spec → working multi-agent in ', em: '10 days', post: '.' },
+    body: 'Multi-agent LangGraph research system, built from a rough problem statement. Hexagonal architecture, verification loops, local + cloud LLM providers, swappable by config.',
+    stack: ['LangGraph', 'multi-agent', 'hexagonal arch', 'verification'],
+    links: [{ label: 'case study', href: '/projects/revolu-idea' }],
   },
   {
     id: 'II',
     cat: 'Protocols / connective tissue',
     project: 'WebMCP Portfolio',
     title: { pre: 'Made my own site ', em: 'agent-queryable', post: ' via WebMCP.' },
-    body: `${WEBMCP_TOOL_COUNT} tools in production. Early implementation on the exact surface OpenAI / Anthropic / Google FDE postings now call table-stakes.`,
+    body: `${WEBMCP_TOOL_COUNT} tools in production. Early implementation on the exact surface Anthropic and Google FDE postings now call table-stakes.`,
     stack: ['WebMCP (W3C CG draft)', `${WEBMCP_TOOL_COUNT} tools`, 'production'],
     links: [{ label: 'see the tools an agent can call', href: '/projects/webmcp-portfolio' }],
   },
@@ -448,9 +448,12 @@ export const PROOFS: ProofItem[] = [
     cat: 'Upstream contribution',
     project: 'Anthropic MCP Python SDK',
     title: { pre: 'Walked into unfamiliar code and ', em: 'left it better', post: '.' },
-    body: "A merged PR into the Anthropic MCP Python SDK. Also navigated vLLM (200k+ LOC) for a separate investigation. The exact muscle FDEs use in customer code.",
+    body: "Merged PRs into the Anthropic MCP Python SDK and into vLLM (200k+ LOC), where the PR added LoRA support for LLaVA's tower and connector. The exact muscle FDEs use in customer code.",
     stack: ['Anthropic SDK', 'vLLM (200k+ LOC)', 'merged'],
-    links: [{ label: 'modelcontextprotocol/python-sdk', href: 'https://github.com/modelcontextprotocol/python-sdk' }],
+    links: [
+      { label: 'modelcontextprotocol/python-sdk #1826', href: 'https://github.com/modelcontextprotocol/python-sdk/pull/1826' },
+      { label: 'vllm-project/vllm #31513', href: 'https://github.com/vllm-project/vllm/pull/31513' },
+    ],
   },
   {
     id: 'IV',

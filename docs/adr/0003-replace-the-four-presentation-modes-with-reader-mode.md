@@ -4,6 +4,7 @@
 - **Date:** 2026-07-16
 - **Commit:** `60cc059`
 - **Related:** ADR 0001
+- **Amended by:** [ADR 0018](0018-adopt-the-desk-design-site-wide.md) (the preloader and the cursor reticle are gone)
 
 ## Context
 
@@ -104,3 +105,10 @@ The description in `content/projects/webmcp-portfolio.mdx` still refers to the
 "presentation-mode switch" as one of the two side-effecting tools. That phrasing
 predates this decision and describes reader mode correctly enough, since the
 tool name did not change.
+
+**Correction, 2026-10-10.** Two sentences above no longer hold. ADR 0018
+removed the preloader and the cursor reticle; `src/components/motion/` now holds
+only `MotionProvider`. Reader mode still drops Lenis, the home page's tiles and
+the page transition to their still branch. And `webmcp.test.ts` checks the
+registry against the `registerTool` calls by name, order and count, and the
+WebMCP copy against the count; it has no separate duplicate check.

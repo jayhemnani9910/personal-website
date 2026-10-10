@@ -1,6 +1,5 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import type { Project } from "@/lib/definitions";
 import { SHOWCASE_PROJECTS } from "@/lib/showcase";
 import { CodeBlock } from "./CodeBlock";
@@ -11,10 +10,8 @@ import { BTN, CARD, H1, H2, HAND, LABEL, LEDE, MONO, SHELL, WRAP, pad } from "./
 // Markdown prose from a deep-dive string (lists, bold, the odd fenced block).
 // Inline code is a paper chip; a fenced block is an ink panel, like CodeBlock.
 const PROSE =
-  "max-w-[62ch] text-[16px] leading-[var(--tr-lh-prose)] text-tr-text-mute [&>*+*]:mt-4 [&_a]:text-tr-text [&_a]:underline [&_code]:font-mono [&_code]:text-[12.5px] [&_:not(pre)>code]:rounded-[var(--tr-r-sm)] [&_:not(pre)>code]:bg-tr-surface-2 [&_:not(pre)>code]:px-1.5 [&_:not(pre)>code]:py-[2px] [&_:not(pre)>code]:text-tr-text [&_li]:mt-2 [&_ol]:list-decimal [&_ol]:pl-5 [&_pre]:overflow-x-auto [&_pre]:rounded-[var(--tr-r-lg)] [&_pre]:border-[1.5px] [&_pre]:border-tr-on-ink-line [&_pre]:bg-tr-text [&_pre]:p-4 [&_pre]:text-tr-on-ink [&_strong]:font-semibold [&_strong]:text-tr-text [&_ul]:list-disc [&_ul]:pl-5";
+  "max-w-[62ch] text-[16px] leading-[var(--tr-lh-prose)] text-tr-text-mute [&>*+*]:mt-4 [&_a]:text-tr-text [&_a]:underline [&_code]:font-mono [&_code]:text-[12.5px] [&_:not(pre)>code]:rounded-[var(--tr-r-sm)] [&_:not(pre)>code]:bg-tr-surface-2 [&_:not(pre)>code]:px-1.5 [&_:not(pre)>code]:py-[2px] [&_:not(pre)>code]:text-tr-text [&_li]:mt-2 [&_ol]:list-decimal [&_ol]:pl-5 [&_pre]:overflow-x-auto [&_pre]:scroll-hint [&_pre]:ink-hint [&_pre]:rounded-[var(--tr-r-lg)] [&_pre]:border-[1.5px] [&_pre]:border-tr-on-ink-line [&_pre]:bg-tr-text [&_pre]:p-4 [&_pre]:text-tr-on-ink [&_strong]:font-semibold [&_strong]:text-tr-text [&_ul]:list-disc [&_ul]:pl-5";
 
-// A figure's frame, matching ComparisonSlider's: ink, radius 14, a small hard shadow.
-const FIGURE = "overflow-hidden rounded-[var(--tr-r-lg)] border-[1.5px] border-tr-hairline bg-tr-surface-1 shadow-[4px_4px_0_var(--tr-text)]";
 // Text on an ink panel: the tools demo's request and response. They are JSON,
 // so they wrap rather than scroll off the edge of a phone.
 const INK_PRE = "min-w-0 whitespace-pre-wrap p-4 font-mono text-[12.5px] leading-[var(--tr-lh-body)] text-tr-on-ink [overflow-wrap:anywhere]";
@@ -71,9 +68,6 @@ export function ProjectDetail({
   const links = project.links ?? {};
   const showcase = SHOWCASE_PROJECTS[project.id];
   const demo = showcase?.demo;
-  // stock-data-platform and biotech-accelerator carry an arch diagram; it sits
-  // with the architecture prose, apart from the Data flow section.
-  const archImage = showcase?.arch;
 
   const flow: DataFlowStep[] =
     Array.isArray(deepDive?.dataFlow) && typeof deepDive.dataFlow[0] === "object"
@@ -93,25 +87,20 @@ export function ProjectDetail({
     Array.isArray(deepDive?.metrics) && typeof deepDive.metrics[0] === "object"
       ? (deepDive.metrics as MetricObj[])
       : [];
+  // One size for the whole grid: big figures only when every value is short
+  // enough to sit on one line, so "22 FPS" and "whisper-large-v3" never sit
+  // side by side at two different sizes.
+  const bigMetrics = metrics.every((m) => m.value.length <= 7);
   const snippets = Array.isArray(deepDive?.codeSnippets) ? deepDive.codeSnippets : [];
 
   const learnings = Array.isArray(deepDive?.learnings) ? deepDive.learnings : [];
   const futureWork = Array.isArray(deepDive?.futureWork) ? deepDive.futureWork : [];
 
-  // Fact-grid cells. ROLE and STATUS always show; the rest only when the
-  // project's frontmatter actually carries that field.
+  // Fact-grid cells. ROLE always shows; the rest only when the project's
+  // frontmatter actually carries that field.
   const factCells: { label: string; value: ReactNode }[] = [{ label: "ROLE", value: project.role }];
   if (project.period) factCells.push({ label: "PERIOD", value: project.period });
   if (project.domain) factCells.push({ label: "DOMAIN", value: project.domain });
-  factCells.push({
-    label: "STATUS",
-    value: (
-      <span className="inline-flex items-center gap-2">
-        <span aria-hidden="true" className="size-2.5 rounded-full border-[1.5px] border-tr-hairline bg-tr-mint" />
-        Published
-      </span>
-    ),
-  });
   const linkCell = (label: string, href: string | undefined, text: string) => {
     if (!href) return;
     factCells.push({
@@ -125,8 +114,8 @@ export function ProjectDetail({
   };
   // links.code stands in when there is no top-level github (basic-banking).
   linkCell("CODE", project.github ?? links.code, "GitHub ↗");
-  linkCell("DEMO", links.demo, "Demo ↗");
-  linkCell("SITE", links.site, "Site ↗");
+  linkCell("DEMO", links.demo, "Try it ↗");
+  linkCell("SITE", links.site, "Visit ↗");
   linkCell("PAPER", links.paper, "IEEE ↗");
 
   return (
@@ -246,6 +235,7 @@ export function ProjectDetail({
 
       {demo?.kind === "report" && (
         <Ruled>
+          <p className={`${LABEL} mb-2`}>Sample run · the question</p>
           <h2 className={H2}>{demo.title}</h2>
           <p className={`mt-3 max-w-[62ch] ${LEDE}`}>{demo.note}</p>
 
@@ -325,23 +315,11 @@ export function ProjectDetail({
         </div>
       </Ruled>
 
-      {/* ── Architecture: the prose, and the diagram where there is one ── */}
-      {(prose.architecture || archImage) && (
+      {/* ── Architecture ── */}
+      {prose.architecture && (
         <Ruled>
           <h2 className={`${LABEL} mb-3`}>ARCHITECTURE</h2>
-          {prose.architecture && <div className={PROSE}>{prose.architecture}</div>}
-          {archImage && (
-            <figure className={`${prose.architecture ? "mt-8 " : ""}${FIGURE}`}>
-              <Image
-                src={archImage}
-                alt={`${project.title}: system architecture diagram`}
-                width={1672}
-                height={941}
-                sizes="(max-width: 1200px) 100vw, 1104px"
-                className="h-auto w-full"
-              />
-            </figure>
-          )}
+          <div className={PROSE}>{prose.architecture}</div>
         </Ruled>
       )}
 
@@ -428,9 +406,13 @@ export function ProjectDetail({
       {/* ── The part that mattered ── */}
       {(metrics.length > 0 || snippets.length > 0 || prose.codeSnippets) && (
         <Ruled className="grid gap-[clamp(32px,5vw,64px)] lg:grid-cols-2">
-          <div>
+          {/* Sticky beside a long code column, so the left half is not a
+              blank stretch while the code scrolls past. */}
+          <div className="lg:sticky lg:top-24 lg:self-start">
             <h2 className={H2}>The part that mattered.</h2>
-            <p className={`mt-3 max-w-[48ch] ${LEDE}`}>The numbers behind the work, and the code that produced them.</p>
+            <p className={`mt-3 max-w-[48ch] ${LEDE}`}>
+              {metrics.length > 0 ? "The facts behind the work, and the code that produced them." : "The code that did the work."}
+            </p>
 
             {metrics.length > 0 && (
               <div className={`mt-8 overflow-hidden ${CARD}`}>
@@ -450,7 +432,7 @@ export function ProjectDetail({
                     >
                       <dt className={`order-2 mt-2 text-[14px] leading-[var(--tr-lh-card)] text-tr-text-mute`}>{m.label}</dt>
                       <dd
-                        className={`order-1 ${/^\d/.test(m.value) ? "text-[length:clamp(36px,4vw,52px)]" : "text-[length:clamp(24px,2.6vw,32px)]"} font-extrabold leading-none tracking-[-0.04em] tabular-nums text-tr-text`}
+                        className={`order-1 ${bigMetrics ? "text-[length:clamp(36px,4vw,52px)]" : "text-[length:clamp(24px,2.6vw,32px)]"} font-extrabold leading-none tracking-[-0.04em] tabular-nums text-tr-text hyphens-auto [overflow-wrap:anywhere] [text-wrap:balance]`}
                       >
                         {m.value}
                       </dd>
@@ -477,10 +459,14 @@ export function ProjectDetail({
 
       {/* ── Learned / Not done yet ── */}
       {(learnings.length > 0 || futureWork.length > 0 || prose.learnings) && (
-        <Ruled className="grid gap-[clamp(32px,5vw,64px)] sm:grid-cols-2">
+        <Ruled
+          className={`grid gap-[clamp(32px,5vw,64px)] ${
+            (learnings.length > 0 || prose.learnings) && futureWork.length > 0 ? "sm:grid-cols-2" : "max-w-[62ch]"
+          }`}
+        >
           {(learnings.length > 0 || prose.learnings) && (
             <div className="min-w-0">
-              <h2 className={`${MONO} mb-1 text-[11px] font-semibold uppercase tracking-[0.08em] text-tr-ok`}>✓ LEARNED</h2>
+              <h2 className={`${MONO} mb-1 text-[11px] font-semibold uppercase tracking-[0.08em] text-tr-ok`}><span aria-hidden="true">✓ </span>LEARNED</h2>
               {prose.learnings && <div className={`mt-3 ${PROSE}`}>{prose.learnings}</div>}
               {learnings.length > 0 && (
                 <ol className="list-none">
@@ -501,7 +487,7 @@ export function ProjectDetail({
 
           {futureWork.length > 0 && (
             <div>
-              <h2 className={`${MONO} mb-1 text-[11px] font-semibold uppercase tracking-[0.08em] text-tr-warn`}>◔ NOT DONE YET</h2>
+              <h2 className={`${MONO} mb-1 text-[11px] font-semibold uppercase tracking-[0.08em] text-tr-warn`}><span aria-hidden="true">◔ </span>NOT DONE YET</h2>
               <ol className="list-none">
                 {futureWork.map((item, i) => (
                   <li key={i} className="border-t border-tr-hairline py-3.5 text-[15px] leading-normal text-tr-text">
@@ -525,7 +511,7 @@ export function ProjectDetail({
             <span className={`${MONO} shrink-0 text-[11px] font-normal tracking-[0.08em] text-tr-text-faint`}>
               NEXT · {pad(nextProject.index)}
             </span>
-            <span className="min-w-0 truncate">{nextProject.title} →</span>
+            <span className="min-w-0 [text-wrap:balance]">{nextProject.title} →</span>
           </Link>
         </div>
       </footer>

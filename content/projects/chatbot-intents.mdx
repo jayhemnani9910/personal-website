@@ -2,10 +2,10 @@
 title: "Chatbot (NLP)"
 summary: "Intent-based bot trained from JSON corpus."
 description: "An intent-based chatbot trained from a JSON corpus: stemming, bag-of-words, and a small neural network that picks the intent."
-role: "Concept"
+role: "Developer"
 domain: "Student work"
 tags: ["python", "nlp"]
-tech: ["Python"]
+tech: ["Python", "TensorFlow", "NLTK"]
 challenge: "Lightweight Q/A without heavy infra."
 solution:
   - "Tokenization, stemming, bag-of-words; intent matching."
@@ -14,7 +14,7 @@ impact:
   - "Snappy prototype for FAQs & utilities."
 deepDive:
   context: |
-    Intent classification is the cornerstone of conversational AI systems. When a user sends a message to a chatbot, the system must understand what the user wants to accomplish, their intent, before it can respond appropriately. This project tackles the fundamental challenge of building a lightweight, accurate intent classification system without relying on heavy infrastructure or cloud-based NLP services.
+    When a user sends a message to a chatbot, the system must understand what the user wants to accomplish, their intent, before it can respond appropriately. This project tackles the fundamental challenge of building a lightweight, accurate intent classification system without relying on heavy infrastructure or cloud-based NLP services.
 
     Traditional rule-based chatbots use keyword matching, which breaks down quickly with natural language variation. Modern approaches use machine learning to recognize patterns in language, enabling the bot to understand semantically similar phrases. This project demonstrates how to build an intent-based conversational agent using classical NLP techniques and neural networks, trained on a custom JSON corpus that maps example phrases to specific intents.
 
@@ -23,16 +23,16 @@ deepDive:
   architecture: |
     The system follows a pipeline architecture from raw text input to predicted intent:
 
-    **1. User Input → Preprocessing**
-    Raw user text undergoes normalization: lowercasing, tokenization (splitting into words), and stemming (reducing words to root forms using Porter Stemmer or similar). This reduces vocabulary size and improves generalization.
+    **1. User Input → Preprocessing:**
+    Raw user text undergoes normalization: lowercasing, tokenization (splitting into words), and stemming (reducing words to root forms with the Porter stemmer). This reduces vocabulary size and improves generalization.
 
-    **2. Preprocessing → Feature Extraction**
+    **2. Preprocessing → Feature Extraction:**
     Processed tokens are converted into numerical representations using bag-of-words (BoW) encoding. Each word in the training vocabulary becomes a binary feature (1 if present, 0 if absent), creating a fixed-length vector that represents the input sentence.
 
-    **3. Feature Vector → Neural Network**
+    **3. Feature Vector → Neural Network:**
     The bag-of-words vector feeds into a feedforward neural network trained to classify intents. The network learns to map word patterns to intent categories through supervised learning on the labeled training corpus.
 
-    **4. Intent Prediction → Response Generation**
+    **4. Intent Prediction → Response Generation:**
     The model outputs a probability distribution over all possible intents. The highest-probability intent is selected, and the system retrieves a corresponding response from the JSON corpus. Responses can be randomized from a pool to add variety.
 
     **JSON Corpus Structure:**
@@ -46,7 +46,7 @@ deepDive:
       purpose: "Converts preprocessed tokens into fixed-length binary vectors based on training vocabulary. Implements efficient lookup for real-time inference."
 
     - name: "Intent Classifier (Neural Network)"
-      purpose: "Multi-layer feedforward neural network built with TensorFlow/Keras or PyTorch. Uses softmax output layer for multi-class classification across intent categories."
+      purpose: "Multi-layer feedforward neural network built with TensorFlow/Keras. Uses softmax output layer for multi-class classification across intent categories."
 
     - name: "Response Generator"
       purpose: "Maps predicted intent to appropriate responses from JSON corpus. Implements response randomization and context-aware selection logic."
@@ -81,7 +81,7 @@ deepDive:
 
   keyDecisions:
     - decision: "Classical NLP over Transformers"
-      rationale: "Chose bag-of-words + neural network instead of BERT/GPT models to minimize computational overhead. This approach provides sub-50ms inference on CPU, making it suitable for lightweight deployment scenarios where heavy transformer models would be overkill."
+      rationale: "Chose bag-of-words + neural network instead of BERT/GPT models to minimize computational overhead, which suits lightweight deployment scenarios where heavy transformer models would be overkill."
       tradeoff: "Sacrifices semantic understanding of complex queries for speed and simplicity. Works well for domain-specific intents with clear patterns but struggles with highly ambiguous or context-dependent inputs."
 
     - decision: "Stemming vs. Lemmatization"
@@ -90,7 +90,7 @@ deepDive:
 
     - decision: "Modular JSON corpus architecture"
       rationale: "Designed intent definitions as standalone JSON objects rather than hardcoding logic. This enables non-technical users to update bot behavior by editing JSON without touching code."
-      tradeoff: "Requires retraining when intents change, adding a deployment step. However, training is fast enough (<1 minute on small datasets) that this isn't a major bottleneck."
+      tradeoff: "Requires retraining when intents change, adding a deployment step."
 
     - decision: "Confidence threshold with fallback"
       rationale: "Implemented confidence scoring to detect when the model is uncertain. Low-confidence predictions trigger generic fallback responses rather than potentially incorrect answers."
@@ -271,7 +271,7 @@ deepDive:
 
   learnings:
     - lesson: "Intent classification quality depends heavily on training data diversity"
-      detail: "The model performs well only when training patterns cover the variety of ways users express the same intent. Initially struggled with sparse training data, adding 3-5 more pattern variations per intent improved accuracy by ~20%. Data augmentation through paraphrasing and synonym replacement helped expand coverage without manual labeling."
+      detail: "The model performs well only when training patterns cover the variety of ways users express the same intent. Data augmentation through paraphrasing and synonym replacement helped expand coverage without manual labeling."
 
     - lesson: "Preprocessing consistency is critical between training and inference"
       detail: "Early bug: training data was stemmed but inference input wasn't, causing poor predictions. Learned to abstract preprocessing into reusable functions and validate that exact same pipeline runs during both training and deployment. Saved preprocessing configuration alongside model weights."

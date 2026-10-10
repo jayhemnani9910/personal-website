@@ -13,9 +13,10 @@ export function CodeBlock({ snippet }: { snippet: CodeSnippet }) {
         <span>{title}</span>
         {language && <span>{language}</span>}
       </div>
-      {/* Scrollable, so browsers make it keyboard-focusable; the ring is drawn
+      {/* Scrolls sideways, so it is a named, focusable region: Chromium makes a
+          scroller focusable by itself, Safari does not. The ring is drawn
           inside because the card's overflow-hidden clips anything outside. */}
-      <pre className="overflow-x-auto p-4 text-[12.5px] leading-[var(--tr-lh-body)] focus-visible:-outline-offset-2">
+      <pre tabIndex={0} role="region" aria-label={title} className="overflow-x-auto p-4 text-[12.5px] leading-[var(--tr-lh-body)] focus-visible:-outline-offset-2 scroll-hint ink-hint">
         <code className="whitespace-pre font-mono">{snippet.code}</code>
       </pre>
       {explanation && (

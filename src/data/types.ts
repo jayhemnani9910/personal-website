@@ -36,7 +36,6 @@ export interface Role {
 
 export interface ExperienceCompany {
     name: string;
-    industry?: string;
     website?: string;
     location?: string;
     roles: Role[];
@@ -52,8 +51,6 @@ export interface EducationItem {
     gpa?: string;
     courses?: string[];
     achievements?: string[];        // Dean's list, scholarships, awards
-    thesis?: string;                // Thesis/capstone project title
-    thesisDescription?: string;     // Brief description of thesis work
 }
 
 export interface PublicationItem {
@@ -65,13 +62,6 @@ export interface PublicationItem {
     link?: string;                  // Paper link (arxiv, journal, etc.)
     github?: string;                // GitHub repository link
     coAuthors?: string[];           // List of co-authors
-}
-
-export interface CertificationItem {
-    name: string;
-    authority: string;
-    year?: string;
-    url?: string;
 }
 
 export interface SkillItem {
@@ -96,12 +86,9 @@ export interface Resume {
         website?: string;
     };
     summary: string;
-    headlineBullets?: string[];
     coreCompetencies: string[];
     experience: ExperienceCompany[];
     skills: SkillCategory[];
     education: EducationItem[];
     publications: PublicationItem[];
-    certifications?: CertificationItem[];
-    spotlightProjects?: string[]; // project ids for quick linking
 }

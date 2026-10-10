@@ -129,3 +129,8 @@ route's leak check. The golden set was re-recorded on 2026-09-29 with thinking
 off (ADR 0012) and the new caption limits: 184/190, the six failures all
 `arch.captions-fit`, carried in the baseline as known issues.
 
+
+**Correction, 2026-10-10.** `fde-eval.test.ts` grades one recorded live response
+(`contract-review`) clean, then grades broken copies of it for the diagram
+rules. The other nine recordings in `tests/eval/responses/` are read by the live
+eval, not by CI.

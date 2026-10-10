@@ -76,3 +76,8 @@ awkward part: a visitor hitting a transient Gemini 5xx saw "The agent had troubl
 parsing. Try a more specific brief" and would have gone off rewriting a brief
 that was fine. ADR 0010's `http_5xx` counter would have shown the real cause, and
 nobody was watching it.
+
+**Correction, 2026-10-10.** Not every non-200 before a section is retried:
+`http_4xx` and `http_429` are in `NOT_RETRYABLE` (`route.ts`), because a second
+attempt cannot fix a bad request and should not pile onto a rate limit. 5xx,
+network and empty-body failures are retried as described.

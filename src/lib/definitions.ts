@@ -144,6 +144,9 @@ export const PostSchema = z.strictObject({
     // so that form is accepted too and normalised to the same string.
     date: z.union([z.iso.date(), z.date().transform((d) => d.toISOString().slice(0, 10))]),
     summary: z.string(),
+    // The search-result snippet, as for projects: only set when the summary
+    // runs past about 160 characters; the page falls back to the summary.
+    description: z.string().optional(),
     excerpt: z.string().optional(),
     tags: z.array(z.string()).default([]),
     category: z.enum(["engineering", "data", "thoughts", "tutorials"]).default("thoughts"),

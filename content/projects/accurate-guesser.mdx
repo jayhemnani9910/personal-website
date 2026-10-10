@@ -2,7 +2,7 @@
 title: "Accurate Guesser"
 summary: "Java desktop guessing game (GUI)."
 description: "A number-guessing game in Java Swing: an event-driven GUI with input validation, hints, scoring, and replay."
-role: "Concept"
+role: "Developer"
 domain: "Student work"
 tags: ["java", "desktop"]
 tech: ["Java", "Swing"]
@@ -12,18 +12,16 @@ solution:
 impact:
   - "Lightweight demo of event-driven UI."
 deepDive:
-  context: "Accurate Guesser is a classic number guessing game built with Java Swing, designed to demonstrate fundamental GUI programming concepts and event-driven architecture. The player tries to guess a randomly generated number within a range, receiving feedback after each attempt. This project showcases clean separation of concerns between UI presentation, game logic, and state management, all essential principles for desktop application development."
-
   architecture: "The application follows a Model-View-Controller (MVC) pattern adapted for Swing's event-driven paradigm. The game state machine manages three primary states: INITIAL (game setup), PLAYING (active guessing), and FINISHED (game over with results). The architecture separates the game logic (random number generation, guess validation, attempt tracking) from the Swing UI components (JFrame, JPanel, JTextField, JButton), connected through ActionListener callbacks. This separation enables easy testing of game logic independently from UI concerns."
 
   components:
     - name: "GameEngine"
       purpose: "Core game logic managing the secret number, guess validation, and scoring"
-      details: "Handles random number generation within configurable bounds, validates player guesses, maintains attempt counters, and calculates scoring based on accuracy and number of tries. Implements the state transitions and win/loss conditions."
+      details: "Handles random number generation within configurable bounds, validates player guesses, maintains attempt counters, and calculates scoring based on accuracy and number of tries. Implements the state transitions and win condition."
 
     - name: "GameUI (JFrame)"
       purpose: "Main window container orchestrating all visual components"
-      details: "Extends JFrame to create the primary application window. Manages layout using BorderLayout or GridBagLayout to organize input fields, feedback labels, and action buttons. Handles window lifecycle events and coordinates communication between UI components and game logic."
+      details: "Extends JFrame to create the primary application window. Lays out the input field, feedback labels and action buttons. Handles window lifecycle events and coordinates communication between UI components and game logic."
 
     - name: "InputPanel"
       purpose: "User input controls for guess submission"
@@ -31,13 +29,13 @@ deepDive:
 
     - name: "FeedbackDisplay"
       purpose: "Visual feedback mechanism for game state and hints"
-      details: "Uses JLabel or JTextArea to display hints ('Too high!', 'Too low!', 'Correct!'), attempt counts, and current game status. Implements dynamic color coding or font styling to make feedback more intuitive and engaging."
+      details: "Displays the hints ('Too high!', 'Too low!', 'Correct!'), the attempt count and the current game status."
 
     - name: "ControlPanel"
       purpose: "Game control actions (new game, reset, exit)"
       details: "Provides buttons for starting new games, resetting current game, and exiting the application. Manages state transitions and confirms destructive actions (like resetting mid-game) through JOptionPane dialogs."
 
-  dataFlow: "Game flow begins with initialization where the GameEngine generates a random secret number and sets state to INITIAL. When the player enters a guess, the InputPanel validates the input and triggers an ActionEvent. The event handler extracts the guess value, passes it to GameEngine's validateGuess() method, which compares it against the secret number and returns feedback (TOO_HIGH, TOO_LOW, CORRECT). The feedback propagates back to FeedbackDisplay, which updates the UI with appropriate hints and increments the attempt counter. If correct, the game transitions to FINISHED state, displaying win statistics and enabling the replay option. State transitions are atomic and maintain consistency between UI elements and game logic."
+  dataFlow: "Game flow begins with initialization where the GameEngine generates a random secret number, resets the attempt count and sets state to PLAYING. When the player enters a guess, the InputPanel validates the input and triggers an ActionEvent. The event handler extracts the guess value, passes it to GameEngine's validateGuess() method, which counts the attempt, compares the guess against the secret number and returns feedback (TOO_HIGH, TOO_LOW, CORRECT). The feedback propagates back to FeedbackDisplay, which updates the UI with appropriate hints and the attempt count. If correct, the game transitions to FINISHED state, displaying win statistics and enabling the replay option. State transitions are atomic and maintain consistency between UI elements and game logic."
 
   keyDecisions:
     - decision: "Swing over JavaFX for UI framework"
@@ -53,8 +51,8 @@ deepDive:
       tradeoff: "Checks sit in more than one layer, so changing a rule means changing it in each."
 
     - decision: "Modal dialogs for game state changes"
-      rationale: "Used JOptionPane for win/loss notifications and replay confirmations to create clear breakpoints in game flow. Modal dialogs ensure users acknowledge outcomes before proceeding, preventing accidental game resets and making state transitions explicit."
-      tradeoff: "Each dialog blocks the window until dismissed: an extra click at every win, loss, or replay."
+      rationale: "Used JOptionPane for win notifications and replay confirmations to create clear breakpoints in game flow. Modal dialogs ensure users acknowledge outcomes before proceeding, preventing accidental game resets and making state transitions explicit."
+      tradeoff: "Each dialog blocks the window until dismissed: an extra click at every win or replay."
 
   codeSnippets:
     - language: "java"
@@ -158,20 +156,20 @@ deepDive:
 
   learnings:
     - insight: "Event-Driven Architecture Fundamentals"
-      description: "Building with Swing taught the core principles of event-driven programming: loose coupling through listeners, callback-based control flow, and asynchronous user interactions. Understanding how ActionListeners decouple user actions from business logic became foundational knowledge applicable to modern frameworks like React and Vue, where similar event-driven patterns dominate."
+      description: "Building with Swing taught the core principles of event-driven programming: loose coupling through listeners, callback-based control flow, and asynchronous user interactions."
 
     - insight: "State Management Complexity"
       description: "Even a simple game reveals state management challenges. Without explicit state tracking (INITIAL, PLAYING, FINISHED), edge cases emerged: users submitting guesses before initialization, starting multiple games simultaneously, or continuing after winning. This experience highlighted why state management libraries (Redux, MobX) exist in complex applications, because manual state tracking does not scale."
 
     - insight: "Separation of Concerns in Practice"
-      description: "Implementing MVC in Swing demonstrated why architectural patterns matter. Initially mixing UI code with game logic created brittle code resistant to changes. Refactoring to separate GameEngine from GameUI made testing trivial, enabled UI redesigns without touching logic, and clarified responsibilities. This lesson applies universally across software development."
+      description: "Implementing MVC in Swing demonstrated why architectural patterns matter. Initially mixing UI code with game logic created brittle code resistant to changes. Refactoring to separate GameEngine from GameUI made testing trivial, enabled UI redesigns without touching logic, and clarified responsibilities."
 
     - insight: "Input Validation Layers"
       description: "Learned to implement defense in depth: UI-level validation for immediate feedback (DocumentFilter for numeric input), application-level validation for business rules (range checking), and domain-level validation in GameEngine (state checks). Each layer serves distinct purposes and prevents different failure modes. Relying on a single validation point creates fragility."
 
     - insight: "User Experience in Desktop Applications"
-      description: "Discovered that technical correctness doesn't equal good UX. Early versions worked but felt clunky: no visual feedback during input, unclear win conditions, and abrupt state changes. Adding color-coded hints, smooth transitions, confirmation dialogs, and immediate input validation transformed the experience. Small UI details have outsized impact on perceived quality."
+      description: "Discovered that technical correctness doesn't equal good UX. Early versions worked but felt clunky: no visual feedback during input, unclear win conditions, and abrupt state changes. Adding color-coded hints, confirmation dialogs, and immediate input validation transformed the experience. Small UI details have outsized impact on perceived quality."
 ---
-Accurate Guesser is a classic number guessing game built with Java Swing that demonstrates fundamental desktop application development principles. Players attempt to guess a randomly generated number, receiving intelligent feedback after each attempt. Beyond being a fun game, this project serves as a comprehensive exploration of event-driven architecture, state management, and GUI programming patterns in Java.
+Accurate Guesser is a classic number guessing game built with Java Swing that demonstrates fundamental desktop application development principles. Players attempt to guess a randomly generated number, receiving intelligent feedback after each attempt. Beyond being a fun game, it is practice in event-driven architecture, state management, and GUI programming in Java.
 
 The application showcases clean separation between game logic and presentation, implements thorough input validation, and provides clear user feedback through responsive UI. It shows how a simple concept can teach foundational programming patterns.

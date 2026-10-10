@@ -21,7 +21,7 @@ const TILE = "rounded-[var(--tr-r-lg)] border-[1.5px] border-tr-hairline bg-tr-s
 function DurationPill({ sec }: { sec: number }) {
   if (sec <= 0) return null;
   return (
-    <span className="absolute bottom-1.5 right-1.5 rounded-[6px] bg-tr-text px-1.5 py-[1px] font-mono text-[10px] text-tr-on-ink">
+    <span aria-hidden="true" className="absolute bottom-1.5 right-1.5 rounded-[6px] bg-tr-text px-1.5 py-[1px] font-mono text-[10px] text-tr-on-ink">
       {formatDuration(sec)}
     </span>
   );
@@ -61,6 +61,7 @@ function ItemCard({ item, variant }: { item: YouTubeItem; variant: keyof typeof 
         <p className="mt-1.5 font-mono text-[11px] text-tr-text-faint">
           {formatViews(item.views)} views · {formatDate(item.publishedAt)}
         </p>
+        <span className="sr-only"> (opens YouTube in a new tab)</span>
       </div>
     </a>
   );
@@ -81,7 +82,7 @@ function ChannelButton({
       aria-pressed={selected}
       onClick={onSelect}
       className={`desk-press flex min-w-[220px] cursor-pointer flex-col gap-1 rounded-[var(--tr-r-lg)] border-[1.5px] border-tr-hairline px-4 py-3 text-left ${
-        selected ? "bg-tr-butter shadow-[var(--tr-shadow-btn)]" : "bg-tr-surface-1"
+        selected ? "bg-tr-butter shadow-[var(--tr-shadow-btn)]" : "bg-tr-surface-1 hover:bg-tr-surface-2"
       }`}
     >
       <span className="text-[17px] font-bold tracking-[-0.01em]">{channel.title}</span>
@@ -148,7 +149,6 @@ export function YouTubeShowcase({ data }: { data: YouTubeData }) {
         </div>
       )}
 
-      <p className="mt-10 font-mono text-[12px] text-tr-text-faint">Stats refresh daily via the YouTube API.</p>
     </div>
   );
 }

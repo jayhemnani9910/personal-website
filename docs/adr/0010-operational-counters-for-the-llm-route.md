@@ -116,3 +116,9 @@ Not done, and worth naming: the numbers are not shown anywhere a person would
 look. The FDE page could carry a line reading how many briefs have been
 decomposed and at what p95, which would make the instrumentation visible and is
 the same argument the page already makes about itself.
+
+**Correction, 2026-10-10.** Two values were added after this record:
+`over_budget` (an outcome, when the day's run budget is spent) and `timeout` (a
+failure, when an attempt runs past its deadline). The lists in
+`src/lib/fde-metrics.ts` are the source of truth. `fde-metrics.test.ts` now runs
+27 tests.

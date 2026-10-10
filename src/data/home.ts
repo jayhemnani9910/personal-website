@@ -7,6 +7,15 @@
 import { WEBMCP_TOOLS, WEBMCP_TOOL_COUNT } from "@/lib/webmcp-tools";
 import { RESUME, CUBE_ACHIEVEMENT, companyAnchor, parsePublishedVsReproduced } from "@/data/resume";
 
+/** The fraud model's precision from the Amnex bullet on the résumé, e.g. "94". */
+const fraudPrecision = RESUME.experience
+  .find((org) => org.name === "Amnex")
+  ?.roles.flatMap((r) => r.bullets)
+  .map((b) => b.text.match(/(\d+)% precision/)?.[1])
+  .find(Boolean);
+if (!fraudPrecision) throw new Error("resume.ts: the Amnex role has no '<n>% precision' bullet");
+const FRAUD_PRECISION = `${fraudPrecision}%`;
+
 export type FeaturedProject = {
   id: string;
   num: string;
@@ -23,9 +32,7 @@ export type ReceiptLine = { text: string; meta: string; href: string };
 export type Receipt = {
   n: string;
   label: string;
-  cta: string;
   title: string;
-  note: string;
   lines: ReceiptLine[];
 };
 
@@ -38,7 +45,7 @@ export const FEATURED: FeaturedProject[] = [
     tech: ["YOLOv8", "ByteTrack", "DVC", "MLflow", "FastAPI"],
     arrived: "Match footage and a question: can we track every player and turn it into tactics?",
     did: "Detection → multi-object tracking → tactical graph, wired as one reproducible DVC stage (analyze_frames) with MLflow tracking and a FastAPI service.",
-    changed: "22 fps end to end. Reproducible from extracted frames with one command.",
+    changed: "Detection and tracking at 22 fps. Reproducible from extracted frames with one command.",
   },
   {
     id: "revolu-idea",
@@ -67,7 +74,7 @@ export const FEATURED: FeaturedProject[] = [
     tags: ["web", "agents", "standards"],
     tech: ["TypeScript", "Next.js 16", "WebMCP"],
     arrived: "Could a portfolio be read by a machine as easily as by a person?",
-    did: `Registered ${WEBMCP_TOOL_COUNT} tools with the WebMCP browser API: search, résumé, skills, contact, experiments, theme, mode.`,
+    did: `Registered ${WEBMCP_TOOL_COUNT} tools with the WebMCP browser API: search, project, résumé, skills, contact, experiments, reader mode.`,
     changed: "An agent in Chrome, with the WebMCP flag on, reads this site without scraping it.",
   },
   {
@@ -95,8 +102,8 @@ export const FEATURED: FeaturedProject[] = [
 /**
  * The merged upstream pull requests, by repo and number.
  *
- * One list, two readers: the home page's proof ledger and the about page's
- * open-source block. It lives here rather than in resume.ts because resume.ts
+ * One list, two readers: the about page's open-source block and the shell's
+ * `receipts`. It lives here rather than in resume.ts because resume.ts
  * has no field for it, and duplicating these URLs across two pages is how a
  * verified claim drifts into an unverified one. Sourced from
  * the job-search MASTER_PROFILE.md section 7, which is the canonical list.
@@ -205,9 +212,7 @@ export function buildReceipts(c: { projectCount: number; toolCount: number }): R
     {
       n: String(c.projectCount),
       label: "projects in the archive, each with a write-up",
-      cta: "open index",
       title: "The archive",
-      note: "Computer vision, agentic AI, data platforms, on-device ML, a Go voice tool. Sorted by priority, then id.",
       lines: [
         { text: "Work index, filterable by domain and stack", meta: "/projects", href: "/projects" },
         {
@@ -220,56 +225,50 @@ export function buildReceipts(c: { projectCount: number; toolCount: number }): R
     {
       n: String(MERGED_PRS.length),
       label: "pull requests merged into ecosystem repositories",
-      cta: "show PRs",
       title: "Merged upstream",
-      note: "Small changes in large repos. Listed by repo and number so you can read the diff yourself.",
       lines: [
         ...MERGED_PRS.flatMap((pr) => [
           { text: pr.repo, meta: pr.number, href: pr.href },
           ...(pr.landed ? [{ text: `${pr.number} closed, landed as this commit`, meta: "commit", href: pr.landed }] : []),
         ]),
-        { text: "The merged ones, in one GitHub search", meta: MERGED_PRS_SEARCH_LABEL, href: MERGED_PRS_SEARCH },
+        {
+          text: `GitHub search for the merged ones: finds ${MERGED_PRS_SEARCH_LABEL}, the rest landed as commits`,
+          meta: MERGED_PRS_SEARCH_LABEL,
+          href: MERGED_PRS_SEARCH,
+        },
       ],
     },
     {
       n: String(RESUME.publications.length),
       label: `peer-reviewed IEEE papers, ${RESUME.publications[0]?.year}`,
-      cta: "show papers",
       title: `IEEE AIMV ${RESUME.publications[0]?.year}`,
-      note: "The diabetes paper includes the honest gap between the published number and the reproducible notebook.",
       lines: RESUME.publications.flatMap((pub) =>
         pub.link ? [{ text: pub.title, meta: `ieeexplore ${pub.link.split("/").pop()}`, href: pub.link }] : [],
       ),
     },
     {
       n: "22",
-      label: "frames per second, soccer tracking, end to end",
-      cta: "show pipeline",
+      label: "frames per second, soccer detection and tracking",
       title: "FIFA Soccer DS",
-      note: "YOLOv8 detection, ByteTrack persistence, GraphSAGE scaffold. One DVC stage (analyze_frames) you can re-run.",
       lines: [
         { text: "Project write-up and demo", meta: "/projects/fifa-soccer-ds", href: "/projects/fifa-soccer-ds" },
         {
-          text: "Live before/after overlay",
+          text: "Project landing page",
           meta: "github.io",
           href: "https://jayhemnani9910.github.io/fifa-soccer-ds/",
         },
       ],
     },
     {
-      n: "94%",
+      n: FRAUD_PRECISION,
       label: "precision, credit-fraud ensemble on live transaction data",
-      cta: "show role",
       title: "Amnex, 2022",
-      note: "Random Forest + XGBoost with SMOTE for imbalance. Internship, but it ran on real transactions.",
       lines: [{ text: "AI/ML Intern · Amnex · Gujarat", meta: "Jan-May 2022", href: `/resume#${companyAnchor("Amnex")}` }],
     },
     {
       n: String(c.toolCount),
       label: "MCP tools an agent can call on this page right now",
-      cta: "list tools",
       title: "document.modelContext",
-      note: "Registered in webmcp.ts and asserted by a test, so the count can't drift from the code.",
       lines: toolLines(),
     },
   ];
@@ -294,7 +293,7 @@ export const LOG_NOTES: Record<string, string> = {
   "Elite Hotel Group":
     "ETL in SQL + Python that cut manual prep 40%; occupancy and revenue dashboards; time-series demand forecasts for pricing.",
   "Independent": "Analytics and pipeline work for small businesses; A/B frameworks; reporting automation.",
-  "Amnex": "Credit-fraud ensemble with SMOTE, 94% precision; anomaly dashboards.",
+  "Amnex": `Credit-fraud ensemble with SMOTE, ${FRAUD_PRECISION} precision; anomaly dashboards.`,
   "Cygnus SoftTech": "CodeLock: AES-encrypted iOS privacy app on Core Data.",
   "Cactus Creatives Pvt. Ltd.": "First-responder comms platform on Azure microservices; CI/CD cut deploys 60%.",
 };
@@ -330,7 +329,7 @@ export function buildDeskStats(c: { projectCount: number }): DeskStat[] {
     { n: String(c.projectCount), label: "projects, each with a write-up" },
     { n: String(MERGED_PRS.length), label: "pull requests merged upstream" },
     { n: String(RESUME.publications.length), label: `IEEE papers (${RESUME.publications[0]?.year})` },
-    { n: "94%", label: "fraud-model precision on live data" },
+    { n: FRAUD_PRECISION, label: "fraud-model precision on live data" },
     { n: `${CUBE_PB}s`, label: "Rubik's PB, officially" },
   ];
 }
@@ -370,7 +369,7 @@ export const DAILY_FACTS = [
   "My first internship shipped a first-responder comms platform. No pressure.",
   'I have two IEEE papers and zero idea how to pronounce "IEEE" confidently.',
   "This page has more easter eggs than tests. That's a lie. Probably.",
-  "A credit-fraud model of mine hit 94% precision. It still doesn't trust me.",
+  `A credit-fraud model of mine hit ${FRAUD_PRECISION} precision. It still doesn't trust me.`,
   "I once wrote 23 Airflow DAGs and named exactly zero of them well.",
   "Favourite bug: the one that only appeared on Tuesdays.",
 ];

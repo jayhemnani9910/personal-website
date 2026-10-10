@@ -28,6 +28,10 @@ const overviewComponents = {
     // #fragment stays in this one.
     a: (props: JSX.IntrinsicElements["a"]) =>
         /^https?:\/\//.test(props.href ?? "") ? <a target="_blank" rel="noreferrer" {...props} /> : <a {...props} />,
+    // A fenced block scrolls sideways. Chromium lets Tab reach a scroller on
+    // its own; Safari does not, so it is focusable. Not a named region: a page
+    // can hold several, and landmarks with one shared name tell nobody apart.
+    pre: (props: JSX.IntrinsicElements["pre"]) => <pre tabIndex={0} {...props} />,
 };
 
 // Deep-dive sections authored as one markdown string instead of structured
@@ -43,10 +47,10 @@ export default async function ProjectPage({ params }: { params: Promise<{ id: st
         notFound();
     }
 
-    // Every project renders through the same v4 template now; the old
+    // Every project renders through the same template now; the old
     // tabbed ProjectShowcase path is gone. Order and neighbours come from
     // the same priority-then-id sort the work index uses, so the "01 / N"
-    // counter and the prev/next footer agree with what /projects shows.
+    // counter and the next-project footer agree with what /projects shows.
     const allProjects = await getAllProjects();
     const index = allProjects.findIndex((p) => p.id === id);
     const total = allProjects.length;
@@ -107,6 +111,10 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
         article: { tags: project.tags },
     });
 }
+
+// Every id is generated at build; an unknown one is a 404 served with the
+// site's not-found page, not an on-demand render with an empty body.
+export const dynamicParams = false;
 
 export async function generateStaticParams() {
     const projects = await getAllProjects();
