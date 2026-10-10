@@ -286,6 +286,9 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "morluto/rea", number: "#1216", href: "https://github.com/morluto/rea/pull/1216" },
   { repo: "AlexsJones/llmfit", number: "#1121", href: "https://github.com/AlexsJones/llmfit/pull/1121" },
   { repo: "morluto/rea", number: "#1215", href: "https://github.com/morluto/rea/pull/1215" },
+  { repo: "AlexsJones/llmfit", number: "#1126", href: "https://github.com/AlexsJones/llmfit/pull/1126" },
+  { repo: "lightpanda-io/browser", number: "#3874", href: "https://github.com/lightpanda-io/browser/pull/3874" },
+  { repo: "caddyserver/caddy", number: "#8168", href: "https://github.com/caddyserver/caddy/pull/8168" },
 ];
 
 /**
