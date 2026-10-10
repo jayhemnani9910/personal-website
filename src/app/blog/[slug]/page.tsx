@@ -116,6 +116,10 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   });
 }
 
+// Every slug is generated at build; an unknown one is a 404 served with the
+// site's not-found page, not an on-demand render with an empty body.
+export const dynamicParams = false;
+
 export async function generateStaticParams() {
   const posts = await getAllPosts();
   return posts.map((post) => ({

@@ -112,6 +112,10 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
     });
 }
 
+// Every id is generated at build; an unknown one is a 404 served with the
+// site's not-found page, not an on-demand render with an empty body.
+export const dynamicParams = false;
+
 export async function generateStaticParams() {
     const projects = await getAllProjects();
     return projects.map((project) => ({

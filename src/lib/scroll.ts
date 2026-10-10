@@ -2,9 +2,8 @@ import { isMotionReduced } from "@/hooks/usePrefersReducedMotion";
 
 /**
  * "auto" (an instant jump) under reduced motion or reader mode, else "smooth".
- * Every scripted scroll uses this: an explicit behavior passed to scrollTo or
- * scrollIntoView overrides the CSS scroll-behavior backstop, so each call has
- * to ask for itself.
+ * Every scripted scroll uses this: the page sets no CSS scroll-behavior, so
+ * each call asks for its own.
  */
 export function scrollBehavior(): ScrollBehavior {
   return isMotionReduced() ? "auto" : "smooth";

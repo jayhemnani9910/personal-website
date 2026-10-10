@@ -8,7 +8,7 @@ vi.mock("next/font/google", () => {
 
 import { HomeDesk, inWords } from "./HomeDesk";
 import { greetingFor } from "./Visits";
-import { untilMidnight } from "./TodayPick";
+import { TodayPick, untilMidnight } from "./TodayPick";
 import { dayOfYear } from "./day";
 import { DAILY_FACTS, FEATURED, HOUSE_RULES, buildLogEntries } from "@/data/home";
 import { getAllProjects } from "@/lib/content";
@@ -156,6 +156,38 @@ describe("HomeDesk", () => {
 });
 
 describe("TodayPick", () => {
+  it("never picks a project the cards below already show, on any day of a month", async () => {
+    const featured = FEATURED.map((f) => f.id);
+    vi.useFakeTimers({ toFake: ["Date"] });
+    try {
+      for (let day = 1; day <= 31; day++) {
+        vi.setSystemTime(new Date(2026, 0, day, 12));
+        const view = render(<TerminalProvider>{await HomeDesk()}</TerminalProvider>);
+        const id = view.getByRole("link", { name: /project of the day/ }).getAttribute("href")?.replace("/projects/", "");
+        expect(featured).not.toContain(id);
+        view.unmount();
+      }
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
+  it("turns to a different project on a different day", () => {
+    const projects = ["a", "b", "c"].map((id) => ({ id, title: `Title ${id}`, brief: "b", changed: "c", tags: [] }));
+    vi.useFakeTimers({ toFake: ["Date"] });
+    try {
+      vi.setSystemTime(new Date(2026, 0, 5, 12));
+      const first = render(<TodayPick projects={projects} facts={["f"]} renderedDay={5} />);
+      const day5 = first.getByRole("link").getAttribute("href");
+      first.unmount();
+      vi.setSystemTime(new Date(2026, 0, 6, 12));
+      const second = render(<TodayPick projects={projects} facts={["f"]} renderedDay={6} />);
+      expect(second.getByRole("link").getAttribute("href")).not.toBe(day5);
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
   it("announces a fact only when one more is asked for", async () => {
     await renderHome();
     const live = document.querySelector('#today [aria-live="polite"]');
@@ -165,6 +197,44 @@ describe("TodayPick", () => {
     const shown = document.querySelector("#today p.font-hand")?.textContent;
     expect(DAILY_FACTS).toContain(shown);
     expect(live?.textContent).toBe(shown);
+  });
+});
+
+describe("Hash links on the home page", () => {
+  afterEach(() => {
+    history.replaceState(null, "", "/");
+  });
+
+  it("brings a linked section back into view once the wall has loaded", async () => {
+    history.replaceState(null, "", "/#hi");
+    const scrollTo = vi.spyOn(window, "scrollTo");
+    let release = () => {};
+    getGate = new Promise<void>((r) => (release = r));
+    const page = await HomeDesk();
+    render(<TerminalProvider>{page}</TerminalProvider>);
+    expect(scrollTo).not.toHaveBeenCalled();
+    await act(async () => release());
+    await waitFor(() => expect(scrollTo).toHaveBeenCalled());
+  });
+
+  it("leaves the visitor where they scrolled to", async () => {
+    history.replaceState(null, "", "/#hi");
+    const scrollTo = vi.spyOn(window, "scrollTo");
+    let release = () => {};
+    getGate = new Promise<void>((r) => (release = r));
+    const page = await HomeDesk();
+    render(<TerminalProvider>{page}</TerminalProvider>);
+    fireEvent.wheel(window);
+    await act(async () => release());
+    await waitFor(() => expect(screen.queryByText("counting notes…")).toBeNull());
+    expect(scrollTo).not.toHaveBeenCalled();
+  });
+
+  it("drops the #section from the URL on the first real scroll", async () => {
+    history.replaceState(null, "", "/#work");
+    await renderHome();
+    fireEvent.wheel(window);
+    expect(location.hash).toBe("");
   });
 });
 
