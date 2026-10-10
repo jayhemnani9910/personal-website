@@ -47,11 +47,16 @@ export function DataFlowStrip({ flow, components }: { flow: DataFlowStep[]; comp
                   <span className={`${MONO} text-[11px] ${selected ? "text-tr-text-mute" : "text-tr-text-faint"}`}>{pad(i + 1)}</span>
                   <span className="text-[14px] font-semibold leading-[var(--tr-lh-tight)] text-tr-text">{f.step}</span>
                 </button>
-                {i < flow.length - 1 && (
-                  <span aria-hidden="true" className="shrink-0 text-[18px] font-bold text-tr-text">
-                    →
-                  </span>
-                )}
+                {/* The last stage keeps an invisible arrow, so its card is as
+                    wide as the others rather than taking the arrow's space. On
+                    a phone, where two stages share a row, the arrows would
+                    point off the edge, so the numbers carry the order. */}
+                <span
+                  aria-hidden="true"
+                  className={`hidden shrink-0 text-[18px] font-bold text-tr-text sm:inline ${i === flow.length - 1 ? "invisible" : ""}`}
+                >
+                  →
+                </span>
               </li>
             );
           })}

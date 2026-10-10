@@ -5,7 +5,7 @@ import { CUBE_ACHIEVEMENT, RESUME, companyAnchor, parsePublishedVsReproduced } f
 import { MERGED_PRS, MERGED_PRS_SEARCH, MERGED_PRS_SEARCH_LABEL } from "@/data/home";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
-import { BTN_PRIMARY, CARD, CHIP, H1, H2, HAND, HIGHLIGHT, KICKER, LABEL, LEDE, PILL, SHELL, WRAP } from "@/components/desk";
+import { CARD, CHIP, H1, H2, HAND, HIGHLIGHT, KICKER, LABEL, LEDE, PILL, PILL_ACTIVE, SHELL, WRAP } from "@/components/desk";
 import { SkillGroups } from "./SkillGroups";
 
 export const metadata: Metadata = pageMetadata({
@@ -68,7 +68,7 @@ export default function AboutPage() {
           <ul className="mt-3 flex flex-wrap items-center gap-3">
             {RESUME_PDFS.map((r, i) => (
               <li key={r.file}>
-                <a href={r.file} target="_blank" rel="noreferrer" className={i === 0 ? BTN_PRIMARY : PDF_PILL}>
+                <a href={r.file} target="_blank" rel="noreferrer" className={i === 0 ? `${PDF_PILL} ${PILL_ACTIVE}` : PDF_PILL}>
                   {r.label} <span aria-hidden="true">↗</span>
                   <span className="sr-only"> résumé (PDF, opens in a new tab)</span>
                 </a>
@@ -166,11 +166,13 @@ export default function AboutPage() {
                     {pub.link ? (
                       <a href={pub.link} target="_blank" rel="noreferrer" className={OUT_LINK}>
                         ieeexplore <span aria-hidden="true">↗</span>
+                        <span className="sr-only">: {pub.title} (opens in a new tab)</span>
                       </a>
                     ) : null}
                     {pub.github ? (
                       <a href={pub.github} target="_blank" rel="noreferrer" className={OUT_LINK}>
                         notebook <span aria-hidden="true">↗</span>
+                        <span className="sr-only"> for {pub.title} (opens in a new tab)</span>
                       </a>
                     ) : null}
                   </p>
@@ -235,6 +237,7 @@ export default function AboutPage() {
                           {link}
                           <a href={pr.landed} target="_blank" rel="noreferrer">
                             (closed, landed as a commit <span aria-hidden="true">↗</span>)
+                            <span className="sr-only"> for {pr.repo} {pr.number} (opens in a new tab)</span>
                           </a>
                         </span>
                       ) : (

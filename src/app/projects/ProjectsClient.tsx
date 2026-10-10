@@ -116,7 +116,12 @@ export function ProjectsClient({ projects }: ProjectsClientProps) {
             ) : (
               <button
                 type="button"
-                onClick={() => setFilter("all")}
+                onClick={() => {
+                  setFilter("all");
+                  // The button goes away with the results it brings back, so
+                  // focus would fall to the page; the search box is next.
+                  document.getElementById("project-search")?.focus();
+                }}
                 className="cursor-pointer text-tr-accent-ink underline"
               >
                 search every domain
@@ -166,7 +171,7 @@ export function ProjectsClient({ projects }: ProjectsClientProps) {
                   </span>
 
                   <span className={`pt-1 text-right text-[12px] text-tr-text-faint ${MONO}`}>
-                    {p.period ?? ""}
+                    {p.period ?? "—"}
                   </span>
                 </Link>
               </li>

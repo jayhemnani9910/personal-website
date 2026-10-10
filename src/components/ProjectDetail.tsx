@@ -93,6 +93,10 @@ export function ProjectDetail({
     Array.isArray(deepDive?.metrics) && typeof deepDive.metrics[0] === "object"
       ? (deepDive.metrics as MetricObj[])
       : [];
+  // One size for the whole grid: big figures only when every value is short
+  // enough to sit on one line, so "22 FPS" and "whisper-large-v3" never sit
+  // side by side at two different sizes.
+  const bigMetrics = metrics.every((m) => m.value.length <= 7);
   const snippets = Array.isArray(deepDive?.codeSnippets) ? deepDive.codeSnippets : [];
 
   const learnings = Array.isArray(deepDive?.learnings) ? deepDive.learnings : [];
@@ -450,7 +454,7 @@ export function ProjectDetail({
                     >
                       <dt className={`order-2 mt-2 text-[14px] leading-[var(--tr-lh-card)] text-tr-text-mute`}>{m.label}</dt>
                       <dd
-                        className={`order-1 ${/^\d/.test(m.value) ? "text-[length:clamp(36px,4vw,52px)]" : "text-[length:clamp(24px,2.6vw,32px)]"} font-extrabold leading-none tracking-[-0.04em] tabular-nums text-tr-text`}
+                        className={`order-1 ${bigMetrics ? "text-[length:clamp(36px,4vw,52px)]" : "text-[length:clamp(24px,2.6vw,32px)]"} font-extrabold leading-none tracking-[-0.04em] tabular-nums text-tr-text [text-wrap:balance]`}
                       >
                         {m.value}
                       </dd>
@@ -477,7 +481,11 @@ export function ProjectDetail({
 
       {/* ── Learned / Not done yet ── */}
       {(learnings.length > 0 || futureWork.length > 0 || prose.learnings) && (
-        <Ruled className="grid gap-[clamp(32px,5vw,64px)] sm:grid-cols-2">
+        <Ruled
+          className={`grid gap-[clamp(32px,5vw,64px)] ${
+            (learnings.length > 0 || prose.learnings) && futureWork.length > 0 ? "sm:grid-cols-2" : "max-w-[62ch]"
+          }`}
+        >
           {(learnings.length > 0 || prose.learnings) && (
             <div className="min-w-0">
               <h2 className={`${MONO} mb-1 text-[11px] font-semibold uppercase tracking-[0.08em] text-tr-ok`}>✓ LEARNED</h2>

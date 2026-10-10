@@ -4,6 +4,8 @@ import { useId, useState } from "react";
 import Image from "next/image";
 import { KICKER, PILL, PILL_ACTIVE } from "../desk";
 
+const BADGE = "absolute top-3 rounded-[6px] bg-tr-text px-2 py-1 font-mono text-[11px] text-tr-on-ink";
+
 export type ComparisonPair = { before: string; after: string; label?: string };
 
 /**
@@ -67,14 +69,10 @@ export function ComparisonSlider({
           sizes="(max-width: 1200px) 100vw, 1104px"
           className="object-cover"
         />
-        {/* These two corner labels sit on top of a photograph, where a --tr-*
-            token can't promise contrast against arbitrary imagery underneath.
-            A fixed dark scrim with white text is the one hard-coded colour on
-            project pages, reserved for exactly this case. */}
-        <span
-          className="absolute right-3 top-3 rounded px-2 py-1 font-mono text-[11px] text-white"
-          style={{ background: "rgba(0,0,0,.6)" }}
-        >
+        {/* These two corner labels sit on a photograph, so they are opaque ink
+            badges: their contrast is the text on ink, whatever the image does
+            underneath. Same badge as the video durations on /youtube. */}
+        <span className={`right-3 ${BADGE}`}>
           PIPELINE OUTPUT
         </span>
 
@@ -86,10 +84,7 @@ export function ComparisonSlider({
             sizes="(max-width: 1200px) 100vw, 1104px"
             className="object-cover"
           />
-          <span
-            className="absolute left-3 top-3 rounded px-2 py-1 font-mono text-[11px] text-white"
-            style={{ background: "rgba(0,0,0,.6)" }}
-          >
+          <span className={`left-3 ${BADGE}`}>
             RAW
           </span>
         </div>

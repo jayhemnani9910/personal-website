@@ -42,7 +42,7 @@ export function SiteHeader({ meta }: { meta?: string }) {
                 key={item.href}
                 href={item.href}
                 aria-current={active ? "page" : undefined}
-                className={active ? "rounded-[6px] bg-tr-butter px-2 py-[2px] text-tr-text hover:text-tr-text" : "px-2 py-[2px] text-tr-text"}
+                className={active ? "rounded-[6px] bg-tr-butter px-2 py-[2px] text-tr-text hover:text-tr-text" : "px-2 py-[2px] text-tr-text hover:text-tr-accent-ink"}
               >
                 {item.label}
               </Link>

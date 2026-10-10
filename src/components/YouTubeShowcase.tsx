@@ -81,7 +81,7 @@ function ChannelButton({
       aria-pressed={selected}
       onClick={onSelect}
       className={`desk-press flex min-w-[220px] cursor-pointer flex-col gap-1 rounded-[var(--tr-r-lg)] border-[1.5px] border-tr-hairline px-4 py-3 text-left ${
-        selected ? "bg-tr-butter shadow-[var(--tr-shadow-btn)]" : "bg-tr-surface-1"
+        selected ? "bg-tr-butter shadow-[var(--tr-shadow-btn)]" : "bg-tr-surface-1 hover:bg-tr-surface-2"
       }`}
     >
       <span className="text-[17px] font-bold tracking-[-0.01em]">{channel.title}</span>
@@ -148,7 +148,7 @@ export function YouTubeShowcase({ data }: { data: YouTubeData }) {
         </div>
       )}
 
-      <p className="mt-10 font-mono text-[12px] text-tr-text-faint">Stats refresh daily via the YouTube API.</p>
+      <p className="mt-10 font-mono text-[12px] text-tr-text-faint">Stats from the YouTube API, as of {formatDate(data.fetchedAt)}.</p>
     </div>
   );
 }

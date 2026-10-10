@@ -9,7 +9,7 @@ import { pageMetadata } from "@/lib/page-metadata";
 import { blogPosting, jsonLd } from "@/lib/json-ld";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import { SITE_CONFIG } from "@/../content/site";
-import { CHIP, H1, H2, HAND, HIGHLIGHT, KICKER, SHELL } from "@/components/desk";
+import { CHIP, H1, H2, HIGHLIGHT, KICKER, SHELL } from "@/components/desk";
 
 const BACK_LINK = "font-mono text-[13px] text-tr-text-faint hover:text-tr-accent-ink";
 const INLINE_CODE = "rounded-[var(--tr-r-sm)] bg-tr-surface-2 px-[.35em] py-[.1em] font-mono text-[13px] text-tr-text";
@@ -88,7 +88,7 @@ const mdxComponents = {
   // from markdown syntax, never when written as JSX. tabIndex lets a keyboard
   // user scroll it.
   Diagram: ({ children }: { children?: ReactNode }) => (
-    <div tabIndex={0} className="mb-5 overflow-x-auto text-tr-text [&>svg]:min-w-[640px]">
+    <div tabIndex={0} role="region" aria-label="Diagram, scrolls sideways on narrow screens" className="mb-5 overflow-x-auto text-tr-text [&>svg]:min-w-[640px]">
       {children}
     </div>
   ),
@@ -104,7 +104,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
   return pageMetadata({
     title: post.title,
-    description: post.summary,
+    description: post.description ?? post.summary,
     path: `/blog/${slug}`,
     type: "article",
     article: { publishedTime: post.date, tags: post.tags },
@@ -163,8 +163,10 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
             </div>
 
             <footer className="mt-12 flex flex-wrap items-baseline justify-between gap-x-6 gap-y-4 border-t-[1.5px] border-tr-hairline pt-6">
-              <a href={`mailto:${SITE_CONFIG.social.email}`} className={`${HAND} inline-block -rotate-1 hover:text-tr-accent-ink`}>
-                that&apos;s the essay. argue with me →
+              {/* Mono, not Caveat: the site footer's handwritten line follows
+                  right below, and one hand per page is the rule (ADR 0018). */}
+              <a href={`mailto:${SITE_CONFIG.social.email}`} className={`${BACK_LINK} underline`}>
+                argue with me by email →
               </a>
               <Link href="/blog" className={BACK_LINK}>
                 <span aria-hidden="true">←</span> more writing

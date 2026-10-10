@@ -222,8 +222,10 @@ export function FdeConsole() {
 
       // An error event, or a body that ended without `done`: either way the
       // run is over. A run that produced nothing leaves the panel as it was.
-      if (failed || !finished) {
-        setError(failed ?? NETWORK_ERROR);
+      // `done` with no section at all is a failure too, or the click would
+      // end in silence.
+      if (failed || !finished || !started) {
+        setError(failed ?? (finished ? PARSE_ERROR : NETWORK_ERROR));
         stopStreaming();
       }
     } catch {
@@ -317,6 +319,7 @@ export function FdeConsole() {
 
           {/* Phase strip preview */}
           <div
+            role="group"
             className="mt-5 flex flex-wrap items-center gap-1.5 font-mono text-[12px] text-tr-text-mute"
             aria-label="Simulation phases overview"
           >
