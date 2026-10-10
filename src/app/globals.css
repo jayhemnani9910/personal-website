@@ -57,7 +57,9 @@ html {
   /* html:root, not :root: the token block below sets the 100px default with
      the same specificity, later in the file, and would win. */
   html:root { --tr-scroll-pad: 0px; }
-  .sticky-bar { position: static; }
+  /* relative, not static: the bar keeps its z-index, so the secrets panel
+     hanging off it still paints above the hero below. */
+  .sticky-bar { position: relative; }
 }
 
 /* A shade at the right edge of anything that scrolls sideways (code, wide

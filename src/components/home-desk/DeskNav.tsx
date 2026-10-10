@@ -5,6 +5,7 @@ import { useDesk } from "./SecretsProvider";
 import { SECRETS } from "./secrets";
 import { useJump } from "./useJump";
 import { SHELL, WRAP } from "@/components/desk";
+import { SCROLL_KEYS } from "./scrollKeys";
 
 const ANCHORS = [
   { label: "today", href: "#today" },
@@ -22,6 +23,19 @@ export function DeskNav() {
   const knocks = useRef(0);
   const chipRef = useRef<HTMLButtonElement>(null);
   const navRef = useRef<HTMLElement>(null);
+
+  // Once the visitor scrolls on, a #section in the URL (from a nav jump or a
+  // "say hi" link) no longer says where they are, and Back or a reload would
+  // jump to it instead of restoring their place. Any real scroll drops it.
+  useEffect(() => {
+    const clear = (e: Event) => {
+      if (e instanceof KeyboardEvent && !SCROLL_KEYS.has(e.key)) return;
+      if (location.hash) history.replaceState(history.state, "", location.pathname + location.search);
+    };
+    const events = ["wheel", "touchmove", "keydown"] as const;
+    events.forEach((e) => window.addEventListener(e, clear, { passive: true }));
+    return () => events.forEach((e) => window.removeEventListener(e, clear));
+  }, []);
 
   useEffect(() => {
     if (!open) return;
@@ -60,7 +74,7 @@ export function DeskNav() {
     // A header, so / has the same banner landmark as every other page; the
     // sticky box is the header, so the nav inside it still sticks.
     <header className="sticky-bar sticky top-0 z-20 border-b-[1.5px] border-tr-hairline bg-tr-bg/92 backdrop-blur-[8px]">
-      <nav ref={navRef} aria-label="Page">
+      <nav ref={navRef} aria-label="Main">
         {/* The same 1200px column as every inner page's header (SiteHeader), so
             the logo does not jump sideways between / and the rest of the site.
             Relative, so the secrets panel hangs off the column's right edge. */}

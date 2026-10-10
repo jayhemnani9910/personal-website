@@ -416,7 +416,7 @@ function PhaseContent({
                         href={l.href}
                         {...(l.href.startsWith("http") ? { target: "_blank", rel: "noreferrer" } : {})}
                       >
-                        ↗ {l.label}
+                        <span aria-hidden="true">{l.href.startsWith("http") ? "↗" : "→"}</span> {l.label}
                       </a>
                     ))}
                   </div>

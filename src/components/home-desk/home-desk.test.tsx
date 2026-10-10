@@ -301,7 +301,7 @@ describe("Guestbook", () => {
 
 describe("Desk helpers", () => {
   it("greets by visit count", () => {
-    expect(greetingFor(1)).toBe("oh hi, first time? →");
+    expect(greetingFor(1)).toBe("oh hi, first time?");
     expect(greetingFor(2)).toBe("welcome back! the tiles missed you.");
     expect(greetingFor(5)).toBe("visit #5. you're basically a regular.");
     expect(greetingFor(6)).toBe("visit #6. at this point just email me.");

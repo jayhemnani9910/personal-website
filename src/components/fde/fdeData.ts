@@ -88,7 +88,7 @@ export const NARRATION: Record<string, NarrationLine[]> = {
     { who: 'sys', text: "rendering • boxes are services and stores. dashed lines are retrieval / feedback. solid is request / response." },
   ],
   plan: [
-    { who: 'jay', text: "14 days. Real deliverables. Day 1-2 has to be something a human can observe was done." },
+    { who: 'jay', text: "14 days. Real deliverables. Day one has to be something a human can observe was done." },
     { who: 'sys', text: "sprint mode • every row has a measurable deliverable. \"plan a meeting\" doesn't count." },
   ],
   risks: [

@@ -4,6 +4,8 @@ import { useEffect, useRef, useState, type FormEvent } from "react";
 import { MSG_MAX, NAME_MAX } from "@/lib/guestbook";
 import { useDesk } from "./SecretsProvider";
 import { BTN_PRIMARY } from "@/components/desk";
+import { useLenis } from "lenis/react";
+import { SCROLL_KEYS } from "./scrollKeys";
 
 type WallNote = { name: string; msg: string; at: number };
 
@@ -40,22 +42,29 @@ export function Guestbook() {
   // every page's "say hi") would land mid-wall instead, so once the notes are
   // in, the section is brought back into view, unless they have scrolled since.
   const userScrolled = useRef(false);
+  const returned = useRef(false);
+  // The home page glides with Lenis. A plain window.scrollTo during a glide
+  // is overwritten on the next frame, so the return goes through Lenis and
+  // cuts the glide short; without Lenis (reduced motion) it is a plain jump.
+  const lenis = useLenis();
   useEffect(() => {
     // Only input that scrolls: a wheel, a swipe, a scrolling key, or a press
     // on the page's own scrollbar (its target is <html>). A tap or a Tab is
-    // not reading on, so it does not cancel the return.
-    const SCROLL_KEYS = new Set(["ArrowDown", "ArrowUp", "PageDown", "PageUp", "Home", "End", " "]);
+    // not reading on, so it does not cancel the return. Focus inside the
+    // guestbook does: someone typing a note should not be pulled away.
     const mark = (e: Event) => {
       if (e instanceof KeyboardEvent && !SCROLL_KEYS.has(e.key)) return;
       if (e.type === "pointerdown" && e.target !== document.documentElement) return;
+      if (e.type === "focusin" && !(e.target as Element).closest?.("#guestbook")) return;
       userScrolled.current = true;
     };
-    const events = ["wheel", "touchmove", "keydown", "pointerdown"] as const;
+    const events = ["wheel", "touchmove", "keydown", "pointerdown", "focusin"] as const;
     events.forEach((e) => window.addEventListener(e, mark, { passive: true }));
     return () => events.forEach((e) => window.removeEventListener(e, mark));
   }, []);
   useEffect(() => {
-    if (!loaded || userScrolled.current || !location.hash) return;
+    if (!loaded || returned.current || userScrolled.current || !location.hash) return;
+    returned.current = true;
     const wall = document.getElementById("guestbook");
     let id = location.hash.slice(1);
     try {
@@ -72,9 +81,15 @@ export function Guestbook() {
       for (let n: HTMLElement | null = target; n; n = n.offsetParent as HTMLElement | null) top += n.offsetTop;
       const pad = Number.parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) || 0;
       const margin = Number.parseFloat(getComputedStyle(target).scrollMarginTop) || 0;
-      window.scrollTo({ top: top - pad - margin });
+      const y = top - pad - margin;
+      if (lenis) {
+        // Lenis caches the page height; the notes just made the page taller,
+        // and a target past the cached end is clamped back to it.
+        lenis.resize();
+        lenis.scrollTo(y, { immediate: true, force: true });
+      } else window.scrollTo({ top: y });
     }
-  }, [loaded]);
+  }, [loaded, lenis]);
 
   useEffect(() => {
     let live = true;

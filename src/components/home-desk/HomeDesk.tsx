@@ -95,7 +95,7 @@ export async function HomeDesk() {
             </h1>
             <div className="mt-7 flex flex-wrap items-end justify-between gap-6">
               <p className="max-w-[520px] text-[length:clamp(17px,1.6vw,20px)] leading-[var(--tr-lh-body)] text-tr-text-mute [text-wrap:pretty]">
-                Jay Hemnani. Forward-deployed engineer from Gujarat. Data pipelines, ML, agents, and occasionally a
+                Jay Hemnani. Forward Deployed Engineer from Gujarat. Data pipelines, ML, agents, and occasionally a
                 Rubik&apos;s cube. Currently <b>open to work</b> and, apparently, to building toys for my own homepage.
               </p>
               <p aria-hidden="true" className="font-mono text-[12px] text-tr-text-faint">

@@ -210,7 +210,7 @@ export function TerminalOverlay({ projectCount }: { projectCount: number }) {
                 const p = FEATURED[(parseInt(rest, 10) || 0) - 1];
                 out = p
                     ? [ok(p.title), line(`arrived as: ${p.arrived}`), line(`did: ${p.did}`), line(p.changed, "ok", "✓", "ok")]
-                    : [warn("open <1-6>. six, not seven. i checked.")];
+                    : [warn(rest ? "open <1-6>. six, not seven. i checked." : "open <1-6>. try open 1.")];
                 break;
             }
             case "receipts":

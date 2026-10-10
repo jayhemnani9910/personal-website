@@ -17,7 +17,7 @@ export const metadata: Metadata = pageMetadata({
 });
 
 const RESUME_PDFS = [
-  { label: "Forward-Deployed", file: "/resume/jay-hemnani-fde.pdf" },
+  { label: "Forward Deployed", file: "/resume/jay-hemnani-fde.pdf" },
   { label: "Data Engineer", file: "/resume/jay-hemnani-de.pdf" },
   { label: "ML Engineer", file: "/resume/jay-hemnani-ml.pdf" },
   { label: "Backend / SWE", file: "/resume/jay-hemnani-swe.pdf" },

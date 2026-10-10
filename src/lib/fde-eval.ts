@@ -111,13 +111,13 @@ export const VALID_KINDS = ["ui", "service", "agent", "data", "external"];
  * name. Variants of those two, nothing more: a specific risk that mentions data
  * quality, or a hard question about a timeline, is not a regression.
  */
-export const GENERIC_RISK_PHRASES = ["ai might be inaccurate", "ai may be inaccurate", "model may be inaccurate"];
+const GENERIC_RISK_PHRASES = ["ai might be inaccurate", "ai may be inaccurate", "model may be inaccurate"];
 
-export const LAZY_QUESTION_PHRASES = ["your budget", "what is the budget", "what's the budget"];
+const LAZY_QUESTION_PHRASES = ["your budget", "what is the budget", "what's the budget"];
 
 /** How many characters fit in a diagram box: the limits the prompt states. */
-export const MAX_NAME_CHARS = 18;
-export const MAX_SUB_CHARS = 24;
+const MAX_NAME_CHARS = 18;
+const MAX_SUB_CHARS = 24;
 
 export interface Check {
   id: string;

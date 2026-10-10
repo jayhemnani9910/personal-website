@@ -14,7 +14,7 @@ const fraudPrecision = RESUME.experience
   .map((b) => b.text.match(/(\d+)% precision/)?.[1])
   .find(Boolean);
 if (!fraudPrecision) throw new Error("resume.ts: the Amnex role has no '<n>% precision' bullet");
-export const FRAUD_PRECISION = `${fraudPrecision}%`;
+const FRAUD_PRECISION = `${fraudPrecision}%`;
 
 export type FeaturedProject = {
   id: string;
