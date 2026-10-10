@@ -11,7 +11,7 @@ import { BTN, CARD, H1, H2, HAND, LABEL, LEDE, MONO, SHELL, WRAP, pad } from "./
 // Markdown prose from a deep-dive string (lists, bold, the odd fenced block).
 // Inline code is a paper chip; a fenced block is an ink panel, like CodeBlock.
 const PROSE =
-  "max-w-[62ch] text-[16px] leading-[var(--tr-lh-prose)] text-tr-text-mute [&>*+*]:mt-4 [&_a]:text-tr-text [&_a]:underline [&_code]:font-mono [&_code]:text-[12.5px] [&_:not(pre)>code]:rounded-[var(--tr-r-sm)] [&_:not(pre)>code]:bg-tr-surface-2 [&_:not(pre)>code]:px-1.5 [&_:not(pre)>code]:py-[2px] [&_:not(pre)>code]:text-tr-text [&_li]:mt-2 [&_ol]:list-decimal [&_ol]:pl-5 [&_pre]:overflow-x-auto [&_pre]:rounded-[var(--tr-r-lg)] [&_pre]:border-[1.5px] [&_pre]:border-tr-on-ink-line [&_pre]:bg-tr-text [&_pre]:p-4 [&_pre]:text-tr-on-ink [&_strong]:font-semibold [&_strong]:text-tr-text [&_ul]:list-disc [&_ul]:pl-5";
+  "max-w-[62ch] text-[16px] leading-[var(--tr-lh-prose)] text-tr-text-mute [&>*+*]:mt-4 [&_a]:text-tr-text [&_a]:underline [&_code]:font-mono [&_code]:text-[12.5px] [&_:not(pre)>code]:rounded-[var(--tr-r-sm)] [&_:not(pre)>code]:bg-tr-surface-2 [&_:not(pre)>code]:px-1.5 [&_:not(pre)>code]:py-[2px] [&_:not(pre)>code]:text-tr-text [&_li]:mt-2 [&_ol]:list-decimal [&_ol]:pl-5 [&_pre]:overflow-x-auto [&_pre]:scroll-hint [&_pre]:[--hint-bg:var(--tr-text)] [&_pre]:[--hint-edge:color-mix(in_srgb,var(--tr-butter)_45%,transparent)] [&_pre]:rounded-[var(--tr-r-lg)] [&_pre]:border-[1.5px] [&_pre]:border-tr-on-ink-line [&_pre]:bg-tr-text [&_pre]:p-4 [&_pre]:text-tr-on-ink [&_strong]:font-semibold [&_strong]:text-tr-text [&_ul]:list-disc [&_ul]:pl-5";
 
 // A figure's frame, matching ComparisonSlider's: ink, radius 14, a small hard shadow.
 const FIGURE = "overflow-hidden rounded-[var(--tr-r-lg)] border-[1.5px] border-tr-hairline bg-tr-surface-1 shadow-[4px_4px_0_var(--tr-text)]";
@@ -241,6 +241,7 @@ export function ProjectDetail({
 
       {demo?.kind === "report" && (
         <Ruled>
+          <p className={`${LABEL} mb-2`}>Sample run · the question</p>
           <h2 className={H2}>{demo.title}</h2>
           <p className={`mt-3 max-w-[62ch] ${LEDE}`}>{demo.note}</p>
 
@@ -427,7 +428,9 @@ export function ProjectDetail({
               blank stretch while the code scrolls past. */}
           <div className="lg:sticky lg:top-24 lg:self-start">
             <h2 className={H2}>The part that mattered.</h2>
-            <p className={`mt-3 max-w-[48ch] ${LEDE}`}>The numbers behind the work, and the code that produced them.</p>
+            <p className={`mt-3 max-w-[48ch] ${LEDE}`}>
+              {metrics.length > 0 ? "The numbers behind the work, and the code that produced them." : "The code that did the work."}
+            </p>
 
             {metrics.length > 0 && (
               <div className={`mt-8 overflow-hidden ${CARD}`}>
@@ -481,7 +484,7 @@ export function ProjectDetail({
         >
           {(learnings.length > 0 || prose.learnings) && (
             <div className="min-w-0">
-              <h2 className={`${MONO} mb-1 text-[11px] font-semibold uppercase tracking-[0.08em] text-tr-ok`}>✓ LEARNED</h2>
+              <h2 className={`${MONO} mb-1 text-[11px] font-semibold uppercase tracking-[0.08em] text-tr-ok`}><span aria-hidden="true">✓ </span>LEARNED</h2>
               {prose.learnings && <div className={`mt-3 ${PROSE}`}>{prose.learnings}</div>}
               {learnings.length > 0 && (
                 <ol className="list-none">
@@ -502,7 +505,7 @@ export function ProjectDetail({
 
           {futureWork.length > 0 && (
             <div>
-              <h2 className={`${MONO} mb-1 text-[11px] font-semibold uppercase tracking-[0.08em] text-tr-warn`}>◔ NOT DONE YET</h2>
+              <h2 className={`${MONO} mb-1 text-[11px] font-semibold uppercase tracking-[0.08em] text-tr-warn`}><span aria-hidden="true">◔ </span>NOT DONE YET</h2>
               <ol className="list-none">
                 {futureWork.map((item, i) => (
                   <li key={i} className="border-t border-tr-hairline py-3.5 text-[15px] leading-normal text-tr-text">

@@ -33,7 +33,11 @@ export function inWords(n: number): string {
 const PICK_TEXT = 170;
 function clip(text: string): string {
   if (text.length <= PICK_TEXT) return text;
-  return `${text.slice(0, text.lastIndexOf(" ", PICK_TEXT)).replace(/[,;:.]$/, "")}…`;
+  let cut = text.slice(0, text.lastIndexOf(" ", PICK_TEXT));
+  // Never leave a "(" open: cut back to before it instead.
+  const open = cut.lastIndexOf("(");
+  if (open > cut.lastIndexOf(")")) cut = cut.slice(0, open).trimEnd();
+  return `${cut.replace(/[,;:.]$/, "")}…`;
 }
 
 const capitalise = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);

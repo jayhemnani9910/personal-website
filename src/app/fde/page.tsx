@@ -117,7 +117,7 @@ export default function FDEPage() {
                         href={l.href}
                         {...(l.href.startsWith("http") ? { target: "_blank", rel: "noreferrer" } : {})}
                       >
-                        ↗ {l.label}
+                        <span aria-hidden="true">{l.href.startsWith("http") ? "↗" : "→"}</span> {l.label}
                       </a>
                     ))}
                   </div>
@@ -227,7 +227,7 @@ function FdeContact() {
                   aria-hidden="true"
                   className="font-mono text-tr-accent-ink transition-transform duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] group-hover:-translate-y-1 group-hover:translate-x-1"
                 >
-                  ↗
+                  {l.internal ? "→" : "↗"}
                 </span>
               </>
             );

@@ -135,7 +135,7 @@ export function FdeArchDiagram({ architecture }: Props) {
   return (
     // Scrolls sideways on a phone, so it is a named, focusable region; the svg
     // itself is aria-hidden.
-    <div tabIndex={0} role="region" aria-label="Architecture diagram" className="fde-arch-canvas relative overflow-x-auto rounded-[var(--tr-r-lg)] border-[1.5px] border-tr-hairline bg-tr-bg p-5">
+    <div tabIndex={0} role="region" aria-label="Architecture diagram" className="fde-arch-canvas scroll-hint relative overflow-x-auto rounded-[var(--tr-r-lg)] border-[1.5px] border-tr-hairline bg-tr-bg p-5">
       <svg
         viewBox={`0 0 ${maxX} ${maxY}`}
         width="100%"

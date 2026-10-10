@@ -92,7 +92,7 @@ const mdxComponents = {
       <p aria-hidden="true" className="mb-1.5 font-mono text-[11px] text-tr-text-faint md:hidden">
         ← the figure scrolls sideways →
       </p>
-      <div tabIndex={0} role="region" aria-label={label} className="mb-5 overflow-x-auto text-tr-text [&>svg]:min-w-[640px]">
+      <div tabIndex={0} role="region" aria-label={label} className="scroll-hint mb-5 overflow-x-auto text-tr-text [&>svg]:min-w-[640px]">
         {children}
       </div>
     </>
