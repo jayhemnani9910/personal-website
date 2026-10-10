@@ -29,7 +29,7 @@ const MAX_TILES = 40;
 const REST_FRAMES = 60;
 const REST_PX = 0.1;
 
-const TILE = "absolute left-0 top-0 flex select-none items-center justify-center border-[1.5px] border-tr-hairline shadow-[3px_3px_0_var(--tr-text)] [will-change:transform]";
+const TILE = "absolute left-0 top-0 flex select-none transition-none items-center justify-center border-[1.5px] border-tr-hairline shadow-[3px_3px_0_var(--tr-text)] [will-change:transform]";
 const LETTER = "size-[72px] rounded-[14px] text-[52px] sm:size-24 sm:rounded-[18px] sm:text-[68px] font-extrabold";
 const WORD = "rounded-full px-3 py-2 text-[13px] sm:px-4 sm:py-2.5 sm:text-[15px] font-mono font-semibold whitespace-nowrap";
 

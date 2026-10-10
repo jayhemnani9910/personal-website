@@ -1,5 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { act, fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { isValidElement, type ComponentProps, type ReactElement } from "react";
 
 vi.mock("next/font/google", () => {
   const font = () => ({ variable: "font-stub" });
@@ -172,20 +173,19 @@ describe("HomeDesk", () => {
 });
 
 describe("TodayPick", () => {
-  it("never picks a project the cards below already show, on any day of a month", async () => {
+  // The pick is projects[day % length], so checking every candidate covers
+  // every day of the year without rendering the page once per day.
+  it("never picks a project the cards below already show, on any day", async () => {
+    const find = (node: unknown): ReactElement<ComponentProps<typeof TodayPick>> | undefined => {
+      if (Array.isArray(node)) return node.map(find).find(Boolean);
+      if (!isValidElement(node)) return undefined;
+      if (node.type === TodayPick) return node as ReactElement<ComponentProps<typeof TodayPick>>;
+      return find((node.props as { children?: unknown }).children);
+    };
+    const pick = find(await HomeDesk());
     const featured = FEATURED.map((f) => f.id);
-    vi.useFakeTimers({ toFake: ["Date"] });
-    try {
-      for (let day = 1; day <= 31; day++) {
-        vi.setSystemTime(new Date(2026, 0, day, 12));
-        const view = render(<TerminalProvider>{await HomeDesk()}</TerminalProvider>);
-        const id = view.getByRole("link", { name: /project of the day/ }).getAttribute("href")?.replace("/projects/", "");
-        expect(featured).not.toContain(id);
-        view.unmount();
-      }
-    } finally {
-      vi.useRealTimers();
-    }
+    expect(pick?.props.projects.length).toBeGreaterThan(0);
+    for (const p of pick!.props.projects) expect(featured).not.toContain(p.id);
   });
 
   it("turns to a different project on a different day", () => {
