@@ -2,7 +2,7 @@
 title: "Chatbot (NLP)"
 summary: "Intent-based bot trained from JSON corpus."
 description: "An intent-based chatbot trained from a JSON corpus: stemming, bag-of-words, and a small neural network that picks the intent."
-role: "Concept"
+role: "Developer"
 domain: "Student work"
 tags: ["python", "nlp"]
 tech: ["Python"]
@@ -23,16 +23,16 @@ deepDive:
   architecture: |
     The system follows a pipeline architecture from raw text input to predicted intent:
 
-    **1. User Input → Preprocessing**
+    **1. User Input → Preprocessing:**
     Raw user text undergoes normalization: lowercasing, tokenization (splitting into words), and stemming (reducing words to root forms with the Porter stemmer). This reduces vocabulary size and improves generalization.
 
-    **2. Preprocessing → Feature Extraction**
+    **2. Preprocessing → Feature Extraction:**
     Processed tokens are converted into numerical representations using bag-of-words (BoW) encoding. Each word in the training vocabulary becomes a binary feature (1 if present, 0 if absent), creating a fixed-length vector that represents the input sentence.
 
-    **3. Feature Vector → Neural Network**
+    **3. Feature Vector → Neural Network:**
     The bag-of-words vector feeds into a feedforward neural network trained to classify intents. The network learns to map word patterns to intent categories through supervised learning on the labeled training corpus.
 
-    **4. Intent Prediction → Response Generation**
+    **4. Intent Prediction → Response Generation:**
     The model outputs a probability distribution over all possible intents. The highest-probability intent is selected, and the system retrieves a corresponding response from the JSON corpus. Responses can be randomized from a pool to add variety.
 
     **JSON Corpus Structure:**
@@ -46,7 +46,7 @@ deepDive:
       purpose: "Converts preprocessed tokens into fixed-length binary vectors based on training vocabulary. Implements efficient lookup for real-time inference."
 
     - name: "Intent Classifier (Neural Network)"
-      purpose: "Multi-layer feedforward neural network built with TensorFlow/Keras or PyTorch. Uses softmax output layer for multi-class classification across intent categories."
+      purpose: "Multi-layer feedforward neural network built with TensorFlow/Keras. Uses softmax output layer for multi-class classification across intent categories."
 
     - name: "Response Generator"
       purpose: "Maps predicted intent to appropriate responses from JSON corpus. Implements response randomization and context-aware selection logic."

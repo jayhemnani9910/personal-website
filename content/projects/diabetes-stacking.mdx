@@ -61,7 +61,7 @@ deepDive:
       reasoning: "With 768 rows the result is sensitive to the split, so fixing the random_state keeps it reproducible. The stack's 73.59% test accuracy (76.91% train) is reported as it is, even though it ties the SVM and sits below four of the base models."
       alternatives: "Report only the best-looking number (misleading on small data); skip a held-out set (no honest generalization estimate)."
   codeSnippets:
-    - title: "Six tuned base models stacked under a meta-learner"
+    - title: "Six base models (five tuned) stacked under a meta-learner"
       language: "python"
       code: |
         from sklearn.ensemble import StackingClassifier, RandomForestClassifier

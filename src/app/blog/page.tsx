@@ -92,7 +92,7 @@ export default async function WritingPage() {
               <Link href="/projects" className={SMALL_CARD}>
                 <span className={LABEL}>All {projects.length}</span>
                 <span className="text-[20px] font-bold leading-[var(--tr-lh-h2)] tracking-[-0.02em]">The index →</span>
-                <span className="line-clamp-2 text-[14px] leading-normal text-tr-text-mute">
+                <span className="line-clamp-3 text-[14px] leading-normal text-tr-text-mute">
                   Filter by stack or domain. Student work is labelled, not hidden.
                 </span>
               </Link>

@@ -25,14 +25,10 @@ export type ShowcaseDemo =
     };
 
 export type ShowcaseConfig = {
-  arch?: string;
   demo?: ShowcaseDemo;
 };
 
 export const SHOWCASE_PROJECTS: Record<string, ShowcaseConfig> = {
-  "stock-data-platform": {
-    arch: "/projects/stock/architecture.png",
-  },
   "fifa-soccer-ds": {
     demo: {
       kind: "compare",
@@ -43,9 +39,6 @@ export const SHOWCASE_PROJECTS: Record<string, ShowcaseConfig> = {
         { before: "/projects/fifa/input_15.jpg", after: "/projects/fifa/overlay_15.jpg" },
       ],
     },
-  },
-  "biotech-accelerator": {
-    arch: "/projects/bio/architecture.png",
   },
   "webmcp-portfolio": {
     demo: {

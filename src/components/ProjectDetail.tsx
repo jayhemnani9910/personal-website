@@ -1,6 +1,5 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import type { Project } from "@/lib/definitions";
 import { SHOWCASE_PROJECTS } from "@/lib/showcase";
 import { CodeBlock } from "./CodeBlock";
@@ -13,8 +12,6 @@ import { BTN, CARD, H1, H2, HAND, LABEL, LEDE, MONO, SHELL, WRAP, pad } from "./
 const PROSE =
   "max-w-[62ch] text-[16px] leading-[var(--tr-lh-prose)] text-tr-text-mute [&>*+*]:mt-4 [&_a]:text-tr-text [&_a]:underline [&_code]:font-mono [&_code]:text-[12.5px] [&_:not(pre)>code]:rounded-[var(--tr-r-sm)] [&_:not(pre)>code]:bg-tr-surface-2 [&_:not(pre)>code]:px-1.5 [&_:not(pre)>code]:py-[2px] [&_:not(pre)>code]:text-tr-text [&_li]:mt-2 [&_ol]:list-decimal [&_ol]:pl-5 [&_pre]:overflow-x-auto [&_pre]:scroll-hint [&_pre]:ink-hint [&_pre]:rounded-[var(--tr-r-lg)] [&_pre]:border-[1.5px] [&_pre]:border-tr-on-ink-line [&_pre]:bg-tr-text [&_pre]:p-4 [&_pre]:text-tr-on-ink [&_strong]:font-semibold [&_strong]:text-tr-text [&_ul]:list-disc [&_ul]:pl-5";
 
-// A figure's frame, matching ComparisonSlider's: ink, radius 14, a small hard shadow.
-const FIGURE = "overflow-hidden rounded-[var(--tr-r-lg)] border-[1.5px] border-tr-hairline bg-tr-surface-1 shadow-[4px_4px_0_var(--tr-text)]";
 // Text on an ink panel: the tools demo's request and response. They are JSON,
 // so they wrap rather than scroll off the edge of a phone.
 const INK_PRE = "min-w-0 whitespace-pre-wrap p-4 font-mono text-[12.5px] leading-[var(--tr-lh-body)] text-tr-on-ink [overflow-wrap:anywhere]";
@@ -71,9 +68,6 @@ export function ProjectDetail({
   const links = project.links ?? {};
   const showcase = SHOWCASE_PROJECTS[project.id];
   const demo = showcase?.demo;
-  // stock-data-platform and biotech-accelerator carry an arch diagram; it sits
-  // with the architecture prose, apart from the Data flow section.
-  const archImage = showcase?.arch;
 
   const flow: DataFlowStep[] =
     Array.isArray(deepDive?.dataFlow) && typeof deepDive.dataFlow[0] === "object"
@@ -120,8 +114,8 @@ export function ProjectDetail({
   };
   // links.code stands in when there is no top-level github (basic-banking).
   linkCell("CODE", project.github ?? links.code, "GitHub ↗");
-  linkCell("DEMO", links.demo, "Demo ↗");
-  linkCell("SITE", links.site, "Site ↗");
+  linkCell("DEMO", links.demo, "Try it ↗");
+  linkCell("SITE", links.site, "Visit ↗");
   linkCell("PAPER", links.paper, "IEEE ↗");
 
   return (
@@ -321,23 +315,11 @@ export function ProjectDetail({
         </div>
       </Ruled>
 
-      {/* ── Architecture: the prose, and the diagram where there is one ── */}
-      {(prose.architecture || archImage) && (
+      {/* ── Architecture ── */}
+      {prose.architecture && (
         <Ruled>
           <h2 className={`${LABEL} mb-3`}>ARCHITECTURE</h2>
-          {prose.architecture && <div className={PROSE}>{prose.architecture}</div>}
-          {archImage && (
-            <figure className={`${prose.architecture ? "mt-8 " : ""}${FIGURE}`}>
-              <Image
-                src={archImage}
-                alt={`${project.title}: system architecture diagram`}
-                width={1672}
-                height={941}
-                sizes="(max-width: 1200px) 100vw, 1104px"
-                className="h-auto w-full"
-              />
-            </figure>
-          )}
+          <div className={PROSE}>{prose.architecture}</div>
         </Ruled>
       )}
 
@@ -429,7 +411,7 @@ export function ProjectDetail({
           <div className="lg:sticky lg:top-24 lg:self-start">
             <h2 className={H2}>The part that mattered.</h2>
             <p className={`mt-3 max-w-[48ch] ${LEDE}`}>
-              {metrics.length > 0 ? "The numbers behind the work, and the code that produced them." : "The code that did the work."}
+              {metrics.length > 0 ? "The facts behind the work, and the code that produced them." : "The code that did the work."}
             </p>
 
             {metrics.length > 0 && (

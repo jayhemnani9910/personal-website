@@ -2,7 +2,7 @@
 title: "Immigration Management System"
 summary: "Relational schema + CRUD for immigration ops."
 description: "A normalized MySQL schema for immigration case management: people, cases, documents with expiry dates, and an audit trail."
-role: "Concept"
+role: "Developer"
 domain: "Student work"
 tags: ["sql"]
 tech: ["SQL", "MySQL"]
@@ -100,215 +100,209 @@ deepDive:
     - **Case Details:** JOIN cases, case_persons, persons to fetch complete case view
     - **Person History:** JOIN persons, case_persons, cases to show all cases for a person
 
-  keyDecisions: |
-    **1. Normalization vs. Denormalization Trade-off**
-    - **Decision:** Keep person data normalized, denormalize case counts in persons table
-    - **Rationale:** Person data changes infrequently but is queried often. Storing `active_case_count` avoids expensive COUNT queries while accepting occasional inconsistency risk.
-    - **Cost:** every case change has to keep `active_case_count` in step; a missed update shows a wrong count until it is recomputed.
+  keyDecisions:
+    - decision: "Keep person data normalized, denormalize case counts in persons table"
+      rationale: "Person data changes infrequently but is queried often. Storing `active_case_count` avoids expensive COUNT queries while accepting occasional inconsistency risk."
+      tradeoff: "every case change has to keep `active_case_count` in step; a missed update shows a wrong count until it is recomputed."
 
-    **2. Handling Multiple Roles per Person**
-    - **Decision:** Use `case_persons` junction table with `role` enum (applicant, dependent, sponsor, attorney)
-    - **Rationale:** Allows flexibility for one person to have multiple roles in same case (e.g., sponsor and attorney) while maintaining clean schema.
-    - **Cost:** the role list is an ENUM, so a new role is a schema change (ALTER TABLE), not a row.
+    - decision: "Use `case_persons` junction table with `role` enum (applicant, dependent, sponsor, attorney)"
+      rationale: "Allows flexibility for one person to have multiple roles in same case (e.g., sponsor and attorney) while maintaining clean schema."
+      tradeoff: "the role list is an ENUM, so a new role is a schema change (ALTER TABLE), not a row."
 
-    **3. Document Expiration Strategy**
-    - **Decision:** Store both `issue_date` and `expiration_date` rather than calculating on-the-fly
-    - **Rationale:** Different document types have different validity periods, and some may be extended. Pre-calculating enables efficient index-based queries for deadline monitoring.
-    - **Cost:** an extension is an update to the stored date, and nothing in the schema stops a stored date from disagreeing with its document type's validity period.
+    - decision: "Store both `issue_date` and `expiration_date` rather than calculating on-the-fly"
+      rationale: "Different document types have different validity periods, and some may be extended. Pre-calculating enables efficient index-based queries for deadline monitoring."
+      tradeoff: "an extension is an update to the stored date, and nothing in the schema stops a stored date from disagreeing with its document type's validity period."
 
-    **4. Audit Trail Implementation**
-    - **Decision:** Separate `case_status_history` table instead of JSON field in cases table
-    - **Rationale:** Enables SQL queries on historical data, maintains normalization, and allows efficient range queries (e.g., "all cases that were pending in Q2 2023").
-    - **Cost:** every status change is two writes inside one transaction, and a case's history is a join away.
+    - decision: "Separate `case_status_history` table instead of JSON field in cases table"
+      rationale: "Enables SQL queries on historical data, maintains normalization, and allows efficient range queries (e.g., \"all cases that were pending in Q2 2023\")."
+      tradeoff: "every status change is two writes inside one transaction, and a case's history is a join away."
 
-    **5. Database Engine Choice**
-    - **Decision:** MySQL with the InnoDB engine
-    - **Rationale:** ACID compliance critical for immigration data integrity. Row-level locking supports concurrent case updates. Native support for foreign keys and transactions.
-    - **Cost:** the schema leans on MySQL specifics (ENUM columns, ON UPDATE CURRENT_TIMESTAMP), so moving to another database is a rewrite of those parts.
+    - decision: "MySQL with the InnoDB engine"
+      rationale: "ACID compliance critical for immigration data integrity. Row-level locking supports concurrent case updates. Native support for foreign keys and transactions."
+      tradeoff: "the schema leans on MySQL specifics (ENUM columns, ON UPDATE CURRENT_TIMESTAMP), so moving to another database is a rewrite of those parts."
 
-    **6. Text Encoding for Internationalization**
-    - **Decision:** UTF-8 encoding for all text fields
-    - **Rationale:** Immigration data includes names and addresses from diverse languages. UTF-8 ensures proper storage and sorting of international characters.
-    - **Cost:** utf8mb4 takes up to four bytes a character, so long indexed VARCHAR columns reach InnoDB's index-length limit sooner.
+    - decision: "UTF-8 encoding for all text fields"
+      rationale: "Immigration data includes names and addresses from diverse languages. UTF-8 ensures proper storage and sorting of international characters."
+      tradeoff: "utf8mb4 takes up to four bytes a character, so long indexed VARCHAR columns reach InnoDB's index-length limit sooner."
 
-  codeSnippets: |
-    **Core Schema Definition:**
-    ```sql
-    -- Person entity (normalized to avoid duplication)
-    CREATE TABLE persons (
-      person_id INT PRIMARY KEY AUTO_INCREMENT,
-      first_name VARCHAR(100) NOT NULL,
-      last_name VARCHAR(100) NOT NULL,
-      date_of_birth DATE NOT NULL,
-      nationality VARCHAR(100),
-      passport_number VARCHAR(50) UNIQUE,
-      email VARCHAR(255),
-      phone VARCHAR(20),
-      active_case_count INT DEFAULT 0, -- Denormalized for performance
-      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-      updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-      INDEX idx_name (last_name, first_name),
-      INDEX idx_dob (date_of_birth)
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  codeSnippets:
+    - title: "Core Schema Definition"
+      language: "sql"
+      code: |
+        -- Person entity (normalized to avoid duplication)
+        CREATE TABLE persons (
+          person_id INT PRIMARY KEY AUTO_INCREMENT,
+          first_name VARCHAR(100) NOT NULL,
+          last_name VARCHAR(100) NOT NULL,
+          date_of_birth DATE NOT NULL,
+          nationality VARCHAR(100),
+          passport_number VARCHAR(50) UNIQUE,
+          email VARCHAR(255),
+          phone VARCHAR(20),
+          active_case_count INT DEFAULT 0, -- Denormalized for performance
+          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+          updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+          INDEX idx_name (last_name, first_name),
+          INDEX idx_dob (date_of_birth)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-    -- Case entity
-    CREATE TABLE cases (
-      case_id INT PRIMARY KEY AUTO_INCREMENT,
-      case_number VARCHAR(50) UNIQUE NOT NULL,
-      case_type_id INT NOT NULL,
-      status ENUM('OPEN', 'PENDING', 'APPROVED', 'DENIED', 'CLOSED') DEFAULT 'OPEN',
-      filing_date DATE NOT NULL,
-      target_completion_date DATE,
-      priority ENUM('LOW', 'MEDIUM', 'HIGH', 'URGENT') DEFAULT 'MEDIUM',
-      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-      updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-      FOREIGN KEY (case_type_id) REFERENCES case_types(case_type_id),
-      INDEX idx_status_date (status, filing_date),
-      INDEX idx_completion (target_completion_date)
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+        -- Case entity
+        CREATE TABLE cases (
+          case_id INT PRIMARY KEY AUTO_INCREMENT,
+          case_number VARCHAR(50) UNIQUE NOT NULL,
+          case_type_id INT NOT NULL,
+          status ENUM('OPEN', 'PENDING', 'APPROVED', 'DENIED', 'CLOSED') DEFAULT 'OPEN',
+          filing_date DATE NOT NULL,
+          target_completion_date DATE,
+          priority ENUM('LOW', 'MEDIUM', 'HIGH', 'URGENT') DEFAULT 'MEDIUM',
+          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+          updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+          FOREIGN KEY (case_type_id) REFERENCES case_types(case_type_id),
+          INDEX idx_status_date (status, filing_date),
+          INDEX idx_completion (target_completion_date)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-    -- Many-to-many relationship with role differentiation
-    CREATE TABLE case_persons (
-      case_person_id INT PRIMARY KEY AUTO_INCREMENT,
-      case_id INT NOT NULL,
-      person_id INT NOT NULL,
-      role ENUM('APPLICANT', 'DEPENDENT', 'SPONSOR', 'ATTORNEY') NOT NULL,
-      is_primary BOOLEAN DEFAULT FALSE,
-      relationship VARCHAR(50), -- e.g., "spouse", "child", "employer"
-      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-      FOREIGN KEY (case_id) REFERENCES cases(case_id) ON DELETE CASCADE,
-      FOREIGN KEY (person_id) REFERENCES persons(person_id) ON DELETE RESTRICT,
-      UNIQUE KEY unique_case_person_role (case_id, person_id, role),
-      INDEX idx_person_cases (person_id, case_id)
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+        -- Many-to-many relationship with role differentiation
+        CREATE TABLE case_persons (
+          case_person_id INT PRIMARY KEY AUTO_INCREMENT,
+          case_id INT NOT NULL,
+          person_id INT NOT NULL,
+          role ENUM('APPLICANT', 'DEPENDENT', 'SPONSOR', 'ATTORNEY') NOT NULL,
+          is_primary BOOLEAN DEFAULT FALSE,
+          relationship VARCHAR(50), -- e.g., "spouse", "child", "employer"
+          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+          FOREIGN KEY (case_id) REFERENCES cases(case_id) ON DELETE CASCADE,
+          FOREIGN KEY (person_id) REFERENCES persons(person_id) ON DELETE RESTRICT,
+          UNIQUE KEY unique_case_person_role (case_id, person_id, role),
+          INDEX idx_person_cases (person_id, case_id)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-    -- Document tracking with expiration management
-    CREATE TABLE documents (
-      document_id INT PRIMARY KEY AUTO_INCREMENT,
-      case_id INT NOT NULL,
-      document_type_id INT NOT NULL,
-      document_number VARCHAR(100),
-      issue_date DATE NOT NULL,
-      expiration_date DATE,
-      file_path VARCHAR(500),
-      status ENUM('PENDING', 'SUBMITTED', 'APPROVED', 'REJECTED', 'EXPIRED') DEFAULT 'PENDING',
-      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-      updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-      FOREIGN KEY (case_id) REFERENCES cases(case_id) ON DELETE CASCADE,
-      FOREIGN KEY (document_type_id) REFERENCES document_types(document_type_id),
-      INDEX idx_expiration (expiration_date, status),
-      INDEX idx_case_docs (case_id, document_type_id)
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-    ```
+        -- Document tracking with expiration management
+        CREATE TABLE documents (
+          document_id INT PRIMARY KEY AUTO_INCREMENT,
+          case_id INT NOT NULL,
+          document_type_id INT NOT NULL,
+          document_number VARCHAR(100),
+          issue_date DATE NOT NULL,
+          expiration_date DATE,
+          file_path VARCHAR(500),
+          status ENUM('PENDING', 'SUBMITTED', 'APPROVED', 'REJECTED', 'EXPIRED') DEFAULT 'PENDING',
+          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+          updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+          FOREIGN KEY (case_id) REFERENCES cases(case_id) ON DELETE CASCADE,
+          FOREIGN KEY (document_type_id) REFERENCES document_types(document_type_id),
+          INDEX idx_expiration (expiration_date, status),
+          INDEX idx_case_docs (case_id, document_type_id)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-    **Complex Query Example - Case Details with All Relationships:**
-    ```sql
-    -- View for complete case information
-    CREATE VIEW v_case_details AS
-    SELECT
-      c.case_id,
-      c.case_number,
-      ct.case_type_name,
-      c.status,
-      c.filing_date,
-      c.target_completion_date,
-      p.person_id,
-      CONCAT(p.first_name, ' ', p.last_name) AS person_name,
-      p.nationality,
-      cp.role,
-      cp.is_primary,
-      cp.relationship,
-      COUNT(DISTINCT d.document_id) AS total_documents,
-      COUNT(DISTINCT CASE WHEN d.status = 'APPROVED' THEN d.document_id END) AS approved_documents,
-      MIN(d.expiration_date) AS next_expiration
-    FROM cases c
-    INNER JOIN case_types ct ON c.case_type_id = ct.case_type_id
-    LEFT JOIN case_persons cp ON c.case_id = cp.case_id
-    LEFT JOIN persons p ON cp.person_id = p.person_id
-    LEFT JOIN documents d ON c.case_id = d.case_id
-    GROUP BY c.case_id, p.person_id, cp.case_person_id;
+    - title: "Complex Query Example - Case Details with All Relationships"
+      language: "sql"
+      code: |
+        -- View for complete case information
+        CREATE VIEW v_case_details AS
+        SELECT
+          c.case_id,
+          c.case_number,
+          ct.case_type_name,
+          c.status,
+          c.filing_date,
+          c.target_completion_date,
+          p.person_id,
+          CONCAT(p.first_name, ' ', p.last_name) AS person_name,
+          p.nationality,
+          cp.role,
+          cp.is_primary,
+          cp.relationship,
+          COUNT(DISTINCT d.document_id) AS total_documents,
+          COUNT(DISTINCT CASE WHEN d.status = 'APPROVED' THEN d.document_id END) AS approved_documents,
+          MIN(d.expiration_date) AS next_expiration
+        FROM cases c
+        INNER JOIN case_types ct ON c.case_type_id = ct.case_type_id
+        LEFT JOIN case_persons cp ON c.case_id = cp.case_id
+        LEFT JOIN persons p ON cp.person_id = p.person_id
+        LEFT JOIN documents d ON c.case_id = d.case_id
+        GROUP BY c.case_id, p.person_id, cp.case_person_id;
 
-    -- Query to find cases needing attention (expiring documents)
-    SELECT
-      c.case_number,
-      c.status,
-      p.first_name,
-      p.last_name,
-      dt.document_type_name,
-      d.expiration_date,
-      DATEDIFF(d.expiration_date, CURDATE()) AS days_until_expiration
-    FROM documents d
-    INNER JOIN cases c ON d.case_id = c.case_id
-    INNER JOIN case_persons cp ON c.case_id = cp.case_id AND cp.is_primary = TRUE
-    INNER JOIN persons p ON cp.person_id = p.person_id
-    INNER JOIN document_types dt ON d.document_type_id = dt.document_type_id
-    WHERE d.expiration_date BETWEEN CURDATE() AND DATE_ADD(CURDATE(), INTERVAL 30 DAY)
-      AND d.status NOT IN ('EXPIRED', 'REJECTED')
-      AND c.status NOT IN ('CLOSED', 'DENIED')
-    ORDER BY d.expiration_date ASC;
-    ```
+        -- Query to find cases needing attention (expiring documents)
+        SELECT
+          c.case_number,
+          c.status,
+          p.first_name,
+          p.last_name,
+          dt.document_type_name,
+          d.expiration_date,
+          DATEDIFF(d.expiration_date, CURDATE()) AS days_until_expiration
+        FROM documents d
+        INNER JOIN cases c ON d.case_id = c.case_id
+        INNER JOIN case_persons cp ON c.case_id = cp.case_id AND cp.is_primary = TRUE
+        INNER JOIN persons p ON cp.person_id = p.person_id
+        INNER JOIN document_types dt ON d.document_type_id = dt.document_type_id
+        WHERE d.expiration_date BETWEEN CURDATE() AND DATE_ADD(CURDATE(), INTERVAL 30 DAY)
+          AND d.status NOT IN ('EXPIRED', 'REJECTED')
+          AND c.status NOT IN ('CLOSED', 'DENIED')
+        ORDER BY d.expiration_date ASC;
 
-    **Transaction Example - Safe Case Creation:**
-    ```sql
-    -- Procedure to create a case with primary applicant atomically
-    DELIMITER $$
+    - title: "Transaction Example - Safe Case Creation"
+      language: "sql"
+      code: |
+        -- Procedure to create a case with primary applicant atomically
+        DELIMITER $$
 
-    CREATE PROCEDURE create_immigration_case(
-      IN p_case_number VARCHAR(50),
-      IN p_case_type_id INT,
-      IN p_filing_date DATE,
-      IN p_first_name VARCHAR(100),
-      IN p_last_name VARCHAR(100),
-      IN p_date_of_birth DATE,
-      IN p_nationality VARCHAR(100),
-      IN p_passport_number VARCHAR(50),
-      OUT p_case_id INT,
-      OUT p_person_id INT
-    )
-    BEGIN
-      DECLARE EXIT HANDLER FOR SQLEXCEPTION
-      BEGIN
-        ROLLBACK;
-        RESIGNAL;
-      END;
+        CREATE PROCEDURE create_immigration_case(
+          IN p_case_number VARCHAR(50),
+          IN p_case_type_id INT,
+          IN p_filing_date DATE,
+          IN p_first_name VARCHAR(100),
+          IN p_last_name VARCHAR(100),
+          IN p_date_of_birth DATE,
+          IN p_nationality VARCHAR(100),
+          IN p_passport_number VARCHAR(50),
+          OUT p_case_id INT,
+          OUT p_person_id INT
+        )
+        BEGIN
+          DECLARE EXIT HANDLER FOR SQLEXCEPTION
+          BEGIN
+            ROLLBACK;
+            RESIGNAL;
+          END;
 
-      START TRANSACTION;
+          START TRANSACTION;
 
-      -- Check if person already exists by passport
-      SELECT person_id INTO p_person_id
-      FROM persons
-      WHERE passport_number = p_passport_number
-      LIMIT 1;
+          -- Check if person already exists by passport
+          SELECT person_id INTO p_person_id
+          FROM persons
+          WHERE passport_number = p_passport_number
+          LIMIT 1;
 
-      -- Create person if not exists
-      IF p_person_id IS NULL THEN
-        INSERT INTO persons (first_name, last_name, date_of_birth, nationality, passport_number)
-        VALUES (p_first_name, p_last_name, p_date_of_birth, p_nationality, p_passport_number);
-        SET p_person_id = LAST_INSERT_ID();
-      END IF;
+          -- Create person if not exists
+          IF p_person_id IS NULL THEN
+            INSERT INTO persons (first_name, last_name, date_of_birth, nationality, passport_number)
+            VALUES (p_first_name, p_last_name, p_date_of_birth, p_nationality, p_passport_number);
+            SET p_person_id = LAST_INSERT_ID();
+          END IF;
 
-      -- Create case
-      INSERT INTO cases (case_number, case_type_id, filing_date, status)
-      VALUES (p_case_number, p_case_type_id, p_filing_date, 'OPEN');
-      SET p_case_id = LAST_INSERT_ID();
+          -- Create case
+          INSERT INTO cases (case_number, case_type_id, filing_date, status)
+          VALUES (p_case_number, p_case_type_id, p_filing_date, 'OPEN');
+          SET p_case_id = LAST_INSERT_ID();
 
-      -- Link person to case as primary applicant
-      INSERT INTO case_persons (case_id, person_id, role, is_primary)
-      VALUES (p_case_id, p_person_id, 'APPLICANT', TRUE);
+          -- Link person to case as primary applicant
+          INSERT INTO case_persons (case_id, person_id, role, is_primary)
+          VALUES (p_case_id, p_person_id, 'APPLICANT', TRUE);
 
-      -- Update denormalized counter
-      UPDATE persons SET active_case_count = active_case_count + 1
-      WHERE person_id = p_person_id;
+          -- Update denormalized counter
+          UPDATE persons SET active_case_count = active_case_count + 1
+          WHERE person_id = p_person_id;
 
-      -- Create initial status history entry
-      INSERT INTO case_status_history (case_id, old_status, new_status, changed_by)
-      VALUES (p_case_id, NULL, 'OPEN', USER());
+          -- Create initial status history entry
+          INSERT INTO case_status_history (case_id, old_status, new_status, changed_by)
+          VALUES (p_case_id, NULL, 'OPEN', USER());
 
-      COMMIT;
-    END$$
+          COMMIT;
+        END$$
 
-    DELIMITER ;
-    ```
+        DELIMITER ;
 
   learnings: |
     **Database Design Insights:**

@@ -139,7 +139,7 @@ export function FdeArchDiagram({ architecture }: Props) {
       <svg
         viewBox={`0 0 ${maxX} ${maxY}`}
         width="100%"
-        style={{ maxWidth: maxX, height: 'auto', minWidth: 760 }}
+        style={{ maxWidth: maxX, height: 'auto', minWidth: 640 }}
         aria-hidden="true"
       >
         <defs>

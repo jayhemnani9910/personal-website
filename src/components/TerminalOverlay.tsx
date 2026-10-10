@@ -222,7 +222,9 @@ export function TerminalOverlay({ projectCount }: { projectCount: number }) {
                 // search). A link short enough to read is printed as the link;
                 // a long one (the search URL) by what it is.
                 out = buildReceipts({ projectCount, toolCount: WEBMCP_TOOL_COUNT }).flatMap((r) => {
-                    const sources = r.lines.length <= 3 ? r.lines : r.lines.slice(-1);
+                    const picked = r.lines.length <= 3 ? r.lines : r.lines.slice(-1);
+                    // Lines that share a link (the tools receipt) print it once.
+                    const sources = picked.filter((s, i) => picked.findIndex((t) => t.href === s.href) === i);
                     return [
                         info(`${r.n.padEnd(5)} ${r.label}`),
                         ...sources.map((s) => {
