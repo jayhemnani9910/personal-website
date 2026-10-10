@@ -7,6 +7,15 @@
 import { WEBMCP_TOOLS, WEBMCP_TOOL_COUNT } from "@/lib/webmcp-tools";
 import { RESUME, CUBE_ACHIEVEMENT, companyAnchor, parsePublishedVsReproduced } from "@/data/resume";
 
+/** The fraud model's precision from the Amnex bullet on the résumé, e.g. "94". */
+const fraudPrecision = RESUME.experience
+  .find((org) => org.name === "Amnex")
+  ?.roles.flatMap((r) => r.bullets)
+  .map((b) => b.text.match(/(\d+)% precision/)?.[1])
+  .find(Boolean);
+if (!fraudPrecision) throw new Error("resume.ts: the Amnex role has no '<n>% precision' bullet");
+export const FRAUD_PRECISION = `${fraudPrecision}%`;
+
 export type FeaturedProject = {
   id: string;
   num: string;
@@ -38,7 +47,7 @@ export const FEATURED: FeaturedProject[] = [
     tech: ["YOLOv8", "ByteTrack", "DVC", "MLflow", "FastAPI"],
     arrived: "Match footage and a question: can we track every player and turn it into tactics?",
     did: "Detection → multi-object tracking → tactical graph, wired as one reproducible DVC stage (analyze_frames) with MLflow tracking and a FastAPI service.",
-    changed: "22 fps end to end. Reproducible from extracted frames with one command.",
+    changed: "Detection and tracking at 22 fps. Reproducible from extracted frames with one command.",
   },
   {
     id: "revolu-idea",
@@ -228,7 +237,7 @@ export function buildReceipts(c: { projectCount: number; toolCount: number }): R
     },
     {
       n: "22",
-      label: "frames per second, soccer tracking, end to end",
+      label: "frames per second, soccer detection and tracking",
       cta: "show pipeline",
       title: "FIFA Soccer DS",
       note: "YOLOv8 detection, ByteTrack persistence, GraphSAGE scaffold. One DVC stage (analyze_frames) you can re-run.",
@@ -242,7 +251,7 @@ export function buildReceipts(c: { projectCount: number; toolCount: number }): R
       ],
     },
     {
-      n: "94%",
+      n: FRAUD_PRECISION,
       label: "precision, credit-fraud ensemble on live transaction data",
       cta: "show role",
       title: "Amnex, 2022",
@@ -279,7 +288,7 @@ export const LOG_NOTES: Record<string, string> = {
   "Elite Hotel Group":
     "ETL in SQL + Python that cut manual prep 40%; occupancy and revenue dashboards; time-series demand forecasts for pricing.",
   "Independent": "Analytics and pipeline work for small businesses; A/B frameworks; reporting automation.",
-  "Amnex": "Credit-fraud ensemble with SMOTE, 94% precision; anomaly dashboards.",
+  "Amnex": `Credit-fraud ensemble with SMOTE, ${FRAUD_PRECISION} precision; anomaly dashboards.`,
   "Cygnus SoftTech": "CodeLock: AES-encrypted iOS privacy app on Core Data.",
   "Cactus Creatives Pvt. Ltd.": "First-responder comms platform on Azure microservices; CI/CD cut deploys 60%.",
 };
@@ -315,7 +324,7 @@ export function buildDeskStats(c: { projectCount: number }): DeskStat[] {
     { n: String(c.projectCount), label: "projects, each with a write-up" },
     { n: String(MERGED_PRS.length), label: "pull requests merged upstream" },
     { n: String(RESUME.publications.length), label: `IEEE papers (${RESUME.publications[0]?.year})` },
-    { n: "94%", label: "fraud-model precision on live data" },
+    { n: FRAUD_PRECISION, label: "fraud-model precision on live data" },
     { n: `${CUBE_PB}s`, label: "Rubik's PB, officially" },
   ];
 }
@@ -355,7 +364,7 @@ export const DAILY_FACTS = [
   "My first internship shipped a first-responder comms platform. No pressure.",
   'I have two IEEE papers and zero idea how to pronounce "IEEE" confidently.',
   "This page has more easter eggs than tests. That's a lie. Probably.",
-  "A credit-fraud model of mine hit 94% precision. It still doesn't trust me.",
+  `A credit-fraud model of mine hit ${FRAUD_PRECISION} precision. It still doesn't trust me.`,
   "I once wrote 23 Airflow DAGs and named exactly zero of them well.",
   "Favourite bug: the one that only appeared on Tuesdays.",
 ];

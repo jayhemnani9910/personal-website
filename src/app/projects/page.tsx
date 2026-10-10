@@ -38,7 +38,7 @@ export default async function ProjectsPage() {
                       </h1>
                     </div>
                     <p className={`max-w-[56ch] ${LEDE}`}>
-                      Priority first, then alphabetical, the same order the code uses. The early entries are student
+                      Priority first, then alphabetical, the same order the code uses. The last entries are student
                       work and are labelled as such; leaving them out would be curating, not documenting.
                     </p>
                   </div>

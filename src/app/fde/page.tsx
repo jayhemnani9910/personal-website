@@ -182,7 +182,7 @@ function FdeContact() {
   const links = [
     { lbl: 'email',    val: social.email,            href: `mailto:${social.email}`, primary: true },
     { lbl: 'essay',    val: 'what FDE means in 2026', href: '/blog/forward-deployed-engineer', internal: true },
-    { lbl: 'resume',   val: 'the one-pager',          href: '/resume', internal: true },
+    { lbl: 'resume',   val: 'the about page',         href: '/resume', internal: true },
     { lbl: 'github',   val: handles.github,           href: social.github },
     { lbl: 'linkedin', val: handles.linkedin,         href: social.linkedin },
     { lbl: 'x',        val: handles.twitter,          href: social.twitter },

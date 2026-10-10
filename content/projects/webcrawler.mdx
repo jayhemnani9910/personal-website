@@ -19,7 +19,7 @@ solution:
   - "Operational from the start: Docker Compose (with a production profile for Prometheus and Grafana) and systemd timer/service units, with health checks and metrics."
 impact:
   - "Turns ad-hoc archiving into a scheduled, queryable system: every version of a page is captured, hashed for change detection, and searchable by full text, faceted by site and date."
-  - "Provenance integrations degrade gracefully, OpenTimestamps and IPFS use the external tool when present and fall back to a safe local path otherwise, so the service runs without them and gains verifiability when they are available."
+  - "Provenance integrations degrade gracefully, OpenTimestamps and IPFS use the external tool when present and are skipped otherwise, with the content hash kept, so the service runs without them and gains verifiability when they are available."
   - "26 Python modules across crawling, archiving, search, Merkle/anchor provenance, and operations, with a test suite covering search, ArchiveBox integration, and Merkle ordering."
 deepDive:
   context: "A web archive is only useful if you can trust it and query it. This project started from two gaps in plain archiving: there is no record of what changed between two captures of a page, and there is no independent proof that a snapshot is authentic and was taken when it claims. Website Watcher addresses both: it hashes each version for change detection and builds a verifiable-provenance layer (Merkle trees plus OpenTimestamps anchoring) on top of ArchiveBox snapshots, while keeping everything searchable through SQLite FTS5."

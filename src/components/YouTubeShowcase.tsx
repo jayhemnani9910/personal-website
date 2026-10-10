@@ -99,6 +99,7 @@ export function YouTubeShowcase({ data }: { data: YouTubeData }) {
   // throwing mid-render. youtube.test.ts is what keeps the entry from going
   // missing in the first place.
   const copy = CHANNEL_COPY[channel.id];
+  const shorts = channel.shorts.filter((s) => !copy?.hideShorts?.includes(s.id));
 
   return (
     <div>
@@ -126,11 +127,11 @@ export function YouTubeShowcase({ data }: { data: YouTubeData }) {
         {copy ? <p className="max-w-[60ch] text-[17px] leading-[var(--tr-lh-body)] text-tr-text-mute [text-wrap:pretty]">{copy.about}</p> : null}
       </div>
 
-      {channel.shorts.length > 0 && (
+      {shorts.length > 0 && (
         <div className="mt-10">
           <h3 className={`${LABEL} mb-3`}>Shorts · latest</h3>
           <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
-            {channel.shorts.slice(0, 6).map((item) => (
+            {shorts.slice(0, 6).map((item) => (
               <ItemCard key={item.id} item={item} variant="short" />
             ))}
           </div>

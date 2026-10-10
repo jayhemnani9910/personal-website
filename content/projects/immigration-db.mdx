@@ -41,8 +41,8 @@ deepDive:
 
     3. **Indexing Strategy:**
        - Composite indexes on `(case_id, person_id, role)` for relationship queries
-       - B-tree indexes on `document_expiration_date` for deadline monitoring
-       - Full-text indexes on person names for search functionality
+       - A composite B-tree index on `(expiration_date, status)` for deadline monitoring
+       - A composite index on `(last_name, first_name)` for name lookups
 
     **Normalization Decisions:**
     - Separated person data from case data to avoid duplication (one person can be in multiple cases)
@@ -51,14 +51,14 @@ deepDive:
 
   components: |
     **1. Data Definition Layer (DDL)**
-    - Table creation scripts with proper constraints (PRIMARY KEY, FOREIGN KEY, NOT NULL, CHECK)
+    - Table creation scripts with proper constraints (PRIMARY KEY, FOREIGN KEY, NOT NULL, ENUM)
     - Index definitions for query optimization
     - View definitions for common query patterns
 
     **2. CRUD Operations Layer**
     - Parameterized SQL procedures for safe data manipulation
-    - Transaction management for multi-table operations (e.g., creating a case with multiple persons atomically)
-    - Input validation at the database level using CHECK constraints
+    - Transaction management for multi-table operations (e.g., creating a case and its primary applicant atomically)
+    - Input validation at the database level through NOT NULL columns and ENUM statuses
 
     **3. Query Interface**
     - Console-based application for data entry and retrieval
@@ -67,7 +67,7 @@ deepDive:
 
     **4. Data Integrity Mechanisms**
     - Foreign key constraints to maintain referential integrity
-    - Triggers for automatic timestamp updates (created_at, updated_at)
+    - `ON UPDATE CURRENT_TIMESTAMP` defaults for automatic timestamp updates (created_at, updated_at)
     - Cascading deletes configured appropriately (CASCADE vs RESTRICT based on business rules)
 
   dataFlow: |
@@ -96,7 +96,7 @@ deepDive:
     ```
 
     **4. Query Patterns:**
-    - **Find Expiring Documents:** Index scan on `document_expiration_date WHERE expiration_date BETWEEN NOW() AND NOW() + 30 DAYS`
+    - **Find Expiring Documents:** Index scan on `idx_expiration` for `expiration_date BETWEEN NOW() AND NOW() + 30 DAYS`
     - **Case Details:** JOIN cases, case_persons, persons to fetch complete case view
     - **Person History:** JOIN persons, case_persons, cases to show all cases for a person
 
@@ -329,7 +329,7 @@ deepDive:
 
     6. **Constraints Prevent Bad Data**
        - Foreign key constraints caught several bugs where the application tried to reference non-existent case types.
-       - CHECK constraints ensured `expiration_date > issue_date` for documents.
+       - NOT NULL issue dates and ENUM statuses kept document rows to values the queries could trust.
        - Learning: Let the database enforce business rules where possible. It's the last line of defense against data corruption.
 
     7. **UTF-8 Encoding is Non-Negotiable**

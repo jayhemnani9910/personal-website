@@ -431,7 +431,7 @@ export const PROOFS: ProofItem[] = [
     project: 'CAG Deep Research',
     title: { pre: 'Vague spec -> working multi-agent in ', em: '10 days', post: '.' },
     body: 'Multi-agent LangGraph research system, built from a rough problem statement. Hexagonal architecture, verification loops, local + cloud LLM fallback.',
-    stack: ['LangGraph', '5 agents', 'hexagonal arch', 'verification'],
+    stack: ['LangGraph', 'multi-agent', 'hexagonal arch', 'verification'],
     links: [{ label: 'github.com/jayhemnani9910', href: 'https://github.com/jayhemnani9910' }],
   },
   {
@@ -448,9 +448,12 @@ export const PROOFS: ProofItem[] = [
     cat: 'Upstream contribution',
     project: 'Anthropic MCP Python SDK',
     title: { pre: 'Walked into unfamiliar code and ', em: 'left it better', post: '.' },
-    body: "A merged PR into the Anthropic MCP Python SDK. Also navigated vLLM (200k+ LOC) for a separate investigation. The exact muscle FDEs use in customer code.",
+    body: "Merged PRs into the Anthropic MCP Python SDK and into vLLM (200k+ LOC), LoRA support for LLaVA's tower and connector. The exact muscle FDEs use in customer code.",
     stack: ['Anthropic SDK', 'vLLM (200k+ LOC)', 'merged'],
-    links: [{ label: 'modelcontextprotocol/python-sdk', href: 'https://github.com/modelcontextprotocol/python-sdk' }],
+    links: [
+      { label: 'modelcontextprotocol/python-sdk', href: 'https://github.com/modelcontextprotocol/python-sdk' },
+      { label: 'vllm-project/vllm #31513', href: 'https://github.com/vllm-project/vllm/pull/31513' },
+    ],
   },
   {
     id: 'IV',
