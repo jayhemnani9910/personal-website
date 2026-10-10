@@ -3,35 +3,29 @@ import { existsSync } from "node:fs";
 import { join } from "node:path";
 import {
   FEATURED,
-  PRESETS,
   buildReceipts,
-  METHOD,
+  HOUSE_RULES,
+  DAILY_FACTS,
+  CUBE_PB,
   LOG_NOTES,
-  SECTIONS,
-  HERO,
-  ROLES,
-  COPY,
-  buildNav,
+  buildDeskStats,
+  buildLogEntries,
   MERGED_PRS,
   MERGED_PRS_SEARCH,
   MERGED_PRS_SEARCH_LABEL,
 } from "./home";
-import { RESUME, companyAnchor, parsePublishedVsReproduced } from "./resume";
+import { RESUME, CUBE_ACHIEVEMENT, companyAnchor, parsePublishedVsReproduced } from "./resume";
 
 const PROJECTS_DIR = join(process.cwd(), "content/projects");
-const FEATURED_IDS = new Set(FEATURED.map((p) => p.id));
 const RECEIPTS = buildReceipts({ projectCount: 41, toolCount: 13 });
 
 const ALL_TEXT = JSON.stringify({
   FEATURED,
-  PRESETS,
   receipts: RECEIPTS,
-  METHOD,
+  HOUSE_RULES,
+  DAILY_FACTS,
   LOG_NOTES,
-  SECTIONS,
-  HERO,
-  COPY: { ...COPY, workMore: COPY.workMore(21) },
-  nav: buildNav({ projectCount: 27, essayCount: 2 }),
+  stats: buildDeskStats({ projectCount: 27 }),
 });
 
 // The AI ban-words this task's brief named. (The full list lives in the
@@ -75,19 +69,6 @@ describe("home data", () => {
     expect(FEATURED.map((p) => p.num)).toEqual(["01", "02", "03", "04", "05", "06"]);
   });
 
-  it("every preset has 3 lines per section and matches real projects", () => {
-    for (const preset of PRESETS) {
-      expect(preset.out.scope).toHaveLength(3);
-      expect(preset.out.architecture).toHaveLength(3);
-      expect(preset.out.plan).toHaveLength(3);
-      expect(preset.out.risks).toHaveLength(3);
-      expect(preset.out.match.length).toBeGreaterThan(0);
-      for (const id of preset.out.match) {
-        expect(FEATURED_IDS.has(id)).toBe(true);
-      }
-    }
-  });
-
   it("every receipt href is external or an allowed internal path", () => {
     for (const r of RECEIPTS) {
       for (const line of r.lines) {
@@ -111,18 +92,33 @@ describe("home data", () => {
     for (const h of hashes) expect(anchors.has(h)).toBe(true);
   });
 
-  it("reads the paper receipt, the published gap and the role count from resume.ts", () => {
+  it("reads the paper receipt and the published gap from resume.ts", () => {
     const papers = RECEIPTS.find((r) => r.title.startsWith("IEEE"))!;
     expect(papers.n).toBe(String(RESUME.publications.length));
     expect(papers.lines.map((l) => l.text)).toEqual(RESUME.publications.map((p) => p.title));
     expect(papers.lines.map((l) => l.href)).toEqual(RESUME.publications.map((p) => p.link));
 
     const gap = RESUME.publications.map((p) => parsePublishedVsReproduced(p.description)).find(Boolean)!;
-    expect(METHOD[3].why).toContain(`${gap.published}% in the paper`);
-    expect(METHOD[3].why).toContain(`${gap.reproduced}% in the committed notebook`);
+    expect(HOUSE_RULES[3].why).toContain(`${gap.published}% in the paper`);
+    expect(HOUSE_RULES[3].why).toContain(`${gap.reproduced}% in the notebook`);
+  });
 
-    const roles = RESUME.experience.flatMap((c) => c.roles).length;
-    expect(COPY.logDeck.startsWith(`${roles} roles`)).toBe(true);
+  it("derives every stat from the content, not a literal", () => {
+    const stats = buildDeskStats({ projectCount: 27 });
+    expect(stats.map((s) => s.n)).toEqual([
+      "27",
+      String(MERGED_PRS.length),
+      String(RESUME.publications.length),
+      "94%",
+      `${CUBE_PB}s`,
+    ]);
+    expect(CUBE_ACHIEVEMENT).toContain(`${CUBE_PB} sec`);
+  });
+
+  it("builds one log row per employer, newest first, each with a note", () => {
+    const log = buildLogEntries();
+    expect(log.map((e) => e.org)).toEqual(RESUME.experience.filter((o) => o.roles[0]?.period?.label).map((o) => o.name));
+    for (const e of log) expect(e.what).not.toBe("");
   });
 
   it("searches only the listed repos, and says how many of them it finds", () => {
@@ -148,11 +144,8 @@ describe("home data", () => {
     }
   });
 
-  it("every METHOD href and internal /projects/ receipt href points at a real file", () => {
-    const projectHrefs = [
-      ...METHOD.map((m) => m.href),
-      ...RECEIPTS.flatMap((r) => r.lines.map((l) => l.href)),
-    ].filter((href) => href.startsWith("/projects/"));
+  it("every internal /projects/ receipt href points at a real file", () => {
+    const projectHrefs = RECEIPTS.flatMap((r) => r.lines.map((l) => l.href)).filter((href) => href.startsWith("/projects/"));
     expect(projectHrefs.length).toBeGreaterThan(0);
     for (const href of projectHrefs) {
       const slug = href.replace("/projects/", "");
@@ -168,42 +161,8 @@ describe("home data", () => {
     expect(ALL_TEXT).not.toMatch(/SJSU|San Jose/i);
   });
 
-  it("SECTIONS covers brief, proof, work, method, contact in order", () => {
-    expect(SECTIONS.map((s) => s.id)).toEqual(["brief", "proof", "work", "method", "contact"]);
-  });
-
-  it("buildNav interpolates its arguments", () => {
-    const nav = buildNav({ projectCount: 27, essayCount: 2 });
-    expect(nav[0].alt).toBe("27 shipped");
-    expect(nav[1].alt).toBe("2 essays");
-  });
-
-  // The status line used to carry a relocation arrow and a computed years count.
-  // Both are gone on purpose, and both are the kind of thing that creeps back in
-  // when someone reaches for something to fill the line with.
-  it("keeps the status line to place and availability", () => {
-    expect(HERO.status).toEqual(["GUJARAT, IN", "OPEN TO WORK"]);
-    const joined = HERO.status.join(" ");
-    expect(joined).not.toMatch(/RELOCAT/i);
-    expect(joined).not.toMatch(/\d+\s*YRS/i);
-  });
-
-  it("carries the role titles the hero cycles through, most specific first", () => {
-    // Exactly eight: the tr-role-cycle keyframes in globals.css give each title
-    // a 1/8 slot (visible 1.5-10.5%, gone by 12.5%). Seven would leave blank
-    // gaps and nine would overlap two titles; change the keyframes with it.
-    expect(ROLES.length).toBe(8);
-    expect(ROLES[0]).toBe("FORWARD DEPLOYED ENGINEER");
-    expect(new Set(ROLES).size).toBe(ROLES.length);
-    // Every title renders into one fixed-width slot, so a stray lowercase entry
-    // would show up mid-rotation as the only one that looks different.
-    for (const r of ROLES) expect(r).toBe(r.toUpperCase());
-  });
-
-  // These lines are the page's own voice, and the mono `//` styling they used to
-  // carry measured 3.39:1. Prose replaced it; the marker should not come back.
-  it("has no // asides left in the copy", () => {
-    const strings = Object.values(COPY).filter((v): v is string => typeof v === "string");
-    for (const v of strings) expect(v.startsWith("//"), v).toBe(false);
+  it("has a fact for every day of the week", () => {
+    expect(DAILY_FACTS.length).toBeGreaterThanOrEqual(7);
+    expect(new Set(DAILY_FACTS).size).toBe(DAILY_FACTS.length);
   });
 });

@@ -11,26 +11,17 @@ import {
   type YouTubeItem,
 } from "@/lib/youtube";
 import { CHANNEL_COPY } from "@/lib/youtube-copy";
+import { CARD_HOVER, HAND, LABEL } from "@/components/desk";
 
-// One colour class per element: two text-tr-* colours on the same element are
-// decided by Tailwind's output order, not by which one is written last.
-const MONO_TYPE = "font-[family-name:var(--ff-mono)] text-[length:var(--tr-t-mono-sm)] tracking-[.1em]";
-const MONO = `${MONO_TYPE} text-tr-text-faint`;
+// A card at radius 14, the size down from CARD's 18 that small tiles use.
+const TILE = "rounded-[var(--tr-r-lg)] border-[1.5px] border-tr-hairline bg-tr-surface-1";
 
-const CARD =
-  "block border border-tr-hairline rounded-[var(--tr-r-md)] overflow-hidden bg-tr-surface-1 hover:border-tr-accent transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)]";
-
-// Fixed dark scrim, independent of theme: it sits over arbitrary YouTube
-// thumbnail imagery, so a theme token could land on a light frame and vanish.
-const SCRIM = { background: "rgba(0,0,0,.7)" };
-
+// Fixed ink pill, not a surface token: it sits over arbitrary YouTube
+// thumbnail imagery, so it carries its own contrast.
 function DurationPill({ sec }: { sec: number }) {
   if (sec <= 0) return null;
   return (
-    <span
-      className="absolute bottom-1.5 right-1.5 rounded-[3px] px-1 py-[1px] font-[family-name:var(--ff-mono)] text-[10px] text-white"
-      style={SCRIM}
-    >
+    <span className="absolute bottom-1.5 right-1.5 rounded-[6px] bg-tr-text px-1.5 py-[1px] font-mono text-[10px] text-tr-on-ink">
       {formatDuration(sec)}
     </span>
   );
@@ -41,14 +32,14 @@ const CARD_VARIANTS = {
   short: {
     aspect: "aspect-[9/16]",
     sizes: "(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 16vw",
-    body: "p-2",
-    title: "text-[12.5px]",
+    body: "p-2.5",
+    title: "text-[13px]",
   },
   video: {
     aspect: "aspect-video",
     sizes: "(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw",
-    body: "p-3",
-    title: "text-[13.5px]",
+    body: "p-3.5",
+    title: "text-[14.5px]",
   },
 };
 
@@ -59,16 +50,15 @@ function ItemCard({ item, variant }: { item: YouTubeItem; variant: keyof typeof 
       href={`https://www.youtube.com/watch?v=${item.id}`}
       target="_blank"
       rel="noopener noreferrer"
-      data-cursor="OPEN"
-      className={CARD}
+      className={`${TILE} ${CARD_HOVER} block overflow-hidden hover:text-tr-text`}
     >
-      <div className={`relative ${v.aspect} bg-tr-surface-2`}>
+      <div className={`relative ${v.aspect} border-b-[1.5px] border-tr-hairline bg-tr-surface-2`}>
         <Image src={item.thumb} alt="" fill sizes={v.sizes} className="object-cover" />
         <DurationPill sec={item.durationSec} />
       </div>
       <div className={v.body}>
-        <p className={`line-clamp-2 ${v.title} leading-[var(--tr-lh-h3)]`}>{item.title}</p>
-        <p className={`${MONO} mt-1 tracking-normal`}>
+        <p className={`line-clamp-2 ${v.title} font-semibold leading-[var(--tr-lh-card)]`}>{item.title}</p>
+        <p className="mt-1.5 font-mono text-[11px] text-tr-text-faint">
           {formatViews(item.views)} views · {formatDate(item.publishedAt)}
         </p>
       </div>
@@ -90,13 +80,12 @@ function ChannelButton({
       type="button"
       aria-pressed={selected}
       onClick={onSelect}
-      data-cursor="SWITCH"
-      className={`min-w-[220px] text-left flex flex-col gap-[.15rem] px-4 py-[.7rem] rounded-[var(--tr-r-md)] border transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] ${
-        selected ? "border-tr-accent bg-tr-surface-1" : "border-tr-hairline bg-transparent hover:border-tr-accent"
+      className={`desk-press flex min-w-[220px] cursor-pointer flex-col gap-1 rounded-[var(--tr-r-lg)] border-[1.5px] border-tr-hairline px-4 py-3 text-left ${
+        selected ? "bg-tr-butter shadow-[var(--tr-shadow-btn)]" : "bg-tr-surface-1"
       }`}
     >
-      <span className="font-medium tracking-[-.01em]">{channel.title}</span>
-      <span className={`${MONO_TYPE} tracking-normal text-tr-text-mute`}>
+      <span className="text-[17px] font-bold tracking-[-0.01em]">{channel.title}</span>
+      <span className="font-mono text-[12px] text-tr-text-mute">
         {channel.handle} · {formatViews(channel.stats.subscribers)} subs · {formatViews(channel.stats.views)} views
       </span>
     </button>
@@ -119,26 +108,28 @@ export function YouTubeShowcase({ data }: { data: YouTubeData }) {
         ))}
       </div>
 
-      <div className="grid lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] gap-[clamp(2rem,5vw,5rem)] mt-8 mb-8">
+      <div className="mb-8 mt-10 grid gap-[clamp(2rem,5vw,5rem)] lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]">
         <div>
-          <h2 className={`${MONO_TYPE} text-tr-accent-ink`}>{copy?.tagline ?? channel.title}</h2>
+          <h2 className="text-[length:var(--tr-t-h2)] font-extrabold leading-[var(--tr-lh-h2)] tracking-[-0.035em] [text-wrap:balance]">
+            {copy?.tagline ?? channel.title}
+          </h2>
+          <p className={`${HAND} mt-3 max-w-[340px] -rotate-2 [text-wrap:balance]`}>subscribe. or don&apos;t. the algorithm&apos;s watching either way.</p>
           <a
             href={channel.url}
             target="_blank"
             rel="noopener noreferrer"
-            data-cursor="OPEN"
-            className="inline-block mt-3 text-tr-text-mute border-b border-tr-hairline hover:text-tr-accent-ink hover:border-tr-accent transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)]"
+            className="mt-4 block break-all font-mono text-[13px] text-tr-text-mute underline"
           >
             {channel.url} ↗
           </a>
         </div>
-        {copy ? <p className="max-w-[60ch] text-tr-text-mute [text-wrap:pretty]">{copy.about}</p> : null}
+        {copy ? <p className="max-w-[60ch] text-[17px] leading-[var(--tr-lh-body)] text-tr-text-mute [text-wrap:pretty]">{copy.about}</p> : null}
       </div>
 
       {channel.shorts.length > 0 && (
         <div className="mt-10">
-          <h3 className={`${MONO} mb-3`}>SHORTS · LATEST</h3>
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+          <h3 className={`${LABEL} mb-3`}>Shorts · latest</h3>
+          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
             {channel.shorts.slice(0, 6).map((item) => (
               <ItemCard key={item.id} item={item} variant="short" />
             ))}
@@ -148,8 +139,8 @@ export function YouTubeShowcase({ data }: { data: YouTubeData }) {
 
       {copy?.showVideos !== false && channel.videos.length > 0 && (
         <div className="mt-10">
-          <h3 className={`${MONO} mb-3`}>VIDEOS · LATEST</h3>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+          <h3 className={`${LABEL} mb-3`}>Videos · latest</h3>
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {channel.videos.slice(0, 4).map((item) => (
               <ItemCard key={item.id} item={item} variant="video" />
             ))}
@@ -157,7 +148,7 @@ export function YouTubeShowcase({ data }: { data: YouTubeData }) {
         </div>
       )}
 
-      <p className={`${MONO} mt-10`}>Stats refresh daily via the YouTube API.</p>
+      <p className="mt-10 font-mono text-[12px] text-tr-text-faint">Stats refresh daily via the YouTube API.</p>
     </div>
   );
 }

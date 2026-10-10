@@ -18,7 +18,7 @@ npm run dev          # http://localhost:3000
 ```
 
 The site runs with no environment variables. Without them the AI features fall
-back to saved examples and the view counter keeps counts in memory.
+back to saved examples, and the view counter and guestbook keep what they get in memory.
 
 ## Environment
 
@@ -26,8 +26,8 @@ Put local values in `.env.local` (gitignored).
 
 | Variable | Used by | Without it |
 |---|---|---|
-| `GEMINI_API_KEY` | `/api/fde-sim`, `/api/decompose` | Both routes say no model is available; the home decomposer falls back to saved examples and `/fde` keeps its presets |
-| `UPSTASH_REDIS_REST_URL`, `UPSTASH_REDIS_REST_TOKEN` (or the older `KV_REST_API_URL`, `KV_REST_API_TOKEN`) | View counts, rate limits, the daily model budget, FDE metrics | Views are counted in memory; rate limits, the budget and metrics are off |
+| `GEMINI_API_KEY` | `/api/fde-sim` | The route says no model is available and `/fde` keeps its presets |
+| `UPSTASH_REDIS_REST_URL`, `UPSTASH_REDIS_REST_TOKEN` (or the older `KV_REST_API_URL`, `KV_REST_API_TOKEN`) | View counts, the home page guestbook, rate limits, the daily model budget, FDE metrics | Views and guestbook notes are kept in memory; rate limits, the budget and metrics are off |
 | `FDE_EVAL_ENDPOINT` | `npm run eval:fde` | Defaults to the production `/api/fde-sim` |
 | `FDE_EVAL_DATE` | `npm run eval:fde:update` | The recorded baseline says `unset` |
 
@@ -39,7 +39,7 @@ npm run typecheck    # route types, then tsc
 npm test             # unit and component tests (Vitest)
 npm run build
 npm run test:perf    # bundle and first-paint budgets (Playwright)
-npm run test:visual  # screenshot comparison in both themes (Playwright)
+npm run test:visual  # screenshot comparison (Playwright)
 npm run eval:fde     # live quality check of the simulation against the golden set
 ```
 

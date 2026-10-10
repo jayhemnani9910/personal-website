@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { HomeV4 } from "@/components/home/HomeV4";
+import { HomeDesk } from "@/components/home-desk/HomeDesk";
 import { PROFILE_PAGE, jsonLd } from "@/lib/json-ld";
 
 export const metadata: Metadata = {
@@ -9,13 +9,11 @@ export const metadata: Metadata = {
 export const dynamic = "force-static";
 export const revalidate = 3600;
 
-// HomeV4 reads the content itself, so the counts it needs stay next to the
-// markup that interpolates them rather than being threaded through here.
 export default function Home() {
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(PROFILE_PAGE) }} />
-      <HomeV4 />
+      <HomeDesk />
     </>
   );
 }

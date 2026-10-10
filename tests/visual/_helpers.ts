@@ -5,25 +5,11 @@ import { expect, type Page } from "@playwright/test";
 
 const VIEWS_STUB = { count: 42, counted: false };
 
-/**
- * Put the page in a state where two runs produce identical pixels.
- *
- * The theme is set before first paint rather than by clicking the toggle: the
- * inline anti-flash script in layout.tsx reads localStorage, and a click would
- * screenshot the transition instead of the destination.
- */
-export async function prepare(page: Page, theme: "dark" | "light") {
-  await page.addInitScript((t) => {
-    try {
-      localStorage.setItem("theme-choice", t); // THEME_KEY in src/lib/storage.ts
-      // The cold open is once-per-session and already off under reduced motion.
-      // Belt and braces: a preloader caught mid-fade is the classic flaky shot.
-      sessionStorage.setItem("tr-intro-seen", "1");
-    } catch {
-      // Storage disabled. Reduced motion still suppresses the preloader.
-    }
-  }, theme);
-
+/** Put the page in a state where two runs produce identical pixels. */
+export async function prepare(page: Page) {
+  // The home page picks its project and fact by day and counts down to
+  // midnight every second. A fixed clock holds both still.
+  await page.clock.setFixedTime(new Date("2026-10-10T12:00:00"));
   // Two reasons, and the second is the important one. The counter renders
   // whatever number the API returns, so a live value makes every shot differ.
   // And an unstubbed run POSTs to /api/views on every mount of every project
@@ -37,26 +23,21 @@ export async function prepare(page: Page, theme: "dark" | "light") {
     }),
   );
 
-  // No test clicks "run sim" or types a brief into the home page's Decomposer,
-  // but a stray call to either would spend Gemini quota and return different
-  // prose every run.
+  // No test clicks "run sim", but a stray call would spend Gemini quota and
+  // return different prose every run.
   await page.route("**/api/fde-sim**", (route) => route.abort());
-  await page.route("**/api/decompose**", (route) => route.abort());
+  // The home page's guestbook reads the shared wall. An empty wall keeps the
+  // baseline stable and keeps tests from posting to the real one.
+  await page.route("**/api/guestbook**", (route) =>
+    route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify({ notes: [] }) }),
+  );
 }
 
 /** Navigate and wait for everything that moves pixels to have settled. */
 export async function settle(page: Page, path: string) {
   await page.goto(path, { waitUntil: "networkidle" });
-  // Newsreader and JetBrains Mono are self-hosted by next/font, so this is fast,
-  // but a screenshot taken mid-swap bakes in fallback metrics.
+  // The fonts are self-hosted by next/font, so this is fast, but a screenshot
+  // taken mid-swap bakes in fallback metrics.
   await page.evaluate(() => document.fonts.ready);
   await expect(page.locator("#main-content")).toBeVisible();
-}
-
-/** The Playwright project name is the theme. */
-export function themeOf(colorScheme: string | null | undefined): "dark" | "light" {
-  if (colorScheme !== "dark" && colorScheme !== "light") {
-    throw new Error(`visual tests need an explicit colorScheme, got ${colorScheme}`);
-  }
-  return colorScheme;
 }

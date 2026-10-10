@@ -3,11 +3,8 @@ import { pageMetadata } from "@/lib/page-metadata";
 import { getProjectSummaries } from "@/lib/content";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
+import { H1, HIGHLIGHT, KICKER, LEDE, SHELL, WRAP } from "@/components/desk";
 import { ProjectsClient } from "./ProjectsClient";
-
-const MONO = "font-[family-name:var(--ff-mono)]";
-const SHELL = "px-[clamp(1rem,4vw,2rem)]";
-const WRAP = "mx-auto max-w-[1280px]";
 
 export const metadata: Metadata = pageMetadata({
     title: "The Work",
@@ -26,17 +23,15 @@ export default async function ProjectsPage() {
             <SiteHeader />
             <main id="main-content" className="bg-tr-bg text-tr-text">
                 {/* Intro */}
-                <section className={`${SHELL} pt-[clamp(2.5rem,5vw,4rem)] pb-6`}>
-                  <div className={`${WRAP} grid gap-[clamp(2rem,5vw,5rem)] items-end lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]`}>
+                <section className={`${WRAP} ${SHELL} pt-[clamp(40px,6vw,72px)] pb-8`}>
+                  <div className="grid items-end gap-[clamp(24px,5vw,80px)] lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)]">
                     <div>
-                      <p className={`mb-3 ${MONO} text-[length:var(--tr-t-mono)] tracking-[.1em] text-tr-text-faint`}>
-                        /WORK · 2019 → 2026
-                      </p>
-                      <h1 className="text-[length:var(--tr-t-display-sm)] leading-[var(--tr-lh-display)] tracking-[-.035em] font-medium">
-                        {projects.length}, sorted by what they&apos;d cost you to ignore.
+                      <p className={`mb-4 ${KICKER}`}>/work · 2019 → 2026</p>
+                      <h1 className={H1}>
+                        <span className={HIGHLIGHT}>{projects.length}</span>, sorted by what they&apos;d cost you to ignore.
                       </h1>
                     </div>
-                    <p className="max-w-[56ch] text-tr-text-mute [text-wrap:pretty]">
+                    <p className={`max-w-[56ch] ${LEDE}`}>
                       Priority first, then alphabetical, the same order the code uses. The early entries are student
                       work and are labelled as such; leaving them out would be curating, not documenting.
                     </p>

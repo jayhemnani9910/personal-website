@@ -5,25 +5,18 @@ import { act, fireEvent, render, screen } from "@testing-library/react";
 // its log to the bottom after every command.
 Element.prototype.scrollIntoView = () => {};
 
-// The overlay reads the terminal context for its open state and next/navigation
-// for the two commands that leave the page. Both are mocked so the component can
-// be driven directly.
+// The overlay reads the terminal context for its open state. It is mocked so
+// the component can be driven directly.
 const mockCloseTerminal = vi.fn();
-const mockPush = vi.fn();
 
 vi.mock("@/context/TerminalContext", () => ({
   useTerminal: () => ({ isOpen: true, toggleTerminal: vi.fn(), closeTerminal: mockCloseTerminal }),
-}));
-
-vi.mock("next/navigation", () => ({
-  useRouter: () => ({ push: mockPush }),
 }));
 
 
 import { TerminalOverlay } from "./TerminalOverlay";
 import { FEATURED, buildReceipts } from "@/data/home";
 import { WEBMCP_TOOL_COUNT } from "@/lib/webmcp-tools";
-import { useShellIntent } from "@/lib/shell-intent";
 
 // The real project count as of this write-up (see src/data/home.test.ts,
 // which hardcodes the same number for the same reason: the overlay is a
@@ -44,7 +37,6 @@ function type(cmd: string) {
 beforeEach(() => {
   vi.useFakeTimers();
   mockCloseTerminal.mockClear();
-  mockPush.mockClear();
   window.location.hash = "";
 });
 
@@ -67,78 +59,14 @@ describe("TerminalOverlay chrome", () => {
     expect(screen.getByText(/try a chip above/)).toBeDefined();
   });
 
-  it("offers the theme chip the design has and we were missing", () => {
+  it("offers the eggs chip, and no theme chip now there is one theme", () => {
     renderOpen();
-    expect(screen.getByRole("button", { name: "theme" })).toBeDefined();
+    expect(screen.getByRole("button", { name: "eggs" })).toBeDefined();
+    expect(screen.queryByRole("button", { name: "theme" })).toBeNull();
   });
 });
 
 describe("TerminalOverlay v4 commands", () => {
-  it("brief dispatches v4:brief with the typed text and closes the overlay", () => {
-    renderOpen();
-    const seen: string[] = [];
-    const onBrief = (e: Event) => seen.push((e as CustomEvent<string>).detail);
-    window.addEventListener("v4:brief", onBrief);
-
-    type("brief we have data nobody trusts");
-    act(() => {
-      vi.advanceTimersByTime(200);
-    });
-
-    expect(seen).toEqual(["we have data nobody trusts"]);
-    expect(mockCloseTerminal).toHaveBeenCalled();
-    window.removeEventListener("v4:brief", onBrief);
-  });
-
-  it("brief strips surrounding quotes", () => {
-    renderOpen();
-    const seen: string[] = [];
-    const onBrief = (e: Event) => seen.push((e as CustomEvent<string>).detail);
-    window.addEventListener("v4:brief", onBrief);
-
-    type('brief "our model is stuck in a notebook"');
-    act(() => {
-      vi.advanceTimersByTime(200);
-    });
-
-    expect(seen).toEqual(["our model is stuck in a notebook"]);
-    window.removeEventListener("v4:brief", onBrief);
-  });
-
-  it("brief with no argument asks for one instead of dispatching", () => {
-    renderOpen();
-    const seen: string[] = [];
-    const onBrief = () => seen.push("fired");
-    window.addEventListener("v4:brief", onBrief);
-
-    type("brief");
-    act(() => {
-      vi.advanceTimersByTime(200);
-    });
-
-    expect(seen).toEqual([]);
-    expect(screen.getByText(/vaguer the better/i)).toBeDefined();
-    window.removeEventListener("v4:brief", onBrief);
-  });
-
-  it("cube dispatches v4:cube", () => {
-    renderOpen();
-    let fired = 0;
-    const onCube = () => {
-      fired += 1;
-    };
-    window.addEventListener("v4:cube", onCube);
-
-    type("cube");
-    act(() => {
-      vi.advanceTimersByTime(200);
-    });
-
-    expect(fired).toBe(1);
-    expect(mockCloseTerminal).toHaveBeenCalled();
-    window.removeEventListener("v4:cube", onCube);
-  });
-
   it("ls lists the featured projects and derives the remaining count", () => {
     renderOpen();
     type("ls");
@@ -165,22 +93,32 @@ describe("TerminalOverlay v4 commands", () => {
     }
   });
 
+  it("eggs lists the home page's secrets, naming only the ones found", () => {
+    localStorage.setItem("jh_eggs", JSON.stringify(["cube"]));
+    renderOpen();
+    type("eggs");
+    const log = screen.getByRole("log");
+    expect(log.textContent).toContain("1/5 secrets found");
+    expect(log.textContent).toContain("Scrambler");
+    expect(log.textContent).not.toContain("Yeet");
+    localStorage.clear();
+  });
+
   it("rm refuses", () => {
     renderOpen();
     type("rm -rf .");
     expect(screen.getByText(/not a chance/i)).toBeDefined();
   });
 
-  it("help lists the home page commands", () => {
+  it("help lists the commands", () => {
     renderOpen();
     type("help");
-    // The chip row always shows brief, receipts and cube, so check the log,
-    // and for lines only help prints.
+    // The chip row also shows receipts, so check the log, and for lines only
+    // help prints.
     const log = screen.getByRole("log");
     expect(log.textContent).toContain("things that work here:");
-    expect(log.textContent).toContain("run the decomposer on your problem");
     expect(log.textContent).toContain("every number on this page, with source");
-    expect(log.textContent).toContain("cube · joke");
+    expect(log.textContent).toContain("contact · joke");
   });
 
   it("renders a chip row whose entries are runnable commands", () => {
@@ -195,7 +133,6 @@ describe("TerminalOverlay v4 commands", () => {
   // Regression. Enter ran the command, the command closed the overlay, closing
   // restored focus to the header's shell button, and Enter's own default action
   // then activated that newly focused button on keyup and reopened the dialog.
-  // `exit` had always behaved this way; `cube` and `brief` inherited it.
   it("cancels Enter's default action so a closing command cannot reopen the dialog", () => {
     renderOpen();
     const input = screen.getByLabelText("Terminal command input");
@@ -213,7 +150,6 @@ describe("TerminalOverlay v4 commands", () => {
   it("still answers a pre-existing command", () => {
     renderOpen();
     type("whoami");
-    expect(mockPush).not.toHaveBeenCalled();
     expect(screen.getByText(/you, however, remain a mystery/)).toBeDefined();
     expect(screen.queryByText(/command not found/)).toBeNull();
     expect(screen.getByLabelText("Terminal command input")).toBeDefined();
@@ -232,65 +168,6 @@ describe("TerminalOverlay v4 commands", () => {
     const log = screen.getByRole("log");
     expect(log.textContent).toContain("Jay Hemnani");
     expect(log.contains(screen.getByLabelText("Terminal command input"))).toBe(false);
-  });
-});
-
-// From any page but /, the home page's listeners do not exist yet when the
-// command runs, so an event fired then is lost. The intent is carried across
-// the navigation instead, and the home page takes it on mount.
-describe("TerminalOverlay brief and cube off the home page", () => {
-  beforeEach(() => {
-    window.history.pushState({}, "", "/projects");
-    window.sessionStorage.clear();
-  });
-
-  afterEach(() => {
-    window.history.pushState({}, "", "/");
-  });
-
-  function Home() {
-    useShellIntent("brief");
-    useShellIntent("cube");
-    return null;
-  }
-
-  it("brief navigates to /#brief and the home page replays it on mount", () => {
-    renderOpen();
-    const seen: string[] = [];
-    const onBrief = (e: Event) => seen.push((e as CustomEvent<string>).detail);
-    window.addEventListener("v4:brief", onBrief);
-
-    type("brief we have data nobody trusts");
-    act(() => {
-      vi.advanceTimersByTime(200);
-    });
-    expect(mockPush).toHaveBeenCalledWith("/#brief");
-    expect(seen).toEqual([]);
-
-    render(<Home />);
-    expect(seen).toEqual(["we have data nobody trusts"]);
-
-    // Taken once: a later visit to / does not run it again.
-    render(<Home />);
-    expect(seen).toHaveLength(1);
-    window.removeEventListener("v4:brief", onBrief);
-  });
-
-  it("cube navigates to /#method and the home page replays it on mount", () => {
-    renderOpen();
-    let fired = 0;
-    const onCube = () => {
-      fired += 1;
-    };
-    window.addEventListener("v4:cube", onCube);
-
-    type("cube");
-    expect(mockPush).toHaveBeenCalledWith("/#method");
-    expect(fired).toBe(0);
-
-    render(<Home />);
-    expect(fired).toBe(1);
-    window.removeEventListener("v4:cube", onCube);
   });
 });
 

@@ -118,3 +118,10 @@ Update, 2026-09-30: the budget also caps document and fetch bytes, not only scri
 and stylesheet bytes, and the script cap came down from 850 KB to 765 KB.
 Responses with an error status are no longer counted, and the LCP check fails if
 no LCP entry is recorded. `tests/perf/budget.spec.ts` has the measured numbers.
+
+Update, 2026-10-10: the Desk redesign (ADR 0018) took first-load JS on the home
+page from 695.9 KB to 632.3 KB, so every byte cap came down: script 700 KB,
+document 90 KB, fetch 60 KB, stylesheet 62 KB. The font count is now exactly 3
+(Bricolage Grotesque, JetBrains Mono, Caveat). The guestbook's limits live in a
+zod-free module because the first measurement, with zod pulled into the home
+page through it, read 1014 KB.

@@ -3,9 +3,9 @@
 import { useRef, useState, type KeyboardEvent } from "react";
 import Link from "next/link";
 import type { Route } from "next";
-import { ArrowRight } from "lucide-react";
 import { LAB_ITEMS, type LabItem } from "@/data/lab";
 import { SITE_CONFIG } from "@/../content/site";
+import { CARD, CARD_HOVER, CHIP, LABEL, PILL, PILL_ACTIVE, SHELL, WRAP } from "@/components/desk";
 
 type TabKey = keyof typeof LAB_ITEMS;
 
@@ -15,32 +15,8 @@ const TABS: { key: TabKey; label: string }[] = [
   { key: "radar", label: "On the radar" },
 ];
 
-const MONO = "font-[family-name:var(--ff-mono)]";
-const CONTAINER = "mx-auto max-w-[1280px] px-[clamp(1rem,4vw,2rem)]";
-const LINK =
-  "text-tr-text-mute transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] hover:text-tr-accent-ink";
-
-// lucide-react 1.x dropped brand icons; this is its old Github mark, path for path.
-function GithubIcon({ className }: { className?: string }) {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-      className={className}
-    >
-      <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4" />
-      <path d="M9 18c-4.51 2-5-2-7-2" />
-    </svg>
-  );
-}
+const LINK = "font-mono text-[12px] text-tr-text-mute hover:text-tr-accent-ink";
+const TAB_ON = `${PILL} ${PILL_ACTIVE}`;
 
 // Calm mono status derived from the tab plus (for Building) the progress value.
 // Never the accent: the active tab is the page's single at-rest accent, so a status
@@ -60,19 +36,16 @@ function LabCard({ item, tab }: { item: LabItem; tab: TabKey }) {
   const showBar = progress !== undefined && progress < 100;
 
   return (
-    <article className="flex h-full flex-col bg-tr-surface-1 p-5">
-      <div className="mb-3 flex items-center justify-between gap-3">
-        <span className={`${MONO} text-[length:var(--tr-t-mono-sm)] uppercase tracking-[.08em] text-tr-text-mute`}>
-          {status}
-        </span>
+    <article className={`${CARD} ${CARD_HOVER} flex h-full flex-col p-6`}>
+      <div className="mb-3 flex h-5 items-center justify-between gap-3">
+        <span className={LABEL}>{status}</span>
         {sitePath ? (
           <Link
             href={sitePath as Route}
             aria-label={`${item.title}: project page`}
-            data-cursor="OPEN"
             className={LINK}
           >
-            <ArrowRight aria-hidden="true" className="h-4 w-4" />
+            open <span aria-hidden="true">→</span>
           </Link>
         ) : item.link ? (
           <a
@@ -80,42 +53,39 @@ function LabCard({ item, tab }: { item: LabItem; tab: TabKey }) {
             target="_blank"
             rel="noreferrer"
             aria-label={`${item.title} on GitHub`}
-            data-cursor="OPEN"
             className={LINK}
           >
-            <GithubIcon className="h-4 w-4" />
+            <span aria-hidden="true">github ↗</span>
           </a>
         ) : null}
       </div>
 
       {/* A plain paragraph, not a heading: these cards sit inside a tabpanel
-          ahead of the page's only <h2> ("Want to collaborate?"), so a heading
+          ahead of the page's only <h2> (the collaborate card), so a heading
           here would read as a skip in the outline. Same call as the project
           row titles in src/app/projects/ProjectsClient.tsx. */}
-      <p className="mb-2 text-[length:var(--tr-t-h3)] leading-[var(--tr-lh-h3)] tracking-[-.01em] font-medium text-tr-text">
-        {item.title}
-      </p>
+      <p className="mb-2 text-[22px] font-extrabold leading-[var(--tr-lh-h3)] tracking-[-0.025em]">{item.title}</p>
 
-      <p className="text-tr-text-mute">{item.description}</p>
+      <p className="text-[15px] leading-normal text-tr-text-mute">{item.description}</p>
 
       {showBar && (
         <div className="mt-4">
-          <div className={`mb-2 flex items-baseline justify-between ${MONO} text-[length:var(--tr-t-mono-sm)]`}>
-            <span className="uppercase tracking-[.08em] text-tr-text-faint">Progress</span>
-            <span className="text-tr-text-mute">{progress}%</span>
+          <div className="mb-2 flex items-baseline justify-between">
+            <span className={LABEL}>Progress</span>
+            <span className="font-mono text-[12px] text-tr-text-mute">{progress}%</span>
           </div>
-          <div className="h-[3px] w-full bg-tr-hairline">
-            <div className="h-full bg-tr-text-mute" style={{ width: `${progress}%` }} aria-hidden="true" />
+          <div className="h-2.5 w-full overflow-hidden rounded-full border-[1.5px] border-tr-hairline bg-tr-surface-2">
+            <div className="h-full bg-tr-butter" style={{ width: `${progress}%` }} aria-hidden="true" />
           </div>
         </div>
       )}
 
       {item.tags.length > 0 && (
-        <div
-          className={`mt-auto flex flex-wrap gap-x-3 gap-y-1.5 border-t border-tr-hairline pt-4 ${MONO} text-[length:var(--tr-t-mono-sm)] text-tr-text-faint`}
-        >
+        <div className="mt-auto flex flex-wrap gap-1.5 pt-5">
           {item.tags.map((tag) => (
-            <span key={tag}>{tag}</span>
+            <span key={tag} className={CHIP}>
+              {tag}
+            </span>
           ))}
         </div>
       )}
@@ -145,12 +115,12 @@ export function LabTabs() {
   }
 
   return (
-    <section className={`${CONTAINER} pb-[var(--tr-s-10)]`}>
+    <section className={`${WRAP} ${SHELL} pb-[clamp(3rem,6vw,5rem)]`}>
       <div
         role="tablist"
         aria-label="Lab sections"
         aria-orientation="horizontal"
-        className={`flex flex-wrap gap-x-6 gap-y-2 border-b border-tr-hairline ${MONO}`}
+        className="flex flex-wrap gap-2"
       >
         {TABS.map((tab, i) => {
           const selected = activeTab === tab.key;
@@ -168,14 +138,10 @@ export function LabTabs() {
               tabIndex={selected ? 0 : -1}
               onClick={() => setActiveTab(tab.key)}
               onKeyDown={(e) => onTabKeyDown(e, i)}
-              className={`-mb-px flex items-center gap-2 border-b-2 pb-3 text-[length:var(--tr-t-mono)] uppercase tracking-[.04em] transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] ${
-                selected
-                  ? "border-tr-accent text-tr-accent-ink"
-                  : "border-transparent text-tr-text-mute hover:text-tr-text"
-              }`}
+              className={`${selected ? TAB_ON : PILL} cursor-pointer`}
             >
               {tab.label}
-              <span className="text-[length:var(--tr-t-mono-sm)] text-tr-text-faint">
+              <span className="text-tr-text-mute">
                 {LAB_ITEMS[tab.key].length}
               </span>
             </button>
@@ -201,7 +167,7 @@ export function LabTabs() {
             // tab's aria-controls target in the DOM. It replaces `grid`
             // rather than sitting beside it, because a `grid` utility would
             // override the hidden display and re-show the panel.
-            className={`mt-8 gap-px overflow-hidden rounded-[var(--tr-r-lg)] border border-tr-hairline bg-tr-hairline sm:grid-cols-2 lg:grid-cols-3 ${
+            className={`mt-8 grid-cols-[repeat(auto-fill,minmax(min(100%,330px),1fr))] gap-5 ${
               isActive ? "grid" : "hidden"
             }`}
           >

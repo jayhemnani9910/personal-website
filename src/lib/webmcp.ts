@@ -12,7 +12,6 @@
  */
 
 import { WEBMCP_TOOLS } from "@/lib/webmcp-tools";
-import { THEME_KEY, writeStorage } from "@/lib/storage";
 import { setReaderMode } from "@/lib/reader-mode";
 
 export interface ModelContextTool {
@@ -309,49 +308,18 @@ export function buildTools(data: SiteData): ModelContextTool[] {
     },
   });
 
-  // Tool 7: Toggle theme
-  tools.push({
-    name: "toggle_theme",
-    description: "Toggle the site between light and dark theme, or set a specific theme.",
-    inputSchema: {
-      type: "object",
-      properties: {
-        theme: { type: "string", enum: ["light", "dark", "toggle"], description: "Theme to set (default: toggle)" },
-      },
-    },
-    execute: async (args) => {
-      const current = document.documentElement.getAttribute("data-theme") || "dark";
-      const requested = args.theme as string;
-      let newTheme: string;
-
-      if (requested === "light" || requested === "dark") {
-        newTheme = requested;
-      } else {
-        newTheme = current === "dark" ? "light" : "dark";
-      }
-
-      document.documentElement.setAttribute("data-theme", newTheme);
-      writeStorage(THEME_KEY, newTheme);
-
-      // Dispatch storage event so ThemeContext picks it up
-      window.dispatchEvent(new StorageEvent("storage", { key: THEME_KEY, newValue: newTheme }));
-
-      return { previous: current, current: newTheme };
-    },
-  });
-
-  // Tool 8: Toggle reader mode
+  // Tool 7: Toggle reader mode
   tools.push({
     name: "switch_mode",
     description:
-      "Toggle reader mode: a calm, high-readability view that turns off the site's motion and cinematic chrome (custom cursor, preloader, smooth-scroll, scroll reveals). Use 'reader' for the accessible reading view, 'default' to restore the full experience. Applies immediately, no reload.",
+      "Toggle reader mode: a calm, high-readability view that turns off the site's motion (smooth scroll, the home page's falling tiles, hover tilts). Use 'reader' for the accessible reading view, 'default' to restore the full experience. Applies immediately, no reload.",
     inputSchema: {
       type: "object",
       properties: {
         mode: {
           type: "string",
           enum: ["reader", "default"],
-          description: "'reader' for the calm, motion-free reading view; 'default' for the full cinematic site",
+          description: "'reader' for the calm, motion-free reading view; 'default' for the full site",
         },
       },
       required: ["mode"],
@@ -364,8 +332,8 @@ export function buildTools(data: SiteData): ModelContextTool[] {
         mode: on ? "reader" : "default",
         reader: on,
         description: on
-          ? "Reader mode on: motion and cinematic chrome disabled for a calm reading view."
-          : "Reader mode off: the full cinematic site is restored.",
+          ? "Reader mode on: motion disabled for a calm reading view."
+          : "Reader mode off: the full site is restored.",
       };
     },
   });

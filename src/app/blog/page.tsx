@@ -4,6 +4,7 @@ import { pageMetadata } from "@/lib/page-metadata";
 import { formatPostDate, getAllPosts, getAllProjects } from "@/lib/content";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
+import { CARD, CARD_HOVER, CHIP, DOT, DOTS, H1, H2, HAND, HIGHLIGHT, KICKER, LABEL, LEDE, SHELL, WRAP } from "@/components/desk";
 
 export const metadata: Metadata = pageMetadata({
   title: "Writing",
@@ -11,17 +12,15 @@ export const metadata: Metadata = pageMetadata({
   path: "/blog",
 });
 
-// Mono UI chrome: kickers and card labels. Matches the MONO convention used
-// across the v4 home sections (see Method.tsx, Hero.tsx, Contact.tsx).
-const MONO =
-  "font-[family-name:var(--ff-mono)] text-[length:var(--tr-t-mono-sm)] tracking-[.1em] text-tr-text-faint";
+// The write-up cards: the essay card's smaller sibling (radius 14, padding 18).
+const SMALL_CARD = `${CARD_HOVER} flex flex-col gap-2 rounded-[var(--tr-r-lg)] border-[1.5px] border-tr-hairline bg-tr-surface-1 p-[18px] hover:text-tr-text`;
 
 export default async function WritingPage() {
   const posts = await getAllPosts();
   const projects = await getAllProjects();
 
-  // The right rail of the write-ups section: the first three projects with a
-  // deep dive, in catalogue order, plus a fourth card pointing at the index.
+  // The write-ups section: the first three projects with a deep dive, in
+  // catalogue order, plus a fourth card pointing at the index.
   const deepDives = projects.filter((p) => p.deepDive).slice(0, 3);
 
   return (
@@ -29,61 +28,42 @@ export default async function WritingPage() {
       <SiteHeader />
       <main id="main-content" className="bg-tr-bg text-tr-text">
         {/* ========== INTRO ========== */}
-        <section className="mx-auto grid max-w-[1280px] items-end gap-[clamp(2rem,5vw,5rem)] px-[clamp(1rem,4vw,2rem)] pt-[clamp(2.5rem,5vw,4rem)] pb-8 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]">
-          <div>
-            <p className={MONO}>
-              /WRITING · {posts.length} {posts.length === 1 ? "ESSAY" : "ESSAYS"} · {projects.length} WRITE-UPS
-            </p>
-            <h1 className="mt-[var(--tr-s-2)] text-[length:var(--tr-t-display-sm)] leading-[var(--tr-lh-display)] tracking-[-.035em] font-medium">
-              Written down so I can be checked later.
-            </h1>
-          </div>
-          <p className="max-w-[56ch] text-tr-text-mute [text-wrap:pretty]">
+        <section className={`${WRAP} ${SHELL} pb-10 pt-[clamp(40px,6vw,72px)]`}>
+          <p className={KICKER}>
+            /writing · {posts.length} {posts.length === 1 ? "essay" : "essays"} · {projects.length} write-ups
+          </p>
+          <h1 className={`${H1} mt-3 max-w-[20ch]`}>
+            Written down so I can be <span className={HIGHLIGHT}>checked later.</span>
+          </h1>
+          <p className={`${LEDE} mt-6 max-w-[56ch]`}>
             Essays on the Forward Deployed Engineer role. Unflattering details left in. Every project also
             has a write-up, most with their decisions and trade-offs, and those live under Work.
           </p>
         </section>
 
         {/* ========== ESSAYS ========== */}
-        <section className="mx-auto max-w-[1280px] px-[clamp(1rem,4vw,2rem)]">
-          <ol className="border-t border-tr-hairline">
-            {posts.map((post) => (
-              <li key={post.slug} className="border-b border-tr-hairline">
-                <Link
-                  href={`/blog/${post.slug}`}
-                  data-cursor="OPEN"
-                  className="group grid items-start gap-[clamp(1rem,3vw,2.5rem)] py-[clamp(1.5rem,3vw,2.5rem)] no-underline lg:grid-cols-[8rem_minmax(0,1fr)_5rem]"
-                >
-                  <div className="font-[family-name:var(--ff-mono)] leading-relaxed text-tr-text-faint">
-                    <span className="block">{formatPostDate(post.date)}</span>
-                    {post.readingTime && (
-                      <span className="block text-tr-text-faint transition-colors group-hover:text-tr-accent-ink">
-                        {post.readingTime} min
-                      </span>
-                    )}
-                  </div>
-
-                  <div className="min-w-0">
-                    <p className="block text-[length:var(--tr-t-h2)] leading-[var(--tr-lh-h2)] tracking-[-.03em] font-medium transition-transform duration-300 ease-[var(--tr-ease)] group-hover:translate-x-1.5">
-                      {post.title}
-                    </p>
-                    <p className="mt-3 max-w-[66ch] text-tr-text-mute">{post.excerpt ?? post.summary}</p>
+        <section aria-label="Essays" className={`${WRAP} ${SHELL} pb-[60px]`}>
+          <ol className="grid grid-cols-[repeat(auto-fill,minmax(min(100%,330px),1fr))] gap-5">
+            {posts.map((post, i) => (
+              <li key={post.slug} className="flex">
+                <Link href={`/blog/${post.slug}`} className={`${CARD} ${CARD_HOVER} flex w-full flex-col gap-3.5 p-6 hover:text-tr-text`}>
+                  <span className="flex items-center justify-between">
+                    <span className="font-mono text-[12px] text-tr-text-faint">{formatPostDate(post.date)}</span>
+                    <span aria-hidden="true" className={DOT} style={{ background: DOTS[i % DOTS.length] }} />
+                  </span>
+                  <span className="text-[26px] font-extrabold leading-[var(--tr-lh-h3)] tracking-[-0.025em]">{post.title}</span>
+                  <span className="text-[15px] leading-normal text-tr-text-mute">{post.excerpt ?? post.summary}</span>
+                  <span className="mt-auto flex flex-col gap-3 pt-1">
+                    {post.readingTime && <span className={HAND}>~{post.readingTime} min, with chai</span>}
                     {post.tags.length > 0 && (
-                      <div className="mt-3 flex flex-wrap gap-2">
+                      <span className="flex flex-wrap gap-1.5">
                         {post.tags.map((tag) => (
-                          <span
-                            key={tag}
-                            className="rounded-[var(--tr-r-sm)] border border-tr-hairline px-1.5 py-0.5 font-[family-name:var(--ff-mono)] text-[length:var(--tr-t-mono-sm)] text-tr-text-mute"
-                          >
+                          <span key={tag} className={CHIP}>
                             {tag}
                           </span>
                         ))}
-                      </div>
+                      </span>
                     )}
-                  </div>
-
-                  <span className="font-[family-name:var(--ff-mono)] text-tr-text-faint transition-colors group-hover:text-tr-accent-ink lg:text-right">
-                    read ↗
                   </span>
                 </Link>
               </li>
@@ -92,40 +72,27 @@ export default async function WritingPage() {
         </section>
 
         {/* ========== PROJECT WRITE-UPS ========== */}
-        <section className="border-t border-tr-hairline bg-tr-surface-1">
-          <div className="mx-auto grid max-w-[1280px] gap-[clamp(2rem,5vw,5rem)] px-[clamp(1rem,4vw,2rem)] py-[clamp(3rem,6vw,5rem)] lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]">
-            <div>
-              <h2 className="text-[length:var(--tr-t-h2)] leading-[var(--tr-lh-h2)] tracking-[-.025em] font-medium">
-                Project write-ups.
-              </h2>
-              <p className="mt-5 max-w-[40ch] text-tr-text-mute">
-                {projects.length}, each with the same skeleton: arrived as, what I did, what changed. The
-                deep dives add the decisions and their cost.
-              </p>
-            </div>
+        <section className={`${WRAP} ${SHELL} pb-[60px]`}>
+          <div className="border-t-[1.5px] border-tr-hairline pt-10">
+            <h2 className={H2}>Project write-ups.</h2>
+            <p className={`${LEDE} mt-3 max-w-[56ch]`}>
+              {projects.length}, each with the same skeleton: arrived as, what I did, what changed. The
+              deep dives add the decisions and their cost.
+            </p>
 
-            <div className="grid gap-px overflow-hidden rounded-[var(--tr-r-lg)] border border-tr-hairline bg-tr-hairline sm:grid-cols-2">
+            <div className="mt-7 grid grid-cols-[repeat(auto-fill,minmax(min(100%,240px),1fr))] gap-5">
               {deepDives.map((p) => (
-                <Link
-                  key={p.id}
-                  href={`/projects/${p.id}`}
-                  data-cursor="OPEN"
-                  className="flex flex-col gap-2 bg-tr-surface-1 p-5 no-underline transition-colors hover:bg-tr-surface-2 focus-visible:-outline-offset-2"
-                >
-                  <span className={MONO}>DEEP DIVE</span>
-                  <span className="font-medium tracking-[-.01em]">{p.title}</span>
-                  <span className="line-clamp-2 text-tr-text-mute">{p.summary}</span>
+                <Link key={p.id} href={`/projects/${p.id}`} className={SMALL_CARD}>
+                  <span className={LABEL}>Deep dive</span>
+                  <span className="text-[20px] font-bold leading-[var(--tr-lh-h2)] tracking-[-0.02em]">{p.title}</span>
+                  <span className="line-clamp-2 text-[14px] leading-normal text-tr-text-mute">{p.summary}</span>
                 </Link>
               ))}
 
-              <Link
-                href="/projects"
-                data-cursor="OPEN"
-                className="flex flex-col gap-2 bg-tr-surface-1 p-5 no-underline transition-colors hover:bg-tr-surface-2 focus-visible:-outline-offset-2"
-              >
-                <span className={MONO}>ALL {projects.length}</span>
-                <span className="font-medium tracking-[-.01em]">The index</span>
-                <span className="line-clamp-2 text-tr-text-mute">
+              <Link href="/projects" className={SMALL_CARD}>
+                <span className={LABEL}>All {projects.length}</span>
+                <span className="text-[20px] font-bold leading-[var(--tr-lh-h2)] tracking-[-0.02em]">The index →</span>
+                <span className="line-clamp-2 text-[14px] leading-normal text-tr-text-mute">
                   Filter by stack or domain. Student work is labelled, not hidden.
                 </span>
               </Link>

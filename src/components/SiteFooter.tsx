@@ -1,21 +1,43 @@
 import Link from "next/link";
+import type { Route } from "next";
 import { SITE_CONFIG } from "@/../content/site";
+import { SHELL, WRAP } from "@/components/desk";
 import { ReaderToggle } from "./ReaderToggle";
 
-// The footer the v4 design screens carry: one rule, one surface, a copyright
-// and a way back. The home page has its own slimmer copyright and back-to-top
-// bar; this is the version every other route uses.
+const LINKS: { label: string; href: Route }[] = [
+  { label: "home", href: "/" },
+  { label: "work", href: "/projects" },
+  { label: "writing", href: "/blog" },
+  { label: "about", href: "/resume" },
+  { label: "channel", href: "/youtube" },
+];
+
+// The small sibling of the home page's contact band, so leaving / and coming
+// back feels like one site. Every route but the home page uses it.
 export function SiteFooter() {
   return (
-    <footer className="border-t border-tr-hairline bg-tr-surface-1">
-      <div className="mx-auto flex max-w-[1280px] flex-wrap justify-between gap-4 px-[clamp(1rem,4vw,2rem)] py-6 font-[family-name:var(--ff-mono)] text-[length:var(--tr-t-mono)] text-tr-text-faint">
-        <span>{SITE_CONFIG.copyright}</span>
-        <span className="flex gap-6">
-          <ReaderToggle className="hover:text-tr-accent-ink" />
-          <Link href="/" data-cursor="OPEN" className="hover:text-tr-accent-ink">
-            ← home
-          </Link>
-        </span>
+    <footer className="ink-panel bg-tr-text text-tr-on-ink">
+      <div className={`${WRAP} ${SHELL} py-7`}>
+        <Link
+          href={"/#hi" as Route}
+          className="inline-block -rotate-2 font-hand text-[26px] text-tr-butter hover:text-tr-butter hover:underline"
+        >
+          that&apos;s the page. got a vague brief? →
+        </Link>
+        <div className="mt-5 flex flex-wrap items-center justify-between gap-x-6 gap-y-3 font-mono text-[12px] text-tr-on-ink-faint">
+          <span>{SITE_CONFIG.copyright}</span>
+          <span className="flex flex-wrap items-center gap-x-4 gap-y-2">
+            <ReaderToggle className="cursor-pointer hover:text-tr-butter" />
+            <span aria-hidden="true">·</span>
+            <nav aria-label="Footer" className="flex flex-wrap gap-x-4 gap-y-2">
+              {LINKS.map((l) => (
+                <Link key={l.href} href={l.href} className="hover:text-tr-butter">
+                  {l.label}
+                </Link>
+              ))}
+            </nav>
+          </span>
+        </div>
       </div>
     </footer>
   );

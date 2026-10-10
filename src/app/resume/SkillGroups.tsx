@@ -1,13 +1,13 @@
 "use client";
 
 import { useState } from "react";
+import { CHIP, PILL, PILL_ACTIVE } from "@/components/desk";
 
 interface SkillGroup {
   category: string;
   items: string[];
 }
 
-const MONO = "font-[family-name:var(--ff-mono)]";
 
 // The design's copy ("Click a group to see where it was used") pointed at a
 // "USED IN · <sentence>" line per group. resume.ts carries no such field, and
@@ -26,11 +26,7 @@ export function SkillGroups({ groups }: { groups: SkillGroup[] }) {
             type="button"
             aria-pressed={i === active}
             onClick={() => setActive(i)}
-            className={`${MONO} h-[30px] rounded-full border px-[.8rem] text-[12.5px] transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] ${
-              i === active
-                ? "border-tr-accent bg-tr-accent text-tr-on-accent"
-                : "border-tr-hairline text-tr-text-mute hover:border-tr-accent"
-            }`}
+            className={`${PILL} cursor-pointer ${i === active ? PILL_ACTIVE : "hover:bg-tr-surface-2"}`}
           >
             {g.category}
           </button>
@@ -38,12 +34,9 @@ export function SkillGroups({ groups }: { groups: SkillGroup[] }) {
       </div>
       {/* Polite live region, so the swap is not silent to a screen reader. */}
       {current ? (
-        <div aria-live="polite" className="mt-6 flex flex-wrap gap-2">
+        <div aria-live="polite" className="mt-5 flex flex-wrap gap-1.5 border-t border-dashed border-tr-rule-soft pt-5">
           {current.items.map((item) => (
-            <span
-              key={item}
-              className={`${MONO} rounded-[var(--tr-r-md)] border border-tr-hairline bg-tr-bg px-[10px] py-[6px] text-[length:var(--tr-t-mono-sm)] text-tr-text-mute`}
-            >
+            <span key={item} className={CHIP}>
               {item}
             </span>
           ))}

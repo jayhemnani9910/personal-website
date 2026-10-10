@@ -1,7 +1,7 @@
 "use client";
 
 /* FDE Simulation workspace: phase tabs, narration side panel, 6 phase content
-   renderers. Ported from sim.jsx and reskinned to editorial theme. */
+   renderers. Ported from sim.jsx and reskinned to the Desk design. */
 
 import { useState, useEffect, useRef } from "react";
 import type { KeyboardEvent } from "react";
@@ -11,6 +11,7 @@ import { FdeArchDiagram } from "./FdeArchDiagram";
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
 import { SITE_CONFIG } from "@/../content/site";
 import { SECTION_ORDER } from "@/lib/fde-payload";
+import { BTN, BTN_PRIMARY, HIGHLIGHT, PILL } from "@/components/desk";
 
 interface Props {
   /** Partial while a live run streams. Presets and cache hits arrive complete. */
@@ -22,7 +23,8 @@ interface Props {
   streaming?: boolean;
 }
 
-const MONO = "font-[family-name:var(--ff-mono)]";
+const LABEL_INK = "mb-3.5 font-mono text-[11px] uppercase tracking-[.08em] text-tr-accent-ink";
+const NAV_BTN = "cursor-pointer font-mono text-[13px] disabled:cursor-not-allowed disabled:opacity-40";
 
 // The server's list, so a renamed or added section cannot drift out of step here.
 const SECTION_KEYS: readonly (keyof Preset)[] = SECTION_ORDER;
@@ -112,28 +114,28 @@ export function FdeSimulation({ payload, brief, source, onExit, streaming = fals
     : '';
 
   return (
-    <div className="overflow-hidden rounded-[var(--tr-r-md)] border border-tr-hairline bg-tr-surface-1">
+    <div className="overflow-hidden rounded-[var(--tr-r-2xl)] border-[1.5px] border-tr-hairline bg-tr-surface-1 shadow-[var(--tr-shadow-card)]">
       {/* Head */}
-      <div className="grid grid-cols-[auto_minmax(0,1fr)] items-center gap-x-4 gap-y-2 sm:grid-cols-[auto_minmax(0,1fr)_auto] border-b border-tr-hairline bg-tr-surface-2 px-5 py-3.5">
+      <div className="grid grid-cols-[auto_minmax(0,1fr)] items-center gap-x-4 gap-y-2 border-b-[1.5px] border-tr-hairline bg-tr-surface-2 px-5 py-3.5 sm:grid-cols-[auto_minmax(0,1fr)_auto]">
         <button
-          className={`whitespace-nowrap rounded-[var(--tr-r-sm)] border border-tr-hairline px-2.5 py-1.5 ${MONO} text-[length:var(--tr-t-mono-sm)] tracking-[.06em] text-tr-text transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] hover:border-tr-accent hover:text-tr-accent-ink`}
+          className={`${PILL} cursor-pointer whitespace-nowrap hover:bg-tr-butter`}
           onClick={onExit}
           type="button"
         >
           × EXIT SIM
         </button>
-        <div className="min-w-0 overflow-hidden text-ellipsis whitespace-nowrap text-[length:var(--tr-t-h3)] italic text-tr-text" title={brief}>
+        <div className="min-w-0 overflow-hidden text-ellipsis whitespace-nowrap text-[18px] font-bold tracking-[-0.01em]" title={brief}>
           &ldquo;{brief}&rdquo;
         </div>
         {/* On a phone the status drops to its own row rather than squeezing the brief to nothing. */}
-        <div className={`col-span-2 sm:col-span-1 sm:whitespace-nowrap ${MONO} text-[length:var(--tr-t-mono-sm)] tracking-[.1em] text-tr-text-mute`}>
+        <div className="col-span-2 font-mono text-[12px] text-tr-text-mute sm:col-span-1 sm:whitespace-nowrap">
           {source === 'live' ? '* LIVE · ' : '◆ DEMO · '}
           PHASE {PHASES[phase].num} · {PHASES[phase].status.toUpperCase()}
         </div>
       </div>
 
       {/* Phase tabs */}
-      <div className="grid grid-cols-3 border-b border-tr-hairline bg-tr-surface-1 sm:grid-cols-6" role="tablist" aria-label="Simulation phases" onKeyDown={onTabKey}>
+      <div className="grid grid-cols-3 gap-2 border-b-[1.5px] border-tr-hairline px-5 py-4 sm:grid-cols-6" role="tablist" aria-label="Simulation phases" onKeyDown={onTabKey}>
         {PHASES.map((p, i) => {
           const ready = sectionReady(payload, p.key);
           const state = i === phase ? 'active' : (i < phase ? 'done' : 'pending');
@@ -141,12 +143,10 @@ export function FdeSimulation({ payload, brief, source, onExit, streaming = fals
             <button
               key={p.key}
               ref={(el) => { tabRefs.current[i] = el; }}
-              className={`border-b-2 border-r border-r-tr-hairline px-3.5 py-3.5 text-left ${MONO} text-[length:var(--tr-t-mono-sm)] tracking-[.06em] transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] last:border-r-0 disabled:cursor-not-allowed ${
+              className={`cursor-pointer rounded-[var(--tr-r-md)] border-[1.5px] border-tr-hairline px-3 py-2 text-left font-mono text-[11px] text-tr-text-mute disabled:cursor-not-allowed disabled:opacity-50 ${
                 state === 'active'
-                  ? 'border-b-tr-accent bg-tr-surface-2 text-tr-accent-ink'
-                  : state === 'done'
-                    ? 'border-b-transparent text-tr-text hover:bg-tr-surface-2'
-                    : 'border-b-transparent text-tr-text-faint hover:enabled:bg-tr-surface-2 hover:enabled:text-tr-text'
+                  ? 'bg-tr-butter shadow-[2px_2px_0_var(--tr-text)]'
+                  : 'bg-tr-surface-1 hover:enabled:bg-tr-surface-2'
               }`}
               data-state={state}
               role="tab"
@@ -162,7 +162,7 @@ export function FdeSimulation({ payload, brief, source, onExit, streaming = fals
               title={ready ? undefined : streaming ? 'still generating' : 'not generated'}
             >
               <span>{state === 'done' && ready ? '✓ ' : ''}{p.num}</span>
-              <span className="mt-0.5 block text-[length:var(--tr-t-small)] font-medium text-tr-text">{p.title}</span>
+              <span className="mt-0.5 block font-sans text-[14px] font-bold text-tr-text">{p.title}</span>
             </button>
           );
         })}
@@ -179,20 +179,20 @@ export function FdeSimulation({ payload, brief, source, onExit, streaming = fals
           <p className="sr-only" aria-live="polite">{awaiting}</p>
           <PhaseContent phase={currentKey} payload={payload} streaming={streaming} source={source} />
 
-          <div className="mt-8 flex flex-wrap items-center justify-between gap-3.5 border-t border-tr-hairline pt-5">
+          <div className="mt-8 flex flex-wrap items-center justify-between gap-3.5 border-t-[1.5px] border-dashed border-tr-rule-soft pt-5">
             <button
-              className={`rounded-[var(--tr-r-sm)] border border-tr-hairline bg-tr-surface-2 px-4 py-2 ${MONO} text-[length:var(--tr-t-mono-sm)] tracking-[.04em] text-tr-text transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] hover:enabled:border-tr-accent disabled:cursor-not-allowed disabled:opacity-40`}
+              className={`${BTN} ${NAV_BTN}`}
               onClick={prev}
               disabled={phase === 0}
               type="button"
             >
               &larr; previous
             </button>
-            <span className={`${MONO} text-[length:var(--tr-t-mono-sm)] tracking-[.08em] text-tr-text-faint`}>
+            <span className="font-mono text-[12px] text-tr-text-faint">
               {phase + 1} / {PHASES.length}
             </span>
             <button
-              className={`rounded-[var(--tr-r-sm)] bg-tr-accent px-4 py-2 ${MONO} text-[length:var(--tr-t-mono-sm)] font-semibold tracking-[.04em] text-tr-on-accent transition-opacity duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] disabled:cursor-not-allowed disabled:opacity-40`}
+              className={`${BTN_PRIMARY} ${NAV_BTN}`}
               onClick={next}
               disabled={phase === PHASES.length - 1 || !nextReady}
               type="button"
@@ -203,9 +203,9 @@ export function FdeSimulation({ payload, brief, source, onExit, streaming = fals
         </div>
 
         <aside
-          className={`border-t border-tr-hairline bg-tr-surface-2 px-5 py-6 ${MONO} text-[length:var(--tr-t-mono-sm)] leading-[var(--tr-lh-body)] text-tr-text lg:border-l lg:border-t-0 lg:px-6 lg:py-7`}
+          className="border-t-[1.5px] border-tr-hairline bg-tr-surface-2 px-5 py-6 font-mono text-[12px] leading-[var(--tr-lh-body)] text-tr-text lg:border-l-[1.5px] lg:border-t-0 lg:px-6 lg:py-7"
         >
-          <h3 className="mb-3.5 text-[length:var(--tr-t-mono-sm)] uppercase tracking-[.18em] text-tr-accent-ink">{"// Jay, narrating"}</h3>
+          <h3 className={LABEL_INK}>{"// Jay, narrating"}</h3>
           {narration.slice(0, narrationVisible).map((n, i) => (
             <div key={`${phase}-${i}`} className={`mb-2.5 ${n.who === 'sys' ? 'text-tr-text-mute' : ''}`}>
               <span className={`mr-1.5 ${n.who === 'sys' ? 'text-tr-text-faint' : 'text-tr-accent-ink'}`}>{n.who === 'jay' ? '$ jay' : '~ sys'}</span>
@@ -213,14 +213,14 @@ export function FdeSimulation({ payload, brief, source, onExit, streaming = fals
             </div>
           ))}
 
-          <hr className="my-6 border-0 border-t border-tr-hairline" />
+          <hr className="my-6 border-0 border-t-[1.5px] border-dashed border-tr-rule-soft" />
 
-          <h3 className="mb-3.5 text-[length:var(--tr-t-mono-sm)] uppercase tracking-[.18em] text-tr-accent-ink">{"// Brief"}</h3>
-          <div className="italic text-tr-text-mute">&quot;{brief}&quot;</div>
+          <h3 className={LABEL_INK}>{"// Brief"}</h3>
+          <div className="text-tr-text-mute">&quot;{brief}&quot;</div>
 
-          <hr className="my-6 border-0 border-t border-tr-hairline" />
+          <hr className="my-6 border-0 border-t-[1.5px] border-dashed border-tr-rule-soft" />
 
-          <h3 className="mb-3.5 text-[length:var(--tr-t-mono-sm)] uppercase tracking-[.18em] text-tr-accent-ink">{"// Stack"}</h3>
+          <h3 className={LABEL_INK}>{"// Stack"}</h3>
           <div className="text-tr-text-mute">
             LangGraph · MCP · RAG<br />
             Python · FastAPI · Node<br />
@@ -235,15 +235,17 @@ export function FdeSimulation({ payload, brief, source, onExit, streaming = fals
 
 // ─── Phase content ────────────────────────────────────────────────────────────
 
-const PHASE_TITLE = `mb-2 max-w-[22ch] text-[length:var(--tr-t-h2)] leading-[var(--tr-lh-h2)] tracking-[-.01em] font-medium text-tr-text`;
-const PHASE_SUB = `mb-7 ${MONO} text-[length:var(--tr-t-mono-sm)] tracking-[.04em] text-tr-text-mute`;
-const EM = "italic text-tr-accent-ink";
+const PHASE_TITLE = "mb-2 max-w-[22ch] text-[length:clamp(24px,2.6vw,32px)] leading-[var(--tr-lh-h2)] tracking-[-0.03em]";
+const PHASE_SUB = "mb-7 font-mono text-[12px] text-tr-text-mute";
+/** A row inside the panel: a small paper card. */
+const ROW = "rounded-[var(--tr-r-lg)] border-[1.5px] border-tr-hairline bg-tr-surface-1";
+const ROW_LABEL = "pt-0.5 font-mono text-[12px] text-tr-accent-ink";
 
 /** Shown in the panel for a section that has not arrived yet. */
 function AwaitingSection({ title }: { title: string }) {
   return (
-    <div className={`flex items-center gap-2.5 py-6 ${MONO} text-[length:var(--tr-t-mono)] text-tr-text-mute`} aria-hidden="true">
-      <span className="h-4 w-4 shrink-0 animate-spin rounded-full border-2 border-tr-hairline border-t-tr-accent" aria-hidden="true" />
+    <div className="flex items-center gap-2.5 py-6 font-mono text-[13px] text-tr-text-mute" aria-hidden="true">
+      <span className="size-4 shrink-0 animate-spin rounded-full border-2 border-tr-surface-2 border-t-tr-accent" aria-hidden="true" />
       <span>
         generating {title.toLowerCase()}
         <span className="animate-pulse" aria-hidden="true">...</span>
@@ -269,15 +271,15 @@ function PhaseContent({
       return (
         <div>
           <h2 className={PHASE_TITLE}>
-            First: <span className={EM}>three questions</span> I need answered.
+            First: <span className={HIGHLIGHT}>three questions</span> I need answered.
           </h2>
           <div className={PHASE_SUB}>{"// scoping. before any building, before any architecture, before anything."}</div>
           {(payload.scope ?? []).map((s, i) => (
-            <div key={i} className="grid grid-cols-[2.5rem_1fr] gap-4 border-t border-tr-hairline py-[18px] last:border-b">
-              <div className="pt-1 text-[length:var(--tr-t-stat)] italic leading-[var(--tr-lh-numeral)] text-tr-accent-ink">Q{i + 1}</div>
+            <div key={i} className="grid grid-cols-[2.75rem_1fr] gap-4 border-t-[1.5px] border-tr-hairline py-[18px] last:border-b-[1.5px]">
+              <div className="text-[26px] font-extrabold leading-none tracking-[-0.03em] text-tr-accent-ink">Q{i + 1}</div>
               <div>
-                <div className="max-w-[50ch] text-[length:var(--tr-t-h3)] leading-[var(--tr-lh-h3)] text-tr-text">{s.q}</div>
-                <div className={`mt-1.5 flex gap-1 ${MONO} text-[length:var(--tr-t-mono-sm)] tracking-[.04em] text-tr-text-mute`}>
+                <div className="max-w-[50ch] text-[19px] font-semibold leading-[var(--tr-lh-h2)]">{s.q}</div>
+                <div className="mt-1.5 flex gap-1 font-mono text-[12px] text-tr-text-mute">
                   <span className="text-tr-accent-ink" aria-hidden="true">{"//"}</span>
                   <span>{s.why}</span>
                 </div>
@@ -291,19 +293,19 @@ function PhaseContent({
       return (
         <div>
           <h2 className={PHASE_TITLE}>
-            The <span className={EM}>subproblems</span>.
+            The <span className={HIGHLIGHT}>subproblems</span>.
           </h2>
           <div className={PHASE_SUB}>{"// each one has a clean boundary. each one is shippable on its own."}</div>
           <div className="grid gap-2.5">
             {(payload.decomposition ?? []).map((d) => (
               <div
                 key={d.id}
-                className="grid grid-cols-[3.75rem_1fr] items-start gap-[18px] rounded-[var(--tr-r-sm)] border-l-2 border-tr-accent bg-tr-surface-2 px-4 py-3.5"
+                className={`${ROW} grid grid-cols-[3.75rem_1fr] items-start gap-[18px] px-4 py-3.5`}
               >
-                <div className={`pt-0.5 ${MONO} text-[length:var(--tr-t-mono-sm)] tracking-[.08em] text-tr-accent-ink`}>{d.id}</div>
+                <div className={ROW_LABEL}>{d.id}</div>
                 <div>
-                  <div className="mb-1 font-medium text-tr-text">{d.title}</div>
-                  <div className={`${MONO} text-[length:var(--tr-t-mono-sm)] leading-[var(--tr-lh-body)] text-tr-text-mute`}>{d.why}</div>
+                  <div className="mb-1 font-bold">{d.title}</div>
+                  <div className="font-mono text-[12px] leading-[var(--tr-lh-body)] text-tr-text-mute">{d.why}</div>
                 </div>
               </div>
             ))}
@@ -315,7 +317,7 @@ function PhaseContent({
       return (
         <div>
           <h2 className={PHASE_TITLE}>
-            How the <span className={EM}>system</span> wants to be drawn.
+            How the <span className={HIGHLIGHT}>system</span> wants to be drawn.
           </h2>
           <div className={PHASE_SUB}>{"// services · data flows · failure boundaries · where humans are in the loop."}</div>
           <FdeArchDiagram architecture={payload.architecture} />
@@ -326,19 +328,19 @@ function PhaseContent({
       return (
         <div>
           <h2 className={PHASE_TITLE}>
-            <span className={EM}>Fourteen days</span> to something working.
+            <span className={HIGHLIGHT}>Fourteen days</span> to something working.
           </h2>
           <div className={PHASE_SUB}>{"// real deliverables. each row is something a human can observe was done."}</div>
           <div className="grid gap-3">
             {(payload.sprint ?? []).map((s, i) => (
               <div
                 key={i}
-                className="grid grid-cols-[6.25rem_1fr] items-start gap-[18px] rounded-[var(--tr-r-sm)] border border-tr-hairline bg-tr-surface-2 px-[18px] py-4"
+                className={`${ROW} grid grid-cols-[6.25rem_1fr] items-start gap-[18px] px-[18px] py-4`}
               >
-                <div className={`pt-0.5 ${MONO} text-[length:var(--tr-t-mono-sm)] tracking-[.08em] text-tr-accent-ink`}>{s.day}</div>
+                <div className={ROW_LABEL}>{s.day}</div>
                 <div>
-                  <div className="mb-1.5 font-medium text-tr-text">{s.title}</div>
-                  <div className={`${MONO} text-[length:var(--tr-t-mono-sm)] leading-[var(--tr-lh-body)] text-tr-text-mute`}>
+                  <div className="mb-1.5 font-bold">{s.title}</div>
+                  <div className="font-mono text-[12px] leading-[var(--tr-lh-body)] text-tr-text-mute">
                     <span className="text-tr-accent-ink">deliverable: </span>
                     {s.deliv}
                   </div>
@@ -353,22 +355,22 @@ function PhaseContent({
       return (
         <div>
           <h2 className={PHASE_TITLE}>
-            What I&apos;m <span className={EM}>honest about</span>, on day one.
+            What I&apos;m <span className={HIGHLIGHT}>honest about</span>, on day one.
           </h2>
           <div className={PHASE_SUB}>{"// the failure modes I would name in the SOW. specific to your problem."}</div>
           <div className="grid gap-3">
             {(payload.risks ?? []).map((r, i) => (
               <div
                 key={i}
-                className="grid grid-cols-1 gap-[22px] rounded-[var(--tr-r-sm)] border border-tr-hairline border-l-2 border-l-tr-accent bg-tr-surface-2 px-[18px] py-4 sm:grid-cols-2"
+                className={`${ROW} grid grid-cols-1 gap-[22px] px-[18px] py-4 sm:grid-cols-2`}
               >
                 <div>
-                  <h3 className={`mb-2 ${MONO} text-[length:var(--tr-t-mono-sm)] uppercase tracking-[.16em] text-tr-accent-ink`}>Risk</h3>
-                  <p className="text-tr-text">{r.risk}</p>
+                  <h3 className="mb-2 font-mono text-[11px] font-normal uppercase tracking-[.08em] text-tr-accent-ink">Risk</h3>
+                  <p className="text-[15px] leading-normal">{r.risk}</p>
                 </div>
                 <div>
-                  <h3 className={`mb-2 ${MONO} text-[length:var(--tr-t-mono-sm)] uppercase tracking-[.16em] text-tr-accent-ink`}>Mitigation</h3>
-                  <p className="text-tr-text">{r.mitigation}</p>
+                  <h3 className="mb-2 font-mono text-[11px] font-normal uppercase tracking-[.08em] text-tr-ok">Mitigation</h3>
+                  <p className="text-[15px] leading-normal">{r.mitigation}</p>
                 </div>
               </div>
             ))}
@@ -380,19 +382,19 @@ function PhaseContent({
       return (
         <div>
           <h2 className={PHASE_TITLE}>
-            And every phase above: <span className={EM}>I&apos;ve done that work</span>.
+            And every phase above: <span className={HIGHLIGHT}>I&apos;ve done that work</span>.
           </h2>
           <div className={PHASE_SUB}>{"// brief -> receipts. each phase mapped to evidence in production code, shipped systems, or current work."}</div>
           <div className="grid grid-cols-1 gap-3.5 sm:grid-cols-2">
             {RECEIPTS.map((r, i) => (
-              <div key={i} className="rounded-[var(--tr-r-sm)] border border-tr-hairline bg-tr-surface-2 px-5 py-[18px]">
-                <div className={`mb-2.5 ${MONO} text-[length:var(--tr-t-mono-sm)] tracking-[.14em] text-tr-accent-ink`}>{r.phase}</div>
-                <div className={`mb-2 ${MONO} text-[length:var(--tr-t-mono-sm)] tracking-[.06em] text-tr-accent-ink`}>{r.project}</div>
-                <h3 className="mb-2 text-[length:var(--tr-t-h3)] leading-[var(--tr-lh-h3)] font-medium text-tr-text">{r.title}</h3>
-                <p className="mb-3 leading-[var(--tr-lh-prose)] text-tr-text">{r.desc}</p>
+              <div key={i} className={`${ROW} px-5 py-[18px]`}>
+                <div className="mb-1 font-mono text-[11px] uppercase tracking-[.08em] text-tr-text-faint">{r.phase}</div>
+                <div className="mb-2 font-mono text-[12px] text-tr-accent-ink">{r.project}</div>
+                <h3 className="mb-2 text-[20px] leading-[var(--tr-lh-h3)]">{r.title}</h3>
+                <p className="mb-3 text-[15px] leading-[var(--tr-lh-body)] text-tr-text-mute">{r.desc}</p>
                 {r.note && (
-                  <div className={`mb-3 border-l-2 border-tr-accent pl-2.5 ${MONO} text-[length:var(--tr-t-mono-sm)] text-tr-text-faint`}>
-                    <span className="tracking-[.1em] text-tr-accent-ink">note / </span>
+                  <div className="mb-3 border-l-[3px] border-tr-accent pl-2.5 font-mono text-[12px] text-tr-text-faint">
+                    <span className="text-tr-accent-ink">note / </span>
                     {r.note}
                   </div>
                 )}
@@ -401,7 +403,7 @@ function PhaseContent({
                     {r.links.map((l) => (
                       <a
                         key={l.href}
-                        className={`${MONO} border-b border-dashed border-tr-hairline pb-px text-[length:var(--tr-t-mono-sm)] text-tr-text no-underline transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] hover:border-tr-accent hover:text-tr-accent-ink`}
+                        className="font-mono text-[12px] text-tr-text underline"
                         href={l.href}
                         {...(l.href.startsWith("http") ? { target: "_blank", rel: "noreferrer" } : {})}
                       >
@@ -414,16 +416,13 @@ function PhaseContent({
             ))}
           </div>
 
-          <div className="mt-9 rounded-[var(--tr-r-md)] border border-dashed border-tr-accent bg-tr-surface-2 px-7 py-6 text-[length:var(--tr-t-h3)] leading-[var(--tr-lh-h3)] italic text-tr-text">
+          <div className="mt-9 rounded-[var(--tr-r-xl)] border-[1.5px] border-tr-hairline bg-tr-butter px-7 py-6 text-[20px] font-semibold leading-[var(--tr-lh-h2)]">
             {source === 'live'
               ? 'You just experienced what a 30-minute scoping call with me feels like, on your real problem.'
               : 'That was a prepared example of a 30-minute scoping call with me. Bring your real problem and it gets the same treatment.'}
             <br />
-            <span className="text-tr-accent-ink">If that landed → </span>
-            <a
-              href={`mailto:${SITE_CONFIG.social.email}`}
-              className="not-italic text-tr-accent-ink underline decoration-current underline-offset-2"
-            >
+            <span className="font-mono text-[14px] font-normal text-tr-text-mute">If that landed → </span>
+            <a href={`mailto:${SITE_CONFIG.social.email}`} className="font-mono text-[14px] text-tr-text underline">
               {SITE_CONFIG.social.email}
             </a>
           </div>

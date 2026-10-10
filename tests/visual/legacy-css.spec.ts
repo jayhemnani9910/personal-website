@@ -1,5 +1,5 @@
 import { test, expect } from "@playwright/test";
-import { prepare, settle, themeOf } from "./_helpers";
+import { prepare, settle } from "./_helpers";
 
 // This file's name is a holdover: it originally baselined the two routes
 // still on the pre-redesign `.editorial`/`.fde-*` stylesheet (ADR 0002). Both
@@ -15,8 +15,7 @@ import { prepare, settle, themeOf } from "./_helpers";
 // set, and adding one that does not carry distinct markup costs a baseline
 // and buys nothing.
 //
-// Dark and light both run. The theme comes from the Playwright project, and
-// snapshotPathTemplate files each project's baselines separately.
+// One palette, one project: baselines live under __snapshots__/paper.
 
 // ── Routes, and what each one is here to protect ──────────────────────────────
 const ROUTES = [
@@ -53,8 +52,8 @@ const ROUTES = [
 ] as const;
 
 for (const route of ROUTES) {
-  test(`${route.name} renders unchanged`, async ({ page, colorScheme }) => {
-    await prepare(page, themeOf(colorScheme));
+  test(`${route.name} renders unchanged`, async ({ page }) => {
+    await prepare(page);
     await settle(page, route.path);
     await expect(page).toHaveScreenshot(`${route.name}.png`, { fullPage: true });
   });
@@ -76,16 +75,16 @@ for (const route of ROUTES) {
 // worth asserting directly. `data-tool-kind` / `data-verdict` on
 // ProjectDetail.tsx exist for exactly this: they are the styling-independent
 // equivalent of the old CSS classes.
-test("tools table renders both read and write kinds", async ({ page, colorScheme }) => {
-  await prepare(page, themeOf(colorScheme));
+test("tools table renders both read and write kinds", async ({ page }) => {
+  await prepare(page);
   await settle(page, "/projects/webmcp-portfolio");
 
   await expect(page.locator('[data-tool-kind="read"]').first()).toBeVisible();
   await expect(page.locator('[data-tool-kind="write"]').first()).toBeVisible();
 });
 
-test("findings list renders all three verdict states", async ({ page, colorScheme }) => {
-  await prepare(page, themeOf(colorScheme));
+test("findings list renders all three verdict states", async ({ page }) => {
+  await prepare(page);
   await settle(page, "/projects/revolu-idea");
 
   await expect(page.locator('[data-verdict="VERIFIED"]').first()).toBeVisible();
@@ -99,8 +98,8 @@ test("findings list renders all three verdict states", async ({ page, colorSchem
 // showcase-demo.png baseline above already captures the slider in its
 // rendered state (it is no longer hidden behind a tab), and a pixel diff
 // would not have caught "loaded" vs. "decoded" anyway.
-test("comparison slider images decode", async ({ page, colorScheme }) => {
-  await prepare(page, themeOf(colorScheme));
+test("comparison slider images decode", async ({ page }) => {
+  await prepare(page);
   await settle(page, "/projects/fifa-soccer-ds");
 
   const slider = page.locator('[data-testid="comparison-slider"]');

@@ -2,9 +2,7 @@ import { describe, expect, it } from "vitest";
 import { act, render, screen } from "@testing-library/react";
 import { TerminalProvider, useTerminal } from "./TerminalContext";
 
-// The header badge (HomeHeader.tsx) advertises "shell `", so backtick has to
-// actually open the overlay. It used to bind nothing at all: only Ctrl/Cmd+K
-// worked, which is advertised nowhere. Guarded against text fields so typing
+// Backtick opens the overlay as well as Ctrl/Cmd+K. Guarded against text fields so typing
 // a literal backtick, including into the shell's own command input, never
 // yanks focus by toggling the overlay mid-keystroke.
 

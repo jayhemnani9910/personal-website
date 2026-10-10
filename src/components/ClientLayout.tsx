@@ -7,8 +7,6 @@ import { TerminalProvider, useTerminal } from "@/context/TerminalContext";
 import { SkipLink } from "@/components/SkipLink";
 import { TransitionLayout } from "@/components/TransitionLayout";
 import { MotionProvider } from "@/components/motion/MotionProvider";
-import { Preloader } from "@/components/motion/Preloader";
-import { Cursor } from "@/components/motion/Cursor";
 import { ReaderMode } from "@/components/ReaderMode";
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
 import { usePathname } from "next/navigation";
@@ -31,17 +29,12 @@ function LazyTerminal({ projectCount }: { projectCount: number }) {
 export function ClientLayout({ children, projectCount }: { children: React.ReactNode; projectCount: number }) {
     const prefersReducedMotion = usePrefersReducedMotion();
     const pathname = usePathname();
-    const smoothScroll = pathname === "/" && !prefersReducedMotion;
+    const isHome = pathname === "/";
+    const smoothScroll = isHome && !prefersReducedMotion;
 
     return (
         <MotionProvider>
-            {/* Overlays: both self-gate to nothing under reduced motion / touch,
-                and neither wraps page content (the preloader is a sibling scrim
-                that paints over already-rendered content, the cursor is a fixed
-                reticle). Order does not matter since both are position:fixed. */}
             <ReaderMode />
-            <Preloader />
-            <Cursor />
             <SkipLink />
             {/* Lenis in root mode drives the document scroller, so it does not
                 need to wrap the page. As a childless sibling it can come and go

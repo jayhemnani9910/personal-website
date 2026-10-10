@@ -23,8 +23,7 @@ export const TerminalProvider: React.FC<{ children: React.ReactNode }> = ({ chil
                 toggleTerminal();
                 return;
             }
-            // Backtick is what the header's own "shell `" badge advertises
-            // (HomeHeader.tsx), so it has to actually work. Guarded so typing
+            // Backtick opens the shell too, the quick way in. Guarded so typing
             // a literal backtick into a text field, including the shell's own
             // command input, never toggles the overlay out from under it.
             const target = e.target as HTMLElement | null;

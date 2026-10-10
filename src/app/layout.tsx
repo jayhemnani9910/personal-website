@@ -1,40 +1,17 @@
 import type { Metadata, Viewport } from "next";
-import { Instrument_Sans, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { FONT_VARIABLES } from "./fonts";
 import { ClientLayout } from "@/components/ClientLayout";
-import { ThemeProvider } from "@/context/ThemeContext";
 import { WebMCPProvider } from "@/components/WebMCPProvider";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { SITE_CONFIG } from "@/../content/site";
-import { THEME_KEY } from "@/lib/storage";
 import { getAllProjects } from "@/lib/content";
 import { SITE_GRAPH, jsonLd } from "@/lib/json-ld";
 
-// Instrument Sans is a variable font, so no `weight` array: listing weights
-// makes next/font ship static instances instead of the variable face, which
-// cost four extra files the last time it happened.
-const instrumentSans = Instrument_Sans({
-  subsets: ["latin"],
-  style: ["normal", "italic"],
-  display: "swap",
-  variable: "--font-instrument",
-});
-
-const geistMono = Geist_Mono({
-  subsets: ["latin"],
-  weight: ["400", "500"],
-  display: "swap",
-  variable: "--font-geist-mono",
-});
-
 export const viewport: Viewport = {
-  // Static, not media-query-keyed: the theme is resolved in JS from
-  // localStorage and defaults to dark (ADR 0015), so a value keyed to the OS
-  // preference would track the wrong thing more often than not. Matches
-  // --tr-bg. Someone who toggles to light keeps a dark address bar, which is
-  // the smaller and rarer mismatch.
-  themeColor: "#0B0C0F",
+  // Paper, the only theme (ADR 0018).
+  themeColor: "#f3ede2",
   width: "device-width",
   initialScale: 1,
 };
@@ -88,45 +65,20 @@ export default async function RootLayout({
   const projectCount = (await getAllProjects()).length;
 
   return (
-    <html lang="en" className={`${instrumentSans.variable} ${geistMono.variable}`} suppressHydrationWarning>
+    <html lang="en" className={FONT_VARIABLES}>
       <head>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: jsonLd(SITE_GRAPH) }}
         />
-        {/* Inline script to prevent theme flash */}
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              (function() {
-                try {
-                  var theme = localStorage.getItem('${THEME_KEY}');
-                  if (theme !== 'dark' && theme !== 'light') {
-                    theme = 'dark';
-                  }
-                  document.documentElement.setAttribute('data-theme', theme);
-                } catch (e) {}
-              })();
-            `,
-          }}
-        />
-        {/* framer-motion writes each home section's hidden starting state
-            (opacity 0) into the server HTML, and only JS reveals it. Without
-            JS, or if a chunk fails to load, un-hide them. Inert whenever
-            scripting is on. */}
-        <noscript>
-          <style>{".tr-reveal{opacity:1!important;transform:none!important}"}</style>
-        </noscript>
       </head>
       <body
         className="antialiased"
       >
-        <ThemeProvider>
-          <ClientLayout projectCount={projectCount}>{children}</ClientLayout>
-          <WebMCPProvider />
-          <Analytics />
-          <SpeedInsights />
-        </ThemeProvider>
+        <ClientLayout projectCount={projectCount}>{children}</ClientLayout>
+        <WebMCPProvider />
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );

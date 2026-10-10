@@ -2,7 +2,7 @@
 
 - **Status:** Accepted
 - **Date:** 2026-09-02, promoted the same day
-- **Amended by:** [ADR 0015](0015-match-the-design-palette-and-drop-below-aa.md) (reverts the four lifted colour values below; see the note at the paragraph they were introduced in)
+- **Amended by:** [ADR 0015](0015-match-the-design-palette-and-drop-below-aa.md) (reverts the four lifted colour values below; see the note at the paragraph they were introduced in), [ADR 0018](0018-adopt-the-desk-design-site-wide.md) (the Desk design replaced the v4 look site-wide)
 - **Related:** ADR 0001 (TWO READERS), ADR 0002 (the scoped-override pattern), ADR 0006 (visual baselines), ADR 0007 (one palette), ADR 0008 (performance budget)
 
 ## Context

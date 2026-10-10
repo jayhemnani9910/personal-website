@@ -56,6 +56,7 @@ there.
 | [0015](0015-match-the-design-palette-and-drop-below-aa.md) | Match the design palette and drop below AA | Superseded by 0017 | 2026-09-03 |
 | [0016](0016-split-accent-ink-from-accent-for-readable-yellow.md) | Split accent-ink from accent for readable yellow | Accepted | 2026-09-06 |
 | [0017](0017-lift-the-palette-to-wcag-aa.md) | Lift the palette to WCAG AA | Accepted | 2026-09-29 |
+| [0018](0018-adopt-the-desk-design-site-wide.md) | Adopt the Desk design site-wide: paper only, one palette, three type voices | Accepted | 2026-10-10 |
 
 ## Adding one
 

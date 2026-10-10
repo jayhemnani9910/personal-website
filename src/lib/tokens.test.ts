@@ -52,10 +52,13 @@ function paletteFor(selector: string): Record<string, string> {
   return out;
 }
 
-const DARK = paletteFor(":root"); // dark is canonical, so it is the base
-const LIGHT = paletteFor(':root[data-theme="light"]');
+// Paper is the only palette (ADR 0018).
+const PAPER = paletteFor(":root");
 
-const REQUIRED = ["bg", "surface-1", "surface-2", "text", "text-mute", "text-faint", "accent", "accent-ink", "accent-hover", "on-accent", "ok", "warn"] as const;
+const REQUIRED = [
+  "bg", "surface-1", "surface-2", "text", "text-mute", "text-faint", "accent", "accent-ink", "accent-hand",
+  "accent-hover", "on-accent", "ok", "warn", "butter", "on-ink", "on-ink-mute", "on-ink-faint",
+] as const;
 const SURFACES = ["bg", "surface-1", "surface-2"] as const;
 // Every token that colours words. `accent` is not one of them: it is the fill
 // colour (buttons, borders, rules), and words in the accent use `accent-ink`
@@ -83,31 +86,20 @@ function contrastRatio(a: string, b: string): number {
 // below would silently iterate an empty set and "pass", which is exactly the
 // hole this file used to have. Fail loudly instead.
 describe("token parsing (guards the contrast suite against going vacuous)", () => {
-  it.each([
-    ["dark", DARK],
-    ["light", LIGHT],
-  ])(`%s: parsed all ${REQUIRED.length} --tr- tokens out of globals.css`, (theme, palette) => {
-    const missing = REQUIRED.filter((k) => !palette[k]);
-    expect(missing, `${theme}: could not parse ${missing.join(", ")} from globals.css`).toEqual([]);
+  it(`parsed all ${REQUIRED.length} --tr- tokens out of globals.css`, () => {
+    const missing = REQUIRED.filter((k) => !PAPER[k]);
+    expect(missing, `could not parse ${missing.join(", ")} from globals.css`).toEqual([]);
   });
 
   it("every parsed value is a 6-digit hex", () => {
-    for (const [theme, palette] of [
-      ["dark", DARK],
-      ["light", LIGHT],
-    ] as const) {
-      for (const [name, value] of Object.entries(palette)) {
-        expect(value, `${theme} --tr-${name} is not a hex colour`).toMatch(/^#[0-9A-Fa-f]{6}$/);
-      }
+    for (const [name, value] of Object.entries(PAPER)) {
+      expect(value, `--tr-${name} is not a hex colour`).toMatch(/^#[0-9A-Fa-f]{6}$/);
     }
   });
 
-  it("dark and light are actually different palettes", () => {
-    // Catches parsing the same block twice and testing dark against dark.
-    expect(DARK.bg).not.toBe(LIGHT.bg);
-    expect(DARK.text).not.toBe(LIGHT.text);
+  it("no theme blocks are left behind", () => {
+    expect(CSS).not.toMatch(/data-theme/);
   });
-
 });
 
 // Tailwind's `text-*` utility means BOTH font-size and colour. Given a bare CSS
@@ -203,45 +195,48 @@ describe("type scale is actually applied (Tailwind silently drops the un-hinted 
 });
 
 interface Case {
-  theme: string;
   fg: string;
   bg: string;
-  palette: Record<string, string>;
 }
 
 const cases: Case[] = [];
-for (const [theme, palette] of [["dark", DARK], ["light", LIGHT]] as const) {
-  for (const fg of TEXT_TOKENS) {
-    for (const bg of SURFACES) cases.push({ theme, fg, bg, palette });
-  }
-  // The primary CTA's label on its own accent fill. This is the single most
-  // important pair on the site: white on the dark accent measures 3.08:1 and
-  // fails, which is why --tr-on-accent is near-black rather than white.
-  cases.push({ theme, fg: "on-accent", bg: "accent", palette });
-  // The same label once the cursor is on it. A hover fill is still a surface
-  // carrying text, so it has to clear AA too, in both directions: dark hover
-  // lightens the accent, light hover darkens it.
-  cases.push({ theme, fg: "on-accent", bg: "accent-hover", palette });
+for (const fg of TEXT_TOKENS) {
+  for (const bg of SURFACES) cases.push({ fg, bg });
 }
+// Butter is a surface (the fact card, the secrets chip, highlights): only ink
+// and ink-2 go on it. Faint measures 4.28 there and is not allowed.
+cases.push({ fg: "text", bg: "butter" }, { fg: "text-mute", bg: "butter" });
+// Ink panels: today's pick, the contact band, footers, code, the terminal.
+for (const fg of ["on-ink", "on-ink-mute", "on-ink-faint", "butter", "accent", "mint"]) cases.push({ fg, bg: "text" });
+// The primary button's label on its fill, at rest and under the pointer. This
+// is why --tr-on-accent is ink: card-white on tomato is 3.57:1.
+cases.push({ fg: "on-accent", bg: "accent" }, { fg: "on-accent", bg: "accent-hover" });
 
-describe("Two Readers token contrast (ADR 0017: WCAG AA everywhere)", () => {
-  it.each(cases)("$theme: $fg on $bg clears AA", ({ theme, fg, bg, palette }) => {
-    const ratio = contrastRatio(palette[fg], palette[bg]);
-    expect(ratio, `${theme}: ${fg} on ${bg} is ${ratio.toFixed(2)}:1, under ${AA_MIN}:1`).toBeGreaterThanOrEqual(AA_MIN);
+describe("Desk token contrast (ADR 0017: WCAG AA everywhere)", () => {
+  it.each(cases)("$fg on $bg clears AA", ({ fg, bg }) => {
+    const ratio = contrastRatio(PAPER[fg], PAPER[bg]);
+    expect(ratio, `${fg} on ${bg} is ${ratio.toFixed(2)}:1, under ${AA_MIN}:1`).toBeGreaterThanOrEqual(AA_MIN);
   });
 
   // WCAG 1.4.11: a focus indicator needs 3:1 against what it sits on. The ring
-  // is drawn in accent-ink (globals.css, :focus-visible).
-  it.each(["dark", "light"] as const)("%s: the focus ring clears 3:1 on every surface", (theme) => {
-    const palette = theme === "dark" ? DARK : LIGHT;
-    for (const bg of SURFACES) {
-      expect(contrastRatio(palette["accent-ink"], palette[bg])).toBeGreaterThanOrEqual(3);
+  // is accent-ink on paper surfaces and butter inside ink panels (globals.css).
+  it("the focus ring clears 3:1 on every surface it is drawn on", () => {
+    for (const bg of [...SURFACES, "butter"]) {
+      expect(contrastRatio(PAPER["accent-ink"], PAPER[bg]), `ring on ${bg}`).toBeGreaterThanOrEqual(3);
+    }
+    expect(contrastRatio(PAPER.butter, PAPER.text), "ring on ink").toBeGreaterThanOrEqual(3);
+  });
+
+  // Pure tomato as words is only for Caveat at 24px and up: large text, 3:1.
+  it("the handwritten accent clears the large-text bar on paper and card", () => {
+    for (const bg of ["bg", "surface-1"]) {
+      expect(contrastRatio(PAPER["accent-hand"], PAPER[bg])).toBeGreaterThanOrEqual(3);
     }
   });
 });
 
-// `text-tr-accent` is the fill token used as a text colour, which measured
-// 2.84:1 in light. Words and glyphs take `text-tr-accent-ink` (ADR 0016).
+// `text-tr-accent` is the fill token used as a text colour: tomato measures
+// 3.11:1 on paper. Words and glyphs take `text-tr-accent-ink` (ADR 0016).
 describe("accent-coloured text uses accent-ink", () => {
   it("no component colours text with the fill accent", () => {
     const offenders = walk(SRC).flatMap((file) =>
@@ -251,5 +246,24 @@ describe("accent-coloured text uses accent-ink", () => {
         .filter((x): x is string => x !== null),
     );
     expect(offenders, `use text-tr-accent-ink:\n  ${offenders.join("\n  ")}`).toEqual([]);
+  });
+});
+
+// `text-tr-accent-hand` is pure tomato, which only clears the large-text bar.
+// It is for the Caveat asides (24px and up) and decorative marks hidden from
+// assistive tech, such as the logo's dot.
+describe("the handwritten accent stays handwritten", () => {
+  it("every text-tr-accent-hand sits on Caveat or an aria-hidden mark", () => {
+    const offenders = walk(SRC).flatMap((file) =>
+      readFileSync(file, "utf8")
+        .split("\n")
+        .map((line, i) =>
+          /text-tr-accent-hand/.test(line) && !/font-hand|aria-hidden|HAND\b|const HAND =/.test(line)
+            ? `${file.replace(SRC, "src")}:${i + 1}`
+            : null,
+        )
+        .filter((x): x is string => x !== null),
+    );
+    expect(offenders, `pair text-tr-accent-hand with font-hand at 24px+:\n  ${offenders.join("\n  ")}`).toEqual([]);
   });
 });

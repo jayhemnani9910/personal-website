@@ -28,11 +28,13 @@ const ROUTE = "/";
 const BUDGET = {
   // Set at 850 KB against 765.7 KB and never lowered after the drops, which
   // left room to put 150 KB back unnoticed. Lowered on 2026-09-30.
-  scriptBytes: 765 * 1024,     // measured 765.7 KB, then 718.2 KB on 2026-09-02, then 693.0 KB on 2026-09-03, then 695.9 KB on 2026-09-30
+  // Lowered again on 2026-10-10 when the Desk home replaced the v4 one: the
+  // decomposer, GL backdrop, preloader and cursor left the bundle.
+  scriptBytes: 700 * 1024,     // measured 765.7 KB, then 718.2 KB on 2026-09-02, then 693.0 KB on 2026-09-03, then 695.9 KB on 2026-09-30, then 632.3 KB on 2026-10-10
   // The home page's HTML, and the RSC payloads Next prefetches for the links
   // in view. Neither had a budget until 2026-09-30.
-  documentBytes: 135 * 1024,   // measured 121.4 KB on 2026-09-30
-  fetchBytes: 100 * 1024,      // measured 90.1 KB on 2026-09-30
+  documentBytes: 90 * 1024,    // measured 121.4 KB on 2026-09-30, 77.7 KB on 2026-10-10
+  fetchBytes: 60 * 1024,       // measured 90.1 KB on 2026-09-30, 52.5 KB on 2026-10-10
   // A moving number, so the history matters: 95 KB under the editorial system,
   // 110 KB for the day the v4 home shipped a second palette beside it, 105 KB
   // once ADR 0014's promotion put one palette back at :root. Now 65 KB, because
@@ -44,12 +46,15 @@ const BUDGET = {
   // longer a second design system to absorb, so the next few KB of growth
   // should be something a person chose. Not lowered here: 58.6 KB is not well
   // under the budget, it is a few KB up from the last measurement.
-  stylesheetBytes: 65 * 1024,  // measured 58.6 KB
-  // 5 under the editorial system, 6 for the day both type systems shipped, now
-  // 4: Newsreader and JetBrains Mono are out of the build entirely, and both
-  // remaining families are variable faces. Still an equality check, and this is
-  // exactly the "fewer means a family stopped loading" case, deliberately.
-  fontFiles: 4,                // exact, see below
+  // Lowered to 62 KB on 2026-10-10: one palette instead of two, the role
+  // cycle and buddy rules gone, the Desk component classes in.
+  stylesheetBytes: 62 * 1024,  // measured 58.6 KB, then 55.2 KB on 2026-10-10
+  // 5 under the editorial system, 6 for the day both type systems shipped, 4
+  // for Instrument Sans and Geist Mono, now 3 (ADR 0018): Bricolage Grotesque,
+  // JetBrains Mono and Caveat, each one variable latin face. Still an equality
+  // check, and this is exactly the "fewer means a family stopped loading" case,
+  // deliberately.
+  fontFiles: 3,                // exact, see below
   // 160, 168, 168, 220, 224 across five runs under this test's own conditions,
   // which include a cold `next start` that JIT-compiles on the first request. An
   // earlier draft cited 84ms from a warm server, which is not what this measures.
