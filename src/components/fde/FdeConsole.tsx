@@ -310,9 +310,13 @@ export function FdeConsole() {
               ))}
             </div>
             <button
-              className={`${BTN_PRIMARY} cursor-pointer whitespace-nowrap font-mono text-[13px] disabled:translate-0 disabled:cursor-not-allowed disabled:bg-tr-surface-2 disabled:text-tr-text-faint disabled:shadow-none`}
+              className={`${BTN_PRIMARY} cursor-pointer whitespace-nowrap font-mono text-[13px] disabled:translate-0 disabled:cursor-not-allowed disabled:bg-tr-surface-2 disabled:text-tr-text-faint disabled:shadow-none aria-disabled:cursor-wait`}
               onClick={startCustom}
-              disabled={!briefInput.trim() || loading}
+              // Native disabled only for an empty brief. While a run is going it
+              // is aria-disabled, so the button pressed keeps keyboard focus;
+              // startCustom ignores presses while loading.
+              disabled={!briefInput.trim()}
+              aria-disabled={loading}
               type="button"
             >
               {loading ? 'scoping…' : 'run sim ↵'}

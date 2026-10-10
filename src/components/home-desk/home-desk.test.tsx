@@ -31,6 +31,8 @@ let wall: { name: string; msg: string; at: number }[];
 let postStatus: number;
 let postBody: Record<string, unknown>;
 let getStatus: number;
+// When set, the wall's GET waits for it, so a post can land while it loads.
+let getGate: Promise<void> | null;
 
 beforeEach(() => {
   window.localStorage.clear();
@@ -40,6 +42,7 @@ beforeEach(() => {
   postStatus = 201;
   postBody = {};
   getStatus = 200;
+  getGate = null;
   vi.stubGlobal(
     "fetch",
     vi.fn(async (_url: string, init?: RequestInit) => {
@@ -48,6 +51,7 @@ beforeEach(() => {
         const body = postStatus === 201 ? { note: { name: sent.name || "anonymous", msg: sent.msg, at: 5 } } : postBody;
         return new Response(JSON.stringify(body), { status: postStatus });
       }
+      if (getGate) await getGate;
       return getStatus === 200
         ? new Response(JSON.stringify({ notes: wall }), { status: 200 })
         : new Response(JSON.stringify({ error: "store-unavailable" }), { status: getStatus });
@@ -189,6 +193,21 @@ describe("Guestbook", () => {
       fireEvent.click(screen.getByRole("button", { name: "stick it" }));
     });
     expect(screen.getByText("your note's up. the rest of the fridge didn't load.")).toBeDefined();
+  });
+
+  it("keeps a note posted while the wall loads, even if the load then fails", async () => {
+    let release = () => {};
+    getGate = new Promise<void>((r) => (release = r));
+    getStatus = 503;
+    const page = await HomeDesk();
+    render(<TerminalProvider>{page}</TerminalProvider>);
+    fireEvent.change(screen.getByLabelText("Your note"), { target: { value: "early bird" } });
+    await act(async () => {
+      fireEvent.click(screen.getByRole("button", { name: "stick it" }));
+    });
+    await act(async () => release());
+    await waitFor(() => expect(screen.getByText("your note's up. the rest of the fridge didn't load.")).toBeDefined());
+    expect(screen.getByText("early bird")).toBeDefined();
   });
 
   it("puts a note up straight away and thanks the writer", async () => {

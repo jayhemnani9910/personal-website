@@ -82,11 +82,14 @@ export function FdeSimulation({ payload, brief, source, onExit, streaming = fals
     return () => timers.forEach(t => clearTimeout(t));
   }, [phase, prefersReducedMotion, narration.length]);
 
-  // A nav button that disables itself at the first or last phase would drop
-  // keyboard focus to <body>, so arriving there hands focus to that tab.
+  // A nav button that disables itself would drop keyboard focus to <body>:
+  // previous at the first phase, continue at the last one or while the next
+  // section is still streaming. Arriving there hands focus to that tab.
   const goTo = (target: number) => {
     setPhase(target);
-    if (target === 0 || target === PHASES.length - 1) requestAnimationFrame(() => tabRefs.current[target]?.focus());
+    const last = PHASES.length - 1;
+    const stuck = target === 0 || target === last || !sectionReady(payload, PHASES[target + 1].key);
+    if (stuck) requestAnimationFrame(() => tabRefs.current[target]?.focus());
   };
   const next = () => goTo(Math.min(phase + 1, PHASES.length - 1));
   // The tab for an unfinished section is disabled, so the nav button that walks

@@ -96,12 +96,13 @@ export function TerminalOverlay({ projectCount }: { projectCount: number }) {
         };
     }, [isOpen, lenis]);
 
-    // Focuses the input once the panel has finished sliding in, matching the
-    // comp's own 380ms delay rather than fighting the entrance transition.
+    // Focuses the input on the next frame: an aria-modal dialog owns focus
+    // from the moment it shows (a 380ms wait let Tab walk the page behind it).
+    // Not synchronously, so the effect below still records the opener first.
     useEffect(() => {
         if (!isOpen) return;
-        const t = window.setTimeout(() => inputRef.current?.focus(), 380);
-        return () => window.clearTimeout(t);
+        const raf = requestAnimationFrame(() => inputRef.current?.focus());
+        return () => cancelAnimationFrame(raf);
     }, [isOpen]);
 
     // Dialog semantics: remember what had focus before opening (to restore
@@ -216,11 +217,19 @@ export function TerminalOverlay({ projectCount }: { projectCount: number }) {
                 // Both of buildReceipts's dynamic inputs are honestly available
                 // here: projectCount arrives as a prop (see layout.tsx), and
                 // WEBMCP_TOOL_COUNT is a static array length, not a fs read.
-                // Each figure with the link it rests on: the last line of its
-                // receipt is the broadest source (the search, the paper, the file).
+                // Each figure with what it rests on: every line of a short
+                // receipt (both papers), the last line of a long one (the PR
+                // search). A link short enough to read is printed as the link;
+                // a long one (the search URL) by what it is.
                 out = buildReceipts({ projectCount, toolCount: WEBMCP_TOOL_COUNT }).flatMap((r) => {
-                    const source = r.lines.at(-1)?.href.replace(/^https:\/\//, "");
-                    return [info(`${r.n.padEnd(5)} ${r.label}`), ...(source ? [line(`${"".padEnd(5)} source: ${source}`)] : [])];
+                    const sources = r.lines.length <= 3 ? r.lines : r.lines.slice(-1);
+                    return [
+                        info(`${r.n.padEnd(5)} ${r.label}`),
+                        ...sources.map((s) => {
+                            const href = s.href.replace(/^https:\/\//, "");
+                            return line(`${"".padEnd(5)} source: ${href.length <= 90 ? href : s.text}`);
+                        }),
+                    ];
                 });
                 break;
             case "contact":

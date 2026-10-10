@@ -77,7 +77,8 @@ export function Guestbook() {
       })
       .catch(() => {
         if (!live) return;
-        setNotes([]);
+        // Keep a note posted while the wall was loading; it did stick.
+        setNotes((prev) => prev ?? []);
         setLoadFailed(true);
       });
     return () => {

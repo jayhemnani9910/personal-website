@@ -60,7 +60,7 @@ export function ProjectsClient({ projects }: ProjectsClientProps) {
       {/* Sticky only from lg up: on a phone the search box and the wrapping
           domain chips are several rows tall, and pinned they would cover
           about half the screen. */}
-      <section className="sticky-bar z-[30] border-b-[1.5px] border-tr-hairline bg-tr-bg lg:sticky lg:top-[58px]">
+      <section className="z-[30] border-b-[1.5px] border-tr-hairline bg-tr-bg lg:sticky lg:top-[58px] lg:sticky-bar">
         <div className={`${WRAP} ${SHELL} flex flex-wrap items-center gap-2 pb-5 pt-4`}>
           {/* The search box shows focus on its frame; the bare input inside keeps outline-none. */}
           <div className="flex h-9 w-full items-center gap-2 rounded-[var(--tr-r-md)] border-[1.5px] border-tr-hairline bg-tr-surface-1 px-3 focus-within:shadow-[2px_2px_0_var(--tr-text)] focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-tr-accent-ink sm:w-[300px]">

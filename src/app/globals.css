@@ -44,8 +44,33 @@ html {
 /* Controls inside a sticky bar are always on screen, but the padding above
    would still have the browser scroll to "reveal" one when it is clicked or
    focused, jumping the page about 470px. A matching negative margin cancels
-   it for anything in the bar. */
-.sticky-bar :where(*) { scroll-margin-top: calc(-1 * var(--tr-scroll-pad)); }
+   it for anything in the bar. A utility, so a bar that is only sticky from
+   some width up (the /projects filters) carries it only there: lg:sticky-bar.
+   On a bar that scrolls away, the margin would land focus under the header. */
+@utility sticky-bar {
+  & :where(*) { scroll-margin-top: calc(-1 * var(--tr-scroll-pad)); }
+}
+
+/* On a short screen (a phone on its side, 200% zoom) a sticky header would
+   cover too much of what is focused, so it scrolls away like the rest. */
+@media (max-height: 520px) {
+  :root { --tr-scroll-pad: 0px; }
+  .sticky-bar { position: static; }
+}
+
+/* A shade at the right edge of anything that scrolls sideways (code, wide
+   diagrams), shown only while there is more to the right: the "local" layer
+   is painted in the box's own colour at the end of the content and covers the
+   shade once the end is in view. Set --hint-bg to the box's background. */
+@utility scroll-hint {
+  background-image:
+    linear-gradient(to left, var(--hint-bg, var(--tr-bg)) 40%, transparent),
+    linear-gradient(to left, var(--hint-edge, color-mix(in srgb, var(--tr-text) 28%, transparent)), transparent);
+  background-position: right center, right center;
+  background-size: 48px 100%, 18px 100%;
+  background-repeat: no-repeat;
+  background-attachment: local, scroll;
+}
 
 body {
   font-family: var(--font-sans);
@@ -236,8 +261,8 @@ html.lenis {
   --tr-r-2xl: 20px;    /* panels, the playground */
 
   /* ---- z-index ladder (ascending) ---- */
-  --tr-z-masthead: 50;
-  --tr-scroll-pad: 100px;  /* room for the sticky header, see html below */     /* site header, above page content */
+  --tr-z-masthead: 50;     /* site header, above page content */
+  --tr-scroll-pad: 100px;  /* room for the sticky header (html, above) */
   --tr-z-overlay: 80;      /* modals, drawers, scrims */
 
   /* ---- motion ---- */
