@@ -112,6 +112,14 @@ describe("guestbook helpers", () => {
     expect(parseNote({ msg: 3 })).toEqual({ ok: false, error: "invalid" });
   });
 
+  it("strips tags in linear time and rejects oversized input before cleaning", () => {
+    expect(clean("a<b>c</b>d")).toBe("acd");
+    const started = performance.now();
+    expect(clean("<".repeat(50_000))).toBe("<".repeat(50_000));
+    expect(performance.now() - started).toBeLessThan(100);
+    expect(parseNote({ msg: "<".repeat(361) })).toEqual({ ok: false, error: "too_long" });
+  });
+
   it("does not block words that only contain a blocked one", () => {
     expect(parseNote({ msg: "grapes and a shiitake" }).ok).toBe(true);
   });

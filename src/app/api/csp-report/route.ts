@@ -37,14 +37,34 @@ function parseViolations(data: unknown): Violation[] {
   ];
 }
 
+/** The body as text, or null past MAX_BYTES. Read in chunks, so a chunked
+ * upload with no Content-Length is cut off at the cap, not buffered whole. */
+async function readCapped(request: NextRequest): Promise<string | null> {
+  if (!request.body) return "";
+  const reader = request.body.getReader();
+  const chunks: Uint8Array[] = [];
+  let size = 0;
+  for (;;) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    size += value.byteLength;
+    if (size > MAX_BYTES) {
+      await reader.cancel();
+      return null;
+    }
+    chunks.push(value);
+  }
+  return new TextDecoder().decode(Buffer.concat(chunks));
+}
+
 export async function POST(request: NextRequest) {
   const length = Number(request.headers.get("content-length") ?? 0);
   if (length > MAX_BYTES) return new Response(null, { status: 413 });
 
   let data: unknown;
   try {
-    const text = await request.text();
-    if (text.length > MAX_BYTES) return new Response(null, { status: 413 });
+    const text = await readCapped(request);
+    if (text === null) return new Response(null, { status: 413 });
     data = JSON.parse(text);
   } catch {
     return new Response(null, { status: 400 });

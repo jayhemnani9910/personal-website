@@ -18,10 +18,11 @@ export const runtime = "nodejs";
 export const maxDuration = 60;
 const DEADLINE_MS = 55_000;
 
-// Model calls allowed per UTC day across every visitor (decision D11). Past
-// it, a visitor gets the same answer as when no model is configured: the
-// closest prepared example.
-const DAILY_MODEL_CALLS = 200;
+// Simulation runs allowed per UTC day across every visitor (decision D11). A
+// run makes at most two model calls (one retry), so this also caps calls at
+// 400. Past it, a visitor gets the same answer as when no model is configured:
+// the closest prepared example.
+const DAILY_RUNS = 200;
 
 const isTimeout = (err: unknown) => err instanceof Error && (err.name === "TimeoutError" || err.name === "AbortError");
 
@@ -367,8 +368,8 @@ export async function POST(request: NextRequest) {
         await defer(() => recordSim(getRedis(), { outcome: "no_runtime" }));
         return noRuntime();
     }
-    if ((await dailyBudget(getRedis(), "fde-sim", DAILY_MODEL_CALLS)) === "exhausted") {
-        console.error("[fde-sim] daily model budget spent; serving presets");
+    if ((await dailyBudget(getRedis(), "fde-sim", DAILY_RUNS)) === "exhausted") {
+        console.error("[fde-sim] daily run budget spent; serving presets");
         await defer(() => recordSim(getRedis(), { outcome: "over_budget" }));
         return noRuntime();
     }

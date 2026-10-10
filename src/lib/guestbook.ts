@@ -22,7 +22,9 @@ const BLOCKED = /\b(fuck\w*|shit\w*|cunt\w*|bitch\w*|nigg\w*|fag\w*|retard\w*|wh
 /** Tags out, control characters out, whitespace collapsed. */
 export function clean(text: string): string {
   return text
-    .replace(/<[^>]*>/g, "")
+    // `[^<>]`, not `[^>]`: on a run of "<" with no ">" the wider class rescans
+    // to the end from every "<", which is quadratic in the input.
+    .replace(/<[^<>]*>/g, "")
     .replace(/[\u0000-\u001f\u007f]/g, " ")
     .replace(/\s+/g, " ")
     .trim();
@@ -36,6 +38,9 @@ export function parseNote(body: unknown): ParseResult {
   if (typeof rawMsg !== "string" || (rawName !== undefined && typeof rawName !== "string")) {
     return { ok: false, error: "invalid" };
   }
+  // Tags and spaces can shrink a note, but not by this much. Rejecting here
+  // keeps a huge body from being cleaned at all.
+  if ((rawName?.length ?? 0) > NAME_MAX * 4 || rawMsg.length > MSG_MAX * 4) return { ok: false, error: "too_long" };
   const name = clean(rawName ?? "");
   const msg = clean(rawMsg);
   if (!msg) return { ok: false, error: "empty" };
