@@ -29,7 +29,7 @@ const MAX_TILES = 40;
 const REST_FRAMES = 60;
 const REST_PX = 0.1;
 
-const TILE = "absolute left-0 top-0 flex select-none items-center justify-center border-[1.5px] border-tr-hairline shadow-[3px_3px_0_var(--tr-text)] [touch-action:none] [will-change:transform]";
+const TILE = "absolute left-0 top-0 flex select-none items-center justify-center border-[1.5px] border-tr-hairline shadow-[3px_3px_0_var(--tr-text)] [will-change:transform]";
 const LETTER = "size-[72px] rounded-[14px] text-[52px] sm:size-24 sm:rounded-[18px] sm:text-[68px] font-extrabold";
 const WORD = "rounded-full px-3 py-2 text-[13px] sm:px-4 sm:py-2.5 sm:text-[15px] font-mono font-semibold whitespace-nowrap";
 
@@ -91,7 +91,7 @@ export function PhysicsPlayground() {
       const el = document.createElement("div");
       const letter = kind === "letter";
       const bg = letter ? LETTER_BG[bodies.length % LETTER_BG.length] : WORD_BG[bodies.length % WORD_BG.length];
-      el.className = `${TILE} ${letter ? LETTER : WORD} ${reduced ? "" : "cursor-grab"}`;
+      el.className = `${TILE} ${letter ? LETTER : WORD} ${reduced ? "" : "cursor-grab [touch-action:none]"}`;
       el.style.background = bg;
       el.style.color = bg === "var(--tr-text)" ? "var(--tr-butter)" : "var(--tr-text)";
       el.textContent = label;
@@ -137,6 +137,15 @@ export function PhysicsPlayground() {
     };
 
     // Still mode: lay the tiles along the floor, wrapping upward, slightly tilted.
+    // A tile's size is set by CSS breakpoints (72px letters on a phone, 96px
+    // from sm up), so a resize across one changes it; re-read before laying out.
+    const measure = () => {
+      for (const b of bodies) {
+        b.w = b.el.offsetWidth;
+        b.h = b.el.offsetHeight;
+      }
+    };
+
     const pile = () => {
       const W = host.clientWidth;
       const H = host.clientHeight;
@@ -237,7 +246,10 @@ export function PhysicsPlayground() {
 
     if (reduced) {
       pile();
-      const onResize = () => pile();
+      const onResize = () => {
+        measure();
+        pile();
+      };
       window.addEventListener("resize", onResize);
       playgroundRef.current = {
         storm: () => window.scrollTo({ top: 0, behavior: scrollBehavior() }),
@@ -275,7 +287,11 @@ export function PhysicsPlayground() {
     window.addEventListener("pointerup", onUp);
     window.addEventListener("pointercancel", onUp);
     // A narrower box pushes tiles back inside on the next frame, so wake up.
-    window.addEventListener("resize", start);
+    const onResize = () => {
+      measure();
+      start();
+    };
+    window.addEventListener("resize", onResize);
 
     // Off screen, the loop stops; it picks up again when the box scrolls back.
     const io = new IntersectionObserver(([entry]) => {
@@ -317,7 +333,7 @@ export function PhysicsPlayground() {
       window.removeEventListener("pointermove", onMove);
       window.removeEventListener("pointerup", onUp);
       window.removeEventListener("pointercancel", onUp);
-      window.removeEventListener("resize", start);
+      window.removeEventListener("resize", onResize);
       playgroundRef.current = null;
       host.replaceChildren();
     };

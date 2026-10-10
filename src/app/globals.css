@@ -375,3 +375,7 @@ html.lenis {
   :root:not([data-reader="on"]) .desk-sticky { transition: transform .2s; }
   :root:not([data-reader="on"]) .desk-sticky:hover { transform: rotate(0deg) scale(1.05); }
 }
+
+/* The still tiles can't be thrown, so the line inviting it goes too. */
+@media (prefers-reduced-motion: reduce) { .desk-grab-hint { display: none; } }
+[data-reader="on"] .desk-grab-hint { display: none; }

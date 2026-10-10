@@ -98,7 +98,7 @@ export async function HomeDesk() {
                 Jay Hemnani. Forward Deployed Engineer from Gujarat. Data pipelines, ML, agents, and occasionally a
                 Rubik&apos;s cube. Currently <b>open to work</b> and, apparently, to building toys for my own homepage.
               </p>
-              <p aria-hidden="true" className="font-mono text-[12px] text-tr-text-faint">
+              <p aria-hidden="true" className="desk-grab-hint font-mono text-[12px] text-tr-text-faint">
                 ↓ grab a tile. throw it. they don&apos;t mind.
               </p>
             </div>
