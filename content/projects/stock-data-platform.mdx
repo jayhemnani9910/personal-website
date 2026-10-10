@@ -19,7 +19,7 @@ impact:
   - "Full price history, back to each ticker's first traded day, for 10 major US equities (AAPL, NVDA, MSFT, GOOG, AMZN, META, TSLA, JPM, NFLX, DIS)."
   - "Fully containerized with 7 Docker services, single command deployment."
   - "A Bloomberg-style Chart.js dashboard for price trends, fundamentals, earnings surprises, and macro indicators."
-priority: 24
+priority: 4
 deepDive:
   architecture: "Four upstream sources feed the warehouse on two paths. Live prices stream through a Kafka producer into a broker, where a consumer batches and upserts them into TimescaleDB. Batch data (daily and hourly prices, fundamentals, earnings, SEC filings, macro indicators) moves through Airflow DAGs that extract, normalize, and load on a schedule. Everything lands in a 10-table star schema and surfaces through a Chart.js dashboard."
   dataFlow:

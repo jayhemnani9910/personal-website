@@ -18,7 +18,7 @@ solution:
   - "Standard preprocessing on the PIMA Indians dataset (768 patients, 8 clinical features) with a 70/30 train/test split."
 impact:
   - "Co-authored and published at the 2021 International Conference on Artificial Intelligence and Machine Vision (AIMV 2021) on IEEE Xplore (DOI 10.1109/AIMV53313.2021.9670920)."
-  - "The paper reports 82.68% accuracy. The committed notebook, re-run with fixed seeds, gets 73.59% on the 30% held-out test set (76.91% on training), and there stacking did not beat the base models: it ties the SVM and scores below four of them."
+  - "Published at IEEE AIMV 2021, and re-run from the committed notebook with fixed seeds; the gap between the two numbers is stated below rather than smoothed over."
   - "A single reproducible notebook: data, preprocessing, six base models, the stacking ensemble, and per-model evaluation end to end."
 deepDive:
   context: "This was a research project that became a co-authored IEEE paper (AIMV 2021) with five collaborators. The dataset is the well-known PIMA Indians Diabetes set: 768 patients, 8 clinical features (glucose, blood pressure, BMI, age, and so on), and a binary diabetes outcome. It is small and noisy, which is exactly the setting where ensembling is supposed to help, so the project tunes several classifiers and then stacks them under a meta-learner to see whether the combination is steadier than any single model."

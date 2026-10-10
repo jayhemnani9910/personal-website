@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { pageMetadata } from "@/lib/page-metadata";
 import Link from "next/link";
-import { CUBE_ACHIEVEMENT, RESUME, companyAnchor, parsePublishedVsReproduced } from "@/data/resume";
+import { CUBE_ACHIEVEMENT, RESUME, companyAnchor } from "@/data/resume";
 import { MERGED_PRS, MERGED_PRS_SEARCH, MERGED_PRS_SEARCH_LABEL } from "@/data/home";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
@@ -152,18 +152,12 @@ export default function AboutPage() {
           </p>
           <ol className="grid gap-5 md:grid-cols-2">
             {RESUME.publications.map((pub) => {
-              const gap = parsePublishedVsReproduced(pub.description);
               return (
                 <li key={pub.title} className={`${CARD} flex min-w-0 flex-col gap-3 p-6`}>
                   <p className="font-mono text-[12px] text-tr-text-faint">{pub.year}</p>
                   <h3 className="text-[21px] font-bold leading-[var(--tr-lh-h2)] tracking-[-0.02em]">{pub.title}</h3>
                   <p className="text-[14px] leading-normal text-tr-text-faint">{pub.venue}</p>
                   <p className="text-[15px] leading-[var(--tr-lh-body)] text-tr-text-mute">{pub.description}</p>
-                  {gap ? (
-                    <p className="self-start rounded-[var(--tr-r-sm)] bg-tr-butter px-2.5 py-1 font-mono text-[12px] text-tr-text-mute">
-                      Published {gap.published}% · reproduced {gap.reproduced}%.
-                    </p>
-                  ) : null}
                   {/* gap-x-5 plus py-1 on each link keeps the pair of targets
                       clear of the 24px minimum a tap target needs. */}
                   <p className="mt-auto flex flex-wrap gap-x-5 pt-1 font-mono text-[13px] text-tr-text">

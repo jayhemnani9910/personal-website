@@ -266,7 +266,7 @@ export const PRESETS: Preset[] = [
       ],
     },
     sprint: [
-      { day: 'Day 1-2', title: 'Identity resolver + happy-path eval', deliv: 'given email -> prospect_id with >95% precision on 50-prospect eval set across 4 source types.' },
+      { day: 'Day 1-2', title: 'Identity resolver + happy-path eval', deliv: 'given email → prospect_id with >95% precision on 50-prospect eval set across 4 source types.' },
       { day: 'Day 3-5', title: 'Research orchestrator v1', deliv: 'multi-step agent calling CRM + LinkedIn + news. Cached. Returns raw structured context per prospect.' },
       { day: 'Day 6-7', title: 'Insight extractor', deliv: 'turns raw context into a 6-bullet brief: who, what they care about, recent triggers, competitive context.' },
       { day: 'Day 8-9', title: 'Slack /prep slash command', deliv: '/prep email@company.com returns brief in <12s. Cached for 1hr.' },
@@ -291,7 +291,7 @@ export const PRESETS: Preset[] = [
       },
       {
         q: "What's the actual blocker: review speed, or consistency between reviewers? Different problems, different solutions.",
-        why: "Speed -> asynchronous batch processing. Consistency -> side-by-side reviewer assist. We optimize for the one that's killing you.",
+        why: "Speed → asynchronous batch processing. Consistency → side-by-side reviewer assist. We optimize for the one that's killing you.",
       },
       {
         q: "Who is the human reviewing AI output: paralegal, attorney, ops? Their reading speed determines the UX.",
@@ -300,7 +300,7 @@ export const PRESETS: Preset[] = [
     ],
     decomposition: [
       { id: 'D1', title: 'Playbook codification', why: "Convert your written + tribal playbook into structured, testable rules. Without this, AI judgments aren't auditable." },
-      { id: 'D2', title: 'Contract ingest + clause extraction', why: 'PDF/DOCX -> structured clauses with type tagging (indemnity, data, IP, term, etc.).' },
+      { id: 'D2', title: 'Contract ingest + clause extraction', why: 'PDF/DOCX → structured clauses with type tagging (indemnity, data, IP, term, etc.).' },
       { id: 'D3', title: 'Per-clause risk evaluator', why: 'For each clause, compare against the relevant playbook rule. Flag severity (block, negotiate, accept).' },
       { id: 'D4', title: 'Reviewer console', why: 'Side-by-side: contract on left, AI annotations on right, accept/reject/edit per flag. Audit trail.' },
       { id: 'D5', title: 'Audit + eval', why: 'Every AI judgment is reproducible (cite the rule + the clause). Sample 10% for blind human review monthly.' },
@@ -309,7 +309,7 @@ export const PRESETS: Preset[] = [
       components: [
         { id: 'up', name: 'Upload portal', kind: 'ui', x: 60, y: 60, sub: 'pdf · docx · email' },
         { id: 'pb', name: 'Playbook store', kind: 'data', x: 60, y: 240, sub: 'structured rules' },
-        { id: 'ing', name: 'Contract parser', kind: 'service', x: 280, y: 60, sub: 'pdf -> structured' },
+        { id: 'ing', name: 'Contract parser', kind: 'service', x: 280, y: 60, sub: 'pdf → structured' },
         { id: 'cl', name: 'Clause classifier', kind: 'agent', x: 280, y: 220, sub: 'type per clause' },
         { id: 'ev', name: 'Risk evaluator', kind: 'agent', x: 500, y: 140, sub: 'clause vs rule' },
         { id: 'rev', name: 'Reviewer console', kind: 'ui', x: 720, y: 140, sub: 'side-by-side' },
@@ -329,7 +329,7 @@ export const PRESETS: Preset[] = [
     },
     sprint: [
       { day: 'Day 1-3', title: 'Playbook codification workshop', deliv: "three sessions with legal. Output: structured rules doc with explicit thresholds. This is the keystone: if we skip it, the rest collapses." },
-      { day: 'Day 4-5', title: 'Contract parser + clause classifier', deliv: 'PDF/DOCX in -> typed clauses out. >90% F1 on 50-contract eval set.' },
+      { day: 'Day 4-5', title: 'Contract parser + clause classifier', deliv: 'PDF/DOCX in → typed clauses out. >90% F1 on 50-contract eval set.' },
       { day: 'Day 6-8', title: 'Risk evaluator v1', deliv: 'each clause judged against the relevant playbook rule with a severity + citation. Cited rule must be retrievable.' },
       { day: 'Day 9-11', title: 'Reviewer console', deliv: 'side-by-side UI. Accept / reject / edit per flag. Audit log on every action.' },
       { day: 'Day 12-13', title: 'Eval + shadow run', deliv: 'AI runs in shadow on 10 fresh contracts, legal does their normal review, we compare blind.' },
@@ -345,7 +345,7 @@ export const PRESETS: Preset[] = [
   {
     id: 'field',
     chip: 'Field diagnostics',
-    brief: "Our field technicians spend a lot of time diagnosing industrial pumps from on-site visits. They want a phone app: take a photo + describe symptoms -> AI gives them a probable failure mode and next steps.",
+    brief: "Our field technicians spend a lot of time diagnosing industrial pumps from on-site visits. They want a phone app: take a photo + describe symptoms → AI gives them a probable failure mode and next steps.",
     scope: [
       {
         q: "What's the actual cost of wrong diagnosis: wasted truck-roll, repeat visit, or worse (safety incident)?",
@@ -362,7 +362,7 @@ export const PRESETS: Preset[] = [
     ],
     decomposition: [
       { id: 'D1', title: 'Mobile capture UX', why: 'Photo + voice notes + symptom checklist. Cheap to capture, structured enough for the model.' },
-      { id: 'D2', title: 'Multi-modal diagnostic model', why: 'Image + structured symptoms -> ranked probable failure modes with confidence. VLM + retrieval from past cases.' },
+      { id: 'D2', title: 'Multi-modal diagnostic model', why: 'Image + structured symptoms → ranked probable failure modes with confidence. VLM + retrieval from past cases.' },
       { id: 'D3', title: 'Next-steps playbook', why: 'For each failure mode, retrieve the documented next steps + parts list + safety warnings.' },
       { id: 'D4', title: 'Tech feedback loop', why: 'After visit: was the AI right? What was the actual failure? This becomes labeled training data.' },
       { id: 'D5', title: 'Connectivity handling', why: 'Offline queue for inference + sync when reconnected. Critical for remote sites.' },
@@ -429,7 +429,7 @@ export const PROOFS: ProofItem[] = [
     id: 'I',
     cat: 'Agentic systems',
     project: 'CAG Deep Research',
-    title: { pre: 'Vague spec -> working multi-agent in ', em: '10 days', post: '.' },
+    title: { pre: 'Vague spec → working multi-agent in ', em: '10 days', post: '.' },
     body: 'Multi-agent LangGraph research system, built from a rough problem statement. Hexagonal architecture, verification loops, local + cloud LLM providers, swappable by config.',
     stack: ['LangGraph', 'multi-agent', 'hexagonal arch', 'verification'],
     links: [{ label: 'case study', href: '/projects/revolu-idea' }],

@@ -149,7 +149,6 @@ export function YouTubeShowcase({ data }: { data: YouTubeData }) {
         </div>
       )}
 
-      <p className="mt-10 font-mono text-[12px] text-tr-text-faint">Stats from the YouTube API, as of {formatDate(data.fetchedAt)}.</p>
     </div>
   );
 }

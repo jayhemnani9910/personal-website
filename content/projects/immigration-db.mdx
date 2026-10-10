@@ -307,36 +307,36 @@ deepDive:
 
     1. **Normalization is Not Always Absolute**
        - Started with strict 3NF but found that denormalizing `active_case_count` in the persons table removed an aggregate query every case listing would otherwise run.
-       - Learning: Strategic denormalization for read-heavy fields is worth the added complexity of maintaining consistency.
+       - Strategic denormalization for read-heavy fields is worth the added complexity of maintaining consistency.
 
     2. **Junction Tables Should Carry Business Logic**
        - Initially made `case_persons` a pure junction table with just IDs. Later added `role`, `is_primary`, and `relationship` fields.
-       - Learning: Many-to-many relationships in real-world domains often have attributes that belong to the relationship itself, not either entity.
+       - Many-to-many relationships in real-world domains often have attributes that belong to the relationship itself, not either entity.
 
     3. **Date Fields Require Careful Indexing**
        - Queries filtering by `expiration_date` ranges were slow until adding composite index `(expiration_date, status)`.
-       - Learning: Range queries on dates benefit enormously from proper indexing, and including status in the composite index eliminated filesorts.
+       - Range queries on dates benefit enormously from proper indexing, and including status in the composite index eliminated filesorts.
 
     4. **Enums vs. Foreign Keys Trade-off**
        - Used ENUMs for `status` and `role` fields (limited, stable values) but foreign keys for `case_type` and `document_type` (extensible).
-       - Learning: ENUMs are faster and enforce constraints at the schema level, but they're rigid. Use them only for stable domains.
+       - ENUMs are faster and enforce constraints at the schema level, but they're rigid. Use them only for stable domains.
 
     5. **Audit Trails Are Essential for Compliance**
        - Immigration data has legal implications. The `case_status_history` table proved invaluable for tracking "when did this case move to PENDING?"
-       - Learning: For regulated domains, invest in audit infrastructure early. Retrofitting is painful.
+       - For regulated domains, invest in audit infrastructure early. Retrofitting is painful.
 
     6. **Constraints Prevent Bad Data**
        - Foreign key constraints reject a case that names a case type which does not exist.
        - NOT NULL issue dates and ENUM statuses kept document rows to values the queries could trust.
-       - Learning: Let the database enforce business rules where possible. It's the last line of defense against data corruption.
+       - Let the database enforce business rules where possible. It's the last line of defense against data corruption.
 
     7. **UTF-8 Encoding is Non-Negotiable**
        - Names with accented characters (José, Müller, etc.) need utf8mb4; latin1 would mangle them, and converting a populated table later is painful.
-       - Learning: Always use UTF-8 (specifically utf8mb4 in MySQL) from day one when dealing with international data.
+       - Always use UTF-8 (specifically utf8mb4 in MySQL) from day one when dealing with international data.
 
     8. **Transactions Ensure Consistency**
        - Creating a case involves 4-5 table inserts. Without transactions, partial failures left orphaned records.
        - Stored procedure with transaction boundaries solved this completely.
-       - Learning: Multi-table operations must be wrapped in transactions. ACID compliance is worth the learning curve.
+       - Multi-table operations must be wrapped in transactions. ACID compliance is worth the learning curve.
 ---
 A normalized (3NF) MySQL schema for immigration case management: people, cases, a junction table for who plays which role on each case, documents with issue and expiration dates, and a status-history table as the audit trail. Indexes cover the frequent lookups, such as documents expiring soon, and a stored procedure creates a case and its people in one transaction.
