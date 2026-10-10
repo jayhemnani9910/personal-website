@@ -28,6 +28,9 @@ export function Guestbook() {
   // A failed load is not an empty wall: saying "be the first" while the store
   // is down invites a post that will fail too.
   const [loadFailed, setLoadFailed] = useState(false);
+  // Whether the wall's GET has answered, either way. A note posted before then
+  // makes `notes` non-empty, so `notes` alone cannot say the wall is loaded.
+  const [loaded, setLoaded] = useState(false);
   const [name, setName] = useState("");
   const [msg, setMsg] = useState("");
   const [pending, setPending] = useState(false);
@@ -47,7 +50,7 @@ export function Guestbook() {
     return () => events.forEach((e) => window.removeEventListener(e, mark));
   }, []);
   useEffect(() => {
-    if (notes === null || userScrolled.current || !location.hash) return;
+    if (!loaded || userScrolled.current || !location.hash) return;
     const wall = document.getElementById("guestbook");
     let id = location.hash.slice(1);
     try {
@@ -59,7 +62,7 @@ export function Guestbook() {
     if (wall && target && wall.compareDocumentPosition(target) & Node.DOCUMENT_POSITION_FOLLOWING) {
       target.scrollIntoView({ block: "start" });
     }
-  }, [notes]);
+  }, [loaded]);
 
   useEffect(() => {
     let live = true;
@@ -69,6 +72,7 @@ export function Guestbook() {
       // on top rather than letting the loaded list replace it.
       .then((data: { notes: WallNote[] }) => {
         if (!live) return;
+        setLoaded(true);
         setNotes((prev) => {
           if (!prev?.length) return data.notes;
           const mine = (n: WallNote) => prev.some((p) => p.at === n.at && p.msg === n.msg && p.name === n.name);
@@ -80,6 +84,7 @@ export function Guestbook() {
         // Keep a note posted while the wall was loading; it did stick.
         setNotes((prev) => prev ?? []);
         setLoadFailed(true);
+        setLoaded(true);
       });
     return () => {
       live = false;
@@ -120,7 +125,8 @@ export function Guestbook() {
     }
   };
 
-  const wall = notes && notes.length > 0 ? notes : loadFailed ? [] : [EMPTY_NOTE];
+  // Jay's "fridge is empty" note only once the wall is known to be empty.
+  const wall = notes && notes.length > 0 ? notes : !loaded || loadFailed ? [] : [EMPTY_NOTE];
   const count = notes?.length ?? 0;
 
   return (
@@ -130,7 +136,7 @@ export function Guestbook() {
           Leave a sticky
         </h2>
         <p className="font-mono text-[13px] text-tr-text-faint">
-          {notes === null
+          {!loaded
             ? "counting notes…"
             : loadFailed
               ? count === 0

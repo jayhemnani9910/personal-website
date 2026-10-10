@@ -33,6 +33,8 @@ let postBody: Record<string, unknown>;
 let getStatus: number;
 // When set, the wall's GET waits for it, so a post can land while it loads.
 let getGate: Promise<void> | null;
+// When set, the POST waits for it, so the wall can load while a post is out.
+let postGate: Promise<void> | null;
 
 beforeEach(() => {
   window.localStorage.clear();
@@ -43,10 +45,12 @@ beforeEach(() => {
   postBody = {};
   getStatus = 200;
   getGate = null;
+  postGate = null;
   vi.stubGlobal(
     "fetch",
     vi.fn(async (_url: string, init?: RequestInit) => {
       if (init?.method === "POST") {
+        if (postGate) await postGate;
         const sent = JSON.parse(String(init.body));
         const body = postStatus === 201 ? { note: { name: sent.name || "anonymous", msg: sent.msg, at: 5 } } : postBody;
         return new Response(JSON.stringify(body), { status: postStatus });
@@ -208,6 +212,57 @@ describe("Guestbook", () => {
     await act(async () => release());
     await waitFor(() => expect(screen.getByText("your note's up. the rest of the fridge didn't load.")).toBeDefined());
     expect(screen.getByText("early bird")).toBeDefined();
+  });
+
+  it("merges a wall that loads after a post, keeping the note once", async () => {
+    let release = () => {};
+    getGate = new Promise<void>((r) => (release = r));
+    wall = [{ name: "ana", msg: "older note", at: 1 }];
+    const page = await HomeDesk();
+    render(<TerminalProvider>{page}</TerminalProvider>);
+    expect(screen.getByText("counting notes…")).toBeDefined();
+    fireEvent.change(screen.getByLabelText("Your note"), { target: { value: "early bird" } });
+    await act(async () => {
+      fireEvent.click(screen.getByRole("button", { name: "stick it" }));
+    });
+    // The server already has the note (at: 5, as the POST stub answers), so
+    // the loaded wall carries it too: it must still show once.
+    wall = [{ name: "anonymous", msg: "early bird", at: 5 }, ...wall];
+    await act(async () => release());
+    await waitFor(() => expect(screen.getByText("2 notes on the fridge")).toBeDefined());
+    expect(screen.getAllByText("early bird")).toHaveLength(1);
+    expect(screen.getByText("older note")).toBeDefined();
+  });
+
+  it("keeps a posted note when the wall loads without it", async () => {
+    let release = () => {};
+    getGate = new Promise<void>((r) => (release = r));
+    wall = [{ name: "ana", msg: "older note", at: 1 }];
+    const page = await HomeDesk();
+    render(<TerminalProvider>{page}</TerminalProvider>);
+    fireEvent.change(screen.getByLabelText("Your note"), { target: { value: "early bird" } });
+    await act(async () => {
+      fireEvent.click(screen.getByRole("button", { name: "stick it" }));
+    });
+    await act(async () => release());
+    await waitFor(() => expect(screen.getByText("2 notes on the fridge")).toBeDefined());
+    expect(screen.getByText("early bird")).toBeDefined();
+  });
+
+  it("shows a note once when the wall brings it in while the post is still out", async () => {
+    let releaseGet = () => {};
+    let releasePost = () => {};
+    getGate = new Promise<void>((r) => (releaseGet = r));
+    postGate = new Promise<void>((r) => (releasePost = r));
+    const page = await HomeDesk();
+    render(<TerminalProvider>{page}</TerminalProvider>);
+    fireEvent.change(screen.getByLabelText("Your note"), { target: { value: "early bird" } });
+    fireEvent.click(screen.getByRole("button", { name: "stick it" }));
+    wall = [{ name: "anonymous", msg: "early bird", at: 5 }];
+    await act(async () => releaseGet());
+    await act(async () => releasePost());
+    await waitFor(() => expect(status()).toBe("Stuck to the fridge. Thanks!"));
+    expect(screen.getAllByText("early bird")).toHaveLength(1);
   });
 
   it("puts a note up straight away and thanks the writer", async () => {

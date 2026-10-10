@@ -54,7 +54,9 @@ html {
 /* On a short screen (a phone on its side, 200% zoom) a sticky header would
    cover too much of what is focused, so it scrolls away like the rest. */
 @media (max-height: 520px) {
-  :root { --tr-scroll-pad: 0px; }
+  /* html:root, not :root: the token block below sets the 100px default with
+     the same specificity, later in the file, and would win. */
+  html:root { --tr-scroll-pad: 0px; }
   .sticky-bar { position: static; }
 }
 
@@ -70,6 +72,11 @@ html {
   background-size: 48px 100%, 18px 100%;
   background-repeat: no-repeat;
   background-attachment: local, scroll;
+}
+/* The same shade on an ink panel: ink to cover it, a butter edge to see it. */
+@utility ink-hint {
+  --hint-bg: var(--tr-text);
+  --hint-edge: color-mix(in srgb, var(--tr-butter) 45%, transparent);
 }
 
 body {

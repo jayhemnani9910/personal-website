@@ -34,7 +34,9 @@ export function SiteHeader({ meta }: { meta?: string }) {
         <Link href="/" aria-label="jay.hemnani, home" className="text-[20px] font-extrabold tracking-[-0.02em] hover:text-tr-text">
           jay<span aria-hidden="true" className="text-tr-accent-hand">.</span>hemnani
         </Link>
-        <nav aria-label="Main" className="order-last flex w-full flex-wrap gap-x-5 gap-y-1 font-mono text-[13px] sm:order-none sm:w-auto">
+        {/* gap-x-3 below sm: at 320px the four links fit one row, so the header
+            stays two rows (91px) and the page's 100px scroll padding clears it. */}
+        <nav aria-label="Main" className="order-last flex w-full flex-wrap gap-x-3 gap-y-1 font-mono text-[13px] sm:order-none sm:w-auto sm:gap-x-5">
           {NAV.map((item) => {
             const active = isActive(item.href);
             return (
