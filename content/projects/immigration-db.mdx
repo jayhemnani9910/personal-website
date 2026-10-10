@@ -339,4 +339,4 @@ deepDive:
        - Stored procedure with transaction boundaries solved this completely.
        - Multi-table operations must be wrapped in transactions. ACID compliance is worth the learning curve.
 ---
-A normalized (3NF) MySQL schema for immigration case management: people, cases, a junction table for who plays which role on each case, documents with issue and expiration dates, and a status-history table as the audit trail. Indexes cover the frequent lookups, such as documents expiring soon, and a stored procedure creates a case and its people in one transaction.
+A normalized (3NF) MySQL schema for immigration case management: people, cases, a junction table for who plays which role on each case, documents with issue and expiration dates, and a status-history table as the audit trail. Indexes cover the frequent lookups, such as documents expiring soon, and a stored procedure creates a case and its primary applicant in one transaction.

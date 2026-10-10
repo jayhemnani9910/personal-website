@@ -51,6 +51,16 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "i.ytimg.com" },
     ],
   },
+  // The section kickers read like paths ("/about · the particulars"), so the
+  // paths they name lead to the pages that print them.
+  async redirects() {
+    return [
+      { source: "/about", destination: "/resume", permanent: true },
+      { source: "/work", destination: "/projects", permanent: true },
+      { source: "/writing", destination: "/blog", permanent: true },
+      { source: "/channel", destination: "/youtube", permanent: true },
+    ];
+  },
   async headers() {
     return [{ source: "/:path*", headers: securityHeaders }];
   },

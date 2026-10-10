@@ -53,7 +53,7 @@ const SOCIALS = [
 const PAGES: { label: string; href: Route }[] = [
   { label: "all projects", href: "/projects" },
   { label: "writing", href: "/blog" },
-  { label: "résumé", href: "/resume" },
+  { label: "about", href: "/resume" },
   { label: "channel", href: "/youtube" },
 ];
 

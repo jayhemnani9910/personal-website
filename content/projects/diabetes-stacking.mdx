@@ -18,7 +18,7 @@ solution:
   - "Standard preprocessing on the PIMA Indians dataset (768 patients, 8 clinical features) with a 70/30 train/test split."
 impact:
   - "Co-authored and published at the 2021 International Conference on Artificial Intelligence and Machine Vision (AIMV 2021) on IEEE Xplore (DOI 10.1109/AIMV53313.2021.9670920)."
-  - "Published at IEEE AIMV 2021, and re-run from the committed notebook with fixed seeds; the gap between the two numbers is stated below rather than smoothed over."
+  - "Re-run from the committed notebook with fixed seeds; the gap to the published number is stated below rather than smoothed over."
   - "A single reproducible notebook: data, preprocessing, six base models, the stacking ensemble, and per-model evaluation end to end."
 deepDive:
   context: "This was a research project that became a co-authored IEEE paper (AIMV 2021) with five collaborators. The dataset is the well-known PIMA Indians Diabetes set: 768 patients, 8 clinical features (glucose, blood pressure, BMI, age, and so on), and a binary diabetes outcome. It is small and noisy, which is exactly the setting where ensembling is supposed to help, so the project tunes several classifiers and then stacks them under a meta-learner to see whether the combination is steadier than any single model."
@@ -78,7 +78,7 @@ deepDive:
 
         model = StackingClassifier(estimators=level0, final_estimator=level1, cv=4)
         model.fit(X_train, y_train.ravel())
-      explanation: "The six base classifiers (five tuned, plus Naive Bayes) are the level-0 estimators; the StackingClassifier runs them with 4-fold cross-validation and feeds their predictions to a Random Forest level-1 meta-learner that makes the final call."
+      explanation: "The six base classifiers (five tuned, plus Naive Bayes) are the level-0 estimators; the `*_grid_search` names are the notebook's, and each holds a RandomizedSearchCV; the StackingClassifier runs them with 4-fold cross-validation and feeds their predictions to a Random Forest level-1 meta-learner that makes the final call."
     - title: "A fixed split, so the number is reproducible"
       language: "python"
       code: |
