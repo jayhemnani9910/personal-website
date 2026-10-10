@@ -104,26 +104,32 @@ deepDive:
     **1. Normalization vs. Denormalization Trade-off**
     - **Decision:** Keep person data normalized, denormalize case counts in persons table
     - **Rationale:** Person data changes infrequently but is queried often. Storing `active_case_count` avoids expensive COUNT queries while accepting occasional inconsistency risk.
+    - **Cost:** every case change has to keep `active_case_count` in step; a missed update shows a wrong count until it is recomputed.
 
     **2. Handling Multiple Roles per Person**
     - **Decision:** Use `case_persons` junction table with `role` enum (applicant, dependent, sponsor, attorney)
     - **Rationale:** Allows flexibility for one person to have multiple roles in same case (e.g., sponsor and attorney) while maintaining clean schema.
+    - **Cost:** the role list is an ENUM, so a new role is a schema change (ALTER TABLE), not a row.
 
     **3. Document Expiration Strategy**
     - **Decision:** Store both `issue_date` and `expiration_date` rather than calculating on-the-fly
     - **Rationale:** Different document types have different validity periods, and some may be extended. Pre-calculating enables efficient index-based queries for deadline monitoring.
+    - **Cost:** an extension is an update to the stored date, and nothing in the schema stops a stored date from disagreeing with its document type's validity period.
 
     **4. Audit Trail Implementation**
     - **Decision:** Separate `case_status_history` table instead of JSON field in cases table
     - **Rationale:** Enables SQL queries on historical data, maintains normalization, and allows efficient range queries (e.g., "all cases that were pending in Q2 2023").
+    - **Cost:** every status change is two writes inside one transaction, and a case's history is a join away.
 
     **5. Database Engine Choice**
     - **Decision:** MySQL with the InnoDB engine
     - **Rationale:** ACID compliance critical for immigration data integrity. Row-level locking supports concurrent case updates. Native support for foreign keys and transactions.
+    - **Cost:** the schema leans on MySQL specifics (ENUM columns, ON UPDATE CURRENT_TIMESTAMP), so moving to another database is a rewrite of those parts.
 
     **6. Text Encoding for Internationalization**
     - **Decision:** UTF-8 encoding for all text fields
     - **Rationale:** Immigration data includes names and addresses from diverse languages. UTF-8 ensures proper storage and sorting of international characters.
+    - **Cost:** utf8mb4 takes up to four bytes a character, so long indexed VARCHAR columns reach InnoDB's index-length limit sooner.
 
   codeSnippets: |
     **Core Schema Definition:**
@@ -308,7 +314,7 @@ deepDive:
     **Database Design Insights:**
 
     1. **Normalization is Not Always Absolute**
-       - Started with strict 3NF but found that denormalizing `active_case_count` in the persons table eliminated expensive aggregate queries that ran on every dashboard load.
+       - Started with strict 3NF but found that denormalizing `active_case_count` in the persons table removed an aggregate query every case listing would otherwise run.
        - Learning: Strategic denormalization for read-heavy fields is worth the added complexity of maintaining consistency.
 
     2. **Junction Tables Should Carry Business Logic**
@@ -328,13 +334,12 @@ deepDive:
        - Learning: For regulated domains, invest in audit infrastructure early. Retrofitting is painful.
 
     6. **Constraints Prevent Bad Data**
-       - Foreign key constraints caught several bugs where the application tried to reference non-existent case types.
+       - Foreign key constraints reject a case that names a case type which does not exist.
        - NOT NULL issue dates and ENUM statuses kept document rows to values the queries could trust.
        - Learning: Let the database enforce business rules where possible. It's the last line of defense against data corruption.
 
     7. **UTF-8 Encoding is Non-Negotiable**
-       - Initially used latin1 encoding, ran into issues with names containing accented characters (José, Müller, etc.).
-       - Migration to utf8mb4 was painful but necessary.
+       - Names with accented characters (José, Müller, etc.) need utf8mb4; latin1 would mangle them, and converting a populated table later is painful.
        - Learning: Always use UTF-8 (specifically utf8mb4 in MySQL) from day one when dealing with international data.
 
     8. **Transactions Ensure Consistency**

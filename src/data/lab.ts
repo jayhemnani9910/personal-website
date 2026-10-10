@@ -64,7 +64,7 @@ export const LAB_ITEMS: Record<"building" | "exploring" | "radar", LabItem[]> = 
       id: "claude-sdk",
       title: "Claude Agent SDK",
       description:
-        "Building custom AI agents with Anthropic's new SDK",
+        "Building custom AI agents with Anthropic's SDK",
       tags: ["Anthropic", "Agents"],
     },
     {

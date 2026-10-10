@@ -110,14 +110,14 @@ export const RECEIPTS: Receipt[] = [
     project: 'ELITE HOTEL GROUP · DATA ANALYST',
     desc: "Defined metrics and SLAs in working sessions with finance and operations. The clarifying-questions muscle this phase uses is the same muscle that turned vague \"we need better reporting\" into a structured forecasting + ETL system.",
     note: "Internal stakeholders, not external customers. Relevant practice, not full FDE-grade.",
-    links: [{ label: 'jayhemnani.in/resume', href: 'https://jayhemnani.in/resume' }],
+    links: [{ label: 'the about page', href: '/resume' }],
   },
   {
     phase: 'PHASE 02 · DECOMPOSE',
     title: 'Turning a vague spec into a working multi-agent system.',
     project: 'CAG DEEP RESEARCH',
     desc: "Built a multi-agent LangGraph research system in 10 days from a rough problem statement. Hexagonal architecture, verification loops, local + cloud LLM fallback. This is the decomposition this simulation just did, but on a real ambiguous brief.",
-    links: [{ label: 'github.com/jayhemnani9910', href: 'https://github.com/jayhemnani9910' }],
+    links: [{ label: 'case study', href: '/projects/revolu-idea' }],
   },
   {
     phase: 'PHASE 03 · ARCHITECT',
@@ -234,7 +234,7 @@ export const PRESETS: Preset[] = [
       { id: 'D1', title: 'Prospect identity resolver', why: 'Given an email or LinkedIn URL, resolve to a canonical prospect ID across our CRM + LinkedIn + email history.' },
       { id: 'D2', title: 'Research orchestrator', why: 'Multi-step agent: read CRM history, pull LinkedIn, fetch recent news, query internal Slack archive, synthesize.' },
       { id: 'D3', title: 'Insight extraction', why: "Not just summarization: extract pain signals, recent triggers (funding rounds, exec hires), and competitor mentions." },
-      { id: 'D4', title: 'Slack + Gmail surface', why: "A /prep slash command in Slack. A Gmail add-on that side-panel'd previews the prospect when reading their email." },
+      { id: 'D4', title: 'Slack + Gmail surface', why: "A /prep slash command in Slack. A Gmail add-on that previews the prospect in a side panel while you read their email." },
       { id: 'D5', title: 'Feedback loop + sales rep ratings', why: "Every brief gets a \"useful / not useful / what was missing\" widget. That data tunes future briefs." },
     ],
     architecture: {
@@ -432,7 +432,7 @@ export const PROOFS: ProofItem[] = [
     title: { pre: 'Vague spec -> working multi-agent in ', em: '10 days', post: '.' },
     body: 'Multi-agent LangGraph research system, built from a rough problem statement. Hexagonal architecture, verification loops, local + cloud LLM fallback.',
     stack: ['LangGraph', 'multi-agent', 'hexagonal arch', 'verification'],
-    links: [{ label: 'github.com/jayhemnani9910', href: 'https://github.com/jayhemnani9910' }],
+    links: [{ label: 'case study', href: '/projects/revolu-idea' }],
   },
   {
     id: 'II',
@@ -448,10 +448,10 @@ export const PROOFS: ProofItem[] = [
     cat: 'Upstream contribution',
     project: 'Anthropic MCP Python SDK',
     title: { pre: 'Walked into unfamiliar code and ', em: 'left it better', post: '.' },
-    body: "Merged PRs into the Anthropic MCP Python SDK and into vLLM (200k+ LOC), LoRA support for LLaVA's tower and connector. The exact muscle FDEs use in customer code.",
+    body: "Merged PRs into the Anthropic MCP Python SDK and into vLLM (200k+ LOC), where the PR added LoRA support for LLaVA's tower and connector. The exact muscle FDEs use in customer code.",
     stack: ['Anthropic SDK', 'vLLM (200k+ LOC)', 'merged'],
     links: [
-      { label: 'modelcontextprotocol/python-sdk', href: 'https://github.com/modelcontextprotocol/python-sdk' },
+      { label: 'modelcontextprotocol/python-sdk #1826', href: 'https://github.com/modelcontextprotocol/python-sdk/pull/1826' },
       { label: 'vllm-project/vllm #31513', href: 'https://github.com/vllm-project/vllm/pull/31513' },
     ],
   },

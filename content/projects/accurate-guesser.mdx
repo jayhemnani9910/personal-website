@@ -12,8 +12,6 @@ solution:
 impact:
   - "Lightweight demo of event-driven UI."
 deepDive:
-  context: "Accurate Guesser is a classic number guessing game built with Java Swing, designed to demonstrate fundamental GUI programming concepts and event-driven architecture. The player tries to guess a randomly generated number within a range, receiving feedback after each attempt. This project showcases clean separation of concerns between UI presentation, game logic, and state management, all essential principles for desktop application development."
-
   architecture: "The application follows a Model-View-Controller (MVC) pattern adapted for Swing's event-driven paradigm. The game state machine manages three primary states: INITIAL (game setup), PLAYING (active guessing), and FINISHED (game over with results). The architecture separates the game logic (random number generation, guess validation, attempt tracking) from the Swing UI components (JFrame, JPanel, JTextField, JButton), connected through ActionListener callbacks. This separation enables easy testing of game logic independently from UI concerns."
 
   components:
@@ -23,7 +21,7 @@ deepDive:
 
     - name: "GameUI (JFrame)"
       purpose: "Main window container orchestrating all visual components"
-      details: "Extends JFrame to create the primary application window. Manages layout using BorderLayout or GridBagLayout to organize input fields, feedback labels, and action buttons. Handles window lifecycle events and coordinates communication between UI components and game logic."
+      details: "Extends JFrame to create the primary application window. Lays out the input field, feedback labels and action buttons. Handles window lifecycle events and coordinates communication between UI components and game logic."
 
     - name: "InputPanel"
       purpose: "User input controls for guess submission"
@@ -31,7 +29,7 @@ deepDive:
 
     - name: "FeedbackDisplay"
       purpose: "Visual feedback mechanism for game state and hints"
-      details: "Uses JLabel or JTextArea to display hints ('Too high!', 'Too low!', 'Correct!'), attempt counts, and current game status. Implements dynamic color coding or font styling to make feedback more intuitive and engaging."
+      details: "Displays the hints ('Too high!', 'Too low!', 'Correct!'), the attempt count and the current game status."
 
     - name: "ControlPanel"
       purpose: "Game control actions (new game, reset, exit)"
