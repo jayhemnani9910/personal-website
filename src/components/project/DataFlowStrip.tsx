@@ -17,7 +17,6 @@ export function DataFlowStrip({ flow, components }: { flow: DataFlowStep[]; comp
   const panelId = useId();
   const selectedFlow = flow[activeStage];
   if (!selectedFlow) return null;
-  const mapsComponents = flow.some((f) => f.component);
   const component = components.find((c) => c.name === selectedFlow.component);
 
   return (
@@ -64,7 +63,7 @@ export function DataFlowStrip({ flow, components }: { flow: DataFlowStep[]; comp
 
         {/* Polite live region: choosing a stage swaps this text, and a
             screen reader otherwise hears only "pressed". */}
-        <div id={panelId} aria-live="polite" className={`mt-5 grid gap-8 p-6 ${CARD} ${mapsComponents ? "lg:grid-cols-2" : ""}`}>
+        <div id={panelId} aria-live="polite" className={`mt-5 grid gap-8 p-6 ${CARD} ${component ? "lg:grid-cols-2" : ""}`}>
           <div>
             {selectedFlow.detail ? (
               <p className="text-[16px] leading-[var(--tr-lh-body)] text-tr-text">{selectedFlow.detail}</p>
@@ -73,19 +72,16 @@ export function DataFlowStrip({ flow, components }: { flow: DataFlowStep[]; comp
             )}
           </div>
 
-          {mapsComponents && (
+          {/* A stage with no component shows only its detail, full width. */}
+          {component && (
             <div>
               <p className={LABEL}>COMPONENT</p>
-              {component ? (
-                <div className="mt-2">
-                  <code className={`${MONO} text-[13px] font-semibold text-tr-text`}>{component.name}</code>
-                  {component.purpose && (
-                    <p className="mt-1.5 text-[14px] leading-normal text-tr-text-mute">{component.purpose}</p>
-                  )}
-                </div>
-              ) : (
-                <p className="mt-2 text-[14px] text-tr-text-faint">No component mapped to this stage.</p>
-              )}
+              <div className="mt-2">
+                <code className={`${MONO} text-[13px] font-semibold text-tr-text`}>{component.name}</code>
+                {component.purpose && (
+                  <p className="mt-1.5 text-[14px] leading-normal text-tr-text-mute">{component.purpose}</p>
+                )}
+              </div>
             </div>
           )}
         </div>

@@ -102,20 +102,11 @@ export function ProjectDetail({
   const learnings = Array.isArray(deepDive?.learnings) ? deepDive.learnings : [];
   const futureWork = Array.isArray(deepDive?.futureWork) ? deepDive.futureWork : [];
 
-  // Fact-grid cells. ROLE and STATUS always show; the rest only when the
-  // project's frontmatter actually carries that field.
+  // Fact-grid cells. ROLE always shows; the rest only when the project's
+  // frontmatter actually carries that field.
   const factCells: { label: string; value: ReactNode }[] = [{ label: "ROLE", value: project.role }];
   if (project.period) factCells.push({ label: "PERIOD", value: project.period });
   if (project.domain) factCells.push({ label: "DOMAIN", value: project.domain });
-  factCells.push({
-    label: "STATUS",
-    value: (
-      <span className="inline-flex items-center gap-2">
-        <span aria-hidden="true" className="size-2.5 rounded-full border-[1.5px] border-tr-hairline bg-tr-mint" />
-        Published
-      </span>
-    ),
-  });
   const linkCell = (label: string, href: string | undefined, text: string) => {
     if (!href) return;
     factCells.push({
@@ -432,7 +423,9 @@ export function ProjectDetail({
       {/* ── The part that mattered ── */}
       {(metrics.length > 0 || snippets.length > 0 || prose.codeSnippets) && (
         <Ruled className="grid gap-[clamp(32px,5vw,64px)] lg:grid-cols-2">
-          <div>
+          {/* Sticky beside a long code column, so the left half is not a
+              blank stretch while the code scrolls past. */}
+          <div className="lg:sticky lg:top-24 lg:self-start">
             <h2 className={H2}>The part that mattered.</h2>
             <p className={`mt-3 max-w-[48ch] ${LEDE}`}>The numbers behind the work, and the code that produced them.</p>
 
@@ -533,7 +526,7 @@ export function ProjectDetail({
             <span className={`${MONO} shrink-0 text-[11px] font-normal tracking-[0.08em] text-tr-text-faint`}>
               NEXT · {pad(nextProject.index)}
             </span>
-            <span className="min-w-0 truncate">{nextProject.title} →</span>
+            <span className="min-w-0 [text-wrap:balance]">{nextProject.title} →</span>
           </Link>
         </div>
       </footer>

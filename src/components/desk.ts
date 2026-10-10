@@ -10,7 +10,7 @@ export const SHELL = "px-[clamp(16px,4vw,48px)]";
 /** An inner page's title: a label, smaller than the home page's statement. */
 export const H1 =
   "text-[length:var(--tr-t-display-sm)] font-extrabold leading-[var(--tr-lh-display)] tracking-[-0.035em] text-tr-text [text-wrap:balance]";
-export const H2 = "text-[length:var(--tr-t-h2)] font-extrabold leading-[var(--tr-lh-h2)] tracking-[-0.035em] text-tr-text";
+export const H2 = "text-[length:var(--tr-t-h2)] font-extrabold leading-[var(--tr-lh-h2)] tracking-[-0.035em] text-tr-text [text-wrap:balance]";
 /** The phrase in a title that sits on a butter highlight. */
 export const HIGHLIGHT = "desk-hl rounded-[6px] bg-tr-butter px-[0.12em] [box-decoration-break:clone]";
 export const LEDE = "text-[17px] leading-[var(--tr-lh-body)] text-tr-text-mute [text-wrap:pretty]";
