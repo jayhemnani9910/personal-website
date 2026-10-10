@@ -31,10 +31,10 @@ function overlapsBox(x: number, y: number, halfW: number, halfH: number, b: Box)
 // colour, so node TYPES are encoded by ink tier + their mono labels, not by five
 // hues. UI (the entry the human acts on) is the one tomato; the rest step down
 // through the ink tiers. Service and data share a tier, so the legend lists them
-// as one entry and the box header names which. `label` is the header text: tomato
-// is a fill, so the UI header word is set in tomato-ink.
+// as one entry and the box header names which. `label` is the header text: on
+// the UI box's tomato band even tomato-ink falls under 4.5:1 at 9px, so it is ink.
 const KIND_COLORS: Record<string, { stroke: string; fill: string; label: string }> = {
-  ui:       { stroke: 'var(--tr-accent)',     fill: 'var(--tr-accent-soft)', label: 'var(--tr-accent-ink)' },
+  ui:       { stroke: 'var(--tr-accent)',     fill: 'var(--tr-accent-soft)', label: 'var(--tr-text)' },
   agent:    { stroke: 'var(--tr-text)',       fill: 'var(--tr-surface-1)',   label: 'var(--tr-text)' },
   service:  { stroke: 'var(--tr-text-mute)',  fill: 'var(--tr-surface-1)',   label: 'var(--tr-text-mute)' },
   data:     { stroke: 'var(--tr-text-mute)',  fill: 'var(--tr-surface-1)',   label: 'var(--tr-text-mute)' },
@@ -133,7 +133,9 @@ export function FdeArchDiagram({ architecture }: Props) {
   });
 
   return (
-    <div className="fde-arch-canvas relative overflow-x-auto rounded-[var(--tr-r-lg)] border-[1.5px] border-tr-hairline bg-tr-bg p-5">
+    // Scrolls sideways on a phone, so it is a named, focusable region; the svg
+    // itself is aria-hidden.
+    <div tabIndex={0} role="region" aria-label="Architecture diagram" className="fde-arch-canvas relative overflow-x-auto rounded-[var(--tr-r-lg)] border-[1.5px] border-tr-hairline bg-tr-bg p-5">
       <svg
         viewBox={`0 0 ${maxX} ${maxY}`}
         width="100%"

@@ -40,7 +40,11 @@ const roles = RESUME.experience.flatMap((company) =>
 
 // One row per repo, not per PR. Home prefetches this page, and a row per PR
 // repeated its class strings into the RSC payload until it broke the budget.
-const prsByRepo = Map.groupBy(MERGED_PRS, (pr) => pr.repo);
+// Within a repo, PRs read in number order however MERGED_PRS was appended to.
+const prNumber = (n: string) => Number(n.replace(/\D/g, ""));
+const prsByRepo = new Map(
+  [...Map.groupBy(MERGED_PRS, (pr) => pr.repo)].map(([repo, prs]) => [repo, prs.toSorted((a, b) => prNumber(a.number) - prNumber(b.number))]),
+);
 
 export default function AboutPage() {
   return (
@@ -218,6 +222,8 @@ export default function AboutPage() {
               <p className="mt-2 text-[15px] leading-[var(--tr-lh-body)] text-tr-text-mute">
                 {MERGED_PRS.length} merged pull requests to repositories not my own, by repo and
                 number so the diff can be read directly.
+                {/* Said once, not on all 35 links: this page is prefetched. */}
+                <span className="sr-only"> Each number opens the pull request on GitHub in a new tab.</span>
               </p>
               <ul className={`${PR_LIST_LINKS} mt-4 flex flex-col gap-1 font-mono text-[12px] text-tr-text-faint`}>
                 {[...prsByRepo].map(([repo, prs]) => (
@@ -236,7 +242,7 @@ export default function AboutPage() {
                         <span key={pr.href} className="flex gap-x-3">
                           {link}
                           <a href={pr.landed} target="_blank" rel="noreferrer">
-                            (closed, landed as a commit <span aria-hidden="true">↗</span>)
+                            (closed, landed as a commit<span aria-hidden="true"> ↗</span>)
                             <span className="sr-only"> for {pr.repo} {pr.number} (opens in a new tab)</span>
                           </a>
                         </span>

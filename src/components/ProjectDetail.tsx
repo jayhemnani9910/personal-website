@@ -447,7 +447,7 @@ export function ProjectDetail({
                     >
                       <dt className={`order-2 mt-2 text-[14px] leading-[var(--tr-lh-card)] text-tr-text-mute`}>{m.label}</dt>
                       <dd
-                        className={`order-1 ${bigMetrics ? "text-[length:clamp(36px,4vw,52px)]" : "text-[length:clamp(24px,2.6vw,32px)]"} font-extrabold leading-none tracking-[-0.04em] tabular-nums text-tr-text [text-wrap:balance]`}
+                        className={`order-1 ${bigMetrics ? "text-[length:clamp(36px,4vw,52px)]" : "text-[length:clamp(24px,2.6vw,32px)]"} font-extrabold leading-none tracking-[-0.04em] tabular-nums text-tr-text hyphens-auto [overflow-wrap:anywhere] [text-wrap:balance]`}
                       >
                         {m.value}
                       </dd>

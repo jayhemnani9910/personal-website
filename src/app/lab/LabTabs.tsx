@@ -42,7 +42,7 @@ function LabCard({ item, tab }: { item: LabItem; tab: TabKey }) {
         {sitePath ? (
           <Link
             href={sitePath as Route}
-            aria-label={`${item.title}: project page`}
+            aria-label={`open: ${item.title} project page`}
             className={LINK}
           >
             open <span aria-hidden="true">→</span>

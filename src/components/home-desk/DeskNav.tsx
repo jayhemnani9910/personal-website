@@ -52,7 +52,7 @@ export function DeskNav() {
     <nav
       ref={navRef}
       aria-label="Page"
-      className="sticky top-0 z-20 border-b-[1.5px] border-tr-hairline bg-tr-bg/92 backdrop-blur-[8px]"
+      className="sticky-bar sticky top-0 z-20 border-b-[1.5px] border-tr-hairline bg-tr-bg/92 backdrop-blur-[8px]"
     >
       {/* The same 1200px column as every inner page's header (SiteHeader), so
           the logo does not jump sideways between / and the rest of the site.
@@ -95,7 +95,7 @@ export function DeskNav() {
         <div
           id="desk-secrets"
           hidden={!open}
-          className="absolute right-[clamp(16px,4vw,48px)] top-full z-30 mt-2 w-[min(300px,calc(100vw-32px))] rounded-[14px] border-[1.5px] border-tr-hairline bg-tr-surface-1 p-[18px] shadow-[5px_5px_0_var(--tr-text)]"
+          className="absolute right-[clamp(16px,4vw,48px)] top-full z-30 mt-2 max-h-[calc(100dvh-90px)] w-[min(300px,calc(100vw-32px))] overflow-y-auto overscroll-contain rounded-[14px] border-[1.5px] border-tr-hairline bg-tr-surface-1 p-[18px] shadow-[5px_5px_0_var(--tr-text)]"
         >
           <p className="mb-2.5 font-mono text-[11px] uppercase tracking-[0.08em] text-tr-text-faint">hidden around this page</p>
           <ul>

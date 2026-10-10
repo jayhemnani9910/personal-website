@@ -105,7 +105,10 @@ export function Guestbook() {
       const data: { note?: WallNote; error?: string } = await r.json().catch(() => ({}));
       if (!r.ok || !data.note) throw new Error(data.error ?? "");
       const saved = data.note;
-      setNotes((prev) => (prev ?? []).map((n) => (n === draft ? saved : n)));
+      // Swap the draft for the saved note, and drop a copy of it the wall GET
+      // may have brought in while the post was in flight.
+      const same = (n: WallNote) => n.at === saved.at && n.msg === saved.msg && n.name === saved.name;
+      setNotes((prev) => (prev ?? []).filter((n) => n === draft || !same(n)).map((n) => (n === draft ? saved : n)));
       say("Stuck to the fridge. Thanks!");
     } catch (err) {
       setNotes((prev) => (prev ?? []).filter((n) => n !== draft));
@@ -163,8 +166,10 @@ export function Guestbook() {
         />
         <button
           type="submit"
-          disabled={pending}
-          className={`${BTN_PRIMARY} cursor-pointer px-5! py-3! text-[16px] disabled:cursor-wait disabled:opacity-70`}
+          // aria-disabled, not disabled: a disabled button drops keyboard focus
+          // to <body>. submit() already ignores a press while pending.
+          aria-disabled={pending}
+          className={`${BTN_PRIMARY} cursor-pointer px-5! py-3! text-[16px] aria-disabled:cursor-wait aria-disabled:opacity-70`}
         >
           stick it
         </button>

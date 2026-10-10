@@ -43,7 +43,7 @@ export default async function WritingPage() {
 
         {/* ========== ESSAYS ========== */}
         <section aria-label="Essays" className={`${WRAP} ${SHELL} pb-[60px]`}>
-          <ol className="grid grid-cols-[repeat(auto-fill,minmax(min(100%,330px),1fr))] gap-5">
+          <ol className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,330px),1fr))] gap-5">
             {posts.map((post, i) => (
               <li key={post.slug} className="flex">
                 <Link href={`/blog/${post.slug}`} className={`${CARD} ${CARD_HOVER} flex w-full flex-col gap-3.5 p-6 hover:text-tr-text`}>

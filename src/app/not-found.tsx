@@ -4,8 +4,11 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { BTN, BTN_PRIMARY, H1, HAND, HIGHLIGHT, KICKER, LEDE, SHELL, WRAP } from "@/components/desk";
 
+// robots: null drops the layout's "index, follow" and googlebot tags. Next
+// adds its own noindex to a 404, so the page carries exactly that one.
 export const metadata: Metadata = {
   title: "Page not found",
+  robots: null,
 };
 
 export default function NotFound() {

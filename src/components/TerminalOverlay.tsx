@@ -311,7 +311,7 @@ export function TerminalOverlay({ projectCount }: { projectCount: number }) {
                     transition={{ duration: DUR.base, ease: EASE }}
                     // w-screen, not right-0: with the page's scrollbar gutter
                     // kept, right-0 would leave that strip undimmed.
-                    className="fixed inset-y-0 left-0 z-[var(--tr-z-overlay)] flex w-screen items-end justify-center bg-tr-text/45 px-[clamp(1rem,4vw,2rem)] pb-6"
+                    className="fixed inset-y-0 left-0 z-[var(--tr-z-overlay)] flex w-screen items-end justify-center bg-tr-text/45 px-[clamp(1rem,4vw,2rem)] pb-6 pt-4"
                     onClick={closeTerminal}
                 >
                     <div
@@ -340,7 +340,7 @@ export function TerminalOverlay({ projectCount }: { projectCount: number }) {
                             <button
                                 type="button"
                                 onClick={closeTerminal}
-                                aria-label="Close shell"
+                                aria-label="esc, close shell"
                                 className="ml-auto cursor-pointer border-0 bg-transparent text-tr-on-ink-mute hover:text-tr-butter"
                             >
                                 <span aria-hidden="true">esc ✕</span>
@@ -367,7 +367,9 @@ export function TerminalOverlay({ projectCount }: { projectCount: number }) {
                             mono tokens (12/11.5/11/10.5) matches the comp's
                             body size, and it has exactly one call site. */}
                         <div
-                            className="h-[280px] overflow-y-auto overscroll-contain p-4 font-mono text-[12.5px] leading-[var(--tr-lh-shell)]"
+                            // Up to 280px, shrinking on a short screen (a phone on
+                            // its side, 200% zoom) so the title bar stays in view.
+                            className="h-[280px] max-h-[calc(100dvh-14rem)] min-h-[6rem] overflow-y-auto overscroll-contain p-4 font-mono text-[12.5px] leading-[var(--tr-lh-shell)]"
                             onClick={() => inputRef.current?.focus()}
                         >
                             {/* role="log" (polite by default) so a screen reader
@@ -379,14 +381,14 @@ export function TerminalOverlay({ projectCount }: { projectCount: number }) {
                                         key={i}
                                         className={`grid grid-cols-[1.4rem_minmax(0,1fr)] gap-[.4rem] whitespace-pre-wrap ${TEXT_COLOR[entry.color]}`}
                                     >
-                                        <span className={TEXT_COLOR[entry.iconColor]}>{entry.icon}</span>
+                                        <span aria-hidden="true" className={TEXT_COLOR[entry.iconColor]}>{entry.icon}</span>
                                         <span className="min-w-0 [overflow-wrap:anywhere]">{entry.text}</span>
                                     </div>
                                 ))}
                             </div>
 
                             <div className="grid grid-cols-[1.4rem_minmax(0,1fr)] items-center gap-[.4rem]">
-                                <span className="text-tr-butter">❯</span>
+                                <span aria-hidden="true" className="text-tr-butter">❯</span>
                                 <input
                                     ref={inputRef}
                                     type="text"

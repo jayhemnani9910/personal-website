@@ -246,7 +246,7 @@ describe("TerminalOverlay Tab handling", () => {
     });
     // The input is the dialog's last focusable element, so the trap wraps
     // focus to the first one, as it should for an ordinary Tab.
-    expect(document.activeElement).toBe(screen.getByRole("button", { name: "Close shell" }));
+    expect(document.activeElement).toBe(screen.getByRole("button", { name: "esc, close shell" }));
   });
 
   it("does not swallow Shift+Tab in the input", () => {
