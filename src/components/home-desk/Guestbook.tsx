@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
 import { MSG_MAX, NAME_MAX } from "@/lib/guestbook";
 import { useDesk } from "./SecretsProvider";
 
@@ -13,7 +13,7 @@ const EMPTY_NOTE: WallNote = { name: "jay", msg: "the fridge is empty. first sti
 
 const ERRORS: Record<string, string> = {
   empty: "A blank sticky? Bold. Write something.",
-  rate_limited: "Easy there. The fridge is full for now. Try again in a bit.",
+  rate_limited: "That's a lot of stickies for ten minutes. Try again in a bit.",
   blocked: "That one won't stick. Try different words.",
   too_long: `Stickies are small. ${MSG_MAX} characters, tops.`,
 };
@@ -24,16 +24,45 @@ const INPUT = "min-w-0 rounded-xl border-[1.5px] border-tr-hairline bg-tr-surfac
 export function Guestbook() {
   const { say } = useDesk();
   const [notes, setNotes] = useState<WallNote[] | null>(null);
+  // A failed load is not an empty wall: saying "be the first" while the store
+  // is down invites a post that will fail too.
+  const [loadFailed, setLoadFailed] = useState(false);
   const [name, setName] = useState("");
   const [msg, setMsg] = useState("");
   const [pending, setPending] = useState(false);
+
+  // The notes arrive after the first paint and push everything below the wall
+  // down. A visitor who came in on a link to a section further down (/#hi, from
+  // every page's "say hi") would land mid-wall instead, so once the notes are
+  // in, the section is brought back into view, unless they have scrolled since.
+  const userScrolled = useRef(false);
+  useEffect(() => {
+    const mark = () => {
+      userScrolled.current = true;
+    };
+    const events = ["wheel", "touchmove", "keydown"] as const;
+    events.forEach((e) => window.addEventListener(e, mark, { once: true, passive: true }));
+    return () => events.forEach((e) => window.removeEventListener(e, mark));
+  }, []);
+  useEffect(() => {
+    if (notes === null || userScrolled.current || !location.hash) return;
+    const wall = document.getElementById("guestbook");
+    const target = document.getElementById(decodeURIComponent(location.hash.slice(1)));
+    if (wall && target && wall.compareDocumentPosition(target) & Node.DOCUMENT_POSITION_FOLLOWING) {
+      target.scrollIntoView({ block: "start" });
+    }
+  }, [notes]);
 
   useEffect(() => {
     let live = true;
     fetch("/api/guestbook")
       .then((r) => (r.ok ? r.json() : Promise.reject(new Error(String(r.status)))))
       .then((data: { notes: WallNote[] }) => live && setNotes(data.notes))
-      .catch(() => live && setNotes([]));
+      .catch(() => {
+        if (!live) return;
+        setNotes([]);
+        setLoadFailed(true);
+      });
     return () => {
       live = false;
     };
@@ -70,17 +99,21 @@ export function Guestbook() {
     }
   };
 
-  const wall = notes && notes.length > 0 ? notes : [EMPTY_NOTE];
+  const wall = notes && notes.length > 0 ? notes : loadFailed ? [] : [EMPTY_NOTE];
   const count = notes?.length ?? 0;
 
   return (
-    <section id="guestbook" aria-labelledby="guestbook-h2" className="mx-auto max-w-[1200px] px-[clamp(16px,4vw,48px)] py-[60px]">
+    <section id="guestbook" aria-labelledby="guestbook-h2" className="scroll-mt-[100px] mx-auto max-w-[1200px] px-[clamp(16px,4vw,48px)] py-[60px]">
       <div className="mb-6 flex flex-wrap items-baseline justify-between gap-3">
         <h2 id="guestbook-h2" className="text-[length:clamp(32px,4.5vw,56px)] font-extrabold tracking-[-0.035em]">
           Leave a sticky
         </h2>
         <p className="font-mono text-[13px] text-tr-text-faint">
-          {notes === null ? "counting notes…" : `${count} ${count === 1 ? "note" : "notes"} on the fridge`}
+          {notes === null
+            ? "counting notes…"
+            : loadFailed && count === 0
+              ? "couldn't reach the fridge. notes are safe, just not here right now."
+              : `${count} ${count === 1 ? "note" : "notes"} on the fridge`}
         </p>
       </div>
 

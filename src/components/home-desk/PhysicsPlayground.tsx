@@ -21,6 +21,13 @@ const FLOOR_FRICTION = 0.88;
 const WALL_BOUNCE = -0.6;
 const MAX_THROW = 45;
 const FLING_SPEED = 38;
+// Konami can be entered again and again; past this, each new storm tile
+// replaces the oldest one, so the pairwise collision pass stays small.
+const MAX_TILES = 40;
+// The loop stops after this many frames in which no tile moved more than
+// REST_PX, and starts again on a grab, a wave, a storm or a resize.
+const REST_FRAMES = 60;
+const REST_PX = 0.1;
 
 const TILE = "absolute left-0 top-0 flex select-none items-center justify-center border-[1.5px] border-tr-hairline shadow-[3px_3px_0_var(--tr-text)] [touch-action:none] [will-change:transform]";
 const LETTER = "size-[72px] rounded-[14px] text-[52px] sm:size-24 sm:rounded-[18px] sm:text-[68px] font-extrabold";
@@ -42,6 +49,9 @@ type Body = {
   oy: number;
   lx: number;
   ly: number;
+  /** Where the tile was painted last frame, to tell when the pile is still. */
+  px: number;
+  py: number;
 };
 
 /**
@@ -64,6 +74,11 @@ export function PhysicsPlayground() {
 
     const bodies: Body[] = [];
     let dragging: Body | null = null;
+    // Only the pointer that grabbed a tile moves or drops it. A second finger
+    // on another tile is ignored rather than stealing the drag, which left the
+    // first tile hanging in the air with nothing to release it.
+    let dragPointer = -1;
+    let quietFrames = 0;
     let raf = 0;
     let visible = false;
     const timers: ReturnType<typeof setTimeout>[] = [];
@@ -98,10 +113,14 @@ export function PhysicsPlayground() {
         oy: 0,
         lx: 0,
         ly: 0,
+        px: 0,
+        py: 0,
       };
       if (!reduced) {
         el.addEventListener("pointerdown", (e) => {
           e.preventDefault();
+          if (dragging) return;
+          dragPointer = e.pointerId;
           b.drag = true;
           b.ox = e.clientX - b.x;
           b.oy = e.clientY - b.y;
@@ -196,16 +215,25 @@ export function PhysicsPlayground() {
           }
         }
       }
-      bodies.forEach(paint);
-      raf = visible || dragging ? requestAnimationFrame(step) : 0;
+      let moved = 0;
+      for (const b of bodies) {
+        moved = Math.max(moved, Math.abs(b.x - b.px) + Math.abs(b.y - b.py));
+        b.px = b.x;
+        b.py = b.y;
+        paint(b);
+      }
+      quietFrames = moved < REST_PX ? quietFrames + 1 : 0;
+      raf = dragging || (visible && quietFrames < REST_FRAMES) ? requestAnimationFrame(step) : 0;
     };
 
     const start = () => {
+      quietFrames = 0;
       if (!reduced && !raf) raf = requestAnimationFrame(step);
     };
 
     LETTERS.forEach((l) => addTile(l, "letter"));
     (host.clientWidth < NARROW ? WORDS.slice(0, NARROW_WORDS) : WORDS).forEach((w) => addTile(w, "word"));
+    const initialTiles = bodies.length;
 
     if (reduced) {
       pile();
@@ -224,7 +252,7 @@ export function PhysicsPlayground() {
 
     const onMove = (e: PointerEvent) => {
       const b = dragging;
-      if (!b) return;
+      if (!b || e.pointerId !== dragPointer) return;
       b.vx = e.clientX - b.lx;
       b.vy = e.clientY - b.ly;
       b.lx = e.clientX;
@@ -232,19 +260,22 @@ export function PhysicsPlayground() {
       b.x = e.clientX - b.ox;
       b.y = e.clientY - b.oy;
     };
-    const onUp = () => {
+    const onUp = (e: PointerEvent) => {
       const b = dragging;
-      if (!b) return;
+      if (!b || e.pointerId !== dragPointer) return;
       b.drag = false;
       b.el.style.cursor = "grab";
       if (Math.hypot(b.vx, b.vy) > FLING_SPEED) found("fling", "That tile has left the building.");
       b.vx = Math.max(-MAX_THROW, Math.min(MAX_THROW, b.vx));
       b.vy = Math.max(-MAX_THROW, Math.min(MAX_THROW, b.vy));
       dragging = null;
+      start();
     };
     window.addEventListener("pointermove", onMove);
     window.addEventListener("pointerup", onUp);
     window.addEventListener("pointercancel", onUp);
+    // A narrower box pushes tiles back inside on the next frame, so wake up.
+    window.addEventListener("resize", start);
 
     // Off screen, the loop stops; it picks up again when the box scrolls back.
     const io = new IntersectionObserver(([entry]) => {
@@ -255,7 +286,19 @@ export function PhysicsPlayground() {
 
     playgroundRef.current = {
       storm: () => {
-        STORM.forEach((t, i) => timers.push(setTimeout(() => addTile(t, "word"), i * 90)));
+        STORM.forEach((t, i) =>
+          timers.push(
+            setTimeout(() => {
+              if (bodies.length >= MAX_TILES) {
+                const [oldest] = bodies.splice(initialTiles, 1);
+                if (oldest === dragging) dragging = null;
+                oldest.el.remove();
+              }
+              addTile(t, "word");
+              start();
+            }, i * 90),
+          ),
+        );
         window.scrollTo({ top: 0, behavior: scrollBehavior() });
         start();
       },
@@ -274,6 +317,7 @@ export function PhysicsPlayground() {
       window.removeEventListener("pointermove", onMove);
       window.removeEventListener("pointerup", onUp);
       window.removeEventListener("pointercancel", onUp);
+      window.removeEventListener("resize", start);
       playgroundRef.current = null;
       host.replaceChildren();
     };

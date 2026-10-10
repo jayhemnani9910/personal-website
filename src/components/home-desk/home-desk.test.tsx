@@ -8,10 +8,18 @@ vi.mock("next/font/google", () => {
 
 import { HomeDesk, inWords } from "./HomeDesk";
 import { greetingFor } from "./Visits";
-import { dayOfYear, untilMidnight } from "./TodayPick";
-import { FEATURED, HOUSE_RULES, buildLogEntries } from "@/data/home";
+import { untilMidnight } from "./TodayPick";
+import { dayOfYear } from "./day";
+import { DAILY_FACTS, FEATURED, HOUSE_RULES, buildLogEntries } from "@/data/home";
 import { getAllProjects } from "@/lib/content";
 import { SITE_CONFIG } from "@/../content/site";
+import { TerminalProvider, useTerminal } from "@/context/TerminalContext";
+
+// The footer's shell button reads the shell's context, as it does under
+// ClientLayout on the real page. The probe shows whether the shell is open.
+function ShellProbe() {
+  return <p data-testid="shell-state">{useTerminal().isOpen ? "open" : "closed"}</p>;
+}
 
 class IntersectionObserverStub {
   observe() {}
@@ -22,6 +30,7 @@ class IntersectionObserverStub {
 let wall: { name: string; msg: string; at: number }[];
 let postStatus: number;
 let postBody: Record<string, unknown>;
+let getStatus: number;
 
 beforeEach(() => {
   window.localStorage.clear();
@@ -30,6 +39,7 @@ beforeEach(() => {
   wall = [];
   postStatus = 201;
   postBody = {};
+  getStatus = 200;
   vi.stubGlobal(
     "fetch",
     vi.fn(async (_url: string, init?: RequestInit) => {
@@ -38,7 +48,9 @@ beforeEach(() => {
         const body = postStatus === 201 ? { note: { name: sent.name || "anonymous", msg: sent.msg, at: 5 } } : postBody;
         return new Response(JSON.stringify(body), { status: postStatus });
       }
-      return new Response(JSON.stringify({ notes: wall }), { status: 200 });
+      return getStatus === 200
+        ? new Response(JSON.stringify({ notes: wall }), { status: 200 })
+        : new Response(JSON.stringify({ error: "store-unavailable" }), { status: getStatus });
     }),
   );
 });
@@ -48,7 +60,13 @@ afterEach(() => {
 });
 
 async function renderHome() {
-  render(await HomeDesk());
+  const page = await HomeDesk();
+  render(
+    <TerminalProvider>
+      {page}
+      <ShellProbe />
+    </TerminalProvider>,
+  );
   // The guestbook loads its wall on mount.
   await waitFor(() => expect(screen.queryByText("counting notes…")).toBeNull());
 }
@@ -129,11 +147,37 @@ describe("HomeDesk", () => {
   });
 });
 
+describe("TodayPick", () => {
+  it("announces a fact only when one more is asked for", async () => {
+    await renderHome();
+    const live = document.querySelector('#today [aria-live="polite"]');
+    expect(live?.textContent).toBe("");
+    fireEvent.click(screen.getByRole("button", { name: /one more/ }));
+    expect(DAILY_FACTS).toContain(live?.textContent);
+  });
+});
+
+describe("Footer", () => {
+  it("opens the shell from a visible button, for visitors without a backtick key", async () => {
+    await renderHome();
+    expect(screen.getByTestId("shell-state").textContent).toBe("closed");
+    fireEvent.click(screen.getByRole("button", { name: "open the shell" }));
+    expect(screen.getByTestId("shell-state").textContent).toBe("open");
+  });
+});
+
 describe("Guestbook", () => {
   it("shows Jay's empty-fridge note until someone writes one", async () => {
     await renderHome();
     expect(screen.getByText(/the fridge is empty/)).toBeDefined();
     expect(screen.getByText("0 notes on the fridge")).toBeDefined();
+  });
+
+  it("says the wall could not load, rather than calling it empty, when the store is down", async () => {
+    getStatus = 503;
+    await renderHome();
+    expect(screen.getByText(/couldn't reach the fridge/)).toBeDefined();
+    expect(screen.queryByText(/the fridge is empty/)).toBeNull();
   });
 
   it("puts a note up straight away and thanks the writer", async () => {
@@ -159,7 +203,7 @@ describe("Guestbook", () => {
     });
     expect(screen.queryByText("again", { selector: "li p" })).toBeNull();
     expect((screen.getByLabelText("Your note") as HTMLInputElement).value).toBe("again");
-    expect(status()).toBe("Easy there. The fridge is full for now. Try again in a bit.");
+    expect(status()).toBe("That's a lot of stickies for ten minutes. Try again in a bit.");
   });
 
   it("refuses a blank note without posting", async () => {
@@ -173,7 +217,7 @@ describe("Guestbook", () => {
 describe("Desk helpers", () => {
   it("greets by visit count", () => {
     expect(greetingFor(1)).toBe("oh hi, first time? →");
-    expect(greetingFor(2)).toBe("welcome back! today's pick changed.");
+    expect(greetingFor(2)).toBe("welcome back! the tiles missed you.");
     expect(greetingFor(5)).toBe("visit #5. you're basically a regular.");
     expect(greetingFor(6)).toBe("visit #6. at this point just email me.");
   });
@@ -182,6 +226,18 @@ describe("Desk helpers", () => {
     expect(dayOfYear(new Date(2026, 0, 1, 12))).toBe(1);
     expect(dayOfYear(new Date(2026, 9, 10, 23, 59))).toBe(283);
     expect(untilMidnight(new Date(2026, 9, 10, 18, 56, 51))).toBe("5h 03m 09s");
+  });
+
+  it("turns the day over at midnight on a DST date, not an hour later", () => {
+    const tz = process.env.TZ;
+    process.env.TZ = "America/New_York";
+    try {
+      expect(dayOfYear(new Date(2026, 6, 3, 23, 30))).toBe(184);
+      expect(dayOfYear(new Date(2026, 6, 4, 0, 30))).toBe(185);
+      expect(dayOfYear(new Date(2026, 10, 2, 0, 30))).toBe(306);
+    } finally {
+      process.env.TZ = tz;
+    }
   });
 
   it("writes counts in words", () => {

@@ -7,15 +7,17 @@ import { SecretsProvider } from "./SecretsProvider";
 import { DeskNav } from "./DeskNav";
 import { PhysicsPlayground } from "./PhysicsPlayground";
 import { TodayPick } from "./TodayPick";
+import { dayOfYear } from "./day";
 import { CubeCard } from "./CubeCard";
 import { Guestbook } from "./Guestbook";
 import { CopyEmail } from "./CopyEmail";
 import { Greeting, VisitCount } from "./Visits";
 import { ReaderToggle } from "@/components/ReaderToggle";
+import { ShellButton } from "@/components/ShellButton";
+import { CHIP, DOTS } from "@/components/desk";
 
 const SECTION = "mx-auto max-w-[1200px] px-[clamp(16px,4vw,48px)] py-[60px]";
 const H2 = "text-[length:clamp(32px,4.5vw,56px)] font-extrabold tracking-[-0.035em] leading-none";
-const DOTS = ["var(--tr-accent)", "var(--tr-butter)", "var(--tr-sky)", "var(--tr-mint)", "var(--tr-lilac)", "var(--tr-pink)"];
 
 const NUMBER_WORDS = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen"];
 const TENS = ["", "", "twenty", "thirty", "forty", "fifty", "sixty", "seventy", "eighty", "ninety"];
@@ -25,6 +27,17 @@ export function inWords(n: number): string {
   if (n < 20) return NUMBER_WORDS[n];
   if (n < 100) return TENS[Math.floor(n / 10)] + (n % 10 ? `-${NUMBER_WORDS[n % 10]}` : "");
   return String(n);
+}
+
+// The nav's anchors land sections below the sticky nav; a typed or shared
+// /#work link does the same through this margin.
+const UNDER_NAV = "scroll-mt-[100px]";
+
+/** Cut at a word, near the length a four-line clamp on the pick card shows. */
+const PICK_TEXT = 170;
+function clip(text: string): string {
+  if (text.length <= PICK_TEXT) return text;
+  return `${text.slice(0, text.lastIndexOf(" ", PICK_TEXT)).replace(/[,;:.]$/, "")}…`;
 }
 
 const capitalise = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
@@ -52,7 +65,20 @@ export async function HomeDesk() {
   // a 404. Filtering here means deleting content can only shorten the list.
   const ids = new Set(projects.map((p) => p.id));
   const featured = FEATURED.filter((f) => ids.has(f.id));
-  const picks = featured.map((p) => ({ id: p.id, title: p.title, brief: p.arrived, changed: p.changed, tags: p.tech.slice(0, 4) }));
+  // The daily pick is drawn from the projects the cards below do not show, so
+  // over a month it walks the visitor through the shy ones.
+  const featuredIds = new Set(featured.map((f) => f.id));
+  // Every pick ships, because the visitor's clock picks the day; the text is
+  // cut to what the card shows, so the list stays small in the page.
+  const picks = projects
+    .filter((p) => !featuredIds.has(p.id))
+    .map((p) => ({
+      id: p.id,
+      title: p.title,
+      brief: clip(p.description ?? p.summary),
+      changed: clip(p.impact[0] ?? p.challenge),
+      tags: p.tech.slice(0, 4),
+    }));
   const shy = projectCount - featured.length;
 
   return (
@@ -79,7 +105,7 @@ export async function HomeDesk() {
             <PhysicsPlayground />
           </header>
 
-          <TodayPick projects={picks} facts={DAILY_FACTS} />
+          <TodayPick projects={picks} facts={DAILY_FACTS} renderedDay={dayOfYear(new Date())} />
 
           <section aria-label="By the numbers" className="mx-auto max-w-[1200px] px-[clamp(16px,4vw,48px)] pb-10 pt-5">
             <dl className="grid grid-cols-[repeat(auto-fit,minmax(150px,1fr))] border-y-[1.5px] border-tr-hairline">
@@ -92,7 +118,7 @@ export async function HomeDesk() {
             </dl>
           </section>
 
-          <section id="work" aria-labelledby="work-h2" className={SECTION}>
+          <section id="work" aria-labelledby="work-h2" className={`${SECTION} ${UNDER_NAV}`}>
             <h2 id="work-h2" className={`${H2} mb-2`}>
               Things I&apos;ve shipped
             </h2>
@@ -119,7 +145,7 @@ export async function HomeDesk() {
                     <span className="text-[15px] leading-normal text-tr-text-mute">{p.changed}</span>
                     <span className="mt-auto flex flex-wrap gap-1.5">
                       {p.tech.slice(0, 4).map((t) => (
-                        <span key={t} className="rounded-md bg-tr-bg px-2 py-[3px] font-mono text-[11px]">
+                        <span key={t} className={CHIP}>
                           {t}
                         </span>
                       ))}
@@ -171,7 +197,7 @@ export async function HomeDesk() {
 
           <Guestbook />
 
-          <section id="hi" aria-labelledby="hi-h2" className="ink-panel mt-[60px] bg-tr-text text-tr-on-ink">
+          <section id="hi" aria-labelledby="hi-h2" className={`ink-panel mt-[60px] bg-tr-text text-tr-on-ink ${UNDER_NAV}`}>
             <div className="mx-auto max-w-[1200px] px-[clamp(16px,4vw,48px)] pb-10 pt-[clamp(60px,9vw,110px)]">
               <h2 id="hi-h2" className="font-hand text-[28px] font-normal text-tr-butter">
                 got a vague brief?
@@ -203,6 +229,8 @@ export async function HomeDesk() {
                   <VisitCount />
                   {" · "}
                   <ReaderToggle className="cursor-pointer hover:text-tr-butter" />
+                  {" · "}
+                  <ShellButton className="cursor-pointer hover:text-tr-butter" />
                 </p>
                 <p aria-hidden="true">psst. ↑ ↑ ↓ ↓ ← → ← → b a</p>
               </footer>
