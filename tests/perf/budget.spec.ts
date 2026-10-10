@@ -30,11 +30,13 @@ const BUDGET = {
   // left room to put 150 KB back unnoticed. Lowered on 2026-09-30.
   // Lowered again on 2026-10-10 when the Desk home replaced the v4 one: the
   // decomposer, GL backdrop, preloader and cursor left the bundle.
-  scriptBytes: 700 * 1024,     // measured 765.7 KB, then 718.2 KB on 2026-09-02, then 693.0 KB on 2026-09-03, then 695.9 KB on 2026-09-30, then 632.3 KB on 2026-10-10
+  scriptBytes: 700 * 1024,     // measured 765.7 KB, then 718.2 KB on 2026-09-02, then 693.0 KB on 2026-09-03, then 695.9 KB on 2026-09-30, then 632.3 KB on 2026-10-10, 650.9 KB on 2026-10-11
   // The home page's HTML, and the RSC payloads Next prefetches for the links
   // in view. Neither had a budget until 2026-09-30.
-  documentBytes: 90 * 1024,    // measured 121.4 KB on 2026-09-30, 77.7 KB on 2026-10-10
-  fetchBytes: 60 * 1024,       // measured 90.1 KB on 2026-09-30, 52.5 KB on 2026-10-10
+  // Tight since 2026-10-10: the daily pick now ships every candidate project
+  // in the page, about 9 KB, so each new project adds a few hundred bytes.
+  documentBytes: 90 * 1024,    // measured 121.4 KB on 2026-09-30, 77.7 KB on 2026-10-10, 88.4 KB on 2026-10-11
+  fetchBytes: 60 * 1024,       // measured 90.1 KB on 2026-09-30, 52.5 KB on 2026-10-10, 55.1 KB on 2026-10-11
   // A moving number, so the history matters: 95 KB under the editorial system,
   // 110 KB for the day the v4 home shipped a second palette beside it, 105 KB
   // once ADR 0014's promotion put one palette back at :root. Now 65 KB, because
@@ -48,7 +50,7 @@ const BUDGET = {
   // under the budget, it is a few KB up from the last measurement.
   // Lowered to 62 KB on 2026-10-10: one palette instead of two, the role
   // cycle and buddy rules gone, the Desk component classes in.
-  stylesheetBytes: 62 * 1024,  // measured 58.6 KB, then 55.2 KB on 2026-10-10
+  stylesheetBytes: 62 * 1024,  // measured 58.6 KB, then 55.2 KB on 2026-10-10, 58.0 KB on 2026-10-11
   // 5 under the editorial system, 6 for the day both type systems shipped, 4
   // for Instrument Sans and Geist Mono, now 3 (ADR 0018): Bricolage Grotesque,
   // JetBrains Mono and Caveat, each one variable latin face. Still an equality
