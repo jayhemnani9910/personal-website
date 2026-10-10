@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import { m, AnimatePresence } from "framer-motion";
+import { useLenis } from "lenis/react";
 import { useTerminal } from "@/context/TerminalContext";
 import { EASE, DUR } from "@/lib/motion-tokens";
 import { FEATURED, buildReceipts } from "@/data/home";
@@ -74,6 +75,23 @@ export function TerminalOverlay({ projectCount }: { projectCount: number }) {
     // Command history for arrow key navigation
     const cmdHistoryRef = useRef<string[]>([]);
     const historyIndexRef = useRef(-1);
+
+    // A modal keeps the page behind it still: no native scroll, and on the home
+    // page no Lenis wheel either. The gutter stays, so nothing shifts sideways.
+    const lenis = useLenis();
+    useEffect(() => {
+        if (!isOpen) return;
+        const html = document.documentElement;
+        const { overflow, scrollbarGutter } = html.style;
+        html.style.overflow = "hidden";
+        html.style.scrollbarGutter = "stable";
+        lenis?.stop();
+        return () => {
+            html.style.overflow = overflow;
+            html.style.scrollbarGutter = scrollbarGutter;
+            lenis?.start();
+        };
+    }, [isOpen, lenis]);
 
     // Focuses the input once the panel has finished sliding in, matching the
     // comp's own 380ms delay rather than fighting the entrance transition.
@@ -165,14 +183,14 @@ export function TerminalOverlay({ projectCount }: { projectCount: number }) {
                     line("things that work here:", "mute", "?", "accent"),
                     info(`${"ls".padEnd(15)}the six featured projects`),
                     info(`${"open <1-6>".padEnd(15)}one project, in three lines`),
-                    info(`${"receipts".padEnd(15)}every number on this page, with source`),
+                    info(`${"receipts".padEnd(15)}every number on the site, with its source`),
                     info(`${"eggs".padEnd(15)}the home page's secrets, found and not`),
                     line("whoami · contact · joke · clear"),
                 ];
                 break;
             case "whoami":
                 out = [
-                    ok("Jay Hemnani, Forward Deployed Engineer. Gujarat, IN. Relocating."),
+                    ok("Jay Hemnani, Forward Deployed Engineer. Gujarat, IN. Open to relocate."),
                     line("you, however, remain a mystery."),
                 ];
                 break;
@@ -195,7 +213,12 @@ export function TerminalOverlay({ projectCount }: { projectCount: number }) {
                 // Both of buildReceipts's dynamic inputs are honestly available
                 // here: projectCount arrives as a prop (see layout.tsx), and
                 // WEBMCP_TOOL_COUNT is a static array length, not a fs read.
-                out = buildReceipts({ projectCount, toolCount: WEBMCP_TOOL_COUNT }).map((r) => info(`${r.n.padEnd(5)} ${r.label}`));
+                // Each figure with the link it rests on: the last line of its
+                // receipt is the broadest source (the search, the paper, the file).
+                out = buildReceipts({ projectCount, toolCount: WEBMCP_TOOL_COUNT }).flatMap((r) => {
+                    const source = r.lines.at(-1)?.href.replace(/^https:\/\//, "");
+                    return [info(`${r.n.padEnd(5)} ${r.label}`), ...(source ? [line(`${"".padEnd(5)} source: ${source}`)] : [])];
+                });
                 break;
             case "contact":
                 out = [
@@ -238,7 +261,7 @@ export function TerminalOverlay({ projectCount }: { projectCount: number }) {
         if (e.key === "Enter") {
             // Without this, a command that closes the overlay reopens it
             // immediately. Closing restores focus to whatever opened the
-            // dialog, which is the header's shell button, and Enter's default
+            // dialog, such as the footer's shell button, and Enter's default
             // action then activates that newly focused button on keyup. The
             // dialog looked like it ignored `exit` entirely.
             e.preventDefault();

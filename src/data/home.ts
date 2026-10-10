@@ -67,7 +67,7 @@ export const FEATURED: FeaturedProject[] = [
     tags: ["web", "agents", "standards"],
     tech: ["TypeScript", "Next.js 16", "WebMCP"],
     arrived: "Could a portfolio be read by a machine as easily as by a person?",
-    did: `Registered ${WEBMCP_TOOL_COUNT} tools with the WebMCP browser API: search, résumé, skills, contact, experiments, theme, mode.`,
+    did: `Registered ${WEBMCP_TOOL_COUNT} tools with the WebMCP browser API: search, project, résumé, skills, contact, experiments, reader mode.`,
     changed: "An agent in Chrome, with the WebMCP flag on, reads this site without scraping it.",
   },
   {

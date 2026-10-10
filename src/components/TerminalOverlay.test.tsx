@@ -18,10 +18,9 @@ import { TerminalOverlay } from "./TerminalOverlay";
 import { FEATURED, buildReceipts } from "@/data/home";
 import { WEBMCP_TOOL_COUNT } from "@/lib/webmcp-tools";
 
-// The real project count as of this write-up (see src/data/home.test.ts,
-// which hardcodes the same number for the same reason: the overlay is a
-// client component and cannot read content/projects/*.mdx itself, so the
-// count arrives as a prop from the server, the same way it does in layout.tsx).
+// A fixture count. The overlay is a client component and cannot read
+// content/projects/*.mdx itself, so the count arrives as a prop from the
+// server, the same way it does in layout.tsx; any number exercises that.
 const PROJECT_COUNT = 27;
 
 function renderOpen() {
@@ -66,7 +65,7 @@ describe("TerminalOverlay chrome", () => {
   });
 });
 
-describe("TerminalOverlay v4 commands", () => {
+describe("TerminalOverlay commands", () => {
   it("ls lists the featured projects and derives the remaining count", () => {
     renderOpen();
     type("ls");
@@ -91,6 +90,9 @@ describe("TerminalOverlay v4 commands", () => {
     for (const r of receipts) {
       expect(dialog.textContent).toContain(`${r.n.padEnd(5)} ${r.label}`);
     }
+    // And each one names where it can be checked, as help promises.
+    expect(dialog.textContent?.match(/source: /g)).toHaveLength(receipts.length);
+    expect(dialog.textContent).toContain("source: ieeexplore.ieee.org");
   });
 
   it("eggs lists the home page's secrets, naming only the ones found", () => {
@@ -102,6 +104,37 @@ describe("TerminalOverlay v4 commands", () => {
     expect(log.textContent).toContain("Scrambler");
     expect(log.textContent).not.toContain("Yeet");
     localStorage.clear();
+  });
+
+  it("open prints the numbered project in three lines, and refuses numbers out of range", () => {
+    renderOpen();
+    type("open 2");
+    const log = screen.getByRole("log");
+    expect(log.textContent).toContain(FEATURED[1].title);
+    expect(log.textContent).toContain(`arrived as: ${FEATURED[1].arrived}`);
+    type("open 7");
+    type("open fifa");
+    expect(log.textContent?.match(/six, not seven/g)).toHaveLength(2);
+  });
+
+  it("contact prints the email and the profile links without the scheme", () => {
+    renderOpen();
+    type("contact");
+    const log = screen.getByRole("log");
+    expect(log.textContent).toContain("jayhemnani992000@gmail.com");
+    expect(log.textContent).toContain("github.com/jayhemnani9910");
+    expect(log.textContent).not.toContain("https://");
+  });
+
+  it("joke and sudo answer, and an unknown command names itself", () => {
+    renderOpen();
+    type("joke");
+    type("sudo make me a sandwich");
+    type("Frobnicate");
+    const log = screen.getByRole("log");
+    expect(log.textContent).toContain("casts itself to string");
+    expect(log.textContent).toContain("trust and tomato");
+    expect(log.textContent).toContain("command not found: frobnicate");
   });
 
   it("rm refuses", () => {
@@ -117,7 +150,7 @@ describe("TerminalOverlay v4 commands", () => {
     // help prints.
     const log = screen.getByRole("log");
     expect(log.textContent).toContain("things that work here:");
-    expect(log.textContent).toContain("every number on this page, with source");
+    expect(log.textContent).toContain("every number on the site, with its source");
     expect(log.textContent).toContain("contact · joke");
   });
 

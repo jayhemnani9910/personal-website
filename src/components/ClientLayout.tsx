@@ -11,10 +11,10 @@ import { ReaderMode } from "@/components/ReaderMode";
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
 import { usePathname } from "next/navigation";
 
-// The shell renders nothing until it is opened, and off the home page the only
-// way in is a keyboard shortcut (Ctrl/Cmd+K or backtick, handled in
-// TerminalContext). So it is not in any page's first-load JS: it comes down the
-// first time it opens and stays mounted after that.
+// The shell renders nothing until it is opened, by a keyboard shortcut
+// (Ctrl/Cmd+K or backtick, handled in TerminalContext) or the footer's "open
+// the shell" button. So it is not in any page's first-load JS: it comes down
+// the first time it opens and stays mounted after that.
 const TerminalOverlay = dynamic(() => import("@/components/TerminalOverlay").then((m) => m.TerminalOverlay), {
     ssr: false,
 });
