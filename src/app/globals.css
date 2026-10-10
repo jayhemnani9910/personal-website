@@ -32,9 +32,13 @@
    BASE
    ═══════════════════════════════════════════════════════════════ */
 
+/* Room for the sticky header (59px, 91px when its nav wraps on a phone) on
+   every scroll the browser makes for us: a #hash link, and a focused element
+   brought into view by Tab or Shift+Tab. Lenis reads it too. */
 html {
   background: var(--tr-bg);
   color: var(--tr-text);
+  scroll-padding-top: 100px;
 }
 
 body {

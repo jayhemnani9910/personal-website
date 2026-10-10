@@ -29,10 +29,6 @@ export function inWords(n: number): string {
   return String(n);
 }
 
-// The nav's anchors land sections below the sticky nav; a typed or shared
-// /#work link does the same through this margin.
-const UNDER_NAV = "scroll-mt-[100px]";
-
 /** Cut at a word, near the length a four-line clamp on the pick card shows. */
 const PICK_TEXT = 170;
 function clip(text: string): string {
@@ -108,7 +104,7 @@ export async function HomeDesk() {
           <TodayPick projects={picks} facts={DAILY_FACTS} renderedDay={dayOfYear(new Date())} />
 
           <section aria-label="By the numbers" className="mx-auto max-w-[1200px] px-[clamp(16px,4vw,48px)] pb-10 pt-5">
-            <dl className="grid grid-cols-[repeat(auto-fit,minmax(150px,1fr))] border-y-[1.5px] border-tr-hairline">
+            <dl className="grid grid-cols-[repeat(auto-fit,minmax(110px,1fr))] border-y-[1.5px] border-tr-hairline">
               {buildDeskStats({ projectCount }).map((s) => (
                 <div key={s.label} className="flex flex-col-reverse justify-end py-[22px] pr-4">
                   <dt className="mt-1.5 text-[14px] leading-[var(--tr-lh-card)] text-tr-text-faint">{s.label}</dt>
@@ -118,7 +114,7 @@ export async function HomeDesk() {
             </dl>
           </section>
 
-          <section id="work" aria-labelledby="work-h2" className={`${SECTION} ${UNDER_NAV}`}>
+          <section id="work" aria-labelledby="work-h2" className={SECTION}>
             <h2 id="work-h2" className={`${H2} mb-2`}>
               Things I&apos;ve shipped
             </h2>
@@ -197,7 +193,7 @@ export async function HomeDesk() {
 
           <Guestbook />
 
-          <section id="hi" aria-labelledby="hi-h2" className={`ink-panel mt-[60px] bg-tr-text text-tr-on-ink ${UNDER_NAV}`}>
+          <section id="hi" aria-labelledby="hi-h2" className="ink-panel mt-[60px] bg-tr-text text-tr-on-ink">
             <div className="mx-auto max-w-[1200px] px-[clamp(16px,4vw,48px)] pb-10 pt-[clamp(60px,9vw,110px)]">
               <h2 id="hi-h2" className="font-hand text-[28px] font-normal text-tr-butter">
                 got a vague brief?

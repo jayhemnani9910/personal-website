@@ -132,9 +132,11 @@ export function ProjectsClient({ projects }: ProjectsClientProps) {
           <ol className="list-none">
             {visible.map((p, i) => (
               <li key={p.id} className="border-t-[1.5px] border-tr-hairline">
+                {/* From lg the filter bar is sticky under the header too, so a
+                    row Tab brings into view needs room for both. */}
                 <Link
                   href={`/projects/${p.id}`}
-                  className={`group grid grid-cols-[minmax(0,1fr)_auto] items-start gap-x-4 gap-y-2.5 py-5 hover:text-tr-text lg:gap-6 ${COLS}`}
+                  className={`group grid grid-cols-[minmax(0,1fr)_auto] items-start gap-x-4 gap-y-2.5 py-5 hover:text-tr-text lg:scroll-mt-[90px] lg:gap-6 ${COLS}`}
                 >
                   <span className={`col-span-2 flex items-center gap-2.5 pt-1 text-[12px] text-tr-text-faint lg:col-span-1 ${MONO}`}>
                     {pad(i + 1)}
@@ -144,8 +146,7 @@ export function ProjectsClient({ projects }: ProjectsClientProps) {
                   <div className="col-span-2 lg:col-span-1">
                     {/* A plain span, not a heading: this is one row of a data table, not a
                         document section, and the page carries exactly one <h1> and no <h2>s
-                        for these rows to nest under. WorkTable.tsx (the home page's version
-                        of this same table) makes the same call. */}
+                        for these rows to nest under. */}
                     <span className="block text-[20px] font-bold leading-[var(--tr-lh-tight)] tracking-[-0.02em] group-hover:text-tr-accent-ink">
                       {p.title}
                     </span>

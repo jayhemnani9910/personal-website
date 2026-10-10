@@ -9,8 +9,10 @@ export type PickProject = { id: string; title: string; brief: string; changed: s
 
 // A one-second clock read through useSyncExternalStore: null on the server and
 // at hydration, so the server HTML never mismatches. Until it ticks, the pick
-// uses the day the page was rendered on, which is today for nearly everyone,
-// so the card does not swap under the reader once the clock starts.
+// uses the day the page was rendered on (server time, UTC on Vercel). Where
+// the visitor's date is the same, the card does not change once the clock
+// starts; where it is not (late evening in the Americas, early morning in
+// India), it moves to the visitor's day, which is the one the countdown counts.
 function subscribeClock(callback: () => void) {
   const id = setInterval(callback, 1000);
   return () => clearInterval(id);
@@ -42,7 +44,7 @@ export function TodayPick({ projects, facts, renderedDay }: { projects: PickProj
   const factIndex = (day + factOffset) % facts.length;
 
   return (
-    <section id="today" aria-labelledby="today-h2" className="scroll-mt-[100px] mx-auto max-w-[1200px] px-[clamp(16px,4vw,48px)] py-[60px]">
+    <section id="today" aria-labelledby="today-h2" className="mx-auto max-w-[1200px] px-[clamp(16px,4vw,48px)] py-[60px]">
       <div className="mb-6 flex flex-wrap items-baseline justify-between gap-3">
         <h2 id="today-h2" className="text-[length:clamp(32px,4.5vw,56px)] font-extrabold tracking-[-0.035em]">
           Today&apos;s pick

@@ -31,7 +31,7 @@ const mdxComponents = {
   h2: (props: JSX.IntrinsicElements["h2"]) => (
     <h2
       {...props}
-      className="mb-3 mt-12 text-[26px] [hr+&]:mt-0 font-extrabold leading-[var(--tr-lh-h2)] tracking-[-0.025em] text-tr-text"
+      className="mb-3 mt-12 text-[26px] [hr+&]:mt-0 font-extrabold leading-[var(--tr-lh-h2)] tracking-[-0.025em] text-tr-text [text-wrap:balance]"
     />
   ),
   h3: (props: JSX.IntrinsicElements["h3"]) => (
@@ -86,11 +86,16 @@ const mdxComponents = {
   // width and this box scrolls sideways instead. Capitalised because MDX only
   // routes literal lowercase tags like <svg> through components when they come
   // from markdown syntax, never when written as JSX. tabIndex lets a keyboard
-  // user scroll it.
-  Diagram: ({ children }: { children?: ReactNode }) => (
-    <div tabIndex={0} role="region" aria-label="Diagram, scrolls sideways on narrow screens" className="mb-5 overflow-x-auto text-tr-text [&>svg]:min-w-[640px]">
-      {children}
-    </div>
+  // user scroll it; below md a line says the box scrolls, since nothing else does.
+  Diagram: ({ children, label }: { children?: ReactNode; label: string }) => (
+    <>
+      <p aria-hidden="true" className="mb-1.5 font-mono text-[11px] text-tr-text-faint md:hidden">
+        ← the figure scrolls sideways →
+      </p>
+      <div tabIndex={0} role="region" aria-label={label} className="mb-5 overflow-x-auto text-tr-text [&>svg]:min-w-[640px]">
+        {children}
+      </div>
+    </>
   ),
 };
 
@@ -133,12 +138,15 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
       <main id="main-content" className="bg-tr-bg text-tr-text">
         <article className={`${SHELL} pb-[60px] pt-[clamp(32px,5vw,56px)]`}>
           <div className="mx-auto max-w-[68ch]">
-            <Link href="/blog" className={BACK_LINK}>
-              <span aria-hidden="true">←</span> back to writing
-            </Link>
-
-            <header className="mb-10 mt-8 border-b-[1.5px] border-tr-hairline pb-7">
-              <p className={KICKER}>/writing · {post.category}</p>
+            <header className="mb-10 border-b-[1.5px] border-tr-hairline pb-7">
+              {/* The same breadcrumb shape as a project page: the section is
+                  the link back. */}
+              <p className={KICKER}>
+                <Link href="/blog" className="text-tr-text-faint underline">
+                  /writing
+                </Link>{" "}
+                · {post.category}
+              </p>
 
               <h1 className={`${H1} mt-3`}>{post.title}</h1>
 

@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import { MSG_MAX, NAME_MAX } from "@/lib/guestbook";
 import { useDesk } from "./SecretsProvider";
+import { BTN_PRIMARY } from "@/components/desk";
 
 type WallNote = { name: string; msg: string; at: number };
 
@@ -40,7 +41,8 @@ export function Guestbook() {
     const mark = () => {
       userScrolled.current = true;
     };
-    const events = ["wheel", "touchmove", "keydown"] as const;
+    // pointerdown covers a scrollbar drag, which fires no wheel or touch event.
+    const events = ["wheel", "touchmove", "keydown", "pointerdown"] as const;
     events.forEach((e) => window.addEventListener(e, mark, { once: true, passive: true }));
     return () => events.forEach((e) => window.removeEventListener(e, mark));
   }, []);
@@ -103,7 +105,7 @@ export function Guestbook() {
   const count = notes?.length ?? 0;
 
   return (
-    <section id="guestbook" aria-labelledby="guestbook-h2" className="scroll-mt-[100px] mx-auto max-w-[1200px] px-[clamp(16px,4vw,48px)] py-[60px]">
+    <section id="guestbook" aria-labelledby="guestbook-h2" className="mx-auto max-w-[1200px] px-[clamp(16px,4vw,48px)] py-[60px]">
       <div className="mb-6 flex flex-wrap items-baseline justify-between gap-3">
         <h2 id="guestbook-h2" className="text-[length:clamp(32px,4.5vw,56px)] font-extrabold tracking-[-0.035em]">
           Leave a sticky
@@ -111,8 +113,10 @@ export function Guestbook() {
         <p className="font-mono text-[13px] text-tr-text-faint">
           {notes === null
             ? "counting notes…"
-            : loadFailed && count === 0
-              ? "couldn't reach the fridge. notes are safe, just not here right now."
+            : loadFailed
+              ? count === 0
+                ? "couldn't reach the fridge. notes are safe, just not here right now."
+                : "your note's up. the rest of the fridge didn't load."
               : `${count} ${count === 1 ? "note" : "notes"} on the fridge`}
         </p>
       </div>
@@ -145,7 +149,7 @@ export function Guestbook() {
         <button
           type="submit"
           disabled={pending}
-          className="desk-press cursor-pointer rounded-xl border-[1.5px] border-tr-hairline bg-tr-accent px-5 py-3 text-[16px] font-bold text-tr-on-accent shadow-[3px_3px_0_var(--tr-text)] disabled:cursor-wait disabled:opacity-70"
+          className={`${BTN_PRIMARY} cursor-pointer px-5! py-3! text-[16px] disabled:cursor-wait disabled:opacity-70`}
         >
           stick it
         </button>

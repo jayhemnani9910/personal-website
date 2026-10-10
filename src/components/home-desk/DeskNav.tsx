@@ -68,7 +68,16 @@ export function DeskNav() {
         </button>
         <div className="order-last flex w-full flex-wrap gap-x-[clamp(12px,3vw,28px)] gap-y-1 font-mono text-[13px] sm:order-none sm:w-auto">
           {ANCHORS.map((a) => (
-            <a key={a.href} href={a.href} onClick={jump(a.href)}>
+            <a
+              key={a.href}
+              href={a.href}
+              onClick={(e) => {
+                // A jump closes the secrets panel; on a phone it would cover
+                // the section just jumped to.
+                setOpen(false);
+                jump(a.href)(e);
+              }}
+            >
               {a.label}
             </a>
           ))}

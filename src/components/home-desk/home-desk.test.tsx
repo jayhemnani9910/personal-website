@@ -178,6 +178,14 @@ describe("Guestbook", () => {
     await renderHome();
     expect(screen.getByText(/couldn't reach the fridge/)).toBeDefined();
     expect(screen.queryByText(/the fridge is empty/)).toBeNull();
+
+    // A note that does get through is not "1 note on the fridge": the rest
+    // of the wall is still missing.
+    fireEvent.change(screen.getByLabelText("Your note"), { target: { value: "still here" } });
+    await act(async () => {
+      fireEvent.click(screen.getByRole("button", { name: "stick it" }));
+    });
+    expect(screen.getByText("your note's up. the rest of the fridge didn't load.")).toBeDefined();
   });
 
   it("puts a note up straight away and thanks the writer", async () => {

@@ -89,7 +89,10 @@ export function TerminalOverlay({ projectCount }: { projectCount: number }) {
         return () => {
             html.style.overflow = overflow;
             html.style.scrollbarGutter = scrollbarGutter;
-            lenis?.start();
+            // Leaving / while open destroys this Lenis first, and starting a
+            // destroyed one would put its class back on <html>. A live Lenis
+            // always keeps the "lenis" class there.
+            if (html.classList.contains("lenis")) lenis?.start();
         };
     }, [isOpen, lenis]);
 
@@ -183,7 +186,7 @@ export function TerminalOverlay({ projectCount }: { projectCount: number }) {
                     line("things that work here:", "mute", "?", "accent"),
                     info(`${"ls".padEnd(15)}the six featured projects`),
                     info(`${"open <1-6>".padEnd(15)}one project, in three lines`),
-                    info(`${"receipts".padEnd(15)}every number on the site, with its source`),
+                    info(`${"receipts".padEnd(15)}the headline numbers, with their sources`),
                     info(`${"eggs".padEnd(15)}the home page's secrets, found and not`),
                     line("whoami · contact · joke · clear"),
                 ];
@@ -306,7 +309,9 @@ export function TerminalOverlay({ projectCount }: { projectCount: number }) {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: slide }}
                     transition={{ duration: DUR.base, ease: EASE }}
-                    className="fixed inset-0 z-[var(--tr-z-overlay)] flex items-end justify-center bg-tr-text/45 px-[clamp(1rem,4vw,2rem)] pb-6"
+                    // w-screen, not right-0: with the page's scrollbar gutter
+                    // kept, right-0 would leave that strip undimmed.
+                    className="fixed inset-y-0 left-0 z-[var(--tr-z-overlay)] flex w-screen items-end justify-center bg-tr-text/45 px-[clamp(1rem,4vw,2rem)] pb-6"
                     onClick={closeTerminal}
                 >
                     <div
@@ -375,7 +380,7 @@ export function TerminalOverlay({ projectCount }: { projectCount: number }) {
                                         className={`grid grid-cols-[1.4rem_minmax(0,1fr)] gap-[.4rem] whitespace-pre-wrap ${TEXT_COLOR[entry.color]}`}
                                     >
                                         <span className={TEXT_COLOR[entry.iconColor]}>{entry.icon}</span>
-                                        <span>{entry.text}</span>
+                                        <span className="min-w-0 [overflow-wrap:anywhere]">{entry.text}</span>
                                     </div>
                                 ))}
                             </div>

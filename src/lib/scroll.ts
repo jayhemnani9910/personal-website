@@ -11,14 +11,16 @@ export function scrollBehavior(): ScrollBehavior {
 }
 
 /**
- * Unified scroll helper that prefers Lenis when available. `offset` is applied
- * on both paths, so a target lands below the sticky masthead with or without
- * Lenis (Lenis is off for reduced-motion and reader visitors).
+ * Unified scroll helper that prefers Lenis when available. `offset`, the
+ * target's scroll-margin-top and the page's scroll-padding-top are applied on
+ * both paths (Lenis reads the last two itself), so a target lands where a
+ * #hash link would put it, with or without Lenis (Lenis is off for
+ * reduced-motion and reader visitors).
  */
 export function scrollToTarget(
   target: string | Element,
   lenis?: { scrollTo: (el: HTMLElement | string, opts?: { offset?: number }) => void } | null,
-  offset = -100
+  offset = 0
 ) {
   const el = typeof target === "string" ? document.querySelector(target) : target;
 
@@ -27,7 +29,9 @@ export function scrollToTarget(
     return;
   }
   if (el) {
-    const top = el.getBoundingClientRect().top + window.scrollY + offset;
+    const margin = Number.parseFloat(getComputedStyle(el).scrollMarginTop) || 0;
+    const padding = Number.parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) || 0;
+    const top = el.getBoundingClientRect().top + window.scrollY + offset - margin - padding;
     window.scrollTo({ top, behavior: scrollBehavior() });
     return;
   }

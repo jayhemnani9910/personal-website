@@ -87,7 +87,7 @@ export default function AboutPage() {
               <li
                 key={`${company.name}-${role.title}`}
                 id={anchor}
-                className="grid scroll-mt-16 gap-1 border-t-[1.5px] border-tr-hairline py-[18px] sm:grid-cols-[minmax(110px,180px)_minmax(0,1fr)] sm:gap-5"
+                className="grid gap-1 border-t-[1.5px] border-tr-hairline py-[18px] sm:grid-cols-[minmax(110px,180px)_minmax(0,1fr)] sm:gap-5"
               >
                 <div className="pt-1 font-mono text-[13px] text-tr-text-faint">
                   <p>{role.period?.label}</p>
@@ -171,7 +171,7 @@ export default function AboutPage() {
                     ) : null}
                     {pub.github ? (
                       <a href={pub.github} target="_blank" rel="noreferrer" className={OUT_LINK}>
-                        notebook <span aria-hidden="true">↗</span>
+                        code <span aria-hidden="true">↗</span>
                         <span className="sr-only"> for {pub.title} (opens in a new tab)</span>
                       </a>
                     ) : null}

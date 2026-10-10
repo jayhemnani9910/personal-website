@@ -150,7 +150,7 @@ describe("TerminalOverlay commands", () => {
     // help prints.
     const log = screen.getByRole("log");
     expect(log.textContent).toContain("things that work here:");
-    expect(log.textContent).toContain("every number on the site, with its source");
+    expect(log.textContent).toContain("the headline numbers, with their sources");
     expect(log.textContent).toContain("contact · joke");
   });
 
