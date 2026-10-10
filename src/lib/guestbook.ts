@@ -17,7 +17,7 @@ export type Note = { name: string; msg: string; at: number; hidden?: boolean };
 
 // Words that would make the wall unshowable. Kept short on purpose: this stops
 // the obvious, the rate limit stops the persistent, and LSET handles the rest.
-const BLOCKED = /\b(fuck\w*|shit\w*|cunt\w*|bitch\w*|nigg\w*|fag\w*|retard\w*|whore\w*|slut\w*|rape\w*)\b/i;
+const BLOCKED = /\b(fuck\w*|shit(s|ty|head|hole|show)?|cunts?|bitch(es|y)?|nigg(a|as|az|er|ers)|fag(s|got|gots)?|retard(s|ed)?|whores?|slut(s|ty)?|rap(e|ed|es|ist|ists))\b/i;
 
 /** Tags out, control characters out, whitespace collapsed. */
 export function clean(text: string): string {

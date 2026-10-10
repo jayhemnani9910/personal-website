@@ -122,6 +122,12 @@ describe("guestbook helpers", () => {
 
   it("does not block words that only contain a blocked one", () => {
     expect(parseNote({ msg: "grapes and a shiitake" }).ok).toBe(true);
+    for (const msg of ["one small niggle", "fire retardant tiles", "rapeseed oil fan", "Shitake mushrooms are great"]) {
+      expect(parseNote({ msg }).ok).toBe(true);
+    }
+    for (const msg of ["shitty", "you retard", "raped", "bitches"]) {
+      expect(parseNote({ msg })).toEqual({ ok: false, error: "blocked" });
+    }
   });
 
   it("visible drops the hidden flag itself", () => {
