@@ -120,3 +120,6 @@ Gemini's actual stream shape cannot be verified locally, because
 `GEMINI_API_KEY` exists only in production. The parts that could be tested
 without it were, and the integration was checked against production immediately
 after deploy.
+
+**Correction, 2026-10-10.** The counts moved: `json-sections.test.ts` runs 27
+tests and `fde-stream.test.ts` 13.

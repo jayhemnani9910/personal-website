@@ -26,7 +26,7 @@ export function SkillGroups({ groups }: { groups: SkillGroup[] }) {
             type="button"
             aria-pressed={i === active}
             onClick={() => setActive(i)}
-            className={`${PILL} cursor-pointer ${i === active ? PILL_ACTIVE : "hover:bg-tr-surface-2"}`}
+            className={`${PILL} cursor-pointer ${i === active ? PILL_ACTIVE : ""}`}
           >
             {g.category}
           </button>

@@ -2,7 +2,7 @@
 
 - **Status:** Accepted
 - **Date:** 2026-10-10
-- **Amends:** [ADR 0001](0001-two-readers-as-the-single-design-concept.md) (dark canonical, no shadows, the type split), [ADR 0014](0014-adopt-the-v4-home-as-a-scoped-island.md) (Instrument Sans, Geist Mono, the yellow accent), [ADR 0016](0016-split-accent-ink-from-accent-for-readable-yellow.md) (the fill/ink split survives; the yellow rationale does not)
+- **Amends:** [ADR 0001](0001-two-readers-as-the-single-design-concept.md) (dark canonical, no shadows, the type split), [ADR 0003](0003-replace-the-four-presentation-modes-with-reader-mode.md) (the preloader and reticle reader mode used to still), [ADR 0006](0006-pixel-exact-visual-regression-for-the-legacy-routes.md) (one theme, one Playwright project), [ADR 0017](0017-lift-the-palette-to-wcag-aa.md) (the AA rule stays, the values are Desk's), [ADR 0014](0014-adopt-the-v4-home-as-a-scoped-island.md) (Instrument Sans, Geist Mono, the yellow accent), [ADR 0016](0016-split-accent-ink-from-accent-for-readable-yellow.md) (the fill/ink split survives; the yellow rationale does not)
 
 ## Context
 

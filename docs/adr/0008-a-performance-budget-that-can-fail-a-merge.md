@@ -125,3 +125,17 @@ document 90 KB, fetch 60 KB, stylesheet 62 KB. The font count is now exactly 3
 (Bricolage Grotesque, JetBrains Mono, Caveat). The guestbook's limits live in a
 zod-free module because the first measurement, with zod pulled into the home
 page through it, read 1014 KB.
+
+Update, 2026-10-11: an optimization pass after the audit loop measured before
+changing anything (Lighthouse mobile, three runs on six routes, medians) and kept
+one change. On the home page Lenis ran its frame loop sixty times a second for as
+long as the page was open; it now runs only while a glide is under way, so an
+idle home page schedules no frames (300 per five seconds before). Tried and
+reverted: not preloading Caveat, which left LCP where it was and moved first
+paint from 905 to 1358 ms on every route. Not changed, each for a stated reason:
+the 14 KB of legacy polyfills Lighthouse flags are in Next's own chunk; images
+already go through the optimizer with a four-hour cache; the Lenis chunk (7 KB
+gzipped) and framer-motion (15 KB) load on every route but are single-digit
+shares of the script total. No cap moved, because no byte count went down. The
+document cap is tight (88.4 of 90 KB) since the daily pick ships every candidate
+project; trimming that or raising the cap is the owner's call.

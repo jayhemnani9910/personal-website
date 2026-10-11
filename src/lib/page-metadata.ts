@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { SITE_CONFIG } from "@/../content/site";
+import { alt as shareImageAlt } from "@/app/opengraph-image";
 
 // Next replaces openGraph and twitter whole per segment, and only the root
 // layer gets the root opengraph-image added for it. So a page that sets its
@@ -9,7 +10,7 @@ const SHARE_IMAGE = {
   url: "/opengraph-image",
   width: 1200,
   height: 630,
-  alt: "Jay Hemnani, Software, Data and ML Engineer",
+  alt: shareImageAlt,
 };
 
 type PageMetadataInput = {

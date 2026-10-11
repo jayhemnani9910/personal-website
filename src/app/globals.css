@@ -1,14 +1,8 @@
 @import "tailwindcss";
 
 /* Tailwind v4 auto-detects source files across the project and text-matches raw
-   file content for class candidates. `redesign/` is local-only scaffolding
-   (notes, evidence, the concept mockup) that documents class names in prose, so
-   Tailwind was compiling those prose strings into real utilities and choking on
-   them. It contains no app code, so exclude it. */
-@source not "../../redesign";
-
-/* Same reason as above: docs/ holds prose ABOUT the class names (plans, specs,
-   audits), including the malformed `text-[length:var(--tr-t-*)]` written as an
+   file content for class candidates. docs/ holds prose ABOUT the class names
+   (plans, specs, audits), including the malformed `text-[length:var(--tr-t-*)]` written as an
    example. Tailwind was compiling that literal into a real rule, which is where
    the build's "Unexpected token Delim('*')" CSS warnings came from. Prose about
    utilities is not a usage of them. */
@@ -38,9 +32,53 @@
    BASE
    ═══════════════════════════════════════════════════════════════ */
 
+/* Room for the sticky header (59px, 91px when its nav wraps on a phone) on
+   every scroll the browser makes for us: a #hash link, and a focused element
+   brought into view by Tab or Shift+Tab. Lenis reads it too. */
 html {
   background: var(--tr-bg);
   color: var(--tr-text);
+  scroll-padding-top: var(--tr-scroll-pad);
+}
+
+/* Controls inside a sticky bar are always on screen, but the padding above
+   would still have the browser scroll to "reveal" one when it is clicked or
+   focused, jumping the page about 470px. A matching negative margin cancels
+   it for anything in the bar. A utility, so a bar that is only sticky from
+   some width up (the /projects filters) carries it only there: lg:sticky-bar.
+   On a bar that scrolls away, the margin would land focus under the header. */
+@utility sticky-bar {
+  & :where(*) { scroll-margin-top: calc(-1 * var(--tr-scroll-pad)); }
+}
+
+/* On a short screen (a phone on its side, 200% zoom) a sticky header would
+   cover too much of what is focused, so it scrolls away like the rest. */
+@media (max-height: 520px) {
+  /* html:root, not :root: the token block below sets the 100px default with
+     the same specificity, later in the file, and would win. */
+  html:root { --tr-scroll-pad: 0px; }
+  /* relative, not static: the bar keeps its z-index, so the secrets panel
+     hanging off it still paints above the hero below. */
+  .sticky-bar { position: relative; }
+}
+
+/* A shade at the right edge of anything that scrolls sideways (code, wide
+   diagrams), shown only while there is more to the right: the "local" layer
+   is painted in the box's own colour at the end of the content and covers the
+   shade once the end is in view. Set --hint-bg to the box's background. */
+@utility scroll-hint {
+  background-image:
+    linear-gradient(to left, var(--hint-bg, var(--tr-bg)) 40%, transparent),
+    linear-gradient(to left, var(--hint-edge, color-mix(in srgb, var(--tr-text) 28%, transparent)), transparent);
+  background-position: right center, right center;
+  background-size: 48px 100%, 18px 100%;
+  background-repeat: no-repeat;
+  background-attachment: local, scroll;
+}
+/* The same shade on an ink panel: ink to cover it, a butter edge to see it. */
+@utility ink-hint {
+  --hint-bg: var(--tr-text);
+  --hint-edge: color-mix(in srgb, var(--tr-butter) 45%, transparent);
 }
 
 body {
@@ -54,9 +92,6 @@ body {
 /* ═══════════════════════════════════════════════════════════════
    ACCESSIBILITY
    ═══════════════════════════════════════════════════════════════ */
-
-/* In @layer base (below), so a utility such as -outline-offset-2 can still
-   adjust it where a control sits flush in an overflow-hidden grid. */
 
 .skip-link {
   position: fixed;
@@ -206,31 +241,17 @@ html.lenis {
   /* Hard offset shadows, no blur: the Desk signature. A pressed control
      sinks onto its shadow (.desk-press). */
   --tr-shadow-card: 6px 6px 0 var(--tr-text);
-  --tr-shadow-modal: 8px 8px 0 var(--tr-text);
   --tr-shadow-btn: 3px 3px 0 var(--tr-text);
 
   /* ---- type scale (fluid) ---- */
-  --tr-t-display: clamp(2.75rem, 8vw, 7rem);
   /* Interior pages set their h1 smaller than the home page does: the home
      page opens on a statement, the index pages open on a label. */
   --tr-t-display-sm: clamp(2rem, 4.5vw, 3.5rem);
   --tr-t-h2: clamp(1.625rem, 3vw, 2.5rem);
-  --tr-t-h3: clamp(1.15rem, 1.5vw, 1.4rem);
-  --tr-t-card-h: clamp(1.1rem, 1.4vw, 1.3rem);
-  --tr-t-deck: clamp(1.05rem, 1.3vw, 1.25rem);
-  --tr-t-stat: clamp(2.25rem, 4vw, 3.25rem);
-  --tr-t-mail: clamp(1.5rem, 5vw, 4.5rem);
-  --tr-t-body: 15px;
-  --tr-t-small: 13.5px;
-  --tr-t-mono-lg: 13px;
-  --tr-t-mono: 12px;
-  --tr-t-mono-xs: 11.5px;
-  --tr-t-mono-sm: 11px;
 
   /* ---- line height (paired with the sizes above) ----
      tokens.test.ts fails the build on a raw `leading-[1.55]`-style value so
      leading cannot drift back into inline literals. */
-  --tr-lh-numeral: .85;   /* single-glyph stats */
   --tr-lh-display: .92;   /* display type */
   --tr-lh-h2: 1.15;       /* section headings, rule titles */
   --tr-lh-h3: 1.05;       /* card titles */
@@ -238,19 +259,8 @@ html.lenis {
   --tr-lh-prose: 1.55;    /* long-form reading: blog post bodies at 17px */
   --tr-lh-tight: 1.2;
   --tr-lh-card: 1.35;     /* small labels under figures */
-  --tr-lh-mail: 1.05;
   --tr-lh-shell: 1.75;    /* the terminal shell body */
   --tr-lh-hand: 1.1;      /* Caveat */
-
-  /* ---- spacing: 4px-based ramp ---- */
-  --tr-s-2: 0.5rem;    /* 8px */
-  --tr-s-3: 0.75rem;   /* 12px */
-  --tr-s-4: 1rem;      /* 16px */
-  --tr-s-5: 1.5rem;    /* 24px */
-  --tr-s-6: 2rem;      /* 32px */
-  --tr-s-8: 3rem;      /* 48px */
-  --tr-s-10: 4rem;     /* 64px */
-  --tr-s-12: 6rem;     /* 96px */
 
   /* ---- radius ---- */
   --tr-r-sm: 6px;      /* tags, chips */
@@ -261,6 +271,7 @@ html.lenis {
 
   /* ---- z-index ladder (ascending) ---- */
   --tr-z-masthead: 50;     /* site header, above page content */
+  --tr-scroll-pad: 100px;  /* room for the sticky header (html, above) */
   --tr-z-overlay: 80;      /* modals, drawers, scrims */
 
   /* ---- motion ---- */
@@ -287,9 +298,7 @@ html.lenis {
    to any `text-tr-*` utility on the same <a>. Left unlayered, this plain
    selector sat OUTSIDE Tailwind's layer stack entirely, and unlayered CSS
    beats every layered rule regardless of specificity, so it silently
-   overrode every text-color utility ever applied straight to an anchor
-   (e.g. the method cards' back-ref links, stuck at inherited full-strength
-   text no matter which --tr-text-* utility they carried). */
+   overrode every text-color utility ever applied straight to an anchor. */
 @layer base {
   a { color: inherit; text-decoration: none; text-decoration-color: var(--tr-accent); text-underline-offset: 3px; }
   a:hover { color: var(--tr-accent-ink); }
@@ -297,6 +306,8 @@ html.lenis {
   /* The focus ring is drawn in accent-ink: pure tomato is 2.62:1 on butter
      and under the 3:1 a focus indicator needs (WCAG 1.4.11). On ink panels
      it turns butter. */
+  /* The focus ring lives in this layer so a utility such as -outline-offset-2
+     can still adjust it where a control sits flush in an overflow-hidden box. */
   :focus-visible { outline: 2px solid var(--tr-accent-ink); outline-offset: 2px; }
   .ink-panel :focus-visible { outline-color: var(--tr-butter); }
   ::selection { background: var(--tr-butter); color: var(--tr-text); }
@@ -305,8 +316,8 @@ html.lenis {
 
 
 /* Expose color tokens to Tailwind utilities (bg-tr-bg, text-tr-accent, …).
-   "inline" so utilities stay theme-reactive instead of freezing at the
-   :root (dark) default — see Tailwind v4 @theme docs. */
+   "inline" so a utility emits var(--tr-*) and reads it at use time, rather
+   than a value copied in at build — see Tailwind v4 @theme docs. */
 @theme inline {
   --color-tr-bg: var(--tr-bg);
   --color-tr-surface-1: var(--tr-surface-1);
@@ -364,3 +375,7 @@ html.lenis {
   :root:not([data-reader="on"]) .desk-sticky { transition: transform .2s; }
   :root:not([data-reader="on"]) .desk-sticky:hover { transform: rotate(0deg) scale(1.05); }
 }
+
+/* The still tiles can't be thrown, so the line inviting it goes too. */
+@media (prefers-reduced-motion: reduce) { .desk-grab-hint { display: none; } }
+[data-reader="on"] .desk-grab-hint { display: none; }

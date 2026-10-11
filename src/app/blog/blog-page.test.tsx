@@ -5,6 +5,8 @@ import { describe, expect, it } from "vitest";
 import { render, screen, within } from "@testing-library/react";
 import { getAllProjects } from "@/lib/content";
 import WritingPage from "./page";
+// The footer's shell button reads the shell context, as under ClientLayout.
+import { TerminalProvider } from "@/context/TerminalContext";
 
 // The published posts counted from the files, not through the loader the page
 // renders from: a post the loader drops (a file name getPost refuses as a slug,
@@ -20,7 +22,7 @@ function publishedPostFiles(): string[] {
 // element before render(), same as any other async function that returns JSX.
 describe("WritingPage", () => {
   it("renders exactly one h1 with the page title", async () => {
-    render(await WritingPage());
+    render(await WritingPage(), { wrapper: TerminalProvider });
 
     const headings = screen.getAllByRole("heading", { level: 1 });
     expect(headings).toHaveLength(1);
@@ -30,7 +32,7 @@ describe("WritingPage", () => {
   it("renders one row for every published post", async () => {
     const files = publishedPostFiles();
     expect(files.length).toBeGreaterThan(0);
-    render(await WritingPage());
+    render(await WritingPage(), { wrapper: TerminalProvider });
 
     const postLinks = screen
       .getAllByRole("link")
@@ -41,7 +43,7 @@ describe("WritingPage", () => {
   it("renders the deep-dive cards plus the index card", async () => {
     const projects = await getAllProjects();
     const expectedDeepDives = Math.min(projects.filter((p) => p.deepDive).length, 3);
-    render(await WritingPage());
+    render(await WritingPage(), { wrapper: TerminalProvider });
 
     // Scoped to the write-ups section: SiteHeader's own nav also links to
     // /projects ("Work"), which would otherwise be double-counted here.

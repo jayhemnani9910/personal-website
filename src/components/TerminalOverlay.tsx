@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import { m, AnimatePresence } from "framer-motion";
+import { useLenis } from "lenis/react";
 import { useTerminal } from "@/context/TerminalContext";
 import { EASE, DUR } from "@/lib/motion-tokens";
 import { FEATURED, buildReceipts } from "@/data/home";
@@ -41,7 +42,9 @@ const TEXT_COLOR: Record<ColorKey, string> = {
     err: "text-[color:var(--tr-accent)]",
 };
 
-type Line = { text: string; color: ColorKey; icon: string; iconColor: ColorKey };
+// `lead` is a first column (a command, a project): beside the text on a wide
+// panel, above it on a phone, instead of space padding that wraps mid-column.
+type Line = { text: string; color: ColorKey; icon: string; iconColor: ColorKey; lead?: string };
 
 const line = (text: string, color: ColorKey = "mute", icon = " ", iconColor: ColorKey = "faint"): Line => ({
     text,
@@ -51,6 +54,7 @@ const line = (text: string, color: ColorKey = "mute", icon = " ", iconColor: Col
 });
 const ok = (text: string): Line => line(text, "text", "✓", "ok");
 const info = (text: string): Line => line(text, "text", "·", "faint");
+const pair = (lead: string, text: string): Line => ({ ...info(text), lead });
 const warn = (text: string): Line => line(text, "mute", "!", "accent");
 const err = (text: string): Line => line(text, "text", "✗", "err");
 
@@ -75,12 +79,33 @@ export function TerminalOverlay({ projectCount }: { projectCount: number }) {
     const cmdHistoryRef = useRef<string[]>([]);
     const historyIndexRef = useRef(-1);
 
-    // Focuses the input once the panel has finished sliding in, matching the
-    // comp's own 380ms delay rather than fighting the entrance transition.
+    // A modal keeps the page behind it still: no native scroll, and on the home
+    // page no Lenis wheel either. The gutter stays, so nothing shifts sideways.
+    const lenis = useLenis();
     useEffect(() => {
         if (!isOpen) return;
-        const t = window.setTimeout(() => inputRef.current?.focus(), 380);
-        return () => window.clearTimeout(t);
+        const html = document.documentElement;
+        const { overflow, scrollbarGutter } = html.style;
+        html.style.overflow = "hidden";
+        html.style.scrollbarGutter = "stable";
+        lenis?.stop();
+        return () => {
+            html.style.overflow = overflow;
+            html.style.scrollbarGutter = scrollbarGutter;
+            // Leaving / while open destroys this Lenis first, and starting a
+            // destroyed one would put its class back on <html>. A live Lenis
+            // always keeps the "lenis" class there.
+            if (html.classList.contains("lenis")) lenis?.start();
+        };
+    }, [isOpen, lenis]);
+
+    // Focuses the input on the next frame: an aria-modal dialog owns focus
+    // from the moment it shows (a 380ms wait let Tab walk the page behind it).
+    // Not synchronously, so the effect below still records the opener first.
+    useEffect(() => {
+        if (!isOpen) return;
+        const raf = requestAnimationFrame(() => inputRef.current?.focus());
+        return () => cancelAnimationFrame(raf);
     }, [isOpen]);
 
     // Dialog semantics: remember what had focus before opening (to restore
@@ -163,23 +188,23 @@ export function TerminalOverlay({ projectCount }: { projectCount: number }) {
             case "help":
                 out = [
                     line("things that work here:", "mute", "?", "accent"),
-                    info(`${"ls".padEnd(15)}the six featured projects`),
-                    info(`${"open <1-6>".padEnd(15)}one project, in three lines`),
-                    info(`${"receipts".padEnd(15)}every number on this page, with source`),
-                    info(`${"eggs".padEnd(15)}the home page's secrets, found and not`),
+                    pair("ls", "the six featured projects"),
+                    pair("open <1-6>", "one project, in three lines"),
+                    pair("receipts", "the headline numbers, with their sources"),
+                    pair("eggs", "the home page's secrets, found and not"),
                     line("whoami · contact · joke · clear"),
                 ];
                 break;
             case "whoami":
                 out = [
-                    ok("Jay Hemnani, Forward Deployed Engineer. Gujarat, IN. Relocating."),
+                    ok("Jay Hemnani, Forward Deployed Engineer. Gujarat, IN. Open to relocate."),
                     line("you, however, remain a mystery."),
                 ];
                 break;
             case "ls": {
                 const more = projectCount - FEATURED.length;
                 out = [
-                    ...FEATURED.map((p) => info(`${p.num}  ${p.title.padEnd(26)} ${p.tech.slice(0, 3).join(", ")}`)),
+                    ...FEATURED.map((p) => pair(`${p.num}  ${p.title}`, p.tech.slice(0, 3).join(", "))),
                     line(`… ${more} more at /projects`),
                 ];
                 break;
@@ -188,14 +213,29 @@ export function TerminalOverlay({ projectCount }: { projectCount: number }) {
                 const p = FEATURED[(parseInt(rest, 10) || 0) - 1];
                 out = p
                     ? [ok(p.title), line(`arrived as: ${p.arrived}`), line(`did: ${p.did}`), line(p.changed, "ok", "✓", "ok")]
-                    : [warn("open <1-6>. six, not seven. i checked.")];
+                    : [warn(rest ? "open <1-6>. six, not seven. i checked." : "open <1-6>. try open 1.")];
                 break;
             }
             case "receipts":
                 // Both of buildReceipts's dynamic inputs are honestly available
                 // here: projectCount arrives as a prop (see layout.tsx), and
                 // WEBMCP_TOOL_COUNT is a static array length, not a fs read.
-                out = buildReceipts({ projectCount, toolCount: WEBMCP_TOOL_COUNT }).map((r) => info(`${r.n.padEnd(5)} ${r.label}`));
+                // Each figure with what it rests on: every line of a short
+                // receipt (both papers), the last line of a long one (the PR
+                // search). A link short enough to read is printed as the link;
+                // a long one (the search URL) by what it is.
+                out = buildReceipts({ projectCount, toolCount: WEBMCP_TOOL_COUNT }).flatMap((r) => {
+                    const picked = r.lines.length <= 3 ? r.lines : r.lines.slice(-1);
+                    // Lines that share a link (the tools receipt) print it once.
+                    const sources = picked.filter((s, i) => picked.findIndex((t) => t.href === s.href) === i);
+                    return [
+                        info(`${r.n.padEnd(5)} ${r.label}`),
+                        ...sources.map((s) => {
+                            const href = s.href.replace(/^https:\/\//, "");
+                            return line(`${"".padEnd(5)} source: ${href.length <= 90 ? href : s.text}`);
+                        }),
+                    ];
+                });
                 break;
             case "contact":
                 out = [
@@ -238,7 +278,7 @@ export function TerminalOverlay({ projectCount }: { projectCount: number }) {
         if (e.key === "Enter") {
             // Without this, a command that closes the overlay reopens it
             // immediately. Closing restores focus to whatever opened the
-            // dialog, which is the header's shell button, and Enter's default
+            // dialog, such as the footer's shell button, and Enter's default
             // action then activates that newly focused button on keyup. The
             // dialog looked like it ignored `exit` entirely.
             e.preventDefault();
@@ -283,7 +323,9 @@ export function TerminalOverlay({ projectCount }: { projectCount: number }) {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: slide }}
                     transition={{ duration: DUR.base, ease: EASE }}
-                    className="fixed inset-0 z-[var(--tr-z-overlay)] flex items-end justify-center bg-tr-text/45 px-[clamp(1rem,4vw,2rem)] pb-6"
+                    // w-screen, not right-0: with the page's scrollbar gutter
+                    // kept, right-0 would leave that strip undimmed.
+                    className="fixed inset-y-0 left-0 z-[var(--tr-z-overlay)] flex w-screen items-end justify-center bg-tr-text/45 px-[clamp(1rem,4vw,2rem)] pb-6 pt-4"
                     onClick={closeTerminal}
                 >
                     <div
@@ -312,7 +354,7 @@ export function TerminalOverlay({ projectCount }: { projectCount: number }) {
                             <button
                                 type="button"
                                 onClick={closeTerminal}
-                                aria-label="Close shell"
+                                aria-label="esc, close shell"
                                 className="ml-auto cursor-pointer border-0 bg-transparent text-tr-on-ink-mute hover:text-tr-butter"
                             >
                                 <span aria-hidden="true">esc ✕</span>
@@ -339,7 +381,9 @@ export function TerminalOverlay({ projectCount }: { projectCount: number }) {
                             mono tokens (12/11.5/11/10.5) matches the comp's
                             body size, and it has exactly one call site. */}
                         <div
-                            className="h-[280px] overflow-y-auto overscroll-contain p-4 font-mono text-[12.5px] leading-[var(--tr-lh-shell)]"
+                            // Up to 280px, shrinking on a short screen (a phone on
+                            // its side, 200% zoom) so the title bar stays in view.
+                            className="h-[280px] max-h-[calc(100dvh-14rem)] min-h-[6rem] overflow-y-auto overscroll-contain p-4 font-mono text-[12.5px] leading-[var(--tr-lh-shell)]"
                             onClick={() => inputRef.current?.focus()}
                         >
                             {/* role="log" (polite by default) so a screen reader
@@ -351,14 +395,21 @@ export function TerminalOverlay({ projectCount }: { projectCount: number }) {
                                         key={i}
                                         className={`grid grid-cols-[1.4rem_minmax(0,1fr)] gap-[.4rem] whitespace-pre-wrap ${TEXT_COLOR[entry.color]}`}
                                     >
-                                        <span className={TEXT_COLOR[entry.iconColor]}>{entry.icon}</span>
-                                        <span>{entry.text}</span>
+                                        <span aria-hidden="true" className={TEXT_COLOR[entry.iconColor]}>{entry.icon}</span>
+                                        {entry.lead ? (
+                                            <span className="grid min-w-0 sm:grid-cols-[minmax(0,15rem)_minmax(0,1fr)] sm:gap-x-3">
+                                                <span>{entry.lead}</span>
+                                                <span className="pl-3 sm:pl-0 [overflow-wrap:anywhere]">{entry.text}</span>
+                                            </span>
+                                        ) : (
+                                            <span className="min-w-0 [overflow-wrap:anywhere]">{entry.text}</span>
+                                        )}
                                     </div>
                                 ))}
                             </div>
 
                             <div className="grid grid-cols-[1.4rem_minmax(0,1fr)] items-center gap-[.4rem]">
-                                <span className="text-tr-butter">❯</span>
+                                <span aria-hidden="true" className="text-tr-butter">❯</span>
                                 <input
                                     ref={inputRef}
                                     type="text"

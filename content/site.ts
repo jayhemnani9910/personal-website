@@ -19,7 +19,7 @@ export const SITE_CONFIG = {
     github: "https://github.com/jayhemnani9910",
     linkedin: "https://linkedin.com/in/jayhemnani",
     twitter: "https://x.com/jeyhemnani9",
-    youtube: "https://youtube.com/@jhanalytics2.0",
+    youtube: "https://www.youtube.com/@jhanalytics2.0",
   },
 
   // How each profile is written on the page. Kept next to the URLs so no
@@ -28,7 +28,6 @@ export const SITE_CONFIG = {
     github: "jayhemnani9910",
     linkedin: "in/jayhemnani",
     twitter: "@jeyhemnani9",
-    youtube: "@jhanalytics2.0",
   },
 
   // Evaluated at build time: both footers show the build year until the next deploy.

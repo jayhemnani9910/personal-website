@@ -1,8 +1,11 @@
 "use client";
 
-import { useEffect, useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
 import { MSG_MAX, NAME_MAX } from "@/lib/guestbook";
 import { useDesk } from "./SecretsProvider";
+import { BTN_PRIMARY } from "@/components/desk";
+import { useLenis } from "lenis/react";
+import { SCROLL_KEYS } from "./scrollKeys";
 
 type WallNote = { name: string; msg: string; at: number };
 
@@ -13,7 +16,7 @@ const EMPTY_NOTE: WallNote = { name: "jay", msg: "the fridge is empty. first sti
 
 const ERRORS: Record<string, string> = {
   empty: "A blank sticky? Bold. Write something.",
-  rate_limited: "Easy there. The fridge is full for now. Try again in a bit.",
+  rate_limited: "That's a lot of stickies for ten minutes. Try again in a bit.",
   blocked: "That one won't stick. Try different words.",
   too_long: `Stickies are small. ${MSG_MAX} characters, tops.`,
 };
@@ -24,16 +27,92 @@ const INPUT = "min-w-0 rounded-xl border-[1.5px] border-tr-hairline bg-tr-surfac
 export function Guestbook() {
   const { say } = useDesk();
   const [notes, setNotes] = useState<WallNote[] | null>(null);
+  // A failed load is not an empty wall: saying "be the first" while the store
+  // is down invites a post that will fail too.
+  const [loadFailed, setLoadFailed] = useState(false);
+  // Whether the wall's GET has answered, either way. A note posted before then
+  // makes `notes` non-empty, so `notes` alone cannot say the wall is loaded.
+  const [loaded, setLoaded] = useState(false);
   const [name, setName] = useState("");
   const [msg, setMsg] = useState("");
   const [pending, setPending] = useState(false);
+
+  // The notes arrive after the first paint and push everything below the wall
+  // down. A visitor who came in on a link to a section further down (/#hi, from
+  // every page's "say hi") would land mid-wall instead, so once the notes are
+  // in, the section is brought back into view, unless they have scrolled since.
+  const userScrolled = useRef(false);
+  const returned = useRef(false);
+  // The home page glides with Lenis. A plain window.scrollTo during a glide
+  // is overwritten on the next frame, so the return goes through Lenis and
+  // cuts the glide short; without Lenis (reduced motion) it is a plain jump.
+  const lenis = useLenis();
+  useEffect(() => {
+    // Only input that scrolls: a wheel, a swipe, a scrolling key, or a press
+    // on the page's own scrollbar (its target is <html>). A tap or a Tab is
+    // not reading on, so it does not cancel the return. Focus inside the
+    // guestbook does: someone typing a note should not be pulled away.
+    const mark = (e: Event) => {
+      if (e instanceof KeyboardEvent && !SCROLL_KEYS.has(e.key)) return;
+      if (e.type === "pointerdown" && e.target !== document.documentElement) return;
+      if (e.type === "focusin" && !(e.target as Element).closest?.("#guestbook")) return;
+      userScrolled.current = true;
+    };
+    const events = ["wheel", "touchmove", "keydown", "pointerdown", "focusin"] as const;
+    events.forEach((e) => window.addEventListener(e, mark, { passive: true }));
+    return () => events.forEach((e) => window.removeEventListener(e, mark));
+  }, []);
+  useEffect(() => {
+    if (!loaded || returned.current || userScrolled.current || !location.hash) return;
+    returned.current = true;
+    const wall = document.getElementById("guestbook");
+    let id = location.hash.slice(1);
+    try {
+      id = decodeURIComponent(id);
+    } catch {
+      // A malformed escape in a hand-typed link: look the raw hash up instead.
+    }
+    const target = document.getElementById(id);
+    if (wall && target && wall.compareDocumentPosition(target) & Node.DOCUMENT_POSITION_FOLLOWING) {
+      // From layout offsets, not getBoundingClientRect: after a client
+      // navigation the page is still sliding in (a 12px transform), and a
+      // measurement taken mid-slide lands that far off.
+      let top = 0;
+      for (let n: HTMLElement | null = target; n; n = n.offsetParent as HTMLElement | null) top += n.offsetTop;
+      const pad = Number.parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) || 0;
+      const margin = Number.parseFloat(getComputedStyle(target).scrollMarginTop) || 0;
+      const y = top - pad - margin;
+      if (lenis) {
+        // Lenis caches the page height; the notes just made the page taller,
+        // and a target past the cached end is clamped back to it.
+        lenis.resize();
+        lenis.scrollTo(y, { immediate: true, force: true });
+      } else window.scrollTo({ top: y });
+    }
+  }, [loaded, lenis]);
 
   useEffect(() => {
     let live = true;
     fetch("/api/guestbook")
       .then((r) => (r.ok ? r.json() : Promise.reject(new Error(String(r.status)))))
-      .then((data: { notes: WallNote[] }) => live && setNotes(data.notes))
-      .catch(() => live && setNotes([]));
+      // A note posted while the wall was still loading is already up; keep it
+      // on top rather than letting the loaded list replace it.
+      .then((data: { notes: WallNote[] }) => {
+        if (!live) return;
+        setLoaded(true);
+        setNotes((prev) => {
+          if (!prev?.length) return data.notes;
+          const mine = (n: WallNote) => prev.some((p) => p.at === n.at && p.msg === n.msg && p.name === n.name);
+          return [...prev, ...data.notes.filter((n) => !mine(n))];
+        });
+      })
+      .catch(() => {
+        if (!live) return;
+        // Keep a note posted while the wall was loading; it did stick.
+        setNotes((prev) => prev ?? []);
+        setLoadFailed(true);
+        setLoaded(true);
+      });
     return () => {
       live = false;
     };
@@ -59,18 +138,23 @@ export function Guestbook() {
       const data: { note?: WallNote; error?: string } = await r.json().catch(() => ({}));
       if (!r.ok || !data.note) throw new Error(data.error ?? "");
       const saved = data.note;
-      setNotes((prev) => (prev ?? []).map((n) => (n === draft ? saved : n)));
+      // Swap the draft for the saved note, and drop a copy of it the wall GET
+      // may have brought in while the post was in flight.
+      const same = (n: WallNote) => n.at === saved.at && n.msg === saved.msg && n.name === saved.name;
+      setNotes((prev) => (prev ?? []).filter((n) => n === draft || !same(n)).map((n) => (n === draft ? saved : n)));
       say("Stuck to the fridge. Thanks!");
     } catch (err) {
       setNotes((prev) => (prev ?? []).filter((n) => n !== draft));
-      setMsg(text);
+      // Give the note back, unless something new was typed meanwhile.
+      setMsg((cur) => cur || text);
       say(ERRORS[err instanceof Error ? err.message : ""] ?? FALLBACK_ERROR);
     } finally {
       setPending(false);
     }
   };
 
-  const wall = notes && notes.length > 0 ? notes : [EMPTY_NOTE];
+  // Jay's "fridge is empty" note only once the wall is known to be empty.
+  const wall = notes && notes.length > 0 ? notes : !loaded || loadFailed ? [] : [EMPTY_NOTE];
   const count = notes?.length ?? 0;
 
   return (
@@ -80,7 +164,13 @@ export function Guestbook() {
           Leave a sticky
         </h2>
         <p className="font-mono text-[13px] text-tr-text-faint">
-          {notes === null ? "counting notes…" : `${count} ${count === 1 ? "note" : "notes"} on the fridge`}
+          {!loaded
+            ? "counting notes…"
+            : loadFailed
+              ? count === 0
+                ? "couldn't reach the fridge. notes are safe, just not here right now."
+                : "your note's up. the rest of the fridge didn't load."
+              : `${count} ${count === 1 ? "note" : "notes"} on the fridge`}
         </p>
       </div>
 
@@ -111,8 +201,10 @@ export function Guestbook() {
         />
         <button
           type="submit"
-          disabled={pending}
-          className="desk-press cursor-pointer rounded-xl border-[1.5px] border-tr-hairline bg-tr-accent px-5 py-3 text-[16px] font-bold text-tr-on-accent shadow-[3px_3px_0_var(--tr-text)] disabled:cursor-wait disabled:opacity-70"
+          // aria-disabled, not disabled: a disabled button drops keyboard focus
+          // to <body>. submit() already ignores a press while pending.
+          aria-disabled={pending}
+          className={`${BTN_PRIMARY} cursor-pointer px-5! py-3! text-[16px] aria-disabled:cursor-wait aria-disabled:opacity-70`}
         >
           stick it
         </button>

@@ -8,7 +8,7 @@ import { WEBMCP_TOOL_COUNT } from "@/lib/webmcp-tools";
 export type ShowcaseDemo =
   | {
       kind: "compare";
-      pairs: { before: string; after: string; label?: string }[];
+      pairs: { before: string; after: string }[];
     }
   | {
       kind: "report";
@@ -25,27 +25,20 @@ export type ShowcaseDemo =
     };
 
 export type ShowcaseConfig = {
-  arch?: string;
   demo?: ShowcaseDemo;
 };
 
 export const SHOWCASE_PROJECTS: Record<string, ShowcaseConfig> = {
-  "stock-data-platform": {
-    arch: "/projects/stock/architecture.png",
-  },
   "fifa-soccer-ds": {
     demo: {
       kind: "compare",
       pairs: [
-        { before: "/projects/fifa/input_5.jpg", after: "/projects/fifa/overlay_5.jpg", label: "RMA vs BAR" },
+        { before: "/projects/fifa/input_5.jpg", after: "/projects/fifa/overlay_5.jpg" },
         { before: "/projects/fifa/input_8.jpg", after: "/projects/fifa/overlay_8.jpg" },
         { before: "/projects/fifa/input_10.jpg", after: "/projects/fifa/overlay_10.jpg" },
         { before: "/projects/fifa/input_15.jpg", after: "/projects/fifa/overlay_15.jpg" },
       ],
     },
-  },
-  "biotech-accelerator": {
-    arch: "/projects/bio/architecture.png",
   },
   "webmcp-portfolio": {
     demo: {
@@ -54,7 +47,7 @@ export const SHOWCASE_PROJECTS: Record<string, ShowcaseConfig> = {
       tools: [
         { name: "search_projects", kind: "read", description: "Search projects by query, tech, tag, domain, or featured-only." },
         { name: "get_project", kind: "read", description: "Full details for one project by ID: challenge, solution, impact, stack." },
-        { name: "get_resume", kind: "read", description: "Resume data by section: experience, education, skills, competencies, contact." },
+        { name: "get_resume", kind: "read", description: "Resume data by section: experience, education, publications, skills, competencies, contact." },
         { name: "search_skills", kind: "read", description: "Technical skills by category or keyword." },
         { name: "get_contact", kind: "read", description: "Contact info and social links." },
         { name: "list_experiments", kind: "read", description: "What Jay is currently building, exploring, or watching in the lab." },

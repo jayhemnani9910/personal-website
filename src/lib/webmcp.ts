@@ -77,6 +77,7 @@ export interface ResumeData {
     end?: string;
     gpa?: string;
   }[];
+  publications: { title: string; venue?: string; year?: string; description?: string; link?: string }[];
 }
 
 export interface SiteData {
@@ -189,13 +190,13 @@ export function buildTools(data: SiteData): ModelContextTool[] {
   // Tool 3: Get resume
   tools.push({
     name: "get_resume",
-    description: "Get Jay's resume data: experience, education, skills, and core competencies.",
+    description: "Get Jay's resume data: experience, education, publications, skills, and core competencies.",
     inputSchema: {
       type: "object",
       properties: {
         section: {
           type: "string",
-          enum: ["all", "experience", "education", "skills", "competencies", "contact"],
+          enum: ["all", "experience", "education", "publications", "skills", "competencies", "contact"],
           description: "Which section to return (default: all)",
         },
       },
@@ -209,6 +210,8 @@ export function buildTools(data: SiteData): ModelContextTool[] {
           return { experience: r.experience };
         case "education":
           return { education: r.education };
+        case "publications":
+          return { publications: r.publications };
         case "skills":
           return { skills: r.skills };
         case "competencies":
@@ -225,6 +228,7 @@ export function buildTools(data: SiteData): ModelContextTool[] {
             skills: r.skills,
             experience: r.experience,
             education: r.education,
+            publications: r.publications,
             competencies: r.coreCompetencies,
           };
       }

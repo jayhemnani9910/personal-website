@@ -59,8 +59,9 @@ export function ProjectsClient({ projects }: ProjectsClientProps) {
       {/* Filter bar */}
       {/* Sticky only from lg up: on a phone the search box and the wrapping
           domain chips are several rows tall, and pinned they would cover
-          about half the screen. */}
-      <section className="z-[30] border-b-[1.5px] border-tr-hairline bg-tr-bg lg:sticky lg:top-[58px]">
+          about half the screen. And only on a screen taller than 520px, where
+          the header above it is sticky too (globals.css). */}
+      <section className="z-[30] border-b-[1.5px] border-tr-hairline bg-tr-bg lg:[@media(min-height:521px)]:sticky lg:top-[58px] lg:sticky-bar">
         <div className={`${WRAP} ${SHELL} flex flex-wrap items-center gap-2 pb-5 pt-4`}>
           {/* The search box shows focus on its frame; the bare input inside keeps outline-none. */}
           <div className="flex h-9 w-full items-center gap-2 rounded-[var(--tr-r-md)] border-[1.5px] border-tr-hairline bg-tr-surface-1 px-3 focus-within:shadow-[2px_2px_0_var(--tr-text)] focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-tr-accent-ink sm:w-[300px]">
@@ -116,7 +117,12 @@ export function ProjectsClient({ projects }: ProjectsClientProps) {
             ) : (
               <button
                 type="button"
-                onClick={() => setFilter("all")}
+                onClick={() => {
+                  setFilter("all");
+                  // The button goes away with the results it brings back, so
+                  // focus would fall to the page; the search box is next.
+                  document.getElementById("project-search")?.focus();
+                }}
                 className="cursor-pointer text-tr-accent-ink underline"
               >
                 search every domain
@@ -127,9 +133,11 @@ export function ProjectsClient({ projects }: ProjectsClientProps) {
           <ol className="list-none">
             {visible.map((p, i) => (
               <li key={p.id} className="border-t-[1.5px] border-tr-hairline">
+                {/* From lg the filter bar is sticky under the header too, so a
+                    row Tab brings into view needs room for both. */}
                 <Link
                   href={`/projects/${p.id}`}
-                  className={`group grid grid-cols-[minmax(0,1fr)_auto] items-start gap-x-4 gap-y-2.5 py-5 hover:text-tr-text lg:gap-6 ${COLS}`}
+                  className={`group grid grid-cols-[minmax(0,1fr)_auto] items-start gap-x-4 gap-y-2.5 py-5 hover:text-tr-text lg:scroll-mt-[90px] lg:gap-6 ${COLS}`}
                 >
                   <span className={`col-span-2 flex items-center gap-2.5 pt-1 text-[12px] text-tr-text-faint lg:col-span-1 ${MONO}`}>
                     {pad(i + 1)}
@@ -139,8 +147,7 @@ export function ProjectsClient({ projects }: ProjectsClientProps) {
                   <div className="col-span-2 lg:col-span-1">
                     {/* A plain span, not a heading: this is one row of a data table, not a
                         document section, and the page carries exactly one <h1> and no <h2>s
-                        for these rows to nest under. WorkTable.tsx (the home page's version
-                        of this same table) makes the same call. */}
+                        for these rows to nest under. */}
                     <span className="block text-[20px] font-bold leading-[var(--tr-lh-tight)] tracking-[-0.02em] group-hover:text-tr-accent-ink">
                       {p.title}
                     </span>
@@ -166,7 +173,7 @@ export function ProjectsClient({ projects }: ProjectsClientProps) {
                   </span>
 
                   <span className={`pt-1 text-right text-[12px] text-tr-text-faint ${MONO}`}>
-                    {p.period ?? ""}
+                    {p.period ?? "—"}
                   </span>
                 </Link>
               </li>

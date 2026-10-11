@@ -18,10 +18,11 @@ export const runtime = "nodejs";
 export const maxDuration = 60;
 const DEADLINE_MS = 55_000;
 
-// Model calls allowed per UTC day across every visitor (decision D11). Past
-// it, a visitor gets the same answer as when no model is configured: the
-// closest prepared example.
-const DAILY_MODEL_CALLS = 200;
+// Simulation runs allowed per UTC day across every visitor (decision D11). A
+// run makes at most two model calls (one retry), so this also caps calls at
+// 400. Past it, a visitor gets the same answer as when no model is configured:
+// the closest prepared example.
+const DAILY_RUNS = 200;
 
 const isTimeout = (err: unknown) => err instanceof Error && (err.name === "TimeoutError" || err.name === "AbortError");
 
@@ -354,23 +355,23 @@ export async function POST(request: NextRequest) {
         return NextResponse.json(cached, { headers: { "x-sim-cache": "hit" } });
     }
 
-    // No model configured, or today's model budget spent: either way the
-    // visitor gets "no-runtime", which the console answers with the closest
-    // prepared example. The two are recorded separately.
-    const noRuntime = () =>
+    // No model configured ("no-runtime"), or today's run budget spent
+    // ("over-budget"): either way the console offers the closest prepared
+    // example, with copy that says which. The two are recorded separately.
+    const unavailable = (error: "no-runtime" | "over-budget") =>
         wantsStream
-            ? sseResponse((send) => send({ type: "error", error: "no-runtime" }))
-            : NextResponse.json({ error: "no-runtime" }, { status: 503 });
+            ? sseResponse((send) => send({ type: "error", error }))
+            : NextResponse.json({ error }, { status: 503 });
     const apiKey = process.env.GEMINI_API_KEY;
     if (!apiKey) {
         console.error("[fde-sim] GEMINI_API_KEY is not set; live simulation is disabled");
         await defer(() => recordSim(getRedis(), { outcome: "no_runtime" }));
-        return noRuntime();
+        return unavailable("no-runtime");
     }
-    if ((await dailyBudget(getRedis(), "fde-sim", DAILY_MODEL_CALLS)) === "exhausted") {
-        console.error("[fde-sim] daily model budget spent; serving presets");
+    if ((await dailyBudget(getRedis(), "fde-sim", DAILY_RUNS)) === "exhausted") {
+        console.error("[fde-sim] daily run budget spent; serving presets");
         await defer(() => recordSim(getRedis(), { outcome: "over_budget" }));
-        return noRuntime();
+        return unavailable("over-budget");
     }
 
     const geminiUrl =

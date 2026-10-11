@@ -9,7 +9,7 @@ Hosted on Vercel.
 
 ## Run it
 
-Node 24 is required (`engine-strict` is on, so npm refuses other versions).
+Node 24.15 or later in the 24 line is required (`engine-strict` is on, so npm refuses other versions, and the test dependencies need 24.15).
 
 ```sh
 nvm use 24
@@ -56,7 +56,7 @@ model, so it only runs by hand.
 | `content/site.ts` | Name, links and handles used across the site |
 | `src/data/` | Home, résumé, lab and YouTube data |
 | `src/app/` | Routes, API routes, metadata, sitemap |
-| `src/components/` | UI, grouped by page (`home/`, `fde/`, `project/`) |
+| `src/components/` | UI, grouped by page (`home-desk/`, `fde/`, `project/`) |
 | `src/lib/` | Content loading, schemas, the AI prompts and their guards, rate limits |
 | `scripts/fetch-youtube.mjs` | Refreshes `src/data/youtube.json` (needs the owner's OAuth token) |
 | `tests/` | Playwright suites (visual, perf) and the eval golden set |

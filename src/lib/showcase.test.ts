@@ -6,13 +6,11 @@ import { WEBMCP_TOOLS } from "@/lib/webmcp-tools";
 import { buildTools } from "@/lib/webmcp";
 import { buildSiteData } from "@/lib/site-data";
 
-// Every image path the project pages render: each architecture diagram
-// (ProjectDetail) and each compare pair's before and after frames
-// (ComparisonSlider). A wrong path is a request for a 404 on a live page, and
+// Every image path the project pages render: each compare pair's before and
+// after frames (ComparisonSlider). A wrong path is a request for a 404 on a live page, and
 // nothing in the build complains about it.
 function renderedImages(): string[] {
     return Object.values(SHOWCASE_PROJECTS).flatMap((config) => [
-        ...(config.arch ? [config.arch] : []),
         ...(config.demo?.kind === "compare" ? config.demo.pairs.flatMap((p) => [p.before, p.after]) : []),
     ]);
 }

@@ -1,6 +1,6 @@
 ---
 title: "Unified Search"
-summary: "A compact whitepaper plus a runnable simulator that pits five autonomous-search strategies (random walk, Levy flight, gradient ascent, surge-cast, swarm stigmergy) against each other in a noisy, sparse plume environment, with an interactive in-browser Digital Lab."
+summary: "A compact whitepaper plus a runnable simulator that pits five autonomous-search strategies (random walk, Lévy flight, gradient ascent, surge-cast, swarm stigmergy) against each other in a noisy, sparse plume environment, with an interactive in-browser Digital Lab."
 description: "A whitepaper and runnable simulator that pits five autonomous-search strategies against each other in a noisy plume, with an in-browser Digital Lab."
 role: "Builder"
 period: "2026"
@@ -13,7 +13,7 @@ links:
   demo: "https://jayhemnani9910.github.io/unified-search/"
 challenge: "How an agent should search for a sparse target in a noisy field, a foraging animal, a robot sniffing for a gas leak, a swarm sweeping an area, depends heavily on the strategy and the environment, and the trade-offs are easy to argue about and hard to see. The goal was a small, controlled sandbox where several search strategies run on the same environment so their behavior can actually be compared rather than asserted."
 solution:
-  - "A simulator that implements five search strategies, random walk, Levy flight, gradient ascent, surge-cast (chemotaxis-style), and swarm stigmergy (pheromone trails), as interchangeable behaviors over one agent model."
+  - "A simulator that implements five search strategies, random walk, Lévy flight, gradient ascent, surge-cast (chemotaxis-style), and swarm stigmergy (pheromone trails), as interchangeable behaviors over one agent model."
   - "A plume environment with static or turbulent modes: in turbulent mode the signal comes from drifting Gaussian puffs, with configurable sensing noise, so strategies are tested under realistic sparsity and uncertainty."
   - "A leaderboard runner that scores strategies across repeated trials and plume conditions and writes out plots, plus a short whitepaper that frames the strategies and cites the literature."
   - "Two runtimes from the same idea: a Python CLI simulator (NumPy + plots) for repeatable experiments, and a JavaScript reimplementation that runs the Digital Lab live in the browser."
@@ -23,7 +23,7 @@ impact:
   - "Deliberately compact and deterministic enough to repeat, so a result can be reproduced rather than admired once."
 deepDive:
   context: "This is a small, self-contained exploration of autonomous search: the question of how a single agent or a swarm should move to find sparse targets when the only cue is a weak, noisy signal. It pairs a short whitepaper (framing strategies from random walks through bio-inspired chemotaxis and stigmergy) with a simulator that actually runs them, so the comparison is empirical. It is intentionally compact, the point is a clean sandbox and a repeatable leaderboard, not a large framework."
-  architecture: "At the center is an Environment that holds targets and a signal field, in static mode a fixed field, in turbulent mode a set of drifting Gaussian puffs, and returns a noisy signal reading at any position. Agents move over this environment according to a chosen Strategy (one of five), sensing the signal, and in the stigmergy case depositing and reading pheromone. A Config object parameterizes everything: Levy exponents, surge-cast thresholds, swarm and pheromone settings, plume mode, and sensing noise. A leaderboard runner sweeps strategies across trials and plume conditions and produces plots. The same model is implemented twice, in Python (NumPy, for CLI experiments and figures) and in JavaScript (for the in-browser Digital Lab), so the live site needs no backend."
+  architecture: "At the center is an Environment that holds targets and a signal field, in static mode a fixed field, in turbulent mode a set of drifting Gaussian puffs, and returns a noisy signal reading at any position. Agents move over this environment according to a chosen Strategy (one of five), sensing the signal, and in the stigmergy case depositing and reading pheromone. A Config object parameterizes everything: Lévy exponents, surge-cast thresholds, swarm and pheromone settings, plume mode, and sensing noise. A leaderboard runner sweeps strategies across trials and plume conditions and produces plots. The same model is implemented twice, in Python (NumPy, for CLI experiments and figures) and in JavaScript (for the in-browser Digital Lab), so the live site needs no backend."
   dataFlow:
     - step: "Configure the run"
       component: "Config"
@@ -44,9 +44,9 @@ deepDive:
     - name: "Environment (plume + targets)"
       purpose: "Holds targets and the signal field, advances turbulent Gaussian puffs, and returns a noisy signal reading and pheromone level at any position."
     - name: "Strategy (5 behaviors)"
-      purpose: "Random walk, Levy flight, gradient ascent, surge-cast, and swarm stigmergy as interchangeable movement rules over the agent model."
+      purpose: "Random walk, Lévy flight, gradient ascent, surge-cast, and swarm stigmergy as interchangeable movement rules over the agent model."
     - name: "Config"
-      purpose: "One place for every parameter: Levy exponents, surge thresholds, swarm and pheromone settings, plume mode, and sensing noise."
+      purpose: "One place for every parameter: Lévy exponents, surge thresholds, swarm and pheromone settings, plume mode, and sensing noise."
     - name: "Leaderboard runner"
       purpose: "Sweeps strategies across repeated trials and plume conditions and writes comparison plots."
     - name: "Digital Lab (JavaScript)"
@@ -97,7 +97,7 @@ deepDive:
   metrics:
     - value: "5 strategies"
       label: "head-to-head"
-      context: "random walk · Levy · gradient · surge-cast · stigmergy"
+      context: "random walk · Lévy · gradient · surge-cast · stigmergy"
     - value: "Turbulent plume"
       label: "environment"
       context: "drifting Gaussian puffs + sensing noise"
@@ -113,4 +113,4 @@ deepDive:
     - "Keeping it compact and deterministic was a feature, the value is a repeatable sandbox, not a sprawling framework."
 priority: 18
 ---
-A compact project pairing a short whitepaper with a runnable simulator for autonomous search. It implements five strategies, random walk, Levy flight, gradient ascent, surge-cast, and swarm stigmergy, as interchangeable behaviors over one agent model, and runs them in a plume environment that can be static or turbulent (drifting Gaussian puffs with sensing noise). A leaderboard runner scores the strategies across repeated trials and conditions and produces plots, and the same model is reimplemented in JavaScript so the Digital Lab runs live in the browser with no backend. It is deliberately small and deterministic enough to reproduce.
+A compact project pairing a short whitepaper with a runnable simulator for autonomous search. It implements five strategies, random walk, Lévy flight, gradient ascent, surge-cast, and swarm stigmergy, as interchangeable behaviors over one agent model, and runs them in a plume environment that can be static or turbulent (drifting Gaussian puffs with sensing noise). A leaderboard runner scores the strategies across repeated trials and conditions and produces plots, and the same model is reimplemented in JavaScript so the Digital Lab runs live in the browser with no backend. It is deliberately small and deterministic enough to reproduce.

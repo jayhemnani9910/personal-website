@@ -26,10 +26,6 @@ class ResizeObserverStub {
 }
 window.ResizeObserver ??= ResizeObserverStub as unknown as typeof ResizeObserver;
 
-// jsdom has no canvas. Returning null is what GlBackdrop already handles; the
-// stub only stops jsdom printing "Not implemented: getContext()" on every run.
-HTMLCanvasElement.prototype.getContext = (() => null) as typeof HTMLCanvasElement.prototype.getContext;
-
 // framer-motion's scroll/viewport hooks probe this.
 window.scrollTo = () => {};
 

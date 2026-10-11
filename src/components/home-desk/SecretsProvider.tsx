@@ -3,6 +3,7 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode, type RefObject } from "react";
 import { EGGS_KEY, countVisit, parseEggs, readEggs, useStored, writeStored } from "./deskStore";
 import { SECRETS, type SecretId } from "./secrets";
+import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
 
 /** What the playground lets the rest of the page do to it. */
 export type PlaygroundHandle = { storm: () => void; wave: () => void };
@@ -55,7 +56,9 @@ export function SecretsProvider({ children }: { children: ReactNode }) {
     countVisit();
   }, []);
 
-  // "hello" and the Konami code, typed anywhere but a text field.
+  // "hello" and the Konami code, typed anywhere but a text field. Still tiles
+  // neither storm nor wave, so the toasts don't promise it.
+  const reduced = usePrefersReducedMotion();
   useEffect(() => {
     let keys: string[] = [];
     let typed = "";
@@ -64,12 +67,12 @@ export function SecretsProvider({ children }: { children: ReactNode }) {
       if (target?.tagName === "INPUT" || target?.tagName === "TEXTAREA" || target?.isContentEditable) return;
       keys = [...keys, e.key].slice(-KONAMI.length);
       if (KONAMI.every((k, i) => keys[i] === k)) {
-        found("konami", "Cheat code accepted. Tile storm incoming.");
+        found("konami", reduced ? "Cheat code accepted." : "Cheat code accepted. Tile storm incoming.");
         playgroundRef.current?.storm();
       }
       typed = (typed + e.key).slice(-5).toLowerCase();
       if (typed === "hello") {
-        found("hello", "Hello yourself. The tiles say hi too.");
+        found("hello", reduced ? "Hello yourself." : "Hello yourself. The tiles say hi too.");
         playgroundRef.current?.wave();
       }
     };
@@ -78,7 +81,7 @@ export function SecretsProvider({ children }: { children: ReactNode }) {
       window.removeEventListener("keydown", onKey);
       clearTimeout(toastTimer.current);
     };
-  }, [found]);
+  }, [found, reduced]);
 
   // `eggs` is a fresh array every render; key the memo on its contents.
   const eggKey = eggs.join(",");

@@ -1,8 +1,8 @@
 import { describe, expect, it, vi, beforeEach, afterEach } from "vitest";
 
 /**
- * Exercises the rate limiter through the real POST handler, because the limiter
- * itself cannot be exported (Next validates the exports of a route file).
+ * Exercises the rate limiter through the real POST handler, as the route uses
+ * it. The limiter on its own is tested in ratelimit.test.ts.
  *
  * The bug: only the first request of a window sets the TTL. If that `expire`
  * failed, the key counted up forever with no expiry, so every later request saw
@@ -97,6 +97,8 @@ describe("fde-sim rate limiting", () => {
       }),
     });
     const res = await post();
-    expect(res.status).not.toBe(429);
+    // Past the limiter, so the request reaches the runtime check (no key here).
+    expect(res.status).toBe(503);
+    expect((await res.json()).error).toBe("no-runtime");
   });
 });

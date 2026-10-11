@@ -1,9 +1,10 @@
-import { readFileSync } from "node:fs";
+import { readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { WEBMCP_TOOLS, WEBMCP_TOOL_COUNT } from "./webmcp-tools";
 import { buildTools, registerWebMCPTools, type ModelContextTool, type SiteData } from "./webmcp";
 import { READER_KEY } from "./storage";
+import { FEATURED } from "@/data/home";
 
 const DATA: SiteData = {
     siteUrl: "https://example.test",
@@ -23,6 +24,7 @@ const DATA: SiteData = {
         ],
         experience: [],
         education: [],
+        publications: [{ title: "A paper", venue: "IEEE", year: "2021", link: "https://ieeexplore.ieee.org/document/1" }],
     },
     social: { github: "https://github.com/x" },
     experiments: [{ id: "e1", title: "Voice agent", description: "Talks back", tags: ["audio"] }],
@@ -81,6 +83,23 @@ describe("WebMCP tool registry", () => {
             expect(value(n)).toBe(WEBMCP_TOOLS.filter((t) => t.kind === kind.toLowerCase()).length);
         }
     });
+
+    // Other posts mention the integration in passing. Only their WebMCP lines are
+    // checked, so an unrelated "3 tools" elsewhere in a post is left alone. The
+    // theme tool went with the dark theme (ADR 0018), so no line may offer it.
+    it("keeps every other mention of WebMCP in step", () => {
+        const dir = join(process.cwd(), "content/blog");
+        const lines = readdirSync(dir)
+            .filter((f) => f.endsWith(".mdx"))
+            .flatMap((f) => readFileSync(join(dir, f), "utf8").split("\n"))
+            .concat(FEATURED.find((f) => f.id === "webmcp-portfolio")?.did ?? "")
+            .filter((l) => /webmcp/i.test(l));
+        expect(lines.length).toBeGreaterThan(0);
+        for (const line of lines) {
+            for (const m of line.matchAll(/\b(\d+) tools\b/g)) expect(Number(m[1])).toBe(WEBMCP_TOOL_COUNT);
+            expect(line).not.toMatch(/\btheme\b/i);
+        }
+    });
 });
 
 describe("WebMCP tools", () => {
@@ -102,6 +121,13 @@ describe("WebMCP tools", () => {
         expect(hit.url).toBe("https://example.test/projects/beta");
         const miss = (await tool("get_project").execute({ id: "nope" })) as { error: string };
         expect(miss.error).toMatch(/not found/);
+    });
+
+    it("get_resume returns the publications, alone and in the full resume", async () => {
+        const only = (await tool("get_resume").execute({ section: "publications" })) as { publications: { title: string }[] };
+        expect(only.publications.map((p) => p.title)).toEqual(["A paper"]);
+        const all = (await tool("get_resume").execute({})) as { publications: unknown[] };
+        expect(all.publications).toHaveLength(1);
     });
 
     it("get_resume returns the requested section", async () => {

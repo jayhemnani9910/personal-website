@@ -3,7 +3,7 @@ title: "Basic Banking System"
 summary: "A small PHP and MySQL banking app: a money-transfer form with balance checks and a paginated transaction history."
 role: "Developer"
 domain: "Student work"
-period: "Feb 2021"
+period: "2021"
 tags: ["web", "php"]
 tech: ["PHP", "MySQL", "HTML", "CSS"]
 challenge: "A minimal banking flow for learning: move money between accounts and keep a record of every transfer."
@@ -67,4 +67,4 @@ deepDive:
     - learning: "Why atomicity matters for money"
       description: "The transfer is three separate queries: an insert and two updates. If one fails partway, the balances and the history disagree. Wrapping them in one database transaction is what keeps them in step."
 ---
-A small banking app in procedural PHP and MySQL, built in February 2021 as a task for The Sparks Foundation. A form moves money between two accounts after checking the amount, both account numbers, and a 1,000 minimum balance, and a history page lists every transfer, newest first. There is no login: the project is about forms, server-side validation, and SQL writes.
+A small banking app in procedural PHP and MySQL. A form moves money between two accounts after checking the amount, both account numbers, and a 1,000 minimum balance, and a history page lists every transfer, newest first. There is no login: the project is about forms, server-side validation, and SQL writes.

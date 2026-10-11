@@ -1,7 +1,7 @@
 ---
 title: "Rubik's Cube Timer & Visualizer"
-summary: "A keyboard-first speedcubing app in vanilla JS: a Three.js 3D cube, WCA-style scrambles for 2x2 to 7x7, an inspection timer with +2/DNF, full session stats (Ao5/Ao12/Ao100), and a C++ solver compiled to WebAssembly, all offline-capable as a PWA."
-description: "A keyboard-first speedcubing PWA in vanilla JS: a Three.js 3D cube, WCA-style scrambles for 2x2 to 7x7, session stats, and a WebAssembly solver."
+summary: "A keyboard-first speedcubing app in vanilla JS: a Three.js 3D cube, WCA-style scrambles for 2x2 to 7x7, an inspection timer with +2/DNF, full session stats (Ao5/Ao12/Ao100), and a C++ scramble validator compiled to WebAssembly, all offline-capable as a PWA."
+description: "A keyboard-first speedcubing PWA in vanilla JS: a Three.js 3D cube, WCA-style scrambles for 2x2 to 7x7, session stats, and a WebAssembly scramble validator."
 role: "Builder"
 period: "2026"
 domain: "Web and tools"
@@ -22,7 +22,7 @@ impact:
   - "Covers the full speedcubing loop, scramble, inspect, solve, review, in one keyboard-first interface, with session management and a leaderboard view."
   - "Documented with generated architecture, module, and data-flow diagrams, a CI workflow, and the usual issue/PR templates and contribution guides."
 deepDive:
-  context: "Speedcubers want a timer that gets out of the way: hit a key to start inspection, release to solve, and immediately see how this solve moved the averages. Most browser timers cover the timing but skip the cube, the scrambles for larger puzzles, or offline use. This project is an attempt at the whole loop in plain JavaScript, with a 3D cube, correct multi-size scrambles, the standard rolling averages, and a WebAssembly solver, all installable and usable without a network."
+  context: "Speedcubers want a timer that gets out of the way: hit a key to start inspection, release to solve, and immediately see how this solve moved the averages. Most browser timers cover the timing but skip the cube, the scrambles for larger puzzles, or offline use. This project is an attempt at the whole loop in plain JavaScript, with a 3D cube, correct multi-size scrambles, the standard rolling averages, and a WebAssembly scramble validator, all installable and usable without a network."
   architecture: "The app is plain ES modules with no framework. A central state module plus a storage module (localStorage) hold the source of truth: settings, sessions, and solves. Input handling maps keyboard events to cube moves and timer controls. A Three.js layer renders the cube and animates face turns, with a separate dynamic-cube module tracking the logical cube state and a 2D preview. Scramble generation builds a move sequence per puzzle size and applies it to both the logical state and the Three.js cube. The timer module runs inspection and solve timing with penalties and writes finished solves to storage, which the stats module reads to compute best, mean, and rolling averages, rendered by a Chart.js charts module. A WebAssembly module (C++ compiled with Emscripten) is loaded lazily for scramble validation and hints. A PWA layer (service worker plus manifest) caches the app for offline use."
   dataFlow:
     - step: "Scramble"

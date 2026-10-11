@@ -1,5 +1,5 @@
 // Authored copy for the /youtube channel page. Lives here rather than in the
-// generated src/data/youtube.json so the daily refresh script can never
+// generated src/data/youtube.json so the refresh script can never
 // overwrite Jay's words.
 //
 // Keyed by channel ID, NOT by handle. A handle is a display name the owner can
@@ -14,8 +14,10 @@
 // src/lib/youtube.test.ts asserts every channel in the JSON has an entry here.
 
 // `showVideos: false` hides the long-form row: the AI channel's long uploads
-// are FC gaming clips from before it became an AI channel.
-export type ChannelCopy = { tagline: string; about: string; showVideos?: boolean };
+// are FC gaming clips from before it became an AI channel. `hideShorts` drops
+// single shorts by id for the same reason: a gaming clip posted to the AI
+// channel would sit under a tagline it does not fit.
+export type ChannelCopy = { tagline: string; about: string; showVideos?: boolean; hideShorts?: string[] };
 
 export const CHANNEL_COPY: Record<string, ChannelCopy> = {
   // JH-Analytics | 2.0 — @jhanalytics2.0
@@ -24,6 +26,7 @@ export const CHANNEL_COPY: Record<string, ChannelCopy> = {
     about:
       "A faceless shorts channel that takes what just happened in AI and pulls out the one mechanism that matters: the failure mode, the cost math, the benchmark that holds up. One claim per video, under 90 seconds, no hype. The current run is the Failure Report series: what broke, why, and the fix.",
     showVideos: false,
+    hideShorts: ["xECY__i8LTQ"], // FC 26 Rivals comeback
   },
   // JodnaniPlays — @jodnaniplays (formerly @jhanalytics)
   UCRAV0VDSxngptEo5SY4nKcw: {

@@ -4,7 +4,7 @@ import type { NextConfig } from "next";
 // this is safe to ship. Reports land in the function logs via /api/csp-report.
 // Promote to the enforcing "Content-Security-Policy" header once they are clean,
 // which will mean replacing 'unsafe-inline' with per-request nonces for the
-// inline theme-flash and JSON-LD scripts (needs middleware).
+// inline JSON-LD script (needs middleware).
 const cspReportOnly = [
   "default-src 'self'",
   "base-uri 'self'",
@@ -50,6 +50,16 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       { protocol: "https", hostname: "i.ytimg.com" },
     ],
+  },
+  // The section kickers read like paths ("/about · the particulars"), so the
+  // paths they name lead to the pages that print them.
+  async redirects() {
+    return [
+      { source: "/about", destination: "/resume", permanent: true },
+      { source: "/work", destination: "/projects", permanent: true },
+      { source: "/writing", destination: "/blog", permanent: true },
+      { source: "/channel", destination: "/youtube", permanent: true },
+    ];
   },
   async headers() {
     return [{ source: "/:path*", headers: securityHeaders }];

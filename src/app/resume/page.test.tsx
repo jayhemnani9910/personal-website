@@ -2,25 +2,27 @@ import { describe, expect, it } from "vitest";
 import { fireEvent, render, screen, within } from "@testing-library/react";
 import { RESUME, companyAnchor } from "@/data/resume";
 import AboutPage from "./page";
+// The footer's shell button reads the shell context, as under ClientLayout.
+import { TerminalProvider } from "@/context/TerminalContext";
 
 const roleCount = RESUME.experience.reduce((n, c) => n + c.roles.length, 0);
 
 describe("AboutPage", () => {
   it("renders exactly one h1", () => {
-    render(<AboutPage />);
+    render(<AboutPage />, { wrapper: TerminalProvider });
     const headings = screen.getAllByRole("heading", { level: 1 });
     expect(headings).toHaveLength(1);
     expect(headings[0].textContent).toBe("Came from design. Stayed for the mess.");
   });
 
   it("renders one Experience row per role in resume.ts", () => {
-    render(<AboutPage />);
+    render(<AboutPage />, { wrapper: TerminalProvider });
     const section = screen.getByRole("heading", { name: "Experience" }).closest("section")!;
     expect(section.querySelectorAll("ol > li")).toHaveLength(roleCount);
   });
 
   it("gives each company's first role row an anchor the home receipts can link to", () => {
-    const { container } = render(<AboutPage />);
+    const { container } = render(<AboutPage />, { wrapper: TerminalProvider });
     for (const company of RESUME.experience) {
       const row = container.querySelector(`#${companyAnchor(company.name)}`);
       expect(row?.textContent).toContain(company.name);
@@ -29,7 +31,7 @@ describe("AboutPage", () => {
   });
 
   it("switches the shown skill chips when a different stack pill is clicked", () => {
-    render(<AboutPage />);
+    render(<AboutPage />, { wrapper: TerminalProvider });
     const [firstCategory, secondCategory] = RESUME.skills;
     // Scoped to the Stack section: several skill names (e.g. "Python") also
     // appear as tech chips under Experience, which would otherwise make

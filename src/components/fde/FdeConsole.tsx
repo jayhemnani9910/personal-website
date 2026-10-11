@@ -63,6 +63,7 @@ function closestPreset(brief: string): Preset {
 
 const PARSE_ERROR = "The agent had trouble parsing. Try a more specific brief, or pick a preset.";
 const NO_RUNTIME_ERROR = "The live agent needs a runtime (this only works on the hosted preview). Try one of the preset scenarios above: they're fully prepared.";
+const OVER_BUDGET_ERROR = "The live agent has used today's runs; it has a daily budget. Try again tomorrow, or see the closest prepared example.";
 const UPSTREAM_ERROR = "The model provider is busy or did not answer in time. Your brief is fine: try again in a minute, or see the closest prepared example.";
 const BAD_INPUT_ERROR = `A brief has to be between 1 and ${MAX_BRIEF.toLocaleString('en-US')} characters. Trim it and run it again.`;
 const NETWORK_ERROR = "Lost the connection to the agent before the run finished. Check your connection and try again, or see the closest prepared example.";
@@ -71,6 +72,7 @@ const NETWORK_ERROR = "Lost the connection to the agent before the run finished.
 function errorMessage(code: unknown): string {
   switch (code) {
     case 'no-runtime': return NO_RUNTIME_ERROR;
+    case 'over-budget': return OVER_BUDGET_ERROR;
     case 'upstream': return UPSTREAM_ERROR;
     case 'bad-input': return BAD_INPUT_ERROR;
     default: return PARSE_ERROR;
@@ -87,6 +89,7 @@ export function FdeConsole() {
   const [error, setError] = useState<string | null>(null);
   const simRef = useRef<HTMLDivElement>(null);
   const briefRef = useRef<HTMLTextAreaElement>(null);
+  const errorRef = useRef<HTMLDivElement>(null);
   // Only the latest live run may write to the panel. Exit, a preset or a new
   // run aborts the fetch and bumps the id, and a stale run drops its events.
   const runRef = useRef(0);
@@ -101,8 +104,11 @@ export function FdeConsole() {
 
   useEffect(() => () => abortRef.current?.abort(), []);
 
+  // Focus follows the scroll: the control that opened the sim ends up under
+  // the sticky header or above the viewport, so the sim's selected tab takes it.
   const scrollToSim = () => {
     setTimeout(() => {
+      simRef.current?.querySelector<HTMLElement>('[role="tab"][aria-selected="true"]')?.focus({ preventScroll: true });
       simRef.current?.scrollIntoView({ behavior: scrollBehavior(), block: 'start' });
     }, 80);
   };
@@ -129,8 +135,14 @@ export function FdeConsole() {
     let started = false;
     // A run that stops after some sections leaves the rest of its tabs empty:
     // they must stop saying "still generating".
+    // By then the page has scrolled to the sim, past the error box, so bring
+    // the box back. 'start', not 'nearest': a run that fails on its first
+    // chunk lands here while the scroll to the sim is still under way, and a
+    // no-op scroll would not stop it.
     const stopStreaming = () => {
-      if (started) setSimState((prev) => ({ ...prev, streaming: false }));
+      if (!started) return;
+      setSimState((prev) => ({ ...prev, streaming: false }));
+      setTimeout(() => errorRef.current?.scrollIntoView({ behavior: scrollBehavior(), block: 'start' }), 80);
     };
 
     try {
@@ -222,8 +234,10 @@ export function FdeConsole() {
 
       // An error event, or a body that ended without `done`: either way the
       // run is over. A run that produced nothing leaves the panel as it was.
-      if (failed || !finished) {
-        setError(failed ?? NETWORK_ERROR);
+      // `done` with no section at all is a failure too, or the click would
+      // end in silence.
+      if (failed || !finished || !started) {
+        setError(failed ?? (finished ? PARSE_ERROR : NETWORK_ERROR));
         stopStreaming();
       }
     } catch {
@@ -306,9 +320,13 @@ export function FdeConsole() {
               ))}
             </div>
             <button
-              className={`${BTN_PRIMARY} cursor-pointer whitespace-nowrap font-mono text-[13px] disabled:translate-0 disabled:cursor-not-allowed disabled:bg-tr-surface-2 disabled:text-tr-text-faint disabled:shadow-none`}
+              className={`${BTN_PRIMARY} cursor-pointer whitespace-nowrap font-mono text-[13px] disabled:translate-0 disabled:cursor-not-allowed disabled:bg-tr-surface-2 disabled:text-tr-text-faint disabled:shadow-none aria-disabled:cursor-wait`}
               onClick={startCustom}
-              disabled={!briefInput.trim() || loading}
+              // Native disabled only for an empty brief. While a run is going it
+              // is aria-disabled, so the button pressed keeps keyboard focus;
+              // startCustom ignores presses while loading.
+              disabled={!briefInput.trim()}
+              aria-disabled={loading}
               type="button"
             >
               {loading ? 'scoping…' : 'run sim ↵'}
@@ -317,6 +335,7 @@ export function FdeConsole() {
 
           {/* Phase strip preview */}
           <div
+            role="group"
             className="mt-5 flex flex-wrap items-center gap-1.5 font-mono text-[12px] text-tr-text-mute"
             aria-label="Simulation phases overview"
           >
@@ -352,6 +371,7 @@ export function FdeConsole() {
 
           {error && (
             <div
+              ref={errorRef}
               className="mt-4 rounded-r-[var(--tr-r-md)] border-l-[3px] border-tr-accent bg-tr-accent-soft px-4 py-3 font-mono text-[13px] leading-[var(--tr-lh-body)] text-tr-text"
               role="alert"
             >

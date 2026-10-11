@@ -59,7 +59,7 @@ export default function FDEPage() {
           </div>
 
           <h1 className={`${H1} max-w-[16ch]`}>
-            Stop reading. <span className={HIGHLIGHT}>Brief me</span>.
+            Stop reading. <span className={HIGHLIGHT}>Brief me.</span>
           </h1>
 
           <p className={`${LEDE} mt-6 max-w-[60ch]`}>
@@ -80,7 +80,7 @@ export default function FDEPage() {
             <div className="mb-10 max-w-[760px]">
               <p className={`${LABEL} mb-3`}>Receipts</p>
               <h2 className={H2}>
-                The simulation above isn&apos;t <span className={HIGHLIGHT}>vibes</span>. Here&apos;s the
+                The simulation above isn&apos;t <span className={HIGHLIGHT}>vibes.</span> Here&apos;s the
                 engineering substrate it runs on.
               </h2>
               <p className={`${LEDE} mt-4 max-w-[48ch]`}>
@@ -91,7 +91,7 @@ export default function FDEPage() {
 
             <div className="grid gap-5 sm:grid-cols-2">
               {PROOFS.map((p) => (
-                <div key={p.id} className={`${CARD} flex flex-col gap-3 p-6 shadow-[var(--tr-shadow-card)]`}>
+                <div key={p.id} className={`${CARD} flex flex-col gap-3 p-6`}>
                   <span className="font-hand text-[30px] leading-none text-tr-accent-hand">{p.id}</span>
                   <span className={LABEL}>
                     {p.cat} · {p.project}
@@ -117,7 +117,7 @@ export default function FDEPage() {
                         href={l.href}
                         {...(l.href.startsWith("http") ? { target: "_blank", rel: "noreferrer" } : {})}
                       >
-                        ↗ {l.label}
+                        <span aria-hidden="true">{l.href.startsWith("http") ? "↗" : "→"}</span> {l.label}
                       </a>
                     ))}
                   </div>
@@ -133,7 +133,7 @@ export default function FDEPage() {
             <div className="mb-10 max-w-[760px]">
               <p className={`${LABEL} mb-3`}>Candid</p>
               <h2 className={H2}>
-                Notes on <span className={HIGHLIGHT}>fit</span>.
+                Notes on <span className={HIGHLIGHT}>fit.</span>
               </h2>
               <p className={`${LEDE} mt-4 max-w-[48ch]`}>
                 The version where I&apos;m honest about what I can claim, and what I can&apos;t. Yet.
@@ -152,7 +152,7 @@ export default function FDEPage() {
                   with finance and operations at Elite Hotel Group.
                 </p>
               </div>
-              <div className={`${CARD} overflow-hidden p-6 shadow-[inset_0_6px_0_var(--tr-accent)]`}>
+              <div className={`${CARD} p-6`}>
                 <h3 className={`${LABEL} mb-4`}>What I haven&apos;t yet</h3>
                 <p className="text-[20px] font-semibold leading-[var(--tr-lh-h2)]">
                   The full FDE customer lifecycle in an <span className={HIGHLIGHT}>external</span>{" "}
@@ -182,10 +182,10 @@ function FdeContact() {
   const links = [
     { lbl: 'email',    val: social.email,            href: `mailto:${social.email}`, primary: true },
     { lbl: 'essay',    val: 'what FDE means in 2026', href: '/blog/forward-deployed-engineer', internal: true },
-    { lbl: 'resume',   val: 'the one-pager',          href: '/resume', internal: true },
+    { lbl: 'resume',   val: 'the about page',         href: '/resume', internal: true },
     { lbl: 'github',   val: handles.github,           href: social.github },
     { lbl: 'linkedin', val: handles.linkedin,         href: social.linkedin },
-    { lbl: 'twitter',  val: handles.twitter,          href: social.twitter },
+    { lbl: 'x',        val: handles.twitter,          href: social.twitter },
   ];
 
   return (
@@ -193,7 +193,7 @@ function FdeContact() {
       <div className={SECTION}>
         <div className={`grid items-end gap-[clamp(2rem,5vw,5rem)] ${TWO_COL}`}>
           <h2 className={H2}>
-            If the simulation made you think, <span className={HIGHLIGHT}>say so</span>.
+            If the simulation made you think, <span className={HIGHLIGHT}>say so.</span>
           </h2>
           <p className={`${LEDE} max-w-[46ch]`}>
             Fastest path: email. I read every one. If you ran the sim on a real problem and it sparked an idea, send
@@ -207,17 +207,27 @@ function FdeContact() {
               <>
                 <span className={LABEL}>{l.lbl}</span>
                 <span
-                  className={`min-w-0 [overflow-wrap:anywhere] tracking-[-0.02em] transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] group-hover:text-tr-accent-ink ${
-                    l.primary ? "text-[26px] font-extrabold" : "text-[20px] font-semibold"
+                  className={`min-w-0 tracking-[-0.02em] transition-colors duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] group-hover:text-tr-accent-ink ${
+                    // break-word, not anywhere, on the email: it takes the <wbr>
+                    // before the @ first and splits the word only if it must.
+                    l.primary ? "text-[length:clamp(18px,5vw,26px)] font-extrabold [overflow-wrap:break-word]" : "text-[20px] font-semibold [overflow-wrap:anywhere]"
                   }`}
                 >
-                  {l.val}
+                  {/* On a phone the address breaks at the @, not mid-word. */}
+                  {l.primary ? (
+                    <>
+                      {l.val.split("@")[0]}
+                      <wbr />@{l.val.split("@")[1]}
+                    </>
+                  ) : (
+                    l.val
+                  )}
                 </span>
                 <span
                   aria-hidden="true"
                   className="font-mono text-tr-accent-ink transition-transform duration-[var(--tr-dur-base)] ease-[var(--tr-ease)] group-hover:-translate-y-1 group-hover:translate-x-1"
                 >
-                  ↗
+                  {l.internal ? "→" : "↗"}
                 </span>
               </>
             );

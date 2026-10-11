@@ -9,7 +9,7 @@ tags: ["computer-vision", "research", "detection", "segmentation", "vision-langu
 tech: ["Python", "PyTorch", "RF-DETR", "SAM2", "SigLIP"]
 github: "https://github.com/jayhemnani9910/soccer-vision-research"
 links:
-  demo: "https://jayhemnani9910.github.io/soccer-vision-research/"
+  site: "https://jayhemnani9910.github.io/soccer-vision-research/"
 challenge: "Combining several vision models for soccer analysis usually means hard-wiring one fixed pipeline. The goal here was a modular framework where detection, segmentation, identification, and classification models are swappable and configurable, so model combinations can be A/B tested without rewriting code."
 solution:
   - "An orchestration layer (ModelPipeline) that runs RF-DETR detection, SAM2 segmentation and tracking, SigLIP zero-shot identification, and ResNet jersey classification."
@@ -153,4 +153,4 @@ deepDive:
     - "Train a roster-specific jersey/identity head and compare it head-to-head against the SigLIP zero-shot baseline."
     - "Promote the landing page to a hosted demo that runs an actual clip through the pipeline and shows the fused output."
 ---
-A modular research framework that orchestrates four pretrained vision models for soccer analysis: RF-DETR detection, SAM2 segmentation with temporal tracking, SigLIP zero-shot identification, and ResNet jersey classification. A ModelPipeline runs them sequentially, in parallel, or adaptively; a ResultFusion layer reconciles their outputs under seven selectable strategies; and a schema-validated YAML config system with a model registry makes every model swappable by configuration. It is a composition and experimentation harness, built so model combinations can be A/B tested without rewriting code.
+Each model has one job: RF-DETR detection, SAM2 segmentation with temporal tracking, SigLIP zero-shot identification, and ResNet jersey classification. A ModelPipeline runs them sequentially, in parallel, or adaptively; a ResultFusion layer reconciles their outputs under seven selectable strategies; and a schema-validated YAML config system with a model registry makes every model swappable by configuration. It is a composition and experimentation harness, built so model combinations can be A/B tested without rewriting code.

@@ -20,7 +20,7 @@ export function SkipLink() {
     if (!main) return;
     main.tabIndex = -1;
     main.focus({ preventScroll: true });
-    scrollToTarget(main, lenis, -80);
+    scrollToTarget(main, lenis);
   };
 
   return (

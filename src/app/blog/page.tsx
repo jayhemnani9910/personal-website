@@ -8,7 +8,7 @@ import { CARD, CARD_HOVER, CHIP, DOT, DOTS, H1, H2, HAND, HIGHLIGHT, KICKER, LAB
 
 export const metadata: Metadata = pageMetadata({
   title: "Writing",
-  description: "Essays and long-form project writeups by Jay Hemnani.",
+  description: "Essays by Jay Hemnani on forward-deployed engineering: what the role is, how the interviews run, and where the work actually happens.",
   path: "/blog",
 });
 
@@ -43,7 +43,7 @@ export default async function WritingPage() {
 
         {/* ========== ESSAYS ========== */}
         <section aria-label="Essays" className={`${WRAP} ${SHELL} pb-[60px]`}>
-          <ol className="grid grid-cols-[repeat(auto-fill,minmax(min(100%,330px),1fr))] gap-5">
+          <ol className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,330px),1fr))] gap-5">
             {posts.map((post, i) => (
               <li key={post.slug} className="flex">
                 <Link href={`/blog/${post.slug}`} className={`${CARD} ${CARD_HOVER} flex w-full flex-col gap-3.5 p-6 hover:text-tr-text`}>
@@ -92,7 +92,7 @@ export default async function WritingPage() {
               <Link href="/projects" className={SMALL_CARD}>
                 <span className={LABEL}>All {projects.length}</span>
                 <span className="text-[20px] font-bold leading-[var(--tr-lh-h2)] tracking-[-0.02em]">The index →</span>
-                <span className="line-clamp-2 text-[14px] leading-normal text-tr-text-mute">
+                <span className="line-clamp-3 text-[14px] leading-normal text-tr-text-mute">
                   Filter by stack or domain. Student work is labelled, not hidden.
                 </span>
               </Link>

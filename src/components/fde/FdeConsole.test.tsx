@@ -403,3 +403,60 @@ describe("FdeConsole runs", () => {
     expect(screen.getByRole("tab", { name: /receipts/i }).getAttribute("aria-selected")).toBe("true");
   });
 });
+
+// A button that disables itself under keyboard focus drops focus to <body>.
+// These are the places that used to, each fixed once already.
+describe("FdeConsole keeps keyboard focus", () => {
+  it("keeps focus on run sim while the run is pending", async () => {
+    vi.stubGlobal("fetch", vi.fn(() => new Promise(() => {})));
+    render(<FdeConsole />);
+    fireEvent.change(screen.getByLabelText(/enter your problem brief/i), { target: { value: "a support team drowning in tickets" } });
+    const run = screen.getByRole("button", { name: /run sim/i });
+    run.focus();
+    fireEvent.click(run);
+    await waitFor(() => expect(run.getAttribute("aria-disabled")).toBe("true"));
+    expect(document.activeElement).toBe(run);
+  });
+
+  // The page scrolls to the sim, leaving the preset button under the sticky
+  // header, and each phase has its own height, so continue would land offscreen.
+  it("moves focus into the sim when a preset starts, and onto each new phase's tab", async () => {
+    render(<FdeConsole />);
+    const preset = screen.getByRole("button", { name: /customer support deluge/i });
+    preset.focus();
+    fireEvent.click(preset);
+    await waitFor(() => expect(document.activeElement).toBe(screen.getAllByRole("tab")[0]));
+    const next = screen.getByRole("button", { name: /continue/i });
+    next.focus();
+    await act(async () => {
+      fireEvent.click(next);
+      await new Promise((r) => requestAnimationFrame(() => r(null)));
+    });
+    expect(document.activeElement).toBe(screen.getAllByRole("tab")[1]);
+  });
+
+  it("hands focus to the tab when continue or previous runs out at either end", async () => {
+    render(<FdeConsole />);
+    fireEvent.click(screen.getByRole("button", { name: /customer support deluge/i }));
+    const tabs = await screen.findAllByRole("tab");
+    for (let i = 0; i < tabs.length - 1; i++) {
+      const next = screen.getByRole("button", { name: /continue|see the receipts/i });
+      next.focus();
+      await act(async () => {
+        fireEvent.click(next);
+        await new Promise((r) => requestAnimationFrame(() => r(null)));
+      });
+    }
+    expect(document.activeElement).toBe(screen.getAllByRole("tab").at(-1));
+
+    for (let i = 0; i < tabs.length - 1; i++) {
+      const prev = screen.getByRole("button", { name: /previous/i });
+      prev.focus();
+      await act(async () => {
+        fireEvent.click(prev);
+        await new Promise((r) => requestAnimationFrame(() => r(null)));
+      });
+    }
+    expect(document.activeElement).toBe(screen.getAllByRole("tab")[0]);
+  });
+});

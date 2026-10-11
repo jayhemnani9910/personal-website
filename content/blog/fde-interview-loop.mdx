@@ -2,6 +2,7 @@
 title: "The Forward Deployed Engineer Interview Loop, Round by Round"
 date: "2026-05-31"
 summary: "A second look at the FDE role, this time at the hiring gauntlet: the six rounds a 2026 FDE loop usually runs, what each one is actually grading, and the two rounds that screen out strong software engineers."
+description: "The six rounds of a 2026 forward deployed engineer interview loop, what each one grades, and the two that screen out strong software engineers."
 excerpt: "The first post explained the FDE role and left the interview loop closed. This one opens it, round by round, including the two rounds a pure SWE loop does not have."
 tags: ["forward-deployed-engineer", "ai", "careers", "interviews", "hiring"]
 category: "thoughts"
@@ -18,7 +19,7 @@ A caveat up front, in the same spirit as the last one: I am targeting this loop,
 
 A modern FDE loop runs five to six stages. The thing that separates it from a standard software-engineering loop is not an extra coding round. It is two rounds a pure SWE loop usually does not have: a problem-decomposition round where you write no code, and a customer-simulation round where you are graded on what you say when a deployment is on fire.
 
-<Diagram>
+<Diagram label="The six rounds of an FDE interview loop">
 <svg viewBox="0 0 760 470" width="100%" xmlns="http://www.w3.org/2000/svg" aria-label="The six rounds of a 2026 FDE interview loop" role="img">
   <rect x="15" y="12" width="730" height="62" rx="10" fill="#7cc3e8" fillOpacity="0.5" stroke="#1d1a16" strokeWidth="1.5"/>
   <rect x="30" y="30" width="26" height="26" rx="7" fill="#7cc3e8" stroke="#1d1a16" strokeWidth="1.5"/>
@@ -60,7 +61,8 @@ A modern FDE loop runs five to six stages. The thing that separates it from a st
   <rect x="30" y="400" width="26" height="26" rx="7" fill="#e8553a" stroke="#1d1a16" strokeWidth="1.5"/>
   <text x="43" y="418" textAnchor="middle" fontSize="13" fontWeight="700" fill="#1d1a16">6</text>
   <text x="70" y="409" fontSize="13.5" fontWeight="700" fill="currentColor">Client simulation</text>
-  <text x="70" y="427" fontSize="11.5" fill="currentColor" opacity="0.7">Composure · ownership · exec translation</text>
+  <text x="70" y="427" fontSize="11.5" fill="currentColor" opacity="0.85">Composure · ownership · exec translation</text>
+  <text x="423" y="418" textAnchor="end" fontSize="11" fontWeight="600" fill="#1d1a16">45-60 min</text>
 </svg>
 </Diagram>
 
@@ -140,6 +142,6 @@ There is also a framing fix that the guides keep returning to. STAR answers anch
 
 ## Where I sit in this loop
 
-To stay honest about it, the way [the first post](/blog/forward-deployed-engineer) did. The rounds I would be strongest in are the technical screen, the design round, and the take-home: RAG, agents, MCP, and eval harnesses are the things I have actually built, between the [MCP SDK PR](https://github.com/modelcontextprotocol/python-sdk/pull/1826), the [WebMCP work on this site](/projects/webmcp-portfolio), the [10-day CAG research system](/projects/revolu-idea), and a recent validation study whose whole spine was an eval that reported my own hypothesis losing. Those are round-4 and round-5 muscles.
+To stay honest about it, the way [the first post](/blog/forward-deployed-engineer) did. The rounds I would be strongest in are the technical screen, the design round, and the take-home: RAG, agents, MCP, and eval harnesses are the things I have actually built, between the [MCP SDK PR](https://github.com/modelcontextprotocol/python-sdk/pull/1826), the [WebMCP work on this site](/projects/webmcp-portfolio), the [10-day CAG research system](/projects/revolu-idea), and a recent validation study whose whole spine was an eval that reported a mixed, partly negative result. Those are round-4 and round-5 muscles.
 
 The round I would have to work hardest at is the same gap I [named last time](/blog/forward-deployed-engineer). The client-simulation round rewards real external-deployment stories, and mine are still internal or portfolio-scale. The decomposition round sits in between: I can scope a vague problem, but I have done it for internal stakeholders, not across the table from a skeptical external customer with their own politics. So the prep that moves the needle for me is not another pass through algorithm drills. It is one real external deployment to draw round-3 and round-6 answers from, which is exactly the thing I said I was going to go build.

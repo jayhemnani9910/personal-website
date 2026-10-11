@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
 import { pageMetadata } from "@/lib/page-metadata";
 import Link from "next/link";
-import { CUBE_ACHIEVEMENT, RESUME, companyAnchor, parsePublishedVsReproduced } from "@/data/resume";
+import { CUBE_ACHIEVEMENT, RESUME, companyAnchor } from "@/data/resume";
 import { MERGED_PRS, MERGED_PRS_SEARCH, MERGED_PRS_SEARCH_LABEL } from "@/data/home";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
-import { BTN_PRIMARY, CARD, CHIP, H1, H2, HAND, HIGHLIGHT, KICKER, LABEL, LEDE, PILL, SHELL, WRAP } from "@/components/desk";
+import { CARD, CHIP, H1, H2, HAND, HIGHLIGHT, KICKER, LABEL, LEDE, PILL, PILL_ACTIVE, SHELL, WRAP } from "@/components/desk";
 import { SkillGroups } from "./SkillGroups";
 
 export const metadata: Metadata = pageMetadata({
@@ -17,7 +17,7 @@ export const metadata: Metadata = pageMetadata({
 });
 
 const RESUME_PDFS = [
-  { label: "Forward-Deployed", file: "/resume/jay-hemnani-fde.pdf" },
+  { label: "Forward Deployed", file: "/resume/jay-hemnani-fde.pdf" },
   { label: "Data Engineer", file: "/resume/jay-hemnani-de.pdf" },
   { label: "ML Engineer", file: "/resume/jay-hemnani-ml.pdf" },
   { label: "Backend / SWE", file: "/resume/jay-hemnani-swe.pdf" },
@@ -33,14 +33,18 @@ const PR_LIST_LINKS = "[&_a]:inline-flex [&_a]:min-h-6 [&_a]:items-center [&_a]:
 const PDF_PILL = `${PILL} desk-press shadow-[2px_2px_0_var(--tr-text)] [--desk-press:2px]`;
 
 // A company's first role row carries its anchor (e.g. /resume#amnex), which
-// the home page's receipts link to.
+// the shell's receipts link to.
 const roles = RESUME.experience.flatMap((company) =>
   company.roles.map((role, i) => ({ company, role, anchor: i === 0 ? companyAnchor(company.name) : undefined }))
 );
 
 // One row per repo, not per PR. Home prefetches this page, and a row per PR
 // repeated its class strings into the RSC payload until it broke the budget.
-const prsByRepo = Map.groupBy(MERGED_PRS, (pr) => pr.repo);
+// Within a repo, PRs read in number order however MERGED_PRS was appended to.
+const prNumber = (n: string) => Number(n.replace(/\D/g, ""));
+const prsByRepo = new Map(
+  [...Map.groupBy(MERGED_PRS, (pr) => pr.repo)].map(([repo, prs]) => [repo, prs.toSorted((a, b) => prNumber(a.number) - prNumber(b.number))]),
+);
 
 export default function AboutPage() {
   return (
@@ -68,7 +72,7 @@ export default function AboutPage() {
           <ul className="mt-3 flex flex-wrap items-center gap-3">
             {RESUME_PDFS.map((r, i) => (
               <li key={r.file}>
-                <a href={r.file} target="_blank" rel="noreferrer" className={i === 0 ? BTN_PRIMARY : PDF_PILL}>
+                <a href={r.file} target="_blank" rel="noreferrer" className={i === 0 ? `${PDF_PILL} ${PILL_ACTIVE}` : PDF_PILL}>
                   {r.label} <span aria-hidden="true">↗</span>
                   <span className="sr-only"> résumé (PDF, opens in a new tab)</span>
                 </a>
@@ -87,7 +91,7 @@ export default function AboutPage() {
               <li
                 key={`${company.name}-${role.title}`}
                 id={anchor}
-                className="grid scroll-mt-16 gap-1 border-t-[1.5px] border-tr-hairline py-[18px] sm:grid-cols-[minmax(110px,180px)_minmax(0,1fr)] sm:gap-5"
+                className="grid gap-1 border-t-[1.5px] border-tr-hairline py-[18px] sm:grid-cols-[minmax(110px,180px)_minmax(0,1fr)] sm:gap-5"
               >
                 <div className="pt-1 font-mono text-[13px] text-tr-text-faint">
                   <p>{role.period?.label}</p>
@@ -148,29 +152,25 @@ export default function AboutPage() {
           </p>
           <ol className="grid gap-5 md:grid-cols-2">
             {RESUME.publications.map((pub) => {
-              const gap = parsePublishedVsReproduced(pub.description);
               return (
                 <li key={pub.title} className={`${CARD} flex min-w-0 flex-col gap-3 p-6`}>
                   <p className="font-mono text-[12px] text-tr-text-faint">{pub.year}</p>
                   <h3 className="text-[21px] font-bold leading-[var(--tr-lh-h2)] tracking-[-0.02em]">{pub.title}</h3>
                   <p className="text-[14px] leading-normal text-tr-text-faint">{pub.venue}</p>
                   <p className="text-[15px] leading-[var(--tr-lh-body)] text-tr-text-mute">{pub.description}</p>
-                  {gap ? (
-                    <p className="self-start rounded-[var(--tr-r-sm)] bg-tr-butter px-2.5 py-1 font-mono text-[12px] text-tr-text-mute">
-                      Published {gap.published}% · reproduced {gap.reproduced}%.
-                    </p>
-                  ) : null}
                   {/* gap-x-5 plus py-1 on each link keeps the pair of targets
                       clear of the 24px minimum a tap target needs. */}
                   <p className="mt-auto flex flex-wrap gap-x-5 pt-1 font-mono text-[13px] text-tr-text">
                     {pub.link ? (
                       <a href={pub.link} target="_blank" rel="noreferrer" className={OUT_LINK}>
                         ieeexplore <span aria-hidden="true">↗</span>
+                        <span className="sr-only">: {pub.title} (opens in a new tab)</span>
                       </a>
                     ) : null}
                     {pub.github ? (
                       <a href={pub.github} target="_blank" rel="noreferrer" className={OUT_LINK}>
-                        notebook <span aria-hidden="true">↗</span>
+                        code <span aria-hidden="true">↗</span>
+                        <span className="sr-only"> for {pub.title} (opens in a new tab)</span>
                       </a>
                     ) : null}
                   </p>
@@ -216,6 +216,8 @@ export default function AboutPage() {
               <p className="mt-2 text-[15px] leading-[var(--tr-lh-body)] text-tr-text-mute">
                 {MERGED_PRS.length} merged pull requests to repositories not my own, by repo and
                 number so the diff can be read directly.
+                {/* Said once, not on all 35 links: this page is prefetched. */}
+                <span className="sr-only"> Each number opens the pull request on GitHub in a new tab.</span>
               </p>
               <ul className={`${PR_LIST_LINKS} mt-4 flex flex-col gap-1 font-mono text-[12px] text-tr-text-faint`}>
                 {[...prsByRepo].map(([repo, prs]) => (
@@ -234,7 +236,8 @@ export default function AboutPage() {
                         <span key={pr.href} className="flex gap-x-3">
                           {link}
                           <a href={pr.landed} target="_blank" rel="noreferrer">
-                            (closed, landed as a commit <span aria-hidden="true">↗</span>)
+                            (closed, landed as a commit<span aria-hidden="true"> ↗</span>)
+                            <span className="sr-only"> for {pr.repo} {pr.number} (opens in a new tab)</span>
                           </a>
                         </span>
                       ) : (
