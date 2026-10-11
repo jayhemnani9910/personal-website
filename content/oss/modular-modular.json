@@ -1,0 +1,30 @@
+{
+  "repo": "modular/modular",
+  "about": "The home of Mojo, a new programming language for fast code, and Modular's tools for running AI models.",
+  "prs": [
+    {
+      "number": 7235,
+      "merged": "2026-10-08",
+      "title": "Splitting text into lines no longer drops a line",
+      "broken": "When text mixed old-style Mac line breaks with normal ones, Mojo's split-into-lines function silently lost a line. \"a, b, c\" came back as \"a, c\".",
+      "changed": "I fixed a check meant to skip only empty pieces, so it no longer skips real lines.",
+      "matters": "Programs reading text from different systems get every line, the same as Python gives."
+    },
+    {
+      "number": 6967,
+      "merged": "2026-09-17",
+      "title": "Tests in a loop now check every round, not just the first",
+      "broken": "Mojo has a test helper that checks code crashes when it should. In a loop it re-ran the first round each time, so tests could pass having checked one case.",
+      "changed": "I made it count how many times each check has been reached, so every round runs its own case.",
+      "matters": "A test that reports a pass has now really checked every case it claims to."
+    },
+    {
+      "number": 6954,
+      "merged": "2026-09-02",
+      "title": "A stuck test now fails instead of hanging forever",
+      "broken": "Mojo's helper for testing deliberate crashes waited forever if the code froze instead of crashing. The whole test run stalled with no hint of which test was stuck.",
+      "changed": "I added a time limit, 60 seconds by default, after which it stops the stuck code and fails that test with its output.",
+      "matters": "Developers get a clear failure they can fix, instead of a frozen test run killed with no explanation."
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "repo": "mvschwarz/openrig",
+  "about": "A tool for running teams of AI coding agents that share a chat room, roles and assigned work.",
+  "prs": [
+    {
+      "number": 1102,
+      "merged": "2026-10-11",
+      "title": "Workflow commands now show what they just did",
+      "broken": "After starting a workflow or handing work to the next agent, the summary said \"(no instance id)\", left out the new task, and told you to wait when work was ready.",
+      "changed": "I made the summary read the names the background service actually sends back.",
+      "matters": "People and agents following those hints are pointed at the right next task instead of waiting."
+    },
+    {
+      "number": 1057,
+      "merged": "2026-10-11",
+      "title": "Chat history now shows the latest messages",
+      "broken": "Once a team chat room held more messages than the display limit, its history showed the oldest ones. New messages never appeared, for people or for agents.",
+      "changed": "Unless you ask to start from a given message, history now returns the newest messages, still listed oldest first.",
+      "matters": "Agents and people catching up on a chat see what was just said, not what was said first."
+    }
+  ]
+}

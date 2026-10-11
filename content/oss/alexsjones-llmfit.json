@@ -1,0 +1,57 @@
+{
+  "repo": "AlexsJones/llmfit",
+  "about": "A command-line tool that tells you which AI models will run on your computer's hardware.",
+  "prs": [
+    {
+      "number": 1125,
+      "merged": "2026-10-10",
+      "title": "Upgrade advice now matches the tool's own ratings",
+      "broken": "The planning feature graded models with an older, looser rule. It called a model \"Perfect\" where the main check said borderline, and its \"add this much memory\" advice fell short.",
+      "changed": "I made the planner use the same grading rules as the main check, and sized each upgrade suggestion to reach the rating it promises.",
+      "matters": "Someone deciding whether to buy a graphics card with more memory gets advice that holds up.",
+      "top": true
+    },
+    {
+      "number": 1126,
+      "merged": "2026-10-09",
+      "title": "The suggested conversation length now fits in memory",
+      "broken": "The tool reports how much text a model can hold in mind at once. It sized that to fill all of memory, which its own check calls too tight.",
+      "changed": "I capped that figure at the same 98% limit the rest of the tool uses.",
+      "matters": "Following the tool's advice no longer pushes a model past the point where it fits."
+    },
+    {
+      "number": 1121,
+      "merged": "2026-10-09",
+      "title": "The download tip now names the version that fits",
+      "broken": "Some huge models keep idle parts in regular memory. For these, the tool picked one compressed version but told you to download a bigger one that didn't fit.",
+      "changed": "The tool now reports the version it actually picked, and the memory that version really needs.",
+      "matters": "People download a model their machine can run, not one that is too big for it.",
+      "top": true
+    },
+    {
+      "number": 1120,
+      "merged": "2026-10-08",
+      "title": "It picks a model size that actually fits your card",
+      "broken": "The tool picked the largest compressed version of a model that filled 98-100% of memory, then rated that same pick \"Too Tight\", even when a smaller version fit fine.",
+      "changed": "It now picks only from versions under the 98% limit, so its pick and its rating agree.",
+      "matters": "On a 24 GB graphics card, 124 models went from \"Too Tight\" to a version that fits.",
+      "top": true
+    },
+    {
+      "number": 1113,
+      "merged": "2026-10-08",
+      "title": "Search results can now be read by other programs",
+      "broken": "Asking the search command for machine-readable output was ignored. It printed a table for humans instead, so scripts reading its output broke.",
+      "changed": "With that option, search now returns a proper list of matching models, or an empty list when nothing matches.",
+      "matters": "Scripts and AI agents can use search the same way they already use the tool's other commands."
+    },
+    {
+      "number": 1114,
+      "merged": "2026-10-07",
+      "title": "Typos in filters are now caught instead of ignored",
+      "broken": "Mistyping a filter, like \"embeddings\" instead of \"embedding\", silently switched the filter off. You got unrelated models back with no warning.",
+      "changed": "The tool now stops and lists the valid choices when it doesn't recognize a filter value.",
+      "matters": "A one-letter typo no longer gives you misleading recommendations."
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "repo": "pocket-id/pocket-id",
+  "about": "A sign-in service you run yourself, so people log in to your apps with passkeys instead of passwords.",
+  "prs": [
+    {
+      "number": 1829,
+      "merged": "2026-10-10",
+      "title": "Long ID numbers now arrive with every digit intact",
+      "broken": "Admins can attach extra details to users, like a Discord ID. Long numbers came out with the last digits wrong, and 1000000 came out as \"1e+06\", which some apps rejected.",
+      "changed": "The sign-in service now keeps whole numbers exactly as they were saved.",
+      "matters": "Apps that rely on those details, for example to match a Discord account, get the right value."
+    },
+    {
+      "number": 1830,
+      "merged": "2026-10-10",
+      "title": "Removing someone from a group now reaches connected apps",
+      "broken": "When an admin removed a user from a group on the user's page, the apps kept in sync with the service were never told. The user stayed in that group there.",
+      "changed": "Saving a user's groups now marks the groups they left as changed too, so the next sync sends them.",
+      "matters": "When someone's access is taken away, it is taken away in the connected apps as well."
+    }
+  ]
+}

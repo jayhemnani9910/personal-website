@@ -1,0 +1,49 @@
+{
+  "repo": "morluto/rea",
+  "about": "A toolkit that lets AI agents take apart apps and programs to see how they work inside.",
+  "prs": [
+    {
+      "number": 1476,
+      "merged": "2026-10-11",
+      "title": "iPhone apps can now be opened on Linux and Windows",
+      "broken": "Apps carry a small settings file. In iPhone apps it is in a compact binary form, and the tool needed a Mac-only helper to read it, so it failed elsewhere.",
+      "changed": "I made the tool read that file itself, with a size limit for safety, so no Mac helper is needed.",
+      "matters": "People studying iPhone apps on Linux or Windows can now use the tool's app-inspection commands.",
+      "top": true
+    },
+    {
+      "number": 1215,
+      "merged": "2026-10-09",
+      "title": "Original files are matched in bundles from popular tools",
+      "broken": "Websites ship code squeezed into one file, plus a map back to the originals. When the map wrote names with \"../\", as Vite does by default, the tool discarded them.",
+      "changed": "The tool now works out the real location from those names instead of throwing them away.",
+      "matters": "Comparing an app's original code with what it ships now works for bundles from these common build tools."
+    },
+    {
+      "number": 1216,
+      "merged": "2026-10-09",
+      "title": "Changed files are now reported as changed",
+      "broken": "When comparing original code with a shipped website bundle, the tool never marked a file as modified. Edited files showed as \"unknown\", with a reason that wasn't true.",
+      "changed": "When a file is found and its fingerprint differs from the original's, the tool now reports it as modified.",
+      "matters": "Anyone checking what changed between source code and shipped code gets a real answer.",
+      "top": true
+    },
+    {
+      "number": 891,
+      "merged": "2026-10-07",
+      "title": "Unpacking a Mac app no longer ends in an error",
+      "broken": "Unpacking any Mac app with the tool failed with an error, even though the files had already been extracted. It never said where they went.",
+      "changed": "I let the unpack step accept the app as a whole, as the inspect steps already did, so it finishes and reports the output folder.",
+      "matters": "Mac apps can now be unpacked for study, just like zip files and iPhone app packages.",
+      "top": true
+    },
+    {
+      "number": 890,
+      "merged": "2026-10-07",
+      "title": "Bundled scripts now find the map file next to them",
+      "broken": "A bundled script ends with a short note naming its map file. The tool mistook that plain file name for a software package, so it never found the file sitting right beside it.",
+      "changed": "The tool now looks for that file, and for background worker scripts, in the same folder as the script.",
+      "matters": "Tracing a feature back to its original code now works with the default output of webpack, Vite and similar tools."
+    }
+  ]
+}

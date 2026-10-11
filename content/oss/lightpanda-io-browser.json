@@ -1,0 +1,137 @@
+{
+  "repo": "lightpanda-io/browser",
+  "about": "A fast web browser that runs without a screen, made for bots and AI agents that read websites.",
+  "prs": [
+    {
+      "number": 3895,
+      "merged": "2026-10-11",
+      "title": "Saved logins now survive being restored",
+      "broken": "Programs that save a logged-in session and load it later got back a logged-out one. The browser misread the login cookies' 'no end date' mark as 'expired' and dropped them.",
+      "changed": "The browser now keeps those cookies until the session ends, as Chrome does.",
+      "matters": "Bots can log in once and reuse that login, instead of ending up signed out.",
+      "top": true
+    },
+    {
+      "number": 3896,
+      "merged": "2026-10-10",
+      "title": "Dropdown choices now send clean text",
+      "broken": "Dropdown choices kept the extra spaces and line breaks from the page's source code. Forms sent the server garbled values, and picking a choice by name found nothing.",
+      "changed": "The browser now trims and squeezes that extra space, as the web standard says.",
+      "matters": "Servers get the same form answers they would get from Chrome."
+    },
+    {
+      "number": 3874,
+      "merged": "2026-10-09",
+      "title": "Ctrl+A now selects all the text in a box",
+      "broken": "Pressing Ctrl+A in a text box did nothing. Programs that clear a field by selecting all and typing over it ended up with the old text plus the new.",
+      "changed": "The browser now selects everything in the box on Ctrl+A, like Chrome on Linux.",
+      "matters": "A common way scripts clear and refill form fields now works."
+    },
+    {
+      "number": 3873,
+      "merged": "2026-10-09",
+      "title": "A missing table feature no longer breaks page searches",
+      "broken": "Pages couldn't ask a table for its rows. Playwright, a popular tool for driving browsers, needs that, so on some pages with tables every search for a heading or button crashed.",
+      "changed": "I added the list of rows, in the order the web standard sets out.",
+      "matters": "Playwright scripts that find links, buttons and headings by what they are now work on those pages."
+    },
+    {
+      "number": 3831,
+      "merged": "2026-10-08",
+      "title": "Error messages from a page now reach the program",
+      "broken": "When code run on a page failed, the program controlling the browser got an empty error message, or just 'undefined', instead of the real one Chrome gives.",
+      "changed": "The browser now labels page objects correctly, so real errors keep their message.",
+      "matters": "Developers see what actually went wrong instead of a blank error."
+    },
+    {
+      "number": 3818,
+      "merged": "2026-10-07",
+      "title": "Deleting a cookie now actually deletes it",
+      "broken": "Sites often delete a cookie (a small note a site stores in the browser) by giving it a 1970 expiry date ending in 'UTC'. The browser misread that, so the cookie stayed.",
+      "changed": "I taught the browser to read dates ending in 'UTC', so those cookies are removed as in Chrome.",
+      "matters": "Log-out and cookie-consent code that clears cookies this way now works.",
+      "top": true
+    },
+    {
+      "number": 3819,
+      "merged": "2026-10-07",
+      "title": "The browser's own tests stop hiding failures",
+      "broken": "In the project's test suite, a test that crashed after its first check passed still counted as passed. One test had been quietly skipping its later checks this way.",
+      "changed": "I made a crash anywhere in a test count as a failure, and fixed the test it had been hiding.",
+      "matters": "Behind-the-scenes work: future bugs can't slip past tests that only look like they passed."
+    },
+    {
+      "number": 3761,
+      "merged": "2026-10-05",
+      "title": "Searches inside news feeds and drawings now find items",
+      "broken": "Programs looking up parts of a page by name came up empty in two cases: inside RSS news feeds, and for some drawing elements with capital letters in their names.",
+      "changed": "I made the browser match those names properly; one small upper/lowercase difference from Chrome is left.",
+      "matters": "Scripts that read news feeds or graphics on a page now find what is there."
+    },
+    {
+      "number": 3762,
+      "merged": "2026-10-05",
+      "title": "Custom page elements are now told apart by name",
+      "broken": "Sites can invent their own element types, like a 'card'. Asked for 'the second card', the browser lumped all invented types together and picked the wrong one, or none.",
+      "changed": "The browser now treats each invented element name as its own type, as Chrome does.",
+      "matters": "Scripts that pick the first, second or last of a kind of item now get the right one."
+    },
+    {
+      "number": 3720,
+      "merged": "2026-10-03",
+      "title": "The page clock now reports the real date",
+      "broken": "A page asking when it was opened got the time since the computer started, not the real date and time, so its date math was off by decades.",
+      "changed": "The browser now records the real clock time when a page opens and reports that.",
+      "matters": "Page scripts that log or measure time get correct timestamps."
+    },
+    {
+      "number": 3722,
+      "merged": "2026-10-03",
+      "title": "A space before a closing bracket is no longer an error",
+      "broken": "Page lookups like 'every odd item in a list' failed with an error if there was a space before the closing bracket, even though the rules allow it.",
+      "changed": "The browser now skips spaces there, as the styling rules allow.",
+      "matters": "Small fix: valid page code written with extra spaces no longer stops with an error."
+    },
+    {
+      "number": 3721,
+      "merged": "2026-10-03",
+      "title": "Clearing text no longer writes the word 'null'",
+      "broken": "When a page cleared an element's text by setting it to 'nothing' (null), the browser showed the word 'null' instead of empty text.",
+      "changed": "The browser now treats 'nothing' as empty text, as the web standard says.",
+      "matters": "Small fix, but pages no longer show a stray 'null' where text should be blank."
+    },
+    {
+      "number": 3719,
+      "merged": "2026-10-03",
+      "title": "Timers with a negative delay now go off",
+      "broken": "A page timer set with a negative or very large delay was misread as about 49 days, so it never went off. Chrome runs it right away.",
+      "changed": "The browser now treats such delays as zero, as the web standard says.",
+      "matters": "Page code that schedules work this way now runs instead of silently waiting."
+    },
+    {
+      "number": 3718,
+      "merged": "2026-10-03",
+      "title": "The browser now knows which fields can be typed in",
+      "broken": "Asked which form fields can be typed into, the browser also counted checkboxes and disabled boxes, and said no field was read-only.",
+      "changed": "I made it follow the web standard's rules for what counts as editable.",
+      "matters": "Scripts and page styles that treat locked fields differently now see the same fields Chrome does."
+    },
+    {
+      "number": 3717,
+      "merged": "2026-10-03",
+      "title": "Saving a page's code no longer drops template parts",
+      "broken": "Pages can hold hidden 'template' blocks used to build content later. When the browser turned a page back into code, those blocks came out empty.",
+      "changed": "The browser now writes out what is inside templates, as the web standard says.",
+      "matters": "Saved copies of pages, including the browser's own page-dump command, keep all their content."
+    },
+    {
+      "number": 3716,
+      "merged": "2026-10-03",
+      "title": "Backspace, Tab and the arrow keys work now",
+      "broken": "When a program typed on a page, keys that don't type a letter (Backspace, Delete, arrows, Escape) were silently ignored. Pressing Backspace in a text box deleted nothing.",
+      "changed": "The browser now handles those key presses the same way Chrome does.",
+      "matters": "Scripts that fill in forms behave the same here as in a normal browser.",
+      "top": true
+    }
+  ]
+}

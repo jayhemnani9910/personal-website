@@ -1,0 +1,14 @@
+{
+  "repo": "vllm-project/vllm",
+  "about": "Software that serves AI language models fast; many companies run their chatbots on it.",
+  "prs": [
+    {
+      "number": 31513,
+      "merged": "2026-01-02",
+      "title": "Custom training can now reach an AI model's 'eyes'",
+      "broken": "LLaVA is an AI model that can look at pictures. People could add small custom training (called LoRA) to it, but only to the part that handles text, not the part that reads images.",
+      "changed": "I wired up the image-reading parts so that custom training applies to them too.",
+      "matters": "Teams can teach the model their own kinds of pictures, not just their own words."
+    }
+  ]
+}

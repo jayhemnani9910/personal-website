@@ -1,0 +1,14 @@
+{
+  "repo": "p-e-w/heretic",
+  "about": "A tool that automatically removes the built-in refusals from AI language models.",
+  "prs": [
+    {
+      "number": 482,
+      "merged": "2026-10-06",
+      "title": "Square brackets in AI text no longer crash the run",
+      "broken": "With the option to print prompts and the AI's replies turned on, text with square brackets, like [/INST], crashed the program, and other bracketed words vanished from the output.",
+      "changed": "I made the printing treat brackets as plain text, not as formatting codes.",
+      "matters": "Runs finish, and the printed text shows exactly what the prompt and the AI said."
+    }
+  ]
+}

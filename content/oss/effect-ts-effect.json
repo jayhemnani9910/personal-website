@@ -1,0 +1,81 @@
+{
+  "repo": "Effect-TS/effect",
+  "about": "A toolkit programmers use to build reliable apps in TypeScript, a popular programming language.",
+  "prs": [
+    {
+      "number": 8987,
+      "merged": "2026-10-10",
+      "title": "Monitoring no longer repeats old lowest and highest values",
+      "broken": "When an app sent timing reports in intervals, each report claimed the smallest and largest values since startup, not for that interval. Dashboards showed values that never happened then.",
+      "changed": "After the first report, I leave those two values out, as the project's other reporting tool already does.",
+      "matters": "Charts for each time window show only what actually happened in that window."
+    },
+    {
+      "number": 8986,
+      "merged": "2026-10-10",
+      "title": "Speed reports now count every slow request",
+      "broken": "Apps can report how long things take, sorted into ranges like 'under 10 ms'. With custom ranges, anything above the top range went uncounted; with built-in ranges, the top range appeared twice.",
+      "changed": "I made all three reporting tools handle both kinds of range lists the same, correct way.",
+      "matters": "Dashboards built on these reports show true numbers again, such as the typical response time."
+    },
+    {
+      "number": 8952,
+      "merged": "2026-10-09",
+      "title": "An AI's 'thinking' now arrives in one piece, not hundreds",
+      "broken": "With Ollama (which runs AI models on your own computer), a model's thinking came back chopped into hundreds of pieces, one per word, and its answer started before it finished thinking.",
+      "changed": "I made the library ignore the empty answer text Ollama sends along with each bit of thinking.",
+      "matters": "Chat apps built on it keep a clean history and show thinking and answers in the right order.",
+      "top": true
+    },
+    {
+      "number": 8878,
+      "merged": "2026-10-07",
+      "title": "Overlapping groups of items no longer lose items at the end",
+      "broken": "A tool that splits a list into overlapping groups (like 1-2-3, then 3-4-5) dropped items from the last, shorter group: 5 and 6 came out as just 6.",
+      "changed": "The last group now keeps all its items, matching what the library's older version did.",
+      "matters": "Programs that process data in overlapping windows no longer quietly lose data at the end."
+    },
+    {
+      "number": 8877,
+      "merged": "2026-10-07",
+      "title": "Settings with '=' in their value are no longer cut short",
+      "broken": "Settings written as name=value pairs lost everything after a second '=' sign. A login key for a monitoring service lost its ending, so the service refused the app's data.",
+      "changed": "I split each pair at the first '=' only, so the rest of the value stays intact.",
+      "matters": "Apps can send their performance data to monitoring services that require a login.",
+      "top": true
+    },
+    {
+      "number": 8858,
+      "merged": "2026-10-07",
+      "title": "Forms that send a single item in a list now work",
+      "broken": "If a form field could hold a list, like tags, and only one item was sent, the server rejected the request with an error. Two or more items worked.",
+      "changed": "The server now accepts a single item and treats it as a list of one.",
+      "matters": "The library's own sending and receiving sides now agree, so these requests stop failing."
+    },
+    {
+      "number": 8857,
+      "merged": "2026-10-06",
+      "title": "Data streams no longer freeze when one part stops early",
+      "broken": "A program can split a stream of data into groups and read each one separately. If one reader stopped early, the whole program froze once that group's backlog filled up.",
+      "changed": "When a reader finishes, its group is now closed, so extra items for it are dropped instead of piling up.",
+      "matters": "Programs that only need part of the data no longer hang forever.",
+      "top": true
+    },
+    {
+      "number": 8752,
+      "merged": "2026-10-06",
+      "title": "Multi-line text in settings files keeps the right ending",
+      "broken": "YAML is a common format for settings files. When reading a block of multi-line text from one, the library added or dropped line breaks at the end, against the format's official rules.",
+      "changed": "I made it follow the official rules for line breaks at the end of a block, with tests for each case.",
+      "matters": "Text read from settings files now comes out exactly as the file says."
+    },
+    {
+      "number": 8753,
+      "merged": "2026-10-06",
+      "title": "Windows-saved settings files no longer get a stray line break",
+      "broken": "TOML is another settings-file format. In files saved on Windows, every multi-line text value started with an extra line break that shouldn't be there.",
+      "changed": "I made the reader skip the Windows-style line break too, as it already did for the usual one.",
+      "matters": "The same settings file now gives the same result no matter which computer saved it."
+    }
+  ]
+}
