@@ -1,0 +1,14 @@
+{
+  "repo": "eugenioenko/ttt",
+  "about": "A text editor that runs in the terminal but works like a desktop one, shipped as one file with no setup.",
+  "prs": [
+    {
+      "number": 814,
+      "merged": "2026-10-11",
+      "title": "Copied GitHub links open the right file again",
+      "broken": "The editor copies a GitHub link to your current line. With a space or # in the file name, a folder opened through a shortcut, or some remote styles, the link broke, and one kept your password.",
+      "changed": "The link is now built from the real file path, with each part of the name safely escaped, and the password and odd parts of the address are dropped.",
+      "matters": "The link you paste for a teammate opens the line you meant, and never leaks your login."
+    }
+  ]
+}

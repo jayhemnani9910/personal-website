@@ -195,6 +195,7 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "casdoor/casdoor", number: "#5915", href: "https://github.com/casdoor/casdoor/pull/5915" },
   { repo: "casdoor/casdoor", number: "#5916", href: "https://github.com/casdoor/casdoor/pull/5916" },
   { repo: "pocket-id/pocket-id", number: "#1834", href: "https://github.com/pocket-id/pocket-id/pull/1834" },
+  { repo: "eugenioenko/ttt", number: "#814", href: "https://github.com/eugenioenko/ttt/pull/814" },
 ];
 
 /**
