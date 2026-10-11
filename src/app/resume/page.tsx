@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { pageMetadata } from "@/lib/page-metadata";
 import Link from "next/link";
 import { CUBE_ACHIEVEMENT, RESUME, companyAnchor } from "@/data/resume";
-import { MERGED_PRS, MERGED_PRS_SEARCH, MERGED_PRS_SEARCH_LABEL } from "@/data/home";
+import { MERGED_PRS } from "@/data/home";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { CARD, CHIP, H1, H2, HAND, HIGHLIGHT, KICKER, LABEL, LEDE, PILL, PILL_ACTIVE, SHELL, WRAP } from "@/components/desk";
@@ -27,8 +27,6 @@ const RESUME_PDFS = [
 const SECTION = `${WRAP} ${SHELL} py-[60px]`;
 const UNDERLINE_LINK = "underline hover:text-tr-accent-ink";
 const OUT_LINK = "inline-flex min-h-6 items-center gap-1 py-1 hover:text-tr-accent-ink";
-// OUT_LINK for every link inside the PR list, written once on the <ul>.
-const PR_LIST_LINKS = "[&_a]:inline-flex [&_a]:min-h-6 [&_a]:items-center [&_a]:gap-1 [&_a]:py-1 [&_a]:hover:text-tr-accent-ink";
 // The PDF pills press onto a 2px shadow, so they sink 2px, not the button's 3.
 const PDF_PILL = `${PILL} desk-press shadow-[2px_2px_0_var(--tr-text)] [--desk-press:2px]`;
 
@@ -36,14 +34,6 @@ const PDF_PILL = `${PILL} desk-press shadow-[2px_2px_0_var(--tr-text)] [--desk-p
 // the shell's receipts link to.
 const roles = RESUME.experience.flatMap((company) =>
   company.roles.map((role, i) => ({ company, role, anchor: i === 0 ? companyAnchor(company.name) : undefined }))
-);
-
-// One row per repo, not per PR. Home prefetches this page, and a row per PR
-// repeated its class strings into the RSC payload until it broke the budget.
-// Within a repo, PRs read in number order however MERGED_PRS was appended to.
-const prNumber = (n: string) => Number(n.replace(/\D/g, ""));
-const prsByRepo = new Map(
-  [...Map.groupBy(MERGED_PRS, (pr) => pr.repo)].map(([repo, prs]) => [repo, prs.toSorted((a, b) => prNumber(a.number) - prNumber(b.number))]),
 );
 
 export default function AboutPage() {
@@ -214,47 +204,12 @@ export default function AboutPage() {
             <div className={`${CARD} min-w-0 p-6`}>
               <p className={LABEL}>Open source</p>
               <p className="mt-2 text-[15px] leading-[var(--tr-lh-body)] text-tr-text-mute">
-                {MERGED_PRS.length} merged pull requests to repositories not my own, by repo and
-                number so the diff can be read directly.
-                {/* Said once, not on all 35 links: this page is prefetched. */}
-                <span className="sr-only"> Each number opens the pull request on GitHub in a new tab.</span>
+                {MERGED_PRS.length} merged pull requests across {new Set(MERGED_PRS.map((pr) => pr.repo)).size} repositories
+                not my own.
               </p>
-              <ul className={`${PR_LIST_LINKS} mt-4 flex flex-col gap-1 font-mono text-[12px] text-tr-text-faint`}>
-                {[...prsByRepo].map(([repo, prs]) => (
-                  <li key={repo} className="flex flex-wrap items-center gap-x-3 border-t border-dashed border-tr-rule-soft pt-1">
-                    <span className="text-tr-text">{repo}</span>
-                    {prs.map((pr) => {
-                      const link = (
-                        <a key={pr.href} href={pr.href} target="_blank" rel="noreferrer">
-                          {pr.number} <span aria-hidden="true">↗</span>
-                        </a>
-                      );
-                      // Closed on GitHub, not merged: Modular lands outside PRs with
-                      // Copybara, so the commit is the proof it went in. Kept on one
-                      // line with its PR so the note can't wrap onto the next one.
-                      return pr.landed ? (
-                        <span key={pr.href} className="flex gap-x-3">
-                          {link}
-                          <a href={pr.landed} target="_blank" rel="noreferrer">
-                            (closed, landed as a commit<span aria-hidden="true"> ↗</span>)
-                            <span className="sr-only"> for {pr.repo} {pr.number} (opens in a new tab)</span>
-                          </a>
-                        </span>
-                      ) : (
-                        link
-                      );
-                    })}
-                  </li>
-                ))}
-              </ul>
-              <a
-                href={MERGED_PRS_SEARCH}
-                target="_blank"
-                rel="noreferrer"
-                className={`${OUT_LINK} mt-3 font-mono text-[12px] text-tr-text-mute underline`}
-              >
-                verify {MERGED_PRS_SEARCH_LABEL} on GitHub <span aria-hidden="true">↗</span>
-              </a>
+              <Link href="/oss" className={`${OUT_LINK} mt-3 font-mono text-[12px] text-tr-text underline`}>
+                see every one, by repo →
+              </Link>
             </div>
           </div>
         </section>
