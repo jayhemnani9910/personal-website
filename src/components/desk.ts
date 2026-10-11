@@ -34,6 +34,10 @@ export const BTN =
 export const BTN_PRIMARY =
   "desk-press inline-flex items-center gap-2 rounded-[var(--tr-r-md)] border-[1.5px] border-tr-hairline bg-tr-accent px-4 py-2.5 font-bold text-tr-on-accent shadow-[var(--tr-shadow-btn)] hover:bg-tr-accent-hover hover:text-tr-on-accent";
 
+/** The header's shell button, the same small pill on every page. */
+export const SHELL_CHIP =
+  "cursor-pointer rounded-full border-[1.5px] border-tr-hairline px-2.5 py-[3px] font-mono text-[12px] hover:bg-tr-surface-2";
+
 /** Tech tags and inline code: a paper chip. */
 export const CHIP = "inline-block rounded-[var(--tr-r-sm)] bg-tr-surface-2 px-2 py-[3px] font-mono text-[11px] text-tr-text";
 
