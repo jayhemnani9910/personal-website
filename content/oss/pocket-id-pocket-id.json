@@ -3,6 +3,14 @@
   "about": "A sign-in service you run yourself, so people log in to your apps with passkeys instead of passwords.",
   "prs": [
     {
+      "number": 1834,
+      "merged": "2026-10-11",
+      "title": "People removed from the directory now lose access in connected apps",
+      "broken": "When a person was removed from the company directory, the service turned off their account. But the apps kept in sync never heard, so the person stayed active there.",
+      "changed": "Turning off an account this way now marks it as changed, so the next sync sends it.",
+      "matters": "Someone who leaves loses access in the connected apps too, not only in the sign-in service."
+    },
+    {
       "number": 1829,
       "merged": "2026-10-10",
       "title": "Long ID numbers now arrive with every digit intact",
