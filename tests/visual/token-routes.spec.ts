@@ -19,7 +19,8 @@ const ROUTES = [
   { path: "/blog", name: "blog-index", why: "prose list styling" },
   { path: "/lab", name: "lab", why: "the tablist" },
   { path: "/resume", name: "resume", why: "the About page, whose CSS a bad ignore pattern once hid entirely" },
-  { path: "/oss", name: "oss", why: "the repo cards and their PR number rows" },
+  { path: "/oss", name: "oss", why: "the repo cards and their top picks" },
+  { path: "/oss/modular-modular", name: "oss-repo", why: "a repo's write-ups, with the landed-commit links" },
 ] as const;
 
 for (const route of ROUTES) {

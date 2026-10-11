@@ -1,0 +1,73 @@
+{
+  "repo": "caddyserver/caddy",
+  "about": "A popular web server that runs websites and sets up their security certificates for you.",
+  "prs": [
+    {
+      "number": 8183,
+      "merged": "2026-10-10",
+      "title": "A repeated rule line is now an error, not silently ignored",
+      "broken": "In the server's settings file, a rule could list two custom conditions. The server quietly used only the first one, so the rule matched more requests than intended.",
+      "changed": "The server now refuses that setup and says how to combine the conditions into one.",
+      "matters": "The mistake is caught when the settings load, instead of quietly changing which requests a rule applies to."
+    },
+    {
+      "number": 8189,
+      "merged": "2026-10-10",
+      "title": "Pages that exist no longer show 'not found'",
+      "broken": "One form of a setting that says 'try this file, then that one, else show not found' gave every page a 'not found' error, even pages that existed.",
+      "changed": "Once one rule in a group has matched, the server now skips checking the rest of that group.",
+      "matters": "Sites using that setting serve their real pages again.",
+      "top": true
+    },
+    {
+      "number": 8168,
+      "merged": "2026-10-09",
+      "title": "Successful requests are no longer retried into an error",
+      "broken": "The server can pass requests to backend servers and retry on failure. A retry rule that checked only the request also retried replies that had succeeded, until the user got an error page.",
+      "changed": "Retries based on the reply now happen only when the rule actually looks at the reply.",
+      "matters": "Requests that succeed the first time are sent once and reach the user, instead of failing.",
+      "top": true
+    },
+    {
+      "number": 8150,
+      "merged": "2026-10-09",
+      "title": "The server stopped lying about the size of compressed files",
+      "broken": "When a program asked only for a file's details, not the file itself, the server reported a wrong size (20 bytes) for compressed files.",
+      "changed": "The server still sends the right details, but no longer makes up that false size.",
+      "matters": "Tools that check a file's size before downloading, like download managers and caches, now get the truth."
+    },
+    {
+      "number": 8169,
+      "merged": "2026-10-09",
+      "title": "Security settings stay on pages that send early hints",
+      "broken": "Sites add extra instructions to every reply, like 'always use a secure connection'. If the backend first sent a quick early note (an 'early hint'), those instructions vanished from the final reply.",
+      "changed": "I save the site's own instructions before handling the early note and put them back afterwards.",
+      "matters": "Security settings a site asks for now reach browsers every time."
+    },
+    {
+      "number": 8149,
+      "merged": "2026-10-08",
+      "title": "Page errors no longer send a broken, half-finished reply",
+      "broken": "When a page the server fills in before sending (a template) had an error, the error reply still claimed the original file's size but had no content, so it looked cut off.",
+      "changed": "On any template error, the server now drops the file's leftover details before sending the error.",
+      "matters": "Visitors and tools get a clean error message instead of a broken reply."
+    },
+    {
+      "number": 8159,
+      "merged": "2026-10-07",
+      "title": "No more crash when a backend is down and weights are missing",
+      "broken": "The server can share visitors between backends by weight (how much traffic each gets). With fewer weights than backends and one backend down, it crashed and visitors got empty replies.",
+      "changed": "Backends without a weight are now treated as getting no traffic, instead of crashing the server.",
+      "matters": "A small gap in the setup no longer breaks the site when one backend goes down.",
+      "top": true
+    },
+    {
+      "number": 8160,
+      "merged": "2026-10-07",
+      "title": "Traffic now goes to the least busy server when all are busy",
+      "broken": "One way of sharing traffic should send each request to the less busy of a few backends. Once all of them were busy, it picked at random, even the busiest one.",
+      "changed": "I fixed the comparison so only the least busy backends stay in the running.",
+      "matters": "In a test with a slow and a fast backend, the fast one got 70 of 80 requests instead of 41."
+    }
+  ]
+}

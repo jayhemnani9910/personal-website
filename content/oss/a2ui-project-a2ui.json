@@ -1,0 +1,14 @@
+{
+  "repo": "a2ui-project/a2ui",
+  "about": "An open format that lets AI agents describe screens, like forms and buttons, for an app to show.",
+  "prs": [
+    {
+      "number": 407,
+      "merged": "2026-01-05",
+      "title": "Safer setup steps for secret keys in the examples",
+      "broken": "The example apps told people to type their secret access keys straight into a settings file, with no template showing which keys were needed.",
+      "changed": "I added template settings files with placeholder values and updated seven setup guides to copy from them.",
+      "matters": "A documentation change, but it makes leaking a real key by accident less likely."
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "repo": "mvanhorn/last30days-skill",
+  "about": "An add-on for AI assistants that researches a topic across Reddit, X, YouTube and the web, then sums it up.",
+  "prs": [
+    {
+      "number": 1191,
+      "merged": "2026-10-08",
+      "title": "YouTube transcripts now come in the right language",
+      "broken": "When the usual way of getting a video's captions failed, a backup service could return a machine-dubbed foreign track, like Arabic for an English video, and count it as a success.",
+      "changed": "The backup now asks for the preferred languages, English first by default, trying up to three.",
+      "matters": "Research summaries are built from what the video actually says, not from a wrong-language track."
+    },
+    {
+      "number": 1195,
+      "merged": "2026-10-08",
+      "title": "A failed YouTube search is now reported as a failure",
+      "broken": "When the YouTube search broke, from a network error or a bot check, the tool reported \"0 results\". The summary then read that as nobody on YouTube discussing the topic.",
+      "changed": "A failed search now shows up as an error with its reason, and the report marks YouTube coverage as partial.",
+      "matters": "Readers aren't told a topic is ignored on YouTube when the tool simply couldn't reach it."
+    }
+  ]
+}

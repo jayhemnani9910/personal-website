@@ -1,6 +1,7 @@
 import { MetadataRoute } from "next";
 import { getAllProjects, getAllPosts } from "@/lib/content";
 import { SITE_CONFIG } from "@/../content/site";
+import { getOssRepos } from "@/lib/oss";
 
 // Built once at build time rather than per request. This is not a static
 // export (the app has live API routes); the sitemap simply has no reason to be
@@ -53,5 +54,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     })),
   ];
 
-  return [...staticRoutes, ...projectRoutes, ...blogRoutes];
+  const ossRoutes: MetadataRoute.Sitemap = getOssRepos().map((repo) => ({
+    url: `${baseUrl}/oss/${repo.slug}`,
+    lastModified: new Date(repo.prs[0].merged),
+    changeFrequency: "monthly" as const,
+    priority: 0.6,
+  }));
+
+  return [...staticRoutes, ...projectRoutes, ...blogRoutes, ...ossRoutes];
 }
