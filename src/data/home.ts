@@ -185,6 +185,13 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "AlexsJones/llmfit", number: "#1125", href: "https://github.com/AlexsJones/llmfit/pull/1125" },
   { repo: "lightpanda-io/browser", number: "#3896", href: "https://github.com/lightpanda-io/browser/pull/3896" },
   { repo: "pocket-id/pocket-id", number: "#1830", href: "https://github.com/pocket-id/pocket-id/pull/1830" },
+  { repo: "caddyserver/caddy", number: "#8189", href: "https://github.com/caddyserver/caddy/pull/8189" },
+  { repo: "caddyserver/caddy", number: "#8183", href: "https://github.com/caddyserver/caddy/pull/8183" },
+  { repo: "pocket-id/pocket-id", number: "#1829", href: "https://github.com/pocket-id/pocket-id/pull/1829" },
+  { repo: "mvschwarz/openrig", number: "#1057", href: "https://github.com/mvschwarz/openrig/pull/1057" },
+  { repo: "mvschwarz/openrig", number: "#1102", href: "https://github.com/mvschwarz/openrig/pull/1102" },
+  { repo: "lightpanda-io/browser", number: "#3895", href: "https://github.com/lightpanda-io/browser/pull/3895" },
+  { repo: "morluto/rea", number: "#1476", href: "https://github.com/morluto/rea/pull/1476" },
 ];
 
 /**
