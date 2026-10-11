@@ -102,7 +102,7 @@ export const FEATURED: FeaturedProject[] = [
 /**
  * The merged upstream pull requests, by repo and number.
  *
- * One list, two readers: the about page's open-source block and the shell's
+ * One list, two readers: the /oss page and the shell's
  * `receipts`. It lives here rather than in resume.ts because resume.ts
  * has no field for it, and duplicating these URLs across two pages is how a
  * verified claim drifts into an unverified one. Sourced from

@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { act, fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { act, fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 import { isValidElement, type ComponentProps, type ReactElement } from "react";
 
 vi.mock("next/font/google", () => {
@@ -99,10 +99,19 @@ describe("HomeDesk", () => {
     for (const j of buildLogEntries()) expect(screen.getByText(j.what)).toBeDefined();
   });
 
+  it("wears the same page nav as every other page, with the shell beside it", async () => {
+    await renderHome();
+    const nav = screen.getByRole("navigation", { name: "Main" });
+    expect([...nav.querySelectorAll("a")].map((a) => a.getAttribute("href"))).toEqual(["/projects", "/blog", "/oss", "/resume", "/youtube"]);
+    const header = nav.closest("header")!;
+    expect(header.querySelector('a[href="#hi"]')?.textContent).toBe("say hi");
+    expect(within(header).getByRole("button", { name: "shell" })).toBeDefined();
+  });
+
   it("links the other pages from the footer and the socials from site config", async () => {
     await renderHome();
     const site = screen.getByRole("navigation", { name: "Site" });
-    expect([...site.querySelectorAll("a")].map((a) => a.getAttribute("href"))).toEqual(["/projects", "/blog", "/resume", "/youtube"]);
+    expect([...site.querySelectorAll("a")].map((a) => a.getAttribute("href"))).toEqual(["/projects", "/blog", "/oss", "/resume", "/youtube"]);
     expect(screen.getByRole("link", { name: "x" }).getAttribute("href")).toBe(SITE_CONFIG.social.twitter);
   });
 

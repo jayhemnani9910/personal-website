@@ -4,14 +4,9 @@ import { SITE_CONFIG } from "@/../content/site";
 import { SHELL, WRAP } from "@/components/desk";
 import { ReaderToggle } from "./ReaderToggle";
 import { ShellButton } from "./ShellButton";
+import { NAV } from "./nav-links";
 
-const LINKS: { label: string; href: Route }[] = [
-  { label: "home", href: "/" },
-  { label: "work", href: "/projects" },
-  { label: "writing", href: "/blog" },
-  { label: "about", href: "/resume" },
-  { label: "channel", href: "/youtube" },
-];
+const LINKS: { label: string; href: Route }[] = [{ label: "home", href: "/" }, ...NAV];
 
 // The small sibling of the home page's contact band, so leaving / and coming
 // back feels like one site. Every route but the home page uses it.

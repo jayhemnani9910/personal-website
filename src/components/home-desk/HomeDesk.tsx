@@ -15,6 +15,7 @@ import { Greeting, VisitCount } from "./Visits";
 import { ReaderToggle } from "@/components/ReaderToggle";
 import { ShellButton } from "@/components/ShellButton";
 import { CHIP, DOTS } from "@/components/desk";
+import { NAV } from "@/components/nav-links";
 
 const SECTION = "mx-auto max-w-[1200px] px-[clamp(16px,4vw,48px)] py-[60px]";
 const H2 = "text-[length:clamp(32px,4.5vw,56px)] font-extrabold tracking-[-0.035em] leading-none";
@@ -50,12 +51,8 @@ const SOCIALS = [
   { label: "youtube", href: social.youtube },
 ];
 
-const PAGES: { label: string; href: Route }[] = [
-  { label: "all projects", href: "/projects" },
-  { label: "writing", href: "/blog" },
-  { label: "about", href: "/resume" },
-  { label: "channel", href: "/youtube" },
-];
+// The header's pages, with work named for what it is below the six cards.
+const PAGES = NAV.map((p) => (p.href === "/projects" ? { ...p, label: "all projects" } : p));
 
 export async function HomeDesk() {
   const projects = await getAllProjects();

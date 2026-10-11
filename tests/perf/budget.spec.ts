@@ -35,7 +35,7 @@ const BUDGET = {
   // in view. Neither had a budget until 2026-09-30.
   // Tight since 2026-10-10: the daily pick now ships every candidate project
   // in the page, about 9 KB, so each new project adds a few hundred bytes.
-  documentBytes: 90 * 1024,    // measured 121.4 KB on 2026-09-30, 77.7 KB on 2026-10-10, 88.4 KB on 2026-10-11
+  documentBytes: 90 * 1024,    // measured 121.4 KB on 2026-09-30, 77.7 KB on 2026-10-10, 88.4 KB on 2026-10-11, 89.4 KB with the page nav
   fetchBytes: 60 * 1024,       // measured 90.1 KB on 2026-09-30, 52.5 KB on 2026-10-10, 55.1 KB on 2026-10-11
   // A moving number, so the history matters: 95 KB under the editorial system,
   // 110 KB for the day the v4 home shipped a second palette beside it, 105 KB
