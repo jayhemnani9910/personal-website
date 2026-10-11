@@ -1,5 +1,5 @@
 {
-  "fetchedAt": "2026-07-23T02:30:06.312Z",
+  "fetchedAt": "2026-10-11T05:46:22.571Z",
   "channels": [
     {
       "id": "UCSf0pNIEkJgXhH7WzIsFnpw",
@@ -7,17 +7,25 @@
       "handle": "@jhanalytics2.0",
       "url": "https://www.youtube.com/@jhanalytics2.0",
       "stats": {
-        "subscribers": 17,
-        "views": 5826,
-        "videos": 41
+        "subscribers": 33,
+        "views": 10114,
+        "videos": 65
       },
       "videos": [
+        {
+          "id": "8S0la-ABQMA",
+          "title": "DESI STADIUM 🥁 Dhol × Bhangra Trap Anthem | #desimusic  #dhol  #trap  #desibeats #trapmusic",
+          "publishedAt": "2026-09-19T12:12:31Z",
+          "durationSec": 183,
+          "views": 716,
+          "thumb": "https://i.ytimg.com/vi/8S0la-ABQMA/hqdefault.jpg"
+        },
         {
           "id": "tCKIQN5twog",
           "title": "Down 3-6, Won 8-7 in the 89th Minute | FC 26 Rivals Comeback #fc26 #eafc26 #ultimateteam #fifa26",
           "publishedAt": "2026-07-04T03:45:38Z",
           "durationSec": 278,
-          "views": 49,
+          "views": 56,
           "thumb": "https://i.ytimg.com/vi/tCKIQN5twog/hqdefault.jpg"
         },
         {
@@ -47,100 +55,100 @@
       ],
       "shorts": [
         {
-          "id": "UcZ8GgIVaY0",
-          "title": "Memory poisoning: the prompt injection that survives the session #ai  #promptinjection",
-          "publishedAt": "2026-07-12T05:45:02Z",
-          "durationSec": 77,
-          "views": 124,
-          "thumb": "https://i.ytimg.com/vi/UcZ8GgIVaY0/oardefault.jpg"
+          "id": "vAeDiFgQByw",
+          "title": "I made Hacker News read itself to me every morning  #ai #productivity #contextvariables #opensource",
+          "publishedAt": "2026-09-12T16:15:33Z",
+          "durationSec": 41,
+          "views": 39,
+          "thumb": "https://i.ytimg.com/vi/vAeDiFgQByw/oardefault.jpg"
         },
         {
-          "id": "xECY__i8LTQ",
-          "title": "Down 3-6, Won 8-7 in the 89th Minute | FC 26 Rivals Comeback #eafc26  #easportsfc  #ultimateteam",
-          "publishedAt": "2026-07-03T17:00:02Z",
-          "durationSec": 39,
-          "views": 631,
-          "thumb": "https://i.ytimg.com/vi/xECY__i8LTQ/oardefault.jpg"
+          "id": "nDibMp4fqLs",
+          "title": "What Your AI Chat DELETES When It Gets Long #ai  #aiagents  #opensource  #chatgpt",
+          "publishedAt": "2026-08-25T05:45:39Z",
+          "durationSec": 74,
+          "views": 20,
+          "thumb": "https://i.ytimg.com/vi/nDibMp4fqLs/hqdefault.jpg"
         },
         {
-          "id": "VNztiHlPj1s",
-          "title": "Claude Fable 5: the model that pulls ahead the longer it runs #ai #llm #aiagents #aivideo #shorts",
-          "publishedAt": "2026-06-11T03:45:07Z",
-          "durationSec": 62,
-          "views": 494,
-          "thumb": "https://i.ytimg.com/vi/VNztiHlPj1s/oardefault.jpg"
+          "id": "utxakhXHj1w",
+          "title": "33.2% Off The AI Bill. The Caveman Part Did NOTHING. #ai  #claudecode  #llm  #opensource",
+          "publishedAt": "2026-08-21T06:00:27Z",
+          "durationSec": 108,
+          "views": 34,
+          "thumb": "https://i.ytimg.com/vi/utxakhXHj1w/hqdefault.jpg"
         },
         {
-          "id": "oBWEEIDiwo0",
-          "title": "DeepMind's AI Solved 9 Unsolved Math Problems by Failing 95% of the Time #ai #deepmind #aiagents",
-          "publishedAt": "2026-06-07T03:45:25Z",
-          "durationSec": 59,
-          "views": 537,
-          "thumb": "https://i.ytimg.com/vi/oBWEEIDiwo0/oardefault.jpg"
+          "id": "cmDZkAaxDkc",
+          "title": "5 Words Choose Every Clip. Then AI SHUFFLES Them. #ai  #aivideo  #contentcreation  #opensource",
+          "publishedAt": "2026-08-20T08:15:32Z",
+          "durationSec": 81,
+          "views": 2,
+          "thumb": "https://i.ytimg.com/vi/cmDZkAaxDkc/hqdefault.jpg"
         },
         {
-          "id": "vgrBHaJdy24",
-          "title": "LLM temperature isn't randomness #shorts #llm #aiforengineers  #machinelearning",
-          "publishedAt": "2026-06-04T04:00:04Z",
-          "durationSec": 67,
-          "views": 6,
-          "thumb": "https://i.ytimg.com/vi/vgrBHaJdy24/oardefault.jpg"
+          "id": "0VRrpCVNLOo",
+          "title": "Why your AI gets slower the longer you chat #localllm  #kvcache  #ai #applesilicon",
+          "publishedAt": "2026-08-19T07:30:10Z",
+          "durationSec": 76,
+          "views": 8,
+          "thumb": "https://i.ytimg.com/vi/0VRrpCVNLOo/oardefault.jpg"
         },
         {
-          "id": "Qwq9H14I420",
-          "title": "Why LLMs can't count letters in a word",
-          "publishedAt": "2026-06-01T03:45:30Z",
-          "durationSec": 60,
-          "views": 1313,
-          "thumb": "https://i.ytimg.com/vi/Qwq9H14I420/oardefault.jpg"
+          "id": "TnHn8SAZW4A",
+          "title": "Your AI Keeps Suggesting The Idea You Already KILLED #aiagents  #claudecode  #devtools",
+          "publishedAt": "2026-08-18T06:15:28Z",
+          "durationSec": 78,
+          "views": 23,
+          "thumb": "https://i.ytimg.com/vi/TnHn8SAZW4A/oardefault.jpg"
         },
         {
-          "id": "gde21h1EvsM",
-          "title": "The two holes in LeCun's world-model bet #aiagents #ai #shorts  #yannlecun  #jepa  #worldmodel",
-          "publishedAt": "2026-05-27T05:30:27Z",
-          "durationSec": 57,
-          "views": 31,
-          "thumb": "https://i.ytimg.com/vi/gde21h1EvsM/oardefault.jpg"
+          "id": "OtLd3BzLYcM",
+          "title": "84GB To Train AI. 70 Of It Isn't The MODEL. #localllm  #finetuning  #machinelearning",
+          "publishedAt": "2026-08-17T07:00:15Z",
+          "durationSec": 74,
+          "views": 26,
+          "thumb": "https://i.ytimg.com/vi/OtLd3BzLYcM/oardefault.jpg"
         },
         {
-          "id": "VZ1lJd4nPGk",
-          "title": "The two holes in LeCun's world-model bet #aiforanalysts #crypto #dataanlysis #llm #trading",
-          "publishedAt": "2026-05-25T04:45:03Z",
-          "durationSec": 57,
-          "views": 74,
-          "thumb": "https://i.ytimg.com/vi/VZ1lJd4nPGk/oardefault.jpg"
+          "id": "yTqosBsg7uw",
+          "title": "Your AI Can't Click. The Fix Isn't EYES. #aiagents  #terminal  #opensource",
+          "publishedAt": "2026-08-16T11:30:13Z",
+          "durationSec": 76,
+          "views": 32,
+          "thumb": "https://i.ytimg.com/vi/yTqosBsg7uw/hqdefault.jpg"
         },
         {
-          "id": "0KLjPAwYp6Y",
-          "title": "Why your AI agent hallucinates dropped columns #aiagents #llm  #dataengineering #ai",
-          "publishedAt": "2026-05-23T10:15:12Z",
-          "durationSec": 56,
-          "views": 913,
-          "thumb": "https://i.ytimg.com/vi/0KLjPAwYp6Y/oardefault.jpg"
+          "id": "VDR4kNDKp5k",
+          "title": "One Email Finds Every Account You FORGOT You Made #osint  #privacy  #cybersecurity",
+          "publishedAt": "2026-08-15T06:45:03Z",
+          "durationSec": 75,
+          "views": 89,
+          "thumb": "https://i.ytimg.com/vi/VDR4kNDKp5k/oardefault.jpg"
         },
         {
-          "id": "6kB9WI7Wseo",
-          "title": "Why this 1.3B vision model uses 40x fewer tokens #llm #aiforanalysts #dataengineering #ai #aiagents",
-          "publishedAt": "2026-05-22T12:58:43Z",
-          "durationSec": 70,
-          "views": 100,
-          "thumb": "https://i.ytimg.com/vi/6kB9WI7Wseo/oardefault.jpg"
+          "id": "5ZUs7u0zsco",
+          "title": "Why Your AI Diagram Always Looks Like SLOP #ai  #claudecode  #design",
+          "publishedAt": "2026-08-14T08:30:15Z",
+          "durationSec": 91,
+          "views": 69,
+          "thumb": "https://i.ytimg.com/vi/5ZUs7u0zsco/oardefault.jpg"
         },
         {
-          "id": "uJ94M0gLgIg",
-          "title": "The training recipe behind LeCun's JEPA bet #llm #aiforanalysts #dataengineering #ai #aiagents #jepa",
-          "publishedAt": "2026-05-22T06:12:43Z",
-          "durationSec": 63,
-          "views": 128,
-          "thumb": "https://i.ytimg.com/vi/uJ94M0gLgIg/oardefault.jpg"
+          "id": "LaIw_zqU_Ao",
+          "title": "This AI Agent Has ONE Tool. The SECRET Is Python #aiagents  #python  #softwareengineering #context",
+          "publishedAt": "2026-08-11T07:45:18Z",
+          "durationSec": 72,
+          "views": 25,
+          "thumb": "https://i.ytimg.com/vi/LaIw_zqU_Ao/oardefault.jpg"
         },
         {
-          "id": "ays0ChS1970",
-          "title": "Why Gemini Flash now beats last year's Pro  #llm #aiforanalysts #dataengineering #ai #aiagents #jepa",
-          "publishedAt": "2026-05-21T13:45:10Z",
-          "durationSec": 64,
-          "views": 65,
-          "thumb": "https://i.ytimg.com/vi/ays0ChS1970/oardefault.jpg"
+          "id": "hPIZEX7oYsE",
+          "title": "Your AI Reads 948,793 Tokens To Answer ONE Question #ai  #coding  #developertools",
+          "publishedAt": "2026-08-07T06:45:01Z",
+          "durationSec": 81,
+          "views": 519,
+          "thumb": "https://i.ytimg.com/vi/hPIZEX7oYsE/oardefault.jpg"
         }
       ],
       "live": [
@@ -249,17 +257,89 @@
       "handle": "@jodnaniplays",
       "url": "https://www.youtube.com/@jodnaniplays",
       "stats": {
-        "subscribers": 32,
-        "views": 54176,
-        "videos": 201
+        "subscribers": 41,
+        "views": 61530,
+        "videos": 265
       },
       "videos": [
+        {
+          "id": "f_zoT3te4e0",
+          "title": "Two 6-6 Draws, Both Levelled Late | FC 27 Rivals |",
+          "publishedAt": "2026-10-06T09:30:13Z",
+          "durationSec": 327,
+          "views": 178,
+          "thumb": "https://i.ytimg.com/vi/f_zoT3te4e0/hqdefault.jpg"
+        },
+        {
+          "id": "rLHvtZJluoM",
+          "title": "6-4 Up in the 87th, It Ends 6-6 | FC 27 Rivals |",
+          "publishedAt": "2026-10-05T07:30:04Z",
+          "durationSec": 325,
+          "views": 9,
+          "thumb": "https://i.ytimg.com/vi/rLHvtZJluoM/hqdefault.jpg"
+        },
+        {
+          "id": "dr1HuuBjA94",
+          "title": "3-0 Down, Won 5-6 Away With an 84' Winner | FC 27 | #fc27  #ultimateteam #fifa27 #futbol #gaming",
+          "publishedAt": "2026-10-03T20:30:02Z",
+          "durationSec": 337,
+          "views": 3,
+          "thumb": "https://i.ytimg.com/vi/dr1HuuBjA94/hqdefault.jpg"
+        },
+        {
+          "id": "lKSNubmn-wc",
+          "title": "Messi Free Kick in the 120th for 5-0 | FC 27 Ultimate Team #eafc27   #ultimateteam   #fut  #gaming",
+          "publishedAt": "2026-10-01T12:00:27Z",
+          "durationSec": 320,
+          "views": 34,
+          "thumb": "https://i.ytimg.com/vi/lKSNubmn-wc/hqdefault.jpg"
+        },
+        {
+          "id": "PmQZFzk3oj4",
+          "title": "Five in a row from 4-6 down to win 9-6 | FC 27 | #fc27   #eafc27ultimateteam",
+          "publishedAt": "2026-09-23T04:45:34Z",
+          "durationSec": 323,
+          "views": 10,
+          "thumb": "https://i.ytimg.com/vi/PmQZFzk3oj4/hqdefault.jpg"
+        },
+        {
+          "id": "gOrHoerBKZ4",
+          "title": "First day of FC27 | 5-0 Win, 3-0 on Penalties and a 7-5 Loss | FC 27 | #fc27  #eafc27  #day1 #futbol",
+          "publishedAt": "2026-09-18T06:15:21Z",
+          "durationSec": 267,
+          "views": 41,
+          "thumb": "https://i.ytimg.com/vi/gOrHoerBKZ4/hqdefault.jpg"
+        },
+        {
+          "id": "b9TLljof7K8",
+          "title": "8-4 Away, 8-2 Home and a 90' Goal | FC 26 Pre-season #preseason  #fifa26  #fut  #gaming #eafc26",
+          "publishedAt": "2026-09-12T07:30:06Z",
+          "durationSec": 365,
+          "views": 485,
+          "thumb": "https://i.ytimg.com/vi/b9TLljof7K8/hqdefault.jpg"
+        },
+        {
+          "id": "huL9QdP9v9U",
+          "title": "pre season special | Blind penalty & Messi The best freekick man. #fc26  #futbol  #ps5gaming",
+          "publishedAt": "2026-09-05T06:15:10Z",
+          "durationSec": 612,
+          "views": 21,
+          "thumb": "https://i.ytimg.com/vi/huL9QdP9v9U/hqdefault.jpg"
+        },
+        {
+          "id": "16H1ghZ3UY8",
+          "title": "Last night's FC26 stream (37 goals, one cliffhanger) #fc26  #ultimateteam  #summerstars",
+          "publishedAt": "2026-07-24T13:06:11Z",
+          "durationSec": 982,
+          "views": 10,
+          "thumb": "https://i.ytimg.com/vi/16H1ghZ3UY8/hqdefault.jpg"
+        },
         {
           "id": "SJgzeQaoRSg",
           "title": "World Cup 2026 Recap: Matches 41-45 | Messi Breaks the Record",
           "publishedAt": "2026-07-05T06:45:06Z",
           "durationSec": 133,
-          "views": 3,
+          "views": 4,
           "thumb": "https://i.ytimg.com/vi/SJgzeQaoRSg/hqdefault.jpg"
         },
         {
@@ -267,7 +347,7 @@
           "title": "World Cup 2026 Recap: Matches 36-40 | Salah, Yamal, Cape Verde Shock",
           "publishedAt": "2026-07-01T03:45:37Z",
           "durationSec": 114,
-          "views": 2,
+          "views": 3,
           "thumb": "https://i.ytimg.com/vi/urqdH6gBId8/hqdefault.jpg"
         },
         {
@@ -277,275 +357,203 @@
           "durationSec": 112,
           "views": 3,
           "thumb": "https://i.ytimg.com/vi/dah-ik4v8do/hqdefault.jpg"
-        },
-        {
-          "id": "17ggrnfV5_s",
-          "title": "World Cup 2026 Recap: Matches 26-30 | Canada 6-0, Mexico Through",
-          "publishedAt": "2026-06-28T10:00:21Z",
-          "durationSec": 108,
-          "views": 6,
-          "thumb": "https://i.ytimg.com/vi/17ggrnfV5_s/hqdefault.jpg"
-        },
-        {
-          "id": "WW-c-dNSikU",
-          "title": "World Cup 2026 Recap: Matches 21-25 | England 4-2 Croatia Classic #fifaworldcup #trending #worldcup",
-          "publishedAt": "2026-06-24T04:00:17Z",
-          "durationSec": 134,
-          "views": 6,
-          "thumb": "https://i.ytimg.com/vi/WW-c-dNSikU/hqdefault.jpg"
-        },
-        {
-          "id": "1yQz-MWQG7c",
-          "title": "World Cup 2026 Recap: Matches 16-20 | Messi & Mbappé Records",
-          "publishedAt": "2026-06-23T02:45:04Z",
-          "durationSec": 127,
-          "views": 2,
-          "thumb": "https://i.ytimg.com/vi/1yQz-MWQG7c/hqdefault.jpg"
-        },
-        {
-          "id": "MGpSrjO2IKo",
-          "title": "World Cup 2026 Recap: Matches 11-15 | Cape Verde Stun Spain #fifa #worldcup2026  #football  #soccer",
-          "publishedAt": "2026-06-20T14:00:24Z",
-          "durationSec": 101,
-          "views": 5,
-          "thumb": "https://i.ytimg.com/vi/MGpSrjO2IKo/hqdefault.jpg"
-        },
-        {
-          "id": "blJ-8ggfQWY",
-          "title": "World Cup 2026 Recap: Matches 6-10 | Germany Hit 7, Brazil Held",
-          "publishedAt": "2026-06-19T14:00:06Z",
-          "durationSec": 133,
-          "views": 2,
-          "thumb": "https://i.ytimg.com/vi/blJ-8ggfQWY/hqdefault.jpg"
-        },
-        {
-          "id": "Q6ICwc0bPqU",
-          "title": "World Cup 2026 Recap: The First 5 Matches | Mexico, Korea, USA, Scotland #worldcup2026 #fifaworldcup",
-          "publishedAt": "2026-06-16T13:00:13Z",
-          "durationSec": 147,
-          "views": 8,
-          "thumb": "https://i.ytimg.com/vi/Q6ICwc0bPqU/hqdefault.jpg"
-        },
-        {
-          "id": "RXkiLBceOjM",
-          "title": "Real Sociedad Finished 8th. The Data Says 6th. | La Liga 2025-26",
-          "publishedAt": "2026-05-22T15:15:39Z",
-          "durationSec": 557,
-          "views": 7,
-          "thumb": "https://i.ytimg.com/vi/RXkiLBceOjM/hqdefault.jpg"
-        },
-        {
-          "id": "G0JXUz_ThLg",
-          "title": "Lewandowski's Barcelona career, by the numbers (2022-2026)",
-          "publishedAt": "2026-05-17T08:46:16Z",
-          "durationSec": 257,
-          "views": 4,
-          "thumb": "https://i.ytimg.com/vi/G0JXUz_ThLg/hqdefault.jpg"
-        },
-        {
-          "id": "YQTyDe_uNHI",
-          "title": "They Beat Real Madrid 2-0 At The Bernabéu. Then Lost To Oviedo. At Home.",
-          "publishedAt": "2026-05-14T12:02:01Z",
-          "durationSec": 526,
-          "views": 2,
-          "thumb": "https://i.ytimg.com/vi/YQTyDe_uNHI/hqdefault.jpg"
         }
       ],
       "shorts": [
         {
-          "id": "0l4VKuMo9gQ",
-          "title": "Argentina 3-2 Egypt: Messi's Wild World Cup Comeback #shorts  #worldcup2026  #argentina  #messi",
-          "publishedAt": "2026-07-11T07:15:25Z",
-          "durationSec": 65,
-          "views": 2,
-          "thumb": "https://i.ytimg.com/vi/0l4VKuMo9gQ/oardefault.jpg"
+          "id": "yQoP54pfAss",
+          "title": "They Equalised. I Hit Back 4 Minutes Later | FC 27 #fc27  #eafc27 #futbol  #shorts  #footballgaming",
+          "publishedAt": "2026-10-10T18:06:36Z",
+          "durationSec": 28,
+          "views": 9,
+          "thumb": "https://i.ytimg.com/vi/yQoP54pfAss/hqdefault.jpg"
         },
         {
-          "id": "PZ4QsK95xak",
-          "title": "USA 1-4 Belgium: De Ketelaere Ends the USMNT's World Cup #shorts  #worldcup2026 #usmnt #belgium",
-          "publishedAt": "2026-07-08T15:45:34Z",
-          "durationSec": 41,
-          "views": 4,
-          "thumb": "https://i.ytimg.com/vi/PZ4QsK95xak/oardefault.jpg"
+          "id": "hHfyjajhuXY",
+          "title": "The 63' Goal That Made It 3-4 at SUB | FC 27 | #fc27  #eafc27  #futbol #shorts",
+          "publishedAt": "2026-10-08T06:10:33Z",
+          "durationSec": 26,
+          "views": 516,
+          "thumb": "https://i.ytimg.com/vi/hHfyjajhuXY/hqdefault.jpg"
         },
         {
-          "id": "JKfjlnnfz2w",
-          "title": "Portugal 0-1 Spain: Ronaldo's Final World Cup Ends #shorts   #worldcup2026   #portugal  #spain",
-          "publishedAt": "2026-07-08T11:45:37Z",
-          "durationSec": 41,
-          "views": 1,
-          "thumb": "https://i.ytimg.com/vi/JKfjlnnfz2w/oardefault.jpg"
+          "id": "Fi66iq2hg24",
+          "title": "Level at 3-3, Ahead 4-3 Three Minutes Later | FC 27 | #fc27  #eafc27  #fut  #shorts",
+          "publishedAt": "2026-10-07T00:45:03Z",
+          "durationSec": 29,
+          "views": 112,
+          "thumb": "https://i.ytimg.com/vi/Fi66iq2hg24/hqdefault.jpg"
         },
         {
-          "id": "M8K98n9ecZ4",
-          "title": "Mexico 2-3 England: Bellingham's 98-Second Brace | World Cup 2026 #shorts  #worldcup2026  #england",
-          "publishedAt": "2026-07-08T08:45:14Z",
-          "durationSec": 47,
-          "views": 3,
-          "thumb": "https://i.ytimg.com/vi/M8K98n9ecZ4/oardefault.jpg"
+          "id": "99nXCzPikZc",
+          "title": "2-1 Down to 2-3 Up in Four Minutes | FC 27 | #fc27  #eafc27  #futbol  #shorts",
+          "publishedAt": "2026-10-06T17:15:30Z",
+          "durationSec": 22,
+          "views": 103,
+          "thumb": "https://i.ytimg.com/vi/99nXCzPikZc/hqdefault.jpg"
         },
         {
-          "id": "yvUdVRfB4e0",
-          "title": "Brazil 1-2 Norway: Haaland Brace Ends Brazil 🇳🇴 | World Cup 2026 #shorts  #worldcup2026  #norway",
-          "publishedAt": "2026-07-08T03:45:17Z",
-          "durationSec": 47,
-          "views": 2,
-          "thumb": "https://i.ytimg.com/vi/yvUdVRfB4e0/oardefault.jpg"
+          "id": "v1Y1mLy8Jhk",
+          "title": "REB Level at 4-4, Then the 60th Minute 5-4 | FC 27 |",
+          "publishedAt": "2026-10-06T09:34:32Z",
+          "durationSec": 27,
+          "views": 178,
+          "thumb": "https://i.ytimg.com/vi/v1Y1mLy8Jhk/hqdefault.jpg"
         },
         {
-          "id": "FGJodhbJwb0",
-          "title": "Canada 0-3 Morocco: Ounahi Brace Ends Co-Host Dream 🇲🇦 | 2026 #shorts  #fifaworldcup  #morocco",
-          "publishedAt": "2026-07-07T14:45:09Z",
-          "durationSec": 66,
-          "views": 1,
-          "thumb": "https://i.ytimg.com/vi/FGJodhbJwb0/oardefault.jpg"
+          "id": "pq989d-lxTs",
+          "title": "3-2 in the 42nd, 4-3 in the 65th | FC 27 |",
+          "publishedAt": "2026-10-05T19:30:35Z",
+          "durationSec": 29,
+          "views": 163,
+          "thumb": "https://i.ytimg.com/vi/pq989d-lxTs/hqdefault.jpg"
         },
         {
-          "id": "oxgYdCeLbWk",
-          "title": "Paraguay 0-1 France: Mbappé Penalty Levels Messi 🇫🇷 | 2026 #shorts  #fifaworldcup  #france #mbappe",
-          "publishedAt": "2026-07-07T10:45:37Z",
-          "durationSec": 70,
-          "views": 2,
-          "thumb": "https://i.ytimg.com/vi/oxgYdCeLbWk/oardefault.jpg"
+          "id": "ZiF5OfF9LqE",
+          "title": "From 1-2 Down to 3-2 Up in Four Minutes | FC 27 | #fc27  #eafc27  #futbol  #shorts",
+          "publishedAt": "2026-10-05T14:00:20Z",
+          "durationSec": 29,
+          "views": 290,
+          "thumb": "https://i.ytimg.com/vi/ZiF5OfF9LqE/hqdefault.jpg"
         },
         {
-          "id": "1pKJK0NvKeY",
-          "title": "Australia 1-1 Egypt: Salah Panenka, Egypt Win on Pens 🇪🇬 | 2026 #shorts  #worldcup2026  #egypt",
-          "publishedAt": "2026-07-07T05:45:34Z",
-          "durationSec": 53,
-          "views": 2,
-          "thumb": "https://i.ytimg.com/vi/1pKJK0NvKeY/oardefault.jpg"
+          "id": "yIz_KEOGitI",
+          "title": "LAM Level at 4-4, Then the 79th Minute 5-4 | FC 27 | #fc27 #eafc27 #futbol #shorts  #footballgaming",
+          "publishedAt": "2026-10-05T06:54:33Z",
+          "durationSec": 27,
+          "views": 398,
+          "thumb": "https://i.ytimg.com/vi/yIz_KEOGitI/hqdefault.jpg"
         },
         {
-          "id": "HZYR42r2K6w",
-          "title": "Colombia 1-0 Ghana: Arias Settles It 🇨🇴 | World Cup 2026 #shorts  #worldcup2026  #colombia #ghana",
-          "publishedAt": "2026-07-07T00:45:21Z",
-          "durationSec": 44,
-          "views": 2,
-          "thumb": "https://i.ytimg.com/vi/HZYR42r2K6w/oardefault.jpg"
+          "id": "5qC8gJFfWjM",
+          "title": "Early 1-0, Then Back in Front at 2-1 | FC 27 | #fc27  #eafc27  #fut  #shorts  #footballgaming",
+          "publishedAt": "2026-10-04T14:06:18Z",
+          "durationSec": 29,
+          "views": 9,
+          "thumb": "https://i.ytimg.com/vi/5qC8gJFfWjM/hqdefault.jpg"
         },
         {
-          "id": "1kGISrCWaAQ",
-          "title": "Argentina 3-2 Cape Verde: Messi and a Cruel Own Goal 🇦🇷 | 2026 #shorts  #worldcup2026  #argentina",
-          "publishedAt": "2026-07-06T15:45:21Z",
-          "durationSec": 53,
-          "views": 2,
-          "thumb": "https://i.ytimg.com/vi/1kGISrCWaAQ/oardefault.jpg"
+          "id": "kWZsAqWqOEo",
+          "title": "Glitch commentary & Down twice, level twice, 1-1 and 2-2 | FC 27 #fc27  #eafc27  #futbol  #shorts",
+          "publishedAt": "2026-10-03T07:00:12Z",
+          "durationSec": 29,
+          "views": 246,
+          "thumb": "https://i.ytimg.com/vi/kWZsAqWqOEo/hqdefault.jpg"
         },
         {
-          "id": "2qYhbCl22wI",
-          "title": "Switzerland 2-0 Algeria: 88-Year Wait Ends 🇨🇭 | World Cup 2026 #shorts  #worldcup2026  #switzerland",
-          "publishedAt": "2026-07-06T09:45:27Z",
-          "durationSec": 45,
-          "views": 2,
-          "thumb": "https://i.ytimg.com/vi/2qYhbCl22wI/oardefault.jpg"
+          "id": "be8bGsTV9LU",
+          "title": "Nothing for 90 minutes, then 1-0 and 2-0 | FC 27 | #fc27  #eafc27  #fut  #shorts  #footballgaming",
+          "publishedAt": "2026-10-02T13:15:29Z",
+          "durationSec": 29,
+          "views": 525,
+          "thumb": "https://i.ytimg.com/vi/be8bGsTV9LU/hqdefault.jpg"
         },
         {
-          "id": "sLSgTAyCoio",
-          "title": "Spain 3-0 Austria: Cruise Into the Last 16 🇪🇸 | World Cup 2026 #shorts  #worldcup2026  #spain",
-          "publishedAt": "2026-07-06T07:45:22Z",
-          "durationSec": 42,
-          "views": 11,
-          "thumb": "https://i.ytimg.com/vi/sLSgTAyCoio/oardefault.jpg"
+          "id": "KaZzymjL-yg",
+          "title": "Messi free kick, last kick, 120th minute, 5-0 | FC 27 #fc27  #eafc27  #FUT  #football #gaming",
+          "publishedAt": "2026-10-01T19:15:04Z",
+          "durationSec": 23,
+          "views": 589,
+          "thumb": "https://i.ytimg.com/vi/KaZzymjL-yg/hqdefault.jpg"
         }
       ],
       "live": [
         {
-          "id": "vepq_92KWtE",
-          "title": "JH-Analytics Live Stream",
-          "publishedAt": "2026-07-21T13:43:16Z",
+          "id": "hEkRgd3L5nc",
+          "title": "FC26 LIVE | Ultimate Team |  #fc26   #ultimateteam",
+          "publishedAt": "2026-10-05T14:15:01Z",
           "durationSec": 0,
           "views": 0,
-          "thumb": "https://i.ytimg.com/vi/vepq_92KWtE/hqdefault.jpg",
+          "thumb": "https://i.ytimg.com/vi/hEkRgd3L5nc/hqdefault.jpg",
           "status": "upcoming"
         },
         {
-          "id": "COyVljbmhDY",
-          "title": "FC 26 New Penalty Event + Rivals Grind | Ultimate Team Live #fc26 #eafc26",
-          "publishedAt": "2026-07-21T05:55:15Z",
-          "durationSec": 6181,
-          "views": 33,
-          "thumb": "https://i.ytimg.com/vi/COyVljbmhDY/hqdefault.jpg"
+          "id": "qcdgWXJD7ho",
+          "title": "FC 27 FUT Champions LIVE 🔴 | How Many Wins Can We Get? | #fc27 #futchampions #eafc27 #ultimateteam",
+          "publishedAt": "2026-10-10T16:04:03Z",
+          "durationSec": 4741,
+          "views": 50,
+          "thumb": "https://i.ytimg.com/vi/qcdgWXJD7ho/hqdefault.jpg"
         },
         {
-          "id": "PkLCAPixPGc",
-          "title": "FC 26 New Penalty Event + Rivals Grind | Ultimate Team Live #fc26 #eafc26",
-          "publishedAt": "2026-07-19T06:48:49Z",
-          "durationSec": 5660,
-          "views": 27,
-          "thumb": "https://i.ytimg.com/vi/PkLCAPixPGc/hqdefault.jpg"
+          "id": "4x5HnZfCdUE",
+          "title": "FC 27 LIVE | Road to Division 5 | Div Rivals + Pack Opening | Ultimate Team #fc27  #ultimateteam",
+          "publishedAt": "2026-10-10T07:00:56Z",
+          "durationSec": 3230,
+          "views": 14,
+          "thumb": "https://i.ytimg.com/vi/4x5HnZfCdUE/hqdefault.jpg"
         },
         {
-          "id": "u28D_3pOhmM",
-          "title": "FC 26 New Penalty Event + Rivals Grind | Ultimate Team Live #fc26 #eafc26",
-          "publishedAt": "2026-07-18T07:56:22Z",
-          "durationSec": 5730,
-          "views": 69,
-          "thumb": "https://i.ytimg.com/vi/u28D_3pOhmM/hqdefault.jpg"
+          "id": "1bBwi0hzFhA",
+          "title": "FC 27 LIVE | Road to Division 5 | Div Rivals + Pack Opening | Ultimate Team #fc27  #ultimateteam",
+          "publishedAt": "2026-10-09T08:27:34Z",
+          "durationSec": 5526,
+          "views": 48,
+          "thumb": "https://i.ytimg.com/vi/1bBwi0hzFhA/hqdefault.jpg"
         },
         {
-          "id": "Z2fr-vwS6_w",
-          "title": "FC 26 New Penalty Event + Rivals Grind | Ultimate Team Live #fc26 #eafc26",
-          "publishedAt": "2026-07-17T06:03:33Z",
-          "durationSec": 4669,
-          "views": 32,
-          "thumb": "https://i.ytimg.com/vi/Z2fr-vwS6_w/hqdefault.jpg"
+          "id": "hcK0_7b2G0s",
+          "title": "FC 27 LIVE | Ultimate Gauntlet 1 – All 10 Objectives | Ultimate Team Rewards Grind | #fc27",
+          "publishedAt": "2026-10-06T19:02:33Z",
+          "durationSec": 9619,
+          "views": 39,
+          "thumb": "https://i.ytimg.com/vi/hcK0_7b2G0s/hqdefault.jpg"
         },
         {
-          "id": "7luRjcO_kZs",
-          "title": "Live | FC26 ULTIMATE TEAM | RIVALS",
-          "publishedAt": "2026-07-16T06:16:02Z",
-          "durationSec": 3937,
+          "id": "6biMw2vLMks",
+          "title": "FC 27 LIVE | Ultimate Gauntlet 1 – All 10 Objectives | Ultimate Team Rewards Grind | #fc27",
+          "publishedAt": "2026-10-05T19:39:25Z",
+          "durationSec": 11543,
+          "views": 45,
+          "thumb": "https://i.ytimg.com/vi/6biMw2vLMks/hqdefault.jpg"
+        },
+        {
+          "id": "xnR9e9rd7aY",
+          "title": "🔴 FC 27 LIVE! Pack Opening, Rivals Div 7 & Upgrading My Squad | Ultimate Team | FC27",
+          "publishedAt": "2026-10-05T07:13:28Z",
+          "durationSec": 2441,
           "views": 10,
-          "thumb": "https://i.ytimg.com/vi/7luRjcO_kZs/hqdefault.jpg"
+          "thumb": "https://i.ytimg.com/vi/xnR9e9rd7aY/hqdefault.jpg"
         },
         {
-          "id": "3qyr2qwkyUI",
-          "title": "JH-Analytics Live Stream",
-          "publishedAt": "2026-07-15T22:18:14Z",
-          "durationSec": 306,
-          "views": 2,
-          "thumb": "https://i.ytimg.com/vi/3qyr2qwkyUI/hqdefault.jpg"
+          "id": "pwgxcCU4fmw",
+          "title": "FC26 LIVE | Ultimate Team |  #fc26   #ultimateteam",
+          "publishedAt": "2026-10-05T05:37:06Z",
+          "durationSec": 1490,
+          "views": 11,
+          "thumb": "https://i.ytimg.com/vi/pwgxcCU4fmw/hqdefault.jpg"
         },
         {
-          "id": "OjchFvSe07o",
-          "title": "Live | FC26 ULTIMATE TEAM | RIVALS",
-          "publishedAt": "2026-07-15T22:09:55Z",
-          "durationSec": 396,
-          "views": 8,
-          "thumb": "https://i.ytimg.com/vi/OjchFvSe07o/hqdefault.jpg"
+          "id": "2hOJojjKExU",
+          "title": "🔴 FC 27 LIVE! Pack Opening, Rivals Div 7 & Upgrading My Squad | Ultimate Team | FC27",
+          "publishedAt": "2026-10-04T09:03:06Z",
+          "durationSec": 4880,
+          "views": 21,
+          "thumb": "https://i.ytimg.com/vi/2hOJojjKExU/hqdefault.jpg"
         },
         {
-          "id": "CoQDuM5nsco",
-          "title": "Live | FC26 ULTIMATE TEAM | RIVALS",
-          "publishedAt": "2026-07-15T09:51:55Z",
-          "durationSec": 7364,
-          "views": 8,
-          "thumb": "https://i.ytimg.com/vi/CoQDuM5nsco/hqdefault.jpg"
+          "id": "uJDx3g_Epi8",
+          "title": "🔴 FC 27 LIVE! Pack Opening, Rivals Div 7 & Upgrading My Squad | Ultimate Team | FC27",
+          "publishedAt": "2026-10-03T11:11:39Z",
+          "durationSec": 4805,
+          "views": 86,
+          "thumb": "https://i.ytimg.com/vi/uJDx3g_Epi8/hqdefault.jpg"
         },
         {
-          "id": "cBkqb80zgbc",
-          "title": "Live | FC26 ULTIMATE TEAM | RIVALS",
-          "publishedAt": "2026-07-15T00:00:21Z",
-          "durationSec": 1731,
-          "views": 5,
-          "thumb": "https://i.ytimg.com/vi/cBkqb80zgbc/hqdefault.jpg"
+          "id": "ZzbRppZdH44",
+          "title": "🔴 FC 27 LIVE! Pack Opening, Rivals Div 7 & Upgrading My Squad | Ultimate Team | FC27",
+          "publishedAt": "2026-10-02T17:23:48Z",
+          "durationSec": 6521,
+          "views": 15,
+          "thumb": "https://i.ytimg.com/vi/ZzbRppZdH44/hqdefault.jpg"
         },
         {
-          "id": "bt22r476AOQ",
-          "title": "Live | GTA V",
-          "publishedAt": "2026-07-14T06:24:24Z",
-          "durationSec": 666,
-          "views": 4,
-          "thumb": "https://i.ytimg.com/vi/bt22r476AOQ/hqdefault.jpg"
-        },
-        {
-          "id": "N1359CH3BL8",
-          "title": "Live | FC26 ULTIMATE TEAM | RIVALS",
-          "publishedAt": "2026-07-14T05:39:36Z",
-          "durationSec": 2853,
-          "views": 16,
-          "thumb": "https://i.ytimg.com/vi/N1359CH3BL8/hqdefault.jpg"
+          "id": "m6k2UkIt-q8",
+          "title": "🔴 FC 27 LIVE! Pack Opening, Rivals & Upgrading My Squad | Ultimate Team | FC27",
+          "publishedAt": "2026-10-01T09:15:01Z",
+          "durationSec": 5851,
+          "views": 91,
+          "thumb": "https://i.ytimg.com/vi/m6k2UkIt-q8/hqdefault.jpg"
         }
       ]
     }
