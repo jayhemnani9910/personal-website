@@ -278,7 +278,7 @@ export function ProjectDetail({
           A short brief is set in the hand the home page's project cards use, so
           a card on / and its page say the same thing the same way. A long one
           stays in print: a paragraph of handwriting is hard to read. */}
-      <Ruled className="grid gap-[clamp(24px,4vw,48px)] sm:grid-cols-2 lg:grid-cols-3">
+      <Ruled className="grid grid-cols-1 gap-[clamp(24px,4vw,48px)] [overflow-wrap:anywhere] sm:grid-cols-2 lg:grid-cols-3">
         <div>
           <h2 className={LABEL}>ARRIVED AS</h2>
           <p className={`mt-3 ${project.challenge.length <= HAND_MAX ? HAND : LEDE}`}>&ldquo;{project.challenge}&rdquo;</p>

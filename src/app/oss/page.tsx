@@ -51,7 +51,7 @@ export default function OssPage() {
         </section>
 
         <section className={`${WRAP} ${SHELL} pb-[clamp(3rem,6vw,5rem)]`}>
-          <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {repos.map((r) => {
               return (
                 <li key={r.slug} className="flex">
@@ -60,7 +60,7 @@ export default function OssPage() {
                     className={`${CARD} ${CARD_HOVER} flex w-full min-w-0 flex-col p-5 text-tr-text hover:text-tr-text`}
                   >
                     <span className="flex items-baseline justify-between gap-3">
-                      <span className="min-w-0 break-words font-mono text-[14px] font-semibold">{r.repo}</span>
+                      <span className="min-w-0 font-mono text-[14px] font-semibold [overflow-wrap:anywhere]">{r.repo}</span>
                       <span className="shrink-0 font-mono text-[12px] text-tr-text-faint">{countLabel(r.prs)}</span>
                     </span>
                     <span className="mt-2 block text-[14px] leading-[var(--tr-lh-body)] text-tr-text-mute">{r.about}</span>
