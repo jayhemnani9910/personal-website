@@ -3,6 +3,14 @@
   "about": "A text editor that runs in the terminal but works like a desktop one, shipped as one file with no setup.",
   "prs": [
     {
+      "number": 815,
+      "merged": "2026-10-12",
+      "title": "The line's author is right even before you save",
+      "broken": "The editor shows who last changed the line you are on. After adding or removing lines without saving, it looked at the wrong line in the saved file and named the wrong person.",
+      "changed": "With unsaved changes, the editor now hands its current text to git, which matches each line to its real author.",
+      "matters": "The name you see is the person who actually wrote that line."
+    },
+    {
       "number": 814,
       "merged": "2026-10-11",
       "title": "Copied GitHub links open the right file again",

@@ -3,6 +3,22 @@
   "about": "A fast web browser that runs without a screen, made for bots and AI agents that read websites.",
   "prs": [
     {
+      "number": 3910,
+      "merged": "2026-10-12",
+      "title": "A '?' after the '#' in a link no longer changes the address",
+      "broken": "Many web apps put a '?' after the '#' in their links. The browser read it as part of the real address, so edited links went somewhere else and servers were told text meant to stay in the browser.",
+      "changed": "The browser now only looks for the '?' before the '#', like Chrome does.",
+      "matters": "Links in these apps go where they should, and the private part of the address stays private."
+    },
+    {
+      "number": 3911,
+      "merged": "2026-10-12",
+      "title": "Searches for forms and links now ignore letter case, like Chrome",
+      "broken": "Pages often write things like method=\"POST\". Searching the page for forms with method=post found nothing, though Chrome finds them, so bots missed forms and links.",
+      "changed": "For the attributes where the web standard says case doesn't matter, the search now ignores it.",
+      "matters": "Bots and test tools find the same parts of a page that Chrome does."
+    },
+    {
       "number": 3895,
       "merged": "2026-10-11",
       "title": "Saved logins now survive being restored",

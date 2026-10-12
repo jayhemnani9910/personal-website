@@ -3,6 +3,22 @@
   "about": "A toolkit programmers use to build reliable apps in TypeScript, a popular programming language.",
   "prs": [
     {
+      "number": 9013,
+      "merged": "2026-10-11",
+      "title": "Uploads with long or odd file names no longer fail",
+      "broken": "A web server built with the toolkit saves each uploaded file under its own name. A long Chinese or Japanese name, or a name of just '.' or '..', made the whole upload fail with a server error.",
+      "changed": "Long names are now cut to fit the disk's real limit, keeping the extension, and '.' and '..' are saved under a safe name.",
+      "matters": "People can upload files named in any language, and an odd name can't break the upload."
+    },
+    {
+      "number": 9014,
+      "merged": "2026-10-11",
+      "title": "Data files saved on Windows now read correctly on Node",
+      "broken": "Some Windows tools put an invisible mark at the start of a file. Data sent with that mark was rejected by apps running on Node, while the same app on other platforms read it fine.",
+      "changed": "Node now drops the invisible mark when it reads text, the same way the other platforms already did.",
+      "matters": "An app gives the same answer wherever it runs, and files from Windows tools just work."
+    },
+    {
       "number": 8987,
       "merged": "2026-10-10",
       "title": "Monitoring no longer repeats old lowest and highest values",

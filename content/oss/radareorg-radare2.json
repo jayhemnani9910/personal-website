@@ -1,0 +1,22 @@
+{
+  "repo": "radareorg/radare2",
+  "about": "A toolkit for taking programs apart to study how they work, used by security researchers.",
+  "prs": [
+    {
+      "number": 26947,
+      "merged": "2026-10-12",
+      "title": "The number converter shows the right old-style address",
+      "broken": "The toolkit's number converter also shows an address in the split format early PCs used. It dropped part of the number, so it showed a different address than the main tool did.",
+      "changed": "It now uses the same calculation as the main tool.",
+      "matters": "Both parts of the toolkit agree, and the address shown is the right one."
+    },
+    {
+      "number": 26948,
+      "merged": "2026-10-12",
+      "title": "Negative numbers now work with every option of the number converter",
+      "broken": "Giving the number converter a negative number, like -1, made it ignore the option you asked for, such as decimal output or a size like 'g' for gigabytes, and just print hex.",
+      "changed": "Negative numbers now go through the same steps as positive ones.",
+      "matters": "Converting -1 to decimal gives -1, not a long hex number."
+    }
+  ]
+}
