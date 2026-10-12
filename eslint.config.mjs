@@ -33,6 +33,8 @@ const eslintConfig = defineConfig([
     "graphify-out/**",
     // Agent worktrees are full checkouts, .next builds included.
     ".claude/**",
+    // Third-party code copied in as-is (src/vendor/*/LICENSE).
+    "src/vendor/**",
   ]),
 ]);
 
