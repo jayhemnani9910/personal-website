@@ -3,6 +3,22 @@
   "about": "A toolkit programmers use to build reliable apps in TypeScript, a popular programming language.",
   "prs": [
     {
+      "number": 9049,
+      "merged": "2026-10-12",
+      "title": "Reading a stream in chunks no longer loses an item",
+      "broken": "A common way to split a stream of data, for example a file's header from its body, read one item too far and threw it away. Every chunk after the first lost its first item.",
+      "changed": "The split now stops right at the item that ends the chunk, so the next chunk starts with the right one.",
+      "matters": "Programs that split data this way get all of it, not most of it."
+    },
+    {
+      "number": 9048,
+      "merged": "2026-10-12",
+      "title": "Adding hours now works across clock changes",
+      "broken": "Adding hours or minutes to a time was done on the clock face. On the nights clocks go back or forward, adding one minute could jump back almost an hour, and adding 24 hours gave only 23.",
+      "changed": "Hours, minutes and seconds are now added as real time passed, while days, months and years still follow the calendar.",
+      "matters": "Timers and schedules built with the toolkit stay right on the two nights a year the clocks change."
+    },
+    {
       "number": 9013,
       "merged": "2026-10-11",
       "title": "Uploads with long or odd file names no longer fail",
