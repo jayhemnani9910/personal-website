@@ -208,6 +208,9 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "MHSanaei/3x-ui", number: "#6781", href: "https://github.com/MHSanaei/3x-ui/pull/6781" },
   { repo: "Effect-TS/effect", number: "#9048", href: "https://github.com/Effect-TS/effect/pull/9048" },
   { repo: "Effect-TS/effect", number: "#9049", href: "https://github.com/Effect-TS/effect/pull/9049" },
+  { repo: "AlexsJones/llmfit", number: "#1130", href: "https://github.com/AlexsJones/llmfit/pull/1130" },
+  { repo: "AlexsJones/llmfit", number: "#1131", href: "https://github.com/AlexsJones/llmfit/pull/1131" },
+  { repo: "seaweedfs/seaweedfs", number: "#11724", href: "https://github.com/seaweedfs/seaweedfs/pull/11724" },
 ];
 
 /**

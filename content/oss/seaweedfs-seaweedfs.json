@@ -1,0 +1,14 @@
+{
+  "repo": "seaweedfs/seaweedfs",
+  "about": "A storage system that spreads files across many servers and lets apps reach them in several ways.",
+  "prs": [
+    {
+      "number": 11724,
+      "merged": "2026-10-12",
+      "title": "File transfer listings no longer hang or come back short",
+      "broken": "SeaweedFS can serve files over SFTP, a common way to transfer files. If storage hiccupped during a folder listing, the server got stuck forever, and a single hidden file could cut a big listing short.",
+      "changed": "I made a storage error end the listing with a clear failure, and made hidden files stop cutting the listing short.",
+      "matters": "Users see every file they are allowed to see, or a clear error, never a silently partial list or a stuck server."
+    }
+  ]
+}
