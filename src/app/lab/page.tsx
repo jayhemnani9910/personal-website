@@ -44,7 +44,7 @@ export default function LabPage() {
             <p className="text-[17px] leading-[var(--tr-lh-body)] text-tr-text-mute">
               Always open to interesting projects and ideas.
             </p>
-            <a href={`mailto:${SITE_CONFIG.social.email}`} className={`${BTN} font-mono text-[14px]`}>
+            <a href={`mailto:${SITE_CONFIG.social.email}`} className={`${BTN} max-w-full font-mono text-[14px] [overflow-wrap:anywhere]`}>
               {SITE_CONFIG.social.email} <span aria-hidden="true">→</span>
             </a>
           </div>

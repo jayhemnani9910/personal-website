@@ -89,7 +89,7 @@ export default function FDEPage() {
               </p>
             </div>
 
-            <div className="grid gap-5 sm:grid-cols-2">
+            <div className="grid grid-cols-1 gap-5 [overflow-wrap:anywhere] sm:grid-cols-2">
               {PROOFS.map((p) => (
                 <div key={p.id} className={`${CARD} flex flex-col gap-3 p-6`}>
                   <span className="font-hand text-[30px] leading-none text-tr-accent-hand">{p.id}</span>
