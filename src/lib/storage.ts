@@ -19,3 +19,20 @@ export function writeStorage(key: string, value: string): void {
         // Blocked storage: the choice lasts for this page view only.
     }
 }
+
+export function removeStorage(key: string): void {
+    try {
+        window.localStorage.removeItem(key);
+    } catch {
+        // Blocked storage held nothing to remove.
+    }
+}
+
+// Saved by earlier versions of the site (the dark theme, the intro preloader,
+// the old site modes) and read by nothing now. Cleared on load so a returning
+// visitor's browser holds only what the privacy page lists.
+const RETIRED_KEYS = ["theme", "theme-choice", "tr-intro-seen", "site-mode", "shell-intent"];
+
+export function dropRetiredKeys(): void {
+    RETIRED_KEYS.forEach(removeStorage);
+}

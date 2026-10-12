@@ -9,6 +9,7 @@ import { TransitionLayout } from "@/components/TransitionLayout";
 import { MotionProvider } from "@/components/motion/MotionProvider";
 import { ReaderMode } from "@/components/ReaderMode";
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
+import { dropRetiredKeys } from "@/lib/storage";
 import { usePathname } from "next/navigation";
 
 // The shell renders nothing until it is opened, by a keyboard shortcut
@@ -60,6 +61,7 @@ function LenisFrames() {
 
 export function ClientLayout({ children, projectCount }: { children: React.ReactNode; projectCount: number }) {
     const prefersReducedMotion = usePrefersReducedMotion();
+    useEffect(dropRetiredKeys, []);
     const pathname = usePathname();
     const isHome = pathname === "/";
     const smoothScroll = isHome && !prefersReducedMotion;

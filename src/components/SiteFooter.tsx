@@ -6,7 +6,7 @@ import { ReaderToggle } from "./ReaderToggle";
 import { ShellButton } from "./ShellButton";
 import { NAV } from "./nav-links";
 
-const LINKS: { label: string; href: Route }[] = [{ label: "home", href: "/" }, ...NAV];
+const LINKS: { label: string; href: Route }[] = [{ label: "home", href: "/" }, ...NAV, { label: "privacy", href: "/privacy" }];
 
 // The small sibling of the home page's contact band, so leaving / and coming
 // back feels like one site. Every route but the home page uses it.

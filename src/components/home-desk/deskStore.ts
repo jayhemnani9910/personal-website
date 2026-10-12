@@ -1,7 +1,8 @@
 "use client";
 
 import { useSyncExternalStore } from "react";
-import { readStorage, writeStorage } from "@/lib/storage";
+import { applyReaderMode } from "@/lib/reader-mode";
+import { READER_KEY, readStorage, removeStorage, writeStorage } from "@/lib/storage";
 
 // The two things the Desk page remembers per visitor: how many visits, and
 // which secrets they found. Read through useSyncExternalStore so the server
@@ -79,4 +80,21 @@ export function useVisits(): number | null {
   const raw = useStored(VISITS_KEY);
   if (raw === null) return null;
   return Math.max(1, Number(raw) || 1);
+}
+
+/**
+ * Everything the site saved in this browser, gone: the visit count, the
+ * secrets, reader mode, and the per-tab "already counted" flags. The privacy
+ * page's "forget me" button. The next visit to / counts as a first one.
+ */
+export function forgetVisitor(): void {
+  [VISITS_KEY, EGGS_KEY, READER_KEY].forEach(removeStorage);
+  try {
+    window.sessionStorage.clear();
+  } catch {
+    // Blocked session storage held nothing.
+  }
+  memory.clear();
+  applyReaderMode(false);
+  listeners.forEach((l) => l());
 }

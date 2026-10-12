@@ -31,6 +31,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${baseUrl}/oss`, changeFrequency: "monthly", priority: 0.7 },
     { url: `${baseUrl}/lab`, changeFrequency: "monthly", priority: 0.6 },
     { url: `${baseUrl}/youtube`, changeFrequency: "weekly", priority: 0.6 },
+    { url: `${baseUrl}/privacy`, changeFrequency: "yearly", priority: 0.2 },
   ];
 
   const projectRoutes: MetadataRoute.Sitemap = projects.map((project) => ({
