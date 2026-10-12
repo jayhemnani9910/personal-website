@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getRedis } from "@/lib/kv";
-import { clientIp } from "@/lib/client-ip";
+import { clientKey } from "@/lib/client-ip";
 import { rateLimit } from "@/lib/ratelimit";
 import { getProjectIds } from "@/lib/content";
 
@@ -75,12 +75,12 @@ export async function POST(request: NextRequest) {
     }
 
     // Generous for a reader moving through projects, tight for a loop.
-    const ip = clientIp(request.headers);
-    if ((await rateLimit(getRedis(), "views", ip, { limit: 30 })) === "limited") {
+    const who = clientKey(request.headers);
+    if ((await rateLimit(getRedis(), "views", who, { limit: 30 })) === "limited") {
         return NextResponse.json({ error: "rate_limited" }, { status: 429 });
     }
 
-    const seenKey = `viewed:${slug}:${ip}`;
+    const seenKey = `viewed:${slug}:${who}`;
     const redis = getRedis();
     if (redis) {
         let first: unknown = null;

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getRedis } from "@/lib/kv";
-import { clientIp } from "@/lib/client-ip";
+import { clientKey } from "@/lib/client-ip";
 import { rateLimit } from "@/lib/ratelimit";
 import { GUESTBOOK_KEY, KEPT, SHOWN, parseNote, visible, type Note } from "@/lib/guestbook";
 
@@ -37,8 +37,8 @@ export async function POST(request: NextRequest) {
     if (!parsed.ok) return NextResponse.json({ error: parsed.error }, { status: 400 });
 
     // Three notes per ten minutes is plenty for a person and dull for a script.
-    const ip = clientIp(request.headers);
-    if ((await rateLimit(getRedis(), "guestbook", ip, { limit: 3, windowSeconds: 600 })) === "limited") {
+    const who = clientKey(request.headers);
+    if ((await rateLimit(getRedis(), "guestbook", who, { limit: 3, windowSeconds: 600 })) === "limited") {
         return NextResponse.json({ error: "rate_limited" }, { status: 429 });
     }
 

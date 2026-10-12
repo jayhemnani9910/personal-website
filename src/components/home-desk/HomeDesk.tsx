@@ -235,6 +235,10 @@ export async function HomeDesk() {
                 <ReaderToggle className="cursor-pointer hover:text-tr-butter" />
                 {" · "}
                 <ShellButton className="cursor-pointer hover:text-tr-butter" />
+                {" · "}
+                <Link href="/privacy" className="hover:text-tr-butter">
+                  privacy
+                </Link>
               </p>
               <p aria-hidden="true">psst. ↑ ↑ ↓ ↓ ← → ← → b a</p>
             </div>

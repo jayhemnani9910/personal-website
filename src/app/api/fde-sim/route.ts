@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getRedis } from "@/lib/kv";
-import { clientIp } from "@/lib/client-ip";
+import { clientKey } from "@/lib/client-ip";
 import { rateLimit } from "@/lib/ratelimit";
 import { dailyBudget } from "@/lib/ratelimit";
 import { defer } from "@/lib/defer";
@@ -327,7 +327,7 @@ export async function POST(request: NextRequest) {
     const wantsStream = request.nextUrl.searchParams.get("stream") === "1";
 
     // Best-effort per-IP rate limit (requires KV; fails open when unconfigured).
-    if ((await rateLimit(getRedis(), "fde-sim", clientIp(request.headers))) === "limited") {
+    if ((await rateLimit(getRedis(), "fde-sim", clientKey(request.headers))) === "limited") {
         await defer(() => recordSim(getRedis(), { outcome: "rate_limited" }));
         return NextResponse.json({ error: "rate-limited" }, { status: 429 });
     }
