@@ -1,0 +1,14 @@
+{
+  "repo": "MHSanaei/3x-ui",
+  "about": "A web panel for running your own VPN-style proxy server and handing out connection links to users.",
+  "prs": [
+    {
+      "number": 6781,
+      "merged": "2026-10-12",
+      "title": "Subscription links work again for some older servers",
+      "broken": "This panel gives users a subscription with their connection settings. For servers set up by older versions, or added through the API, it left one setting blank, and the app refused to load the whole connection.",
+      "changed": "A blank value is now filled in as 'none', the default the rest of the panel already used.",
+      "matters": "Users of those servers can connect again without the admin re-saving anything."
+    }
+  ]
+}

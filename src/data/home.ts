@@ -205,6 +205,9 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "radareorg/radare2", number: "#26948", href: "https://github.com/radareorg/radare2/pull/26948" },
   { repo: "caddyserver/caddy", number: "#8195", href: "https://github.com/caddyserver/caddy/pull/8195" },
   { repo: "radareorg/radare2", number: "#26947", href: "https://github.com/radareorg/radare2/pull/26947" },
+  { repo: "MHSanaei/3x-ui", number: "#6781", href: "https://github.com/MHSanaei/3x-ui/pull/6781" },
+  { repo: "Effect-TS/effect", number: "#9048", href: "https://github.com/Effect-TS/effect/pull/9048" },
+  { repo: "Effect-TS/effect", number: "#9049", href: "https://github.com/Effect-TS/effect/pull/9049" },
 ];
 
 /**
