@@ -3,6 +3,14 @@
   "about": "A popular web server that runs websites and sets up their security certificates for you.",
   "prs": [
     {
+      "number": 8195,
+      "merged": "2026-10-12",
+      "title": "Custom error pages now follow the order you wrote them",
+      "broken": "A site can set different error pages, like one for 'not found' and a general one for other mistakes. The server checked them in reverse order, so the general page showed up where the 'not found' page should have.",
+      "changed": "The server now keeps the order written in the settings file.",
+      "matters": "Visitors see the error page the site owner meant for them."
+    },
+    {
       "number": 8183,
       "merged": "2026-10-10",
       "title": "A repeated rule line is now an error, not silently ignored",

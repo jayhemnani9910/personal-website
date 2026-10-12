@@ -196,6 +196,15 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "casdoor/casdoor", number: "#5916", href: "https://github.com/casdoor/casdoor/pull/5916" },
   { repo: "pocket-id/pocket-id", number: "#1834", href: "https://github.com/pocket-id/pocket-id/pull/1834" },
   { repo: "eugenioenko/ttt", number: "#814", href: "https://github.com/eugenioenko/ttt/pull/814" },
+  { repo: "pocket-id/pocket-id", number: "#1835", href: "https://github.com/pocket-id/pocket-id/pull/1835" },
+  { repo: "Effect-TS/effect", number: "#9014", href: "https://github.com/Effect-TS/effect/pull/9014" },
+  { repo: "Effect-TS/effect", number: "#9013", href: "https://github.com/Effect-TS/effect/pull/9013" },
+  { repo: "eugenioenko/ttt", number: "#815", href: "https://github.com/eugenioenko/ttt/pull/815" },
+  { repo: "lightpanda-io/browser", number: "#3911", href: "https://github.com/lightpanda-io/browser/pull/3911" },
+  { repo: "lightpanda-io/browser", number: "#3910", href: "https://github.com/lightpanda-io/browser/pull/3910" },
+  { repo: "radareorg/radare2", number: "#26948", href: "https://github.com/radareorg/radare2/pull/26948" },
+  { repo: "caddyserver/caddy", number: "#8195", href: "https://github.com/caddyserver/caddy/pull/8195" },
+  { repo: "radareorg/radare2", number: "#26947", href: "https://github.com/radareorg/radare2/pull/26947" },
 ];
 
 /**
