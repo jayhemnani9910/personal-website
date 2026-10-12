@@ -163,11 +163,31 @@ describe("HomeDesk", () => {
 
   it("a found secret only repeats its message the second time", async () => {
     await renderHome();
-    const cube = screen.getByRole("button", { name: "Scramble the cube face" });
+    const cube = screen.getByRole("button", { name: "Scramble the cube" });
     fireEvent.click(cube);
     expect(status()).toContain("Secret 1/5");
     fireEvent.click(cube);
     expect(status()).toBe("Scrambled. Now solve it. I'll wait.");
+  });
+
+  it("solve it puts a scrambled cube back", async () => {
+    await renderHome();
+    const solveIt = screen.getByRole("button", { name: "solve it", hidden: true });
+    // Nothing to solve yet, so the button is there but hidden.
+    expect(solveIt.className).toContain("invisible");
+    fireEvent.click(screen.getByRole("button", { name: "Scramble the cube" }));
+    expect(screen.getByText(/^Scrambled\. Give me/)).toBeDefined();
+    expect(solveIt.className).not.toContain("invisible");
+    // The scramble is written out, so it can be done on a real cube.
+    const scramble = screen.getByText("scramble").nextElementSibling!.firstChild!.textContent!;
+    expect(scramble.split(" ")).toHaveLength(25);
+    fireEvent.click(solveIt);
+    expect(await screen.findByText(/^Solved in 25 moves\./)).toBeDefined();
+    expect(solveIt.className).toContain("invisible");
+    // The full solve stays written out under the scramble: no solver in
+    // jsdom, so it is the scramble undone.
+    const solution = screen.getByText("solution").nextElementSibling!;
+    expect(solution.children).toHaveLength(25);
   });
 
   it("the secrets panel names only what was found", async () => {
