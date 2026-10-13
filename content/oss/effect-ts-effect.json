@@ -3,6 +3,22 @@
   "about": "A toolkit programmers use to build reliable apps in TypeScript, a popular programming language.",
   "prs": [
     {
+      "number": 9095,
+      "merged": "2026-10-13",
+      "title": "Settings that refer to other settings now fill in correctly",
+      "broken": "In a settings file, one setting can use another. The toolkit read the filled-in text again, so it could turn into a different, missing setting. A line that used itself, like extending PATH, crashed the app.",
+      "changed": "Each setting is now filled in once, and the text that was filled in is never read again.",
+      "matters": "Settings come out the way the file says, and a common PATH line no longer crashes the app."
+    },
+    {
+      "number": 9096,
+      "merged": "2026-10-13",
+      "title": "Live updates no longer lose text after a carriage return",
+      "broken": "Servers built with the toolkit can push live updates to a browser. Text with a lone carriage return, which progress bars use, was sent as one line, so the browser lost everything after the first return.",
+      "changed": "Every kind of line break now starts a new line in the update, the way the format expects.",
+      "matters": "Progress output and other text reach the browser whole."
+    },
+    {
       "number": 9049,
       "merged": "2026-10-12",
       "title": "Reading a stream in chunks no longer loses an item",
