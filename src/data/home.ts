@@ -220,6 +220,9 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "Effect-TS/effect", number: "#9095", href: "https://github.com/Effect-TS/effect/pull/9095" },
   { repo: "radareorg/radare2", number: "#26957", href: "https://github.com/radareorg/radare2/pull/26957" },
   { repo: "radareorg/radare2", number: "#26958", href: "https://github.com/radareorg/radare2/pull/26958" },
+  { repo: "AlexsJones/llmfit", number: "#1142", href: "https://github.com/AlexsJones/llmfit/pull/1142" },
+  { repo: "caddyserver/caddy", number: "#8207", href: "https://github.com/caddyserver/caddy/pull/8207" },
+  { repo: "caddyserver/caddy", number: "#8209", href: "https://github.com/caddyserver/caddy/pull/8209" },
 ];
 
 /**
