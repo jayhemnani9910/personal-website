@@ -3,6 +3,24 @@
   "about": "A toolkit for taking programs apart to study how they work, used by security researchers.",
   "prs": [
     {
+      "number": 26957,
+      "merged": "2026-10-13",
+      "title": "The hash tool now prints entropy in every output mode",
+      "broken": "The toolkit's hash tool can measure a file's entropy, a sign of whether data is packed or encrypted. In quiet, JSON and some other modes it printed nothing, or random bytes from memory, instead of the number.",
+      "changed": "Every output mode now uses one shared step for entropy and the other special cases.",
+      "matters": "Scripts that ask for entropy in JSON or quiet mode get the real number.",
+      "top": true
+    },
+    {
+      "number": 26958,
+      "merged": "2026-10-13",
+      "title": "The hash tool's JSON mode works for files again",
+      "broken": "Asking the hash tool for one JSON object per file printed only the file name and nothing else.",
+      "changed": "The JSON object is now printed for files, the same as for text given on the command line.",
+      "matters": "Scripts that read the tool's JSON output get the hashes they asked for.",
+      "top": true
+    },
+    {
       "number": 26947,
       "merged": "2026-10-12",
       "title": "The number converter shows the right old-style address",
@@ -16,7 +34,8 @@
       "title": "Negative numbers now work with every option of the number converter",
       "broken": "Giving the number converter a negative number, like -1, made it ignore the option you asked for, such as decimal output or a size like 'g' for gigabytes, and just print hex.",
       "changed": "Negative numbers now go through the same steps as positive ones.",
-      "matters": "Converting -1 to decimal gives -1, not a long hex number."
+      "matters": "Converting -1 to decimal gives -1, not a long hex number.",
+      "top": true
     }
   ]
 }

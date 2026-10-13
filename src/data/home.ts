@@ -210,11 +210,16 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "Effect-TS/effect", number: "#9049", href: "https://github.com/Effect-TS/effect/pull/9049" },
   { repo: "AlexsJones/llmfit", number: "#1130", href: "https://github.com/AlexsJones/llmfit/pull/1130" },
   { repo: "AlexsJones/llmfit", number: "#1131", href: "https://github.com/AlexsJones/llmfit/pull/1131" },
-  { repo: "seaweedfs/seaweedfs", number: "#11724", href: "https://github.com/seaweedfs/seaweedfs/pull/11724" },  { repo: "stanfordnlp/dspy", number: "#10574", href: "https://github.com/stanfordnlp/dspy/pull/10574" },
+  { repo: "seaweedfs/seaweedfs", number: "#11724", href: "https://github.com/seaweedfs/seaweedfs/pull/11724" },
+  { repo: "stanfordnlp/dspy", number: "#10574", href: "https://github.com/stanfordnlp/dspy/pull/10574" },
   { repo: "skylot/jadx", number: "#3002", href: "https://github.com/skylot/jadx/pull/3002" },
   { repo: "seaweedfs/seaweedfs", number: "#11723", href: "https://github.com/seaweedfs/seaweedfs/pull/11723" },
   { repo: "eugenioenko/ttt", number: "#877", href: "https://github.com/eugenioenko/ttt/pull/877" },
   { repo: "eugenioenko/ttt", number: "#878", href: "https://github.com/eugenioenko/ttt/pull/878" },
+  { repo: "Effect-TS/effect", number: "#9096", href: "https://github.com/Effect-TS/effect/pull/9096" },
+  { repo: "Effect-TS/effect", number: "#9095", href: "https://github.com/Effect-TS/effect/pull/9095" },
+  { repo: "radareorg/radare2", number: "#26957", href: "https://github.com/radareorg/radare2/pull/26957" },
+  { repo: "radareorg/radare2", number: "#26958", href: "https://github.com/radareorg/radare2/pull/26958" },
 ];
 
 /**
