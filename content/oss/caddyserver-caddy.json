@@ -3,6 +3,22 @@
   "about": "A popular web server that runs websites and sets up their security certificates for you.",
   "prs": [
     {
+      "number": 8209,
+      "merged": "2026-10-13",
+      "title": "Redirects from PHP-style apps now actually redirect",
+      "broken": "Apps behind the server can answer with just a 'go here instead' address. The server sent that as a normal 'OK' page, so browsers stayed put instead of following the redirect.",
+      "changed": "The server now sends it as a redirect, as the standard says and other servers already do. An app that sets its own status still wins.",
+      "matters": "Logins, form submits and other pages that redirect work the way the app meant."
+    },
+    {
+      "number": 8207,
+      "merged": "2026-10-13",
+      "title": "Uploads over the size limit are refused, not cut short",
+      "broken": "With unlimited buffering turned on, the server ignored errors while reading a request. An upload over the size limit was cut off and passed on as if complete, and the user got 'OK' instead of 'too large'.",
+      "changed": "Read errors now go through the same path as with a buffer limit, so the server reports them instead of hiding them.",
+      "matters": "Apps never receive a half upload that looks whole, and users are told when a file is too big."
+    },
+    {
       "number": 8195,
       "merged": "2026-10-12",
       "title": "Custom error pages now follow the order you wrote them",

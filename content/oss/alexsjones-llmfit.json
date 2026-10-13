@@ -3,6 +3,14 @@
   "about": "A command-line tool that tells you which AI models will run on your computer's hardware.",
   "prs": [
     {
+      "number": 1142,
+      "merged": "2026-10-13",
+      "title": "Updated model lists now spot mixture-of-experts models",
+      "broken": "Some AI models use only a small part of themselves per word. When refreshing its list, the tool spotted these only by an old naming style, so newer ones counted as full-size and got far too low a speed.",
+      "changed": "I made the update read the expert counts each model already lists in its own settings file, as the tool's built-in list already did.",
+      "matters": "On an 8 GB laptop, one such model now shows about 147 tokens a second instead of 25, and bigger ones get the memory-saving option they qualify for."
+    },
+    {
       "number": 1131,
       "merged": "2026-10-12",
       "title": "Big models in a fixed format get an honest memory estimate",
