@@ -3,6 +3,24 @@
   "about": "A text editor that runs in the terminal but works like a desktop one, shipped as one file with no setup.",
   "prs": [
     {
+      "number": 878,
+      "merged": "2026-10-13",
+      "title": "Ignored files stay hidden in folders with accented names",
+      "broken": "The editor hides or dims files that git is told to ignore. If the project sat in a folder with an accented or non-English name, it lost track of them, so clutter like build output showed up.",
+      "changed": "The editor now asks git in a way that returns names exactly as written, without git's special quoting.",
+      "matters": "Projects behave the same whatever language the folder names are in.",
+      "top": true
+    },
+    {
+      "number": 877,
+      "merged": "2026-10-13",
+      "title": "Throwing away one file's changes no longer hits another",
+      "broken": "In web projects, folders are often named with brackets. Discarding changes to such a file also quietly undid edits in a different file whose name happened to match the pattern, losing work without warning.",
+      "changed": "The editor now tells git to treat each file name exactly as written, as it already did elsewhere.",
+      "matters": "Discard and stage touch only the file you picked, so no one loses work they meant to keep.",
+      "top": true
+    },
+    {
       "number": 815,
       "merged": "2026-10-12",
       "title": "The line's author is right even before you save",
@@ -16,7 +34,8 @@
       "title": "Copied GitHub links open the right file again",
       "broken": "The editor copies a GitHub link to your current line. With a space or # in the file name, a folder opened through a shortcut, or some remote styles, the link broke, and one kept your password.",
       "changed": "The link is now built from the real file path, with each part of the name safely escaped, and the password and odd parts of the address are dropped.",
-      "matters": "The link you paste for a teammate opens the line you meant, and never leaks your login."
+      "matters": "The link you paste for a teammate opens the line you meant, and never leaks your login.",
+      "top": true
     }
   ]
 }

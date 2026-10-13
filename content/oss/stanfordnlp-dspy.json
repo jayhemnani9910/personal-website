@@ -1,0 +1,14 @@
+{
+  "repo": "stanfordnlp/dspy",
+  "about": "A Python framework for building AI programs from language model calls instead of hand-written prompts.",
+  "prs": [
+    {
+      "number": 10574,
+      "merged": "2026-10-12",
+      "title": "Tools with dates or set choices as defaults work again",
+      "broken": "Programs can give the AI model tools to call. If a tool had a default value like a date or a choice from a fixed list, calling the model crashed with an error.",
+      "changed": "Those default values are now turned into plain text the model's interface understands, like 2026-01-02 for a date.",
+      "matters": "Tools with ordinary defaults just work, without people rewriting them to avoid the crash."
+    }
+  ]
+}
