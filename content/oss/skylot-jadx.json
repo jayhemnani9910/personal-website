@@ -1,0 +1,14 @@
+{
+  "repo": "skylot/jadx",
+  "about": "A tool that turns Android apps back into readable Java code, so people can study how an app works.",
+  "prs": [
+    {
+      "number": 3002,
+      "merged": "2026-10-12",
+      "title": "Joined text no longer turns into a sum of numbers",
+      "broken": "Code that glued two numbers into text, like 1 and 2 into \"12\", came back from the tool as adding them, giving 3. The rebuilt code meant something different from the app.",
+      "changed": "The tool now keeps the text joining when the first two pieces are numbers, matching what the app really does.",
+      "matters": "People reading the rebuilt code see what the app actually does, not a quietly wrong version."
+    }
+  ]
+}

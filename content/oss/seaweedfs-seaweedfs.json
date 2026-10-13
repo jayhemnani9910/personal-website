@@ -9,6 +9,14 @@
       "broken": "SeaweedFS can serve files over SFTP, a common way to transfer files. If storage hiccupped during a folder listing, the server got stuck forever, and a single hidden file could cut a big listing short.",
       "changed": "I made a storage error end the listing with a clear failure, and made hidden files stop cutting the listing short.",
       "matters": "Users see every file they are allowed to see, or a clear error, never a silently partial list or a stuck server."
+    },
+    {
+      "number": 11723,
+      "merged": "2026-10-13",
+      "title": "Resumed file uploads no longer wipe the start of the file",
+      "broken": "When an upload over SFTP was cut off and then resumed, the server kept the new part but replaced everything before it with zeros. The file looked complete but was damaged, with no error.",
+      "changed": "When a file is opened to continue writing, the server now starts from the bytes already there instead of an empty copy.",
+      "matters": "Resuming a big upload gives back the whole file, not a silently broken one."
     }
   ]
 }
