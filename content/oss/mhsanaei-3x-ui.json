@@ -3,6 +3,22 @@
   "about": "A web panel for running your own VPN-style proxy server and handing out connection links to users.",
   "prs": [
     {
+      "number": 6809,
+      "merged": "2026-10-14",
+      "title": "Imported vmess links now keep their seed and disguise settings",
+      "broken": "For vmess links using the mKCP connection mode, the panel's importers ignored the shared secret, the traffic disguise and a few size settings. The imported connection used defaults and could not reach a server that set them.",
+      "changed": "The panel now reads those settings from vmess links, the same way it already did for other link types.",
+      "matters": "Servers shared as vmess links with these settings connect after import."
+    },
+    {
+      "number": 6808,
+      "merged": "2026-10-14",
+      "title": "Imported vmess links no longer lose settings the server needs",
+      "broken": "The panel can import connection links from other servers. For vmess links using the XHTTP mode, its server side read only three of the link's settings. Some it skipped must match the server, so the connection failed.",
+      "changed": "It now reads every one of those settings, as the panel's web page and the other link types already did.",
+      "matters": "Servers imported from vmess links connect instead of failing."
+    },
+    {
       "number": 6781,
       "merged": "2026-10-12",
       "title": "Subscription links work again for some older servers",

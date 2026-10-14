@@ -3,6 +3,14 @@
   "about": "A command-line tool that lets a team share the skills and settings of their AI coding assistants from one place.",
   "prs": [
     {
+      "number": 1110,
+      "merged": "2026-10-14",
+      "title": "Empty settings files no longer pile up in members' projects",
+      "broken": "When the team removed the last of its shared tool connections, each member's next update left empty settings files behind. No longer hidden from git, they showed up as new files and were easy to commit by mistake.",
+      "changed": "Updating now deletes a settings file it leaves empty, as the cleanup commands already did. Files with anything else in them, or that git tracks, stay.",
+      "matters": "Members' projects stay clean, with nothing stray to commit."
+    },
+    {
       "number": 1109,
       "merged": "2026-10-14",
       "title": "Files the team deleted no longer come back",

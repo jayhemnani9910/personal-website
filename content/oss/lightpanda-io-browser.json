@@ -3,6 +3,22 @@
   "about": "A fast web browser that runs without a screen, made for bots and AI agents that read websites.",
   "prs": [
     {
+      "number": 3952,
+      "merged": "2026-10-14",
+      "title": "Typing in a box now tells the page the value changed",
+      "broken": "Pages often wait for a 'changed' signal before they check, save or filter what was typed. Chrome sends it when you leave the box or press Enter. This browser never sent it, so those pages never saw the typed text.",
+      "changed": "The browser now remembers the value from before the typing and sends the signal on leaving the box or pressing Enter, if the value is different, as Chrome does.",
+      "matters": "Forms that check or save what you type now work for bots too."
+    },
+    {
+      "number": 3951,
+      "merged": "2026-10-14",
+      "title": "Filter and sort forms now send the new choice",
+      "broken": "When a form like 'sort by' was sent from a page whose address already held choices, the browser added the new choice instead of replacing the old one. With a '#' in the address, the form was never sent.",
+      "changed": "The browser now swaps the old choices for the form's and keeps the '#' part at the end, as the web standard says and Chrome does.",
+      "matters": "Bots that filter, sort or search through forms land on the page they asked for."
+    },
+    {
       "number": 3910,
       "merged": "2026-10-12",
       "title": "A '?' after the '#' in a link no longer changes the address",

@@ -3,6 +3,14 @@
   "about": "A toolkit programmers use to build reliable apps in TypeScript, a popular programming language.",
   "prs": [
     {
+      "number": 9145,
+      "merged": "2026-10-14",
+      "title": "Command-line options can now take a value or go without one",
+      "broken": "Many command-line tools have options like --color that work alone or with a value, as in --color=always. Apps built with the toolkit could not offer options like that, and users had asked for it.",
+      "changed": "A new setting lets an option work alone or with a value after '='. Used alone, it never swallows the next word, and help text and tab completion show it the right way.",
+      "matters": "Programmers can build commands that behave like familiar tools such as ls and grep."
+    },
+    {
       "number": 9118,
       "merged": "2026-10-14",
       "title": "Routes under a prefix with a variable get the right address",
