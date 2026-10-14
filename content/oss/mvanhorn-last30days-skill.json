@@ -3,12 +3,31 @@
   "about": "An add-on for AI assistants that researches a topic across Reddit, X, YouTube and the web, then sums it up.",
   "prs": [
     {
+      "number": 1274,
+      "merged": "2026-10-13",
+      "title": "Sources you ask for by name are always searched",
+      "broken": "Users can pick which sources to search. For some kinds of topics the tool swapped that list for its own, skipped sources like Polymarket, and showed zero results as if it had looked.",
+      "changed": "Any source the user named is now added back after the tool makes its own picks.",
+      "matters": "When a report says a source found nothing, it really searched there.",
+      "top": true
+    },
+    {
+      "number": 1273,
+      "merged": "2026-10-13",
+      "title": "Reports for a past date no longer cite later videos",
+      "broken": "You can ask for a report as of an earlier date. YouTube videos uploaded after that date still counted as recent, so a June report could quote videos from October.",
+      "changed": "Videos dated after the end of the window are now dropped before anything else looks at them.",
+      "matters": "A report for a past date only uses what existed at that time.",
+      "top": true
+    },
+    {
       "number": 1191,
       "merged": "2026-10-08",
       "title": "YouTube transcripts now come in the right language",
       "broken": "When the usual way of getting a video's captions failed, a backup service could return a machine-dubbed foreign track, like Arabic for an English video, and count it as a success.",
       "changed": "The backup now asks for the preferred languages, English first by default, trying up to three.",
-      "matters": "Research summaries are built from what the video actually says, not from a wrong-language track."
+      "matters": "Research summaries are built from what the video actually says, not from a wrong-language track.",
+      "top": true
     },
     {
       "number": 1195,

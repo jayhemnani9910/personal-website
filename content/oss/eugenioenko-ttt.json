@@ -3,6 +3,22 @@
   "about": "A text editor that runs in the terminal but works like a desktop one, shipped as one file with no setup.",
   "prs": [
     {
+      "number": 892,
+      "merged": "2026-10-13",
+      "title": "Unchanged Windows-style files no longer show as edited",
+      "broken": "Files saved with Windows line endings showed every line as changed in the editor's margin, even when nothing was touched. Other files showed a removed line at the end.",
+      "changed": "The margin now reads the saved version the same way the editor reads the file.",
+      "matters": "The change markers point only at lines you really changed."
+    },
+    {
+      "number": 891,
+      "merged": "2026-10-13",
+      "title": "Replace in Files no longer loses unsaved or newer work",
+      "broken": "Replace in Files wrote to the saved file at positions found during the search. It threw away unsaved edits in an open tab, and garbled text that had changed since the search.",
+      "changed": "The editor now refuses files with unsaved edits, checks each match is still where it was, and names any file it skipped.",
+      "matters": "A project-wide replace never destroys work, and the count it reports is the real one."
+    },
+    {
       "number": 878,
       "merged": "2026-10-13",
       "title": "Ignored files stay hidden in folders with accented names",

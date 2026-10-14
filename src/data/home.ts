@@ -223,6 +223,15 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "AlexsJones/llmfit", number: "#1142", href: "https://github.com/AlexsJones/llmfit/pull/1142" },
   { repo: "caddyserver/caddy", number: "#8207", href: "https://github.com/caddyserver/caddy/pull/8207" },
   { repo: "caddyserver/caddy", number: "#8209", href: "https://github.com/caddyserver/caddy/pull/8209" },
+  { repo: "mvanhorn/last30days-skill", number: "#1274", href: "https://github.com/mvanhorn/last30days-skill/pull/1274" },
+  { repo: "mvanhorn/last30days-skill", number: "#1273", href: "https://github.com/mvanhorn/last30days-skill/pull/1273" },
+  { repo: "eugenioenko/ttt", number: "#891", href: "https://github.com/eugenioenko/ttt/pull/891" },
+  { repo: "eugenioenko/ttt", number: "#892", href: "https://github.com/eugenioenko/ttt/pull/892" },
+  { repo: "skylot/jadx", number: "#3003", href: "https://github.com/skylot/jadx/pull/3003" },
+  { repo: "radareorg/radare2", number: "#26969", href: "https://github.com/radareorg/radare2/pull/26969" },
+  { repo: "Effect-TS/effect", number: "#9117", href: "https://github.com/Effect-TS/effect/pull/9117" },
+  { repo: "Effect-TS/effect", number: "#9118", href: "https://github.com/Effect-TS/effect/pull/9118" },
+  { repo: "Tencent/teamai-cli", number: "#1109", href: "https://github.com/Tencent/teamai-cli/pull/1109" },
 ];
 
 /**
