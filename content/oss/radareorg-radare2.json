@@ -3,6 +3,14 @@
   "about": "A toolkit for taking programs apart to study how they work, used by security researchers.",
   "prs": [
     {
+      "number": 26968,
+      "merged": "2026-10-14",
+      "title": "File fingerprints now match the standard ssdeep tool",
+      "broken": "The toolkit can make a fuzzy fingerprint of a file, used to spot near-copies of malware. Its fingerprints differed from the standard ssdeep tool for many files, and small files got none at all.",
+      "changed": "The fingerprint is now worked out the same way the standard tool does it, with a fresh start on each pass and the same minimum size.",
+      "matters": "Researchers can compare the toolkit's fingerprints with ones made anywhere else."
+    },
+    {
       "number": 26969,
       "merged": "2026-10-13",
       "title": "The search tool no longer crashes on a badly written pattern",

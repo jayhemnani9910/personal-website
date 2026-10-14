@@ -232,6 +232,7 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "Effect-TS/effect", number: "#9117", href: "https://github.com/Effect-TS/effect/pull/9117" },
   { repo: "Effect-TS/effect", number: "#9118", href: "https://github.com/Effect-TS/effect/pull/9118" },
   { repo: "Tencent/teamai-cli", number: "#1109", href: "https://github.com/Tencent/teamai-cli/pull/1109" },
+  { repo: "radareorg/radare2", number: "#26968", href: "https://github.com/radareorg/radare2/pull/26968" },
 ];
 
 /**
