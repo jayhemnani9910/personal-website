@@ -1,0 +1,14 @@
+{
+  "repo": "apify/crawlee",
+  "about": "A toolkit programmers use to build bots that crawl websites and collect data from them.",
+  "prs": [
+    {
+      "number": 4250,
+      "merged": "2026-10-14",
+      "title": "Sitemap pages wrapped in extra spacing are no longer lost",
+      "broken": "A sitemap is a file listing a site's pages for crawlers. When a page address had spaces or line breaks around it in a quoted block, the tool kept the space instead, dropped the page, and could crawl nothing.",
+      "changed": "The tool now ignores bits of text that are only spaces or line breaks.",
+      "matters": "Crawls that start from these sitemaps visit every page they list."
+    }
+  ]
+}

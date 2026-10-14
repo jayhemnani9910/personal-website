@@ -233,6 +233,15 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "Effect-TS/effect", number: "#9118", href: "https://github.com/Effect-TS/effect/pull/9118" },
   { repo: "Tencent/teamai-cli", number: "#1109", href: "https://github.com/Tencent/teamai-cli/pull/1109" },
   { repo: "radareorg/radare2", number: "#26968", href: "https://github.com/radareorg/radare2/pull/26968" },
+  { repo: "0xJacky/nginx-ui", number: "#2014", href: "https://github.com/0xJacky/nginx-ui/pull/2014" },
+  { repo: "0xJacky/nginx-ui", number: "#2015", href: "https://github.com/0xJacky/nginx-ui/pull/2015" },
+  { repo: "apify/crawlee", number: "#4250", href: "https://github.com/apify/crawlee/pull/4250" },
+  { repo: "Effect-TS/effect", number: "#9145", href: "https://github.com/Effect-TS/effect/pull/9145" },
+  { repo: "lightpanda-io/browser", number: "#3951", href: "https://github.com/lightpanda-io/browser/pull/3951" },
+  { repo: "lightpanda-io/browser", number: "#3952", href: "https://github.com/lightpanda-io/browser/pull/3952" },
+  { repo: "MHSanaei/3x-ui", number: "#6808", href: "https://github.com/MHSanaei/3x-ui/pull/6808" },
+  { repo: "MHSanaei/3x-ui", number: "#6809", href: "https://github.com/MHSanaei/3x-ui/pull/6809" },
+  { repo: "Tencent/teamai-cli", number: "#1110", href: "https://github.com/Tencent/teamai-cli/pull/1110" },
 ];
 
 /**
