@@ -1,0 +1,14 @@
+{
+  "repo": "Tencent/teamai-cli",
+  "about": "A command-line tool that lets a team share the skills and settings of their AI coding assistants from one place.",
+  "prs": [
+    {
+      "number": 1109,
+      "merged": "2026-10-14",
+      "title": "Files the team deleted no longer come back",
+      "broken": "When someone deleted a file from a shared skill, every teammate's copy kept it. The next time a teammate shared their copy, the deleted file returned for everyone.",
+      "changed": "Updating now removes a file the team deleted, as long as the teammate never changed it. Files they added themselves stay.",
+      "matters": "Cleanups stick, and shared skills stop growing back old files."
+    }
+  ]
+}

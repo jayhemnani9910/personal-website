@@ -3,6 +3,14 @@
   "about": "A toolkit for taking programs apart to study how they work, used by security researchers.",
   "prs": [
     {
+      "number": 26969,
+      "merged": "2026-10-13",
+      "title": "The search tool no longer crashes on a badly written pattern",
+      "broken": "The toolkit's search tool takes patterns written between slashes. Without the slashes, the release version crashed and newer builds silently skipped that search.",
+      "changed": "The tool now says the pattern is invalid and how to write it, and still runs the other searches.",
+      "matters": "Users get a clear message instead of a crash or quietly missing results."
+    },
+    {
       "number": 26957,
       "merged": "2026-10-13",
       "title": "The hash tool now prints entropy in every output mode",

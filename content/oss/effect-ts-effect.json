@@ -3,6 +3,22 @@
   "about": "A toolkit programmers use to build reliable apps in TypeScript, a popular programming language.",
   "prs": [
     {
+      "number": 9118,
+      "merged": "2026-10-14",
+      "title": "Routes under a prefix with a variable get the right address",
+      "broken": "Apps can group routes under a prefix such as one per customer name. The toolkit cut a fixed number of characters off the address, so handlers saw garbled paths and file serving answered not found.",
+      "changed": "The prefix is now removed one path part at a time, so its length no longer matters.",
+      "matters": "Grouped routes and static files under a variable prefix work as written."
+    },
+    {
+      "number": 9117,
+      "merged": "2026-10-13",
+      "title": "One short tracing id no longer drops a whole batch of traces",
+      "broken": "Some tracing tools send a short 64-bit request id. The toolkit passed it on as is, the trace collector rejected the whole batch, and traces for every other request in it were lost too.",
+      "changed": "Short ids are now padded to full length where the full form is required, the same way the tracing standard's own tools do it.",
+      "matters": "Teams mixing older and newer tracing tools keep all their traces."
+    },
+    {
       "number": 9095,
       "merged": "2026-10-13",
       "title": "Settings that refer to other settings now fill in correctly",

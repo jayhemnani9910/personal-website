@@ -3,6 +3,14 @@
   "about": "A tool that turns Android apps back into readable Java code, so people can study how an app works.",
   "prs": [
     {
+      "number": 3003,
+      "merged": "2026-10-13",
+      "title": "Calls that take any number of values keep their meaning",
+      "broken": "Some Java methods take any number of values. When an app passed one empty value or one list, the rebuilt code dropped a wrapper, so the method got something different and could crash.",
+      "changed": "The tool now keeps the wrapper in exactly those cases, so the call means what it did in the app.",
+      "matters": "Rebuilt code behaves like the original app instead of quietly doing something else."
+    },
+    {
       "number": 3002,
       "merged": "2026-10-12",
       "title": "Joined text no longer turns into a sum of numbers",
