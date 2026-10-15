@@ -52,6 +52,14 @@
       "changed": "Negative numbers now go through the same steps as positive ones.",
       "matters": "Converting -1 to decimal gives -1, not a long hex number.",
       "top": true
+    },
+    {
+      "number": 26977,
+      "merged": "2026-10-15",
+      "title": "The number converter now reads every line it is given",
+      "broken": "Piping several numbers into the number converter, one per line, converted only the first. The line break at the end also confused it, so '1f' came out as 1.",
+      "changed": "Each line is now cleaned up and converted on its own, as if it were typed separately.",
+      "matters": "Scripts can feed a whole list of numbers through the converter in one go."
     }
   ]
 }
