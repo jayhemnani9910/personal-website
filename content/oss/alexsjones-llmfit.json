@@ -76,6 +76,30 @@
       "broken": "Mistyping a filter, like \"embeddings\" instead of \"embedding\", silently switched the filter off. You got unrelated models back with no warning.",
       "changed": "The tool now stops and lists the valid choices when it doesn't recognize a filter value.",
       "matters": "A one-letter typo no longer gives you misleading recommendations."
+    },
+    {
+      "number": 1141,
+      "merged": "2026-10-15",
+      "title": "Mixture-of-experts models get memory advice for the size it suggests",
+      "broken": "llmfit tells you which AI models fit your graphics card. For one kind of model, it measured memory at one compression level but recommended another, so a model it called a good fit could be too big.",
+      "changed": "I made it measure memory at the same compression level it recommends.",
+      "matters": "The memory number and the verdict now describe the download it tells you to get."
+    },
+    {
+      "number": 1145,
+      "merged": "2026-10-15",
+      "title": "Memory needs for DeepSeek-style models are no longer hugely overstated",
+      "broken": "Some newer models, like DeepSeek-V3 and Kimi-K2, keep their working memory in a compressed form. llmfit sized it as if uncompressed, about 7 to 25 times too big, so it said they would not fit.",
+      "changed": "I made it size that memory the compressed way these models actually store it.",
+      "matters": "These models are now rated on what they really need, so people with smaller cards can see they fit."
+    },
+    {
+      "number": 1146,
+      "merged": "2026-10-15",
+      "title": "Planning and downloads work when the server runs on a local socket",
+      "broken": "llmfit can run as a small server that only the same machine can reach. In that mode, its planning and download features, and the dashboard panels that use them, failed with a server error every time.",
+      "changed": "I made those features accept a local socket connection as coming from the same machine.",
+      "matters": "The dashboard's planning and download panels now work in that mode too."
     }
   ]
 }

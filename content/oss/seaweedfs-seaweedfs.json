@@ -17,6 +17,14 @@
       "broken": "When an upload over SFTP was cut off and then resumed, the server kept the new part but replaced everything before it with zeros. The file looked complete but was damaged, with no error.",
       "changed": "When a file is opened to continue writing, the server now starts from the bytes already there instead of an empty copy.",
       "matters": "Resuming a big upload gives back the whole file, not a silently broken one."
+    },
+    {
+      "number": 11733,
+      "merged": "2026-10-15",
+      "title": "Small files read over WebDAV are no longer blank",
+      "broken": "SeaweedFS keeps very small files inside its index instead of in separate pieces. Reading one over WebDAV, a way to open server files like a network drive, gave the right size but all zeros.",
+      "changed": "I made WebDAV read those small files from where they are kept.",
+      "matters": "Settings files and other small files open with their real content, and copying them no longer makes blank copies."
     }
   ]
 }

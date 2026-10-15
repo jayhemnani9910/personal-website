@@ -246,6 +246,18 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "radareorg/radare2", number: "#26977", href: "https://github.com/radareorg/radare2/pull/26977" },
   { repo: "Effect-TS/effect", number: "#9198", href: "https://github.com/Effect-TS/effect/pull/9198" },
   { repo: "Effect-TS/effect", number: "#9199", href: "https://github.com/Effect-TS/effect/pull/9199" },
+  { repo: "AlexsJones/llmfit", number: "#1141", href: "https://github.com/AlexsJones/llmfit/pull/1141" },
+  { repo: "AlexsJones/llmfit", number: "#1145", href: "https://github.com/AlexsJones/llmfit/pull/1145" },
+  { repo: "AlexsJones/llmfit", number: "#1146", href: "https://github.com/AlexsJones/llmfit/pull/1146" },
+  { repo: "github/github-mcp-server", number: "#3419", href: "https://github.com/github/github-mcp-server/pull/3419" },
+  { repo: "lightpanda-io/browser", number: "#3979", href: "https://github.com/lightpanda-io/browser/pull/3979" },
+  { repo: "lightpanda-io/browser", number: "#3980", href: "https://github.com/lightpanda-io/browser/pull/3980" },
+  { repo: "radareorg/radare2", number: "#26989", href: "https://github.com/radareorg/radare2/pull/26989" },
+  { repo: "radareorg/radare2", number: "#26990", href: "https://github.com/radareorg/radare2/pull/26990" },
+  { repo: "seaweedfs/seaweedfs", number: "#11733", href: "https://github.com/seaweedfs/seaweedfs/pull/11733" },
+  { repo: "Tencent/teamai-cli", number: "#1146", href: "https://github.com/Tencent/teamai-cli/pull/1146" },
+  { repo: "zigimg/zigimg", number: "#346", href: "https://github.com/zigimg/zigimg/pull/346" },
+  { repo: "zigimg/zigimg", number: "#347", href: "https://github.com/zigimg/zigimg/pull/347" },
 ];
 
 /**

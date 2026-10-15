@@ -60,6 +60,22 @@
       "broken": "Piping several numbers into the number converter, one per line, converted only the first. The line break at the end also confused it, so '1f' came out as 1.",
       "changed": "Each line is now cleaned up and converted on its own, as if it were typed separately.",
       "matters": "Scripts can feed a whole list of numbers through the converter in one go."
+    },
+    {
+      "number": 26989,
+      "merged": "2026-10-15",
+      "title": "Inserting bytes into a file no longer cuts off its end",
+      "broken": "radare2 lets you insert bytes into a file and push the rest along. With the default settings, the last few bytes fell off the end and were replaced by zeros.",
+      "changed": "I made the insert move the rest of the file directly, so nothing is lost at the end.",
+      "matters": "Editing a file this way no longer silently damages it."
+    },
+    {
+      "number": 26990,
+      "merged": "2026-10-15",
+      "title": "The file comparison tool shows every change",
+      "broken": "radare2's tool for comparing two files skipped changes of a single byte, could print random memory for some inputs, and in one mode stopped after the first change.",
+      "changed": "I fixed how it copies the changed bytes, made it stop reading at the right place, and let it carry on past the first change.",
+      "matters": "A comparison now lists every difference between the two files, and only what is really there."
     }
   ]
 }
