@@ -242,6 +242,8 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "MHSanaei/3x-ui", number: "#6808", href: "https://github.com/MHSanaei/3x-ui/pull/6808" },
   { repo: "MHSanaei/3x-ui", number: "#6809", href: "https://github.com/MHSanaei/3x-ui/pull/6809" },
   { repo: "Tencent/teamai-cli", number: "#1110", href: "https://github.com/Tencent/teamai-cli/pull/1110" },
+  { repo: "gtsteffaniak/filebrowser", number: "#3130", href: "https://github.com/gtsteffaniak/filebrowser/pull/3130" },
+  { repo: "radareorg/radare2", number: "#26977", href: "https://github.com/radareorg/radare2/pull/26977" },
 ];
 
 /**

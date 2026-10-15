@@ -1,0 +1,14 @@
+{
+  "repo": "gtsteffaniak/filebrowser",
+  "about": "A web app for browsing, sharing and managing the files on a server from any browser.",
+  "prs": [
+    {
+      "number": 3130,
+      "merged": "2026-10-14",
+      "title": "New users keep the permissions picked for them",
+      "broken": "When an admin created a user and ticked options like Administrator or delete rights, the user was saved without them, reset to the basic defaults.",
+      "changed": "The permissions chosen in the form are now kept, and defaults only fill in what was left unset.",
+      "matters": "Admins get the accounts they asked for, without a second trip to fix each one."
+    }
+  ]
+}
