@@ -1,0 +1,14 @@
+{
+  "repo": "github/github-mcp-server",
+  "about": "GitHub's official server that lets AI assistants read and change repositories, issues and pull requests.",
+  "prs": [
+    {
+      "number": 3419,
+      "merged": "2026-10-15",
+      "title": "Reading files over 1 MB works again",
+      "broken": "Since one release, asking for any file of 1 MB or more failed with an error. GitHub sends big files without their content, and the tool did not expect that reply.",
+      "changed": "I made it treat that reply as a big file and hand back a link to it, as it did before.",
+      "matters": "AI assistants can work with large files in a repository again instead of hitting an error."
+    }
+  ]
+}

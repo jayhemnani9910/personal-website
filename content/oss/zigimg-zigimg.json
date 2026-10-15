@@ -1,0 +1,22 @@
+{
+  "repo": "zigimg/zigimg",
+  "about": "A Zig library for reading and writing image files such as PNG, BMP and JPEG.",
+  "prs": [
+    {
+      "number": 346,
+      "merged": "2026-10-15",
+      "title": "32-bit BMP images save with the right colors",
+      "broken": "Saving a 32-bit image as a BMP file wrote a header that did not match the pixel order. Some programs refused the file and others showed the colors swapped.",
+      "changed": "I made the header describe the pixels in the order they are actually written.",
+      "matters": "BMP files saved by the library open correctly in other programs."
+    },
+    {
+      "number": 347,
+      "merged": "2026-10-15",
+      "title": "24-bit BMP images of any width save and load correctly",
+      "broken": "BMP files need each row padded to a multiple of 4 bytes. The library skipped that, so images of other widths saved as broken files and loaded skewed.",
+      "changed": "I made it add the padding when saving and skip it when loading.",
+      "matters": "Images of any width now go in and out of BMP files intact."
+    }
+  ]
+}

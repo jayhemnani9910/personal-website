@@ -164,6 +164,22 @@
       "changed": "The browser now handles those key presses the same way Chrome does.",
       "matters": "Scripts that fill in forms behave the same here as in a normal browser.",
       "top": true
+    },
+    {
+      "number": 3979,
+      "merged": "2026-10-15",
+      "title": "Form fields are checked as valid or invalid the way browsers do",
+      "broken": "Web pages can style or find form fields that are filled in wrong. Lightpanda only noticed empty required fields, so a bad email address or a number below the limit counted as valid.",
+      "changed": "I made it use every rule a field has, like format, pattern, limits and custom messages, and leave out disabled fields.",
+      "matters": "Scripts and tests that look for invalid fields get the same answer as in Chrome."
+    },
+    {
+      "number": 3980,
+      "merged": "2026-10-15",
+      "title": "Sliders and color pickers start with their default value",
+      "broken": "A slider or color picker on a web form with no starting value was empty instead of its default, the middle of the range or black. Forms sent an empty field.",
+      "changed": "I made these fields start at their default, and go back to it when a form is reset.",
+      "matters": "Forms filled in by Lightpanda send the same values a regular browser would."
     }
   ]
 }
