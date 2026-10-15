@@ -148,6 +148,22 @@
       "broken": "TOML is another settings-file format. In files saved on Windows, every multi-line text value started with an extra line break that shouldn't be there.",
       "changed": "I made the reader skip the Windows-style line break too, as it already did for the usual one.",
       "matters": "The same settings file now gives the same result no matter which computer saved it."
+    },
+    {
+      "number": 9198,
+      "merged": "2026-10-15",
+      "title": "Tracing data with NaN or infinity is no longer thrown away",
+      "broken": "When the library sent monitoring data as JSON, a number like NaN or infinity was written as null. The collector receiving it could not read that and rejected the whole batch, so every metric sent with it was lost.",
+      "changed": "I made it write those numbers as the strings the format expects, \"NaN\", \"Infinity\" and \"-Infinity\".",
+      "matters": "One odd value, like a ratio before the first request, no longer drops all the other monitoring data."
+    },
+    {
+      "number": 9199,
+      "merged": "2026-10-15",
+      "title": "Very large whole numbers no longer break tracing exports",
+      "broken": "The library sent every whole number as a 64-bit integer. A bigger one, like a 64-bit hash, made the collector reject the whole batch, or wrap the number to a negative one.",
+      "changed": "I made numbers that fit still go as integers, bigger ones go as decimals, and very large exact numbers go as text so no digits are lost.",
+      "matters": "Spans and logs with big IDs or hashes now reach the collector intact."
     }
   ]
 }
