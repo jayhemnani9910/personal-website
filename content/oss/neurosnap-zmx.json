@@ -1,0 +1,22 @@
+{
+  "repo": "neurosnap/zmx",
+  "about": "A tool that keeps terminal sessions running in the background, so you can leave and come back to them.",
+  "prs": [
+    {
+      "number": 274,
+      "merged": "2026-10-16",
+      "title": "Accented letters and symbols survive in command output",
+      "broken": "Output from commands run through the tool lost every accented letter, euro sign or non-English character. Some names could even make whole lines vanish.",
+      "changed": "The tool now keeps those characters as they are while reading the output.",
+      "matters": "Output in any language comes back exactly as the command printed it."
+    },
+    {
+      "number": 275,
+      "merged": "2026-10-16",
+      "title": "A -d meant for the command is left alone",
+      "broken": "The tool treated any -d on the line as its own option to run in the background, even when it belonged to the command. Commands like cut -d or date -d then ran without it.",
+      "changed": "The tool now only reads its own options before the command starts.",
+      "matters": "Commands run exactly as typed."
+    }
+  ]
+}

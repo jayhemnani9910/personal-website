@@ -273,6 +273,8 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "caddyserver/caddy", number: "#8225", href: "https://github.com/caddyserver/caddy/pull/8225" },
   { repo: "caddyserver/caddy", number: "#8227", href: "https://github.com/caddyserver/caddy/pull/8227" },
   { repo: "tester-army/e2e", number: "#1113", href: "https://github.com/tester-army/e2e/pull/1113" },
+  { repo: "neurosnap/zmx", number: "#274", href: "https://github.com/neurosnap/zmx/pull/274" },
+  { repo: "neurosnap/zmx", number: "#275", href: "https://github.com/neurosnap/zmx/pull/275" },
 ];
 
 /**
