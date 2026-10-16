@@ -52,6 +52,22 @@
       "changed": "The link is now built from the real file path, with each part of the name safely escaped, and the password and odd parts of the address are dropped.",
       "matters": "The link you paste for a teammate opens the line you meant, and never leaks your login.",
       "top": true
+    },
+    {
+      "number": 909,
+      "merged": "2026-10-15",
+      "title": "New files follow the save settings too",
+      "broken": "Files made with New File ignored the final-newline and trim-trailing-spaces settings, and .editorconfig, when saved. Files opened from disk got them on every save.",
+      "changed": "Saving a new file now looks up the same settings an opened file uses.",
+      "matters": "Every file is saved the same way, however it was created."
+    },
+    {
+      "number": 910,
+      "merged": "2026-10-15",
+      "title": "Save As asks before replacing a file",
+      "broken": "Save As wrote over whatever file was already at the chosen path, with no prompt and no undo.",
+      "changed": "Save As now asks before replacing another file, with Cancel as the default.",
+      "matters": "A typo in a file name can no longer wipe out an existing file."
     }
   ]
 }

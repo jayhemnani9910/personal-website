@@ -8,7 +8,8 @@
       "title": "File transfer listings no longer hang or come back short",
       "broken": "SeaweedFS can serve files over SFTP, a common way to transfer files. If storage hiccupped during a folder listing, the server got stuck forever, and a single hidden file could cut a big listing short.",
       "changed": "I made a storage error end the listing with a clear failure, and made hidden files stop cutting the listing short.",
-      "matters": "Users see every file they are allowed to see, or a clear error, never a silently partial list or a stuck server."
+      "matters": "Users see every file they are allowed to see, or a clear error, never a silently partial list or a stuck server.",
+      "top": true
     },
     {
       "number": 11723,
@@ -16,7 +17,8 @@
       "title": "Resumed file uploads no longer wipe the start of the file",
       "broken": "When an upload over SFTP was cut off and then resumed, the server kept the new part but replaced everything before it with zeros. The file looked complete but was damaged, with no error.",
       "changed": "When a file is opened to continue writing, the server now starts from the bytes already there instead of an empty copy.",
-      "matters": "Resuming a big upload gives back the whole file, not a silently broken one."
+      "matters": "Resuming a big upload gives back the whole file, not a silently broken one.",
+      "top": true
     },
     {
       "number": 11733,
@@ -24,7 +26,16 @@
       "title": "Small files read over WebDAV are no longer blank",
       "broken": "SeaweedFS keeps very small files inside its index instead of in separate pieces. Reading one over WebDAV, a way to open server files like a network drive, gave the right size but all zeros.",
       "changed": "I made WebDAV read those small files from where they are kept.",
-      "matters": "Settings files and other small files open with their real content, and copying them no longer makes blank copies."
+      "matters": "Settings files and other small files open with their real content, and copying them no longer makes blank copies.",
+      "top": true
+    },
+    {
+      "number": 11734,
+      "merged": "2026-10-15",
+      "title": "Small files uploaded by form keep their size",
+      "broken": "A file uploaded by form and stored inside its own record kept its bytes but was recorded as 0 bytes. Downloads, listings and WebDAV then treated it as empty.",
+      "changed": "That upload now records the real size and checksum, the same as other uploads.",
+      "matters": "Small config files uploaded this way can be read back."
     }
   ]
 }
