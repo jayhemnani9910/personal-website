@@ -3,6 +3,30 @@
   "about": "A popular web server that runs websites and sets up their security certificates for you.",
   "prs": [
     {
+      "number": 8217,
+      "merged": "2026-10-16",
+      "title": "Each default header is checked on its own",
+      "broken": "A settings block can add headers only when a response lacks them. If any one of those headers was already set, every default in the block was skipped, and a condition on the block was ignored for them.",
+      "changed": "Each default header now checks only for itself, and the block's condition applies to it.",
+      "matters": "Security headers meant as defaults are actually sent."
+    },
+    {
+      "number": 8227,
+      "merged": "2026-10-16",
+      "title": "Passwords hashed from a pipe match on Windows line endings",
+      "broken": "Piping a password into the hashing command kept the Windows line-ending character as part of the password, so logins with the real password were refused. Input with no final newline failed outright.",
+      "changed": "The command now drops a trailing line ending of either kind and accepts input without one.",
+      "matters": "A password hashed from a script or file works for logging in."
+    },
+    {
+      "number": 8225,
+      "merged": "2026-10-16",
+      "title": "Log folders get usable permissions",
+      "broken": "With one log permission setting and no file mode, the server created missing log folders that even it could not open, then failed to start.",
+      "changed": "Those folders now get permissions that match the log file's default, so the server can write into them.",
+      "matters": "The server starts and writes its logs with that setting."
+    },
+    {
       "number": 8209,
       "merged": "2026-10-13",
       "title": "Redirects from PHP-style apps now actually redirect",
