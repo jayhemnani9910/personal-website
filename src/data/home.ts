@@ -269,6 +269,10 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "Tencent/teamai-cli", number: "#1145", href: "https://github.com/Tencent/teamai-cli/pull/1145" },
   { repo: "YouROK/TorrServer", number: "#913", href: "https://github.com/YouROK/TorrServer/pull/913" },
   { repo: "YouROK/TorrServer", number: "#914", href: "https://github.com/YouROK/TorrServer/pull/914" },
+  { repo: "caddyserver/caddy", number: "#8217", href: "https://github.com/caddyserver/caddy/pull/8217" },
+  { repo: "caddyserver/caddy", number: "#8225", href: "https://github.com/caddyserver/caddy/pull/8225" },
+  { repo: "caddyserver/caddy", number: "#8227", href: "https://github.com/caddyserver/caddy/pull/8227" },
+  { repo: "tester-army/e2e", number: "#1113", href: "https://github.com/tester-army/e2e/pull/1113" },
 ];
 
 /**

@@ -1,0 +1,14 @@
+{
+  "repo": "tester-army/e2e",
+  "about": "A testing framework that runs end-to-end tests on web and mobile apps.",
+  "prs": [
+    {
+      "number": 1113,
+      "merged": "2026-10-16",
+      "title": "A skipped test is reported once when tests are split up",
+      "broken": "Tests can be split into parts that run on separate machines. Every part reported every skipped test again, so totals added up across parts counted each skip several times.",
+      "changed": "Each skipped test is now reported by one part only, and how the tests are split stays the same.",
+      "matters": "Reports from a split test run add up to the real numbers."
+    }
+  ]
+}
