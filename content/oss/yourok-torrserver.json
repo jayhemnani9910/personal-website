@@ -1,0 +1,22 @@
+{
+  "repo": "YouROK/TorrServer",
+  "about": "A server that streams video from torrents while they download, so a TV or player can start watching right away.",
+  "prs": [
+    {
+      "number": 913,
+      "merged": "2026-10-16",
+      "title": "Episode 1 now comes before Episode 10",
+      "broken": "Files with unpadded episode numbers were listed out of order: Episode 10, 11 and 12 came before Episode 1. Playlists followed that order, so a player started at episode 10.",
+      "changed": "The sort now compares the whole episode number, so 1 is weighed against 10 as a number.",
+      "matters": "A season plays from the first episode in the right order."
+    },
+    {
+      "number": 914,
+      "merged": "2026-10-16",
+      "title": "The combined playlist plays the episode it names",
+      "broken": "With the option to merge all playlists into one turned on, entries could play a different file than their name said. The combined list and the stream used two different sort orders.",
+      "changed": "The combined list now sorts files the same way the stream does before numbering them.",
+      "matters": "Picking an episode from the combined playlist plays that episode."
+    }
+  ]
+}

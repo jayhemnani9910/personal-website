@@ -265,6 +265,10 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "eugenioenko/ttt", number: "#910", href: "https://github.com/eugenioenko/ttt/pull/910" },
   { repo: "mvanhorn/last30days-skill", number: "#1286", href: "https://github.com/mvanhorn/last30days-skill/pull/1286" },
   { repo: "seaweedfs/seaweedfs", number: "#11734", href: "https://github.com/seaweedfs/seaweedfs/pull/11734" },
+  { repo: "nestjs/nest", number: "#18158", href: "https://github.com/nestjs/nest/pull/18158" },
+  { repo: "Tencent/teamai-cli", number: "#1145", href: "https://github.com/Tencent/teamai-cli/pull/1145" },
+  { repo: "YouROK/TorrServer", number: "#913", href: "https://github.com/YouROK/TorrServer/pull/913" },
+  { repo: "YouROK/TorrServer", number: "#914", href: "https://github.com/YouROK/TorrServer/pull/914" },
 ];
 
 /**

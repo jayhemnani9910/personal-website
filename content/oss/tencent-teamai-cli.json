@@ -16,7 +16,8 @@
       "title": "Files the team deleted no longer come back",
       "broken": "When someone deleted a file from a shared skill, every teammate's copy kept it. The next time a teammate shared their copy, the deleted file returned for everyone.",
       "changed": "Updating now removes a file the team deleted, as long as the teammate never changed it. Files they added themselves stay.",
-      "matters": "Cleanups stick, and shared skills stop growing back old files."
+      "matters": "Cleanups stick, and shared skills stop growing back old files.",
+      "top": true
     },
     {
       "number": 1146,
@@ -24,7 +25,17 @@
       "title": "Moved coding sessions keep the edits they made",
       "broken": "TeamAI can move a coding session from one AI tool to another. Every file edit made in Codex lost its content on the way, and the tool still said nothing was lost.",
       "changed": "I made it read the edit's content from the place Codex keeps it.",
-      "matters": "A moved or archived session still shows what each edit changed."
+      "matters": "A moved or archived session still shows what each edit changed.",
+      "top": true
+    },
+    {
+      "number": 1145,
+      "merged": "2026-10-16",
+      "title": "Moved coding sessions keep their turns in order",
+      "broken": "Moving a Claude Code session with the tool could scramble it: every question came first, then every answer. The tool still reported the move as fully faithful.",
+      "changed": "The tool now follows each conversation thread from start to end before the next one, so a session reads back in its real order.",
+      "matters": "A moved session reads like the conversation that really happened.",
+      "top": true
     }
   ]
 }
