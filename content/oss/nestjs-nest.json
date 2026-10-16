@@ -1,0 +1,14 @@
+{
+  "repo": "nestjs/nest",
+  "about": "A framework for building server apps in Node with TypeScript, used for web APIs and microservices.",
+  "prs": [
+    {
+      "number": 18158,
+      "merged": "2026-10-16",
+      "title": "Test mocks reach services that get a fresh copy per use",
+      "broken": "Nest's testing tools can fill in missing parts of a test with automatic fakes. Since 11.1.20, a service that gets a fresh copy on each use was never built in such tests, and code using it got nothing.",
+      "changed": "The automatic fake is now treated as one shared value, so the service is built with it as before.",
+      "matters": "Tests that worked on 11.1.19 work again, without each project adding its own workaround."
+    }
+  ]
+}
