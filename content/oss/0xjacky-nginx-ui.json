@@ -8,7 +8,8 @@
       "title": "Notes in a site's settings survive a save",
       "broken": "Notes at the end of a settings line were thrown away when a site was saved in the panel's block editor. Certbot, the common certificate tool, adds one to every line it writes, so those sites lost them all.",
       "changed": "The editor now keeps those notes. Most move to their own line just above the setting, and inside page rules they stay on the same line.",
-      "matters": "Saving a site in the panel no longer quietly strips the notes people and tools left in it."
+      "matters": "Saving a site in the panel no longer quietly strips the notes people and tools left in it.",
+      "top": true
     },
     {
       "number": 2014,
@@ -16,7 +17,25 @@
       "title": "A site under maintenance can't be deleted or renamed by mistake",
       "broken": "A site in maintenance mode shows visitors a 'down for maintenance' page. Deleting or renaming it left that page on under the old name, and with the site gone from the panel, nobody could turn it off.",
       "changed": "The panel now refuses to delete or rename a site while it is under maintenance, and says why. The delete check was already meant to do this but looked in the wrong folder.",
-      "matters": "Visitors are not left stuck on a maintenance page that nobody can switch off."
+      "matters": "Visitors are not left stuck on a maintenance page that nobody can switch off.",
+      "top": true
+    },
+    {
+      "number": 2021,
+      "merged": "2026-10-16",
+      "title": "A renamed site keeps its certificate renewing",
+      "broken": "The panel links a certificate to its site's file name. Renaming a site left the certificate on the old name, so automatic renewal skipped it. Nothing warned anyone, and the certificate just ran out.",
+      "changed": "Renaming a site or a stream now moves its certificate to the new name too.",
+      "matters": "Renaming a site no longer quietly lets its HTTPS certificate expire.",
+      "top": true
+    },
+    {
+      "number": 2022,
+      "merged": "2026-10-16",
+      "title": "Downloaded PFX certificates open in OpenSSL 3 and Node",
+      "broken": "The panel's PFX download used an old 40-bit cipher that OpenSSL 3 and Node refuse by default. The file downloaded fine but could not be opened there.",
+      "changed": "The download now uses the format the library recommends for wide support, which Windows and IIS still import.",
+      "matters": "A certificate exported from the panel works in current tools without extra flags."
     }
   ]
 }

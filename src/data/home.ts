@@ -258,6 +258,13 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "Tencent/teamai-cli", number: "#1146", href: "https://github.com/Tencent/teamai-cli/pull/1146" },
   { repo: "zigimg/zigimg", number: "#346", href: "https://github.com/zigimg/zigimg/pull/346" },
   { repo: "zigimg/zigimg", number: "#347", href: "https://github.com/zigimg/zigimg/pull/347" },
+  { repo: "0xJacky/nginx-ui", number: "#2021", href: "https://github.com/0xJacky/nginx-ui/pull/2021" },
+  { repo: "0xJacky/nginx-ui", number: "#2022", href: "https://github.com/0xJacky/nginx-ui/pull/2022" },
+  { repo: "Effect-TS/effect", number: "#9255", href: "https://github.com/Effect-TS/effect/pull/9255" },
+  { repo: "eugenioenko/ttt", number: "#909", href: "https://github.com/eugenioenko/ttt/pull/909" },
+  { repo: "eugenioenko/ttt", number: "#910", href: "https://github.com/eugenioenko/ttt/pull/910" },
+  { repo: "mvanhorn/last30days-skill", number: "#1286", href: "https://github.com/mvanhorn/last30days-skill/pull/1286" },
+  { repo: "seaweedfs/seaweedfs", number: "#11734", href: "https://github.com/seaweedfs/seaweedfs/pull/11734" },
 ];
 
 /**

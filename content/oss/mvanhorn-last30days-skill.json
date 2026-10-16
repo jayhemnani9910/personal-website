@@ -36,6 +36,14 @@
       "broken": "When the YouTube search broke, from a network error or a bot check, the tool reported \"0 results\". The summary then read that as nobody on YouTube discussing the topic.",
       "changed": "A failed search now shows up as an error with its reason, and the report marks YouTube coverage as partial.",
       "matters": "Readers aren't told a topic is ignored on YouTube when the tool simply couldn't reach it."
+    },
+    {
+      "number": 1286,
+      "merged": "2026-10-15",
+      "title": "A person's PR count stays inside the chosen dates",
+      "broken": "Looking up a GitHub user for a past date range counted every PR up to today. One user showed 34,739 merged PRs for a month that had 742. The summary also always said 30 days.",
+      "changed": "The search now stops at the end of the range, and the summary names the real number of days.",
+      "matters": "Reports about past periods show what happened in that period."
     }
   ]
 }

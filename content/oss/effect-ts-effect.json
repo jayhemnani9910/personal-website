@@ -164,6 +164,14 @@
       "broken": "The library sent every whole number as a 64-bit integer. A bigger one, like a 64-bit hash, made the collector reject the whole batch, or wrap the number to a negative one.",
       "changed": "I made numbers that fit still go as integers, bigger ones go as decimals, and very large exact numbers go as text so no digits are lost.",
       "matters": "Spans and logs with big IDs or hashes now reach the collector intact."
+    },
+    {
+      "number": 9255,
+      "merged": "2026-10-15",
+      "title": "A streamed response that fails halfway is no longer sent as complete",
+      "broken": "When the stream behind a Node server response failed after it had started, the server closed the response normally. Clients got a shorter body that looked whole, so a failed export could be saved as if it had finished.",
+      "changed": "The server now cuts the connection when the stream fails after the headers went out, so the client sees an aborted transfer.",
+      "matters": "A broken download shows up as an error instead of a quietly cut-off file."
     }
   ]
 }
