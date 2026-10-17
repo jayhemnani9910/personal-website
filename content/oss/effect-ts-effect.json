@@ -172,6 +172,14 @@
       "broken": "When the stream behind a Node server response failed after it had started, the server closed the response normally. Clients got a shorter body that looked whole, so a failed export could be saved as if it had finished.",
       "changed": "The server now cuts the connection when the stream fails after the headers went out, so the client sees an aborted transfer.",
       "matters": "A broken download shows up as an error instead of a quietly cut-off file."
+    },
+    {
+      "number": 9446,
+      "merged": "2026-10-17",
+      "title": "Reading a large backlog of messages at once no longer crashes",
+      "broken": "Effect has a message channel that many listeners can read from. Asking it for a large backlog in one go, around 130,000 messages or more, crashed with a stack overflow error.",
+      "changed": "I changed how it gathers the messages so the list size no longer matters.",
+      "matters": "Apps that fall behind can catch up on their messages in one step without crashing."
     }
   ]
 }
