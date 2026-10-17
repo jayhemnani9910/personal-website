@@ -76,6 +76,14 @@
       "broken": "radare2's tool for comparing two files skipped changes of a single byte, could print random memory for some inputs, and in one mode stopped after the first change.",
       "changed": "I fixed how it copies the changed bytes, made it stop reading at the right place, and let it carry on past the first change.",
       "matters": "A comparison now lists every difference between the two files, and only what is really there."
+    },
+    {
+      "number": 27016,
+      "merged": "2026-10-17",
+      "title": "The assembler's word view shows bytes in the right order",
+      "broken": "radare2's assembler can print machine code as 4-byte words. For big-endian targets the bytes came out reversed, long output never wrapped, and a short result read past the end of its memory.",
+      "changed": "I made it read words in the target's byte order, pad the last partial word, and start a new line every eight words.",
+      "matters": "The word view now matches the real bytes for any target, and short inputs no longer read stray memory."
     }
   ]
 }

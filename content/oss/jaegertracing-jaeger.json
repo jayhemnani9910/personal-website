@@ -1,0 +1,14 @@
+{
+  "repo": "jaegertracing/jaeger",
+  "about": "A tool for following requests as they move through many services, to find where things are slow or failing.",
+  "prs": [
+    {
+      "number": 9836,
+      "merged": "2026-10-16",
+      "title": "Repeated spans no longer leave empty entries in a trace",
+      "broken": "When the same piece of a trace arrived twice, for example after a retry, Jaeger removed the copy but kept the empty groups that had held it. Its newer trace API then returned entries with nothing in them.",
+      "changed": "After removing copies, I made it also remove any groups left empty.",
+      "matters": "Tools that read traces from Jaeger get only real data, with no empty entries to trip over."
+    }
+  ]
+}
