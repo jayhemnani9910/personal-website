@@ -9,6 +9,14 @@
       "broken": "When an admin created a user and ticked options like Administrator or delete rights, the user was saved without them, reset to the basic defaults.",
       "changed": "The permissions chosen in the form are now kept, and defaults only fill in what was left unset.",
       "matters": "Admins get the accounts they asked for, without a second trip to fix each one."
+    },
+    {
+      "number": 3166,
+      "merged": "2026-10-17",
+      "title": "Share uploads and deletes show up in the activity log",
+      "broken": "When someone used a share link to upload or delete files, the Activity Viewer showed nothing. Only renames and downloads were logged.",
+      "changed": "Uploads, deletes and bulk deletes made through a share are now logged under the share owner, with the share they came through.",
+      "matters": "Owners can see what visitors did to their files through a share, not just half of it."
     }
   ]
 }
