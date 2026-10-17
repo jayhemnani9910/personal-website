@@ -275,6 +275,8 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "tester-army/e2e", number: "#1113", href: "https://github.com/tester-army/e2e/pull/1113" },
   { repo: "neurosnap/zmx", number: "#274", href: "https://github.com/neurosnap/zmx/pull/274" },
   { repo: "neurosnap/zmx", number: "#275", href: "https://github.com/neurosnap/zmx/pull/275" },
+  { repo: "radareorg/radare2", number: "#27016", href: "https://github.com/radareorg/radare2/pull/27016" },
+  { repo: "jaegertracing/jaeger", number: "#9836", href: "https://github.com/jaegertracing/jaeger/pull/9836" },
 ];
 
 /**
