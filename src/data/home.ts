@@ -281,6 +281,7 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "Effect-TS/effect", number: "#9446", href: "https://github.com/Effect-TS/effect/pull/9446" },
   { repo: "xerj-org/xerj", number: "#1595", href: "https://github.com/xerj-org/xerj/pull/1595" },
   { repo: "xerj-org/xerj", number: "#1596", href: "https://github.com/xerj-org/xerj/pull/1596" },
+  { repo: "nestjs/nest", number: "#18170", href: "https://github.com/nestjs/nest/pull/18170" },
 ];
 
 /**

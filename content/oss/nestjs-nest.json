@@ -9,6 +9,14 @@
       "broken": "Nest's testing tools can fill in missing parts of a test with automatic fakes. Since 11.1.20, a service that gets a fresh copy on each use was never built in such tests, and code using it got nothing.",
       "changed": "The automatic fake is now treated as one shared value, so the service is built with it as before.",
       "matters": "Tests that worked on 11.1.19 work again, without each project adding its own workaround."
+    },
+    {
+      "number": 18170,
+      "merged": "2026-10-17",
+      "title": "Two services that use the same fake in a test now share it",
+      "broken": "When two services in a test needed the same automatic fake, each got its own copy. The test could only reach the last one, so checks on it missed calls made through the first service.",
+      "changed": "I made the testing tools build the fake once and hand that same one to every service that asks for it.",
+      "matters": "A test can check one fake and see every call made to it, as the docs say."
     }
   ]
 }
