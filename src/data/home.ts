@@ -277,6 +277,10 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "neurosnap/zmx", number: "#275", href: "https://github.com/neurosnap/zmx/pull/275" },
   { repo: "radareorg/radare2", number: "#27016", href: "https://github.com/radareorg/radare2/pull/27016" },
   { repo: "jaegertracing/jaeger", number: "#9836", href: "https://github.com/jaegertracing/jaeger/pull/9836" },
+  { repo: "AlexsJones/llmfit", number: "#1150", href: "https://github.com/AlexsJones/llmfit/pull/1150" },
+  { repo: "Effect-TS/effect", number: "#9446", href: "https://github.com/Effect-TS/effect/pull/9446" },
+  { repo: "xerj-org/xerj", number: "#1595", href: "https://github.com/xerj-org/xerj/pull/1595" },
+  { repo: "xerj-org/xerj", number: "#1596", href: "https://github.com/xerj-org/xerj/pull/1596" },
 ];
 
 /**

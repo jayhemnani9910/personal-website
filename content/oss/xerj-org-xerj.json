@@ -1,0 +1,22 @@
+{
+  "repo": "xerj-org/xerj",
+  "about": "A search engine that works with existing Elasticsearch tools, built for AI agents to search code, docs and logs.",
+  "prs": [
+    {
+      "number": 1595,
+      "merged": "2026-10-17",
+      "title": "Changing one cluster setting keeps the others",
+      "broken": "Saving one cluster-wide setting wiped every other setting saved before it. Settings sent in the nested style were stored but never used.",
+      "changed": "I made it merge each update into the saved settings, the way Elasticsearch does, and store every setting under one name form.",
+      "matters": "Earlier settings, like a disk or memory limit, stay in force when someone changes something else."
+    },
+    {
+      "number": 1596,
+      "merged": "2026-10-17",
+      "title": "Turning off the disk check lifts the full-disk block",
+      "broken": "When a disk got too full, writes were blocked. The standard setting to turn that check off was accepted but ignored, so the block stayed on.",
+      "changed": "I made the server read that setting, so turning the check off also lifts the block.",
+      "matters": "Users can unblock writes the same way they would in Elasticsearch."
+    }
+  ]
+}

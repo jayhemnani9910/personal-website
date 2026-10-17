@@ -100,6 +100,14 @@
       "broken": "llmfit can run as a small server that only the same machine can reach. In that mode, its planning and download features, and the dashboard panels that use them, failed with a server error every time.",
       "changed": "I made those features accept a local socket connection as coming from the same machine.",
       "matters": "The dashboard's planning and download panels now work in that mode too."
+    },
+    {
+      "number": 1150,
+      "merged": "2026-10-17",
+      "title": "Speed targets for mixture-of-experts models use the right size",
+      "broken": "llmfit can say how much memory speed a device needs to run a model fast enough. For mixture-of-experts models it counted the whole model, so it asked for far more speed than any device has.",
+      "changed": "I made it count only the part of the model each word actually reads, the same way its speed estimate already does.",
+      "matters": "The speed target for these models is now one a real device can meet, and it agrees with llmfit's own estimate."
     }
   ]
 }
