@@ -36,6 +36,14 @@
       "changed": "The tool now follows each conversation thread from start to end before the next one, so a session reads back in its real order.",
       "matters": "A moved session reads like the conversation that really happened.",
       "top": true
+    },
+    {
+      "number": 1203,
+      "merged": "2026-10-18",
+      "title": "Codex reasoning comes through when a session moves",
+      "broken": "Moving a Codex session to another tool lost all of Codex's reasoning. The tool looked for it in a place Codex never writes, so every reasoning step came out empty.",
+      "changed": "I made the tool read the reasoning from where Codex really keeps it, and still read the old place first so nothing else changes.",
+      "matters": "A moved Codex session keeps the model's thinking, not a row of blank blocks."
     }
   ]
 }

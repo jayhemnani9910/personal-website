@@ -180,6 +180,14 @@
       "broken": "A slider or color picker on a web form with no starting value was empty instead of its default, the middle of the range or black. Forms sent an empty field.",
       "changed": "I made these fields start at their default, and go back to it when a form is reset.",
       "matters": "Forms filled in by Lightpanda send the same values a regular browser would."
+    },
+    {
+      "number": 4038,
+      "merged": "2026-10-18",
+      "title": "Pages can ask for the window size and position",
+      "broken": "Lightpanda had no outer window size or screen position. Pages that use them, like the common code that centers a popup, broke with an error or got nonsense numbers.",
+      "changed": "I added them. The outer size matches the page size, since there is no window frame, and the position is the top left corner.",
+      "matters": "Pages that place popups or check the window size work the same as in a regular browser."
     }
   ]
 }

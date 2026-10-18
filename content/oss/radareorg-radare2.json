@@ -100,6 +100,22 @@
       "broken": "rahash2 refused any empty file with \"Invalid file size\", for every hash type, while other tools give the standard hash of empty input.",
       "changed": "I made empty files get the same hash as empty input for every algorithm; only a byte range that cannot fit still errors.",
       "matters": "Hashing a folder of files no longer fails on the empty ones."
+    },
+    {
+      "number": 27039,
+      "merged": "2026-10-18",
+      "title": "rahash2 hashes the same range of every file",
+      "broken": "When hashing several files with a byte range, rahash2 used that range only for the first file and hashed the rest to the end, so their hashes were wrong.",
+      "changed": "I made each file get the range that was asked for, while files without a range still use their full size.",
+      "matters": "Hashing part of many files at once gives the right answer for all of them."
+    },
+    {
+      "number": 27040,
+      "merged": "2026-10-18",
+      "title": "rahash2 no longer crashes on empty input",
+      "broken": "Piping nothing into rahash2 crashed the released version, because it tried to close a file it never opened.",
+      "changed": "I made it close the file only when one was opened.",
+      "matters": "Scripts that sometimes pass empty input get a hash instead of a crash."
     }
   ]
 }
