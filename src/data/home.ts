@@ -291,6 +291,7 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "radareorg/radare2", number: "#27039", href: "https://github.com/radareorg/radare2/pull/27039" },
   { repo: "radareorg/radare2", number: "#27040", href: "https://github.com/radareorg/radare2/pull/27040" },
   { repo: "eugenioenko/ttt", number: "#964", href: "https://github.com/eugenioenko/ttt/pull/964" },
+  { repo: "seaweedfs/seaweedfs", number: "#11810", href: "https://github.com/seaweedfs/seaweedfs/pull/11810" },
 ];
 
 /**
