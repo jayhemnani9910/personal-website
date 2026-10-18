@@ -84,6 +84,22 @@
       "broken": "radare2's assembler can print machine code as 4-byte words. For big-endian targets the bytes came out reversed, long output never wrapped, and a short result read past the end of its memory.",
       "changed": "I made it read words in the target's byte order, pad the last partial word, and start a new line every eight words.",
       "matters": "The word view now matches the real bytes for any target, and short inputs no longer read stray memory."
+    },
+    {
+      "number": 27033,
+      "merged": "2026-10-18",
+      "title": "rafind2 reports every match, even back-to-back ones",
+      "broken": "When a pattern appeared twice in a row, like a run of repeated bytes, rafind2 only reported the first match and dropped the next one with a warning. The r2 search command found them all.",
+      "changed": "I made rafind2 accept matches that start right where the previous one ended, the same as r2's own search.",
+      "matters": "A search through a binary no longer hides real hits in repeated data."
+    },
+    {
+      "number": 27034,
+      "merged": "2026-10-18",
+      "title": "rahash2 can hash empty files",
+      "broken": "rahash2 refused any empty file with \"Invalid file size\", for every hash type, while other tools give the standard hash of empty input.",
+      "changed": "I made empty files get the same hash as empty input for every algorithm; only a byte range that cannot fit still errors.",
+      "matters": "Hashing a folder of files no longer fails on the empty ones."
     }
   ]
 }

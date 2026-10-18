@@ -283,6 +283,8 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "xerj-org/xerj", number: "#1596", href: "https://github.com/xerj-org/xerj/pull/1596" },
   { repo: "nestjs/nest", number: "#18170", href: "https://github.com/nestjs/nest/pull/18170" },
   { repo: "gtsteffaniak/filebrowser", number: "#3166", href: "https://github.com/gtsteffaniak/filebrowser/pull/3166" },
+  { repo: "radareorg/radare2", number: "#27033", href: "https://github.com/radareorg/radare2/pull/27033" },
+  { repo: "radareorg/radare2", number: "#27034", href: "https://github.com/radareorg/radare2/pull/27034" },
 ];
 
 /**
