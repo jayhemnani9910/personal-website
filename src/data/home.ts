@@ -290,6 +290,7 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "lightpanda-io/browser", number: "#4038", href: "https://github.com/lightpanda-io/browser/pull/4038" },
   { repo: "radareorg/radare2", number: "#27039", href: "https://github.com/radareorg/radare2/pull/27039" },
   { repo: "radareorg/radare2", number: "#27040", href: "https://github.com/radareorg/radare2/pull/27040" },
+  { repo: "eugenioenko/ttt", number: "#964", href: "https://github.com/eugenioenko/ttt/pull/964" },
 ];
 
 /**
