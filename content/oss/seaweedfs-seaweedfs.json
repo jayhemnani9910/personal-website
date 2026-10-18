@@ -36,6 +36,14 @@
       "broken": "A file uploaded by form and stored inside its own record kept its bytes but was recorded as 0 bytes. Downloads, listings and WebDAV then treated it as empty.",
       "changed": "That upload now records the real size and checksum, the same as other uploads.",
       "matters": "Small config files uploaded this way can be read back."
+    },
+    {
+      "number": 11810,
+      "merged": "2026-10-18",
+      "title": "New folders over WebDAV show up every time",
+      "broken": "Creating a folder over WebDAV with a name that had been used before said it worked but made nothing. File managers lost the second \"New Folder\" after a rename, and a deleted folder could not be made again.",
+      "changed": "I fixed how the folder name was split from its path, so the folder itself is created and not an empty name inside it.",
+      "matters": "Folders made from a file manager on a WebDAV share appear as expected."
     }
   ]
 }
