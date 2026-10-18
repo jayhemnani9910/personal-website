@@ -285,6 +285,7 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "gtsteffaniak/filebrowser", number: "#3166", href: "https://github.com/gtsteffaniak/filebrowser/pull/3166" },
   { repo: "radareorg/radare2", number: "#27033", href: "https://github.com/radareorg/radare2/pull/27033" },
   { repo: "radareorg/radare2", number: "#27034", href: "https://github.com/radareorg/radare2/pull/27034" },
+  { repo: "AlexsJones/llmfit", number: "#1152", href: "https://github.com/AlexsJones/llmfit/pull/1152" },
 ];
 
 /**
