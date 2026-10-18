@@ -286,6 +286,10 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "radareorg/radare2", number: "#27033", href: "https://github.com/radareorg/radare2/pull/27033" },
   { repo: "radareorg/radare2", number: "#27034", href: "https://github.com/radareorg/radare2/pull/27034" },
   { repo: "AlexsJones/llmfit", number: "#1152", href: "https://github.com/AlexsJones/llmfit/pull/1152" },
+  { repo: "Tencent/teamai-cli", number: "#1203", href: "https://github.com/Tencent/teamai-cli/pull/1203" },
+  { repo: "lightpanda-io/browser", number: "#4038", href: "https://github.com/lightpanda-io/browser/pull/4038" },
+  { repo: "radareorg/radare2", number: "#27039", href: "https://github.com/radareorg/radare2/pull/27039" },
+  { repo: "radareorg/radare2", number: "#27040", href: "https://github.com/radareorg/radare2/pull/27040" },
 ];
 
 /**
