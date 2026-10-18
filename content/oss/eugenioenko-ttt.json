@@ -68,6 +68,14 @@
       "broken": "Save As wrote over whatever file was already at the chosen path, with no prompt and no undo.",
       "changed": "Save As now asks before replacing another file, with Cancel as the default.",
       "matters": "A typo in a file name can no longer wipe out an existing file."
+    },
+    {
+      "number": 964,
+      "merged": "2026-10-18",
+      "title": "Replace in Files keeps a file's last line as it was",
+      "broken": "Replacing text across files added a newline to the end of any file that had none, so one small edit also changed the file's last line.",
+      "changed": "I made it add the final newline only when the file already had one.",
+      "matters": "A replace changes only the words you asked for, and the diff shows only that."
     }
   ]
 }
