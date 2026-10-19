@@ -8,6 +8,7 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import { SITE_CONFIG } from "@/../content/site";
 import { getAllProjects } from "@/lib/content";
 import { SITE_GRAPH, jsonLd } from "@/lib/json-ld";
+import { FEED } from "@/lib/page-metadata";
 
 export const viewport: Viewport = {
   // Paper, the only theme (ADR 0018).
@@ -25,6 +26,7 @@ export const metadata: Metadata = {
   description: SITE_CONFIG.description,
   keywords: ["Forward Deployed Engineer", "FDE", "Applied AI Engineer", "AI agents", "Model Context Protocol", "MCP", "Data Engineer", "Computer Vision", "Python", "Machine Learning", "MLOps", "PyTorch", "FastAPI", "Data Pipelines", "Backend Engineer"],
   authors: [{ name: SITE_CONFIG.name, url: SITE_CONFIG.url }],
+  alternates: { types: FEED },
   creator: SITE_CONFIG.name,
   openGraph: {
     title: SITE_CONFIG.title,

@@ -13,6 +13,10 @@ const SHARE_IMAGE = {
   alt: shareImageAlt,
 };
 
+// Next replaces alternates whole too, so the feed link the root layout sets
+// has to be named again by every page that sets its own alternates.
+export const FEED = { "application/rss+xml": [{ url: "/feed.xml", title: SITE_CONFIG.name }] };
+
 type PageMetadataInput = {
   title: string;
   description: string;
@@ -29,7 +33,7 @@ export function pageMetadata({ title, description, path, type = "website", artic
   return {
     title,
     description,
-    alternates: { canonical: path },
+    alternates: { canonical: path, types: FEED },
     openGraph: {
       title: shareTitle,
       description,
