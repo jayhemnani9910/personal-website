@@ -44,6 +44,14 @@
       "broken": "Creating a folder over WebDAV with a name that had been used before said it worked but made nothing. File managers lost the second \"New Folder\" after a rename, and a deleted folder could not be made again.",
       "changed": "I fixed how the folder name was split from its path, so the folder itself is created and not an empty name inside it.",
       "matters": "Folders made from a file manager on a WebDAV share appear as expected."
+    },
+    {
+      "number": 11811,
+      "merged": "2026-10-18",
+      "title": "Deleting a folder over WebDAV deletes what is inside",
+      "broken": "Over WebDAV, a folder with anything in it could not be deleted, and nothing could be moved or copied on top of an existing folder.",
+      "changed": "I made deletes remove the folder with its contents, with checks so a move or upload can never wipe the wrong folder.",
+      "matters": "File managers that mount SeaweedFS can clean up and reorganize folders normally."
     }
   ]
 }

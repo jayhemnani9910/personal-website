@@ -292,6 +292,12 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "radareorg/radare2", number: "#27040", href: "https://github.com/radareorg/radare2/pull/27040" },
   { repo: "eugenioenko/ttt", number: "#964", href: "https://github.com/eugenioenko/ttt/pull/964" },
   { repo: "seaweedfs/seaweedfs", number: "#11810", href: "https://github.com/seaweedfs/seaweedfs/pull/11810" },
+  { repo: "Effect-TS/effect", number: "#9487", href: "https://github.com/Effect-TS/effect/pull/9487" },
+  { repo: "lightpanda-io/browser", number: "#4039", href: "https://github.com/lightpanda-io/browser/pull/4039" },
+  { repo: "seaweedfs/seaweedfs", number: "#11811", href: "https://github.com/seaweedfs/seaweedfs/pull/11811" },
+  { repo: "Tencent/teamai-cli", number: "#1202", href: "https://github.com/Tencent/teamai-cli/pull/1202" },
+  { repo: "home-assistant/core", number: "#185795", href: "https://github.com/home-assistant/core/pull/185795" },
+  { repo: "radareorg/radare2", number: "#27055", href: "https://github.com/radareorg/radare2/pull/27055" },
 ];
 
 /**
