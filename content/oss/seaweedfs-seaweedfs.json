@@ -52,6 +52,14 @@
       "broken": "Over WebDAV, a folder with anything in it could not be deleted, and nothing could be moved or copied on top of an existing folder.",
       "changed": "I made deletes remove the folder with its contents, with checks so a move or upload can never wipe the wrong folder.",
       "matters": "File managers that mount SeaweedFS can clean up and reorganize folders normally."
+    },
+    {
+      "number": 11830,
+      "merged": "2026-10-19",
+      "title": "Folder entries that hold data now list their real size",
+      "broken": "In SeaweedFS's S3 storage, a name ending in a slash can hold data. Reading it gave back the data, but a folder listing said its size was zero.",
+      "changed": "The listing now counts the data stored with such an entry, and empty ones still show zero.",
+      "matters": "Apps that trust listing sizes see the same size they get when they read the file."
     }
   ]
 }
