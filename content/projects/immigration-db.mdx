@@ -13,7 +13,7 @@ impact:
   - "Predictable performance & cleaner data model."
 deepDive:
   context: |
-    Immigration case management involves tracking complex, multi-faceted relationships between people, cases, documents, and legal processes. The challenge was to design a normalized relational schema that could handle:
+    Immigration case management means tracking how people, cases, documents and legal processes relate, and those links get messy fast. I needed a normalized relational schema that could handle:
 
     - Multiple people per case (applicants, dependents, sponsors)
     - Various case types (family-based, employment-based, asylum, etc.)
@@ -24,7 +24,7 @@ deepDive:
   architecture: |
     **Database Design Approach:**
 
-    The schema follows a normalized relational model (3NF) with strategic denormalization for performance:
+    The schema follows a normalized relational model (3NF) with some denormalization for performance:
 
     1. **Core Entity Tables:**
        - `persons` - Central person registry (applicants, dependents, sponsors)
@@ -104,23 +104,23 @@ deepDive:
       tradeoff: "Every case change has to keep active_case_count in step; a missed update shows a wrong count until it is recomputed."
 
     - decision: "Use case_persons junction table with role enum (applicant, dependent, sponsor, attorney)"
-      rationale: "Allows flexibility for one person to have multiple roles in same case (e.g., sponsor and attorney) while maintaining clean schema."
+      rationale: "One person can hold several roles in the same case (e.g., sponsor and attorney) and the schema stays clean."
       tradeoff: "The role list is an ENUM, so a new role is a schema change (ALTER TABLE), not a row."
 
     - decision: "Store both issue_date and expiration_date rather than calculating on-the-fly"
-      rationale: "Different document types have different validity periods, and some may be extended. Pre-calculating enables efficient index-based queries for deadline monitoring."
+      rationale: "Different document types have different validity periods, and some may be extended. Storing the date up front makes deadline checks a fast index lookup."
       tradeoff: "An extension is an update to the stored date, and nothing in the schema stops a stored date from disagreeing with its document type's validity period."
 
     - decision: "Separate case_status_history table instead of JSON field in cases table"
-      rationale: "Enables SQL queries on historical data, maintains normalization, and allows efficient range queries (e.g., \"all cases that were pending in Q2 2023\")."
+      rationale: "History can be queried with plain SQL, the schema stays normalized, and range queries are fast (e.g., \"all cases that were pending in Q2 2023\")."
       tradeoff: "Every status change is two writes inside one transaction, and a case's history is a join away."
 
     - decision: "MySQL with the InnoDB engine"
-      rationale: "ACID compliance critical for immigration data integrity. Row-level locking supports concurrent case updates. Native support for foreign keys and transactions."
+      rationale: "Immigration data needs ACID guarantees. Row-level locking handles concurrent case updates, and foreign keys and transactions are built in."
       tradeoff: "The schema leans on MySQL specifics (ENUM columns, ON UPDATE CURRENT_TIMESTAMP), so moving to another database is a rewrite of those parts."
 
     - decision: "UTF-8 encoding for all text fields"
-      rationale: "Immigration data includes names and addresses from diverse languages. UTF-8 ensures proper storage and sorting of international characters."
+      rationale: "Names and addresses come in many languages. UTF-8 stores and sorts those characters properly."
       tradeoff: "In utf8mb4 a character takes up to four bytes, so long indexed VARCHAR columns reach InnoDB's index-length limit sooner."
 
   codeSnippets:
@@ -307,7 +307,7 @@ deepDive:
 
     1. **Normalization is Not Always Absolute**
        - Started with strict 3NF but found that denormalizing `active_case_count` in the persons table removed an aggregate query every case listing would otherwise run.
-       - Strategic denormalization for read-heavy fields is worth the added complexity of maintaining consistency.
+       - For read-heavy fields, denormalizing is worth the extra work of keeping the copy consistent.
 
     2. **Junction Tables Should Carry Business Logic**
        - Initially made `case_persons` a pure junction table with just IDs. Later added `role`, `is_primary`, and `relationship` fields.
@@ -315,14 +315,14 @@ deepDive:
 
     3. **Date Fields Require Careful Indexing**
        - Queries filtering by `expiration_date` ranges were slow until adding composite index `(expiration_date, status)`.
-       - Range queries on dates benefit enormously from proper indexing, and including status in the composite index eliminated filesorts.
+       - Date range queries need the right index, and putting status in the composite index got rid of the filesorts.
 
     4. **Enums vs. Foreign Keys Trade-off**
        - Used ENUMs for `status` and `role` fields (limited, stable values) but foreign keys for `case_type` and `document_type` (extensible).
        - ENUMs are faster and enforce constraints at the schema level, but they're rigid. Use them only for stable domains.
 
     5. **Audit Trails Are Essential for Compliance**
-       - Immigration data has legal implications. The `case_status_history` table proved invaluable for tracking "when did this case move to PENDING?"
+       - Immigration data has legal implications. The `case_status_history` table earned its keep answering "when did this case move to PENDING?"
        - For regulated domains, invest in audit infrastructure early. Retrofitting is painful.
 
     6. **Constraints Prevent Bad Data**

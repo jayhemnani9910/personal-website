@@ -12,7 +12,7 @@ solution:
 impact:
   - "Lightweight demo of event-driven UI."
 deepDive:
-  architecture: "The application follows a Model-View-Controller (MVC) pattern adapted for Swing's event-driven paradigm. The game state machine manages three primary states: INITIAL (game setup), PLAYING (active guessing), and FINISHED (game over with results). The architecture separates the game logic (random number generation, guess validation, attempt tracking) from the Swing UI components (JFrame, JPanel, JTextField, JButton), connected through ActionListener callbacks. This separation enables easy testing of game logic independently from UI concerns."
+  architecture: "The application follows a Model-View-Controller (MVC) pattern adapted to Swing's event model. The game state machine manages three primary states: INITIAL (game setup), PLAYING (active guessing), and FINISHED (game over with results). The architecture separates the game logic (random number generation, guess validation, attempt tracking) from the Swing UI components (JFrame, JPanel, JTextField, JButton), connected through ActionListener callbacks. That split means the game logic can be tested without the UI."
 
   components:
     - name: "GameEngine"
@@ -20,7 +20,7 @@ deepDive:
       details: "Handles random number generation within configurable bounds, validates player guesses, maintains attempt counters, and calculates scoring based on accuracy and number of tries. Implements the state transitions and win condition."
 
     - name: "GameUI (JFrame)"
-      purpose: "Main window container orchestrating all visual components"
+      purpose: "Main window that holds the other components"
       details: "Extends JFrame to create the primary application window. Lays out the input field, feedback labels and action buttons. Handles window lifecycle events and coordinates communication between UI components and game logic."
 
     - name: "InputPanel"
@@ -28,7 +28,7 @@ deepDive:
       details: "Contains JTextField for numerical input with validation, submit button with ActionListener, and visual feedback for invalid inputs. Implements input filtering to prevent non-numeric entries and enforces range constraints before passing guesses to the game engine."
 
     - name: "FeedbackDisplay"
-      purpose: "Visual feedback mechanism for game state and hints"
+      purpose: "Shows hints and game state"
       details: "Displays the hints ('Too high!', 'Too low!', 'Correct!'), the attempt count and the current game status."
 
     - name: "ControlPanel"
@@ -39,19 +39,19 @@ deepDive:
 
   keyDecisions:
     - decision: "Swing over JavaFX for UI framework"
-      rationale: "Chose Swing for its maturity, extensive documentation, and lower learning curve for fundamental GUI concepts. While JavaFX offers more modern features, Swing's simplicity made it ideal for demonstrating core event-driven programming patterns without framework-specific abstractions."
+      rationale: "I picked Swing because it's mature, well documented and easier to learn for GUI basics. JavaFX is more modern, but Swing's simplicity kept the focus on event-driven patterns, not framework abstractions."
       tradeoff: "Gives up JavaFX's more modern features and look."
 
     - decision: "State machine for game flow control"
-      rationale: "Implemented explicit state management (INITIAL, PLAYING, FINISHED) to prevent invalid operations and ensure predictable behavior. This prevents edge cases like submitting guesses after winning or starting multiple games simultaneously. The state machine makes transitions explicit and testable."
+      rationale: "Implemented explicit state management (INITIAL, PLAYING, FINISHED) so invalid moves can't happen and behavior stays predictable. This prevents edge cases like submitting guesses after winning or starting multiple games simultaneously. The state machine makes transitions explicit and testable."
       tradeoff: "More code up front: every state and transition is written out rather than implied."
 
     - decision: "Input validation at UI layer"
-      rationale: "Performed validation in InputPanel before reaching GameEngine to provide immediate user feedback and maintain clean separation of concerns. The UI handles presentation-level validation (numeric input, range checks), while GameEngine focuses purely on game logic. This reduces coupling and improves user experience."
+      rationale: "Performed validation in InputPanel before reaching GameEngine to provide immediate user feedback and maintain clean separation of concerns. The UI handles presentation-level validation (numeric input, range checks), while GameEngine focuses purely on game logic. Less coupling, and the player hears about bad input right away."
       tradeoff: "Checks sit in more than one layer, so changing a rule means changing it in each."
 
     - decision: "Modal dialogs for game state changes"
-      rationale: "Used JOptionPane for win notifications and replay confirmations to create clear breakpoints in game flow. Modal dialogs ensure users acknowledge outcomes before proceeding, preventing accidental game resets and making state transitions explicit."
+      rationale: "Used JOptionPane for win notifications and replay confirmations to create clear breakpoints in game flow. A modal dialog makes the player acknowledge the result before moving on, preventing accidental game resets and making state transitions explicit."
       tradeoff: "Each dialog blocks the window until dismissed: an extra click at every win or replay."
 
   codeSnippets:
@@ -156,20 +156,20 @@ deepDive:
 
   learnings:
     - insight: "Event-Driven Architecture Fundamentals"
-      description: "Building with Swing taught the core principles of event-driven programming: loose coupling through listeners, callback-based control flow, and asynchronous user interactions."
+      description: "Swing taught me the basics of event-driven code: listeners keep parts loosely coupled, control flow runs through callbacks, and user input arrives whenever it arrives."
 
     - insight: "State Management Complexity"
-      description: "Even a simple game reveals state management challenges. Without explicit state tracking (INITIAL, PLAYING, FINISHED), edge cases emerged: users submitting guesses before initialization, starting multiple games simultaneously, or continuing after winning. This experience highlighted why state management libraries (Redux, MobX) exist in complex applications, because manual state tracking does not scale."
+      description: "Even a simple game reveals state management challenges. Without explicit state tracking (INITIAL, PLAYING, FINISHED), edge cases emerged: users submitting guesses before initialization, starting multiple games simultaneously, or continuing after winning. That's why state libraries (Redux, MobX) exist in big apps: tracking state by hand doesn't scale."
 
     - insight: "Separation of Concerns in Practice"
-      description: "Implementing MVC in Swing demonstrated why architectural patterns matter. Initially mixing UI code with game logic created brittle code resistant to changes. Refactoring to separate GameEngine from GameUI made testing trivial, enabled UI redesigns without touching logic, and clarified responsibilities."
+      description: "MVC in Swing showed me why patterns matter. At first I mixed UI code with game logic, and the code was brittle and hard to change. Refactoring to separate GameEngine from GameUI made testing trivial, enabled UI redesigns without touching logic, and clarified responsibilities."
 
     - insight: "Input Validation Layers"
-      description: "Learned to implement defense in depth: UI-level validation for immediate feedback (DocumentFilter for numeric input), application-level validation for business rules (range checking), and domain-level validation in GameEngine (state checks). Each layer serves distinct purposes and prevents different failure modes. Relying on a single validation point creates fragility."
+      description: "I learned defense in depth: UI-level validation for immediate feedback (DocumentFilter for numeric input), application-level validation for business rules (range checking), and domain-level validation in GameEngine (state checks). Each layer catches a different kind of failure. One validation point on its own is fragile."
 
     - insight: "User Experience in Desktop Applications"
-      description: "Discovered that technical correctness doesn't equal good UX. Early versions worked but felt clunky: no visual feedback during input, unclear win conditions, and abrupt state changes. Adding color-coded hints, confirmation dialogs, and immediate input validation transformed the experience. Small UI details have outsized impact on perceived quality."
+      description: "Working code isn't the same as good UX. Early versions worked but felt clunky: no visual feedback during input, unclear win conditions, and abrupt state changes. Adding color-coded hints, confirmation dialogs, and immediate input validation made it feel far better. Small details count for more than they look."
 ---
-Accurate Guesser is a classic number guessing game built with Java Swing that demonstrates fundamental desktop application development principles. Players attempt to guess a randomly generated number, receiving intelligent feedback after each attempt. Beyond being a fun game, it is practice in event-driven architecture, state management, and GUI programming in Java.
+Accurate Guesser is a number-guessing game in Java Swing. You guess a random number and get a hint after each try. Fun to build, and also practice in event-driven code, state management and GUI programming in Java.
 
-The application showcases clean separation between game logic and presentation, implements thorough input validation, and provides clear user feedback through responsive UI. It shows how a simple concept can teach foundational programming patterns.
+Game logic and presentation are kept apart, input is checked at several layers, and the UI says clearly what happened. A simple idea, but it teaches the basic patterns.

@@ -10,7 +10,7 @@ tech: ["Swift", "SwiftUI", "llama.cpp", "MiniCPM-V", "Objective-C++"]
 github: "https://github.com/jayhemnani9910/receiptlens-minicpm-v46"
 links:
   code: "https://github.com/jayhemnani9910/receiptlens-minicpm-v46"
-challenge: "Reading a receipt or document with a vision-language model normally means uploading the image to a cloud API. The aim of this prototype was to keep that entirely on the phone: run a capable multimodal model (MiniCPM-V 4.6) locally so a receipt, document, or screenshot is analyzed offline, with nothing leaving the device."
+challenge: "Reading a receipt or document with a vision-language model normally means uploading the image to a cloud API. I wanted to keep that entirely on the phone: run a capable multimodal model (MiniCPM-V 4.6) locally so a receipt, document, or screenshot is analyzed offline, with nothing leaving the device."
 solution:
   - "A SwiftUI iOS app that captures or picks an image, sends it with a mode-specific prompt to an on-device engine, and shows the model's reading, all offline."
   - "On-device inference of MiniCPM-V 4.6 (GGUF) through llama.cpp and its multimodal mtmd layer, wired into Swift via a native Objective-C++ bridge adapted from OpenBMB's official iOS demo."
@@ -18,8 +18,8 @@ solution:
   - "A local history of scans and an image file store, so past readings are kept on-device without any backend."
 impact:
   - "Fully offline multimodal reading: the image and the model both stay on the phone, which is the point for receipts and documents."
-  - "Demonstrates that a vision-language model, not just a text model, can run on-device through llama.cpp's mtmd path."
-  - "An honest prototype: the SwiftUI app, model management, camera flow, and engine wiring are the original work; the low-level native bridge is adapted from OpenBMB's demo and llama.cpp ships as a vendored xcframework."
+  - "Shows that a vision-language model (not only a text model) can run on-device through llama.cpp's mtmd path."
+  - "Credit where it's due: the SwiftUI app, model management, camera flow, and engine wiring are my own work; the low-level native bridge is adapted from OpenBMB's demo and llama.cpp ships as a vendored xcframework."
 deepDive:
   context: "ReceiptLens is a prototype exploring on-device multimodal inference on iOS: can a phone read a receipt with a real vision-language model without sending anything to a server? It uses MiniCPM-V 4.6 in GGUF form, run locally through llama.cpp's multimodal (mtmd) support. The original work is the SwiftUI application, the model-download and storage flow, the camera and prompt-mode UX, and the Swift engine that drives inference; the underlying native bridge is adapted from OpenBMB's official iOS demo, and llama.cpp is vendored as a prebuilt xcframework."
   architecture: "A SwiftUI app shell (RootView, ScannerView, ModelSetupView, HistoryView) holds the UI. A MiniCPMEngine (an ObservableObject) owns an MTMDWrapper, the Swift-facing handle on the native multimodal runtime. The native bridge (MBMtmd, an Objective-C++ layer over llama.cpp's mtmd, adapted from OpenBMB's demo) is exposed to Swift through a bridging header and the MTMDWrapper, with typed MTMDParams, MTMDToken, and MTMDError. On first run, a ModelStore downloads the MiniCPM-V 4.6 GGUF files; analysis takes a captured image plus a mode-specific prompt (from PromptTemplate), loads the model if needed, adds the image and text to the runtime, and streams the generated reading. An ImageFileStore and a scan history keep results locally. llama.cpp itself is a vendored llama.xcframework (device and simulator slices)."
@@ -112,8 +112,8 @@ deepDive:
       label: "local model files"
       context: "downloaded in-app, no server"
   learnings:
-    - "A multimodal model, not just a text model, can run on a phone through llama.cpp's mtmd path, which makes offline document reading possible."
-    - "For a prototype, adapting an existing native bridge (OpenBMB's) and spending the effort on the app and UX was the right trade, and saying so plainly is part of doing it honestly."
+    - "A multimodal model (not only a text model) can run on a phone through llama.cpp's mtmd path, which makes offline document reading possible."
+    - "For a prototype, adapting an existing native bridge (OpenBMB's) and spending the effort on the app and UX was the right trade. Saying so plainly is part of the job."
     - "On-device inference is a UX problem as much as an ML one: model download, storage, and progress are most of what makes a local-model app usable."
 priority: 19
 ---

@@ -1,6 +1,6 @@
 ---
 title: "Soccer Vision Research"
-summary: "Modular research framework that orchestrates four pretrained vision models (RF-DETR, SAM2, SigLIP, ResNet) into one configurable soccer-analysis pipeline with selectable fusion strategies."
+summary: "Modular research framework that wires four pretrained vision models (RF-DETR, SAM2, SigLIP, ResNet) into one configurable soccer-analysis pipeline with selectable fusion strategies."
 description: "Research framework that combines four pretrained vision models (RF-DETR, SAM2, SigLIP, ResNet) into one configurable soccer-analysis pipeline."
 role: "Researcher"
 period: "2024"
@@ -10,13 +10,13 @@ tech: ["Python", "PyTorch", "RF-DETR", "SAM2", "SigLIP"]
 github: "https://github.com/jayhemnani9910/soccer-vision-research"
 links:
   site: "https://jayhemnani9910.github.io/soccer-vision-research/"
-challenge: "Combining several vision models for soccer analysis usually means hard-wiring one fixed pipeline. The goal here was a modular framework where detection, segmentation, identification, and classification models are swappable and configurable, so model combinations can be A/B tested without rewriting code."
+challenge: "Combining several vision models for soccer analysis usually means hard-wiring one fixed pipeline. I wanted a modular framework where detection, segmentation, identification, and classification models are swappable and configurable, so model combinations can be A/B tested without rewriting code."
 solution:
   - "An orchestration layer (ModelPipeline) that runs RF-DETR detection, SAM2 segmentation and tracking, SigLIP zero-shot identification, and ResNet jersey classification."
   - "Three execution modes (sequential, parallel, adaptive) plus a result-fusion layer with seven selectable strategies."
   - "YAML-driven, schema-validated config per model, with a model registry and manager so presets are configuration, not code."
 impact:
-  - "Swap models or presets through config alone, enabling rapid A/B testing of model combinations."
+  - "Swap models or presets through config alone, so model combinations can be A/B tested quickly."
   - "SigLIP text-image matching identifies players and teams zero-shot, without training on a specific roster."
   - "A documented framework with per-model demos and a config system built for research reproducibility."
 priority: 2

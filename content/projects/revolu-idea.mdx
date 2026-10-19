@@ -10,7 +10,7 @@ tech: ["Python", "LangGraph", "LangChain", "Pydantic", "Ollama", "Groq"]
 github: "https://github.com/jayhemnani9910/revolu-idea"
 links:
   demo: "https://jayhemnani9910.github.io/revolu-idea/"
-challenge: "Single-LLM research tends to confirm whatever it first believes. The goal was a system that actively tries to falsify its own claims: model a question as a causal graph, then attack each causal link with a dedicated adversary before trusting it."
+challenge: "Single-LLM research tends to confirm whatever it first believes. I wanted a system that tries to falsify its own claims: model a question as a causal graph, then attack each causal link with a dedicated adversary before trusting it."
 solution:
   - "A LangGraph workflow (CAG, Causal-Adversarial Graph) that plans a causal DAG, then investigates each edge with a parallel red team (adversary) and blue team (supporter)."
   - "A dialectical judge weighs the two sides on scientific criteria and returns a structured verdict: VERIFIED, FALSIFIED, or UNCLEAR, with a confidence score."
@@ -18,10 +18,10 @@ solution:
 impact:
   - "Falsification-first design: every causal claim faces a dedicated adversary before it is accepted, instead of one model synthesizing unchecked."
   - "Runs entirely on free backends (DuckDuckGo + Ollama or GitHub Models) or scales up to paid search and faster cloud LLMs, with no code changes."
-  - "Safety rails throughout: recursion-depth caps, per-edge investigation limits, loop detection via action hashes, and an auditor that decides loop-or-finish."
+  - "Safety rails: recursion-depth caps, per-edge investigation limits, loop detection via action hashes, and an auditor that decides loop-or-finish."
 priority: 5
 deepDive:
-  context: "Most LLM research tools are confirmation engines: ask a question, get a confident synthesis, rarely an argument against it. That is the opposite of how good research works, where a claim is only trusted after someone has actually tried to break it. CAG (Causal-Adversarial Graph) is built around that idea: a Popperian falsification loop. It turns a question into a causal graph of hypothesized cause-and-effect links, then, for each link, runs an adversary whose only job is to find contradicting evidence alongside a supporter looking for confirming evidence. A judge weighs both and rules. The output is not a single narrative but a set of causal claims, each tagged with a verdict and the evidence on both sides. It was built in 10 days from a rough problem statement."
+  context: "Most LLM research tools are confirmation engines: ask a question, get a confident synthesis, rarely an argument against it. That is the opposite of how good research works, where a claim is only trusted after someone has tried to break it. CAG (Causal-Adversarial Graph) is built around that idea: a Popperian falsification loop. It turns a question into a causal graph of hypothesized cause-and-effect links, then, for each link, runs an adversary whose only job is to find contradicting evidence alongside a supporter looking for confirming evidence. A judge weighs both and rules. The output is a set of causal claims, each tagged with a verdict and the evidence on both sides, rather than one narrative. It was built in 10 days from a rough problem statement."
   architecture: "The system is a LangGraph state machine over a shared ResearchState whose center is a causal graph (the evolving 'world model'). A Causal Planner turns the query into a causal DAG of hypothesized edges. An Edge Selector picks the next unresolved edge. The Investigate step runs two agents concurrently (asyncio.gather): an Adversary (red team) searching for contradicting evidence and a Supporter (blue team) searching for supporting evidence, writing into separate evidence buffers that custom LangGraph reducers merge without clobbering each other. A Dialectical Judge then weighs the two sides on scientific criteria (credibility, recency, methodology, replication, effect size, confounders) and returns a structured verdict (VERIFIED / FALSIFIED / UNCLEAR) with confidence, updating the graph. An Auditor enforces safety (recursion-depth caps, per-edge investigation limits, loop detection via action hashes, node-visit counting) and routes back to the Selector or on to the Writer, which synthesizes the final verdict-tagged report. Routing is done with explicit Command(goto=...) returns rather than conditional edges, a deliberate workaround for hangs observed with LangGraph 1.0.x conditional edges. Everything external lives behind hexagonal ports: LLM, search, and storage adapters are injected, so the same engine runs on free or paid backends."
   dataFlow:
     - step: "Plan"
@@ -102,7 +102,7 @@ deepDive:
                 # routing via Command(goto=...) inside nodes: a deliberate
                 # workaround for LangGraph 1.0.x conditional-edge hangs
                 return wf.compile()
-      explanation: "The whole engine in one place. Note the honest detail: conditional edges hung on this LangGraph version, so the auditor and selector route by returning Command(goto=...) instead, which kept the loop deterministic and debuggable."
+      explanation: "The whole engine in one place. One unflattering detail: conditional edges hung on this LangGraph version, so the auditor and selector route by returning Command(goto=...) instead, which kept the loop deterministic and debuggable."
     - title: "Red team + blue team, in parallel"
       language: "python"
       code: |
@@ -149,7 +149,7 @@ deepDive:
   learnings:
     - "Falsification beats confirmation. Giving each causal edge a dedicated adversary surfaced contradictions that a single synthesizing model would have smoothed over. The adversary is the most valuable agent in the system."
     - "Parallelism is easy; merging parallel state is not. Running red and blue teams with asyncio.gather was trivial, but getting their concurrent writes into LangGraph state without clobbering took custom reducers and separate evidence buffers."
-    - "Sometimes the honest fix is a workaround. Conditional edges hung on this LangGraph version, so routing moved into Command(goto=...) returns. Less elegant, but deterministic and debuggable beat clever-but-hanging."
+    - "Sometimes the fix is a workaround. Conditional edges hung on this LangGraph version, so routing moved into Command(goto=...) returns. Less elegant, but deterministic and debuggable beat clever-but-hanging."
     - "Hexagonal architecture earned its keep. Because search and LLMs sit behind ports, the same engine runs free on DuckDuckGo + Ollama or scales to paid search and cloud models by config, which made iterating cheap."
     - "Agent loops need hard rails. Recursion-depth caps, per-edge limits, node-visit counts, and action-hash loop detection are what stop a self-directed research loop from running forever."
   futureWork:

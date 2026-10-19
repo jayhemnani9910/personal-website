@@ -16,12 +16,12 @@ solution:
   - "FastAPI service plus a live RTSP path, with ONNX and TensorRT export for deployment."
   - "MLflow experiment tracking and a DVC-versioned pipeline so runs are reproducible end to end."
 impact:
-  - "Detection and tracking run on real La Liga footage at 22 FPS on an RTX 3070-class 8GB GPU."
+  - "Detection and tracking run on real La Liga footage at 22 FPS on my RTX 3070 laptop (8 GB). My own measurement, not an independent benchmark."
   - "GraphSAGE role classifier is scaffolded and inference-wired (trained weights pending), feeding off the tracklet graph."
   - "Each stage logs to MLflow and runs standalone or as one unified pipeline; Dockerized."
 priority: 1
 deepDive:
-  context: "Commercial sports-analytics platforms lean on manual tagging teams that spend hundreds of hours per match, so only elite leagues get full coverage and lower-tier, youth, and amateur footage go unanalyzed. This project is an honest attempt at the automation path: get the production-shaped plumbing right (detection, tracking, graph construction, MLOps) on real broadcast footage first, then layer trained tactical models on top. The detection and tracking stages work today on real La Liga clips; the tactical GNN is a wired scaffold waiting on labeled training data."
+  context: "Commercial sports-analytics platforms lean on manual tagging teams that spend hundreds of hours per match, so only elite leagues get full coverage and lower-tier, youth, and amateur footage go unanalyzed. This is my attempt at the automation path: get the production-shaped plumbing right (detection, tracking, graph construction, MLOps) on real broadcast footage first, then layer trained tactical models on top. The detection and tracking stages work today on real La Liga clips; the tactical GNN is a wired scaffold waiting on labeled training data."
   architecture: "A modular three-stage pipeline. (1) Detection uses YOLOv8n with stock COCO weights, keeping the person and sports-ball classes, run through ultralytics. (2) Tracking uses ByteTrack (via the supervision library) with Kalman motion prediction, tuned for La Liga footage (tracker confidence 0.35, distance threshold 120px, max_age 20 frames, which recovers 3 to 5 frame occlusions). (3) Analysis builds a spatial-temporal interaction graph from the tracklets and runs a GraphSAGE position classifier (PyTorch Geometric). Everything is exposed through a FastAPI service with batch and live RTSP paths, ONNX and TensorRT export for deployment, MLflow for experiment tracking, and a DVC-declared pipeline for reproducibility. A fine-tuned soccer checkpoint and trained GNN weights are the explicit next milestones; the training pipelines exist in the repo."
   dataFlow:
     - step: "Ingest"
@@ -43,7 +43,7 @@ deepDive:
       detail: "FastAPI returns detections, tracklets, and overlays; the live path renders annotated frames in real time."
   components:
     - name: "YOLOv8n detection (src/detect/infer.py)"
-      purpose: "Stock COCO YOLOv8n via ultralytics. Robustly extracts boxes, confidences, and classes from results regardless of tensor backend, and writes overlay images. A soccer-tuned 4-class checkpoint is future work; the training script exists."
+      purpose: "Stock COCO YOLOv8n via ultralytics. Extracts boxes, confidences, and classes from results whatever the tensor backend, and writes overlay images. A soccer-tuned 4-class checkpoint is future work; the training script exists."
     - name: "ByteTrack runtime (src/track/)"
       purpose: "ByteTrack via the supervision library with Kalman prediction. Tuned for broadcast soccer: tracker confidence 0.35, distance threshold 120px, max_age 20 frames for short-occlusion recovery."
     - name: "Interaction graph builder (src/graph/build_graph.py)"
@@ -153,7 +153,7 @@ deepDive:
   metrics:
     - value: "22 FPS"
       label: "real-time inference"
-      context: "RTX 3070-class 8GB GPU"
+      context: "self-measured on my RTX 3070 laptop"
     - value: "3-stage"
       label: "detect to track to graph"
       context: "modular; runs unified or per stage"
@@ -176,4 +176,4 @@ deepDive:
     - "Team classification by jersey color to split tracks into home and away before graph construction."
     - "Edge deployment with INT8 quantization and ONNX Runtime for sideline analysis on tablets."
 ---
-Production-shaped computer-vision pipeline for soccer video. YOLOv8n (stock COCO) handles detection, ByteTrack with Kalman filtering persists player identities, and a spatial-temporal graph feeds a GraphSAGE position-classifier scaffold. Wrapped in real MLOps: a DVC-declared pipeline, MLflow tracking, FastAPI endpoints with a live RTSP path, ONNX and TensorRT export, and Docker. Detection and tracking run on real La Liga footage at 22 FPS; the tactical GNN is wired and waiting on trained weights.
+Production-shaped computer-vision pipeline for soccer video. YOLOv8n (stock COCO) handles detection, ByteTrack with Kalman filtering persists player identities, and a spatial-temporal graph feeds a GraphSAGE position-classifier scaffold. Wrapped in real MLOps: a DVC-declared pipeline, MLflow tracking, FastAPI endpoints with a live RTSP path, ONNX and TensorRT export, and Docker. Detection and tracking run on real La Liga footage at 22 FPS on my RTX 3070 laptop; the tactical GNN is wired and waiting on trained weights.

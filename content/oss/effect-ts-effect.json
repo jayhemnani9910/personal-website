@@ -80,7 +80,7 @@
       "title": "Monitoring no longer repeats old lowest and highest values",
       "broken": "When an app sent timing reports in intervals, each report claimed the smallest and largest values since startup, not for that interval. Dashboards showed values that never happened then.",
       "changed": "After the first report, I leave those two values out, as the project's other reporting tool already does.",
-      "matters": "Charts for each time window show only what actually happened in that window."
+      "matters": "Charts for each time window show only what happened in that window."
     },
     {
       "number": 8986,

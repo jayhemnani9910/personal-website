@@ -11,7 +11,7 @@ github: "https://github.com/jayhemnani9910/diabetes-prediction-stacking"
 links:
   code: "https://github.com/jayhemnani9910/diabetes-prediction-stacking"
   paper: "https://ieeexplore.ieee.org/document/9670920"
-challenge: "Single classifiers on the small PIMA Indians Diabetes dataset trade off against each other: one is better on some patients, another on others. The question this project asked was whether stacking, letting a meta-model learn how to combine several tuned base classifiers, would predict diabetes more reliably than any one model on its own."
+challenge: "Single classifiers on the small PIMA Indians Diabetes dataset trade off against each other: one is better on some patients, another on others. The question was whether stacking (letting a meta-model learn how to combine several tuned base classifiers) would predict diabetes more reliably than any one model on its own."
 solution:
   - "Six base classifiers: Gaussian Naive Bayes, Random Forest, Decision Tree, SVM, an ANN (MLP) and Logistic Regression. Five are tuned with randomized search and cross-validation; Naive Bayes uses a fixed var_smoothing."
   - "A stacking ensemble where the six base models' predictions become inputs to a Random Forest meta-learner (scikit-learn StackingClassifier, cv=4)."

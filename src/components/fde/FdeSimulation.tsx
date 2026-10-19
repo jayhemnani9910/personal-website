@@ -362,7 +362,7 @@ function PhaseContent({
       return (
         <div>
           <h2 className={PHASE_TITLE}>
-            What I&apos;m <span className={HIGHLIGHT}>honest about</span>, on day one.
+            What I&apos;d <span className={HIGHLIGHT}>warn you about</span>, on day one.
           </h2>
           <div className={PHASE_SUB}>{"// the failure modes I would name in the SOW. specific to your problem."}</div>
           <div className="grid gap-3">
@@ -425,7 +425,7 @@ function PhaseContent({
 
           <div className="mt-9 rounded-[var(--tr-r-xl)] border-[1.5px] border-tr-hairline bg-tr-butter px-7 py-6 text-[20px] font-semibold leading-[var(--tr-lh-h2)]">
             {source === 'live'
-              ? 'You just experienced what a 30-minute scoping call with me feels like, on your real problem.'
+              ? 'That is what a 30-minute scoping call with me feels like, on your real problem.'
               : 'That was a prepared example of a 30-minute scoping call with me. Bring your real problem and it gets the same treatment.'}
             <br />
             <span className="font-mono text-[14px] font-normal text-tr-text-mute">If that landed → </span>

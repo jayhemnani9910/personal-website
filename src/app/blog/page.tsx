@@ -8,7 +8,7 @@ import { CARD, CARD_HOVER, CHIP, DOT, DOTS, H1, H2, HAND, HIGHLIGHT, KICKER, LAB
 
 export const metadata: Metadata = pageMetadata({
   title: "Writing",
-  description: "Essays by Jay Hemnani on forward-deployed engineering: what the role is, how the interviews run, and where the work actually happens.",
+  description: "Essays by Jay Hemnani on forward-deployed engineering: what the role is, how the interviews run, and where the work happens.",
   path: "/blog",
 });
 

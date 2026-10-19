@@ -12,9 +12,9 @@ links:
   code: "https://github.com/jayhemnani9910/cpu-scheduling-algorithms"
   demo: "https://jayhemnani9910.github.io/cpu-scheduling-algorithms/"
   paper: "https://ieeexplore.ieee.org/document/9670986"
-challenge: "CPU scheduling algorithms are easy to state and hard to feel: the difference between FCFS, Round Robin, and HRRN only becomes intuitive when you watch the same processes scheduled different ways and compare the numbers. The goal was a browser tool to do exactly that, build a process set, run any of the standard algorithms, and see the schedule and its metrics side by side."
+challenge: "CPU scheduling algorithms are easy to state and hard to feel: the difference between FCFS, Round Robin, and HRRN only becomes intuitive when you watch the same processes scheduled different ways and compare the numbers. I wanted a browser tool for exactly that: build a process set, run any of the standard algorithms, and see the schedule and its metrics side by side."
 solution:
-  - "Implements 9 algorithms, FCFS, SJF, SRTF, LJF, LRTF, Priority (non-preemptive and preemptive), Round Robin, and HRRN, as one discrete-event scheduler driven by a per-tick ready queue."
+  - "Implements 9 algorithms (FCFS, SJF, SRTF, LJF, LRTF, Priority non-preemptive and preemptive, Round Robin, HRRN) as one discrete-event scheduler driven by a per-tick ready queue."
   - "Models each process with both CPU and I/O bursts, arrival time, and priority, with configurable context-switch time, time quantum, and a high/low priority preference."
   - "Renders the resulting schedule as a Gantt and timeline chart and compares all algorithms by average completion, turnaround, waiting, and response time, including a Round Robin sweep across time quanta."
   - "Extracts the core scheduling logic into a Node-runnable test suite covering all 9 algorithms, so the engine can be verified outside the browser."
@@ -23,7 +23,7 @@ impact:
   - "Turns scheduling theory into a side-by-side comparison, making the trade-offs between algorithms visible on the same input."
   - "Built as the implementation behind a published IEEE paper (AIMV 2021) that applied CPU-scheduling ideas to vaccine-distribution scheduling."
 deepDive:
-  context: "This started as an operating-systems project and became the implementation behind a published IEEE paper (AIMV 2021) on applying scheduling algorithms to vaccine distribution. The visualizer's job is pedagogical and comparative: let someone enter a set of processes with CPU and I/O bursts, pick a scheduling policy, watch the schedule build on a Gantt chart, and then compare every algorithm on the same input by the four metrics that matter, completion, turnaround, waiting, and response time."
+  context: "This started as an operating-systems project and became the implementation behind a published IEEE paper (AIMV 2021) on applying scheduling algorithms to vaccine distribution. The visualizer's job is pedagogical and comparative: let someone enter a set of processes with CPU and I/O bursts, pick a scheduling policy, watch the schedule build on a Gantt chart, and then compare every algorithm on the same input by the four metrics that matter: completion, turnaround, waiting, and response time."
   architecture: "It is a single-page vanilla-JS app, about 1,105 lines, with no framework. Input is a table of processes (arrival time, alternating CPU and I/O bursts, optional priority) plus global settings (algorithm, context-switch time, time quantum, priority preference). A single discrete-event scheduler advances time tick by tick: at each tick it updates a ready queue from processes that have arrived and a block queue for those finishing I/O, picks the next process according to the chosen policy, and records the run on a time log. From that time log the app derives per-process completion, turnaround, waiting, and response times, averages them, and renders a Gantt and timeline chart. The same core logic is extracted into a Node test suite so the 9 algorithms can be tested headlessly."
   dataFlow:
     - step: "Define processes"
@@ -59,7 +59,7 @@ deepDive:
       reasoning: "All nine policies differ only in how the next process is chosen at each tick. A single time-stepped engine with a pluggable selection rule keeps the ready-queue, I/O-blocking, and context-switch logic in one place instead of duplicated nine times."
       alternatives: "A standalone function per algorithm (lots of duplicated queue and I/O handling, easy to drift out of sync)."
     - decision: "Model I/O bursts, not just CPU bursts"
-      reasoning: "Real processes alternate CPU and I/O. Adding an I/O block queue alongside the ready queue makes the schedules realistic and lets preemptive policies behave as they actually would when a process blocks."
+      reasoning: "Real processes alternate CPU and I/O. Adding an I/O block queue alongside the ready queue makes the schedules realistic and lets preemptive policies behave as they would when a process blocks."
       alternatives: "CPU bursts only (simpler, but an unrealistic model that hides how scheduling interacts with I/O)."
     - decision: "Extract the core logic into a Node test suite"
       reasoning: "Scheduling logic embedded in DOM event handlers is hard to trust. Pulling the engine and the nine algorithms into a plain module that runs under Node makes the results testable headlessly, separate from the UI."
@@ -116,8 +116,8 @@ deepDive:
       label: "paper implementation"
       context: "AIMV, applied to vaccine scheduling"
   learnings:
-    - "Nine algorithms collapse into one engine once you see that they differ only in the next-process selection rule, the queueing and I/O logic is shared."
-    - "Adding an I/O block queue is what separates a toy CPU-only model from schedules that behave the way an OS course actually describes."
+    - "Nine algorithms collapse into one engine once you see that they differ only in the next-process selection rule; the queueing and I/O logic is shared."
+    - "Adding an I/O block queue is what separates a toy CPU-only model from schedules that behave the way an OS course describes."
     - "Lifting logic out of DOM handlers into a Node-testable module turned a browser demo into something with a real regression suite behind it."
 priority: 16
 ---

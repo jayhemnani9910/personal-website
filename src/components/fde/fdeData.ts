@@ -123,7 +123,7 @@ export const RECEIPTS: Receipt[] = [
     phase: 'PHASE 03 · ARCHITECT',
     title: 'Services · data flows · contracts · failure boundaries.',
     project: 'KAYAK + AIRBNB CLONES · TEAM PROJECTS',
-    desc: "Both built with a team. Kayak metasearch: 3-tier distributed architecture. Node/Express services behind an API gateway, polyglot persistence (MySQL/Mongo/Redis), Kafka event streaming, Python FastAPI AI layer. Airbnb on Kubernetes microservices. The substrate FDE deployments run on.",
+    desc: "Both built with a team. Kayak metasearch: 3-tier distributed architecture. Node/Express services behind an API gateway, polyglot persistence (MySQL/Mongo/Redis), Kafka event streaming, Python FastAPI AI layer. Airbnb on Kubernetes microservices. The kind of stack FDE deployments run on.",
     links: [
       { label: 'kayak case study', href: '/projects/kayak-distributed' },
       { label: 'airbnb case study', href: '/projects/airbnb-distributed' },
@@ -138,9 +138,9 @@ export const RECEIPTS: Receipt[] = [
   },
   {
     phase: 'PHASE 05 · RISKS + EVALS',
-    title: 'Honest about what could go wrong, before it does.',
+    title: 'Naming what could go wrong, before it does.',
     project: "WHAT I'M ACTIVELY BUILDING",
-    desc: "An eval harness on CAG Deep Research: 100 automated tests scoring hallucination, context adherence, token cost. Also a short technical post on MCP failure modes in production. The Day-2 ops thinking this phase used, made explicit and external.",
+    desc: "An eval harness on CAG Deep Research: 100 automated tests scoring hallucination, context adherence, token cost. Also a short technical post on MCP failure modes in production. The Day-2 ops thinking from this phase, written down in public.",
     note: "In progress, not yet shipped. Calling it out because pretending it's done would defeat the point of this whole simulation.",
     links: [{ label: 'follow on github', href: 'https://github.com/jayhemnani9910' }],
   },
@@ -233,7 +233,7 @@ export const PRESETS: Preset[] = [
     decomposition: [
       { id: 'D1', title: 'Prospect identity resolver', why: 'Given an email or LinkedIn URL, resolve to a canonical prospect ID across our CRM + LinkedIn + email history.' },
       { id: 'D2', title: 'Research orchestrator', why: 'Multi-step agent: read CRM history, pull LinkedIn, fetch recent news, query internal Slack archive, synthesize.' },
-      { id: 'D3', title: 'Insight extraction', why: "Not just summarization: extract pain signals, recent triggers (funding rounds, exec hires), and competitor mentions." },
+      { id: 'D3', title: 'Insight extraction', why: "Pull out pain signals, recent triggers (funding rounds, exec hires) and competitor mentions, not a summary." },
       { id: 'D4', title: 'Slack + Gmail surface', why: "A /prep slash command in Slack. A Gmail add-on that previews the prospect in a side panel while you read their email." },
       { id: 'D5', title: 'Feedback loop + sales rep ratings', why: "Every brief gets a \"useful / not useful / what was missing\" widget. That data tunes future briefs." },
     ],
@@ -287,7 +287,7 @@ export const PRESETS: Preset[] = [
     scope: [
       {
         q: "How explicit and codified is the playbook today? Is it a written doc, scattered tribal knowledge, or somewhere between?",
-        why: "If the rules aren't written down, this isn't an AI project: it's a rule-extraction project first. We need to know which one we're solving.",
+        why: "If the rules aren't written down, it's a rule-extraction project before it's an AI project. We need to know which one we're solving.",
       },
       {
         q: "What's the actual blocker: review speed, or consistency between reviewers? Different problems, different solutions.",

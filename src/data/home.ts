@@ -45,7 +45,7 @@ export const FEATURED: FeaturedProject[] = [
     tech: ["YOLOv8", "ByteTrack", "DVC", "MLflow", "FastAPI"],
     arrived: "Match footage and a question: can we track every player and turn it into tactics?",
     did: "Detection → multi-object tracking → tactical graph, wired as one reproducible DVC stage (analyze_frames) with MLflow tracking and a FastAPI service.",
-    changed: "Detection and tracking at 22 fps. Reproducible from extracted frames with one command.",
+    changed: "Detection and tracking at 22 fps on my RTX 3070 laptop. Reproducible from extracted frames with one command.",
   },
   {
     id: "revolu-idea",
@@ -349,7 +349,7 @@ export function buildReceipts(c: { projectCount: number; toolCount: number }): R
     },
     {
       n: String(MERGED_PRS.length),
-      label: "pull requests merged into ecosystem repositories",
+      label: "pull requests merged into other people's repos",
       title: "Merged upstream",
       lines: [
         ...MERGED_PRS.flatMap((pr) => [
@@ -454,7 +454,7 @@ export function buildDeskStats(c: { projectCount: number }): DeskStat[] {
     { n: String(c.projectCount), label: "projects, each with a write-up" },
     { n: String(MERGED_PRS.length), label: "pull requests merged upstream" },
     { n: String(RESUME.publications.length), label: `IEEE papers (${RESUME.publications[0]?.year})` },
-    { n: FRAUD_PRECISION, label: "fraud-model precision on live data" },
+    { n: FRAUD_PRECISION, label: "fraud-model precision on transaction data" },
     { n: `${CUBE_PB}s`, label: "Rubik's PB, officially" },
   ];
 }
