@@ -124,6 +124,14 @@
       "broken": "Caddy accepted IP masks in its log filter that cannot exist, and then logged a blank value instead of the client's address.",
       "changed": "I made Caddy reject an out-of-range mask when the config is loaded.",
       "matters": "A typo in the log settings shows up at startup instead of quietly emptying the client addresses in the logs."
+    },
+    {
+      "number": 8255,
+      "merged": "2026-10-19",
+      "title": "The log filter for query strings reads URLs the way the server does",
+      "broken": "Caddy can hide secret values in the query string of logged URLs. The filter read the URL differently from the server, so anything after a hash sign slipped past it and was written to the log in plain text.",
+      "changed": "I made the filter read the URL the same way the server does, so the whole query is filtered.",
+      "matters": "A token sent in a URL with a stray hash sign no longer leaks into the access logs."
     }
   ]
 }
