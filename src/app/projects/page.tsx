@@ -9,7 +9,7 @@ import { ProjectsClient } from "./ProjectsClient";
 export const metadata: Metadata = pageMetadata({
     title: "The Work",
     description:
-        "The full project catalogue: production systems, research prototypes, and a few honest experiments, filterable by domain.",
+        "The full project catalogue: production systems, research prototypes, and a few experiments, filterable by domain.",
     path: "/projects",
 });
 

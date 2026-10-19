@@ -8,7 +8,7 @@
       "title": "Each default header is checked on its own",
       "broken": "A settings block can add headers only when a response lacks them. If any one of those headers was already set, every default in the block was skipped, and a condition on the block was ignored for them.",
       "changed": "Each default header now checks only for itself, and the block's condition applies to it.",
-      "matters": "Security headers meant as defaults are actually sent."
+      "matters": "Security headers meant as defaults now get sent."
     },
     {
       "number": 8227,
@@ -72,7 +72,7 @@
       "merged": "2026-10-09",
       "title": "Successful requests are no longer retried into an error",
       "broken": "The server can pass requests to backend servers and retry on failure. A retry rule that checked only the request also retried replies that had succeeded, until the user got an error page.",
-      "changed": "Retries based on the reply now happen only when the rule actually looks at the reply.",
+      "changed": "Retries based on the reply now happen only when the rule looks at the reply.",
       "matters": "Requests that succeed the first time are sent once and reach the user, instead of failing.",
       "top": true
     },

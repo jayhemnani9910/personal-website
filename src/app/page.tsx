@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import { HomeDesk } from "@/components/home-desk/HomeDesk";
 import { PROFILE_PAGE, jsonLd } from "@/lib/json-ld";
+import { FEED } from "@/lib/page-metadata";
 
 export const metadata: Metadata = {
-  alternates: { canonical: "/" },
+  alternates: { canonical: "/", types: FEED },
 };
 
 export const dynamic = "force-static";

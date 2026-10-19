@@ -90,7 +90,7 @@
       "title": "The browser's own tests stop hiding failures",
       "broken": "In the project's test suite, a test that crashed after its first check passed still counted as passed. One test had been quietly skipping its later checks this way.",
       "changed": "I made a crash anywhere in a test count as a failure, and fixed the test it had been hiding.",
-      "matters": "Behind-the-scenes work: future bugs can't slip past tests that only look like they passed."
+      "matters": "Behind-the-scenes work, but future bugs can't slip past tests that only look like they passed."
     },
     {
       "number": 3761,
@@ -122,7 +122,7 @@
       "title": "A space before a closing bracket is no longer an error",
       "broken": "Page lookups like 'every odd item in a list' failed with an error if there was a space before the closing bracket, even though the rules allow it.",
       "changed": "The browser now skips spaces there, as the styling rules allow.",
-      "matters": "Small fix: valid page code written with extra spaces no longer stops with an error."
+      "matters": "Small fix. Valid page code written with extra spaces no longer stops with an error."
     },
     {
       "number": 3721,

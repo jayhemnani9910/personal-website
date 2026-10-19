@@ -8,7 +8,7 @@
       "title": "Code editors can now check tool handlers properly",
       "broken": "The part of the kit that answers tool requests didn't say what it hands to a developer's code, so code editors couldn't warn about mistakes there.",
       "changed": "I spelled out that it passes the tool's name and its inputs, a one-line change.",
-      "matters": "Small fix: code checkers can now catch wrongly written tool handlers before they run."
+      "matters": "Small fix. Code checkers can now catch wrongly written tool handlers before they run."
     }
   ]
 }

@@ -11,7 +11,7 @@ github: "https://github.com/jayhemnani9910/webcrawler"
 links:
   code: "https://github.com/jayhemnani9910/webcrawler"
   site: "https://jayhemnani9910.github.io/webcrawler/"
-challenge: "Web content changes or disappears, and a plain archive does not prove that a snapshot is genuine or tell you what changed between versions. The goal was a service that discovers and snapshots pages on a schedule, detects content changes by hash, makes every captured version searchable, and can produce a verifiable record that a given version existed at a given time."
+challenge: "Web content changes or disappears, and a plain archive does not prove that a snapshot is genuine or tell you what changed between versions. I wanted a service that discovers and snapshots pages on a schedule, detects content changes by hash, makes every captured version searchable, and can produce a verifiable record that a given version existed at a given time."
 solution:
   - "A four-stage core pipeline: discovery (sitemap parsing and internal-link crawling, robots-compliant) into ArchiveBox snapshots, then SHA-256 content-hash change detection, then SQLite FTS5 full-text search across every archived version."
   - "A Flask web UI and API (search, health, Prometheus metrics) plus a CLI (add-site, run, web, search, proof-worker, status), with crawls scheduled through APScheduler."
@@ -19,7 +19,7 @@ solution:
   - "Operational from the start: Docker Compose (with a production profile for Prometheus and Grafana) and systemd timer/service units, with health checks and metrics."
 impact:
   - "Turns ad-hoc archiving into a scheduled, queryable system: every version of a page is captured, hashed for change detection, and searchable by full text, faceted by site and date."
-  - "Provenance integrations degrade gracefully, OpenTimestamps and IPFS use the external tool when present and are skipped otherwise, with the content hash kept, so the service runs without them and gains verifiability when they are available."
+  - "Provenance integrations degrade gracefully: OpenTimestamps and IPFS use the external tool when present and are skipped otherwise (the content hash is kept), so the service runs without them and gains verifiability when they are available."
   - "26 Python modules across crawling, archiving, search, Merkle/anchor provenance, and operations, with a test suite covering search, ArchiveBox integration, and Merkle ordering."
 deepDive:
   context: "A web archive is only useful if you can trust it and query it. This project started from two gaps in plain archiving: there is no record of what changed between two captures of a page, and there is no independent proof that a snapshot is authentic and was taken when it claims. Website Watcher addresses both: it hashes each version for change detection and builds a verifiable-provenance layer (Merkle trees plus OpenTimestamps anchoring) on top of ArchiveBox snapshots, while keeping everything searchable through SQLite FTS5."
@@ -57,7 +57,7 @@ deepDive:
       purpose: "Flask app for search, health, and Prometheus metrics; CLI for add-site, scheduled run, web server, search, status, and the proof-upgrade worker."
   keyDecisions:
     - decision: "Build on ArchiveBox instead of writing a snapshotter"
-      reasoning: "ArchiveBox already captures pages robustly across formats. Wrapping it and focusing the project on what was missing, change detection, search, and verifiable provenance, avoided rebuilding solved work and kept the value where it was novel."
+      reasoning: "ArchiveBox already captures pages reliably, in several formats. Wrapping it and focusing on what was missing (change detection, search, and verifiable provenance) avoided rebuilding solved work and kept the effort on the new parts."
       alternatives: "A custom snapshot engine (a large, well-trodden problem to redo); save raw HTML only (loses ArchiveBox's multi-format capture)."
     - decision: "Make provenance integrations optional and degrade gracefully"
       reasoning: "OpenTimestamps and IPFS depend on external tools (the ots CLI, an IPFS daemon) that will not always be installed. Each wrapper tries the real tool and falls back to a safe local path, so the core archiver runs anywhere and gains verifiability and decentralized storage only when those tools are present."
@@ -90,7 +90,7 @@ deepDive:
                     if urlparse(u).netloc.endswith(urlparse(root_url).netloc):
                         found.add(u)
             return found
-      explanation: "Discovery prefers the dedicated robots parser (reppy) but falls back to the standard library when it is not installed, the same degrade-gracefully pattern used throughout. Sitemaps are parsed and links are scoped to the site's own domain."
+      explanation: "Discovery prefers the dedicated robots parser (reppy) but falls back to the standard library when it is not installed. Same degrade-gracefully pattern as the rest of the service. Sitemaps are parsed and links are scoped to the site's own domain."
     - title: "A real Merkle tree over version hashes"
       language: "python"
       code: |
@@ -115,7 +115,7 @@ deepDive:
                     h = sha256(sib + h)
                 idx = idx // 2
             return h == root
-      explanation: "Version hashes are leaves of a Merkle tree, so a single root commits to many archived versions and a short proof can show that a specific version belongs to it. This is the verifiable-record core, an actual implementation, not a stub."
+      explanation: "Version hashes are leaves of a Merkle tree, so a single root commits to many archived versions and a short proof can show that a specific version belongs to it. This is the verifiable-record core, and it is a real implementation, not a stub."
     - title: "OpenTimestamps anchoring that works without the tool installed"
       language: "python"
       code: |
@@ -147,9 +147,9 @@ deepDive:
       label: "scheduled crawl"
       context: "APScheduler, robots-compliant"
   learnings:
-    - "Wrapping ArchiveBox instead of rebuilding capture kept the project focused on what was actually missing: change detection, search, and provenance."
+    - "Wrapping ArchiveBox instead of rebuilding capture kept the project focused on what was missing: change detection, search, and provenance."
     - "Treating provenance tools (OpenTimestamps, IPFS) as optional with safe fallbacks is what makes the service deployable anywhere while still gaining verifiability where the tools exist."
     - "Hashing versions and rolling them into a Merkle tree turns a collection of snapshots into a tamper-evident sequence, which is the difference between an archive and a verifiable record."
 priority: 4
 ---
-Website Watcher discovers pages (sitemap and link crawling, robots-compliant), snapshots them with ArchiveBox, detects content changes with SHA-256 hashing, and indexes every version for SQLite FTS5 full-text search. On top it builds a verifiable-provenance layer, Merkle trees over version hashes plus OpenTimestamps anchoring and optional IPFS storage, each degrading gracefully when the external tool is absent. It ships as a 26-module Python service with a Flask UI and API, an APScheduler-driven CLI, and Docker Compose and systemd deployment with Prometheus metrics.
+Website Watcher discovers pages (sitemap and link crawling, robots-compliant), snapshots them with ArchiveBox, detects content changes with SHA-256 hashing, and indexes every version for SQLite FTS5 full-text search. On top it builds a verifiable-provenance layer (Merkle trees over version hashes, OpenTimestamps anchoring, optional IPFS storage), each part degrading gracefully when the external tool is absent. It ships as a 26-module Python service with a Flask UI and API, an APScheduler-driven CLI, and Docker Compose and systemd deployment with Prometheus metrics.

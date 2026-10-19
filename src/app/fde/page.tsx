@@ -64,9 +64,9 @@ export default function FDEPage() {
 
           <p className={`${LEDE} mt-6 max-w-[60ch]`}>
             <strong className="font-semibold text-tr-text">This page is a working Forward Deployed Engineer simulation.</strong>{" "}
-            Give me your real, vague, messy problem. I&apos;ll perform the FDE &quot;decomposition&quot; interview on it live:
+            Give me your real, vague, messy problem. I&apos;ll run the FDE &quot;decomposition&quot; interview on it live:
             scope it, draw the architecture, plan the sprint, and call out where it&apos;ll fail. Then map every phase back
-            to projects I&apos;ve actually shipped.
+            to projects I&apos;ve shipped.
           </p>
 
           <div className="mt-9">
@@ -81,11 +81,11 @@ export default function FDEPage() {
               <p className={`${LABEL} mb-3`}>Receipts</p>
               <h2 className={H2}>
                 The simulation above isn&apos;t <span className={HIGHLIGHT}>vibes.</span> Here&apos;s the
-                engineering substrate it runs on.
+                engineering it runs on.
               </h2>
               <p className={`${LEDE} mt-4 max-w-[48ch]`}>
-                Four proofs of the engineering breadth FDE work actually needs: agents, protocols, upstream code,
-                distributed substrate.
+                Four proofs of the range FDE work needs: agents, protocols, upstream code,
+                distributed systems.
               </p>
             </div>
 
@@ -144,8 +144,8 @@ export default function FDEPage() {
               <div className={`${CARD} p-6`}>
                 <h3 className={`${LABEL} mb-4`}>What I can credibly claim</h3>
                 <p className="text-[20px] font-semibold leading-[var(--tr-lh-h2)]">
-                  The engineering substrate: agentic systems, protocols, upstream code, distributed services. The
-                  decomposition muscle the simulation above demonstrates.
+                  The engineering: agentic systems, protocols, upstream code, distributed services. The
+                  decomposition muscle the simulation above shows.
                 </p>
                 <p className="mt-4 text-[15px] leading-normal text-tr-text-mute">
                   Plus real stakeholder-facing delivery experience: requirements alignment, metric and SLA definition
@@ -160,8 +160,8 @@ export default function FDEPage() {
                   won&apos;t pretend otherwise.
                 </p>
                 <p className="mt-4 text-[15px] leading-normal text-tr-text-mute">
-                  I&apos;m actively closing this by shipping one small real deployment, publishing failure analyses,
-                  and converting an existing project into a deployment case study. Specifics on request.
+                  I&apos;m closing this by shipping one small real deployment, publishing failure analyses,
+                  and turning an existing project into a deployment case study. Specifics on request.
                 </p>
               </div>
             </div>

@@ -4,7 +4,7 @@ import { SITE_CONFIG } from "@/../content/site";
 export const RESUME: Resume = {
   name: "Jay Hemnani",
   tagline: "Software, Data and ML Engineer",
-  summary: "End-to-end builder across data pipelines, ML systems, and distributed backends. Production experience spanning real-time streaming architectures, computer vision research, and full-stack applications, taking prototypes to production quickly.",
+  summary: "I build data pipelines, ML systems and distributed backends. I've shipped real-time streaming, computer vision research and full-stack apps, and I get prototypes into production fast.",
   location: "Gujarat, India",
   contact: {
     email: SITE_CONFIG.social.email,
@@ -67,9 +67,10 @@ export const RESUME: Resume = {
           location: "Remote",
           tech: ["Python", "SQL", "Tableau", "Power BI", "Airflow"],
           bullets: [
-            { text: "Engineered automated ETL pipelines using SQL and Python, reducing manual data preparation by 40% and improving data consistency across multi-property analytics." },
+            { text: "Defined metrics and SLAs with finance and operations, which became the spec for the ETL and forecasting work." },
+            { text: "Built automated ETL pipelines in SQL and Python, cutting manual data preparation by 40% and making multi-property analytics more consistent." },
             { text: "Built interactive dashboards in Tableau and Power BI for occupancy, revenue, and KPI tracking across multiple hotel properties." },
-            { text: "Developed demand forecasting models using time-series analysis to support dynamic pricing and revenue management decisions." }
+            { text: "Built time-series demand forecasting models for dynamic pricing and revenue management decisions." }
           ]
         }
       ]
@@ -85,8 +86,8 @@ export const RESUME: Resume = {
           tech: ["Python", "SQL", "Google Analytics", "Mixpanel", "Tableau", "Figma"],
           summary: "Data analytics & automation consulting",
           bullets: [
-            { text: "Provided data analytics and pipeline consulting for small businesses, building reporting automation and data infrastructure solutions." },
-            { text: "Designed A/B testing frameworks and tracked engagement metrics to optimize client campaigns and product decisions." }
+            { text: "Did data analytics and pipeline consulting for small businesses; built their reporting automation and data infrastructure." },
+            { text: "Designed A/B testing frameworks and tracked engagement metrics to improve client campaigns and product decisions." }
           ]
         }
       ]
@@ -103,8 +104,8 @@ export const RESUME: Resume = {
           tech: ["Python", "Scikit-learn", "TensorFlow", "Pandas", "NumPy", "XGBoost"],
           summary: "ML Engineering & Analytics",
           bullets: [
-            { text: "Built credit fraud detection system using ensemble ML (Random Forest, XGBoost) with SMOTE for class imbalance, achieving 94% precision on transaction data." },
-            { text: "Developed automated analytics dashboards with statistical models for operational reporting and anomaly detection." }
+            { text: "Built a credit fraud detection ensemble (Random Forest, XGBoost) with SMOTE for class imbalance; it reached 94% precision on transaction data." },
+            { text: "Built automated analytics dashboards on statistical models for operational reporting and anomaly detection." }
           ]
         }
       ]
@@ -121,8 +122,8 @@ export const RESUME: Resume = {
           tech: ["Swift", "UIKit", "Core Data", "Xcode", "Git"],
           summary: "Mobile Engineering",
           bullets: [
-            { text: "Developed CodeLock, an iOS privacy/security app with AES encryption and secure local storage using Core Data." },
-            { text: "Instrumented user engagement analytics and iterated on UX based on usage patterns and retention data." }
+            { text: "Built CodeLock, an iOS privacy/security app with AES encryption and secure local storage on Core Data." },
+            { text: "Added user engagement analytics and reworked the UX from usage patterns and retention data." }
           ]
         }
       ]
@@ -139,8 +140,8 @@ export const RESUME: Resume = {
           tech: ["Azure", "CI/CD", "Microservices", "REST APIs", "Docker"],
           summary: "Cloud-Native Development",
           bullets: [
-            { text: "Built cloud-native communication platform for first responders using microservices architecture on Azure with REST APIs." },
-            { text: "Configured CI/CD pipelines for automated testing and deployment, reducing deployment time by 60%." }
+            { text: "Built a cloud-native communication platform for first responders: microservices on Azure with REST APIs." },
+            { text: "Set up CI/CD pipelines for automated testing and deployment, cutting deployment time by 60%." }
           ]
         }
       ]
@@ -164,7 +165,7 @@ export const RESUME: Resume = {
       ],
       achievements: [
         "Rubik's Cube: 16.7 sec (WCA)",
-        "Graphic design work spanning two internships, a conference, a startup, and three student clubs"
+        "Graphic design for two internships, a conference, a startup, and three student clubs"
       ]
     }
   ],

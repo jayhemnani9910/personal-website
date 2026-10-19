@@ -11,7 +11,7 @@ github: "https://github.com/jayhemnani9910/contextbox"
 links:
   code: "https://github.com/jayhemnani9910/contextbox"
   demo: "https://jayhemnani9910.github.io/contextbox/"
-challenge: "The things you reference while working (a screenshot, a web page, a Wikipedia entry, a YouTube transcript) scatter across apps and are gone the moment you close the tab. The goal was a single command-line tool that captures all of it, indexes it for meaning rather than keywords, and lets you ask questions over everything you have seen, without leaving the terminal."
+challenge: "The things you reference while working (a screenshot, a web page, a Wikipedia entry, a YouTube transcript) scatter across apps and are gone the moment you close the tab. I wanted one command-line tool that captures all of it, indexes it for meaning rather than keywords, and lets you ask questions over everything you have seen, without leaving the terminal."
 solution:
   - "Cross-platform screenshot capture with Tesseract OCR, detecting Wayland, X11, GNOME, or macOS and falling back across gnome-screenshot, scrot, and grim."
   - "Pluggable content extractors for web pages, Wikipedia, and YouTube transcripts, each behind an availability guard so a missing dependency disables just that extractor."
@@ -19,10 +19,10 @@ solution:
   - "Question-answering over captured content via GitHub Models, with question-type classification, source attribution, and confidence levels, plus a privacy mode that encrypts sensitive captures with Fernet."
 impact:
   - "A Python package (Click + Rich CLI) covering capture, extraction, semantic search, and AI Q&A, installable via pip with optional feature groups ([llm], [ocr], [youtube])."
-  - "Graceful degradation throughout: heavy dependencies (sentence-transformers, OCR, YouTube) are optional, and each subsystem disables itself cleanly when its dependency is absent."
+  - "Heavy dependencies (sentence-transformers, OCR, YouTube) are optional, and each subsystem switches itself off cleanly when its dependency is missing."
   - "Ships with a React documentation site (install, commands, API reference, demo) deployed on GitHub Pages, and is MIT-licensed."
 deepDive:
-  context: "While working you constantly pull in context from different places, a screenshot of an error, a web page, a Wikipedia article, a video transcript, and then lose it. ContextBox is a command-line tool that captures those into one local store, embeds them so they can be searched by meaning, and answers questions over them. It is deliberately CLI-first and local-first: captures live in a SQLite database under your home directory, the embedding model runs locally, and the only external call is the LLM for question-answering."
+  context: "While working you pull in context from all over (a screenshot of an error, a web page, a Wikipedia article, a video transcript) and then lose it. ContextBox is a command-line tool that captures those into one local store, embeds them so they can be searched by meaning, and answers questions over them. It is deliberately CLI-first and local-first: captures live in a SQLite database under your home directory, the embedding model runs locally, and the only external call is the LLM for question-answering."
   architecture: "The package is organized around a capture-store-retrieve loop. A capture layer (screenshots with OCR, plus extractors for web pages, Wikipedia, and YouTube) writes captures and artifacts into a SQLite database. A semantic-search layer manages sentence-transformer embeddings (all-MiniLM-L6-v2) and ranks captures by cosine similarity, with a keyword fallback if the model is unavailable. An LLM layer wraps GitHub Models for question-answering, with question classification, context building from retrieved captures, source attribution, and confidence scoring. A privacy layer encrypts sensitive data with Fernet. Almost every heavy dependency is optional and guarded by a try/except availability flag, so the tool installs small and grows features as you add the [llm], [ocr], or [youtube] extras."
   dataFlow:
     - step: "Capture"

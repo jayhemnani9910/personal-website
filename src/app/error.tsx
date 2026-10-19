@@ -11,6 +11,10 @@ import { BTN, BTN_PRIMARY, H1, HIGHLIGHT, KICKER, LEDE, SHELL, WRAP } from "@/co
 export default function Error({ error, retry }: { error: Error & { digest?: string }; retry: () => void }) {
   useEffect(() => {
     console.error(error);
+    // The visitor's console is the only place this would otherwise land.
+    // /api/client-error keeps it where `npm run ops` can see it.
+    const body = JSON.stringify({ message: error.message, digest: error.digest, page: location.pathname });
+    navigator.sendBeacon?.("/api/client-error", new Blob([body], { type: "application/json" }));
   }, [error]);
 
   return (

@@ -14,17 +14,17 @@ impact:
   - "Snappy prototype for FAQs & utilities."
 deepDive:
   context: |
-    When a user sends a message to a chatbot, the system must understand what the user wants to accomplish, their intent, before it can respond appropriately. This project tackles the fundamental challenge of building a lightweight, accurate intent classification system without relying on heavy infrastructure or cloud-based NLP services.
+    Before a chatbot can answer, it has to work out what the user wants: their intent. I wanted a small, accurate intent classifier that didn't need heavy infrastructure or a cloud NLP service.
 
-    Traditional rule-based chatbots use keyword matching, which breaks down quickly with natural language variation. Modern approaches use machine learning to recognize patterns in language, enabling the bot to understand semantically similar phrases. This project demonstrates how to build an intent-based conversational agent using classical NLP techniques and neural networks, trained on a custom JSON corpus that maps example phrases to specific intents.
+    Rule-based bots match keywords, and that breaks as soon as people phrase things differently. Machine learning picks up patterns instead, so phrases that mean the same thing land on the same intent. This bot uses classical NLP and a neural network, trained on a custom JSON corpus that maps example phrases to intents.
 
-    The goal was to create a fast, deployable chatbot prototype suitable for FAQs, customer service automation, and utility functions, all while maintaining low latency and minimal resource requirements.
+    I wanted a fast prototype I could deploy for FAQs, customer service automation and small utilities, with low latency and few resources.
 
   architecture: |
     The system follows a pipeline architecture from raw text input to predicted intent:
 
     **1. User Input → Preprocessing:**
-    Raw user text undergoes normalization: lowercasing, tokenization (splitting into words), and stemming (reducing words to root forms with the Porter stemmer). This reduces vocabulary size and improves generalization.
+    Raw user text is normalized: lowercasing, tokenization (splitting into words), and stemming (reducing words to root forms with the Porter stemmer). This reduces vocabulary size and improves generalization.
 
     **2. Preprocessing → Feature Extraction:**
     Processed tokens are converted into numerical representations using bag-of-words (BoW) encoding. Each word in the training vocabulary becomes a binary feature (1 if present, 0 if absent), creating a fixed-length vector that represents the input sentence.
@@ -36,7 +36,7 @@ deepDive:
     The model outputs a probability distribution over all possible intents. The highest-probability intent is selected, and the system retrieves a corresponding response from the JSON corpus. Responses can be randomized from a pool to add variety.
 
     **JSON Corpus Structure:**
-    The training data is organized as intents, each containing example patterns (user inputs) and responses. This modular structure allows rapid updates, adding new intents simply requires extending the JSON file and retraining.
+    The training data is organized as intents, each containing example patterns (user inputs) and responses. So updates are quick: a new intent means extending the JSON file and retraining.
 
   components:
     - name: "Text Preprocessor"
@@ -77,24 +77,24 @@ deepDive:
 
     - step: "Response delivery"
       component: "Response Generator"
-      detail: "Selected intent triggers response lookup from JSON corpus. System randomly selects from available responses for natural conversation flow."
+      detail: "Selected intent triggers response lookup from JSON corpus. A reply is picked at random from the pool so the bot sounds less canned."
 
   keyDecisions:
     - decision: "Classical NLP over Transformers"
-      rationale: "Chose bag-of-words + neural network instead of BERT/GPT models to minimize computational overhead, which suits lightweight deployment scenarios where heavy transformer models would be overkill."
-      tradeoff: "Sacrifices semantic understanding of complex queries for speed and simplicity. Works well for domain-specific intents with clear patterns but struggles with highly ambiguous or context-dependent inputs."
+      rationale: "I used bag-of-words and a small neural network instead of BERT/GPT to keep compute low. For a lightweight deployment, a transformer would be overkill."
+      tradeoff: "Gives up semantic understanding of complex queries for speed and simplicity. Works well for domain-specific intents with clear patterns but struggles with highly ambiguous or context-dependent inputs."
 
     - decision: "Stemming vs. Lemmatization"
-      rationale: "Used Porter Stemmer rather than lemmatization for preprocessing. Stemming is faster and doesn't require POS tagging, reducing pipeline complexity while still achieving vocabulary reduction."
-      tradeoff: "Stemming can be overly aggressive (e.g., 'university' → 'univers'), potentially merging semantically different words. Acceptable trade-off for intent classification where exact word forms matter less than pattern recognition."
+      rationale: "I used the Porter stemmer, not lemmatization. Stemming is faster and needs no POS tagging, so the pipeline stays simpler and the vocabulary still shrinks."
+      tradeoff: "Stemming can be overly aggressive (e.g., 'university' → 'univers'), potentially merging semantically different words. Fine for intent classification, where exact word forms matter less than the pattern."
 
     - decision: "Modular JSON corpus architecture"
-      rationale: "Designed intent definitions as standalone JSON objects rather than hardcoding logic. This enables non-technical users to update bot behavior by editing JSON without touching code."
+      rationale: "Intents live as standalone JSON objects, not hardcoded logic, so someone non-technical can change the bot by editing JSON without touching code."
       tradeoff: "Requires retraining when intents change, adding a deployment step."
 
     - decision: "Confidence threshold with fallback"
-      rationale: "Implemented confidence scoring to detect when the model is uncertain. Low-confidence predictions trigger generic fallback responses rather than potentially incorrect answers."
-      tradeoff: "May miss some valid queries that fall outside training distribution. Better to admit uncertainty than provide wrong information in customer-facing applications."
+      rationale: "A confidence score tells me when the model is unsure. Low-confidence predictions get a generic fallback instead of a possibly wrong answer."
+      tradeoff: "May miss some valid queries that fall outside training distribution. In anything customer-facing, admitting 'not sure' beats a wrong answer."
 
   codeSnippets:
     - title: "Text Preprocessing Pipeline"
@@ -274,18 +274,18 @@ deepDive:
       detail: "The model performs well only when training patterns cover the variety of ways users express the same intent. Data augmentation through paraphrasing and synonym replacement helped expand coverage without manual labeling."
 
     - lesson: "Preprocessing consistency is critical between training and inference"
-      detail: "Early bug: training data was stemmed but inference input wasn't, causing poor predictions. Learned to abstract preprocessing into reusable functions and validate that exact same pipeline runs during both training and deployment. Saved preprocessing configuration alongside model weights."
+      detail: "Early bug: training data was stemmed but inference input wasn't, causing poor predictions. I moved preprocessing into shared functions and checked that the exact same pipeline runs in training and deployment. Saved preprocessing configuration alongside model weights."
 
     - lesson: "Bag-of-words loses word order information"
-      detail: "BoW treats 'not good' and 'good' identically if both words appear, missing negation. For this project scope it was acceptable, but production systems need n-grams or sequential models (RNN/LSTM) to capture context. Identified this as a limitation when testing edge cases."
+      detail: "BoW treats 'not good' and 'good' identically if both words appear, missing negation. For this project scope it was acceptable, but production systems need n-grams or sequential models (RNN/LSTM) to capture context. I found this one testing edge cases."
 
     - lesson: "Confidence thresholding significantly improves user experience"
-      detail: "Without confidence checks, the bot would confidently return wrong answers for out-of-domain queries. Implementing a 0.7 threshold and fallback responses reduced user frustration, better to say 'I don't know' than mislead. Tested threshold values empirically using validation set."
+      detail: "Without confidence checks, the bot would confidently return wrong answers for out-of-domain queries. A 0.7 threshold with fallback responses cut down user frustration. Better to say 'I don't know' than mislead. I picked the threshold by testing values on the validation set."
 
     - lesson: "Neural networks vs. classical ML for intent classification"
-      detail: "Experimented with both neural networks and traditional classifiers (SVM, Naive Bayes). Neural networks handled sparse BoW vectors better and generalized to unseen patterns more effectively, despite being more complex. The non-linear activation functions helped learn subtle pattern combinations that linear models missed."
+      detail: "Experimented with both neural networks and traditional classifiers (SVM, Naive Bayes). The neural network handled sparse BoW vectors better and generalized better to unseen patterns, though it's more complex. The non-linear activation functions helped learn subtle pattern combinations that linear models missed."
 
-    - lesson: "Modular architecture enables rapid iteration"
-      detail: "Separating intent definitions (JSON), preprocessing logic (Python module), and model architecture (separate file) made experimentation faster. Could swap out models or add intents without refactoring. This design pattern proved valuable when testing different neural network architectures and preprocessing strategies."
+    - lesson: "Keeping the pieces separate made iteration fast"
+      detail: "Separating intent definitions (JSON), preprocessing logic (Python module), and model architecture (separate file) made experiments faster. I could swap models or add intents without refactoring, which helped a lot when trying different network architectures and preprocessing."
 ---
 An intent-based chatbot trained from a JSON corpus of intents, each with example patterns and responses. Input is tokenized, stemmed, and turned into a bag-of-words vector; a small feedforward network picks the intent, and a low-confidence prediction gets a fallback reply instead of a guess. Adding an intent means editing the JSON and retraining.

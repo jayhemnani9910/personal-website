@@ -27,7 +27,7 @@ export default function LabPage() {
             </h1>
           </div>
           <p className={`${LEDE} max-w-[56ch]`}>
-            Things I am building, exploring, and keeping an eye on. Shown as they actually stand, not
+            Things I am building, exploring, and keeping an eye on. Shown as they stand, not
             cleaned up for the visit.
           </p>
         </section>
@@ -42,7 +42,7 @@ export default function LabPage() {
               want to build something half-finished together?
             </h2>
             <p className="text-[17px] leading-[var(--tr-lh-body)] text-tr-text-mute">
-              Always open to interesting projects and ideas.
+              Always up for an interesting project or idea.
             </p>
             <a href={`mailto:${SITE_CONFIG.social.email}`} className={`${BTN} max-w-full font-mono text-[14px] [overflow-wrap:anywhere]`}>
               {SITE_CONFIG.social.email} <span aria-hidden="true">→</span>

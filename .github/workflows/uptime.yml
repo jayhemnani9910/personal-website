@@ -1,0 +1,30 @@
+name: Uptime
+
+# Why this exists: on 12 Oct 2026 two production deploys failed (once on git
+# metadata, once on a font fetch timing out) and nobody knew until they went
+# looking. Vercel keeps serving the last good deploy when a build fails, so the
+# site stays up, but a broken page or a dead API route would sit there unseen.
+# A failed scheduled run emails the repo owner, which is the whole alert.
+
+on:
+  schedule:
+    - cron: "17 */6 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Pages and routes answer
+        run: |
+          fail=0
+          for path in / /projects /resume /fde /oss /blog /feed.xml /sitemap.xml /resume/jay-hemnani-fde.pdf /api/guestbook; do
+            code=$(curl -s -o /dev/null -w "%{http_code}" --max-time 20 --retry 2 --retry-delay 10 "https://jayhemnani.in$path")
+            echo "$code $path"
+            [ "$code" = "200" ] || fail=1
+          done
+          exit $fail

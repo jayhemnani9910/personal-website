@@ -13,6 +13,7 @@ name: CI
 #   showcase.test.ts    every architecture image and compare frame resolves
 #   fde-prompt.test.ts  system prompt and visitor brief stay in separate channels
 #   adr.test.ts         the decision records stay well-formed and indexed
+#   resume-pdf.test.ts  the résumé PDFs state the same facts as resume.ts
 #   perf budget         script, CSS, document and fetch bytes, font-file count
 #                       and LCP for the home route (ADR 0008)
 
@@ -61,6 +62,10 @@ jobs:
       # `next typegen` first, so typed routes (typedRoutes) are checked too.
       - name: Typecheck
         run: npm run typecheck
+
+      # resume-pdf.test.ts reads the résumé PDFs' text with pdftotext.
+      - name: Install pdftotext
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq poppler-utils
 
       - name: Test
         run: npm test

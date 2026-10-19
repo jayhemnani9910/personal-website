@@ -10,9 +10,9 @@ tech: ["Go", "PortAudio", "Groq Whisper", "SQLite", "GTK"]
 github: "https://github.com/jayhemnani9910/voxt"
 links:
   code: "https://github.com/jayhemnani9910/voxt"
-challenge: "Dictation on Linux is fiddly: most tools are cloud apps, browser extensions, or desktop-environment-specific. The aim was a small, fast, keyboard-driven utility that works the same on Wayland and X11, press a hotkey anywhere, speak, and have the text waiting on your clipboard, with no window to focus."
+challenge: "Dictation on Linux is fiddly: most tools are cloud apps, browser extensions, or desktop-environment-specific. I wanted a small, fast, keyboard-driven utility that works the same on Wayland and X11: press a hotkey anywhere, speak, and have the text waiting on your clipboard, with no window to focus."
 solution:
-  - "A Go desktop app split into focused packages, audio capture (PortAudio), a global hotkey listener, transcription, clipboard, desktop notifications, a system tray, and a SQLite history store."
+  - "A Go desktop app split into focused packages: audio capture (PortAudio), a global hotkey listener, transcription, clipboard, desktop notifications, a system tray, and a SQLite history store."
   - "Transcription through Groq's Whisper (whisper-large-v3) for speed, with optional formatting of the result through a Groq-hosted Llama model, and retry with backoff on rate limits."
   - "Press-to-toggle recording on a configurable global hotkey (default F9), with start/stop beeps and a tray icon that reflects the recording state."
   - "Works on both Wayland and X11, stores every transcription in SQLite, and copies the result straight to the clipboard with a desktop notification when it is ready."
@@ -99,7 +99,7 @@ deepDive:
                 log.Println("voxt started - press", app.config.Hotkey, "to toggle recording")
             })
         }
-      explanation: "Each concern, audio, hotkey, transcribe, clipboard, notify, tray, history, is its own package, and main just wires them into one App. The tray runs the event loop while the hotkey listener drives the record/transcribe cycle."
+      explanation: "Each concern (audio, hotkey, transcribe, clipboard, notify, tray, history) is its own package, and main just wires them into one App. The tray runs the event loop while the hotkey listener drives the record/transcribe cycle."
   metrics:
     - value: "Go"
       label: "single binary"
