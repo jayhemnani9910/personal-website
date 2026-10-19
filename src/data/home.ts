@@ -309,6 +309,7 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "p-e-w/heretic", number: "#484", href: "https://github.com/p-e-w/heretic/pull/484" },
   { repo: "radareorg/radare2", number: "#27064", href: "https://github.com/radareorg/radare2/pull/27064" },
   { repo: "radareorg/radare2", number: "#27066", href: "https://github.com/radareorg/radare2/pull/27066" },
+  { repo: "radareorg/radare2", number: "#27072", href: "https://github.com/radareorg/radare2/pull/27072" },
 ];
 
 /**
