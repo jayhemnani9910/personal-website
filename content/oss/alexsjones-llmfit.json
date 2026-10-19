@@ -116,6 +116,14 @@
       "broken": "llmfit's server can listen on a local socket file. Before starting, it deleted whatever was at that path, so a typo could wipe a real file and a second server could cut off a running one.",
       "changed": "It now removes the path only when it is a leftover socket nothing is listening on. A regular file or a live server makes it stop with a clear message instead.",
       "matters": "A wrong path or a second launch can no longer destroy a file or cut off a running server."
+    },
+    {
+      "number": 1160,
+      "merged": "2026-10-19",
+      "title": "A mistyped memory size is an error, not a silent fallback",
+      "broken": "If you mistyped the memory or RAM size you wanted to test with, llmfit only printed a warning and then scored your own machine, while still reporting success.",
+      "changed": "I made it refuse a size it cannot read, the same way it already refused a bad percentage.",
+      "matters": "Scripts and tools that read llmfit's results never get numbers for the wrong machine."
     }
   ]
 }
