@@ -9,6 +9,14 @@
       "broken": "With the option to print prompts and the AI's replies turned on, text with square brackets, like [/INST], crashed the program, and other bracketed words vanished from the output.",
       "changed": "I made the printing treat brackets as plain text, not as formatting codes.",
       "matters": "Runs finish, and the printed text shows exactly what the prompt and the AI said."
+    },
+    {
+      "number": 484,
+      "merged": "2026-10-19",
+      "title": "Reproducing a run uses only the run's own settings",
+      "broken": "Repeating a finished run, or resuming one, mixed the settings in the local config file into the saved ones. A single extra plugin setting on another machine changed the result, so the reproduced model did not match the original.",
+      "changed": "I made the saved settings load on their own, without reading the local config file, environment variables or command line.",
+      "matters": "A saved run gives the same model wherever it is reproduced."
     }
   ]
 }
