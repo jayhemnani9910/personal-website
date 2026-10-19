@@ -148,6 +148,22 @@
       "broken": "The toolkit's number tool can show a value as a signed number. It guessed the size from the wrong bit, so values like 256 came out as 0 and large numbers came out as -1.",
       "changed": "I made it read each value as signed in the smallest of 8, 16, 32 or 64 bits that holds it.",
       "matters": "Users converting numbers get the value they typed, not a wrong one."
+    },
+    {
+      "number": 27064,
+      "merged": "2026-10-19",
+      "title": "The number tool shows small decimal numbers instead of zero",
+      "broken": "Converting raw bytes to a decimal number printed only six decimal places, so very small values such as 0.0000001 came out as zero and others lost digits.",
+      "changed": "The number is now printed with enough digits to get the exact same value back, the way the tool already did for another number format.",
+      "matters": "People reading values out of a program see what is really stored, not a rounded zero."
+    },
+    {
+      "number": 27066,
+      "merged": "2026-10-19",
+      "title": "Changing folders inside the toolkit follows the shell's search list",
+      "broken": "In a normal terminal, a list of favourite folders lets you jump to a folder by its short name from anywhere. The toolkit's own change-folder command ignored that list, a request open since 2024.",
+      "changed": "The command now looks the name up in that list the way common shells do, and prints the folder it moved to when the list was used.",
+      "matters": "People can move around the same way they do in their terminal, including on Windows."
     }
   ]
 }
