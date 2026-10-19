@@ -301,6 +301,9 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "AlexsJones/llmfit", number: "#1160", href: "https://github.com/AlexsJones/llmfit/pull/1160" },
   { repo: "caddyserver/caddy", number: "#8241", href: "https://github.com/caddyserver/caddy/pull/8241" },
   { repo: "caddyserver/caddy", number: "#8255", href: "https://github.com/caddyserver/caddy/pull/8255" },
+  { repo: "lightpanda-io/browser", number: "#4051", href: "https://github.com/lightpanda-io/browser/pull/4051" },
+  { repo: "radareorg/radare2", number: "#27054", href: "https://github.com/radareorg/radare2/pull/27054" },
+  { repo: "radareorg/radare2", number: "#27057", href: "https://github.com/radareorg/radare2/pull/27057" },
 ];
 
 /**
