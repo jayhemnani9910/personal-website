@@ -196,6 +196,14 @@
       "broken": "In Lightpanda, asking a dropdown option for its position in the list gave nothing, while real browsers give a number.",
       "changed": "I added the position, counted the same way browsers count it, including options inside groups.",
       "matters": "Scripts that read which option is which work the same in Lightpanda as in Chrome."
+    },
+    {
+      "number": 4051,
+      "merged": "2026-10-19",
+      "title": "A form's list of fields includes every kind of field",
+      "broken": "When a script asked a form for its fields, Lightpanda left out fieldsets, outputs and embedded objects, so counts and positions differed from real browsers.",
+      "changed": "I made the list include those three kinds too, in page order, the way the HTML standard and Chrome do.",
+      "matters": "Scripts that walk a form by position or by name get the same fields in Lightpanda as in Chrome."
     }
   ]
 }

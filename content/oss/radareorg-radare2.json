@@ -124,6 +124,22 @@
       "broken": "When radare2 was built with networking turned off, one of its tests would not compile on newer compilers.",
       "changed": "I added the one missing include the test needed.",
       "matters": "People building radare2 without networking can run its full test suite."
+    },
+    {
+      "number": 27054,
+      "merged": "2026-10-19",
+      "title": "Hashing stops at the end of the file",
+      "broken": "Asking the hashing tool for a range past the end of a file hashed the last chunk over and over, so the result matched no other tool.",
+      "changed": "I made the range stop at the file's real size.",
+      "matters": "A hash of a whole file now matches what standard tools like md5sum print."
+    },
+    {
+      "number": 27057,
+      "merged": "2026-10-19",
+      "title": "Block hashes stay inside the range and report read errors",
+      "broken": "In block mode, the last block could run past the requested end, and a failed read went unnoticed, so the tool hashed stale data.",
+      "changed": "I made each block stop at the end of the range and made a failed read stop with an error.",
+      "matters": "Per-block hashes cover exactly the bytes asked for, and a read problem is reported instead of hidden."
     }
   ]
 }
