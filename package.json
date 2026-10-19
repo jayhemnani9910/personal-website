@@ -16,10 +16,12 @@
     "typecheck": "next typegen && tsc --noEmit",
     "test:visual": "next build && playwright test --project=paper",
     "test:visual:update": "next build && playwright test --project=paper --update-snapshots",
+    "test:visual:oss": "next build && playwright test --project=paper --update-snapshots --grep \"\\\\b(home|oss|oss-repo|resume) renders unchanged\" && playwright test --project=paper",
     "test:perf": "next build && playwright test --project=perf",
     "test:perf:ci": "playwright test --project=perf",
     "eval:fde": "FDE_EVAL_LIVE=1 vitest run src/lib/fde-eval.live.test.ts",
-    "eval:fde:update": "FDE_EVAL_LIVE=1 FDE_EVAL_UPDATE=1 vitest run src/lib/fde-eval.live.test.ts"
+    "eval:fde:update": "FDE_EVAL_LIVE=1 FDE_EVAL_UPDATE=1 vitest run src/lib/fde-eval.live.test.ts",
+    "ops": "node --env-file-if-exists=.env.production.local scripts/ops-report.mjs"
   },
   "dependencies": {
     "@upstash/redis": "^1.39.0",

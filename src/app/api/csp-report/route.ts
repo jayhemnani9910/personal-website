@@ -1,17 +1,19 @@
 import { NextRequest } from "next/server";
+import { getRedis } from "@/lib/kv";
+import { clientKey } from "@/lib/client-ip";
+import { rateLimit } from "@/lib/ratelimit";
+import { OPS_CSP, clean, keep } from "@/lib/ops-log";
 
-// Receives the report-only CSP's violation reports (next.config.ts) and writes
-// one line per violation to the function logs. That log is what "reports are
-// clean" means before the policy is enforced.
+// Receives the report-only CSP's violation reports (next.config.ts), writes one
+// line per violation to the function logs and keeps the latest in Redis
+// (ops-log.ts), because the logs are gone long before anyone reads them. Two
+// clean weeks in `npm run ops` is what "reports are clean" means before the
+// policy is enforced.
 
 const MAX_BYTES = 16_384;
 const MAX_REPORTS = 10;
 
 type Violation = { directive: string; blocked: string; page: string };
-
-// Control characters are flattened so a report cannot write extra log lines.
-const str = (v: unknown) =>
-  typeof v === "string" ? v.replace(/[\x00-\x1f\x7f]/g, " ").slice(0, 200) : "";
 
 /** Both wire formats: report-uri sends one {"csp-report": {...}}, report-to
  * sends an array of {type, body: {...}}. */
@@ -21,18 +23,18 @@ function parseViolations(data: unknown): Violation[] {
       .filter((r) => r?.type === "csp-violation" && r.body)
       .slice(0, MAX_REPORTS)
       .map((r) => ({
-        directive: str(r.body.effectiveDirective),
-        blocked: str(r.body.blockedURL),
-        page: str(r.body.documentURL ?? r.url),
+        directive: clean(r.body.effectiveDirective),
+        blocked: clean(r.body.blockedURL),
+        page: clean(r.body.documentURL ?? r.url),
       }));
   }
   const r = (data as { "csp-report"?: Record<string, unknown> } | null)?.["csp-report"];
   if (!r) return [];
   return [
     {
-      directive: str(r["effective-directive"] ?? r["violated-directive"]),
-      blocked: str(r["blocked-uri"]),
-      page: str(r["document-uri"]),
+      directive: clean(r["effective-directive"] ?? r["violated-directive"]),
+      blocked: clean(r["blocked-uri"]),
+      page: clean(r["document-uri"]),
     },
   ];
 }
@@ -70,8 +72,19 @@ export async function POST(request: NextRequest) {
     return new Response(null, { status: 400 });
   }
 
-  for (const v of parseViolations(data)) {
+  const violations = parseViolations(data);
+  for (const v of violations) {
     console.warn(`[csp] ${v.directive} blocked ${v.blocked || "(inline)"} on ${v.page}`);
+  }
+
+  // One browser can send a burst for one bad page; twenty a minute per visitor
+  // is enough to see it and too few to flood the list.
+  const redis = getRedis();
+  if (redis && violations.length) {
+    if ((await rateLimit(redis, "csp", clientKey(request.headers), { limit: 20, windowSeconds: 60 })) !== "limited") {
+      const at = Date.now();
+      await keep(redis, OPS_CSP, violations.map((v) => ({ ...v, at })));
+    }
   }
   return new Response(null, { status: 204 });
 }
