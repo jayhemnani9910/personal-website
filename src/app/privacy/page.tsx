@@ -16,7 +16,7 @@ export const metadata: Metadata = pageMetadata({
 // Keep this in step with the code: every row names what the site really
 // stores. The browser keys live in src/lib/storage.ts and deskStore.ts, the
 // server ones in src/app/api/*.
-const UPDATED = "12 October 2026";
+const UPDATED = "20 October 2026";
 
 function Row({ what, where, kept, children }: { what: string; where: string; kept: string; children: ReactNode }) {
   return (
@@ -89,11 +89,19 @@ export default function PrivacyPage() {
             </Row>
             <Row what="Rate limits" where="Upstash Redis" kept="1 to 10 minutes">
               The same scrambled code, counting requests for a few minutes so a script can&apos;t flood the guestbook, the
-              view counter or the simulator.
+              counters, the error reports or the simulator.
             </Row>
             <Row what="Guestbook notes" where="Upstash Redis" kept="until 500 newer notes">
               The name and message you write, and when. They are public on the home page. The 500 newest are kept. Want
               yours gone? Email me and I&apos;ll remove it.
+            </Row>
+            <Row what="Click tallies" where="Upstash Redis" kept="400 days">
+              A count per day of a few clicks: which résumé PDF was opened, the email copied or clicked, and links out to
+              GitHub, LinkedIn or YouTube. Only the number goes up. Nothing about who clicked is stored.
+            </Row>
+            <Row what="Error reports" where="Upstash Redis" kept="until 200 newer ones">
+              If a page breaks in your browser, it sends me the error message, the page address and when. Same for a
+              blocked script or style (a security policy report). No IP address, nothing about you.
             </Row>
             <Row what="FDE simulator" where="Google Gemini, Upstash Redis" kept="30 days">
               What you type is sent to Google&apos;s Gemini to write the plan. The plan is then saved for 30 days, filed

@@ -8,6 +8,7 @@ import { SkipLink } from "@/components/SkipLink";
 import { TransitionLayout } from "@/components/TransitionLayout";
 import { MotionProvider } from "@/components/motion/MotionProvider";
 import { ReaderMode } from "@/components/ReaderMode";
+import { TrackClicks } from "@/components/TrackClicks";
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
 import { dropRetiredKeys } from "@/lib/storage";
 import { usePathname } from "next/navigation";
@@ -69,6 +70,7 @@ export function ClientLayout({ children, projectCount }: { children: React.React
     return (
         <MotionProvider>
             <ReaderMode />
+            <TrackClicks />
             <SkipLink />
             {/* Lenis in root mode drives the document scroller, so it does not
                 need to wrap the page. As a childless sibling it can come and go

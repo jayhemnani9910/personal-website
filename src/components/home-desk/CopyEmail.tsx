@@ -1,6 +1,7 @@
 "use client";
 
 import { useDesk } from "./SecretsProvider";
+import { track } from "@/lib/events";
 
 export function CopyEmail({ email }: { email: string }) {
   const { say } = useDesk();
@@ -8,6 +9,7 @@ export function CopyEmail({ email }: { email: string }) {
 
   const copy = () => {
     const refused = () => say(`Clipboard said no. It's ${email}.`);
+    track("email:copy");
     if (!navigator.clipboard) return refused();
     navigator.clipboard.writeText(email).then(() => say("Copied. Now you have no excuse."), refused);
   };
