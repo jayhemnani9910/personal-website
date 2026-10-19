@@ -140,6 +140,14 @@
       "broken": "In block mode, the last block could run past the requested end, and a failed read went unnoticed, so the tool hashed stale data.",
       "changed": "I made each block stop at the end of the range and made a failed read stop with an error.",
       "matters": "Per-block hashes cover exactly the bytes asked for, and a read problem is reported instead of hidden."
+    },
+    {
+      "number": 27065,
+      "merged": "2026-10-19",
+      "title": "The number tool reads signed values at the right size",
+      "broken": "The toolkit's number tool can show a value as a signed number. It guessed the size from the wrong bit, so values like 256 came out as 0 and large numbers came out as -1.",
+      "changed": "I made it read each value as signed in the smallest of 8, 16, 32 or 64 bits that holds it.",
+      "matters": "Users converting numbers get the value they typed, not a wrong one."
     }
   ]
 }
