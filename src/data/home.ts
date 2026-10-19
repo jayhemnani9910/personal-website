@@ -298,6 +298,8 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "Tencent/teamai-cli", number: "#1202", href: "https://github.com/Tencent/teamai-cli/pull/1202" },
   { repo: "home-assistant/core", number: "#185795", href: "https://github.com/home-assistant/core/pull/185795" },
   { repo: "radareorg/radare2", number: "#27055", href: "https://github.com/radareorg/radare2/pull/27055" },
+  { repo: "AlexsJones/llmfit", number: "#1160", href: "https://github.com/AlexsJones/llmfit/pull/1160" },
+  { repo: "caddyserver/caddy", number: "#8241", href: "https://github.com/caddyserver/caddy/pull/8241" },
 ];
 
 /**

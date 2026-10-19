@@ -116,6 +116,14 @@
       "broken": "One way of sharing traffic should send each request to the less busy of a few backends. Once all of them were busy, it picked at random, even the busiest one.",
       "changed": "I fixed the comparison so only the least busy backends stay in the running.",
       "matters": "In a test with a slow and a fast backend, the fast one got 70 of 80 requests instead of 41."
+    },
+    {
+      "number": 8241,
+      "merged": "2026-10-19",
+      "title": "An impossible IP mask is caught when the config loads",
+      "broken": "Caddy accepted IP masks in its log filter that cannot exist, and then logged a blank value instead of the client's address.",
+      "changed": "I made Caddy reject an out-of-range mask when the config is loaded.",
+      "matters": "A typo in the log settings shows up at startup instead of quietly emptying the client addresses in the logs."
     }
   ]
 }
