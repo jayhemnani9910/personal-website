@@ -24,7 +24,9 @@ export function RotatingTitle() {
     if (reduced) return;
     // The hero's font size follows the viewport, so the widths do too.
     const measure = () => setWidths(refs.current.map((el) => el?.offsetWidth ?? 0));
-    document.fonts.ready.then(measure);
+    // Measured again once the web font is in, since the fallback is a different width.
+    measure();
+    document.fonts?.ready.then(measure);
     window.addEventListener("resize", measure);
     const id = setInterval(() => setI((n) => (n + 1) % TITLES.length), EVERY_MS);
     return () => {
