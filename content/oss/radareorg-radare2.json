@@ -3,6 +3,14 @@
   "about": "A toolkit for taking programs apart to study how they work, used by security researchers.",
   "prs": [
     {
+      "number": 27072,
+      "merged": "2026-10-19",
+      "title": "Struct views now color addresses by what they point to",
+      "broken": "The toolkit can lay out memory as a struct, field by field. Fields holding addresses were printed as plain numbers, so you could not tell code from data at a glance, unlike its other memory views.",
+      "changed": "With colors on, those fields are now colored by the kind of memory they point to: code, writable data or read-only data. Plain and machine-readable output stay the same.",
+      "matters": "Pointers to code or writable memory stand out while reading a struct."
+    },
+    {
       "number": 26968,
       "merged": "2026-10-14",
       "title": "File fingerprints now match the standard ssdeep tool",
