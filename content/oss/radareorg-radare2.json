@@ -116,6 +116,14 @@
       "broken": "Piping nothing into rahash2 crashed the released version, because it tried to close a file it never opened.",
       "changed": "I made it close the file only when one was opened.",
       "matters": "Scripts that sometimes pass empty input get a hash instead of a crash."
+    },
+    {
+      "number": 27055,
+      "merged": "2026-10-19",
+      "title": "A unit test builds again without network support",
+      "broken": "When radare2 was built with networking turned off, one of its tests would not compile on newer compilers.",
+      "changed": "I added the one missing include the test needed.",
+      "matters": "People building radare2 without networking can run its full test suite."
     }
   ]
 }

@@ -180,6 +180,14 @@
       "broken": "Effect has a message channel that many listeners can read from. Asking it for a large backlog in one go, around 130,000 messages or more, crashed with a stack overflow error.",
       "changed": "I changed how it gathers the messages so the list size no longer matters.",
       "matters": "Apps that fall behind can catch up on their messages in one step without crashing."
+    },
+    {
+      "number": 9487,
+      "merged": "2026-10-18",
+      "title": "Text read from a socket keeps characters that arrive in pieces",
+      "broken": "When a character like an accent or an emoji was split across two network packets, Effect's socket reader turned it into broken replacement symbols.",
+      "changed": "I made it decode the incoming bytes as one stream, so a character split across packets is put back together.",
+      "matters": "Apps that read text over TCP get the exact text that was sent."
     }
   ]
 }

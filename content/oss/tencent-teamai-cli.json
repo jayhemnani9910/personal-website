@@ -44,6 +44,14 @@
       "broken": "Moving a Codex session to another tool lost all of Codex's reasoning. The tool looked for it in a place Codex never writes, so every reasoning step came out empty.",
       "changed": "I made the tool read the reasoning from where Codex really keeps it, and still read the old place first so nothing else changes.",
       "matters": "A moved Codex session keeps the model's thinking, not a row of blank blocks."
+    },
+    {
+      "number": 1202,
+      "merged": "2026-10-19",
+      "title": "Codex tool output keeps its text when sessions move",
+      "broken": "When a Codex session was moved or archived, tool results stored as a list came out as \"[object Object]\" instead of their text.",
+      "changed": "I made the reader join the text parts of such results, the same way it already does for Claude Code.",
+      "matters": "Moved sessions keep what the tools actually printed."
     }
   ]
 }
