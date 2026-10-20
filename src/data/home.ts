@@ -329,6 +329,8 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "radareorg/radare2", number: "#27083", href: "https://github.com/radareorg/radare2/pull/27083" },
   { repo: "seaweedfs/seaweedfs", number: "#11833", href: "https://github.com/seaweedfs/seaweedfs/pull/11833" },
   { repo: "caddyserver/caddy", number: "#8259", href: "https://github.com/caddyserver/caddy/pull/8259" },
+  { repo: "Tencent/teamai-cli", number: "#1217", href: "https://github.com/Tencent/teamai-cli/pull/1217" },
+  { repo: "Tencent/teamai-cli", number: "#1230", href: "https://github.com/Tencent/teamai-cli/pull/1230" },
 ];
 
 /**

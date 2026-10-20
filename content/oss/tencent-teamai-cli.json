@@ -52,6 +52,22 @@
       "broken": "When a Codex session was moved or archived, tool results stored as a list came out as \"[object Object]\" instead of their text.",
       "changed": "I made the reader join the text parts of such results, the same way it already does for Claude Code.",
       "matters": "Moved sessions keep what the tools actually printed."
+    },
+    {
+      "number": 1217,
+      "merged": "2026-10-20",
+      "title": "Absolute repo paths over SSH keep their leading slash",
+      "broken": "Pointing the tool at a Git server by an absolute path, like host:/srv/git/team.git, quietly dropped the first slash. It then looked for the repository in the wrong place and the clone failed.",
+      "changed": "The tool now keeps the slash when it was typed, so the path means what the person wrote. Paths without a slash, and web addresses, work as before.",
+      "matters": "Teams that host their shared setup on a plain Git server can connect."
+    },
+    {
+      "number": 1230,
+      "merged": "2026-10-20",
+      "title": "Pasted screenshots survive a move between Codex and other tools",
+      "broken": "A screenshot pasted into a Codex session disappeared when the session moved to another tool. Moving it back turned any image into plain text. The report still said nothing was lost.",
+      "changed": "I made the tool read Codex's pasted images and write them back the same way. Codex now counts as supporting images.",
+      "matters": "A moved session keeps the screenshots that explained the problem."
     }
   ]
 }
