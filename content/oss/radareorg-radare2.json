@@ -205,6 +205,14 @@
       "broken": "The assembler left out two bytes that mark a 64-bit or extended register. A 64-bit conditional move turned into a 32-bit one and the high registers became the wrong ones.",
       "changed": "It now writes those bytes for 16-bit, 64-bit and extended registers, checked against the GNU assembler.",
       "matters": "Assembled code does what the source says."
+    },
+    {
+      "number": 27082,
+      "merged": "2026-10-20",
+      "title": "The x86 assembler now keeps the high registers in basic math",
+      "broken": "For add, sub, xor, cmp and similar instructions on the extra 64-bit registers in their smaller sizes, the assembler dropped a prefix byte. The instruction quietly used a different, older register instead.",
+      "changed": "It now writes that byte whenever one of those registers is used, checked against the GNU assembler on 80 cases.",
+      "matters": "Patching code with these instructions now writes what was typed."
     }
   ]
 }
