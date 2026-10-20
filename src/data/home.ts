@@ -334,6 +334,7 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "Effect-TS/effect", number: "#9581", href: "https://github.com/Effect-TS/effect/pull/9581" },
   { repo: "mvschwarz/openrig", number: "#1058", href: "https://github.com/mvschwarz/openrig/pull/1058" },
   { repo: "mvschwarz/openrig", number: "#1101", href: "https://github.com/mvschwarz/openrig/pull/1101" },
+  { repo: "lightpanda-io/browser", number: "#4076", href: "https://github.com/lightpanda-io/browser/pull/4076" },
 ];
 
 /**
