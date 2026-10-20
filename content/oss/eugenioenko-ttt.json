@@ -76,6 +76,22 @@
       "broken": "Replacing text across files added a newline to the end of any file that had none, so one small edit also changed the file's last line.",
       "changed": "I made it add the final newline only when the file already had one.",
       "matters": "A replace changes only the words you asked for, and the diff shows only that."
+    },
+    {
+      "number": 1008,
+      "merged": "2026-10-19",
+      "title": "Text piped into the editor now opens in a new tab",
+      "broken": "Sending text into the editor from another command, such as showing a diff, did nothing. The text was thrown away and the editor opened empty.",
+      "changed": "The editor now reads the piped text and shows it in an untitled tab. The tab starts clean, so closing it asks no questions.",
+      "matters": "People can look at command output in the editor, the way they can in vim."
+    },
+    {
+      "number": 1016,
+      "merged": "2026-10-20",
+      "title": "Plugins can now use full regular expressions",
+      "broken": "Plugins could only search with Lua's small pattern language. It has no choices between words, no counted repeats and no word edges in the middle, so the Vim-style plugin turned such searches down.",
+      "changed": "A new module lets plugins use the full regular expression engine, with the same offsets Lua users already know.",
+      "matters": "Plugin authors can write the searches people expect, with no extra permission."
     }
   ]
 }

@@ -172,6 +172,38 @@
       "broken": "In a normal terminal, a list of favourite folders lets you jump to a folder by its short name from anywhere. The toolkit's own change-folder command ignored that list, a request open since 2024.",
       "changed": "The command now looks the name up in that list the way common shells do, and prints the folder it moved to when the list was used.",
       "matters": "People can move around the same way they do in their terminal, including on Windows."
+    },
+    {
+      "number": 27079,
+      "merged": "2026-10-20",
+      "title": "Old Mac file dates now print the right year",
+      "broken": "Old Mac disk formats count time from 1904. The tool added the gap to 1970 instead of taking it away, so every date printed 132 years too late.",
+      "changed": "The gap is now subtracted, so dates print correctly. The same mistake in a second date printer is fixed as well.",
+      "matters": "Dates from these disks read correctly."
+    },
+    {
+      "number": 27080,
+      "merged": "2026-10-20",
+      "title": "A one byte block no longer crashes a base64 print command",
+      "broken": "The command that prints a block as base64 reserved too little memory. For a one byte block it wrote two bytes past the end.",
+      "changed": "The command now uses a helper that reserves the right amount of memory.",
+      "matters": "A memory error that could crash the tool or be abused is gone."
+    },
+    {
+      "number": 27081,
+      "merged": "2026-10-20",
+      "title": "Java byte arrays from the print command now compile",
+      "broken": "Java bytes run from -128 to 127, but the command printed every byte as 0 to 255. Any byte above 127 gave Java code that would not compile.",
+      "changed": "Bytes are now printed as signed numbers, such as -112 in place of 144.",
+      "matters": "The printed Java compiles, and each value still maps back to the same byte."
+    },
+    {
+      "number": 27083,
+      "merged": "2026-10-20",
+      "title": "The x86 assembler now builds 64-bit conditional moves correctly",
+      "broken": "The assembler left out two bytes that mark a 64-bit or extended register. A 64-bit conditional move turned into a 32-bit one and the high registers became the wrong ones.",
+      "changed": "It now writes those bytes for 16-bit, 64-bit and extended registers, checked against the GNU assembler.",
+      "matters": "Assembled code does what the source says."
     }
   ]
 }

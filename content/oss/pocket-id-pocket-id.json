@@ -36,6 +36,14 @@
       "changed": "Saving a user's groups now marks the groups they left as changed too, so the next sync sends them.",
       "matters": "When someone's access is taken away, it is taken away in the connected apps as well.",
       "top": true
+    },
+    {
+      "number": 1847,
+      "merged": "2026-10-19",
+      "title": "Renewed API keys get their expiry reminder email again",
+      "broken": "The service emails a reminder before an API key expires. After a key was renewed it still counted as already reminded, so it never got another reminder.",
+      "changed": "Renewing a key now clears that mark, so the reminder goes out again before the new expiry date.",
+      "matters": "People are warned before a renewed key stops working."
     }
   ]
 }
