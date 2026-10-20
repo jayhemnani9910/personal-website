@@ -1,6 +1,7 @@
 {
   "repo": "nestjs/nest",
   "about": "A framework for building server apps in Node with TypeScript, used for web APIs and microservices.",
+  "stars": 76868,
   "prs": [
     {
       "number": 18158,

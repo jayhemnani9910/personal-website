@@ -1,6 +1,7 @@
 {
   "repo": "radareorg/radare2",
   "about": "A toolkit for taking programs apart to study how they work, used by security researchers.",
+  "stars": 25104,
   "prs": [
     {
       "number": 27072,

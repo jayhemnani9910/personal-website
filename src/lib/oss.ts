@@ -25,11 +25,13 @@ const PrSchema = z.strictObject({
 const RepoSchema = z.strictObject({
   repo: z.string().regex(/^[\w.-]+\/[\w.-]+$/),
   about: z.string().min(1),
+  /** The repo's GitHub stars, copied by hand: what the /oss "best" sort uses. */
+  stars: z.number().int().nonnegative(),
   prs: z.array(PrSchema).min(1),
 });
 
 export type OssPr = z.infer<typeof PrSchema> & { href: string; landed?: string };
-export type OssRepo = { slug: string; repo: string; about: string; prs: OssPr[] };
+export type OssRepo = { slug: string; repo: string; about: string; stars: number; prs: OssPr[] };
 
 /** The URL slug for a repo: "lightpanda-io/browser" -> "lightpanda-io-browser". */
 export const ossSlug = (repo: string) => repo.toLowerCase().replace(/[^a-z0-9]+/g, "-");
@@ -61,7 +63,7 @@ export function getOssRepos(): OssRepo[] {
           return { ...pr, href, landed: landed.get(href) };
         })
         .toSorted((a, b) => b.merged.localeCompare(a.merged) || b.number - a.number);
-      return { slug, repo: data.repo, about: data.about, prs };
+      return { slug, repo: data.repo, about: data.about, stars: data.stars, prs };
     })
     .toSorted((a, b) => b.prs.length - a.prs.length || a.repo.localeCompare(b.repo));
   return cache;

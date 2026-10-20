@@ -1,6 +1,7 @@
 {
   "repo": "xerj-org/xerj",
   "about": "A search engine that works with existing Elasticsearch tools, built for AI agents to search code, docs and logs.",
+  "stars": 10780,
   "prs": [
     {
       "number": 1595,

@@ -1,6 +1,7 @@
 {
   "repo": "YouROK/TorrServer",
   "about": "A server that streams video from torrents while they download, so a TV or player can start watching right away.",
+  "stars": 3140,
   "prs": [
     {
       "number": 913,

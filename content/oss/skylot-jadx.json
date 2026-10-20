@@ -1,6 +1,7 @@
 {
   "repo": "skylot/jadx",
   "about": "A tool that turns Android apps back into readable Java code, so people can study how an app works.",
+  "stars": 51120,
   "prs": [
     {
       "number": 3003,

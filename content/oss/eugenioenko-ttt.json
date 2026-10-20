@@ -1,6 +1,7 @@
 {
   "repo": "eugenioenko/ttt",
   "about": "A text editor that runs in the terminal but works like a desktop one, shipped as one file with no setup.",
+  "stars": 628,
   "prs": [
     {
       "number": 892,

@@ -1,6 +1,7 @@
 {
   "repo": "jaegertracing/jaeger",
   "about": "A tool for following requests as they move through many services, to find where things are slow or failing.",
+  "stars": 23317,
   "prs": [
     {
       "number": 9836,

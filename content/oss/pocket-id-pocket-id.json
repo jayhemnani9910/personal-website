@@ -1,6 +1,7 @@
 {
   "repo": "pocket-id/pocket-id",
   "about": "A sign-in service you run yourself, so people log in to your apps with passkeys instead of passwords.",
+  "stars": 9640,
   "prs": [
     {
       "number": 1835,

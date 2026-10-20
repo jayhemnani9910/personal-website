@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import { MERGED_PRS_SEARCH } from "@/data/home";
 import { cardPrs, getOssRepos } from "@/lib/oss";
 // The header's shell button reads the shell context, as under ClientLayout.
@@ -22,6 +22,24 @@ describe("OssPage", () => {
     }
     expect(hrefs.filter((h) => h?.startsWith("https://"))).toEqual([MERGED_PRS_SEARCH]);
     expect(screen.getAllByRole("heading", { level: 1 })).toHaveLength(1);
+  });
+
+  it("reorders the cards by each sort pill", () => {
+    render(<OssPage />, { wrapper: TerminalProvider });
+    const order = () => [...document.querySelectorAll('main a[href^="/oss/"]')].map((a) => a.getAttribute("href")!.slice(5));
+    const repos = getOssRepos();
+
+    expect(order()).toEqual(repos.map((r) => r.slug));
+
+    fireEvent.click(screen.getByRole("button", { name: "Best" }));
+    expect(order()).toEqual(repos.toSorted((a, b) => b.stars - a.stars).map((r) => r.slug));
+
+    fireEvent.click(screen.getByRole("button", { name: "Most recent" }));
+    expect(order()).toEqual(repos.toSorted((a, b) => b.prs[0].merged.localeCompare(a.prs[0].merged)).map((r) => r.slug));
+
+    fireEvent.click(screen.getByRole("button", { name: "Earliest" }));
+    expect(order()).toEqual(repos.toSorted((a, b) => a.prs.at(-1)!.merged.localeCompare(b.prs.at(-1)!.merged)).map((r) => r.slug));
+    expect(screen.getByRole("button", { name: "Earliest" }).getAttribute("aria-pressed")).toBe("true");
   });
 });
 

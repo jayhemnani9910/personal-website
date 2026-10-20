@@ -1,6 +1,7 @@
 {
   "repo": "vllm-project/vllm",
   "about": "Software that serves AI language models fast; many companies run their chatbots on it.",
+  "stars": 94194,
   "prs": [
     {
       "number": 31513,
