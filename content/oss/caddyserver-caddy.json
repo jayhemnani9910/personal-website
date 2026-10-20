@@ -132,6 +132,14 @@
       "broken": "Caddy can hide secret values in the query string of logged URLs. The filter read the URL differently from the server, so anything after a hash sign slipped past it and was written to the log in plain text.",
       "changed": "I made the filter read the URL the same way the server does, so the whole query is filtered.",
       "matters": "A token sent in a URL with a stray hash sign no longer leaks into the access logs."
+    },
+    {
+      "number": 8259,
+      "merged": "2026-10-20",
+      "title": "Page headers end at the right line in templates",
+      "broken": "A page can start with a header block that ends with three dots. If the page also had a line of three dashes further down, Caddy ended the header there, and the text in between disappeared.",
+      "changed": "I made it end the header at whichever closing line comes first.",
+      "matters": "Pages with a divider line in the body keep all their text."
     }
   ]
 }

@@ -328,6 +328,7 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "radareorg/radare2", number: "#27081", href: "https://github.com/radareorg/radare2/pull/27081" },
   { repo: "radareorg/radare2", number: "#27083", href: "https://github.com/radareorg/radare2/pull/27083" },
   { repo: "seaweedfs/seaweedfs", number: "#11833", href: "https://github.com/seaweedfs/seaweedfs/pull/11833" },
+  { repo: "caddyserver/caddy", number: "#8259", href: "https://github.com/caddyserver/caddy/pull/8259" },
 ];
 
 /**
