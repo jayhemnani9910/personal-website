@@ -1,6 +1,7 @@
 {
   "repo": "seaweedfs/seaweedfs",
   "about": "A storage system that spreads files across many servers and lets apps reach them in several ways.",
+  "stars": 35616,
   "prs": [
     {
       "number": 11724,

@@ -1,6 +1,7 @@
 {
   "repo": "stanfordnlp/dspy",
   "about": "A Python framework for building AI programs from language model calls instead of hand-written prompts.",
+  "stars": 38705,
   "prs": [
     {
       "number": 10574,

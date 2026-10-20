@@ -1,6 +1,7 @@
 {
   "repo": "redis/go-redis",
   "about": "The main Redis client for Go, a programming language, used to talk to the Redis data store.",
+  "stars": 22270,
   "prs": [
     {
       "number": 4099,

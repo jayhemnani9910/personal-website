@@ -1,6 +1,7 @@
 {
   "repo": "caddyserver/caddy",
   "about": "A popular web server that runs websites and sets up their security certificates for you.",
+  "stars": 78178,
   "prs": [
     {
       "number": 8217,

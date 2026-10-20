@@ -1,6 +1,7 @@
 {
   "repo": "home-assistant/core",
   "about": "Home Assistant, open-source software that runs a smart home locally.",
+  "stars": 91612,
   "prs": [
     {
       "number": 185795,

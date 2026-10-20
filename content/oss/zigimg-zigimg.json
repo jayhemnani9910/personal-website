@@ -1,6 +1,7 @@
 {
   "repo": "zigimg/zigimg",
   "about": "A Zig library for reading and writing image files such as PNG, BMP and JPEG.",
+  "stars": 850,
   "prs": [
     {
       "number": 346,

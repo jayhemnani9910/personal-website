@@ -1,6 +1,7 @@
 {
   "repo": "0xJacky/nginx-ui",
   "about": "A web panel for managing Nginx, the program that sits in front of many websites and serves their pages.",
+  "stars": 11647,
   "prs": [
     {
       "number": 2015,

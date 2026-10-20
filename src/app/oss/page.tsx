@@ -1,12 +1,11 @@
 import type { Metadata } from "next";
-import type { Route } from "next";
-import Link from "next/link";
 import { pageMetadata } from "@/lib/page-metadata";
 import { MERGED_PRS, MERGED_PRS_SEARCH, MERGED_PRS_SEARCH_LABEL } from "@/data/home";
 import { cardPrs, countLabel, getOssRepos } from "@/lib/oss";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
-import { CARD, CARD_HOVER, H1, HIGHLIGHT, KICKER, LEDE, SHELL, WRAP } from "@/components/desk";
+import { OssCards } from "./OssCards";
+import { H1, HIGHLIGHT, KICKER, LEDE, SHELL, WRAP } from "@/components/desk";
 
 export const metadata: Metadata = pageMetadata({
   title: "Open source",
@@ -51,35 +50,19 @@ export default function OssPage() {
         </section>
 
         <section className={`${WRAP} ${SHELL} pb-[clamp(3rem,6vw,5rem)]`}>
-          <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {repos.map((r) => {
-              return (
-                <li key={r.slug} className="flex">
-                  <Link
-                    href={`/oss/${r.slug}` as Route}
-                    className={`${CARD} ${CARD_HOVER} flex w-full min-w-0 flex-col p-5 text-tr-text hover:text-tr-text`}
-                  >
-                    <span className="flex items-baseline justify-between gap-3">
-                      <span className="min-w-0 font-mono text-[14px] font-semibold [overflow-wrap:anywhere]">{r.repo}</span>
-                      <span className="shrink-0 font-mono text-[12px] text-tr-text-faint">{countLabel(r.prs)}</span>
-                    </span>
-                    <span className="mt-2 block text-[14px] leading-[var(--tr-lh-body)] text-tr-text-mute">{r.about}</span>
-                    <span className="mt-4 block border-t border-dashed border-tr-rule-soft pt-3">
-                      {cardPrs(r).map((pr) => (
-                        <span key={pr.number} className="grid grid-cols-[1rem_1fr] gap-1.5 py-1 text-[14px] leading-snug">
-                          <span aria-hidden="true" className="font-mono">✓</span>
-                          <span>{pr.title}</span>
-                        </span>
-                      ))}
-                    </span>
-                    <span className="mt-auto pt-4 font-mono text-[12px] underline">
-                      {r.prs.length === 1 ? "read the story →" : `read all ${r.prs.length} →`}
-                    </span>
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
+          <OssCards
+            cards={repos.map((r) => ({
+              slug: r.slug,
+              repo: r.repo,
+              about: r.about,
+              stars: r.stars,
+              count: r.prs.length,
+              countLabel: countLabel(r.prs),
+              picks: cardPrs(r).map(({ number, title }) => ({ number, title })),
+              newest: r.prs[0].merged,
+              oldest: r.prs.at(-1)!.merged,
+            }))}
+          />
         </section>
       </main>
       <SiteFooter />

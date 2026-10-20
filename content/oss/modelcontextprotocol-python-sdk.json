@@ -1,6 +1,7 @@
 {
   "repo": "modelcontextprotocol/python-sdk",
   "about": "The official Python kit for MCP, a shared standard that lets AI assistants use outside tools and data.",
+  "stars": 24624,
   "prs": [
     {
       "number": 1826,

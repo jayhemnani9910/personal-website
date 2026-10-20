@@ -1,6 +1,7 @@
 {
   "repo": "neurosnap/zmx",
   "about": "A tool that keeps terminal sessions running in the background, so you can leave and come back to them.",
+  "stars": 2218,
   "prs": [
     {
       "number": 274,

@@ -1,6 +1,7 @@
 {
   "repo": "github/github-mcp-server",
   "about": "GitHub's official server that lets AI assistants read and change repositories, issues and pull requests.",
+  "stars": 33780,
   "prs": [
     {
       "number": 3419,
