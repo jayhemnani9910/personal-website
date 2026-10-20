@@ -221,6 +221,14 @@
       "broken": "TOML allows a setting name written as empty quotes. The reader rejected it with an error, so some valid config files would not load.",
       "changed": "Empty quoted names are now allowed. Names written without quotes still have to contain something.",
       "matters": "Valid config files load, and real mistakes are still caught."
+    },
+    {
+      "number": 9581,
+      "merged": "2026-10-20",
+      "title": "YAML text blocks no longer swallow comments",
+      "broken": "In a YAML text block, a comment line placed less indented than the text was treated as part of the text. A commented-out step in a CI script could end up running.",
+      "changed": "I made the first line of the block set its indentation, so a less indented comment ends the block.",
+      "matters": "Commented-out lines stay comments, and the text keeps its real indentation."
     }
   ]
 }
