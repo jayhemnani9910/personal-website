@@ -229,6 +229,14 @@
       "broken": "Where the cursor or selection sat in a text box was counted in raw bytes. Accents and emoji take several bytes, so scripts saw wrong positions and could place the cursor inside a character.",
       "changed": "Positions are now counted the way web pages count them, and a position inside a character moves to its start.",
       "matters": "Scripts that work with selections get correct results for accents and emoji."
+    },
+    {
+      "number": 4076,
+      "merged": "2026-10-20",
+      "title": "Text decoding now keeps the encoding a page asked for",
+      "broken": "When text started with certain marker bytes, the browser quietly switched to a different text encoding than the one the page asked for. Chrome only drops a marker that matches the chosen encoding.",
+      "changed": "The browser now sticks to the requested encoding and only removes a matching marker, the way Chrome does.",
+      "matters": "Pages that decode bytes into text get the same result as in Chrome, instead of garbled or wrongly shortened text."
     }
   ]
 }
