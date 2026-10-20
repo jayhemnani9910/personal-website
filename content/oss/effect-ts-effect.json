@@ -188,6 +188,38 @@
       "broken": "When a character like an accent or an emoji was split across two network packets, Effect's socket reader turned it into broken replacement symbols.",
       "changed": "I made it decode the incoming bytes as one stream, so a character split across packets is put back together.",
       "matters": "Apps that read text over TCP get the exact text that was sent."
+    },
+    {
+      "number": 9531,
+      "merged": "2026-10-19",
+      "title": "UTF-16 files now get a clear error from the XML reader",
+      "broken": "The XML reader only handles UTF-8 files. A UTF-16 file failed with a message about a broken file, which sent people looking for damage that was not there.",
+      "changed": "The reader now spots the marker at the start of a UTF-16 file and says plainly that this encoding is not supported.",
+      "matters": "People know to convert the file instead of hunting for a corrupt one."
+    },
+    {
+      "number": 9532,
+      "merged": "2026-10-19",
+      "title": "Config text with quotes before a closing triple quote now loads",
+      "broken": "TOML config files may hold long text in triple quotes, with one or two quotes just before the end. The reader closed the text too early and failed, even on the format's own examples.",
+      "changed": "The reader now treats the last three quotes as the end, so the quotes before them stay in the text.",
+      "matters": "Valid config files that end a long text with quotes load instead of failing."
+    },
+    {
+      "number": 9537,
+      "merged": "2026-10-19",
+      "title": "Config values can no longer be changed by later sections",
+      "broken": "In TOML config files, a value written in curly braces or a list written in full is final. The reader let later sections add keys to them, so broken files were quietly accepted.",
+      "changed": "The reader now remembers which values are final and reports an error when a later section tries to extend one.",
+      "matters": "Invalid config files are caught right away instead of producing odd settings."
+    },
+    {
+      "number": 9538,
+      "merged": "2026-10-19",
+      "title": "Empty quoted names in config files are now accepted",
+      "broken": "TOML allows a setting name written as empty quotes. The reader rejected it with an error, so some valid config files would not load.",
+      "changed": "Empty quoted names are now allowed. Names written without quotes still have to contain something.",
+      "matters": "Valid config files load, and real mistakes are still caught."
     }
   ]
 }

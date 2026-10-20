@@ -1,0 +1,14 @@
+{
+  "repo": "redis/go-redis",
+  "about": "The main Redis client for Go, a programming language, used to talk to the Redis data store.",
+  "prs": [
+    {
+      "number": 4099,
+      "merged": "2026-10-19",
+      "title": "Search results with scores and no content now come back right",
+      "broken": "With the older protocol, a search that asked for scores or sort keys but no content returned scores as if they were documents, and asking for payloads made the call fail.",
+      "changed": "The client now reads those per-document values first and steps over empty payloads.",
+      "matters": "Programs that rank search results by score get the right documents."
+    }
+  ]
+}

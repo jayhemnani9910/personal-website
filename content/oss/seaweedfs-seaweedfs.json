@@ -60,6 +60,14 @@
       "broken": "In SeaweedFS's S3 storage, a name ending in a slash can hold data. Reading it gave back the data, but a folder listing said its size was zero.",
       "changed": "The listing now counts the data stored with such an entry, and empty ones still show zero.",
       "matters": "Apps that trust listing sizes see the same size they get when they read the file."
+    },
+    {
+      "number": 11833,
+      "merged": "2026-10-20",
+      "title": "Listing unfinished uploads now follows the S3 rules",
+      "broken": "The list of unfinished uploads ignored where to resume, came back in the wrong order, and could claim there was more when the page was complete.",
+      "changed": "The list is now sorted by name, resumes after the given name, and reports whether there is more and where to continue.",
+      "matters": "Tools that page through uploads end cleanly and miss nothing."
     }
   ]
 }

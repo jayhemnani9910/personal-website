@@ -204,6 +204,30 @@
       "broken": "When a script asked a form for its fields, Lightpanda left out fieldsets, outputs and embedded objects, so counts and positions differed from real browsers.",
       "changed": "I made the list include those three kinds too, in page order, the way the HTML standard and Chrome do.",
       "matters": "Scripts that walk a form by position or by name get the same fields in Lightpanda as in Chrome."
+    },
+    {
+      "number": 4058,
+      "merged": "2026-10-19",
+      "title": "Non-breaking spaces in attribute values now print as in Chrome",
+      "broken": "When a page was turned back into HTML, a non-breaking space in text was written safely, but in an attribute value it was written raw. Chrome writes it safely in both places.",
+      "changed": "Attribute values now get the same treatment as text, so the output matches Chrome.",
+      "matters": "Saved or compared page markup is the same as what Chrome produces."
+    },
+    {
+      "number": 4059,
+      "merged": "2026-10-20",
+      "title": "Text boxes now report their length and fix line breaks",
+      "broken": "A multi-line text box had no length value, and it kept Windows-style line breaks in what it returned. Chrome reports a length and turns every line break into a plain one.",
+      "changed": "The browser now reports the length the way Chrome does and cleans up line breaks when a value is set.",
+      "matters": "Scripts that read text boxes get the same answers as in Chrome."
+    },
+    {
+      "number": 4066,
+      "merged": "2026-10-20",
+      "title": "Cursor positions in text boxes now count characters like Chrome does",
+      "broken": "Where the cursor or selection sat in a text box was counted in raw bytes. Accents and emoji take several bytes, so scripts saw wrong positions and could place the cursor inside a character.",
+      "changed": "Positions are now counted the way web pages count them, and a position inside a character moves to its start.",
+      "matters": "Scripts that work with selections get correct results for accents and emoji."
     }
   ]
 }

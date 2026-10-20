@@ -124,6 +124,22 @@
       "broken": "If you mistyped the memory or RAM size you wanted to test with, llmfit only printed a warning and then scored your own machine, while still reporting success.",
       "changed": "I made it refuse a size it cannot read, the same way it already refused a bad percentage.",
       "matters": "Scripts and tools that read llmfit's results never get numbers for the wrong machine."
+    },
+    {
+      "number": 1162,
+      "merged": "2026-10-20",
+      "title": "Unknown model size labels are now refused with a clear error",
+      "broken": "The claim command accepted any size label. A mistyped or lowercase one was priced like a small default, so the claim asked for far less hardware than the model needs.",
+      "changed": "The command now checks the label and stops with an error that names the labels it knows.",
+      "matters": "A claim can no longer be scheduled onto a machine that cannot run the model."
+    },
+    {
+      "number": 1167,
+      "merged": "2026-10-20",
+      "title": "Llama 3 models no longer show double their real context size",
+      "broken": "Llama 3.2 models showed a context window of 262144 tokens, twice the real 131072.",
+      "changed": "For this kind of model the tool now keeps the context size the model states instead of multiplying it.",
+      "matters": "Fit estimates for Llama 3.2 models start from the real number."
     }
   ]
 }
