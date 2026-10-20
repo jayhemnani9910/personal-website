@@ -1,5 +1,5 @@
 {
-  "fetchedAt": "2026-10-11T05:46:22.571Z",
+  "fetchedAt": "2026-10-20T09:20:55.337Z",
   "channels": [
     {
       "id": "UCSf0pNIEkJgXhH7WzIsFnpw",
@@ -8,7 +8,7 @@
       "url": "https://www.youtube.com/@jhanalytics2.0",
       "stats": {
         "subscribers": 33,
-        "views": 10114,
+        "views": 10147,
         "videos": 65
       },
       "videos": [
@@ -17,7 +17,7 @@
           "title": "DESI STADIUM 🥁 Dhol × Bhangra Trap Anthem | #desimusic  #dhol  #trap  #desibeats #trapmusic",
           "publishedAt": "2026-09-19T12:12:31Z",
           "durationSec": 183,
-          "views": 716,
+          "views": 721,
           "thumb": "https://i.ytimg.com/vi/8S0la-ABQMA/hqdefault.jpg"
         },
         {
@@ -59,7 +59,7 @@
           "title": "I made Hacker News read itself to me every morning  #ai #productivity #contextvariables #opensource",
           "publishedAt": "2026-09-12T16:15:33Z",
           "durationSec": 41,
-          "views": 39,
+          "views": 42,
           "thumb": "https://i.ytimg.com/vi/vAeDiFgQByw/oardefault.jpg"
         },
         {
@@ -257,11 +257,19 @@
       "handle": "@jodnaniplays",
       "url": "https://www.youtube.com/@jodnaniplays",
       "stats": {
-        "subscribers": 41,
-        "views": 61530,
-        "videos": 265
+        "subscribers": 44,
+        "views": 63527,
+        "videos": 281
       },
       "videos": [
+        {
+          "id": "TDzGoBBx21w",
+          "title": "One Night to Reach Division 5 | FC 27 Rivals",
+          "publishedAt": "2026-10-16T11:00:09Z",
+          "durationSec": 430,
+          "views": 13,
+          "thumb": "https://i.ytimg.com/vi/TDzGoBBx21w/hqdefault.jpg"
+        },
         {
           "id": "f_zoT3te4e0",
           "title": "Two 6-6 Draws, Both Levelled Late | FC 27 Rivals |",
@@ -283,7 +291,7 @@
           "title": "3-0 Down, Won 5-6 Away With an 84' Winner | FC 27 | #fc27  #ultimateteam #fifa27 #futbol #gaming",
           "publishedAt": "2026-10-03T20:30:02Z",
           "durationSec": 337,
-          "views": 3,
+          "views": 4,
           "thumb": "https://i.ytimg.com/vi/dr1HuuBjA94/hqdefault.jpg"
         },
         {
@@ -307,7 +315,7 @@
           "title": "First day of FC27 | 5-0 Win, 3-0 on Penalties and a 7-5 Loss | FC 27 | #fc27  #eafc27  #day1 #futbol",
           "publishedAt": "2026-09-18T06:15:21Z",
           "durationSec": 267,
-          "views": 41,
+          "views": 42,
           "thumb": "https://i.ytimg.com/vi/gOrHoerBKZ4/hqdefault.jpg"
         },
         {
@@ -349,23 +357,63 @@
           "durationSec": 114,
           "views": 3,
           "thumb": "https://i.ytimg.com/vi/urqdH6gBId8/hqdefault.jpg"
-        },
-        {
-          "id": "dah-ik4v8do",
-          "title": "World Cup 2026 Recap: Matches 31-35 | Netherlands 5-1, USA Through",
-          "publishedAt": "2026-06-29T04:45:39Z",
-          "durationSec": 112,
-          "views": 3,
-          "thumb": "https://i.ytimg.com/vi/dah-ik4v8do/hqdefault.jpg"
         }
       ],
       "shorts": [
+        {
+          "id": "fbyWD0UG--8",
+          "title": "Messi scores a Free Kick | FC 27",
+          "publishedAt": "2026-10-20T07:51:42Z",
+          "durationSec": 11,
+          "views": 178,
+          "thumb": "https://i.ytimg.com/vi/fbyWD0UG--8/hqdefault.jpg"
+        },
+        {
+          "id": "GI5H3Ii7mDs",
+          "title": "Level at 2-2, Who Goes Ahead? | FC 27 Rivals",
+          "publishedAt": "2026-10-18T03:45:10Z",
+          "durationSec": 25,
+          "views": 939,
+          "thumb": "https://i.ytimg.com/vi/GI5H3Ii7mDs/hqdefault.jpg"
+        },
+        {
+          "id": "aXQ1V2caXiY",
+          "title": "0-1 Down Early, Can I Turn It Around? | FC 27",
+          "publishedAt": "2026-10-16T10:25:09Z",
+          "durationSec": 25,
+          "views": 204,
+          "thumb": "https://i.ytimg.com/vi/aXQ1V2caXiY/hqdefault.jpg"
+        },
+        {
+          "id": "CBlIFDE0FO8",
+          "title": "1-0 Down to 2-1 Up Inside 4 Minutes | FC 27",
+          "publishedAt": "2026-10-14T14:47:21Z",
+          "durationSec": 28,
+          "views": 8,
+          "thumb": "https://i.ytimg.com/vi/CBlIFDE0FO8/hqdefault.jpg"
+        },
+        {
+          "id": "SnHdLQ2CQ_A",
+          "title": "1-0 Down to 2-1 Up Inside 4 Minutes | FC 27",
+          "publishedAt": "2026-10-13T10:36:41Z",
+          "durationSec": 28,
+          "views": 69,
+          "thumb": "https://i.ytimg.com/vi/SnHdLQ2CQ_A/hqdefault.jpg"
+        },
+        {
+          "id": "hiCwgGXlqUA",
+          "title": "I Kept Equalising in an 18-Goal Game | FC 27",
+          "publishedAt": "2026-10-12T05:15:00Z",
+          "durationSec": 28,
+          "views": 37,
+          "thumb": "https://i.ytimg.com/vi/hiCwgGXlqUA/oardefault.jpg"
+        },
         {
           "id": "yQoP54pfAss",
           "title": "They Equalised. I Hit Back 4 Minutes Later | FC 27 #fc27  #eafc27 #futbol  #shorts  #footballgaming",
           "publishedAt": "2026-10-10T18:06:36Z",
           "durationSec": 28,
-          "views": 9,
+          "views": 11,
           "thumb": "https://i.ytimg.com/vi/yQoP54pfAss/hqdefault.jpg"
         },
         {
@@ -373,7 +421,7 @@
           "title": "The 63' Goal That Made It 3-4 at SUB | FC 27 | #fc27  #eafc27  #futbol #shorts",
           "publishedAt": "2026-10-08T06:10:33Z",
           "durationSec": 26,
-          "views": 516,
+          "views": 518,
           "thumb": "https://i.ytimg.com/vi/hHfyjajhuXY/hqdefault.jpg"
         },
         {
@@ -407,72 +455,79 @@
           "durationSec": 29,
           "views": 163,
           "thumb": "https://i.ytimg.com/vi/pq989d-lxTs/hqdefault.jpg"
-        },
-        {
-          "id": "ZiF5OfF9LqE",
-          "title": "From 1-2 Down to 3-2 Up in Four Minutes | FC 27 | #fc27  #eafc27  #futbol  #shorts",
-          "publishedAt": "2026-10-05T14:00:20Z",
-          "durationSec": 29,
-          "views": 290,
-          "thumb": "https://i.ytimg.com/vi/ZiF5OfF9LqE/hqdefault.jpg"
-        },
-        {
-          "id": "yIz_KEOGitI",
-          "title": "LAM Level at 4-4, Then the 79th Minute 5-4 | FC 27 | #fc27 #eafc27 #futbol #shorts  #footballgaming",
-          "publishedAt": "2026-10-05T06:54:33Z",
-          "durationSec": 27,
-          "views": 398,
-          "thumb": "https://i.ytimg.com/vi/yIz_KEOGitI/hqdefault.jpg"
-        },
-        {
-          "id": "5qC8gJFfWjM",
-          "title": "Early 1-0, Then Back in Front at 2-1 | FC 27 | #fc27  #eafc27  #fut  #shorts  #footballgaming",
-          "publishedAt": "2026-10-04T14:06:18Z",
-          "durationSec": 29,
-          "views": 9,
-          "thumb": "https://i.ytimg.com/vi/5qC8gJFfWjM/hqdefault.jpg"
-        },
-        {
-          "id": "kWZsAqWqOEo",
-          "title": "Glitch commentary & Down twice, level twice, 1-1 and 2-2 | FC 27 #fc27  #eafc27  #futbol  #shorts",
-          "publishedAt": "2026-10-03T07:00:12Z",
-          "durationSec": 29,
-          "views": 246,
-          "thumb": "https://i.ytimg.com/vi/kWZsAqWqOEo/hqdefault.jpg"
-        },
-        {
-          "id": "be8bGsTV9LU",
-          "title": "Nothing for 90 minutes, then 1-0 and 2-0 | FC 27 | #fc27  #eafc27  #fut  #shorts  #footballgaming",
-          "publishedAt": "2026-10-02T13:15:29Z",
-          "durationSec": 29,
-          "views": 525,
-          "thumb": "https://i.ytimg.com/vi/be8bGsTV9LU/hqdefault.jpg"
-        },
-        {
-          "id": "KaZzymjL-yg",
-          "title": "Messi free kick, last kick, 120th minute, 5-0 | FC 27 #fc27  #eafc27  #FUT  #football #gaming",
-          "publishedAt": "2026-10-01T19:15:04Z",
-          "durationSec": 23,
-          "views": 589,
-          "thumb": "https://i.ytimg.com/vi/KaZzymjL-yg/hqdefault.jpg"
         }
       ],
       "live": [
         {
-          "id": "hEkRgd3L5nc",
-          "title": "FC26 LIVE | Ultimate Team |  #fc26   #ultimateteam",
-          "publishedAt": "2026-10-05T14:15:01Z",
-          "durationSec": 0,
-          "views": 0,
-          "thumb": "https://i.ytimg.com/vi/hEkRgd3L5nc/hqdefault.jpg",
-          "status": "upcoming"
+          "id": "vkONjnH1ZcI",
+          "title": "How Many Wins in My Weekend League? | FC 27 FUT Champions",
+          "publishedAt": "2026-10-20T07:08:39Z",
+          "durationSec": 6171,
+          "views": 20,
+          "thumb": "https://i.ytimg.com/vi/vkONjnH1ZcI/hqdefault.jpg"
+        },
+        {
+          "id": "GV_ix0_UNeA",
+          "title": "How Many Wins in My Weekend League? | FC 27 FUT Champions",
+          "publishedAt": "2026-10-19T07:59:54Z",
+          "durationSec": 7195,
+          "views": 51,
+          "thumb": "https://i.ytimg.com/vi/GV_ix0_UNeA/hqdefault.jpg"
+        },
+        {
+          "id": "WlM4qwbpWJs",
+          "title": "How Many Wins in My Weekend League? | FC 27 FUT Champions",
+          "publishedAt": "2026-10-18T06:17:47Z",
+          "durationSec": 4121,
+          "views": 106,
+          "thumb": "https://i.ytimg.com/vi/WlM4qwbpWJs/hqdefault.jpg"
+        },
+        {
+          "id": "z3IovYkqMy4",
+          "title": "Div 5 Done. Can I Reach Div 4 Tonight? | FC 27 Rivals LIVE",
+          "publishedAt": "2026-10-17T06:53:44Z",
+          "durationSec": 6100,
+          "views": 68,
+          "thumb": "https://i.ytimg.com/vi/z3IovYkqMy4/hqdefault.jpg"
+        },
+        {
+          "id": "fnrVl3itW6c",
+          "title": "Can I Reach Division 5 Tonight? | FC 27 Rivals LIVE",
+          "publishedAt": "2026-10-16T06:19:48Z",
+          "durationSec": 6241,
+          "views": 342,
+          "thumb": "https://i.ytimg.com/vi/fnrVl3itW6c/hqdefault.jpg"
+        },
+        {
+          "id": "msNdScwsk1s",
+          "title": "Future Stars Packs + Road to Division 5 | FC 27 Ultimate Team LIVE",
+          "publishedAt": "2026-10-15T08:12:40Z",
+          "durationSec": 5961,
+          "views": 38,
+          "thumb": "https://i.ytimg.com/vi/msNdScwsk1s/hqdefault.jpg"
+        },
+        {
+          "id": "jozB6Hg9WL4",
+          "title": "Future Stars Packs + Road to Division 5 | FC 27 Ultimate Team LIVE",
+          "publishedAt": "2026-10-14T05:27:26Z",
+          "durationSec": 4275,
+          "views": 70,
+          "thumb": "https://i.ytimg.com/vi/jozB6Hg9WL4/hqdefault.jpg"
+        },
+        {
+          "id": "LO5jtbvSsrI",
+          "title": "FC 27 FUT Champions LIVE 🔴 | How Many Wins Can I Get?",
+          "publishedAt": "2026-10-12T07:38:16Z",
+          "durationSec": 6196,
+          "views": 31,
+          "thumb": "https://i.ytimg.com/vi/LO5jtbvSsrI/hqdefault.jpg"
         },
         {
           "id": "qcdgWXJD7ho",
           "title": "FC 27 FUT Champions LIVE 🔴 | How Many Wins Can We Get? | #fc27 #futchampions #eafc27 #ultimateteam",
-          "publishedAt": "2026-10-10T16:04:03Z",
+          "publishedAt": "2026-10-11T08:22:44Z",
           "durationSec": 4741,
-          "views": 50,
+          "views": 88,
           "thumb": "https://i.ytimg.com/vi/qcdgWXJD7ho/hqdefault.jpg"
         },
         {
@@ -480,7 +535,7 @@
           "title": "FC 27 LIVE | Road to Division 5 | Div Rivals + Pack Opening | Ultimate Team #fc27  #ultimateteam",
           "publishedAt": "2026-10-10T07:00:56Z",
           "durationSec": 3230,
-          "views": 14,
+          "views": 38,
           "thumb": "https://i.ytimg.com/vi/4x5HnZfCdUE/hqdefault.jpg"
         },
         {
@@ -488,7 +543,7 @@
           "title": "FC 27 LIVE | Road to Division 5 | Div Rivals + Pack Opening | Ultimate Team #fc27  #ultimateteam",
           "publishedAt": "2026-10-09T08:27:34Z",
           "durationSec": 5526,
-          "views": 48,
+          "views": 50,
           "thumb": "https://i.ytimg.com/vi/1bBwi0hzFhA/hqdefault.jpg"
         },
         {
@@ -496,64 +551,8 @@
           "title": "FC 27 LIVE | Ultimate Gauntlet 1 – All 10 Objectives | Ultimate Team Rewards Grind | #fc27",
           "publishedAt": "2026-10-06T19:02:33Z",
           "durationSec": 9619,
-          "views": 39,
-          "thumb": "https://i.ytimg.com/vi/hcK0_7b2G0s/hqdefault.jpg"
-        },
-        {
-          "id": "6biMw2vLMks",
-          "title": "FC 27 LIVE | Ultimate Gauntlet 1 – All 10 Objectives | Ultimate Team Rewards Grind | #fc27",
-          "publishedAt": "2026-10-05T19:39:25Z",
-          "durationSec": 11543,
           "views": 45,
-          "thumb": "https://i.ytimg.com/vi/6biMw2vLMks/hqdefault.jpg"
-        },
-        {
-          "id": "xnR9e9rd7aY",
-          "title": "🔴 FC 27 LIVE! Pack Opening, Rivals Div 7 & Upgrading My Squad | Ultimate Team | FC27",
-          "publishedAt": "2026-10-05T07:13:28Z",
-          "durationSec": 2441,
-          "views": 10,
-          "thumb": "https://i.ytimg.com/vi/xnR9e9rd7aY/hqdefault.jpg"
-        },
-        {
-          "id": "pwgxcCU4fmw",
-          "title": "FC26 LIVE | Ultimate Team |  #fc26   #ultimateteam",
-          "publishedAt": "2026-10-05T05:37:06Z",
-          "durationSec": 1490,
-          "views": 11,
-          "thumb": "https://i.ytimg.com/vi/pwgxcCU4fmw/hqdefault.jpg"
-        },
-        {
-          "id": "2hOJojjKExU",
-          "title": "🔴 FC 27 LIVE! Pack Opening, Rivals Div 7 & Upgrading My Squad | Ultimate Team | FC27",
-          "publishedAt": "2026-10-04T09:03:06Z",
-          "durationSec": 4880,
-          "views": 21,
-          "thumb": "https://i.ytimg.com/vi/2hOJojjKExU/hqdefault.jpg"
-        },
-        {
-          "id": "uJDx3g_Epi8",
-          "title": "🔴 FC 27 LIVE! Pack Opening, Rivals Div 7 & Upgrading My Squad | Ultimate Team | FC27",
-          "publishedAt": "2026-10-03T11:11:39Z",
-          "durationSec": 4805,
-          "views": 86,
-          "thumb": "https://i.ytimg.com/vi/uJDx3g_Epi8/hqdefault.jpg"
-        },
-        {
-          "id": "ZzbRppZdH44",
-          "title": "🔴 FC 27 LIVE! Pack Opening, Rivals Div 7 & Upgrading My Squad | Ultimate Team | FC27",
-          "publishedAt": "2026-10-02T17:23:48Z",
-          "durationSec": 6521,
-          "views": 15,
-          "thumb": "https://i.ytimg.com/vi/ZzbRppZdH44/hqdefault.jpg"
-        },
-        {
-          "id": "m6k2UkIt-q8",
-          "title": "🔴 FC 27 LIVE! Pack Opening, Rivals & Upgrading My Squad | Ultimate Team | FC27",
-          "publishedAt": "2026-10-01T09:15:01Z",
-          "durationSec": 5851,
-          "views": 91,
-          "thumb": "https://i.ytimg.com/vi/m6k2UkIt-q8/hqdefault.jpg"
+          "thumb": "https://i.ytimg.com/vi/hcK0_7b2G0s/hqdefault.jpg"
         }
       ]
     }
