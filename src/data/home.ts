@@ -335,6 +335,8 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "mvschwarz/openrig", number: "#1058", href: "https://github.com/mvschwarz/openrig/pull/1058" },
   { repo: "mvschwarz/openrig", number: "#1101", href: "https://github.com/mvschwarz/openrig/pull/1101" },
   { repo: "lightpanda-io/browser", number: "#4076", href: "https://github.com/lightpanda-io/browser/pull/4076" },
+  { repo: "radareorg/radare2", number: "#27082", href: "https://github.com/radareorg/radare2/pull/27082" },
+  { repo: "xerj-org/xerj", number: "#1744", href: "https://github.com/xerj-org/xerj/pull/1744" },
 ];
 
 /**

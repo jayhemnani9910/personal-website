@@ -18,6 +18,14 @@
       "broken": "When a disk got too full, writes were blocked. The standard setting to turn that check off was accepted but ignored, so the block stayed on.",
       "changed": "I made the server read that setting, so turning the check off also lifts the block.",
       "matters": "Users can unblock writes the same way they would in Elasticsearch."
+    },
+    {
+      "number": 1744,
+      "merged": "2026-10-20",
+      "title": "Date range searches now respect the time zone",
+      "broken": "A date range search ignored the time zone you gave it and read every date as UTC. Documents inside the real window were left out.",
+      "changed": "I made the search read dates in the given zone, including daylight saving changes, and round dates there too, the way Elasticsearch does.",
+      "matters": "Range searches with a time zone return the same documents as Elasticsearch."
     }
   ]
 }
