@@ -4,6 +4,14 @@
   "stars": 64820,
   "prs": [
     {
+      "number": 1304,
+      "merged": "2026-10-20",
+      "title": "GitHub searches now stay inside the chosen date window",
+      "broken": "The GitHub search only had a start date. When a past window was asked for, the newest issues filled the results page and nearly all were then thrown away. One search for a January window kept 1 of 30.",
+      "changed": "The search now asks for issues between the start and end dates, so the results page is spent on the window.",
+      "matters": "Past-date reports include far more of the issues from that period."
+    },
+    {
       "number": 1274,
       "merged": "2026-10-13",
       "title": "Sources you ask for by name are always searched",

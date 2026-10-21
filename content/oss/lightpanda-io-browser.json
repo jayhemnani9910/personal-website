@@ -4,6 +4,22 @@
   "stars": 36768,
   "prs": [
     {
+      "number": 4077,
+      "merged": "2026-10-21",
+      "title": "Cookies are now sent in the order browsers send them",
+      "broken": "The browser listed cookies in the order they were set. Real browsers put longer paths first, then older cookies. When two cookies share a name, many servers keep only the first one, so they could read the wrong value.",
+      "changed": "Cookies are now sorted by path length and then by age, both when a page reads them and when a request sends them.",
+      "matters": "Sites that rely on cookie order behave the same as in a normal browser."
+    },
+    {
+      "number": 4040,
+      "merged": "2026-10-20",
+      "title": "Markdown pages come through as plain markdown",
+      "broken": "A page served as markdown was wrapped in a code block when converted, and a code block inside the file could end it early. There was also no way to use the markdown version a page offers as an alternate.",
+      "changed": "Markdown files are now written out as they are. A new opt-in setting follows a page's markdown alternate when it has one, and the output says which source was used.",
+      "matters": "AI agents get clean markdown from sites that publish it."
+    },
+    {
       "number": 3952,
       "merged": "2026-10-14",
       "title": "Typing in a box now tells the page the value changed",

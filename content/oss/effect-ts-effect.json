@@ -4,6 +4,14 @@
   "stars": 17333,
   "prs": [
     {
+      "number": 9608,
+      "merged": "2026-10-20",
+      "title": "YAML text blocks now keep tabs and blank-looking lines",
+      "broken": "The YAML reader refused any line starting with a tab, even inside a text block where a tab is just text. A pasted shell recipe failed to load, and lines of only spaces were changed or dropped.",
+      "changed": "Tabs inside text blocks are now kept as written, while tabs used as indentation are still rejected. Whitespace-only lines inside a block now come through as they were written.",
+      "matters": "People can load YAML that holds shell recipes or code without errors or lost whitespace."
+    },
+    {
       "number": 9145,
       "merged": "2026-10-14",
       "title": "Command-line options can now take a value or go without one",

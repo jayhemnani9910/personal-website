@@ -4,6 +4,22 @@
   "stars": 25104,
   "prs": [
     {
+      "number": 27069,
+      "merged": "2026-10-20",
+      "title": "Two file hashes no longer depend on the computer's byte order",
+      "broken": "The elf and xorpair hashes read and wrote their data in whatever byte order the computer used, so they could give different results on different machines.",
+      "changed": "Both now use a fixed byte order. Results on common PCs are unchanged.",
+      "matters": "The same file gives the same hash on any machine."
+    },
+    {
+      "number": 27071,
+      "merged": "2026-10-20",
+      "title": "The DEX checksum fix macro now writes a valid checksum",
+      "broken": "When a DEX file's checksum was wrong, the tool suggested a fix that wrote the checksum in the wrong byte order, so the file stayed broken.",
+      "changed": "The adler32 hash command now prints its bytes in the same order as the rahash2 tool, and tests cover both the hash and the fix.",
+      "matters": "The suggested fix now repairs the file."
+    },
+    {
       "number": 27072,
       "merged": "2026-10-19",
       "title": "Struct views now color addresses by what they point to",
