@@ -357,6 +357,7 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "radareorg/radare2", number: "#27098", href: "https://github.com/radareorg/radare2/pull/27098" },
   { repo: "uutils/util-linux", number: "#670", href: "https://github.com/uutils/util-linux/pull/670" },
   { repo: "Tencent/teamai-cli", number: "#1260", href: "https://github.com/Tencent/teamai-cli/pull/1260" },
+  { repo: "uutils/awk", number: "#138", href: "https://github.com/uutils/awk/pull/138" },
 ];
 
 /**

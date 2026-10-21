@@ -1,0 +1,15 @@
+{
+  "repo": "uutils/awk",
+  "about": "A rewrite of the awk text-processing language in Rust, aiming to work the same as GNU awk.",
+  "stars": 29,
+  "prs": [
+    {
+      "number": 138,
+      "merged": "2026-10-21",
+      "title": "awk now counts fields right on indented and blank lines",
+      "broken": "Spaces at the start or end of a line counted as empty extra fields, and a blank line had one field instead of none. Field counts, first and last fields, and rebuilt lines came out wrong.",
+      "changed": "Spaces at the edges no longer make empty fields, and an empty line has no fields, whatever the separator.",
+      "matters": "Scripts that read columns from indented or blank lines get the same answers as GNU awk."
+    }
+  ]
+}
