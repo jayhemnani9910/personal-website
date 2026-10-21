@@ -1,0 +1,15 @@
+{
+  "repo": "raysan5/raylib",
+  "about": "A simple library for making games in C, popular with beginners and teachers.",
+  "stars": 35343,
+  "prs": [
+    {
+      "number": 6312,
+      "merged": "2026-10-21",
+      "title": "File type checks no longer read dots in folder names",
+      "broken": "When asked for a file's type, raylib looked for the last dot anywhere in the path. A file with no type inside a folder like \"assets.v2\" came back as type \".v2/readme\", so a game could pick the wrong loader.",
+      "changed": "It now looks only at the file's own name. Sound loading also handles a file with no type instead of crashing.",
+      "matters": "Games load their files correctly no matter how the folders are named."
+    }
+  ]
+}

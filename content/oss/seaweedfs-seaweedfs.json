@@ -4,6 +4,14 @@
   "stars": 35616,
   "prs": [
     {
+      "number": 11882,
+      "merged": "2026-10-21",
+      "title": "Conditional uploads now say \"not found\" for a missing file",
+      "broken": "An app can upload a file only if the server's copy still matches what it read. When the file was missing, SeaweedFS said \"precondition failed\" instead of \"not found\" like Amazon S3, so apps could not tell missing from changed.",
+      "changed": "Uploads, copies and multipart uploads with that check now answer \"not found\" when there is no current file. A changed file still gets \"precondition failed\".",
+      "matters": "Apps built for S3 react correctly when the file they expect is gone."
+    },
+    {
       "number": 11724,
       "merged": "2026-10-12",
       "title": "File transfer listings no longer hang or come back short",
