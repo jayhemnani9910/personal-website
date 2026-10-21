@@ -4,6 +4,14 @@
   "stars": 5577,
   "prs": [
     {
+      "number": 1254,
+      "merged": "2026-10-21",
+      "title": "Images that tools return now survive a session move",
+      "broken": "When a coding assistant read an image file, the picture came back inside the tool's result. Moving the session to another assistant dropped it, and the move still reported that nothing was lost.",
+      "changed": "The Claude Code and Codex readers now keep those images and put them in a message right after the tool results.",
+      "matters": "A moved session keeps the screenshots the assistant looked at."
+    },
+    {
       "number": 1110,
       "merged": "2026-10-14",
       "title": "Empty settings files no longer pile up in members' projects",
