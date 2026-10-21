@@ -337,6 +337,15 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "lightpanda-io/browser", number: "#4076", href: "https://github.com/lightpanda-io/browser/pull/4076" },
   { repo: "radareorg/radare2", number: "#27082", href: "https://github.com/radareorg/radare2/pull/27082" },
   { repo: "xerj-org/xerj", number: "#1744", href: "https://github.com/xerj-org/xerj/pull/1744" },
+  { repo: "Effect-TS/effect", number: "#9608", href: "https://github.com/Effect-TS/effect/pull/9608" },
+  { repo: "casdoor/casdoor", number: "#5918", href: "https://github.com/casdoor/casdoor/pull/5918" },
+  { repo: "casdoor/casdoor", number: "#5928", href: "https://github.com/casdoor/casdoor/pull/5928" },
+  { repo: "home-assistant/core", number: "#185796", href: "https://github.com/home-assistant/core/pull/185796" },
+  { repo: "lightpanda-io/browser", number: "#4040", href: "https://github.com/lightpanda-io/browser/pull/4040" },
+  { repo: "mvanhorn/last30days-skill", number: "#1304", href: "https://github.com/mvanhorn/last30days-skill/pull/1304" },
+  { repo: "radareorg/radare2", number: "#27069", href: "https://github.com/radareorg/radare2/pull/27069" },
+  { repo: "radareorg/radare2", number: "#27071", href: "https://github.com/radareorg/radare2/pull/27071" },
+  { repo: "lightpanda-io/browser", number: "#4077", href: "https://github.com/lightpanda-io/browser/pull/4077" },
 ];
 
 /**

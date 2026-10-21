@@ -4,6 +4,14 @@
   "stars": 91612,
   "prs": [
     {
+      "number": 185796,
+      "merged": "2026-10-20",
+      "title": "Time-left text no longer shows 60 minutes",
+      "broken": "The helpers that print how long ago or how long until something happens rounded the last unit but never carried it over. Results like \"1 hour 60 minutes\" or \"30 days\" for just under that appeared.",
+      "changed": "The rounding now happens first and carries into the next unit, so 59 minutes 45 seconds reads as 1 hour.",
+      "matters": "Automations and dashboards show durations that read correctly."
+    },
+    {
       "number": 185795,
       "merged": "2026-10-19",
       "title": "Smart lights get safe white levels for any color temperature",

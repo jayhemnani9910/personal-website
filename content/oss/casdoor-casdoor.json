@@ -4,6 +4,24 @@
   "stars": 14607,
   "prs": [
     {
+      "number": 5918,
+      "merged": "2026-10-20",
+      "title": "Sign-in behind a Traefik proxy now ends on the right site",
+      "broken": "With the documented Traefik setup, people who signed in landed on the login service's own address instead of the app they had opened.",
+      "changed": "After sign-in the service now sends the browser to the app's own address with the same path, and still blocks redirects to other sites.",
+      "matters": "People end up back in the app they opened.",
+      "top": true
+    },
+    {
+      "number": 5928,
+      "merged": "2026-10-20",
+      "title": "Sign-in no longer breaks on special characters in the request",
+      "broken": "On the sign-in page, some values from the app asking for login were pasted into the request unchanged. A plus sign turned into a space, a hash mark cut the request short, and a lone percent sign made sign-in fail.",
+      "changed": "Every one of those values is now encoded before it is sent, on the sign-in, third-party callback and security key steps.",
+      "matters": "Apps get back the same values they sent, so sign-in works with any state or nonce.",
+      "top": true
+    },
+    {
       "number": 5916,
       "merged": "2026-10-11",
       "title": "The service starts again with one common database setting",
@@ -17,7 +35,8 @@
       "title": "Signing out reaches every connected app again",
       "broken": "When someone signs out, the service tells connected apps to sign them out too. For some security settings that message was never sent, or apps rejected it.",
       "changed": "The sign-out message is now locked with the same method and key as the app's sign-in pass.",
-      "matters": "Signing out in one place signs you out of the connected apps, whichever security setting they use."
+      "matters": "Signing out in one place signs you out of the connected apps, whichever security setting they use.",
+      "top": true
     }
   ]
 }
