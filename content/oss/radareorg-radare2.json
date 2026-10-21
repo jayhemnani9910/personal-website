@@ -4,6 +4,22 @@
   "stars": 25104,
   "prs": [
     {
+      "number": 27070,
+      "merged": "2026-10-21",
+      "title": "The fletcher64 checksum now matches other tools",
+      "broken": "radare2 let the running sums of its fletcher64 checksum wrap around instead of reducing them the way the algorithm says, so anything longer than a few bytes got a different checksum than other tools give.",
+      "changed": "The sums are now reduced after every word, the same way the 32-bit version already worked.",
+      "matters": "A fletcher64 checksum from radare2 can be compared with one from any other tool."
+    },
+    {
+      "number": 27102,
+      "merged": "2026-10-21",
+      "title": "The 64-bit assembler now writes address calculations correctly",
+      "broken": "In 64-bit mode, the instruction that computes an address dropped the index register, its scale, the extra registers and the operand size, so the assembled code computed a different address.",
+      "changed": "It now goes through the same encoder as the memory moves fixed just before it, and matches the GNU assembler on 175 tested forms.",
+      "matters": "Address calculations written inside radare2 assemble to what was typed."
+    },
+    {
       "number": 27097,
       "merged": "2026-10-21",
       "title": "The 64-bit assembler now writes the right memory moves",

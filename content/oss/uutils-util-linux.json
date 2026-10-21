@@ -1,0 +1,15 @@
+{
+  "repo": "uutils/util-linux",
+  "about": "A rewrite of Linux system tools like mount and hexdump in Rust, aiming to match util-linux.",
+  "stars": 225,
+  "prs": [
+    {
+      "number": 671,
+      "merged": "2026-10-21",
+      "title": "mountpoint now checks the right folder and exits like util-linux",
+      "broken": "The mountpoint tool compared a path with the parent of the folder it was run from, not the path's own parent, so the answer depended on where you ran it. It also always exited with success.",
+      "changed": "On Linux it now asks the kernel's mount list, so bind mounts and mounts on files are found, and it falls back to the old check without /proc. Exit codes match util-linux.",
+      "matters": "Scripts that use mountpoint get the right answer and exit code."
+    }
+  ]
+}

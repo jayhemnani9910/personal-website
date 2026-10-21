@@ -349,6 +349,11 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "radareorg/radare2", number: "#27097", href: "https://github.com/radareorg/radare2/pull/27097" },
   { repo: "raysan5/raylib", number: "#6312", href: "https://github.com/raysan5/raylib/pull/6312" },
   { repo: "seaweedfs/seaweedfs", number: "#11882", href: "https://github.com/seaweedfs/seaweedfs/pull/11882" },
+  { repo: "Tencent/teamai-cli", number: "#1254", href: "https://github.com/Tencent/teamai-cli/pull/1254" },
+  { repo: "radareorg/radare2", number: "#27070", href: "https://github.com/radareorg/radare2/pull/27070" },
+  { repo: "radareorg/radare2", number: "#27102", href: "https://github.com/radareorg/radare2/pull/27102" },
+  { repo: "uutils/tar", number: "#409", href: "https://github.com/uutils/tar/pull/409" },
+  { repo: "uutils/util-linux", number: "#671", href: "https://github.com/uutils/util-linux/pull/671" },
 ];
 
 /**

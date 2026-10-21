@@ -1,0 +1,15 @@
+{
+  "repo": "uutils/tar",
+  "about": "A rewrite of the tar archive tool in Rust, aiming to work the same as GNU tar.",
+  "stars": 52,
+  "prs": [
+    {
+      "number": 409,
+      "merged": "2026-10-21",
+      "title": "Archive listings now show link targets and local times",
+      "broken": "The verbose archive listing printed times in UTC, showed a hard link as an empty file, and left out where links point. GNU tar shows local time and the link targets.",
+      "changed": "Listings now use the local time zone, mark hard links, and print the target of every link the way GNU tar does.",
+      "matters": "People reading a listing see the same thing they would with GNU tar."
+    }
+  ]
+}
