@@ -354,6 +354,7 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "radareorg/radare2", number: "#27102", href: "https://github.com/radareorg/radare2/pull/27102" },
   { repo: "uutils/tar", number: "#409", href: "https://github.com/uutils/tar/pull/409" },
   { repo: "uutils/util-linux", number: "#671", href: "https://github.com/uutils/util-linux/pull/671" },
+  { repo: "radareorg/radare2", number: "#27098", href: "https://github.com/radareorg/radare2/pull/27098" },
 ];
 
 /**
