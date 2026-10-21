@@ -4,6 +4,14 @@
   "stars": 25104,
   "prs": [
     {
+      "number": 27098,
+      "merged": "2026-10-21",
+      "title": "radiff2 now shows the real file names in its unified diff",
+      "broken": "When you compared two files as a unified diff, the header showed the names of hidden temporary files instead of the files you gave it.",
+      "changed": "The diff now labels each side with the name you passed in. Other tools that use the same diff code behave as before.",
+      "matters": "The output reads like a normal diff, so you can tell which side is which and feed it to other tools."
+    },
+    {
       "number": 27070,
       "merged": "2026-10-21",
       "title": "The fletcher64 checksum now matches other tools",
