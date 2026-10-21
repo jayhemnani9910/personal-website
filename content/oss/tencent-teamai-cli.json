@@ -4,6 +4,14 @@
   "stars": 5577,
   "prs": [
     {
+      "number": 1260,
+      "merged": "2026-10-21",
+      "title": "Moving a Codex session keeps a tool round's results together",
+      "broken": "When a session moved from Codex to Claude Code, a web search or a hidden system message that fell between two tool results split them apart, and the next result got stuck to the image message.",
+      "changed": "Only items that really start a new message now end a round of tool results. Web searches and system messages in between are skipped.",
+      "matters": "The moved session keeps the order Claude Code expects, so it opens cleanly."
+    },
+    {
       "number": 1254,
       "merged": "2026-10-21",
       "title": "Images that tools return now survive a session move",
