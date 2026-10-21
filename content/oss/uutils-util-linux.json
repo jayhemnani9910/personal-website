@@ -4,6 +4,14 @@
   "stars": 225,
   "prs": [
     {
+      "number": 670,
+      "merged": "2026-10-21",
+      "title": "hexdump now reports the right last offset when it skips past the end",
+      "broken": "When told to skip more bytes than the files hold, hexdump printed the amount you asked to skip as the last offset. The original tool prints the real size of the input, and nothing at all for an empty file.",
+      "changed": "Files that the skip covers whole are now counted by their real size. Input that can't be measured, like a pipe or a device, still reports the requested skip.",
+      "matters": "Scripts that read hexdump's offsets get the same numbers as with the original tool."
+    },
+    {
       "number": 671,
       "merged": "2026-10-21",
       "title": "mountpoint now checks the right folder and exits like util-linux",
