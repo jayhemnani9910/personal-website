@@ -4,6 +4,22 @@
   "stars": 36768,
   "prs": [
     {
+      "number": 4113,
+      "merged": "2026-10-22",
+      "title": "Scripts can now replace text inside form fields",
+      "broken": "Text boxes were missing a standard way to swap out part of their text. Editors, input masks and helpers that insert text at the cursor crashed on pages run in Lightpanda.",
+      "changed": "Text boxes and text areas now have it, following the web standard, including where the selection ends up afterwards.",
+      "matters": "Pages with rich text boxes and formatted inputs work for bots the same as in Chrome."
+    },
+    {
+      "number": 4112,
+      "merged": "2026-10-22",
+      "title": "Pages can now pick the second item of a kind in a list",
+      "broken": "Web pages can find, say, the second item in a list that has a given style. Lightpanda did not understand that form of the rule, threw an error, and the page script stopped.",
+      "changed": "The rule now works for counting from the start and from the end, and matches what Chrome finds.",
+      "matters": "Sites that use it to find or style elements keep running instead of breaking halfway."
+    },
+    {
       "number": 4077,
       "merged": "2026-10-21",
       "title": "Cookies are now sent in the order browsers send them",

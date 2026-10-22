@@ -358,6 +358,11 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "uutils/util-linux", number: "#670", href: "https://github.com/uutils/util-linux/pull/670" },
   { repo: "Tencent/teamai-cli", number: "#1260", href: "https://github.com/Tencent/teamai-cli/pull/1260" },
   { repo: "uutils/awk", number: "#138", href: "https://github.com/uutils/awk/pull/138" },
+  { repo: "seaweedfs/seaweedfs", number: "#11856", href: "https://github.com/seaweedfs/seaweedfs/pull/11856" },
+  { repo: "YouROK/TorrServer", number: "#923", href: "https://github.com/YouROK/TorrServer/pull/923" },
+  { repo: "YouROK/TorrServer", number: "#928", href: "https://github.com/YouROK/TorrServer/pull/928" },
+  { repo: "lightpanda-io/browser", number: "#4112", href: "https://github.com/lightpanda-io/browser/pull/4112" },
+  { repo: "lightpanda-io/browser", number: "#4113", href: "https://github.com/lightpanda-io/browser/pull/4113" },
 ];
 
 /**

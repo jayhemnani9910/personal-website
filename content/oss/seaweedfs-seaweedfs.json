@@ -4,6 +4,14 @@
   "stars": 35616,
   "prs": [
     {
+      "number": 11856,
+      "merged": "2026-10-21",
+      "title": "Asking for part of a file's details now gets the right answer",
+      "broken": "Apps can ask for just the details of a file, limited to a slice of it. SeaweedFS ignored the slice and described the whole file, and a slice past the end still got an OK.",
+      "changed": "Those requests now report the size of the slice asked for, the same way a download of that slice does, and a slice past the end gets the error Amazon S3 gives.",
+      "matters": "Apps built for S3 that check a range before downloading get the same answers they would from Amazon."
+    },
+    {
       "number": 11882,
       "merged": "2026-10-21",
       "title": "Conditional uploads now say \"not found\" for a missing file",
