@@ -1,0 +1,23 @@
+{
+  "repo": "bjarneo/cliamp",
+  "about": "A music player for the terminal, inspired by Winamp.",
+  "stars": 4509,
+  "prs": [
+    {
+      "number": 643,
+      "merged": "2026-10-22",
+      "title": "Playlists with file:// links now play",
+      "broken": "Players like VLC save tracks outside the playlist's folder as file:// links. cliamp read those as paths inside the playlist's folder, so the tracks never opened.",
+      "changed": "A local file:// link now turns into the real path on disk, with spaces and other escaped characters decoded.",
+      "matters": "Playlists saved by other players open and play in cliamp."
+    },
+    {
+      "number": 644,
+      "merged": "2026-10-22",
+      "title": "Radio and IPTV playlists show the right station names",
+      "broken": "Radio and IPTV playlists put details such as a logo or group before the station name. cliamp cut the name at the first comma, so a station could show as a broken scrap of those details.",
+      "changed": "The name now starts after the first comma outside quotes, and durations like 245.7 seconds are read too.",
+      "matters": "Station lists show real names and lengths, not leftover pieces of tags."
+    }
+  ]
+}

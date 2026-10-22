@@ -1,0 +1,15 @@
+{
+  "repo": "Graphify-Labs/graphify",
+  "about": "A tool that turns a codebase, with its docs, configs and schemas, into a knowledge graph that coding assistants can query.",
+  "stars": 132807,
+  "prs": [
+    {
+      "number": 4596,
+      "merged": "2026-10-22",
+      "title": "Maven projects no longer get made-up dependencies",
+      "broken": "graphify read every dependency listed anywhere in a Maven pom file, including version pins and plugin dependencies. A parent project that only pins versions showed up as depending on all its modules.",
+      "changed": "Only the dependencies a project really declares, at the top level or in a profile, become links in the graph.",
+      "matters": "The graph of a multi-module Java build shows how its parts really depend on each other."
+    }
+  ]
+}

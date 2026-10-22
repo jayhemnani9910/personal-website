@@ -377,6 +377,15 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "uutils/shadow", number: "#339", href: "https://github.com/uutils/shadow/pull/339" },
   { repo: "uutils/shadow", number: "#341", href: "https://github.com/uutils/shadow/pull/341" },
   { repo: "uutils/tar", number: "#411", href: "https://github.com/uutils/tar/pull/411" },
+  {
+    repo: "Graphify-Labs/graphify",
+    number: "#4596",
+    href: "https://github.com/Graphify-Labs/graphify/pull/4596",
+    landed: "https://github.com/Graphify-Labs/graphify/commit/cc488b90764234c2ee8846bff80db7ce1be2db28",
+  },
+  { repo: "bjarneo/cliamp", number: "#643", href: "https://github.com/bjarneo/cliamp/pull/643" },
+  { repo: "bjarneo/cliamp", number: "#644", href: "https://github.com/bjarneo/cliamp/pull/644" },
+  { repo: "gtsteffaniak/filebrowser", number: "#3234", href: "https://github.com/gtsteffaniak/filebrowser/pull/3234" },
 ];
 
 /**
