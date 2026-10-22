@@ -10,6 +10,14 @@
       "broken": "When asked for a file's type, raylib looked for the last dot anywhere in the path. A file with no type inside a folder like \"assets.v2\" came back as type \".v2/readme\", so a game could pick the wrong loader.",
       "changed": "It now looks only at the file's own name. Sound loading also handles a file with no type instead of crashing.",
       "matters": "Games load their files correctly no matter how the folders are named."
+    },
+    {
+      "number": 6317,
+      "merged": "2026-10-22",
+      "title": "Blending between two rotations no longer takes the long way round",
+      "broken": "raylib's quick rotation blend missed that two rotations can point the same way with opposite signs. It then turned the long way round, and blending a rotation with its mirror copy gave an empty result.",
+      "changed": "It now flips the second rotation first in that case, the same check the smooth blend already did, so the two agree.",
+      "matters": "Animations and cameras that blend rotations no longer spin the wrong way or break."
     }
   ]
 }

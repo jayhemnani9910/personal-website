@@ -261,6 +261,22 @@
       "broken": "For add, sub, xor, cmp and similar instructions on the extra 64-bit registers in their smaller sizes, the assembler dropped a prefix byte. The instruction quietly used a different, older register instead.",
       "changed": "It now writes that byte whenever one of those registers is used, checked against the GNU assembler on 80 cases.",
       "matters": "Patching code with these instructions now writes what was typed."
+    },
+    {
+      "number": 27123,
+      "merged": "2026-10-22",
+      "title": "The x86 assembler now gets math with memory right",
+      "broken": "For add, sub, xor, cmp and similar instructions between a register and memory, the assembler wrote the wrong instruction. It mixed up the extra 64-bit registers, dropped part of 32-bit addresses, and refused negative offsets.",
+      "changed": "These instructions now use the same shared address encoder as mov and lea, checked against the GNU assembler.",
+      "matters": "Patching code with these common instructions now writes what was typed."
+    },
+    {
+      "number": 27124,
+      "merged": "2026-10-22",
+      "title": "The x86 assembler learned the bit test instructions",
+      "broken": "The assembler could not write bt, bts, btr or btc at all. Typing one in any mode just gave \"Cannot assemble\".",
+      "changed": "I added all four, on registers and on memory, in 16, 32 and 64-bit code. After review it also rejects bad inputs, like the wrong number of operands. Checked against the GNU assembler on over 4,000 forms.",
+      "matters": "People patching binaries can now use these instructions instead of typing raw bytes."
     }
   ]
 }

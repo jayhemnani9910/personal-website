@@ -108,11 +108,12 @@ export const FEATURED: FeaturedProject[] = [
  * verified claim drifts into an unverified one. Sourced from
  * the job-search MASTER_PROFILE.md section 7, which is the canonical list.
  *
- * modular/modular #6954, #6967 and #7235 show as Closed on GitHub rather than
+ * modular/modular #6954, #6967, #7235 and #7273 show as Closed on GitHub rather than
  * Merged, because Modular lands outside contributions with Copybara instead of
  * pressing merge. They landed in commits 39b94179d6c9c5be6334888f119fcb51469c3ad0
- * on 2026-09-02, 71437b1e23b7aae926295767f38162e300608953 on 2026-09-17 and
- * 189bd1393e2c35bfe777c97b1b3c8b1a31be8f8e on 2026-10-08, which the modularbot
+ * on 2026-09-02, 71437b1e23b7aae926295767f38162e300608953 on 2026-09-17,
+ * 189bd1393e2c35bfe777c97b1b3c8b1a31be8f8e on 2026-10-08 and
+ * 8ad5954acde7c96caf8a12e8b96abb75e211730f on 2026-10-22, which the modularbot
  * comments on the PRs state, so those commits are linked as
  * `landed`. That is also why they do not appear in MERGED_PRS_SEARCH below.
  *
@@ -363,6 +364,15 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "YouROK/TorrServer", number: "#928", href: "https://github.com/YouROK/TorrServer/pull/928" },
   { repo: "lightpanda-io/browser", number: "#4112", href: "https://github.com/lightpanda-io/browser/pull/4112" },
   { repo: "lightpanda-io/browser", number: "#4113", href: "https://github.com/lightpanda-io/browser/pull/4113" },
+  {
+    repo: "modular/modular",
+    number: "#7273",
+    href: "https://github.com/modular/modular/pull/7273",
+    landed: "https://github.com/modular/modular/commit/8ad5954acde7c96caf8a12e8b96abb75e211730f",
+  },
+  { repo: "radareorg/radare2", number: "#27123", href: "https://github.com/radareorg/radare2/pull/27123" },
+  { repo: "radareorg/radare2", number: "#27124", href: "https://github.com/radareorg/radare2/pull/27124" },
+  { repo: "raysan5/raylib", number: "#6317", href: "https://github.com/raysan5/raylib/pull/6317" },
 ];
 
 /**

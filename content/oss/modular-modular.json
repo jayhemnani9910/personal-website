@@ -9,7 +9,8 @@
       "title": "Splitting text into lines no longer drops a line",
       "broken": "When text mixed old-style Mac line breaks with normal ones, Mojo's split-into-lines function silently lost a line. \"a, b, c\" came back as \"a, c\".",
       "changed": "I fixed a check meant to skip only empty pieces, so it no longer skips real lines.",
-      "matters": "Programs reading text from different systems get every line, the same as Python gives."
+      "matters": "Programs reading text from different systems get every line, the same as Python gives.",
+      "top": true
     },
     {
       "number": 6967,
@@ -25,7 +26,17 @@
       "title": "A stuck test now fails instead of hanging forever",
       "broken": "Mojo's helper for testing deliberate crashes waited forever if the code froze instead of crashing. The whole test run stalled with no hint of which test was stuck.",
       "changed": "I added a time limit, 60 seconds by default, after which it stops the stuck code and fails that test with its output.",
-      "matters": "Developers get a clear failure they can fix, instead of a frozen test run killed with no explanation."
+      "matters": "Developers get a clear failure they can fix, instead of a frozen test run killed with no explanation.",
+      "top": true
+    },
+    {
+      "number": 7273,
+      "merged": "2026-10-22",
+      "title": "Raising a number to a huge whole power now gives the right answer",
+      "broken": "In Mojo, raising a decimal number to a whole power above about two billion, or to infinity, always gave 1. So 0.5 to the power of 4 billion gave 1 instead of 0, and could even crash.",
+      "changed": "Powers that fit the fast path still use it. Bigger or infinite ones now go through a general formula that handles them correctly, with tests for both sizes of number.",
+      "matters": "Math code that uses very large powers gets real results instead of a silent 1 or a crash.",
+      "top": true
     }
   ]
 }
