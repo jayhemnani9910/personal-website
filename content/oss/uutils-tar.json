@@ -4,6 +4,14 @@
   "stars": 52,
   "prs": [
     {
+      "number": 411,
+      "merged": "2026-10-22",
+      "title": "Archives with read-only folders now extract",
+      "broken": "tar created a read-only folder with its final permissions before the files inside it, so writing those files failed and extraction stopped. GNU tar extracts them.",
+      "changed": "Folders now get their permissions after everything inside them is written, deepest folders first.",
+      "matters": "Archives of read-only folders unpack the same way they do with GNU tar."
+    },
+    {
       "number": 409,
       "merged": "2026-10-21",
       "title": "Archive listings now show link targets and local times",

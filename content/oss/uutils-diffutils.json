@@ -1,0 +1,15 @@
+{
+  "repo": "uutils/diffutils",
+  "about": "A rewrite of the diff and cmp tools in Rust, aiming to work the same as GNU diffutils.",
+  "stars": 280,
+  "prs": [
+    {
+      "number": 311,
+      "merged": "2026-10-22",
+      "title": "Context diffs now mark whole changed blocks",
+      "broken": "When a block of lines was replaced by a block of a different length, the context format marked only some lines as changed and showed the rest as plain deletions or additions. GNU diff marks the whole block.",
+      "changed": "Every line in a changed block now gets the change mark, as in GNU diff.",
+      "matters": "Context diffs match GNU's output, so tools that read them see one change, not a split one."
+    }
+  ]
+}
