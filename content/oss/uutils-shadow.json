@@ -1,0 +1,23 @@
+{
+  "repo": "uutils/shadow",
+  "about": "A rewrite of the Linux user account tools (useradd, usermod, passwd and others) in Rust, aiming to work the same as GNU shadow.",
+  "stars": 17,
+  "prs": [
+    {
+      "number": 341,
+      "merged": "2026-10-22",
+      "title": "useradd now gives the right exit code for a bad user name",
+      "broken": "useradd exited with code 3 when a user name was not allowed. The manual says it should exit with 19, and GNU useradd does.",
+      "changed": "A rejected user name now exits with 19, and other errors keep their codes.",
+      "matters": "Scripts that check why useradd failed get the answer the manual promises."
+    },
+    {
+      "number": 339,
+      "merged": "2026-10-22",
+      "title": "useradd and usermod now accept -1 to clear expiry settings",
+      "broken": "The manuals say -1 clears the account expiry date and the inactive days, but both tools rejected -1 as an unknown option.",
+      "changed": "The expiry and inactive options now take -1 and clear the field, as in GNU shadow.",
+      "matters": "Commands and scripts written for GNU shadow work here unchanged."
+    }
+  ]
+}

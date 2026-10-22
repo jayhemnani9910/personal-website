@@ -373,6 +373,10 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "radareorg/radare2", number: "#27123", href: "https://github.com/radareorg/radare2/pull/27123" },
   { repo: "radareorg/radare2", number: "#27124", href: "https://github.com/radareorg/radare2/pull/27124" },
   { repo: "raysan5/raylib", number: "#6317", href: "https://github.com/raysan5/raylib/pull/6317" },
+  { repo: "uutils/diffutils", number: "#311", href: "https://github.com/uutils/diffutils/pull/311" },
+  { repo: "uutils/shadow", number: "#339", href: "https://github.com/uutils/shadow/pull/339" },
+  { repo: "uutils/shadow", number: "#341", href: "https://github.com/uutils/shadow/pull/341" },
+  { repo: "uutils/tar", number: "#411", href: "https://github.com/uutils/tar/pull/411" },
 ];
 
 /**
