@@ -127,12 +127,12 @@ describe("home data", () => {
     expect(url.searchParams.get("type")).toBe("pullrequests");
     const q = url.searchParams.get("q")!;
     for (const pr of MERGED_PRS) expect(q).toContain(`repo:${pr.repo}`);
-    // #6954, #6967 and #7235 landed through Copybara, so GitHub shows them
+    // #6954, #6967, #7235 and #7273 landed through Copybara, so GitHub shows them
     // closed and the search cannot find them: the label must not claim them all.
     // Worked out from the list, not pinned, so adding a merged PR does not mean
     // editing this test.
     const landed = MERGED_PRS.filter((pr) => pr.landed).map((pr) => pr.number);
-    expect(landed.sort()).toEqual(["#6954", "#6967", "#7235"]);
+    expect(landed.sort()).toEqual(["#6954", "#6967", "#7235", "#7273"]);
     expect(MERGED_PRS_SEARCH_LABEL).toBe(`${MERGED_PRS.length - landed.length} of ${MERGED_PRS.length}`);
     expect(MERGED_PRS.find((pr) => pr.number === "#6954")?.landed).toMatch(/^https:\/\/github\.com\/modular\/modular\/commit\//);
   });
