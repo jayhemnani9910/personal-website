@@ -1,7 +1,7 @@
 {
   "repo": "gtsteffaniak/filebrowser",
   "about": "A web app for browsing, sharing and managing the files on a server from any browser.",
-  "stars": 8827,
+  "stars": 8867,
   "prs": [
     {
       "number": 3130,
@@ -18,6 +18,14 @@
       "broken": "When someone used a share link to upload or delete files, the Activity Viewer showed nothing. Only renames and downloads were logged.",
       "changed": "Uploads, deletes and bulk deletes made through a share are now logged under the share owner, with the share they came through.",
       "matters": "Owners can see what visitors did to their files through a share, not just half of it."
+    },
+    {
+      "number": 3234,
+      "merged": "2026-10-22",
+      "title": "Unpacking a tar archive keeps hard-linked files",
+      "broken": "When a .tar.gz held files that were hard links to each other, unpacking it kept only the first name and silently dropped the rest, while still reporting success.",
+      "changed": "Each hard link is now unpacked as a copy of the file it points to, as long as that file came from the same archive.",
+      "matters": "Folders unpack with every file in place, not with some quietly missing."
     }
   ]
 }
