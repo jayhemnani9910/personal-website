@@ -393,6 +393,7 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "uutils/findutils", number: "#915", href: "https://github.com/uutils/findutils/pull/915" },
   { repo: "lalinsky/zio", number: "#851", href: "https://github.com/lalinsky/zio/pull/851" },
   { repo: "lightpanda-io/browser", number: "#4157", href: "https://github.com/lightpanda-io/browser/pull/4157" },
+  { repo: "MHSanaei/3x-ui", number: "#6834", href: "https://github.com/MHSanaei/3x-ui/pull/6834" },
 ];
 
 /**
