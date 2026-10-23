@@ -4,6 +4,14 @@
   "stars": 36886,
   "prs": [
     {
+      "number": 4157,
+      "merged": "2026-10-23",
+      "title": "Number fields now flag values that are off their step",
+      "broken": "A number field with a step, like 0.01 for cents, never reported a value such as 1.005 as invalid. Form checks that rely on it let bad values through.",
+      "changed": "I made the browser check whether the value lands on a step, with room for rounding so large values like 1234567.89 still count as valid, and made the step up and step down buttons use the same check.",
+      "matters": "Forms with number fields validate the same way they do in Chrome."
+    },
+    {
       "number": 4113,
       "merged": "2026-10-22",
       "title": "Scripts can now replace text inside form fields",

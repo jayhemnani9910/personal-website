@@ -391,6 +391,8 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "YouROK/TorrServer", number: "#934", href: "https://github.com/YouROK/TorrServer/pull/934" },
   { repo: "uutils/awk", number: "#139", href: "https://github.com/uutils/awk/pull/139" },
   { repo: "uutils/findutils", number: "#915", href: "https://github.com/uutils/findutils/pull/915" },
+  { repo: "lalinsky/zio", number: "#851", href: "https://github.com/lalinsky/zio/pull/851" },
+  { repo: "lightpanda-io/browser", number: "#4157", href: "https://github.com/lightpanda-io/browser/pull/4157" },
 ];
 
 /**
