@@ -37,6 +37,14 @@
       "changed": "The combined list now sorts files the same way the stream does before numbering them.",
       "matters": "Picking an episode from the combined playlist plays that episode.",
       "top": true
+    },
+    {
+      "number": 934,
+      "merged": "2026-10-23",
+      "title": "Resetting settings turns the network services back on",
+      "broken": "Resetting settings to defaults stopped media sharing, network discovery and the search service and started none of them. The defaults said discovery was on, but the server was not visible until a restart.",
+      "changed": "A reset now restarts each service that the new settings turn on, the same way saving settings does.",
+      "matters": "After a reset the server shows up on the network without a restart."
     }
   ]
 }

@@ -10,6 +10,14 @@
       "broken": "Spaces at the start or end of a line counted as empty extra fields, and a blank line had one field instead of none. Field counts, first and last fields, and rebuilt lines came out wrong.",
       "changed": "Spaces at the edges no longer make empty fields, and an empty line has no fields, whatever the separator.",
       "matters": "Scripts that read columns from indented or blank lines get the same answers as GNU awk."
+    },
+    {
+      "number": 139,
+      "merged": "2026-10-23",
+      "title": "A bare pattern like /re/ now matches the line",
+      "broken": "A pattern written on its own, the most common awk program, never matched anything. awk '/b/' printed nothing, and !/a/ printed every line.",
+      "changed": "A pattern on its own is now checked against the whole line, the same as writing $0 ~ /re/.",
+      "matters": "Everyday one-line awk filters print the lines GNU awk prints."
     }
   ]
 }
