@@ -1,7 +1,7 @@
 {
   "repo": "lightpanda-io/browser",
   "about": "A fast web browser that runs without a screen, made for bots and AI agents that read websites.",
-  "stars": 36768,
+  "stars": 36886,
   "prs": [
     {
       "number": 4113,
@@ -269,6 +269,14 @@
       "broken": "When text started with certain marker bytes, the browser quietly switched to a different text encoding than the one the page asked for. Chrome only drops a marker that matches the chosen encoding.",
       "changed": "The browser now sticks to the requested encoding and only removes a matching marker, the way Chrome does.",
       "matters": "Pages that decode bytes into text get the same result as in Chrome, instead of garbled or wrongly shortened text."
+    },
+    {
+      "number": 4134,
+      "merged": "2026-10-23",
+      "title": "Changing part of a link's address keeps the rest of it",
+      "broken": "Setting one part of a link's address, like its port, dropped the user name and password, and bad values such as a port with letters were kept. Chrome keeps the rest and ignores bad values.",
+      "changed": "Each change now goes through the same address parser the browser already uses elsewhere, so bad values leave the link unchanged.",
+      "matters": "Pages that edit links by parts get the same addresses they would in Chrome."
     }
   ]
 }

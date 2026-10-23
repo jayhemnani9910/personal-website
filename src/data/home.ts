@@ -386,6 +386,8 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "bjarneo/cliamp", number: "#643", href: "https://github.com/bjarneo/cliamp/pull/643" },
   { repo: "bjarneo/cliamp", number: "#644", href: "https://github.com/bjarneo/cliamp/pull/644" },
   { repo: "gtsteffaniak/filebrowser", number: "#3234", href: "https://github.com/gtsteffaniak/filebrowser/pull/3234" },
+  { repo: "uutils/findutils", number: "#914", href: "https://github.com/uutils/findutils/pull/914" },
+  { repo: "lightpanda-io/browser", number: "#4134", href: "https://github.com/lightpanda-io/browser/pull/4134" },
 ];
 
 /**
