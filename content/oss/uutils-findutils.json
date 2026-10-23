@@ -1,0 +1,15 @@
+{
+  "repo": "uutils/findutils",
+  "about": "A rewrite of the find and xargs tools in Rust, aiming to work the same as GNU findutils.",
+  "stars": 653,
+  "prs": [
+    {
+      "number": 914,
+      "merged": "2026-10-22",
+      "title": "Date filters now need a file to be strictly newer",
+      "broken": "Asking find for files newer than a date also matched files with exactly that time, and dates before 1970 lost their minus sign, so a file from 1960 counted as newer than 1965.",
+      "changed": "A file now has to be strictly newer than the date, and times before 1970 compare the right way round.",
+      "matters": "Searches by date return the same files GNU find does."
+    }
+  ]
+}
