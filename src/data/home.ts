@@ -388,6 +388,9 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "gtsteffaniak/filebrowser", number: "#3234", href: "https://github.com/gtsteffaniak/filebrowser/pull/3234" },
   { repo: "uutils/findutils", number: "#914", href: "https://github.com/uutils/findutils/pull/914" },
   { repo: "lightpanda-io/browser", number: "#4134", href: "https://github.com/lightpanda-io/browser/pull/4134" },
+  { repo: "YouROK/TorrServer", number: "#934", href: "https://github.com/YouROK/TorrServer/pull/934" },
+  { repo: "uutils/awk", number: "#139", href: "https://github.com/uutils/awk/pull/139" },
+  { repo: "uutils/findutils", number: "#915", href: "https://github.com/uutils/findutils/pull/915" },
 ];
 
 /**

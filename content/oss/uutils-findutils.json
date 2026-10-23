@@ -10,6 +10,14 @@
       "broken": "Asking find for files newer than a date also matched files with exactly that time, and dates before 1970 lost their minus sign, so a file from 1960 counted as newer than 1965.",
       "changed": "A file now has to be strictly newer than the date, and times before 1970 compare the right way round.",
       "matters": "Searches by date return the same files GNU find does."
+    },
+    {
+      "number": 915,
+      "merged": "2026-10-23",
+      "title": "Date filters accept any date the date command understands",
+      "broken": "find's newer-than-a-date filters only took two fixed date layouts and read them as UTC. Common forms like yesterday, 1 day ago or an ISO date were rejected, and local times came out hours off.",
+      "changed": "find now reads these dates with the same parser the date and touch commands use, in local time.",
+      "matters": "Date searches that work with GNU find work here too, and land on the right hour."
     }
   ]
 }
