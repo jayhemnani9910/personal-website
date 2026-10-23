@@ -4,6 +4,15 @@
   "stars": 48301,
   "prs": [
     {
+      "number": 6834,
+      "merged": "2026-10-23",
+      "title": "A server that used up its traffic limit comes back on at its reset",
+      "broken": "A server with a traffic limit is switched off when it uses the limit up. Its scheduled reset, say monthly, only zeroed the counter and never switched it back on, so it stayed off for good.",
+      "changed": "The scheduled reset now switches the server back on if its own limit is what turned it off. One switched off by hand, or one that has expired, stays off.",
+      "matters": "Monthly limits work as expected: the server is back each new period without the admin turning it on by hand.",
+      "top": true
+    },
+    {
       "number": 6809,
       "merged": "2026-10-14",
       "title": "Imported vmess links now keep their seed and disguise settings",
@@ -17,7 +26,8 @@
       "title": "Imported vmess links no longer lose settings the server needs",
       "broken": "The panel can import connection links from other servers. For vmess links using the XHTTP mode, its server side read only three of the link's settings. Some it skipped must match the server, so the connection failed.",
       "changed": "It now reads every one of those settings, as the panel's web page and the other link types already did.",
-      "matters": "Servers imported from vmess links connect instead of failing."
+      "matters": "Servers imported from vmess links connect instead of failing.",
+      "top": true
     },
     {
       "number": 6781,
@@ -25,7 +35,8 @@
       "title": "Subscription links work again for some older servers",
       "broken": "This panel gives users a subscription with their connection settings. For servers set up by older versions, or added through the API, it left one setting blank, and the app refused to load the whole connection.",
       "changed": "A blank value is now filled in as 'none', the default the rest of the panel already used.",
-      "matters": "Users of those servers can connect again without the admin re-saving anything."
+      "matters": "Users of those servers can connect again without the admin re-saving anything.",
+      "top": true
     }
   ]
 }
