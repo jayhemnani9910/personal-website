@@ -1,0 +1,15 @@
+{
+  "repo": "lalinsky/zio",
+  "about": "An async I/O framework for the Zig programming language.",
+  "stars": 680,
+  "prs": [
+    {
+      "number": 851,
+      "merged": "2026-10-23",
+      "title": "IP addresses are now read strictly, including IPv4 inside IPv6",
+      "broken": "The address reader accepted broken addresses, like one with nine groups, and quietly turned them into something else. It also refused addresses like ::ffff:1.2.3.4, which the library itself prints for IPv4 connections on a dual-stack socket.",
+      "changed": "I rewrote it to follow the IPv6 address standard and the usual rules for IPv4, so bad input is rejected and IPv4 inside IPv6 is read correctly.",
+      "matters": "Programs get an error for a bad address instead of connecting somewhere unexpected, and an address the library printed can always be read back."
+    }
+  ]
+}
