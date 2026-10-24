@@ -4,6 +4,14 @@
   "stars": 48301,
   "prs": [
     {
+      "number": 6918,
+      "merged": "2026-10-24",
+      "title": "Private secure DNS servers are no longer blocked",
+      "broken": "When the panel's DNS server was a private secure DNS address, the panel opened the plain DNS port for it. Secure DNS uses another port, so the rule blocking private addresses still dropped every lookup.",
+      "changed": "For secure DNS addresses with no port given, the panel now opens the port secure DNS really uses. A port you type yourself still wins.",
+      "matters": "People who run their own secure DNS server at home, like AdGuard Home or Pi-hole, can use it from the panel."
+    },
+    {
       "number": 6834,
       "merged": "2026-10-23",
       "title": "A server that used up its traffic limit comes back on at its reset",

@@ -408,6 +408,12 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "uutils/diffutils", number: "#309", href: "https://github.com/uutils/diffutils/pull/309" },
   { repo: "uutils/grep", number: "#146", href: "https://github.com/uutils/grep/pull/146" },
   { repo: "uutils/parse_datetime", number: "#343", href: "https://github.com/uutils/parse_datetime/pull/343" },
+  { repo: "MHSanaei/3x-ui", number: "#6918", href: "https://github.com/MHSanaei/3x-ui/pull/6918" },
+  { repo: "lightpanda-io/browser", number: "#4183", href: "https://github.com/lightpanda-io/browser/pull/4183" },
+  { repo: "seaweedfs/seaweedfs", number: "#12026", href: "https://github.com/seaweedfs/seaweedfs/pull/12026" },
+  { repo: "seaweedfs/seaweedfs", number: "#12027", href: "https://github.com/seaweedfs/seaweedfs/pull/12027" },
+  { repo: "uutils/sed", number: "#612", href: "https://github.com/uutils/sed/pull/612" },
+  { repo: "uutils/util-linux", number: "#673", href: "https://github.com/uutils/util-linux/pull/673" },
 ];
 
 /**

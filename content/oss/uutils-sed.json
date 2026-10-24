@@ -1,0 +1,15 @@
+{
+  "repo": "uutils/sed",
+  "about": "A rewrite of the sed text editing tool in Rust, aiming to work the same as GNU sed.",
+  "stars": 111,
+  "prs": [
+    {
+      "number": 612,
+      "merged": "2026-10-24",
+      "title": "Word start and word end markers now work on their own",
+      "broken": "The markers for the start and end of a word only worked when something else made the pattern a full search. On their own, sed looked for real angle brackets, unlike GNU sed.",
+      "changed": "These two markers now always turn on full pattern search, like the other word boundary markers already did.",
+      "matters": "Find and replace with whole words gives the same result as GNU sed."
+    }
+  ]
+}

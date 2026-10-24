@@ -4,6 +4,14 @@
   "stars": 36886,
   "prs": [
     {
+      "number": 4183,
+      "merged": "2026-10-24",
+      "title": "Jumping to a spot on the same page now updates the address",
+      "broken": "When a page used the newer navigation tool to jump to a spot on the same page, the address did not change, history saved a half-written address, and styles for that spot did not apply. Chrome does all three.",
+      "changed": "Every jump within the same page now updates the address, saves the full address in history, and restyles the targeted spot, like Chrome.",
+      "matters": "Pages and scripts that move around a single page see the same address in Lightpanda as in Chrome."
+    },
+    {
       "number": 4157,
       "merged": "2026-10-23",
       "title": "Number fields now flag values that are off their step",
