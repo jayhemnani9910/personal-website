@@ -141,6 +141,14 @@
       "broken": "Llama 3.2 models showed a context window of 262144 tokens, twice the real 131072.",
       "changed": "For this kind of model the tool now keeps the context size the model states instead of multiplying it.",
       "matters": "Fit estimates for Llama 3.2 models start from the real number."
+    },
+    {
+      "number": 1153,
+      "merged": "2026-10-24",
+      "title": "The tool now shows how each NVIDIA card is connected",
+      "broken": "The tool could not tell a graphics card running on a few lanes, like in most laptops or a riser, from one at full speed. Both looked the same.",
+      "changed": "It now reads the PCIe link of each NVIDIA card and shows it in the system view, the JSON output and the API. The doctor command warns when a card runs narrower than it supports.",
+      "matters": "People can see why a model runs slower than expected on their card. It is the first step toward speed estimates that take the link into account."
     }
   ]
 }

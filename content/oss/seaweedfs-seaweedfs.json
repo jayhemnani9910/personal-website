@@ -85,6 +85,14 @@
       "broken": "The list of unfinished uploads ignored where to resume, came back in the wrong order, and could claim there was more when the page was complete.",
       "changed": "The list is now sorted by name, resumes after the given name, and reports whether there is more and where to continue.",
       "matters": "Tools that page through uploads end cleanly and miss nothing."
+    },
+    {
+      "number": 11944,
+      "merged": "2026-10-24",
+      "title": "A deleted user policy stays deleted",
+      "broken": "In the built-in IAM API, asking for a user policy that did not exist, or had just been deleted, still returned a policy made up from the user's permissions.",
+      "changed": "If the user has stored policies and none has that name, it now answers that the policy does not exist, like the standalone IAM server does.",
+      "matters": "Tools that check whether a policy was removed get the right answer."
     }
   ]
 }
