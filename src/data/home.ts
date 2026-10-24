@@ -400,6 +400,7 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "seaweedfs/seaweedfs", number: "#11944", href: "https://github.com/seaweedfs/seaweedfs/pull/11944" },
   { repo: "uutils/findutils", number: "#916", href: "https://github.com/uutils/findutils/pull/916" },
   { repo: "uutils/findutils", number: "#917", href: "https://github.com/uutils/findutils/pull/917" },
+  { repo: "uutils/findutils", number: "#910", href: "https://github.com/uutils/findutils/pull/910" },
 ];
 
 /**

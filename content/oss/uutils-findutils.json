@@ -37,6 +37,14 @@
       "broken": "The %t, %a and %c dates in find's -printf wrote early days of the month with a leading zero, like Jan 02, while GNU find writes Jan  2.",
       "changed": "The day is now padded with a space, the classic format GNU find uses.",
       "matters": "Output that scripts compare or parse matches GNU find."
+    },
+    {
+      "number": 910,
+      "merged": "2026-10-24",
+      "title": "\\c in -printf stops the output",
+      "broken": "GNU find's manual says \\c in a -printf format stops printing right there. Here it only flushed the output, and the rest of the format was still printed.",
+      "changed": "Printing now stops at \\c. Later actions on the same file still run, as in GNU find.",
+      "matters": "Scripts that use \\c to cut a line short get the same output as with GNU find."
     }
   ]
 }
