@@ -4,6 +4,14 @@
   "stars": 280,
   "prs": [
     {
+      "number": 309,
+      "merged": "2026-10-24",
+      "title": "cmp takes sizes like 1K for how many bytes to compare",
+      "broken": "Telling cmp to compare only the first 1K or 2M of two files failed with an invalid value error. It only took a plain number, while GNU cmp takes sizes with units.",
+      "changed": "The byte limit now reads the same unit sizes as the option for skipping bytes at the start.",
+      "matters": "Scripts that limit cmp with sizes like 1K work the same as with GNU cmp."
+    },
+    {
       "number": 311,
       "merged": "2026-10-22",
       "title": "Context diffs now mark whole changed blocks",

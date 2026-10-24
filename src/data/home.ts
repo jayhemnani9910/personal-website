@@ -404,6 +404,10 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "raysan5/raylib", number: "#6323", href: "https://github.com/raysan5/raylib/pull/6323" },
   { repo: "tashfeenahmed/freellmapi", number: "#1623", href: "https://github.com/tashfeenahmed/freellmapi/pull/1623" },
   { repo: "tashfeenahmed/freellmapi", number: "#1624", href: "https://github.com/tashfeenahmed/freellmapi/pull/1624" },
+  { repo: "Tencent/teamai-cli", number: "#1359", href: "https://github.com/Tencent/teamai-cli/pull/1359" },
+  { repo: "uutils/diffutils", number: "#309", href: "https://github.com/uutils/diffutils/pull/309" },
+  { repo: "uutils/grep", number: "#146", href: "https://github.com/uutils/grep/pull/146" },
+  { repo: "uutils/parse_datetime", number: "#343", href: "https://github.com/uutils/parse_datetime/pull/343" },
 ];
 
 /**
