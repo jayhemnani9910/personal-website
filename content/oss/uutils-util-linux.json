@@ -4,6 +4,14 @@
   "stars": 225,
   "prs": [
     {
+      "number": 673,
+      "merged": "2026-10-24",
+      "title": "The login history now shows when it really begins",
+      "broken": "The login history tool ends with a line saying when its records begin. When options skipped some records, it printed the date the file was last changed instead of the date of the first record.",
+      "changed": "That line now always uses the first record in the file, as the original tool does. An empty file still shows the file's date.",
+      "matters": "The summary line tells you the true start of the history, whatever options you use."
+    },
+    {
       "number": 670,
       "merged": "2026-10-21",
       "title": "hexdump now reports the right last offset when it skips past the end",

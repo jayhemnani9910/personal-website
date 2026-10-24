@@ -4,6 +4,22 @@
   "stars": 35616,
   "prs": [
     {
+      "number": 12027,
+      "merged": "2026-10-24",
+      "title": "Storage servers no longer say an old copy is current",
+      "broken": "When an app asked a storage server if its copy of a file was still current, the server checked the date first and could say yes even when the fingerprint did not match.",
+      "changed": "The server now checks the fingerprint first and looks at the date only when no fingerprint is sent, as the web standard says. Lists, \"any\" and loose fingerprints now match too.",
+      "matters": "Apps and caches do not keep a stale copy of a file, and they skip downloads they do not need."
+    },
+    {
+      "number": 12026,
+      "merged": "2026-10-24",
+      "title": "File checks now understand lists of fingerprints",
+      "broken": "Apps can ask for a file only if it matches, or does not match, a fingerprint they already have. SeaweedFS compared the whole request as one value, so the \"any\" marker, a list of fingerprints and loose fingerprints never matched.",
+      "changed": "These checks now handle \"any\", lists and loose fingerprints, using the strict or loose comparison each check calls for in the web standard.",
+      "matters": "Browsers and caches that send these checks stop downloading the full file again when they already have it."
+    },
+    {
       "number": 11856,
       "merged": "2026-10-21",
       "title": "Asking for part of a file's details now gets the right answer",
