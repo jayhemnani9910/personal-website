@@ -1,0 +1,23 @@
+{
+  "repo": "tashfeenahmed/freellmapi",
+  "about": "A server that puts many free AI model providers behind one OpenAI-style endpoint, with routing and automatic failover.",
+  "stars": 40474,
+  "prs": [
+    {
+      "number": 1623,
+      "merged": "2026-10-24",
+      "title": "Two tool calls at once from Gemini stay two calls",
+      "broken": "When Gemini asked to run two tools at once in a streamed reply, the server glued them into one broken call. Most clients then got an error, and the key was put on a cooldown.",
+      "changed": "Each streamed tool call now gets its own number, like the other providers already did, and calls without an id no longer share one.",
+      "matters": "Agents that run tools in parallel through Gemini work instead of failing."
+    },
+    {
+      "number": 1624,
+      "merged": "2026-10-24",
+      "title": "A cut-off answer is marked incomplete",
+      "broken": "When a model stopped because it hit its length limit or a content filter, the Responses endpoint still called the answer completed.",
+      "changed": "Such a turn is now marked incomplete with the reason, the way the Responses API defines it, both streamed and not.",
+      "matters": "Coding tools can tell a cut-off answer from a finished one instead of taking half an answer as the whole."
+    }
+  ]
+}

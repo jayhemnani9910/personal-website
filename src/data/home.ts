@@ -401,6 +401,9 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "uutils/findutils", number: "#916", href: "https://github.com/uutils/findutils/pull/916" },
   { repo: "uutils/findutils", number: "#917", href: "https://github.com/uutils/findutils/pull/917" },
   { repo: "uutils/findutils", number: "#910", href: "https://github.com/uutils/findutils/pull/910" },
+  { repo: "raysan5/raylib", number: "#6323", href: "https://github.com/raysan5/raylib/pull/6323" },
+  { repo: "tashfeenahmed/freellmapi", number: "#1623", href: "https://github.com/tashfeenahmed/freellmapi/pull/1623" },
+  { repo: "tashfeenahmed/freellmapi", number: "#1624", href: "https://github.com/tashfeenahmed/freellmapi/pull/1624" },
 ];
 
 /**
