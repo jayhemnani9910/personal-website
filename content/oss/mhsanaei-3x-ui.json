@@ -37,6 +37,14 @@
       "changed": "A blank value is now filled in as 'none', the default the rest of the panel already used.",
       "matters": "Users of those servers can connect again without the admin re-saving anything.",
       "top": true
+    },
+    {
+      "number": 6833,
+      "merged": "2026-10-24",
+      "title": "Traffic resets switch quota-blocked users back on",
+      "broken": "When a user ran out of data, the panel switched them off. The scheduled reset and the Reset All button zeroed their usage but left them off until an admin stepped in.",
+      "changed": "Both resets now switch back on the users their quota had turned off, like every other reset in the panel already did.",
+      "matters": "Users on a monthly or daily data plan come back on their own when the period resets."
     }
   ]
 }

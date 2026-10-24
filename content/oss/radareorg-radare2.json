@@ -277,6 +277,14 @@
       "broken": "The assembler could not write bt, bts, btr or btc at all. Typing one in any mode just gave \"Cannot assemble\".",
       "changed": "I added all four, on registers and on memory, in 16, 32 and 64-bit code. After review it also rejects bad inputs, like the wrong number of operands. Checked against the GNU assembler on over 4,000 forms.",
       "matters": "People patching binaries can now use these instructions instead of typing raw bytes."
+    },
+    {
+      "number": 27162,
+      "merged": "2026-10-24",
+      "title": "The x86 assembler writes movzx and movsx correctly",
+      "broken": "The assembler wrote the wrong bytes for movzx and movsx with most memory operands and some registers. It dropped parts of the address, so the code read from a different place than asked.",
+      "changed": "These instructions now use the same address encoding as mov and lea, add the prefixes that 16-bit and the newer byte registers need, and reject forms the GNU assembler rejects.",
+      "matters": "Patches that use these common instructions now do what they say."
     }
   ]
 }
