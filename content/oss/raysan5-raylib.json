@@ -18,6 +18,14 @@
       "broken": "raylib's quick rotation blend missed that two rotations can point the same way with opposite signs. It then turned the long way round, and blending a rotation with its mirror copy gave an empty result.",
       "changed": "It now flips the second rotation first in that case, the same check the smooth blend already did, so the two agree.",
       "matters": "Animations and cameras that blend rotations no longer spin the wrong way or break."
+    },
+    {
+      "number": 6323,
+      "merged": "2026-10-24",
+      "title": "Turning a rotation into angles keeps all three at a straight-up pitch",
+      "broken": "When a rotation pointed straight up or down, raylib's conversion to angles lost the turn around the other axis and reported 0, so turning the angles back gave a different rotation.",
+      "changed": "At that point the whole turn now goes into one angle, so nothing is lost. Away from it the results are exactly the same as before.",
+      "matters": "Cameras and objects that look straight up or down keep their heading when code goes through angles."
     }
   ]
 }
