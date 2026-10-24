@@ -1,0 +1,15 @@
+{
+  "repo": "uutils/grep",
+  "about": "A rewrite of the grep search tool in Rust, aiming to work the same as GNU grep.",
+  "stars": 136,
+  "prs": [
+    {
+      "number": 146,
+      "merged": "2026-10-24",
+      "title": "The last matching include or exclude rule now decides",
+      "broken": "When a search mixed rules for which files to include and which to skip, any skip rule won, whatever the order. GNU grep lets the last rule that matches a file decide, so the two picked different files.",
+      "changed": "The rules are now kept in the order you typed them, and the last one that matches a file decides, like GNU grep.",
+      "matters": "Searches over a folder look at the same files as GNU grep."
+    }
+  ]
+}

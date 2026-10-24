@@ -4,6 +4,14 @@
   "stars": 5577,
   "prs": [
     {
+      "number": 1359,
+      "merged": "2026-10-24",
+      "title": "Resuming a session now prints a command that works",
+      "broken": "After restoring a session, the tool told you to run the assistant with a --resume flag. Codex has no such flag, and there is no claude-code program, so the line it printed failed for both.",
+      "changed": "The hint now uses each tool's real way to continue a session: codex resume, claude --resume, and opencode --session.",
+      "matters": "You can copy the line it prints and pick up the session straight away."
+    },
+    {
       "number": 1260,
       "merged": "2026-10-21",
       "title": "Moving a Codex session keeps a tool round's results together",

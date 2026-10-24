@@ -1,0 +1,15 @@
+{
+  "repo": "uutils/parse_datetime",
+  "about": "The Rust library that reads dates and times written in words, like \"tomorrow\" or \"2 hours ago\", for the uutils date tool.",
+  "stars": 37,
+  "prs": [
+    {
+      "number": 343,
+      "merged": "2026-10-24",
+      "title": "A time zone followed by DST now reads as summer time",
+      "broken": "GNU date lets you write a zone like EST followed by the word DST to mean that zone's summer time. Here it was rejected as an invalid date.",
+      "changed": "A DST word after a standard time zone now adds the hour. Zones that are already summer time still reject it, as in GNU.",
+      "matters": "Dates written this way give the same time as GNU date."
+    }
+  ]
+}
