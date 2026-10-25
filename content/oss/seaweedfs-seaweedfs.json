@@ -109,6 +109,14 @@
       "broken": "In the built-in IAM API, asking for a user policy that did not exist, or had just been deleted, still returned a policy made up from the user's permissions.",
       "changed": "If the user has stored policies and none has that name, it now answers that the policy does not exist, like the standalone IAM server does.",
       "matters": "Tools that check whether a policy was removed get the right answer."
+    },
+    {
+      "number": 12052,
+      "merged": "2026-10-25",
+      "title": "Resumed downloads start over when the file has changed",
+      "broken": "A client resuming a download asks for the rest of the file only if it has not changed. The filer and volume server ignored that check and sent bytes from the new version.",
+      "changed": "Both servers now send the whole current file when the version check fails, and the requested part only when it still matches.",
+      "matters": "Resumed downloads no longer glue pieces of two different versions into one corrupt file."
     }
   ]
 }

@@ -18,6 +18,14 @@
       "broken": "The verbose archive listing printed times in UTC, showed a hard link as an empty file, and left out where links point. GNU tar shows local time and the link targets.",
       "changed": "Listings now use the local time zone, mark hard links, and print the target of every link the way GNU tar does.",
       "matters": "People reading a listing see the same thing they would with GNU tar."
+    },
+    {
+      "number": 415,
+      "merged": "2026-10-25",
+      "title": "Extracting absolute paths now says so",
+      "broken": "Archives with absolute paths were quietly extracted under the current folder, with no note that the leading slash was removed.",
+      "changed": "Extraction now prints the same warning as GNU tar, once for each different prefix.",
+      "matters": "People can see that files landed somewhere other than the path stored in the archive."
     }
   ]
 }

@@ -9,7 +9,8 @@
       "title": "Dividing a built-in variable no longer reads as a pattern",
       "broken": "A slash right after a built-in variable like NR or NF started a pattern instead of a division. So NR divided by 2 failed with a syntax error, and some programs printed a wrong number with no error at all.",
       "changed": "Built-in variables are now read as values, like any other variable, so the slash after them divides.",
-      "matters": "Everyday awk arithmetic on line and field counts works as it does in gawk."
+      "matters": "Everyday awk arithmetic on line and field counts works as it does in gawk.",
+      "top": true
     },
     {
       "number": 138,
@@ -17,7 +18,8 @@
       "title": "awk now counts fields right on indented and blank lines",
       "broken": "Spaces at the start or end of a line counted as empty extra fields, and a blank line had one field instead of none. Field counts, first and last fields, and rebuilt lines came out wrong.",
       "changed": "Spaces at the edges no longer make empty fields, and an empty line has no fields, whatever the separator.",
-      "matters": "Scripts that read columns from indented or blank lines get the same answers as GNU awk."
+      "matters": "Scripts that read columns from indented or blank lines get the same answers as GNU awk.",
+      "top": true
     },
     {
       "number": 139,
@@ -25,7 +27,16 @@
       "title": "A bare pattern like /re/ now matches the line",
       "broken": "A pattern written on its own, the most common awk program, never matched anything. awk '/b/' printed nothing, and !/a/ printed every line.",
       "changed": "A pattern on its own is now checked against the whole line, the same as writing $0 ~ /re/.",
-      "matters": "Everyday one-line awk filters print the lines GNU awk prints."
+      "matters": "Everyday one-line awk filters print the lines GNU awk prints.",
+      "top": true
+    },
+    {
+      "number": 140,
+      "merged": "2026-10-25",
+      "title": "END sees the right record count and last line",
+      "broken": "In the END block, the record count was one too high, the last line was empty, an END-only program counted nothing, and the count restarted with each file.",
+      "changed": "Records are counted only when one is actually read, the count runs across all files, and END-only programs read their input.",
+      "matters": "Totals and averages printed at the end of a script now match gawk."
     }
   ]
 }
