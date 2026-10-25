@@ -1,0 +1,15 @@
+{
+  "repo": "akitaonrails/ai-memory",
+  "about": "Long-term memory for AI coding assistants, so notes and context carry over between sessions and between tools.",
+  "stars": 13340,
+  "prs": [
+    {
+      "number": 1693,
+      "merged": "2026-10-25",
+      "title": "Each saved page gets its own short ID",
+      "broken": "Saving pages from the command line printed a short page ID, but it was the start of the ID, which is a timestamp. Every page saved within about a minute showed the same ID.",
+      "changed": "The command now prints the end of the ID, the random part, as the web view already did.",
+      "matters": "Each saved page can be told apart and looked up by the ID the command prints."
+    }
+  ]
+}
