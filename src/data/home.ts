@@ -425,6 +425,7 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "lightpanda-io/browser", number: "#4184", href: "https://github.com/lightpanda-io/browser/pull/4184" },
   { repo: "akitaonrails/ai-memory", number: "#1693", href: "https://github.com/akitaonrails/ai-memory/pull/1693" },
   { repo: "radareorg/radare2", number: "#27184", href: "https://github.com/radareorg/radare2/pull/27184" },
+  { repo: "uutils/awk", number: "#143", href: "https://github.com/uutils/awk/pull/143" },
 ];
 
 /**
