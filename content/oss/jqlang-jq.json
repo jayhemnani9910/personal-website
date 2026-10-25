@@ -1,0 +1,15 @@
+{
+  "repo": "jqlang/jq",
+  "about": "The command-line tool for reading, filtering and reshaping JSON.",
+  "stars": 35933,
+  "prs": [
+    {
+      "number": 3679,
+      "merged": "2026-10-25",
+      "title": "Dates without a day land on the 1st, not the month before",
+      "broken": "Reading a date like 2024-06 with no day left the day at zero, which counts as the last day of the month before, so 2024-06 became May 31.",
+      "changed": "The day now starts at 1, as in Python and gojq. A weekday bug for early 1900 and 2100 was fixed too, checked against the system clock for every day across two centuries.",
+      "matters": "Month-only and year-only dates convert to the date people expect."
+    }
+  ]
+}

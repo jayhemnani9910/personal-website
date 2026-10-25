@@ -414,6 +414,15 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "seaweedfs/seaweedfs", number: "#12027", href: "https://github.com/seaweedfs/seaweedfs/pull/12027" },
   { repo: "uutils/sed", number: "#612", href: "https://github.com/uutils/sed/pull/612" },
   { repo: "uutils/util-linux", number: "#673", href: "https://github.com/uutils/util-linux/pull/673" },
+  { repo: "YouROK/TorrServer", number: "#933", href: "https://github.com/YouROK/TorrServer/pull/933" },
+  { repo: "YouROK/TorrServer", number: "#935", href: "https://github.com/YouROK/TorrServer/pull/935" },
+  { repo: "YouROK/TorrServer", number: "#937", href: "https://github.com/YouROK/TorrServer/pull/937" },
+  { repo: "uutils/coreutils", number: "#15671", href: "https://github.com/uutils/coreutils/pull/15671" },
+  { repo: "uutils/findutils", number: "#919", href: "https://github.com/uutils/findutils/pull/919" },
+  { repo: "YouROK/TorrServer", number: "#938", href: "https://github.com/YouROK/TorrServer/pull/938" },
+  { repo: "heygen-com/hyperframes", number: "#5336", href: "https://github.com/heygen-com/hyperframes/pull/5336" },
+  { repo: "jqlang/jq", number: "#3679", href: "https://github.com/jqlang/jq/pull/3679" },
+  { repo: "lightpanda-io/browser", number: "#4184", href: "https://github.com/lightpanda-io/browser/pull/4184" },
 ];
 
 /**

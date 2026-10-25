@@ -4,6 +4,14 @@
   "stars": 653,
   "prs": [
     {
+      "number": 919,
+      "merged": "2026-10-24",
+      "title": "A test keeps the stop-printing escape honest",
+      "broken": "The earlier fix that made find stop a print format at the stop escape had no test showing that the next action still runs for each file.",
+      "changed": "A new test runs two print actions and checks that the second still runs after the first stops early, matching GNU find.",
+      "matters": "The fix cannot quietly break later without a test failing."
+    },
+    {
       "number": 914,
       "merged": "2026-10-22",
       "title": "Date filters now need a file to be strictly newer",
