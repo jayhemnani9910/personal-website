@@ -4,6 +4,14 @@
   "stars": 29,
   "prs": [
     {
+      "number": 143,
+      "merged": "2026-10-25",
+      "title": "Dividing a built-in variable no longer reads as a pattern",
+      "broken": "A slash right after a built-in variable like NR or NF started a pattern instead of a division. So NR divided by 2 failed with a syntax error, and some programs printed a wrong number with no error at all.",
+      "changed": "Built-in variables are now read as values, like any other variable, so the slash after them divides.",
+      "matters": "Everyday awk arithmetic on line and field counts works as it does in gawk."
+    },
+    {
       "number": 138,
       "merged": "2026-10-21",
       "title": "awk now counts fields right on indented and blank lines",
