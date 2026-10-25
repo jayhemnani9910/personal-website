@@ -426,6 +426,9 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "akitaonrails/ai-memory", number: "#1693", href: "https://github.com/akitaonrails/ai-memory/pull/1693" },
   { repo: "radareorg/radare2", number: "#27184", href: "https://github.com/radareorg/radare2/pull/27184" },
   { repo: "uutils/awk", number: "#143", href: "https://github.com/uutils/awk/pull/143" },
+  { repo: "AlexsJones/llmfit", number: "#1185", href: "https://github.com/AlexsJones/llmfit/pull/1185" },
+  { repo: "uutils/findutils", number: "#920", href: "https://github.com/uutils/findutils/pull/920" },
+  { repo: "uutils/shadow", number: "#345", href: "https://github.com/uutils/shadow/pull/345" },
 ];
 
 /**

@@ -53,6 +53,14 @@
       "broken": "GNU find's manual says \\c in a -printf format stops printing right there. Here it only flushed the output, and the rest of the format was still printed.",
       "changed": "Printing now stops at \\c. Later actions on the same file still run, as in GNU find.",
       "matters": "Scripts that use \\c to cut a line short get the same output as with GNU find."
+    },
+    {
+      "number": 920,
+      "merged": "2026-10-25",
+      "title": "xargs splits arguments only at spaces, tabs and newlines",
+      "broken": "xargs also split arguments at carriage returns and form feeds. A file with Windows line endings lost the carriage return at the end of each line's last word.",
+      "changed": "Only spaces, tabs and newlines separate arguments now. Other control characters stay inside the word, as in GNU xargs.",
+      "matters": "Input with Windows line endings or other control characters gives the same arguments as with GNU xargs."
     }
   ]
 }
