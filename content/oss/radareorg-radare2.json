@@ -4,6 +4,14 @@
   "stars": 25104,
   "prs": [
     {
+      "number": 27184,
+      "merged": "2026-10-25",
+      "title": "The arm64 assembler keeps the condition you wrote",
+      "broken": "For three conditional instructions, the arm64 assembler only recognised the equal condition and turned every other one, like less-than or higher, into not-equal. The code it produced did something different from what was written.",
+      "changed": "The assembler now reads every condition name and encodes it, and refuses names it does not know instead of guessing.",
+      "matters": "Patching or writing arm64 code in radare2 gives the instruction that was asked for."
+    },
+    {
       "number": 27098,
       "merged": "2026-10-21",
       "title": "radiff2 now shows the real file names in its unified diff",
