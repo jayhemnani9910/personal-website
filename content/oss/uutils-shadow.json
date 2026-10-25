@@ -9,7 +9,8 @@
       "title": "useradd now gives the right exit code for a bad user name",
       "broken": "useradd exited with code 3 when a user name was not allowed. The manual says it should exit with 19, and GNU useradd does.",
       "changed": "A rejected user name now exits with 19, and other errors keep their codes.",
-      "matters": "Scripts that check why useradd failed get the answer the manual promises."
+      "matters": "Scripts that check why useradd failed get the answer the manual promises.",
+      "top": true
     },
     {
       "number": 339,
@@ -17,7 +18,8 @@
       "title": "useradd and usermod now accept -1 to clear expiry settings",
       "broken": "The manuals say -1 clears the account expiry date and the inactive days, but both tools rejected -1 as an unknown option.",
       "changed": "The expiry and inactive options now take -1 and clear the field, as in GNU shadow.",
-      "matters": "Commands and scripts written for GNU shadow work here unchanged."
+      "matters": "Commands and scripts written for GNU shadow work here unchanged.",
+      "top": true
     },
     {
       "number": 345,
@@ -25,7 +27,16 @@
       "title": "useradd -U always creates the user's group",
       "broken": "When the system setting for user groups was off, useradd -U quietly skipped creating the user's own group. It also accepted -U together with -g.",
       "changed": "-U now always creates the group, and -U with -g is rejected, as in GNU shadow.",
-      "matters": "Scripts that ask for a user group get one, whatever the system default is."
+      "matters": "Scripts that ask for a user group get one, whatever the system default is.",
+      "top": true
+    },
+    {
+      "number": 349,
+      "merged": "2026-10-25",
+      "title": "Changing a user's group also updates their home files",
+      "broken": "Changing a user's primary group left the files in their home directory in the old group, unlike GNU usermod.",
+      "changed": "The home directory walk now moves files from the old group to the new one, changes links rather than their targets, and skips homes the user does not own.",
+      "matters": "After a group change, the user's files belong to their new group, as admins expect."
     }
   ]
 }

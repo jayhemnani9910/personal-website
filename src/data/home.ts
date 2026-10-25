@@ -429,6 +429,10 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "AlexsJones/llmfit", number: "#1185", href: "https://github.com/AlexsJones/llmfit/pull/1185" },
   { repo: "uutils/findutils", number: "#920", href: "https://github.com/uutils/findutils/pull/920" },
   { repo: "uutils/shadow", number: "#345", href: "https://github.com/uutils/shadow/pull/345" },
+  { repo: "seaweedfs/seaweedfs", number: "#12052", href: "https://github.com/seaweedfs/seaweedfs/pull/12052" },
+  { repo: "uutils/awk", number: "#140", href: "https://github.com/uutils/awk/pull/140" },
+  { repo: "uutils/shadow", number: "#349", href: "https://github.com/uutils/shadow/pull/349" },
+  { repo: "uutils/tar", number: "#415", href: "https://github.com/uutils/tar/pull/415" },
 ];
 
 /**
