@@ -18,6 +18,14 @@
       "broken": "The manuals say -1 clears the account expiry date and the inactive days, but both tools rejected -1 as an unknown option.",
       "changed": "The expiry and inactive options now take -1 and clear the field, as in GNU shadow.",
       "matters": "Commands and scripts written for GNU shadow work here unchanged."
+    },
+    {
+      "number": 345,
+      "merged": "2026-10-25",
+      "title": "useradd -U always creates the user's group",
+      "broken": "When the system setting for user groups was off, useradd -U quietly skipped creating the user's own group. It also accepted -U together with -g.",
+      "changed": "-U now always creates the group, and -U with -g is rejected, as in GNU shadow.",
+      "matters": "Scripts that ask for a user group get one, whatever the system default is."
     }
   ]
 }

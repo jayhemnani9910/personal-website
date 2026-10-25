@@ -149,6 +149,14 @@
       "broken": "The tool could not tell a graphics card running on a few lanes, like in most laptops or a riser, from one at full speed. Both looked the same.",
       "changed": "It now reads the PCIe link of each NVIDIA card and shows it in the system view, the JSON output and the API. The doctor command warns when a card runs narrower than it supports.",
       "matters": "People can see why a model runs slower than expected on their card. It is the first step toward speed estimates that take the link into account."
+    },
+    {
+      "number": 1185,
+      "merged": "2026-10-25",
+      "title": "Piping the output into another command no longer crashes",
+      "broken": "Piping a listing into a command that stops reading early, like head, made the tool crash with a broken pipe error and exit code 101.",
+      "changed": "The listing commands now end quietly when the reader goes away, the way ls does. The server and the interactive screens keep the old handling.",
+      "matters": "People can use the tool in shell pipelines and scripts without crash messages or odd exit codes."
     }
   ]
 }
