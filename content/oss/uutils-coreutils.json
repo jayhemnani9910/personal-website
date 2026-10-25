@@ -1,0 +1,15 @@
+{
+  "repo": "uutils/coreutils",
+  "about": "A rewrite of the basic Unix command-line tools (ls, cat, sort and the rest) in Rust, aiming to work the same as GNU coreutils.",
+  "stars": 24284,
+  "prs": [
+    {
+      "number": 15671,
+      "merged": "2026-10-24",
+      "title": "pr keeps the column separator when joining lines",
+      "broken": "With the option that joins full lines, pr dropped the separator between columns and between merged files, so the columns ran into each other. GNU pr keeps it.",
+      "changed": "pr now writes the separator in that mode like in every other mode, and a test file that had the glued output was corrected.",
+      "matters": "Multi-column and merged output stays readable, the same as GNU pr."
+    }
+  ]
+}

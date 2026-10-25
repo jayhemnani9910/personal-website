@@ -4,6 +4,14 @@
   "stars": 36886,
   "prs": [
     {
+      "number": 4184,
+      "merged": "2026-10-25",
+      "title": "Playwright can click inside shadow DOM",
+      "broken": "Shadow roots were missing the lookup that finds which element sits at a point on the page. Playwright uses it before every click, so clicking any element inside a shadow root failed with an error.",
+      "changed": "Shadow roots now have both lookups and return the same answers as Chrome, including for nested shadow roots.",
+      "matters": "Pages built with web components can be driven by Playwright in Lightpanda."
+    },
+    {
       "number": 4183,
       "merged": "2026-10-24",
       "title": "Jumping to a spot on the same page now updates the address",

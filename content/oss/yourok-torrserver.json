@@ -4,6 +4,38 @@
   "stars": 3140,
   "prs": [
     {
+      "number": 938,
+      "merged": "2026-10-25",
+      "title": "Playlists refresh when they change",
+      "broken": "The playlist's version tag came only from the torrent and file name. After a file was marked watched, the list changed but the tag did not, so players kept the old list.",
+      "changed": "The tag now comes from the playlist's own content, so it changes whenever the list does.",
+      "matters": "Players always get the current playlist, including the resume-from-last-watched list."
+    },
+    {
+      "number": 933,
+      "merged": "2026-10-24",
+      "title": "Two torrents with the same title can both be opened",
+      "broken": "In the network drive and mounted folder views, two torrents with the same title showed up as two folders with one name, and opening either always opened the first one. The second torrent could not be reached.",
+      "changed": "When titles clash, each folder gets a short piece of its torrent's ID added to its name. Unique titles stay as they are.",
+      "matters": "Every torrent in a category can be browsed and played, even when titles repeat."
+    },
+    {
+      "number": 937,
+      "merged": "2026-10-24",
+      "title": "Episode 1 no longer shows episode 10's subtitles",
+      "broken": "A subtitle was matched to a video when its name started with the video's name. So episode 1 also picked up the subtitles for episodes 10 and 11, and choosing one played the wrong episode's text.",
+      "changed": "The matching name now has to end at a word break, so Show - 1 no longer matches Show - 10.",
+      "matters": "Each episode lists only its own subtitles."
+    },
+    {
+      "number": 935,
+      "merged": "2026-10-24",
+      "title": "Episodes stop pulling in other episodes as extra tracks",
+      "broken": "The playlist attached every file whose name contained the video's name as an extra audio or subtitle track. In a season pack, episode 1 got episodes 10 and 11 and episode 10's audio attached to it in VLC.",
+      "changed": "An extra file now has to carry the whole video name, followed by something that is not a letter or digit.",
+      "matters": "VLC loads only the tracks that belong to the episode being played."
+    },
+    {
       "number": 923,
       "merged": "2026-10-22",
       "title": "Ukrainian and other Cyrillic subtitles now show every letter",

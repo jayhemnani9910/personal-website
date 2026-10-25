@@ -1,0 +1,15 @@
+{
+  "repo": "heygen-com/hyperframes",
+  "about": "A tool that turns HTML pages into rendered videos, built so code and AI agents can make video.",
+  "stars": 71626,
+  "prs": [
+    {
+      "number": 5336,
+      "merged": "2026-10-25",
+      "title": "A block used twice in a video keeps its own timing",
+      "broken": "A clip can start relative to another clip by name. When one block appeared twice in a video, both copies looked that name up in the first copy, so the second copy's clips dropped out.",
+      "changed": "A clip now looks for the named clip inside its own composition first, as the docs say, and only then in the whole page.",
+      "matters": "Reusing a block several times in one video renders every copy correctly."
+    }
+  ]
+}
