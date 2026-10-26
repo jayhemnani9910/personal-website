@@ -443,6 +443,12 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "lightpanda-io/browser", number: "#4197", href: "https://github.com/lightpanda-io/browser/pull/4197" },
   { repo: "radareorg/radare2", number: "#27189", href: "https://github.com/radareorg/radare2/pull/27189" },
   { repo: "AlexsJones/llmfit", number: "#1190", href: "https://github.com/AlexsJones/llmfit/pull/1190" },
+  { repo: "OpenListTeam/OpenList", number: "#3288", href: "https://github.com/OpenListTeam/OpenList/pull/3288" },
+  { repo: "radareorg/radare2", number: "#27149", href: "https://github.com/radareorg/radare2/pull/27149" },
+  { repo: "uutils/shadow", number: "#344", href: "https://github.com/uutils/shadow/pull/344" },
+  { repo: "uutils/shadow", number: "#355", href: "https://github.com/uutils/shadow/pull/355" },
+  { repo: "uutils/shadow", number: "#356", href: "https://github.com/uutils/shadow/pull/356" },
+  { repo: "uutils/shadow", number: "#357", href: "https://github.com/uutils/shadow/pull/357" },
 ];
 
 /**
