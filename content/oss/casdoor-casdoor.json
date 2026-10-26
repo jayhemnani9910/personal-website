@@ -37,6 +37,14 @@
       "changed": "The sign-out message is now locked with the same method and key as the app's sign-in pass.",
       "matters": "Signing out in one place signs you out of the connected apps, whichever security setting they use.",
       "top": true
+    },
+    {
+      "number": 5982,
+      "merged": "2026-10-26",
+      "title": "Apps can sign in with a secret that has special characters",
+      "broken": "Apps that sent their ID and secret in the standard login header were turned away when the secret held characters like plus, slash or percent, even though the same secret worked another way.",
+      "changed": "The service now decodes the header values the way the standard says before comparing them.",
+      "matters": "Common client libraries work with any hand-set secret, not only the generated ones."
     }
   ]
 }
