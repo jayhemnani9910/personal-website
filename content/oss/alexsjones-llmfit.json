@@ -157,6 +157,14 @@
       "broken": "Piping a listing into a command that stops reading early, like head, made the tool crash with a broken pipe error and exit code 101.",
       "changed": "The listing commands now end quietly when the reader goes away, the way ls does. The server and the interactive screens keep the old handling.",
       "matters": "People can use the tool in shell pipelines and scripts without crash messages or odd exit codes."
+    },
+    {
+      "number": 1190,
+      "merged": "2026-10-26",
+      "title": "Comparing two models works even when one does not fit",
+      "broken": "Asking the tool to compare two named models failed with \"no model found\" when one of them was too big for the machine, even though it knew the model.",
+      "changed": "Named models are now looked up in the full list. The fit filter only picks models when no names are given.",
+      "matters": "People can see how a model that does not fit stacks up against one that does, which is a main reason to compare."
     }
   ]
 }
