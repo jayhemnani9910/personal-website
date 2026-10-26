@@ -93,6 +93,14 @@
       "broken": "Plugins could only search with Lua's small pattern language. It has no choices between words, no counted repeats and no word edges in the middle, so the Vim-style plugin turned such searches down.",
       "changed": "A new module lets plugins use the full regular expression engine, with the same offsets Lua users already know.",
       "matters": "Plugin authors can write the searches people expect, with no extra permission."
+    },
+    {
+      "number": 1124,
+      "merged": "2026-10-25",
+      "title": "An unsaved line ending change stays unsaved after undo",
+      "broken": "After changing a file's line ending, typing and then undoing marked the tab as saved. Closing it or quitting then lost the change without asking.",
+      "changed": "The editor remembers the line ending the file was loaded or saved with, and undo only marks the tab clean when that matches too.",
+      "matters": "A line ending change can no longer be thrown away silently when the tab closes."
     }
   ]
 }

@@ -37,6 +37,14 @@
       "broken": "In the END block, the record count was one too high, the last line was empty, an END-only program counted nothing, and the count restarted with each file.",
       "changed": "Records are counted only when one is actually read, the count runs across all files, and END-only programs read their input.",
       "matters": "Totals and averages printed at the end of a script now match gawk."
+    },
+    {
+      "number": 144,
+      "merged": "2026-10-25",
+      "title": "length without parentheses means the length of the line",
+      "broken": "A bare length, as in the common one-liner that prints long lines, was rejected as a syntax error.",
+      "changed": "length with no parentheses is now read as the length of the current line, as POSIX says, and still works inside larger expressions.",
+      "matters": "Everyday one-liners copied from other awks now run unchanged."
     }
   ]
 }

@@ -117,6 +117,14 @@
       "broken": "A client resuming a download asks for the rest of the file only if it has not changed. The filer and volume server ignored that check and sent bytes from the new version.",
       "changed": "Both servers now send the whole current file when the version check fails, and the requested part only when it still matches.",
       "matters": "Resumed downloads no longer glue pieces of two different versions into one corrupt file."
+    },
+    {
+      "number": 12051,
+      "merged": "2026-10-25",
+      "title": "Reading a deleted file in a versioned bucket answers like S3",
+      "broken": "On a versioned bucket, reading a key whose latest version is a delete marker gave a plain not found, with no sign that it had been deleted.",
+      "changed": "The reply now says it is a delete marker and gives its version, and asking for the marker itself returns method not allowed, as S3 does.",
+      "matters": "Backup and sync tools can tell a deleted file from one that never existed."
     }
   ]
 }

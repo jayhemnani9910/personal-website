@@ -61,6 +61,14 @@
       "broken": "xargs also split arguments at carriage returns and form feeds. A file with Windows line endings lost the carriage return at the end of each line's last word.",
       "changed": "Only spaces, tabs and newlines separate arguments now. Other control characters stay inside the word, as in GNU xargs.",
       "matters": "Input with Windows line endings or other control characters gives the same arguments as with GNU xargs."
+    },
+    {
+      "number": 921,
+      "merged": "2026-10-25",
+      "title": "xargs -I reads input lines like GNU",
+      "broken": "With -I, each input line went in raw: leading spaces stayed, blank lines still ran the command, quotes were kept and the end marker was ignored.",
+      "changed": "-I now skips leading blanks and blank lines, handles quotes like plain xargs, and stops at the end marker, keeping each line as one argument.",
+      "matters": "Scripts that feed lines to xargs -I get the same commands as on GNU systems."
     }
   ]
 }
