@@ -125,6 +125,22 @@
       "broken": "On a versioned bucket, reading a key whose latest version is a delete marker gave a plain not found, with no sign that it had been deleted.",
       "changed": "The reply now says it is a delete marker and gives its version, and asking for the marker itself returns method not allowed, as S3 does.",
       "matters": "Backup and sync tools can tell a deleted file from one that never existed."
+    },
+    {
+      "number": 12068,
+      "merged": "2026-10-26",
+      "title": "WebDAV copy onto a folder no longer deletes the folder",
+      "broken": "Copying a file onto a folder's address over WebDAV, with overwrite on, failed with an error, and the folder and everything in it were gone afterwards.",
+      "changed": "The copy now replaces the folder with the file as asked, and with overwrite off the folder stays untouched.",
+      "matters": "A WebDAV client can no longer wipe out a folder of files with a copy that then fails."
+    },
+    {
+      "number": 12069,
+      "merged": "2026-10-26",
+      "title": "S3 lists of unfinished uploads now group by folder",
+      "broken": "When listing unfinished multipart uploads with a folder separator, SeaweedFS ignored the separator and returned every upload in the bucket at the top level.",
+      "changed": "Uploads below a folder are now grouped under that folder's prefix, the way Amazon S3 does it.",
+      "matters": "Tools that browse pending uploads folder by folder see the right ones instead of the whole bucket."
     }
   ]
 }

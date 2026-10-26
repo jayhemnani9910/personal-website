@@ -45,6 +45,14 @@
       "broken": "Apps that sent their ID and secret in the standard login header were turned away when the secret held characters like plus, slash or percent, even though the same secret worked another way.",
       "changed": "The service now decodes the header values the way the standard says before comparing them.",
       "matters": "Common client libraries work with any hand-set secret, not only the generated ones."
+    },
+    {
+      "number": 5983,
+      "merged": "2026-10-26",
+      "title": "SCIM user lists now report the real total",
+      "broken": "Casdoor's SCIM user list reported only the number of users on the current page as the total. A client asking for pages of two saw a total of two and stopped after the first page.",
+      "changed": "The total now counts every matching user, so it stays the same on every page, as the SCIM standard says.",
+      "matters": "Identity tools that sync users page by page now fetch all of them instead of only the first few."
     }
   ]
 }

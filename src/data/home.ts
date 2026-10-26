@@ -449,6 +449,10 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "uutils/shadow", number: "#355", href: "https://github.com/uutils/shadow/pull/355" },
   { repo: "uutils/shadow", number: "#356", href: "https://github.com/uutils/shadow/pull/356" },
   { repo: "uutils/shadow", number: "#357", href: "https://github.com/uutils/shadow/pull/357" },
+  { repo: "casdoor/casdoor", number: "#5983", href: "https://github.com/casdoor/casdoor/pull/5983" },
+  { repo: "seaweedfs/seaweedfs", number: "#12068", href: "https://github.com/seaweedfs/seaweedfs/pull/12068" },
+  { repo: "seaweedfs/seaweedfs", number: "#12069", href: "https://github.com/seaweedfs/seaweedfs/pull/12069" },
+  { repo: "uutils/awk", number: "#146", href: "https://github.com/uutils/awk/pull/146" },
 ];
 
 /**
