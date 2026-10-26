@@ -293,6 +293,14 @@
       "broken": "The assembler wrote the wrong bytes for movzx and movsx with most memory operands and some registers. It dropped parts of the address, so the code read from a different place than asked.",
       "changed": "These instructions now use the same address encoding as mov and lea, add the prefixes that 16-bit and the newer byte registers need, and reject forms the GNU assembler rejects.",
       "matters": "Patches that use these common instructions now do what they say."
+    },
+    {
+      "number": 27189,
+      "merged": "2026-10-26",
+      "title": "The arm64 assembler keeps the full number in system call instructions",
+      "broken": "For system call and breakpoint instructions, the assembler dropped the top bits of the number, so larger values came out wrong, and too-large values were accepted silently.",
+      "changed": "All 16 bits are now written, and a number that does not fit is rejected.",
+      "matters": "Patches that use these instructions with larger numbers now do what they say."
     }
   ]
 }

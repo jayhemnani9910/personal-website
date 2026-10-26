@@ -439,6 +439,9 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "uutils/findutils", number: "#921", href: "https://github.com/uutils/findutils/pull/921" },
   { repo: "lightpanda-io/browser", number: "#4185", href: "https://github.com/lightpanda-io/browser/pull/4185" },
   { repo: "lightpanda-io/browser", number: "#4192", href: "https://github.com/lightpanda-io/browser/pull/4192" },
+  { repo: "casdoor/casdoor", number: "#5982", href: "https://github.com/casdoor/casdoor/pull/5982" },
+  { repo: "lightpanda-io/browser", number: "#4197", href: "https://github.com/lightpanda-io/browser/pull/4197" },
+  { repo: "radareorg/radare2", number: "#27189", href: "https://github.com/radareorg/radare2/pull/27189" },
 ];
 
 /**

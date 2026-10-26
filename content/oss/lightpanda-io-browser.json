@@ -317,6 +317,14 @@
       "broken": "When a tool like Playwright focused a field or picked a select option, the page's own event listeners ran in the tool's context and saw the wrong objects.",
       "changed": "Each listener now runs in the context it was created in, whoever caused the event.",
       "matters": "React focus and change handlers now fire when Playwright drives the page, as in Chrome."
+    },
+    {
+      "number": 4197,
+      "merged": "2026-10-26",
+      "title": "Clearing a style with null shows the element again",
+      "broken": "Pages often hide an element and later clear the style by setting it to null. The browser stored the word \"null\" instead, so the element stayed broken.",
+      "changed": "Setting a style property to null now clears it, as the web standard and Chrome do.",
+      "matters": "Menus, popups and other elements that pages show this way appear when they should."
     }
   ]
 }
