@@ -309,6 +309,22 @@
       "broken": "radare2's x86 assembler turned not, neg, mul, div, imul and idiv into the wrong bytes. Byte registers and memory operands came out as a different instruction, and some forms would not assemble at all.",
       "changed": "These instructions now pick the right size, register and memory form, and give the same bytes as the GNU assembler.",
       "matters": "Patching a program with these instructions no longer writes code that does something else."
+    },
+    {
+      "number": 27151,
+      "merged": "2026-10-26",
+      "title": "The x86 assembler now accepts the lock prefix",
+      "broken": "radare2's x86 assembler refused every instruction with the lock prefix, so atomic code like lock inc could not be assembled or patched.",
+      "changed": "lock now works before the instructions that allow it, with a memory target, and is refused elsewhere, the same as the GNU assembler. The prefix byte goes where GNU puts it.",
+      "matters": "People patching programs that use atomic operations can now write those instructions in place."
+    },
+    {
+      "number": 27199,
+      "merged": "2026-10-26",
+      "title": "The arm64 assembler now writes uxtb and uxth",
+      "broken": "radare2's arm64 assembler could write the signed sxtb and sxth instructions but refused their unsigned versions, uxtb and uxth.",
+      "changed": "uxtb and uxth now assemble to the right bytes, and each one reads back as the same text.",
+      "matters": "Zero-extending a byte or half-word is common in arm64 code, so patches that need it no longer fail."
     }
   ]
 }

@@ -53,6 +53,14 @@
       "broken": "In awk, just reading an array element that does not exist should create it. The Rust awk did not, so counting or looping over such an array found it empty.",
       "changed": "Reading a missing element now adds it with an empty value, matching POSIX and gawk. Checking with \"in\" still adds nothing.",
       "matters": "Common scripts that collect keys by reading them, then loop or count, now give the right answer."
+    },
+    {
+      "number": 147,
+      "merged": "2026-10-26",
+      "title": "print now takes more items after a bracketed first one",
+      "broken": "In the Rust awk, a print line that started with something in brackets, like (x) \"-\", and then had a comma and more items, stopped with a syntax error.",
+      "changed": "The comma and the items after it are now read, so these lines print what gawk prints.",
+      "matters": "Ordinary print lines that start with a bracket no longer stop a script."
     }
   ]
 }
