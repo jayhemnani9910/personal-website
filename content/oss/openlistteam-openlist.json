@@ -1,0 +1,15 @@
+{
+  "repo": "OpenListTeam/OpenList",
+  "about": "A file list server that shows many cloud drives and local folders in one place, over the web, WebDAV, FTP and S3.",
+  "stars": 25284,
+  "prs": [
+    {
+      "number": 3288,
+      "merged": "2026-10-26",
+      "title": "WebDAV locks now report the folder the app asked to lock",
+      "broken": "When an app locked a folder over WebDAV, OpenList answered with its internal storage path as the lock's root instead of the web address the app used. Some apps saw the mismatch and refused the lock.",
+      "changed": "The answer now names the same web address the app locked, written the way folder listings already write it.",
+      "matters": "WebDAV apps that check the lock, like the music player in the bug report, can lock and save files again."
+    }
+  ]
+}

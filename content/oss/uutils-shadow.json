@@ -37,6 +37,38 @@
       "broken": "Changing a user's primary group left the files in their home directory in the old group, unlike GNU usermod.",
       "changed": "The home directory walk now moves files from the old group to the new one, changes links rather than their targets, and skips homes the user does not own.",
       "matters": "After a group change, the user's files belong to their new group, as admins expect."
+    },
+    {
+      "number": 344,
+      "merged": "2026-10-26",
+      "title": "System accounts now get IDs from the top of the range",
+      "broken": "useradd -r and groupadd -r gave a new system account the lowest free ID, for example 101. GNU shadow starts at the top of the range and counts down.",
+      "changed": "System users and groups now get the highest free system ID, 999 on a fresh system, then 998, the same as GNU.",
+      "matters": "Machines set up with these tools hand out the same system IDs as other Linux systems."
+    },
+    {
+      "number": 355,
+      "merged": "2026-10-26",
+      "title": "chage can now print dates as YYYY-MM-DD",
+      "broken": "chage did not accept -i or --iso8601, so there was no way to get the password aging dates in a fixed year-month-day form.",
+      "changed": "chage -l -i now prints every aging date as YYYY-MM-DD, matching GNU chage. Without -i the output stays the same.",
+      "matters": "Scripts can read password expiry dates without parsing month names."
+    },
+    {
+      "number": 356,
+      "merged": "2026-10-26",
+      "title": "passwd now says \"password changed.\" like GNU passwd",
+      "broken": "After locking, unlocking or changing the aging of an account, passwd printed its own message on the error stream, unlike GNU passwd.",
+      "changed": "It now prints \"passwd: password changed.\" on normal output, the same line GNU passwd prints. With -q it stays silent.",
+      "matters": "Scripts and logs that expect GNU's message see it, and a success no longer looks like an error."
+    },
+    {
+      "number": 357,
+      "merged": "2026-10-26",
+      "title": "chfn and chsh stay quiet after a successful change",
+      "broken": "chfn and chsh printed a line on the error stream after every successful change. GNU chfn and chsh print nothing.",
+      "changed": "The extra line is gone. Errors and the interactive prompts work as before.",
+      "matters": "Scripts that treat any error output as a failure no longer flag a change that worked."
     }
   ]
 }

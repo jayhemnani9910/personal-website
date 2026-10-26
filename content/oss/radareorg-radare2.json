@@ -301,6 +301,14 @@
       "broken": "For system call and breakpoint instructions, the assembler dropped the top bits of the number, so larger values came out wrong, and too-large values were accepted silently.",
       "changed": "All 16 bits are now written, and a number that does not fit is rejected.",
       "matters": "Patches that use these instructions with larger numbers now do what they say."
+    },
+    {
+      "number": 27149,
+      "merged": "2026-10-26",
+      "title": "The x86 assembler now writes not, neg, mul and div correctly",
+      "broken": "radare2's x86 assembler turned not, neg, mul, div, imul and idiv into the wrong bytes. Byte registers and memory operands came out as a different instruction, and some forms would not assemble at all.",
+      "changed": "These instructions now pick the right size, register and memory form, and give the same bytes as the GNU assembler.",
+      "matters": "Patching a program with these instructions no longer writes code that does something else."
     }
   ]
 }
