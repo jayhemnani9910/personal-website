@@ -301,6 +301,22 @@
       "broken": "Setting one part of a link's address, like its port, dropped the user name and password, and bad values such as a port with letters were kept. Chrome keeps the rest and ignores bad values.",
       "changed": "Each change now goes through the same address parser the browser already uses elsewhere, so bad values leave the link unchanged.",
       "matters": "Pages that edit links by parts get the same addresses they would in Chrome."
+    },
+    {
+      "number": 4185,
+      "merged": "2026-10-26",
+      "title": "An empty password field no longer looks filled",
+      "broken": "Every password field showed a masked value in the accessibility and page dumps, so tools could not tell an empty field from a filled one.",
+      "changed": "An empty password field now shows no value. A filled one is still masked, so the typed password never appears.",
+      "matters": "Automation and agents can see which login fields still need filling."
+    },
+    {
+      "number": 4192,
+      "merged": "2026-10-26",
+      "title": "Page listeners run in the page's own context",
+      "broken": "When a tool like Playwright focused a field or picked a select option, the page's own event listeners ran in the tool's context and saw the wrong objects.",
+      "changed": "Each listener now runs in the context it was created in, whoever caused the event.",
+      "matters": "React focus and change handlers now fire when Playwright drives the page, as in Chrome."
     }
   ]
 }

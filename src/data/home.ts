@@ -433,6 +433,12 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "uutils/awk", number: "#140", href: "https://github.com/uutils/awk/pull/140" },
   { repo: "uutils/shadow", number: "#349", href: "https://github.com/uutils/shadow/pull/349" },
   { repo: "uutils/tar", number: "#415", href: "https://github.com/uutils/tar/pull/415" },
+  { repo: "eugenioenko/ttt", number: "#1124", href: "https://github.com/eugenioenko/ttt/pull/1124" },
+  { repo: "seaweedfs/seaweedfs", number: "#12051", href: "https://github.com/seaweedfs/seaweedfs/pull/12051" },
+  { repo: "uutils/awk", number: "#144", href: "https://github.com/uutils/awk/pull/144" },
+  { repo: "uutils/findutils", number: "#921", href: "https://github.com/uutils/findutils/pull/921" },
+  { repo: "lightpanda-io/browser", number: "#4185", href: "https://github.com/lightpanda-io/browser/pull/4185" },
+  { repo: "lightpanda-io/browser", number: "#4192", href: "https://github.com/lightpanda-io/browser/pull/4192" },
 ];
 
 /**
