@@ -466,6 +466,17 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "lightpanda-io/browser", number: "#4207", href: "https://github.com/lightpanda-io/browser/pull/4207" },
   { repo: "radareorg/radare2", number: "#27150", href: "https://github.com/radareorg/radare2/pull/27150" },
   { repo: "radareorg/radare2", number: "#27210", href: "https://github.com/radareorg/radare2/pull/27210" },
+  { repo: "AlexsJones/llmfit", number: "#1191", href: "https://github.com/AlexsJones/llmfit/pull/1191" },
+  { repo: "AlexsJones/llmfit", number: "#1192", href: "https://github.com/AlexsJones/llmfit/pull/1192" },
+  { repo: "AlexsJones/llmfit", number: "#1193", href: "https://github.com/AlexsJones/llmfit/pull/1193" },
+  { repo: "AlexsJones/llmfit", number: "#1195", href: "https://github.com/AlexsJones/llmfit/pull/1195" },
+  { repo: "lalinsky/zio", number: "#860", href: "https://github.com/lalinsky/zio/pull/860" },
+  { repo: "lalinsky/zio", number: "#861", href: "https://github.com/lalinsky/zio/pull/861" },
+  { repo: "lightpanda-io/browser", number: "#4225", href: "https://github.com/lightpanda-io/browser/pull/4225" },
+  { repo: "lightpanda-io/browser", number: "#4226", href: "https://github.com/lightpanda-io/browser/pull/4226" },
+  { repo: "seaweedfs/seaweedfs", number: "#12121", href: "https://github.com/seaweedfs/seaweedfs/pull/12121" },
+  { repo: "seaweedfs/seaweedfs", number: "#12122", href: "https://github.com/seaweedfs/seaweedfs/pull/12122" },
+  { repo: "uutils/awk", number: "#148", href: "https://github.com/uutils/awk/pull/148" },
 ];
 
 /**

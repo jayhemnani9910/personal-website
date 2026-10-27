@@ -61,6 +61,14 @@
       "broken": "In the Rust awk, a print line that started with something in brackets, like (x) \"-\", and then had a comma and more items, stopped with a syntax error.",
       "changed": "The comma and the items after it are now read, so these lines print what gawk prints.",
       "matters": "Ordinary print lines that start with a bracket no longer stop a script."
+    },
+    {
+      "number": 148,
+      "merged": "2026-10-27",
+      "title": "Big whole numbers print in full, like in gawk",
+      "broken": "In the Rust awk, whole numbers from 10 quadrillion up printed in scientific form, like 1e+16, and minus zero printed as -0.",
+      "changed": "Whole numbers now print with all their digits, and minus zero prints as 0.",
+      "matters": "Scripts that print large counts or sizes give the same output as gawk."
     }
   ]
 }

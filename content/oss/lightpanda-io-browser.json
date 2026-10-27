@@ -333,6 +333,22 @@
       "broken": "When a test tool loaded HTML into Lightpanda, the page's own scripts ran in a hidden side area, so their variables and functions were missing.",
       "changed": "Scripts on the page now always run in the page itself, as in Chrome.",
       "matters": "Automated tests that load page content directly behave the same in Lightpanda as in Chrome."
+    },
+    {
+      "number": 4225,
+      "merged": "2026-10-27",
+      "title": "Email fields are checked the way Chrome checks them",
+      "broken": "Email form fields rejected good addresses like a@localhost and accepted broken ones like a@b..c. Fields that allow several addresses were not handled at all.",
+      "changed": "Addresses are now checked by the web standard's rules, and fields with several addresses are split and checked one by one.",
+      "matters": "Forms that check email input behave the same in Lightpanda as in Chrome."
+    },
+    {
+      "number": 4226,
+      "merged": "2026-10-27",
+      "title": "Custom data attributes follow the same rules as in Chrome",
+      "broken": "The way pages store custom data on elements accepted names the standard forbids, and turned a leading capital letter into a different name than Chrome does.",
+      "changed": "Bad names are now rejected with the same errors Chrome gives, and every capital letter is mapped the standard way.",
+      "matters": "Pages and scripts that store data on elements get the same results as in Chrome."
     }
   ]
 }

@@ -165,6 +165,38 @@
       "broken": "Asking the tool to compare two named models failed with \"no model found\" when one of them was too big for the machine, even though it knew the model.",
       "changed": "Named models are now looked up in the full list. The fit filter only picks models when no names are given.",
       "matters": "People can see how a model that does not fit stacks up against one that does, which is a main reason to compare."
+    },
+    {
+      "number": 1191,
+      "merged": "2026-10-27",
+      "title": "JSON mode now reports errors as JSON for plan, concurrency and claim",
+      "broken": "With JSON output turned on, three commands still printed their errors as plain text and nothing else, so a script reading the JSON broke.",
+      "changed": "These commands now print a JSON error with a clear kind, like the other commands already do, and still exit with an error.",
+      "matters": "Scripts and AI agents that drive the tool can read every failure the same way."
+    },
+    {
+      "number": 1192,
+      "merged": "2026-10-27",
+      "title": "The local server answers bad requests with JSON errors",
+      "broken": "The server's docs promise a JSON error for bad input, but a request with a broken query string or body got a plain text reply instead.",
+      "changed": "These bad requests now get the same JSON error shape as every other mistake.",
+      "matters": "Apps and the dashboard that read the error field no longer fail on top of the real problem."
+    },
+    {
+      "number": 1193,
+      "merged": "2026-10-27",
+      "title": "Failed hardware plans are now marked as errors for AI tools",
+      "broken": "When an AI tool asked for a hardware plan and it failed, the answer was marked as a success that only held an error message.",
+      "changed": "Failures are now marked as errors. The message itself is the same.",
+      "matters": "AI agents can tell a failed plan from a real one without guessing."
+    },
+    {
+      "number": 1195,
+      "merged": "2026-10-27",
+      "title": "Setting memory by hand no longer shows the real card's free memory",
+      "broken": "When you told the tool to pretend the graphics card had less memory, it still showed the real card's free memory, which could be more than the pretend total.",
+      "changed": "The real free-memory number is now dropped when the size is set by hand.",
+      "matters": "Reports and schedulers that read free memory see numbers that make sense for the setup being tested."
     }
   ]
 }
