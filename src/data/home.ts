@@ -465,6 +465,7 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "uutils/parse_datetime", number: "#345", href: "https://github.com/uutils/parse_datetime/pull/345" },
   { repo: "lightpanda-io/browser", number: "#4207", href: "https://github.com/lightpanda-io/browser/pull/4207" },
   { repo: "radareorg/radare2", number: "#27150", href: "https://github.com/radareorg/radare2/pull/27150" },
+  { repo: "radareorg/radare2", number: "#27210", href: "https://github.com/radareorg/radare2/pull/27210" },
 ];
 
 /**
