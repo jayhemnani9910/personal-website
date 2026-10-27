@@ -10,6 +10,22 @@
       "broken": "The address reader accepted broken addresses, like one with nine groups, and quietly turned them into something else. It also refused addresses like ::ffff:1.2.3.4, which the library itself prints for IPv4 connections on a dual-stack socket.",
       "changed": "I rewrote it to follow the IPv6 address standard and the usual rules for IPv4, so bad input is rejected and IPv4 inside IPv6 is read correctly.",
       "matters": "Programs get an error for a bad address instead of connecting somewhere unexpected, and an address the library printed can always be read back."
+    },
+    {
+      "number": 860,
+      "merged": "2026-10-27",
+      "title": "Time lengths are read the same way Go reads them",
+      "broken": "The library says it reads time lengths like Go, but it refused forms Go accepts, like 0, .5s, +1s and the µs microsecond sign Go itself prints.",
+      "changed": "These forms are now accepted, and everything that worked before gives the same result.",
+      "matters": "Settings written for Go programs, or printed by them, can be read without errors."
+    },
+    {
+      "number": 861,
+      "merged": "2026-10-27",
+      "title": "A # anywhere on a hosts file line now starts a comment",
+      "broken": "In the hosts file, a comment written right after a name with no space turned into part of the name, so that name stopped working.",
+      "changed": "Each line is now cut at its first #, as the hosts file rules say.",
+      "matters": "Names in hosts files with tight comments resolve the way they do in the rest of the system."
     }
   ]
 }

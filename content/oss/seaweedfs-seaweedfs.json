@@ -149,6 +149,22 @@
       "broken": "With login turned off, SeaweedFS let anyone create and use storage buckets, but the list of buckets always came back empty.",
       "changed": "With login off, the list now shows every bucket, as it did in older versions.",
       "matters": "Tools that list buckets before using them work again on servers without login."
+    },
+    {
+      "number": 12121,
+      "merged": "2026-10-27",
+      "title": "Bucket ownership settings work when login is turned off",
+      "broken": "With login turned off, anyone could create and write to a bucket, but reading or changing its ownership settings was always refused.",
+      "changed": "With login off, these ownership requests are now allowed, like the other bucket requests already were.",
+      "matters": "Tools that set bucket ownership as part of setup work on servers without login."
+    },
+    {
+      "number": 12122,
+      "merged": "2026-10-27",
+      "title": "Network drive uploads fail clearly when the folder does not exist",
+      "broken": "Creating a folder or file inside a folder that did not exist quietly made all the missing folders, though the network drive standard says this must fail.",
+      "changed": "These requests now fail with the standard conflict error.",
+      "matters": "A typo in a path shows up as an error instead of leaving stray folders behind."
     }
   ]
 }
