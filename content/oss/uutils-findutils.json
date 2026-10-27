@@ -69,6 +69,14 @@
       "broken": "With -I, each input line went in raw: leading spaces stayed, blank lines still ran the command, quotes were kept and the end marker was ignored.",
       "changed": "-I now skips leading blanks and blank lines, handles quotes like plain xargs, and stops at the end marker, keeping each line as one argument.",
       "matters": "Scripts that feed lines to xargs -I get the same commands as on GNU systems."
+    },
+    {
+      "number": 922,
+      "merged": "2026-10-26",
+      "title": "find -ls shows file times in your own time zone",
+      "broken": "find's -ls output showed modification times in UTC, so on most machines the time was off by hours compared to GNU find and ls.",
+      "changed": "The time is now shown in the local time zone, in both the Unix and Windows code.",
+      "matters": "File listings show the same times as every other tool on the machine."
     }
   ]
 }

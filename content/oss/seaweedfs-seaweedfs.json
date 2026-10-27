@@ -141,6 +141,14 @@
       "broken": "When listing unfinished multipart uploads with a folder separator, SeaweedFS ignored the separator and returned every upload in the bucket at the top level.",
       "changed": "Uploads below a folder are now grouped under that folder's prefix, the way Amazon S3 does it.",
       "matters": "Tools that browse pending uploads folder by folder see the right ones instead of the whole bucket."
+    },
+    {
+      "number": 12077,
+      "merged": "2026-10-26",
+      "title": "Listing buckets works when login is turned off",
+      "broken": "With login turned off, SeaweedFS let anyone create and use storage buckets, but the list of buckets always came back empty.",
+      "changed": "With login off, the list now shows every bucket, as it did in older versions.",
+      "matters": "Tools that list buckets before using them work again on servers without login."
     }
   ]
 }

@@ -237,6 +237,38 @@
       "broken": "In a YAML text block, a comment line placed less indented than the text was treated as part of the text. A commented-out step in a CI script could end up running.",
       "changed": "I made the first line of the block set its indentation, so a less indented comment ends the block.",
       "matters": "Commented-out lines stay comments, and the text keeps its real indentation."
+    },
+    {
+      "number": 9886,
+      "merged": "2026-10-26",
+      "title": "File uploads with a tab in the name work again",
+      "broken": "Effect's form upload parser rejected any file whose name had a tab in it, so the whole request failed with an error.",
+      "changed": "The parser now accepts a tab inside a quoted file name, as the HTTP standard allows and browsers send.",
+      "matters": "Users could upload files with unusual names without the server turning the whole form away."
+    },
+    {
+      "number": 9887,
+      "merged": "2026-10-26",
+      "title": "Redirects go to exactly the address the server gave",
+      "broken": "When Effect's HTTP client followed a redirect, it rewrote the address, changing spaces and some characters, so signed download links stopped working.",
+      "changed": "The client now requests the redirect address exactly as the server sent it, like browsers do.",
+      "matters": "Signed links, such as cloud storage downloads, keep working after a redirect."
+    },
+    {
+      "number": 9891,
+      "merged": "2026-10-26",
+      "title": "Durations can be read and written in the ISO standard form",
+      "broken": "Effect had lost its way to turn a time span into the standard text form like PT1H30M, or read one back.",
+      "changed": "New functions write and read that form for exact units, and a schema converts between the text and a duration.",
+      "matters": "Apps can store and exchange time spans in a format other systems already understand."
+    },
+    {
+      "number": 9903,
+      "merged": "2026-10-26",
+      "title": "Secret parts of AWS download links are hidden in logs",
+      "broken": "Effect hid older AWS signatures from logs and error messages, but the newer kind every AWS tool uses today showed in full.",
+      "changed": "The signature, access key and session token in modern AWS links are now hidden by default.",
+      "matters": "Logs and traces no longer leak credentials that could let someone download private files."
     }
   ]
 }

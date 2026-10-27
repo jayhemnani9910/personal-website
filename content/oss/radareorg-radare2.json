@@ -325,6 +325,14 @@
       "broken": "radare2's arm64 assembler could write the signed sxtb and sxth instructions but refused their unsigned versions, uxtb and uxth.",
       "changed": "uxtb and uxth now assemble to the right bytes, and each one reads back as the same text.",
       "matters": "Zero-extending a byte or half-word is common in arm64 code, so patches that need it no longer fail."
+    },
+    {
+      "number": 27150,
+      "merged": "2026-10-27",
+      "title": "The x86 assembler writes jumps, calls, push and pop correctly",
+      "broken": "radare2's x86 assembler produced wrong or cut-off bytes for jumps, calls, push, pop, inc and dec when they used memory or newer registers.",
+      "changed": "These instructions now go through the shared operand code and match the GNU assembler on 186 forms.",
+      "matters": "Patches that use these common instructions now assemble into code that actually runs."
     }
   ]
 }
