@@ -4,6 +4,14 @@
   "stars": 29,
   "prs": [
     {
+      "number": 149,
+      "merged": "2026-10-27",
+      "title": "An unset variable now equals zero when compared with a number",
+      "broken": "A variable that was never set was compared as text against a number, so checks like n equals 0 came out false and counters that start empty went wrong.",
+      "changed": "An unset value now compares as 0 against a number and as empty text against text, as the standard says.",
+      "matters": "Common awk scripts that count or test variables before setting them give the same answers as gawk."
+    },
+    {
       "number": 143,
       "merged": "2026-10-25",
       "title": "Dividing a built-in variable no longer reads as a pattern",
