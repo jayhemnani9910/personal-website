@@ -333,6 +333,14 @@
       "broken": "radare2's x86 assembler produced wrong or cut-off bytes for jumps, calls, push, pop, inc and dec when they used memory or newer registers.",
       "changed": "These instructions now go through the shared operand code and match the GNU assembler on 186 forms.",
       "matters": "Patches that use these common instructions now assemble into code that actually runs."
+    },
+    {
+      "number": 27210,
+      "merged": "2026-10-27",
+      "title": "The x86 assembler writes test and xchg with memory correctly",
+      "broken": "radare2's x86 assembler dropped parts of test and xchg when one side was memory, so the bytes it wrote meant a different instruction.",
+      "changed": "Both instructions now use the shared memory operand code and give the same bytes as the GNU assembler on over 2,000 forms.",
+      "matters": "Patches that compare or swap a register with memory now assemble into the code that was asked for."
     }
   ]
 }
