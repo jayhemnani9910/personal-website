@@ -325,6 +325,14 @@
       "broken": "Pages often hide an element and later clear the style by setting it to null. The browser stored the word \"null\" instead, so the element stayed broken.",
       "changed": "Setting a style property to null now clears it, as the web standard and Chrome do.",
       "matters": "Menus, popups and other elements that pages show this way appear when they should."
+    },
+    {
+      "number": 4207,
+      "merged": "2026-10-27",
+      "title": "Page scripts set by test tools now run where pages can see them",
+      "broken": "When a test tool loaded HTML into Lightpanda, the page's own scripts ran in a hidden side area, so their variables and functions were missing.",
+      "changed": "Scripts on the page now always run in the page itself, as in Chrome.",
+      "matters": "Automated tests that load page content directly behave the same in Lightpanda as in Chrome."
     }
   ]
 }

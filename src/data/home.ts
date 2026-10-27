@@ -456,6 +456,15 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "radareorg/radare2", number: "#27151", href: "https://github.com/radareorg/radare2/pull/27151" },
   { repo: "radareorg/radare2", number: "#27199", href: "https://github.com/radareorg/radare2/pull/27199" },
   { repo: "uutils/awk", number: "#147", href: "https://github.com/uutils/awk/pull/147" },
+  { repo: "Effect-TS/effect", number: "#9886", href: "https://github.com/Effect-TS/effect/pull/9886" },
+  { repo: "Effect-TS/effect", number: "#9887", href: "https://github.com/Effect-TS/effect/pull/9887" },
+  { repo: "Effect-TS/effect", number: "#9891", href: "https://github.com/Effect-TS/effect/pull/9891" },
+  { repo: "Effect-TS/effect", number: "#9903", href: "https://github.com/Effect-TS/effect/pull/9903" },
+  { repo: "seaweedfs/seaweedfs", number: "#12077", href: "https://github.com/seaweedfs/seaweedfs/pull/12077" },
+  { repo: "uutils/findutils", number: "#922", href: "https://github.com/uutils/findutils/pull/922" },
+  { repo: "uutils/parse_datetime", number: "#345", href: "https://github.com/uutils/parse_datetime/pull/345" },
+  { repo: "lightpanda-io/browser", number: "#4207", href: "https://github.com/lightpanda-io/browser/pull/4207" },
+  { repo: "radareorg/radare2", number: "#27150", href: "https://github.com/radareorg/radare2/pull/27150" },
 ];
 
 /**

@@ -10,6 +10,14 @@
       "broken": "GNU date lets you write a zone like EST followed by the word DST to mean that zone's summer time. Here it was rejected as an invalid date.",
       "changed": "A DST word after a standard time zone now adds the hour. Zones that are already summer time still reject it, as in GNU.",
       "matters": "Dates written this way give the same time as GNU date."
+    },
+    {
+      "number": 345,
+      "merged": "2026-10-26",
+      "title": "Three more time zone names are understood",
+      "broken": "The date parser rejected the time zone names MET, HAST and HADT, which GNU date accepts.",
+      "changed": "The three names were added with the same offsets GNU date uses, and checked against every short name GNU knows.",
+      "matters": "Dates written with these zone names now parse the same as with GNU date."
     }
   ]
 }
