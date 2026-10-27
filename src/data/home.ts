@@ -477,6 +477,7 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "seaweedfs/seaweedfs", number: "#12121", href: "https://github.com/seaweedfs/seaweedfs/pull/12121" },
   { repo: "seaweedfs/seaweedfs", number: "#12122", href: "https://github.com/seaweedfs/seaweedfs/pull/12122" },
   { repo: "uutils/awk", number: "#148", href: "https://github.com/uutils/awk/pull/148" },
+  { repo: "uutils/awk", number: "#149", href: "https://github.com/uutils/awk/pull/149" },
 ];
 
 /**
