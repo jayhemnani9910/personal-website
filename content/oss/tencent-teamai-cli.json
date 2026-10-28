@@ -93,6 +93,14 @@
       "broken": "A screenshot pasted into a Codex session disappeared when the session moved to another tool. Moving it back turned any image into plain text. The report still said nothing was lost.",
       "changed": "I made the tool read Codex's pasted images and write them back the same way. Codex now counts as supporting images.",
       "matters": "A moved session keeps the screenshots that explained the problem."
+    },
+    {
+      "number": 1506,
+      "merged": "2026-10-28",
+      "title": "Passwords with quotes are masked in shared session tool calls",
+      "broken": "Scrubbing a session before sharing it missed a secret inside a tool call when the secret had a quote or a backslash, which generated passwords often do.",
+      "changed": "I made known secrets get masked in each text value of the tool arguments first, before the escaped form is checked.",
+      "matters": "A shared or migrated session no longer leaks such a password from the commands it ran."
     }
   ]
 }

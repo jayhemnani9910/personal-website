@@ -478,6 +478,9 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "seaweedfs/seaweedfs", number: "#12122", href: "https://github.com/seaweedfs/seaweedfs/pull/12122" },
   { repo: "uutils/awk", number: "#148", href: "https://github.com/uutils/awk/pull/148" },
   { repo: "uutils/awk", number: "#149", href: "https://github.com/uutils/awk/pull/149" },
+  { repo: "Tencent/teamai-cli", number: "#1506", href: "https://github.com/Tencent/teamai-cli/pull/1506" },
+  { repo: "eugenioenko/ttt", number: "#1238", href: "https://github.com/eugenioenko/ttt/pull/1238" },
+  { repo: "eugenioenko/ttt", number: "#1239", href: "https://github.com/eugenioenko/ttt/pull/1239" },
 ];
 
 /**

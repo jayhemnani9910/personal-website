@@ -101,6 +101,22 @@
       "broken": "After changing a file's line ending, typing and then undoing marked the tab as saved. Closing it or quitting then lost the change without asking.",
       "changed": "The editor remembers the line ending the file was loaded or saved with, and undo only marks the tab clean when that matches too.",
       "matters": "A line ending change can no longer be thrown away silently when the tab closes."
+    },
+    {
+      "number": 1238,
+      "merged": "2026-10-28",
+      "title": "The detected indent size no longer changes between opens",
+      "broken": "When a file had as many 2-space indents as 4-space ones, the editor picked one at random each time it opened the file.",
+      "changed": "On a tie the smaller step wins, since it fits the larger one too. A single-space step from doc comments never wins a tie.",
+      "matters": "The status bar and the Tab key give the same indent every time a file is opened."
+    },
+    {
+      "number": 1239,
+      "merged": "2026-10-28",
+      "title": "Diffs of one-line changes keep their line numbers",
+      "broken": "Git leaves out the count in a hunk header when it is 1. The editor only read headers with a count, so those diffs showed no line numbers.",
+      "changed": "I made the hunk header parser read a range with or without its count.",
+      "matters": "Staged changes to short files show line numbers on both sides, like any other diff."
     }
   ]
 }
