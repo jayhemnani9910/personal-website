@@ -4,6 +4,14 @@
   "stars": 35616,
   "prs": [
     {
+      "number": 12156,
+      "merged": "2026-10-28",
+      "title": "SFTP no longer creates missing folders on its own",
+      "broken": "Making a folder or uploading a file inside a folder that did not exist quietly created every missing folder on the way. A normal SFTP server says the folder does not exist.",
+      "changed": "The SFTP server now refuses both with a clear not-found error when the parent folder is missing, the same answer OpenSSH gives.",
+      "matters": "Scripts that move files over SFTP catch a wrong path right away instead of filling storage with stray folders."
+    },
+    {
       "number": 12027,
       "merged": "2026-10-24",
       "title": "Storage servers no longer say an old copy is current",
