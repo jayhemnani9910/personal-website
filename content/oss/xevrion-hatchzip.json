@@ -1,0 +1,23 @@
+{
+  "repo": "xevrion/hatchzip",
+  "about": "A free archive extractor for Windows, macOS and Linux that unpacks ZIP, 7z, RAR and tar files in place.",
+  "stars": 2255,
+  "prs": [
+    {
+      "number": 27,
+      "merged": "2026-10-28",
+      "title": "Unzipped files keep their real modification times",
+      "broken": "Files pulled out of a ZIP got times shifted by the computer's time zone, because the precise time stored in the archive was ignored.",
+      "changed": "The extractor now reads the precise time the archive stores, like other unzip tools do.",
+      "matters": "File dates stay correct, so backups and sorting by date still work after extracting."
+    },
+    {
+      "number": 28,
+      "merged": "2026-10-28",
+      "title": "Archives with files dated before 1970 no longer crash the extractor",
+      "broken": "A tar archive holding a file dated before 1970 made the extractor crash while listing, testing or extracting it.",
+      "changed": "Old dates are now read correctly, and dates that cannot be shown are skipped instead of crashing.",
+      "matters": "Old archives, like scanned family photos or legacy backups, open without the tool falling over."
+    }
+  ]
+}

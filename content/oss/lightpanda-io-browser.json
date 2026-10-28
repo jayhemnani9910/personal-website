@@ -373,6 +373,14 @@
       "broken": "The way pages store custom data on elements accepted names the standard forbids, and turned a leading capital letter into a different name than Chrome does.",
       "changed": "Bad names are now rejected with the same errors Chrome gives, and every capital letter is mapped the standard way.",
       "matters": "Pages and scripts that store data on elements get the same results as in Chrome."
+    },
+    {
+      "number": 4247,
+      "merged": "2026-10-28",
+      "title": "Web requests that cannot have a body now refuse one",
+      "broken": "A page could send a GET or HEAD request with a body. Real browsers refuse that, so pages that test for it behaved differently in Lightpanda.",
+      "changed": "Such a request now fails with the same error a browser gives.",
+      "matters": "Sites and scripts see the same rules they see in Chrome, so automated runs match real use."
     }
   ]
 }

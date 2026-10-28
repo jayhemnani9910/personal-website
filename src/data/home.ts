@@ -488,6 +488,11 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "seaweedfs/seaweedfs", number: "#12156", href: "https://github.com/seaweedfs/seaweedfs/pull/12156" },
   { repo: "lightpanda-io/browser", number: "#4228", href: "https://github.com/lightpanda-io/browser/pull/4228" },
   { repo: "radareorg/radare2", number: "#27230", href: "https://github.com/radareorg/radare2/pull/27230" },
+  { repo: "lightpanda-io/browser", number: "#4247", href: "https://github.com/lightpanda-io/browser/pull/4247" },
+  { repo: "seaweedfs/seaweedfs", number: "#12155", href: "https://github.com/seaweedfs/seaweedfs/pull/12155" },
+  { repo: "seaweedfs/seaweedfs", number: "#12168", href: "https://github.com/seaweedfs/seaweedfs/pull/12168" },
+  { repo: "xevrion/hatchzip", number: "#27", href: "https://github.com/xevrion/hatchzip/pull/27" },
+  { repo: "xevrion/hatchzip", number: "#28", href: "https://github.com/xevrion/hatchzip/pull/28" },
 ];
 
 /**
