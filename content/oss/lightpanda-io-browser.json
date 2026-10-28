@@ -4,6 +4,22 @@
   "stars": 36886,
   "prs": [
     {
+      "number": 4249,
+      "merged": "2026-10-28",
+      "title": "Required and optional field rules match only real form fields",
+      "broken": "The page rules that pick out required and optional fields matched almost anything. A small form page had 47 optional elements instead of 9, and hidden inputs counted as required.",
+      "changed": "Only the form fields that can be required now match, using the same list Chrome uses: text inputs and similar, selects, text areas, and buttons for optional.",
+      "matters": "Scripts that look for empty required fields, or styles that mark them, get the same answer as in Chrome."
+    },
+    {
+      "number": 4248,
+      "merged": "2026-10-28",
+      "title": "Mouse enter and leave handlers set on an element now run",
+      "broken": "Pages can attach a hover handler straight to an element, the window or the document. Lightpanda did not know the mouse enter and leave versions, so menus and tooltips built that way never reacted.",
+      "changed": "Elements, the document and the window now accept both handlers, and they run when the mouse moves onto or off an element, as in Chrome.",
+      "matters": "Scripts that hover over menus or tooltips see the same page a real browser shows."
+    },
+    {
       "number": 4184,
       "merged": "2026-10-25",
       "title": "Playwright can click inside shadow DOM",

@@ -481,6 +481,11 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "Tencent/teamai-cli", number: "#1506", href: "https://github.com/Tencent/teamai-cli/pull/1506" },
   { repo: "eugenioenko/ttt", number: "#1238", href: "https://github.com/eugenioenko/ttt/pull/1238" },
   { repo: "eugenioenko/ttt", number: "#1239", href: "https://github.com/eugenioenko/ttt/pull/1239" },
+  { repo: "lightpanda-io/browser", number: "#4248", href: "https://github.com/lightpanda-io/browser/pull/4248" },
+  { repo: "lightpanda-io/browser", number: "#4249", href: "https://github.com/lightpanda-io/browser/pull/4249" },
+  { repo: "radareorg/radare2", number: "#27231", href: "https://github.com/radareorg/radare2/pull/27231" },
+  { repo: "radareorg/radare2", number: "#27232", href: "https://github.com/radareorg/radare2/pull/27232" },
+  { repo: "seaweedfs/seaweedfs", number: "#12156", href: "https://github.com/seaweedfs/seaweedfs/pull/12156" },
 ];
 
 /**

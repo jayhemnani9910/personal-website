@@ -4,6 +4,22 @@
   "stars": 25104,
   "prs": [
     {
+      "number": 27232,
+      "merged": "2026-10-28",
+      "title": "x86 math with a constant now assembles to the right bytes",
+      "broken": "For eight basic math and compare instructions with a constant, the built-in x86 assembler often wrote the wrong bytes without any error, for example using a different register than the one written.",
+      "changed": "These instructions now use the same encoder as the shift instructions. All 3600 tested 64-bit forms match GNU's assembler, up from 3096, and constants too big for the operand are refused.",
+      "matters": "Patches written in radare2 run the instruction that was typed, not a silently different one."
+    },
+    {
+      "number": 27231,
+      "merged": "2026-10-28",
+      "title": "The x86 assembler can write the instruction the disassembler shows",
+      "broken": "radare2 shows one common 64-bit sign-extend instruction under a name its own built-in assembler did not know. Copying a disassembled line back to patch it failed with an error.",
+      "changed": "The assembler now writes that instruction for every register and memory form, and accepts the other common spelling too. All 176 forms were checked against GNU's assembler.",
+      "matters": "People patching 64-bit programs can write back exactly what radare2 showed them."
+    },
+    {
       "number": 27184,
       "merged": "2026-10-25",
       "title": "The arm64 assembler keeps the condition you wrote",
