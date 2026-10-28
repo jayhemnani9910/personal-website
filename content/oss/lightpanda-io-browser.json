@@ -4,6 +4,14 @@
   "stars": 36886,
   "prs": [
     {
+      "number": 4228,
+      "merged": "2026-10-28",
+      "title": "Playwright mouse drags and Puppeteer drag and drop now work",
+      "broken": "Playwright asks the browser to watch for drags during every mouse move with the button held. Lightpanda did not know that request, so pressing and moving the mouse, or dragging one element onto another, failed.",
+      "changed": "Lightpanda now answers that request, and can play drag and drop events sent from outside the page in the same order Chrome fires them, carrying the dragged text or links.",
+      "matters": "Scripts that drag sliders, reorder lists or drop files and links onto a page can run in Lightpanda."
+    },
+    {
       "number": 4249,
       "merged": "2026-10-28",
       "title": "Required and optional field rules match only real form fields",
