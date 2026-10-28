@@ -486,6 +486,8 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "radareorg/radare2", number: "#27231", href: "https://github.com/radareorg/radare2/pull/27231" },
   { repo: "radareorg/radare2", number: "#27232", href: "https://github.com/radareorg/radare2/pull/27232" },
   { repo: "seaweedfs/seaweedfs", number: "#12156", href: "https://github.com/seaweedfs/seaweedfs/pull/12156" },
+  { repo: "lightpanda-io/browser", number: "#4228", href: "https://github.com/lightpanda-io/browser/pull/4228" },
+  { repo: "radareorg/radare2", number: "#27230", href: "https://github.com/radareorg/radare2/pull/27230" },
 ];
 
 /**

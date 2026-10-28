@@ -4,6 +4,14 @@
   "stars": 25104,
   "prs": [
     {
+      "number": 27230,
+      "merged": "2026-10-28",
+      "title": "x86 multiply instructions now assemble to the right bytes",
+      "broken": "The built-in x86 assembler wrote the wrong bytes for most multiply instructions with two or three operands. It used the wrong registers for the newer ones and the wrong length for many constants, with no error.",
+      "changed": "Multiply now uses the same careful encoder as the move instructions. Nearly every one of 2373 tested forms matches GNU's assembler, up from 569, and impossible ones are refused.",
+      "matters": "Patches with a multiply in them do what was typed, instead of silently corrupting the program."
+    },
+    {
       "number": 27232,
       "merged": "2026-10-28",
       "title": "x86 math with a constant now assembles to the right bytes",
