@@ -173,6 +173,22 @@
       "broken": "Creating a folder or file inside a folder that did not exist quietly made all the missing folders, though the network drive standard says this must fail.",
       "changed": "These requests now fail with the standard conflict error.",
       "matters": "A typo in a path shows up as an error instead of leaving stray folders behind."
+    },
+    {
+      "number": 12155,
+      "merged": "2026-10-28",
+      "title": "Changing a file's sharing setting works when login is turned off",
+      "broken": "With login turned off, every attempt to change who can read a file was refused, even right after the same person uploaded it.",
+      "changed": "With login off, these changes are now allowed, the same way other ownership checks already treat it.",
+      "matters": "Small setups without accounts can share files without turning on login just for this."
+    },
+    {
+      "number": 12168,
+      "merged": "2026-10-28",
+      "title": "File transfer reports a failed delete instead of claiming success",
+      "broken": "Through the file transfer server, deleting something that was not there, or making a folder that already existed, quietly reported success.",
+      "changed": "These now fail with the same errors a standard file transfer server gives.",
+      "matters": "Scripts and people learn when an action did nothing, instead of trusting a false success."
     }
   ]
 }
