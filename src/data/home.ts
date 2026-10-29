@@ -509,6 +509,9 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "lightpanda-io/browser", number: "#4265", href: "https://github.com/lightpanda-io/browser/pull/4265" },
   { repo: "lightpanda-io/browser", number: "#4266", href: "https://github.com/lightpanda-io/browser/pull/4266" },
   { repo: "lightpanda-io/browser", number: "#4267", href: "https://github.com/lightpanda-io/browser/pull/4267" },
+  { repo: "LemmyNet/lemmy-ui", number: "#4361", href: "https://github.com/LemmyNet/lemmy-ui/pull/4361" },
+  { repo: "casdoor/casdoor", number: "#5968", href: "https://github.com/casdoor/casdoor/pull/5968" },
+  { repo: "uutils/findutils", number: "#918", href: "https://github.com/uutils/findutils/pull/918" },
 ];
 
 /**

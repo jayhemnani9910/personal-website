@@ -4,6 +4,14 @@
   "stars": 653,
   "prs": [
     {
+      "number": 918,
+      "merged": "2026-10-29",
+      "title": "find prints numbers and names with the same formatting options as GNU",
+      "broken": "find's custom print format only knew a width. Asking to cut a name short, pad a number with zeros, or show a sign printed the format code itself plus warnings.",
+      "changed": "find now understands those options the same way GNU find does, for every kind of value it can print.",
+      "matters": "Scripts that format find's output for GNU find now give the same result here."
+    },
+    {
       "number": 919,
       "merged": "2026-10-24",
       "title": "A test keeps the stop-printing escape honest",

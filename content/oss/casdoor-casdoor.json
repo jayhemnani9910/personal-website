@@ -4,6 +4,14 @@
   "stars": 14607,
   "prs": [
     {
+      "number": 5968,
+      "merged": "2026-10-29",
+      "title": "Directory searches for \"contains\" or \"ends with\" now find people",
+      "broken": "The built-in directory server only matched names that started with the search text. A search for an email containing or ending with some text found nobody.",
+      "changed": "Searches now match the text anywhere it was asked for: at the start, in the middle, or at the end.",
+      "matters": "Apps that look people up by part of a name or email get the right users back."
+    },
+    {
       "number": 5918,
       "merged": "2026-10-20",
       "title": "Sign-in behind a Traefik proxy now ends on the right site",
