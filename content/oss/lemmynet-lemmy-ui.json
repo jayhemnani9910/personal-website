@@ -1,0 +1,15 @@
+{
+  "repo": "LemmyNet/lemmy-ui",
+  "about": "The web app for Lemmy, a link sharing and discussion site that many people run themselves.",
+  "stars": 1015,
+  "prs": [
+    {
+      "number": 4361,
+      "merged": "2026-10-29",
+      "title": "Links to normal web pages no longer show up as videos or images",
+      "broken": "The app guessed a link was a video or image if a file ending appeared anywhere in it. A news page on webmd.com showed a video player because \"webm\" was in the site name.",
+      "changed": "A link now counts as a video, image or audio only when the file ending is at the very end of the address.",
+      "matters": "Posts that link to articles show as links, not broken players."
+    }
+  ]
+}
