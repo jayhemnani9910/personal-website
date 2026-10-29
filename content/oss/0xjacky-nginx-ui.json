@@ -4,6 +4,38 @@
   "stars": 11647,
   "prs": [
     {
+      "number": 2048,
+      "merged": "2026-10-29",
+      "title": "Site list sorts by number",
+      "broken": "Clicking the number column in the site list did nothing; the order stayed as the files were read.",
+      "changed": "The list now sorts by that column.",
+      "matters": "Sites can be ordered the way the column promises."
+    },
+    {
+      "number": 2045,
+      "merged": "2026-10-29",
+      "title": "Quieter logs at start-up",
+      "broken": "Every start filled the log with \"record not found\" messages for lookups that are expected to miss.",
+      "changed": "Those expected misses are no longer logged.",
+      "matters": "Real problems are easier to spot in the log."
+    },
+    {
+      "number": 2044,
+      "merged": "2026-10-29",
+      "title": "Maintenance mode keeps shared settings",
+      "broken": "Putting a site into maintenance dropped settings other sites share, so nginx refused to start.",
+      "changed": "Maintenance mode now keeps those shared settings.",
+      "matters": "Turning on maintenance for one site no longer breaks the others."
+    },
+    {
+      "number": 2035,
+      "merged": "2026-10-29",
+      "title": "Log lines with a spaced user name show up",
+      "broken": "Requests from a user name with a space never appeared in log search or on the dashboard.",
+      "changed": "The log reader now handles names with spaces.",
+      "matters": "No requests go missing from the logs."
+    },
+    {
       "number": 2015,
       "merged": "2026-10-14",
       "title": "Notes in a site's settings survive a save",

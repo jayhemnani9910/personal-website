@@ -493,6 +493,22 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "seaweedfs/seaweedfs", number: "#12168", href: "https://github.com/seaweedfs/seaweedfs/pull/12168" },
   { repo: "xevrion/hatchzip", number: "#27", href: "https://github.com/xevrion/hatchzip/pull/27" },
   { repo: "xevrion/hatchzip", number: "#28", href: "https://github.com/xevrion/hatchzip/pull/28" },
+  { repo: "seaweedfs/seaweedfs", number: "#12180", href: "https://github.com/seaweedfs/seaweedfs/pull/12180" },
+  { repo: "seaweedfs/seaweedfs", number: "#12181", href: "https://github.com/seaweedfs/seaweedfs/pull/12181" },
+  { repo: "skylot/jadx", number: "#3038", href: "https://github.com/skylot/jadx/pull/3038" },
+  { repo: "skylot/jadx", number: "#3039", href: "https://github.com/skylot/jadx/pull/3039" },
+  { repo: "0xJacky/nginx-ui", number: "#2035", href: "https://github.com/0xJacky/nginx-ui/pull/2035" },
+  { repo: "0xJacky/nginx-ui", number: "#2044", href: "https://github.com/0xJacky/nginx-ui/pull/2044" },
+  { repo: "0xJacky/nginx-ui", number: "#2045", href: "https://github.com/0xJacky/nginx-ui/pull/2045" },
+  { repo: "0xJacky/nginx-ui", number: "#2048", href: "https://github.com/0xJacky/nginx-ui/pull/2048" },
+  { repo: "YouROK/TorrServer", number: "#941", href: "https://github.com/YouROK/TorrServer/pull/941" },
+  { repo: "YouROK/TorrServer", number: "#942", href: "https://github.com/YouROK/TorrServer/pull/942" },
+  { repo: "YouROK/TorrServer", number: "#943", href: "https://github.com/YouROK/TorrServer/pull/943" },
+  { repo: "YouROK/TorrServer", number: "#944", href: "https://github.com/YouROK/TorrServer/pull/944" },
+  { repo: "eugenioenko/ttt", number: "#1258", href: "https://github.com/eugenioenko/ttt/pull/1258" },
+  { repo: "lightpanda-io/browser", number: "#4265", href: "https://github.com/lightpanda-io/browser/pull/4265" },
+  { repo: "lightpanda-io/browser", number: "#4266", href: "https://github.com/lightpanda-io/browser/pull/4266" },
+  { repo: "lightpanda-io/browser", number: "#4267", href: "https://github.com/lightpanda-io/browser/pull/4267" },
 ];
 
 /**

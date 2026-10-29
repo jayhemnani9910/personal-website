@@ -4,12 +4,30 @@
   "stars": 51120,
   "prs": [
     {
+      "number": 3039,
+      "merged": "2026-10-28",
+      "title": "Comparing boxed numbers keeps its meaning",
+      "broken": "Two boxed numbers compared with == were shown as a plain number compare, which gives a different answer.",
+      "changed": "The decompiler now keeps them boxed in that compare.",
+      "matters": "The decompiled code behaves like the original."
+    },
+    {
+      "number": 3038,
+      "merged": "2026-10-28",
+      "title": "Joined text uses the right variables again",
+      "broken": "In decompiled Java, text joined after a large number pulled in the wrong variables, so the output said something the app never did.",
+      "changed": "The decompiler now reads each piece from the right place.",
+      "matters": "Decompiled code matches what the app really prints.",
+      "top": true
+    },
+    {
       "number": 3003,
       "merged": "2026-10-13",
       "title": "Calls that take any number of values keep their meaning",
       "broken": "Some Java methods take any number of values. When an app passed one empty value or one list, the rebuilt code dropped a wrapper, so the method got something different and could crash.",
       "changed": "The tool now keeps the wrapper in exactly those cases, so the call means what it did in the app.",
-      "matters": "Rebuilt code behaves like the original app instead of quietly doing something else."
+      "matters": "Rebuilt code behaves like the original app instead of quietly doing something else.",
+      "top": true
     },
     {
       "number": 3002,
@@ -17,7 +35,8 @@
       "title": "Joined text no longer turns into a sum of numbers",
       "broken": "Code that glued two numbers into text, like 1 and 2 into \"12\", came back from the tool as adding them, giving 3. The rebuilt code meant something different from the app.",
       "changed": "The tool now keeps the text joining when the first two pieces are numbers, matching what the app really does.",
-      "matters": "People reading the rebuilt code see what the app actually does, not a quietly wrong version."
+      "matters": "People reading the rebuilt code see what the app actually does, not a quietly wrong version.",
+      "top": true
     }
   ]
 }

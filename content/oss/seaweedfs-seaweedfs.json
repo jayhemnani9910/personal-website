@@ -4,6 +4,22 @@
   "stars": 35616,
   "prs": [
     {
+      "number": 12181,
+      "merged": "2026-10-28",
+      "title": "Copies say which version they came from",
+      "broken": "Copying a file from a bucket that keeps old versions never said which version was copied.",
+      "changed": "Copies now report the source version, as Amazon S3 does.",
+      "matters": "Backup and sync tools can tell exactly what they copied."
+    },
+    {
+      "number": 12180,
+      "merged": "2026-10-28",
+      "title": "Bucket permissions can be set when sign-in is off",
+      "broken": "With no users set up, every request to set a bucket's access rule failed, even the plain private one.",
+      "changed": "The server now accepts these rules when sign-in is turned off.",
+      "matters": "People running SeaweedFS without accounts can set bucket access like on AWS."
+    },
+    {
       "number": 12156,
       "merged": "2026-10-28",
       "title": "SFTP no longer creates missing folders on its own",

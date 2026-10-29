@@ -4,6 +4,38 @@
   "stars": 3140,
   "prs": [
     {
+      "number": 944,
+      "merged": "2026-10-29",
+      "title": "Local network IPv6 clients are not banned",
+      "broken": "With any IP list set, devices on the local network over IPv6 were banned by mistake.",
+      "changed": "The server now reads their address correctly.",
+      "matters": "Home network devices keep working when an IP list is on."
+    },
+    {
+      "number": 943,
+      "merged": "2026-10-29",
+      "title": "Blocked-site rules work for non-English domains",
+      "broken": "A blocked-site rule for a domain in Cyrillic or another script never matched what browsers send.",
+      "changed": "Rules now match both forms of such domains.",
+      "matters": "Blocking works for every domain, not just English ones."
+    },
+    {
+      "number": 942,
+      "merged": "2026-10-29",
+      "title": "Empty settings requests are refused cleanly",
+      "broken": "Saving settings without any settings crashed the request with an empty error.",
+      "changed": "The server now answers with a clear bad-request message.",
+      "matters": "Apps see what went wrong instead of a crash."
+    },
+    {
+      "number": 941,
+      "merged": "2026-10-29",
+      "title": "A bad torrent ID gets a clear answer",
+      "broken": "A torrent ID in the wrong shape crashed the request and returned an empty error.",
+      "changed": "Those requests now get a plain not found.",
+      "matters": "Apps get a clear answer and the log stays clean."
+    },
+    {
       "number": 938,
       "merged": "2026-10-25",
       "title": "Playlists refresh when they change",
