@@ -4,6 +4,14 @@
   "stars": 628,
   "prs": [
     {
+      "number": 1258,
+      "merged": "2026-10-29",
+      "title": "Editor settings apply to the right folders",
+      "broken": "Settings in .editorconfig meant for certain folders or file patterns were ignored.",
+      "changed": "The editor now matches those patterns the standard way.",
+      "matters": "Indentation and other settings follow the project's rules."
+    },
+    {
       "number": 892,
       "merged": "2026-10-13",
       "title": "Unchanged Windows-style files no longer show as edited",

@@ -4,6 +4,30 @@
   "stars": 36886,
   "prs": [
     {
+      "number": 4267,
+      "merged": "2026-10-29",
+      "title": "The :default selector works",
+      "broken": "The :default selector never matched, so forms' default buttons and options could not be found.",
+      "changed": "It now finds the default button, checked boxes and selected options.",
+      "matters": "Form automation finds the same elements as in Chrome."
+    },
+    {
+      "number": 4266,
+      "merged": "2026-10-29",
+      "title": "The :scope selector works on a page",
+      "broken": "Searching a page with :scope found nothing at all.",
+      "changed": "It now matches the top of the page, as in Chrome.",
+      "matters": "Scripts that use :scope work in Lightpanda."
+    },
+    {
+      "number": 4265,
+      "merged": "2026-10-29",
+      "title": "Empty attribute filters match nothing",
+      "broken": "Searching for elements whose attribute starts, ends or contains an empty value matched every such element.",
+      "changed": "These searches now match nothing, as in Chrome.",
+      "matters": "Scripts and scrapers get the same results as in a real browser."
+    },
+    {
       "number": 4228,
       "merged": "2026-10-28",
       "title": "Playwright mouse drags and Puppeteer drag and drop now work",
