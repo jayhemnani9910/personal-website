@@ -512,6 +512,10 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "LemmyNet/lemmy-ui", number: "#4361", href: "https://github.com/LemmyNet/lemmy-ui/pull/4361" },
   { repo: "casdoor/casdoor", number: "#5968", href: "https://github.com/casdoor/casdoor/pull/5968" },
   { repo: "uutils/findutils", number: "#918", href: "https://github.com/uutils/findutils/pull/918" },
+  { repo: "uutils/procps", number: "#819", href: "https://github.com/uutils/procps/pull/819" },
+  { repo: "uutils/procps", number: "#820", href: "https://github.com/uutils/procps/pull/820" },
+  { repo: "uutils/tar", number: "#414", href: "https://github.com/uutils/tar/pull/414" },
+  { repo: "Tencent/teamai-cli", number: "#1574", href: "https://github.com/Tencent/teamai-cli/pull/1574" },
 ];
 
 /**

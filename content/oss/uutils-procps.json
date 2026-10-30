@@ -1,0 +1,23 @@
+{
+  "repo": "uutils/procps",
+  "about": "A rewrite of the procps tools (ps, pgrep, pidof, pmap and more) in Rust, aiming to work the same as the originals.",
+  "stars": 117,
+  "prs": [
+    {
+      "number": 819,
+      "merged": "2026-10-29",
+      "title": "pmap takes memory addresses written with 0x",
+      "broken": "Asking pmap for a range of memory with addresses like 0x1000 failed with a parse error. The original tool accepts them with or without the 0x.",
+      "changed": "I made pmap drop a leading 0x or 0X before reading an address, for a single address and both ends of a range.",
+      "matters": "Address ranges copied from other tools work as typed."
+    },
+    {
+      "number": 820,
+      "merged": "2026-10-29",
+      "title": "pidof understands %PPID, so scripts can skip their own shell",
+      "broken": "Scripts check whether another copy of themselves is running with pidof -o %PPID. The Rust pidof rejected %PPID, so the check always said nothing was running.",
+      "changed": "pidof now reads %PPID as the process that started it, and other values as before.",
+      "matters": "Cron jobs and init scripts that guard against running twice work again."
+    }
+  ]
+}

@@ -101,6 +101,14 @@
       "broken": "Scrubbing a session before sharing it missed a secret inside a tool call when the secret had a quote or a backslash, which generated passwords often do.",
       "changed": "I made known secrets get masked in each text value of the tool arguments first, before the escaped form is checked.",
       "matters": "A shared or migrated session no longer leaks such a password from the commands it ran."
+    },
+    {
+      "number": 1574,
+      "merged": "2026-10-30",
+      "title": "A Codex server written by hand is found, not added twice",
+      "broken": "If the Codex config already had the team's server under a header with a comment, extra spaces or quotes, the tool missed it and appended a second copy. Codex then could not read its config at all.",
+      "changed": "I made the tool recognize every header form the config format allows.",
+      "matters": "Sharing the team's tools no longer breaks a member's Codex setup."
     }
   ]
 }
