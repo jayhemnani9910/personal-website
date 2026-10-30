@@ -18,6 +18,14 @@
       "broken": "A tar archive holding a file dated before 1970 made the extractor crash while listing, testing or extracting it.",
       "changed": "Old dates are now read correctly, and dates that cannot be shown are skipped instead of crashing.",
       "matters": "Old archives, like scanned family photos or legacy backups, open without the tool falling over."
+    },
+    {
+      "number": 42,
+      "merged": "2026-10-30",
+      "title": "Tar files keep dates before 1970 and far in the future",
+      "broken": "Files with very old or far future dates came out dated 1 January 1970, because the real date sits in an extra record.",
+      "changed": "Extraction now reads that record when it is there.",
+      "matters": "Extracted files keep their real modified dates."
     }
   ]
 }

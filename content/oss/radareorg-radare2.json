@@ -365,6 +365,46 @@
       "broken": "radare2's x86 assembler dropped parts of test and xchg when one side was memory, so the bytes it wrote meant a different instruction.",
       "changed": "Both instructions now use the shared memory operand code and give the same bytes as the GNU assembler on over 2,000 forms.",
       "matters": "Patches that compare or swap a register with memory now assemble into the code that was asked for."
+    },
+    {
+      "number": 27247,
+      "merged": "2026-10-30",
+      "title": "Memory writes with a negative number keep the right address",
+      "broken": "Assembling an instruction that adds a negative number to a fixed memory address also turned the address negative, so the code wrote somewhere else.",
+      "changed": "The sign of the number now stays with the number, and the address keeps its own sign.",
+      "matters": "Patched code touches the memory it was written for."
+    },
+    {
+      "number": 27248,
+      "merged": "2026-10-30",
+      "title": "Storing a number into memory assembles correctly",
+      "broken": "Putting a number straight into memory came out as a different instruction for several kinds of address, with no error.",
+      "changed": "These now assemble to the same bytes as the GNU assembler, and bad sizes give an error.",
+      "matters": "Patches that store values in memory do what they say."
+    },
+    {
+      "number": 27249,
+      "merged": "2026-10-30",
+      "title": "The test instruction keeps its memory offset",
+      "broken": "Testing bits at a memory address dropped the offset and some register bits, so it checked the wrong place.",
+      "changed": "The instruction now keeps the offset, the index register and the number's sign.",
+      "matters": "Patched checks look at the memory they name."
+    },
+    {
+      "number": 27273,
+      "merged": "2026-10-30",
+      "title": "Addresses that start with a minus sign are no longer off by one",
+      "broken": "A memory address written with a leading minus, like [-8] or [ebp+-8], came out one byte too far.",
+      "changed": "The minus sign is now read as part of the number.",
+      "matters": "Code that reads local variables below the frame pointer reaches the right ones."
+    },
+    {
+      "number": 27275,
+      "merged": "2026-10-30",
+      "title": "64-bit moves to a fixed address assemble correctly",
+      "broken": "In 64-bit code, moving a register to or from a fixed address quietly became a different instruction.",
+      "changed": "These now use the same encodings as the GNU assembler, including the short form for the main register.",
+      "matters": "Patches in 64-bit programs that read or write fixed addresses work."
     }
   ]
 }

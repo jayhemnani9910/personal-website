@@ -69,6 +69,46 @@
       "broken": "chfn and chsh printed a line on the error stream after every successful change. GNU chfn and chsh print nothing.",
       "changed": "The extra line is gone. Errors and the interactive prompts work as before.",
       "matters": "Scripts that treat any error output as a failure no longer flag a change that worked."
+    },
+    {
+      "number": 350,
+      "merged": "2026-10-30",
+      "title": "usermod can move a home folder",
+      "broken": "The Rust usermod had no -m option, so changing a user's home path left their files behind.",
+      "changed": "usermod -m now moves the old home to the new path, copying across disks with owners, modes and times kept.",
+      "matters": "Admins can rename or relocate a user's home in one step, as with the original tool."
+    },
+    {
+      "number": 366,
+      "merged": "2026-10-30",
+      "title": "pwck stays quiet when the files are fine",
+      "broken": "pwck warned about the normal nobody account on every Debian or Ubuntu system, and said no changes even when nothing was wrong.",
+      "changed": "The false warning is gone, and no changes now appears only after real problems, as in the original.",
+      "matters": "A clean system gives a clean check."
+    },
+    {
+      "number": 369,
+      "merged": "2026-10-30",
+      "title": "Changing group members updates both group files",
+      "broken": "groupmod -U changed the members in one group file but not in the shadow group file, so the two disagreed.",
+      "changed": "The same member change now goes to both files.",
+      "matters": "Group membership stays consistent everywhere the system looks for it."
+    },
+    {
+      "number": 370,
+      "merged": "2026-10-30",
+      "title": "usermod can take a user out of some groups",
+      "broken": "usermod had no -r option, so removing a user from a few groups meant listing every group they should stay in.",
+      "changed": "usermod -r -G now removes the user from just the groups named and keeps the rest.",
+      "matters": "Admins can drop a group membership without touching the others."
+    },
+    {
+      "number": 372,
+      "merged": "2026-10-30",
+      "title": "Group and user IDs can no longer be set to a reserved value",
+      "broken": "groupadd and usermod accepted 4294967295 as an ID, a value the system treats as meaning no change.",
+      "changed": "Both now refuse it, as the other commands and the original tools already do.",
+      "matters": "Accounts can't end up with an ID that file permissions quietly ignore."
     }
   ]
 }

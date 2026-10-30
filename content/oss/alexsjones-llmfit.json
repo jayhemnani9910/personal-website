@@ -197,6 +197,14 @@
       "broken": "When you told the tool to pretend the graphics card had less memory, it still showed the real card's free memory, which could be more than the pretend total.",
       "changed": "The real free-memory number is now dropped when the size is set by hand.",
       "matters": "Reports and schedulers that read free memory see numbers that make sense for the setup being tested."
+    },
+    {
+      "number": 1166,
+      "merged": "2026-10-30",
+      "title": "Big downloadable models no longer show up as tiny ones",
+      "broken": "Models found without size data got a rough size guess. For many GGUF models that guess was far too small, like 2.4B for a 117B model.",
+      "changed": "When the file header gives a bigger count, that count is used.",
+      "matters": "The tool stops recommending huge models for small machines."
     }
   ]
 }

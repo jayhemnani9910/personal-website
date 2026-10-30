@@ -213,6 +213,14 @@
       "broken": "WebDAV clients that move a file onto an existing name often leave out the overwrite setting, which by the standard means yes. The server treated it as no and refused the move.",
       "changed": "A move with no overwrite setting now replaces the existing file, as the standard says. An explicit no still refuses.",
       "matters": "Saving and renaming files from WebDAV apps works the way people expect."
+    },
+    {
+      "number": 12233,
+      "merged": "2026-10-30",
+      "title": "Replacing a file through WebDAV reports a replace, not a create",
+      "broken": "Uploading over an existing file answered created, the same as a new file, which the web standard forbids.",
+      "changed": "A replace now answers with the right code for an update.",
+      "matters": "Sync tools can tell a new file from a changed one."
     }
   ]
 }

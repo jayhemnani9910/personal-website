@@ -517,6 +517,20 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "uutils/tar", number: "#414", href: "https://github.com/uutils/tar/pull/414" },
   { repo: "Tencent/teamai-cli", number: "#1574", href: "https://github.com/Tencent/teamai-cli/pull/1574" },
   { repo: "seaweedfs/seaweedfs", number: "#12232", href: "https://github.com/seaweedfs/seaweedfs/pull/12232" },
+  { repo: "AlexsJones/llmfit", number: "#1166", href: "https://github.com/AlexsJones/llmfit/pull/1166" },
+  { repo: "lightpanda-io/browser", number: "#4297", href: "https://github.com/lightpanda-io/browser/pull/4297" },
+  { repo: "radareorg/radare2", number: "#27247", href: "https://github.com/radareorg/radare2/pull/27247" },
+  { repo: "radareorg/radare2", number: "#27248", href: "https://github.com/radareorg/radare2/pull/27248" },
+  { repo: "radareorg/radare2", number: "#27249", href: "https://github.com/radareorg/radare2/pull/27249" },
+  { repo: "radareorg/radare2", number: "#27273", href: "https://github.com/radareorg/radare2/pull/27273" },
+  { repo: "radareorg/radare2", number: "#27275", href: "https://github.com/radareorg/radare2/pull/27275" },
+  { repo: "seaweedfs/seaweedfs", number: "#12233", href: "https://github.com/seaweedfs/seaweedfs/pull/12233" },
+  { repo: "uutils/shadow", number: "#350", href: "https://github.com/uutils/shadow/pull/350" },
+  { repo: "uutils/shadow", number: "#366", href: "https://github.com/uutils/shadow/pull/366" },
+  { repo: "uutils/shadow", number: "#369", href: "https://github.com/uutils/shadow/pull/369" },
+  { repo: "uutils/shadow", number: "#370", href: "https://github.com/uutils/shadow/pull/370" },
+  { repo: "uutils/shadow", number: "#372", href: "https://github.com/uutils/shadow/pull/372" },
+  { repo: "xevrion/hatchzip", number: "#42", href: "https://github.com/xevrion/hatchzip/pull/42" },
 ];
 
 /**
