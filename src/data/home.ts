@@ -532,6 +532,11 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "uutils/shadow", number: "#372", href: "https://github.com/uutils/shadow/pull/372" },
   { repo: "xevrion/hatchzip", number: "#42", href: "https://github.com/xevrion/hatchzip/pull/42" },
   { repo: "lightpanda-io/browser", number: "#4041", href: "https://github.com/lightpanda-io/browser/pull/4041" },
+  { repo: "radareorg/radare2", number: "#27283", href: "https://github.com/radareorg/radare2/pull/27283" },
+  { repo: "tashfeenahmed/freellmapi", number: "#1713", href: "https://github.com/tashfeenahmed/freellmapi/pull/1713" },
+  { repo: "tashfeenahmed/freellmapi", number: "#1714", href: "https://github.com/tashfeenahmed/freellmapi/pull/1714" },
+  { repo: "tashfeenahmed/freellmapi", number: "#1720", href: "https://github.com/tashfeenahmed/freellmapi/pull/1720" },
+  { repo: "tashfeenahmed/freellmapi", number: "#1721", href: "https://github.com/tashfeenahmed/freellmapi/pull/1721" },
 ];
 
 /**
