@@ -516,6 +516,7 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "uutils/procps", number: "#820", href: "https://github.com/uutils/procps/pull/820" },
   { repo: "uutils/tar", number: "#414", href: "https://github.com/uutils/tar/pull/414" },
   { repo: "Tencent/teamai-cli", number: "#1574", href: "https://github.com/Tencent/teamai-cli/pull/1574" },
+  { repo: "seaweedfs/seaweedfs", number: "#12232", href: "https://github.com/seaweedfs/seaweedfs/pull/12232" },
 ];
 
 /**

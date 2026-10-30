@@ -205,6 +205,14 @@
       "broken": "Through the file transfer server, deleting something that was not there, or making a folder that already existed, quietly reported success.",
       "changed": "These now fail with the same errors a standard file transfer server gives.",
       "matters": "Scripts and people learn when an action did nothing, instead of trusting a false success."
+    },
+    {
+      "number": 12232,
+      "merged": "2026-10-30",
+      "title": "Moving a file over another through WebDAV now replaces it",
+      "broken": "WebDAV clients that move a file onto an existing name often leave out the overwrite setting, which by the standard means yes. The server treated it as no and refused the move.",
+      "changed": "A move with no overwrite setting now replaces the existing file, as the standard says. An explicit no still refuses.",
+      "matters": "Saving and renaming files from WebDAV apps works the way people expect."
     }
   ]
 }
