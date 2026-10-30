@@ -405,6 +405,14 @@
       "broken": "A page could send a GET or HEAD request with a body. Real browsers refuse that, so pages that test for it behaved differently in Lightpanda.",
       "changed": "Such a request now fails with the same error a browser gives.",
       "matters": "Sites and scripts see the same rules they see in Chrome, so automated runs match real use."
+    },
+    {
+      "number": 4297,
+      "merged": "2026-10-30",
+      "title": "Text hidden in a closed details box stays out of page text",
+      "broken": "Reading the visible text of a page included loose text inside a closed details box, which a real browser hides.",
+      "changed": "That text is now left out until the box is opened, as in Chrome.",
+      "matters": "Scripts and agents reading the page see what a person would see."
     }
   ]
 }
