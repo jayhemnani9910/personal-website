@@ -531,6 +531,7 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "uutils/shadow", number: "#370", href: "https://github.com/uutils/shadow/pull/370" },
   { repo: "uutils/shadow", number: "#372", href: "https://github.com/uutils/shadow/pull/372" },
   { repo: "xevrion/hatchzip", number: "#42", href: "https://github.com/xevrion/hatchzip/pull/42" },
+  { repo: "lightpanda-io/browser", number: "#4041", href: "https://github.com/lightpanda-io/browser/pull/4041" },
 ];
 
 /**
