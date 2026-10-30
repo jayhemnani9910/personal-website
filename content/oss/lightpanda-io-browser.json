@@ -413,6 +413,14 @@
       "broken": "Reading the visible text of a page included loose text inside a closed details box, which a real browser hides.",
       "changed": "That text is now left out until the box is opened, as in Chrome.",
       "matters": "Scripts and agents reading the page see what a person would see."
+    },
+    {
+      "number": 4041,
+      "merged": "2026-10-30",
+      "title": "AI agents can run a whole browser script in one step",
+      "broken": "An agent driving the browser through its tool server had to send every click and page load as a separate call, with no way to run a saved script.",
+      "changed": "A new run tool takes a script, runs it in the agent's session with a time limit, returns its output, and closes the pages it opened.",
+      "matters": "Agents finish multi-step jobs faster, and a script that hangs is stopped without breaking the session."
     }
   ]
 }
