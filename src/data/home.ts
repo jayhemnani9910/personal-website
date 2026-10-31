@@ -544,6 +544,8 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
     href: "https://github.com/modular/modular/pull/7264",
     landed: "https://github.com/modular/modular/commit/e555fc12b4d3185be7844fd68d272403ae01f24a",
   },
+  { repo: "radareorg/radare2", number: "#27291", href: "https://github.com/radareorg/radare2/pull/27291" },
+  { repo: "radareorg/radare2", number: "#27292", href: "https://github.com/radareorg/radare2/pull/27292" },
 ];
 
 /**
