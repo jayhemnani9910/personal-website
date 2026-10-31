@@ -37,6 +37,14 @@
       "changed": "The tool now keeps the text joining when the first two pieces are numbers, matching what the app really does.",
       "matters": "People reading the rebuilt code see what the app actually does, not a quietly wrong version.",
       "top": true
+    },
+    {
+      "number": 3045,
+      "merged": "2026-10-30",
+      "title": "Adding empty text to a single value now stays text",
+      "broken": "Code that turned a letter or number into text by adding empty text came back from the tool without the empty text. The rebuilt code returned a number where text was expected and would not compile.",
+      "changed": "When the only piece being joined is not text, the tool now keeps the empty text in front, so the result is still text.",
+      "matters": "Rebuilt apps compile again and mean the same thing as the original code."
     }
   ]
 }

@@ -37,6 +37,14 @@
       "changed": "Powers that fit the fast path still use it. Bigger or infinite ones now go through a general formula that handles them correctly, with tests for both sizes of number.",
       "matters": "Math code that uses very large powers gets real results instead of a silent 1 or a crash.",
       "top": true
+    },
+    {
+      "number": 7264,
+      "merged": "2026-10-31",
+      "title": "Splitting text into lines no longer breaks on tabs",
+      "broken": "In Mojo, splitting text into lines also split at every tab. Tab-separated data like a table fell apart into single cells.",
+      "changed": "Tabs are no longer treated as line ends, matching Python. The help text that listed tabs as line ends was fixed too, and a test was added.",
+      "matters": "Code that reads tab-separated text line by line gets whole rows back."
     }
   ]
 }
