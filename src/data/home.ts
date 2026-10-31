@@ -537,6 +537,13 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "tashfeenahmed/freellmapi", number: "#1714", href: "https://github.com/tashfeenahmed/freellmapi/pull/1714" },
   { repo: "tashfeenahmed/freellmapi", number: "#1720", href: "https://github.com/tashfeenahmed/freellmapi/pull/1720" },
   { repo: "tashfeenahmed/freellmapi", number: "#1721", href: "https://github.com/tashfeenahmed/freellmapi/pull/1721" },
+  { repo: "skylot/jadx", number: "#3045", href: "https://github.com/skylot/jadx/pull/3045" },
+  {
+    repo: "modular/modular",
+    number: "#7264",
+    href: "https://github.com/modular/modular/pull/7264",
+    landed: "https://github.com/modular/modular/commit/e555fc12b4d3185be7844fd68d272403ae01f24a",
+  },
 ];
 
 /**
