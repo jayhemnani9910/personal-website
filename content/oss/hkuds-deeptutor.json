@@ -1,0 +1,23 @@
+{
+  "repo": "HKUDS/DeepTutor",
+  "about": "An AI tutor that adapts to each learner and keeps helping them over time.",
+  "stars": 52418,
+  "prs": [
+    {
+      "number": 2158,
+      "merged": "2026-10-31",
+      "title": "Titles with quote marks keep the rest of the reference",
+      "broken": "A reference title with quote marks in it was cut at the first quote. The title became one word and the authors and year were lost.",
+      "changed": "A quote mark inside braces no longer ends the title.",
+      "matters": "Imported references keep their full title, authors and year."
+    },
+    {
+      "number": 2157,
+      "merged": "2026-10-31",
+      "title": "Author names with Jr and group names show correctly",
+      "broken": "Names like King, Jr., Martin Luther came out jumbled, and group names like Food and Agriculture Organization were split into two authors.",
+      "changed": "Names are split only outside braces, and the Jr part goes in its place.",
+      "matters": "References exported from Zotero list their authors the right way."
+    }
+  ]
+}

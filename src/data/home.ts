@@ -547,6 +547,13 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "radareorg/radare2", number: "#27291", href: "https://github.com/radareorg/radare2/pull/27291" },
   { repo: "radareorg/radare2", number: "#27292", href: "https://github.com/radareorg/radare2/pull/27292" },
   { repo: "mvanhorn/cli-printing-press", number: "#5284", href: "https://github.com/mvanhorn/cli-printing-press/pull/5284" },
+  { repo: "HKUDS/DeepTutor", number: "#2157", href: "https://github.com/HKUDS/DeepTutor/pull/2157" },
+  { repo: "HKUDS/DeepTutor", number: "#2158", href: "https://github.com/HKUDS/DeepTutor/pull/2158" },
+  { repo: "YouROK/TorrServer", number: "#946", href: "https://github.com/YouROK/TorrServer/pull/946" },
+  { repo: "YouROK/TorrServer", number: "#947", href: "https://github.com/YouROK/TorrServer/pull/947" },
+  { repo: "radareorg/radare2", number: "#27293", href: "https://github.com/radareorg/radare2/pull/27293" },
+  { repo: "seaweedfs/seaweedfs", number: "#12272", href: "https://github.com/seaweedfs/seaweedfs/pull/12272" },
+  { repo: "seaweedfs/seaweedfs", number: "#12273", href: "https://github.com/seaweedfs/seaweedfs/pull/12273" },
 ];
 
 /**
