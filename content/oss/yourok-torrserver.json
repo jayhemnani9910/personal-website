@@ -4,6 +4,22 @@
   "stars": 3140,
   "prs": [
     {
+      "number": 947,
+      "merged": "2026-10-31",
+      "title": "Search results show sizes in normal units",
+      "broken": "Torrent search results showed sizes like 1.5 GCiB, with a stray letter in the unit.",
+      "changed": "Sizes now read 1.5 GiB. The web pages still read both forms.",
+      "matters": "Apps reading search results get sizes they understand."
+    },
+    {
+      "number": 946,
+      "merged": "2026-10-31",
+      "title": "IPv6 referer rules block every spelling of the address",
+      "broken": "A blocked-site rule for an IPv6 address only matched one way of writing it. Browsers write it short, so their requests got through.",
+      "changed": "Addresses in rules and in requests are now compared in one standard form.",
+      "matters": "A blocked IPv6 address stays blocked."
+    },
+    {
       "number": 944,
       "merged": "2026-10-29",
       "title": "Local network IPv6 clients are not banned",

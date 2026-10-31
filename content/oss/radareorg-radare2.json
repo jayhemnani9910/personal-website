@@ -429,6 +429,14 @@
       "broken": "xadd only worked between two registers, and in 64-bit code every form was widened to 64 bits, so most came out as a different instruction.",
       "changed": "It now picks the operand size, extended registers and memory targets from the operands, matching the GNU assembler.",
       "matters": "Atomic add instructions, common in lock-free code, now assemble to the right bytes."
+    },
+    {
+      "number": 27293,
+      "merged": "2026-10-31",
+      "title": "test between two registers assembles to the right bytes",
+      "broken": "test between two registers only came out right for two 64-bit ones. Other pairs, like r8 with rax or two 16-bit registers, became a different instruction.",
+      "changed": "Each register pair now gets the prefixes it needs, matching the GNU assembler.",
+      "matters": "A common compare instruction now assembles correctly for every register size."
     }
   ]
 }

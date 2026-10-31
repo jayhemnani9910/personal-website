@@ -221,6 +221,22 @@
       "broken": "Uploading over an existing file answered created, the same as a new file, which the web standard forbids.",
       "changed": "A replace now answers with the right code for an update.",
       "matters": "Sync tools can tell a new file from a changed one."
+    },
+    {
+      "number": 12272,
+      "merged": "2026-10-31",
+      "title": "Unset CORS max age stays unset",
+      "broken": "A CORS rule with no max age was saved as zero, which tells browsers not to cache the check. Every cross-site request then sent an extra check first.",
+      "changed": "An unset max age is now kept unset and the header is left out, as Amazon S3 does.",
+      "matters": "Browsers can cache the check again, so web apps stop sending an extra request each time."
+    },
+    {
+      "number": 12273,
+      "merged": "2026-10-31",
+      "title": "Browser form uploads work when login is off",
+      "broken": "With no logins set up, normal uploads worked but browser form uploads were refused.",
+      "changed": "Form uploads now skip the signature check when login is off. Upload limits in the form still apply.",
+      "matters": "Web pages can upload files to a test or private server."
     }
   ]
 }
