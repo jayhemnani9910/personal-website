@@ -117,6 +117,9 @@ export function ProjectDetail({
   linkCell("DEMO", links.demo, "Try it ↗");
   linkCell("SITE", links.site, "Visit ↗");
   linkCell("PAPER", links.paper, "IEEE ↗");
+  // Installers, for projects that ship one (shiftdrop).
+  linkCell("WINDOWS", links.windows, "Download .exe ↗");
+  linkCell("LINUX", links.linux, "Download .deb ↗");
 
   return (
     <>

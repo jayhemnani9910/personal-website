@@ -1,0 +1,86 @@
+---
+title: "ShiftDrop"
+summary: "A file converter that lives inside the drag: drag any file, hold Shift, and a wheel of formats opens under the pointer; drop it on one to convert. Holding Ctrl too gives tools (compress, trim, strip metadata, resize). Written in Rust for GNOME on Linux and for Windows, and everything runs locally with FFmpeg, ImageMagick, Ghostscript and Poppler."
+description: "Drag a file, hold Shift, drop it on a format: a local file converter in Rust for GNOME and Windows, built on FFmpeg, ImageMagick and Ghostscript."
+role: "Builder"
+period: "2026"
+domain: "Web and tools"
+tags: ["rust", "linux", "windows", "desktop", "gnome"]
+tech: ["Rust", "GTK4", "GNOME Shell", "Win32", "Direct2D", "FFmpeg", "ImageMagick", "Ghostscript", "GitHub Actions"]
+github: "https://github.com/jayhemnani9910/shiftdrop-rust"
+links:
+  code: "https://github.com/jayhemnani9910/shiftdrop-rust"
+  windows: "https://github.com/jayhemnani9910/shiftdrop-rust/releases/latest/download/ShiftDrop-Setup-x64.exe"
+  linux: "https://github.com/jayhemnani9910/shiftdrop-rust/releases/latest/download/shiftdrop_amd64.deb"
+challenge: "Converting a file usually means uploading it to a website you don't trust or installing an app you use for ten seconds. I wanted conversion to happen where the file already is: mid-drag, in the file manager, without opening anything, and without the file ever leaving the computer."
+solution:
+  - "A radial wheel that opens under the pointer when Shift is held during a drag; dropping the file on a segment converts it next to the original, never overwriting anything."
+  - "On GNOME a small Shell extension notices the drag and the Shift key (Wayland apps can't) and asks the GTK4 app over D-Bus to show the wheel; on Windows a low-level mouse hook does the same job and the wheel is a native OLE drop target drawn with Direct2D."
+  - "One shared Rust core decides what each file can become, plans the exact ffmpeg / magick / gs commands, runs them with progress and cancel, and removes half-written files if a job dies."
+  - "Shipped as a .deb, a one-line installer and a Windows installer, all built and published by GitHub Actions on each tag."
+impact:
+  - "Conversion becomes one gesture: drag, Shift, drop. No upload, no account, no app to open, and 0 bytes leave the machine."
+  - "The same core and the same wheel on two very different desktops: everything after the drop is shared code, only the drag detection and drawing differ per system."
+  - "Fast where it can be: when the target container already fits the codecs, video is copied instead of re-encoded (a 116 s clip to MKV in 0.4 s), and images convert four at a time."
+deepDive:
+  context: "ShiftDrop started as a Linux port of a macOS idea and grew into its own app. The whole interaction is a drag that the user was already doing: the wheel only appears when Shift is held mid-drag, and it disappears the moment the drag ends. Behind it sit the open-source converters people already trust, chosen per file type, with settings picked by measuring speed and SSIM on real footage."
+  architecture: "A Rust library holds everything that isn't a window: what a file is and what it can become (rules per category, filtered by which converters and ffmpeg encoders the machine actually has), the commands each conversion or tool needs, and a job runner that streams ffmpeg progress, cancels within 100 ms, falls back from the GPU encoder to the CPU one, and records each job's outputs so a killed job's half-written file is cleaned up on the next start. Two front ends drive it. On Linux, a GNOME Shell extension watches drags and the Shift key and calls the GTK4 app's actions over D-Bus; the app's wheel is an ordinary GTK drop target. On Windows, a mouse hook on its own thread notices the drag and Shift, and the wheel is a layered window registered as an OLE drop target that only ever accepts a copy, so Explorer never deletes the source even though Shift means move."
+  dataFlow:
+    - step: "Notice the drag and Shift"
+      component: "GNOME extension / Windows hook"
+      detail: "The Shell extension (GNOME) or a low-level mouse hook (Windows) sees a drag in progress and the Shift key, and opens the wheel under the pointer."
+    - step: "Offer what fits"
+      component: "session + formats"
+      detail: "The wheel learns which files the drag carries and offers only the formats (or, with Ctrl, the tools) every file can become on this machine."
+    - step: "Plan the work"
+      component: "convert + tools"
+      detail: "The pick becomes exact commands: copy streams when the container can hold them, re-encode otherwise, tone-map HDR for 8-bit targets."
+    - step: "Run it"
+      component: "jobs"
+      detail: "Commands run with progress and cancel; a failed GPU encode retries on the CPU; failures remove what they wrote."
+    - step: "Report"
+      component: "status pop-up"
+      detail: "A pop-up shows progress, then the result with Open and Show in folder."
+  components:
+    - name: "GNOME extension / Windows hook"
+      purpose: "The only part that differs most per system: notices a drag plus Shift (and Ctrl for tools) and places the wheel."
+    - name: "session + formats"
+      purpose: "What the wheel offers, the centre text, and the summary when a batch ends, shared by both front ends."
+    - name: "convert + tools"
+      purpose: "Turns a pick into the ffmpeg, ImageMagick, Ghostscript, Poppler or LibreOffice commands to run."
+    - name: "jobs"
+      purpose: "Runs the commands: progress, cancel, GPU-to-CPU fallback, parallel images, cleanup of half-written files."
+    - name: "status pop-up"
+      purpose: "Progress, Cancel, then Open / Show in folder; errors stay until closed."
+  keyDecisions:
+    - decision: "Only ever accept a drop as a copy"
+      reasoning: "Shift means move in both Nautilus and Explorer. If the wheel accepted a move, the source app would delete the original after the drop. Accepting copy only (and nothing when copy isn't offered) keeps every original safe."
+      alternatives: "Use a different modifier (clashes with existing shortcuts); accept moves and hope (loses files)."
+    - decision: "A drop target that is drawn only once it knows it's a file drag"
+      reasoning: "On Windows the wheel appears as an invisible disc first: fully transparent pixels let drags fall through, so it is painted at alpha 1. Only when the drag turns out to carry files is the wheel drawn; any other Shift-drag (text) is let through."
+      alternatives: "Show the wheel on every Shift-drag (gets in the way of text selection)."
+    - decision: "Copy streams when the target can hold them"
+      reasoning: "Most conversions between video containers don't need a re-encode. Copying is instant and bit-for-bit identical; re-encoding is kept for codecs the target can't hold, with settings chosen by measured SSIM."
+      alternatives: "Always re-encode (slow and lossy)."
+  metrics:
+    - value: "0 bytes"
+      label: "uploaded"
+      context: "every conversion runs locally"
+    - value: "0.4 s"
+      label: "116 s clip to MKV"
+      context: "streams copied, not re-encoded"
+    - value: "2"
+      label: "desktops"
+      context: "GNOME on Linux, Windows 10/11"
+    - value: "28"
+      label: "formats"
+      context: "image, video, audio, PDF, text, subtitles"
+  learnings:
+    - "The hard part of a desktop utility is the platform, not the feature: Wayland apps can't see other apps' drags, so on GNOME the detection had to live in a Shell extension, and Windows needed its own trick with a nearly invisible drop target."
+    - "Keeping everything after the drop in one shared core meant the Windows port was mostly new drawing and input code; formats, commands, jobs and tests carried over unchanged."
+    - "Measuring beat guessing: encoder settings came from timing and SSIM on real footage, and copying streams instead of re-encoding turned minutes into under a second."
+priority: 14
+---
+<video src="/projects/shiftdrop/launch.mp4" poster="/projects/shiftdrop/poster.jpg" controls preload="none" playsInline className="w-full rounded-xl"></video>
+
+On Windows, run the installer; it starts ShiftDrop at sign-in, adds it to Send To, and can install the converters with winget. On Ubuntu, `sudo apt install ./shiftdrop_amd64.deb`. Then drag a file and hold Shift.
