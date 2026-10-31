@@ -413,6 +413,22 @@
       "broken": "After writing bytes in a session without saving them to the file, nothing in the hex or code views showed which bytes were changed.",
       "changed": "Those bytes now show in the diff color in the hex dump and in the byte column of the disassembly.",
       "matters": "People patching a binary can see their edits at a glance before saving them."
+    },
+    {
+      "number": 27291,
+      "merged": "2026-10-31",
+      "title": "Segment overrides on memory operands assemble correctly",
+      "broken": "Instructions that read through fs: or gs:, like the stack canary load, lost their address and came out as a different instruction, or failed to assemble.",
+      "changed": "The segment prefix is now placed first and the address is encoded as a normal memory operand, matching the GNU assembler.",
+      "matters": "Patching code that touches thread-local data or the stack guard now gives the right bytes."
+    },
+    {
+      "number": 27292,
+      "merged": "2026-10-31",
+      "title": "xadd assembles with the right sizes and memory targets",
+      "broken": "xadd only worked between two registers, and in 64-bit code every form was widened to 64 bits, so most came out as a different instruction.",
+      "changed": "It now picks the operand size, extended registers and memory targets from the operands, matching the GNU assembler.",
+      "matters": "Atomic add instructions, common in lock-free code, now assemble to the right bytes."
     }
   ]
 }
