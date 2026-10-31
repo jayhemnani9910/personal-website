@@ -546,6 +546,7 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   },
   { repo: "radareorg/radare2", number: "#27291", href: "https://github.com/radareorg/radare2/pull/27291" },
   { repo: "radareorg/radare2", number: "#27292", href: "https://github.com/radareorg/radare2/pull/27292" },
+  { repo: "mvanhorn/cli-printing-press", number: "#5284", href: "https://github.com/mvanhorn/cli-printing-press/pull/5284" },
 ];
 
 /**
