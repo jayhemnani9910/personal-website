@@ -1,0 +1,15 @@
+{
+  "repo": "mvanhorn/cli-printing-press",
+  "about": "A tool that generates command-line programs for web APIs, with docs and worked examples for each command.",
+  "stars": 4897,
+  "prs": [
+    {
+      "number": 5284,
+      "merged": "2026-10-31",
+      "title": "Examples with backslashes inside quotes run as written",
+      "broken": "Backslashes inside double quotes in an example were dropped, so a search pattern lost its meaning and the checked command was not the one the docs showed.",
+      "changed": "A backslash inside double quotes is now kept unless it escapes a character a shell would escape, the same way a shell reads it.",
+      "matters": "Generated docs and their checks now run the exact command a reader would copy."
+    }
+  ]
+}
