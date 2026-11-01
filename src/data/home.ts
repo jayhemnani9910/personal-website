@@ -554,6 +554,10 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "radareorg/radare2", number: "#27293", href: "https://github.com/radareorg/radare2/pull/27293" },
   { repo: "seaweedfs/seaweedfs", number: "#12272", href: "https://github.com/seaweedfs/seaweedfs/pull/12272" },
   { repo: "seaweedfs/seaweedfs", number: "#12273", href: "https://github.com/seaweedfs/seaweedfs/pull/12273" },
+  { repo: "radareorg/radare2", number: "#27298", href: "https://github.com/radareorg/radare2/pull/27298" },
+  { repo: "froxlor/froxlor", number: "#1433", href: "https://github.com/froxlor/froxlor/pull/1433" },
+  { repo: "radareorg/radare2", number: "#27299", href: "https://github.com/radareorg/radare2/pull/27299" },
+  { repo: "radareorg/radare2", number: "#27300", href: "https://github.com/radareorg/radare2/pull/27300" },
 ];
 
 /**
