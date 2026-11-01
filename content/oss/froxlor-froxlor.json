@@ -1,0 +1,15 @@
+{
+  "repo": "froxlor/froxlor",
+  "about": "A web panel for running hosting servers: customers, domains, email, databases and logs.",
+  "stars": 1750,
+  "prs": [
+    {
+      "number": 1433,
+      "merged": "2026-11-01",
+      "title": "A reseller's log search and cleanup only touch the rows they should",
+      "broken": "For a reseller, searching the system log ignored the search text for their own rows, and clearing old entries deleted all their customers' log rows, recent ones too.",
+      "changed": "The part of the query that picks whose rows to read is now grouped, so the search and the age limit apply to every row.",
+      "matters": "Resellers get correct search results and no longer lose recent customer logs when they clean up."
+    }
+  ]
+}

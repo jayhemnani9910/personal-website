@@ -437,6 +437,30 @@
       "broken": "test between two registers only came out right for two 64-bit ones. Other pairs, like r8 with rax or two 16-bit registers, became a different instruction.",
       "changed": "Each register pair now gets the prefixes it needs, matching the GNU assembler.",
       "matters": "A common compare instruction now assembles correctly for every register size."
+    },
+    {
+      "number": 27298,
+      "merged": "2026-11-01",
+      "title": "setcc assembles to the right bytes for new registers and memory",
+      "broken": "setcc lost its prefix, so sete r9b became sete cl. Memory forms with an offset, like a local variable, came out cut short.",
+      "changed": "setcc now gets the prefix it needs and writes the full memory operand, matching the GNU assembler.",
+      "matters": "Setting a byte from a comparison now assembles correctly for every register and memory form."
+    },
+    {
+      "number": 27299,
+      "merged": "2026-11-01",
+      "title": "Conditional moves from memory assemble to the right bytes",
+      "broken": "cmov instructions that read from memory came out wrong for common forms, like a stack offset, a fixed address, or a newer register as the base.",
+      "changed": "The memory operand is now encoded the same way as for other instructions, matching the GNU assembler.",
+      "matters": "Conditional moves, used everywhere in compiled code, now assemble correctly when they read memory."
+    },
+    {
+      "number": 27300,
+      "merged": "2026-11-01",
+      "title": "8 and 16-bit register moves assemble to the right registers",
+      "broken": "Moving between 8 or 16-bit registers that need an extra prefix, like r10w or sil, silently became a move between two different registers.",
+      "changed": "These moves now get the prefixes they need, and invalid register pairs are rejected like the GNU assembler does.",
+      "matters": "mov is the most common instruction, so small register moves now assemble to what was written."
     }
   ]
 }
