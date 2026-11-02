@@ -581,6 +581,8 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "Paymenter/Paymenter", number: "#1434", href: "https://github.com/Paymenter/Paymenter/pull/1434" },
   { repo: "ZoneMinder/zoneminder", number: "#5429", href: "https://github.com/ZoneMinder/zoneminder/pull/5429" },
   { repo: "cachethq/core", number: "#499", href: "https://github.com/cachethq/core/pull/499" },
+  { repo: "Kovah/LinkAce", number: "#1190", href: "https://github.com/Kovah/LinkAce/pull/1190" },
+  { repo: "Kovah/LinkAce", number: "#1191", href: "https://github.com/Kovah/LinkAce/pull/1191" },
 ];
 
 /**
