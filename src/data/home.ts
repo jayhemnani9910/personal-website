@@ -558,6 +558,17 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "froxlor/froxlor", number: "#1433", href: "https://github.com/froxlor/froxlor/pull/1433" },
   { repo: "radareorg/radare2", number: "#27299", href: "https://github.com/radareorg/radare2/pull/27299" },
   { repo: "radareorg/radare2", number: "#27300", href: "https://github.com/radareorg/radare2/pull/27300" },
+  { repo: "CodeWithCJ/SparkyFitness", number: "#3331", href: "https://github.com/CodeWithCJ/SparkyFitness/pull/3331" },
+  { repo: "casdoor/casdoor", number: "#6016", href: "https://github.com/casdoor/casdoor/pull/6016" },
+  { repo: "casdoor/casdoor", number: "#6017", href: "https://github.com/casdoor/casdoor/pull/6017" },
+  { repo: "mvanhorn/last30days-skill", number: "#1344", href: "https://github.com/mvanhorn/last30days-skill/pull/1344" },
+  { repo: "boyter/scc", number: "#816", href: "https://github.com/boyter/scc/pull/816" },
+  { repo: "boyter/scc", number: "#817", href: "https://github.com/boyter/scc/pull/817" },
+  { repo: "boyter/scc", number: "#818", href: "https://github.com/boyter/scc/pull/818" },
+  { repo: "uutils/util-linux", number: "#674", href: "https://github.com/uutils/util-linux/pull/674" },
+  { repo: "eugenioenko/ttt", number: "#1299", href: "https://github.com/eugenioenko/ttt/pull/1299" },
+  { repo: "eugenioenko/ttt", number: "#1300", href: "https://github.com/eugenioenko/ttt/pull/1300" },
+  { repo: "lightpanda-io/browser", number: "#4344", href: "https://github.com/lightpanda-io/browser/pull/4344" },
 ];
 
 /**

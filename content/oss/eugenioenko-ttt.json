@@ -125,6 +125,22 @@
       "broken": "Git leaves out the count in a hunk header when it is 1. The editor only read headers with a count, so those diffs showed no line numbers.",
       "changed": "I made the hunk header parser read a range with or without its count.",
       "matters": "Staged changes to short files show line numbers on both sides, like any other diff."
+    },
+    {
+      "number": 1299,
+      "merged": "2026-11-02",
+      "title": "Replace bar buttons now respond to clicks",
+      "broken": "In Find and Replace, clicking previous, next or close did nothing, because the input rows took the click first.",
+      "changed": "The bar now checks its buttons before its input rows.",
+      "matters": "You can step through matches and close the bar with the mouse."
+    },
+    {
+      "number": 1300,
+      "merged": "2026-11-02",
+      "title": "Paste goes into the replace bar when it has focus",
+      "broken": "With Find and Replace open, pasting put the text into the file behind it instead of the box you were typing in.",
+      "changed": "Paste now goes to whichever replace bar field has focus.",
+      "matters": "You can paste a search term or replacement without changing your file by accident."
     }
   ]
 }

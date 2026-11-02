@@ -61,6 +61,22 @@
       "broken": "Casdoor's SCIM user list reported only the number of users on the current page as the total. A client asking for pages of two saw a total of two and stopped after the first page.",
       "changed": "The total now counts every matching user, so it stays the same on every page, as the SCIM standard says.",
       "matters": "Identity tools that sync users page by page now fetch all of them instead of only the first few."
+    },
+    {
+      "number": 6016,
+      "merged": "2026-11-01",
+      "title": "Ticking one session no longer ticks the user's other sessions",
+      "broken": "A user signed in to two apps had two rows on the Sessions page that shared one key. Ticking one ticked both, and Delete removed both while the counter said one was selected.",
+      "changed": "Each session row is now keyed by its owner, name and application.",
+      "matters": "Admins delete only the session they picked, so users are not signed out of other apps by mistake."
+    },
+    {
+      "number": 6017,
+      "merged": "2026-11-01",
+      "title": "List searches work with a plus, ampersand or hash in the text",
+      "broken": "The column search on list pages sent the typed text without encoding it. Searching for an email like alice+news@example.com showed no results, and &, # and % broke the search too.",
+      "changed": "All 40 list fetchers now encode the search value, the same way they already encoded the field name.",
+      "matters": "Admins can find users and records whose names or emails contain these common characters."
     }
   ]
 }
