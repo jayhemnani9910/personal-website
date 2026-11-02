@@ -53,6 +53,14 @@
       "broken": "Looking up a GitHub user for a past date range counted every PR up to today. One user showed 34,739 merged PRs for a month that had 742. The summary also always said 30 days.",
       "changed": "The search now stops at the end of the range, and the summary names the real number of days.",
       "matters": "Reports about past periods show what happened in that period."
+    },
+    {
+      "number": 1344,
+      "merged": "2026-11-01",
+      "title": "A clear message instead of a crash when no chosen source can run",
+      "broken": "When none of the sources named with --search could run, for example TikTok without its API key, the tool ended in a Python traceback that did not say which source was the problem.",
+      "changed": "It now names the sources that cannot run, points to the doctor command, and exits like its other usage errors.",
+      "matters": "Users see what is missing and how to fix it, instead of something that looks like a crash."
     }
   ]
 }

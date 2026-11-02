@@ -1,0 +1,15 @@
+{
+  "repo": "CodeWithCJ/SparkyFitness",
+  "about": "A self-hosted app for families to track food, exercise, water and health together.",
+  "stars": 6647,
+  "prs": [
+    {
+      "number": 3331,
+      "merged": "2026-11-01",
+      "title": "Whole stones and feet no longer come back one short",
+      "broken": "With weight in stones and pounds, 13 st showed as 12 st 14 lb, and typing in the pound box added to the 14. Height had the same problem: 6 ft showed as 5 ft 12 in.",
+      "changed": "The conversion back from kilograms and centimetres now rounds to the shown precision before splitting into stones and pounds, or feet and inches.",
+      "matters": "People who track in stones or feet see the number they typed, and the boxes behave as expected."
+    }
+  ]
+}

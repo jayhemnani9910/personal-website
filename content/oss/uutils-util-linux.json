@@ -9,7 +9,8 @@
       "title": "The login history now shows when it really begins",
       "broken": "The login history tool ends with a line saying when its records begin. When options skipped some records, it printed the date the file was last changed instead of the date of the first record.",
       "changed": "That line now always uses the first record in the file, as the original tool does. An empty file still shows the file's date.",
-      "matters": "The summary line tells you the true start of the history, whatever options you use."
+      "matters": "The summary line tells you the true start of the history, whatever options you use.",
+      "top": true
     },
     {
       "number": 670,
@@ -17,7 +18,8 @@
       "title": "hexdump now reports the right last offset when it skips past the end",
       "broken": "When told to skip more bytes than the files hold, hexdump printed the amount you asked to skip as the last offset. The original tool prints the real size of the input, and nothing at all for an empty file.",
       "changed": "Files that the skip covers whole are now counted by their real size. Input that can't be measured, like a pipe or a device, still reports the requested skip.",
-      "matters": "Scripts that read hexdump's offsets get the same numbers as with the original tool."
+      "matters": "Scripts that read hexdump's offsets get the same numbers as with the original tool.",
+      "top": true
     },
     {
       "number": 671,
@@ -25,7 +27,16 @@
       "title": "mountpoint now checks the right folder and exits like util-linux",
       "broken": "The mountpoint tool compared a path with the parent of the folder it was run from, not the path's own parent, so the answer depended on where you ran it. It also always exited with success.",
       "changed": "On Linux it now asks the kernel's mount list, so bind mounts and mounts on files are found, and it falls back to the old check without /proc. Exit codes match util-linux.",
-      "matters": "Scripts that use mountpoint get the right answer and exit code."
+      "matters": "Scripts that use mountpoint get the right answer and exit code.",
+      "top": true
+    },
+    {
+      "number": 674,
+      "merged": "2026-11-01",
+      "title": "uuidgen accepts any UUID as a namespace",
+      "broken": "The tool only took four built-in namespace names. Passing a real UUID, the way apps make their own name-based IDs, gave an error, while the original tool accepts it.",
+      "changed": "It now also reads the value as a UUID, in the same 36-character form the original takes.",
+      "matters": "Scripts that build name-based IDs under their own namespace work the same as on util-linux."
     }
   ]
 }

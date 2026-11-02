@@ -421,6 +421,14 @@
       "broken": "An agent driving the browser through its tool server had to send every click and page load as a separate call, with no way to run a saved script.",
       "changed": "A new run tool takes a script, runs it in the agent's session with a time limit, returns its output, and closes the pages it opened.",
       "matters": "Agents finish multi-step jobs faster, and a script that hangs is stopped without breaking the session."
+    },
+    {
+      "number": 4344,
+      "merged": "2026-11-02",
+      "title": "Playwright can click elements inside an iframe",
+      "broken": "An iframe with no set size got a 5 pixel box. Playwright could read a button inside but not click it, because the click point landed outside the frame.",
+      "changed": "Iframes now default to 300 by 150 like browsers, and the page inside uses that box as its window size.",
+      "matters": "Automation that clicks inside iframes works instead of retrying until it times out."
     }
   ]
 }
