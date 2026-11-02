@@ -1,0 +1,23 @@
+{
+  "repo": "oxigraph/oxigraph",
+  "about": "A graph database that stores linked data and answers SPARQL queries.",
+  "stars": 2020,
+  "prs": [
+    {
+      "number": 2012,
+      "merged": "2026-11-02",
+      "title": "Numbers outside their declared type count as invalid",
+      "broken": "A value like 1200 typed as a byte, which only goes to 127, was treated as a normal number and worked in arithmetic.",
+      "changed": "Each sized integer type now checks its range. A value outside it is handled like any other invalid value.",
+      "matters": "Queries now follow the SPARQL standard, so bad data no longer passes as valid numbers."
+    },
+    {
+      "number": 2013,
+      "merged": "2026-11-02",
+      "title": "Converting text with extra spaces now works",
+      "broken": "Converting a string with spaces around it, like \" 7 \" to an integer, gave no value at all.",
+      "changed": "Conversions to numbers, booleans, dates and durations now trim surrounding whitespace first, as the standard says.",
+      "matters": "Text from messy sources converts correctly instead of silently leaving query results empty."
+    }
+  ]
+}

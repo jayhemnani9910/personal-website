@@ -1,0 +1,15 @@
+{
+  "repo": "uutils/acl",
+  "about": "A rewrite of the Linux access control list tools in Rust.",
+  "stars": 26,
+  "prs": [
+    {
+      "number": 357,
+      "merged": "2026-11-02",
+      "title": "getfacl names a missing file and keeps going",
+      "broken": "When one of several files couldn't be read, getfacl stopped there and printed an error without saying which file.",
+      "changed": "The error now names the file, and the remaining files are still listed. The exit code still reports the failure.",
+      "matters": "One bad path in a list no longer hides the results for every file after it."
+    }
+  ]
+}

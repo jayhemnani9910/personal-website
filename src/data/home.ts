@@ -569,6 +569,12 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "eugenioenko/ttt", number: "#1299", href: "https://github.com/eugenioenko/ttt/pull/1299" },
   { repo: "eugenioenko/ttt", number: "#1300", href: "https://github.com/eugenioenko/ttt/pull/1300" },
   { repo: "lightpanda-io/browser", number: "#4344", href: "https://github.com/lightpanda-io/browser/pull/4344" },
+  { repo: "oxigraph/oxigraph", number: "#2012", href: "https://github.com/oxigraph/oxigraph/pull/2012" },
+  { repo: "oxigraph/oxigraph", number: "#2013", href: "https://github.com/oxigraph/oxigraph/pull/2013" },
+  { repo: "radareorg/radare2", number: "#27304", href: "https://github.com/radareorg/radare2/pull/27304" },
+  { repo: "radareorg/radare2", number: "#27305", href: "https://github.com/radareorg/radare2/pull/27305" },
+  { repo: "radareorg/radare2", number: "#27306", href: "https://github.com/radareorg/radare2/pull/27306" },
+  { repo: "uutils/acl", number: "#357", href: "https://github.com/uutils/acl/pull/357" },
 ];
 
 /**

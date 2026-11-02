@@ -461,6 +461,30 @@
       "broken": "Moving between 8 or 16-bit registers that need an extra prefix, like r10w or sil, silently became a move between two different registers.",
       "changed": "These moves now get the prefixes they need, and invalid register pairs are rejected like the GNU assembler does.",
       "matters": "mov is the most common instruction, so small register moves now assemble to what was written."
+    },
+    {
+      "number": 27304,
+      "merged": "2026-11-02",
+      "title": "Bit-scan instructions assemble with the right high registers",
+      "broken": "In 64-bit mode, bsf, bsr, popcnt, lzcnt and tzcnt ignored registers r8 to r15, so the bytes silently named a different register.",
+      "changed": "These instructions now build their prefix and memory operand through one shared helper. 700 forms were checked against the GNU assembler.",
+      "matters": "Code assembled with these instructions now uses the registers that were written."
+    },
+    {
+      "number": 27305,
+      "merged": "2026-11-02",
+      "title": "The assembler learns cmpxchg",
+      "broken": "Assembling cmpxchg, including the common lock cmpxchg form, failed with Cannot assemble.",
+      "changed": "cmpxchg now shares its encoder with xadd and can take the lock prefix. Its forms match the GNU assembler in 64 and 32-bit mode.",
+      "matters": "cmpxchg is the basic atomic instruction, so people patching binaries can now write it directly."
+    },
+    {
+      "number": 27306,
+      "merged": "2026-11-02",
+      "title": "The assembler learns pause and 64-bit string instructions",
+      "broken": "pause and the quadword string instructions, like movsq and stosq with their rep forms, failed with Cannot assemble.",
+      "changed": "pause now works in every mode. The quadword forms work in 64-bit mode and stay rejected elsewhere, as in the GNU assembler.",
+      "matters": "These show up in ordinary 64-bit code, so more real instructions now assemble."
     }
   ]
 }
