@@ -1,0 +1,15 @@
+{
+  "repo": "DRYTRIX/TimeTracker",
+  "about": "A self-hosted app for tracking work hours across projects and clients.",
+  "stars": 635,
+  "prs": [
+    {
+      "number": 805,
+      "merged": "2026-11-02",
+      "title": "Bulk entry can add a slot right after another one",
+      "broken": "With 09:00 to 12:00 already logged, adding 12:00 to 17:00 for that day failed with an error, because an entry that only touched the new slot counted as an overlap.",
+      "changed": "Bulk entry now only refuses real overlaps, the same rule manual entries already follow.",
+      "matters": "People can fill in a normal split work day in one go."
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "repo": "cachethq/core",
+  "about": "The core of Cachet, an open source, self-hosted status page system.",
+  "stars": 227,
+  "prs": [
+    {
+      "number": 499,
+      "merged": "2026-11-02",
+      "title": "The Incidents badge counts every open incident",
+      "broken": "The dashboard badge counted only incidents guests can see. With an open incident visible only to users, it showed 0 in green while the same page listed it.",
+      "changed": "The badge now uses the same count as the open incidents card. The public status page is unchanged.",
+      "matters": "Admins no longer see an all-clear badge while an incident is open."
+    }
+  ]
+}
