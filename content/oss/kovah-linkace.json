@@ -1,0 +1,23 @@
+{
+  "repo": "Kovah/LinkAce",
+  "about": "A self-hosted bookmark archive for saving and organizing links.",
+  "stars": 3351,
+  "prs": [
+    {
+      "number": 1190,
+      "merged": "2026-11-02",
+      "title": "Newest first and Z to A sorting work on every page",
+      "broken": "List, tag and guest pages read the sort direction from the wrong setting, so choosing Newest or Title Z-A still sorted the links in ascending order.",
+      "changed": "Those pages now read the direction from the right setting, as the main links, lists and tags pages already did.",
+      "matters": "Sorting does what people pick, including for guests browsing a shared collection."
+    },
+    {
+      "number": 1191,
+      "merged": "2026-11-02",
+      "title": "Clearing a link title shows an error, not a crash",
+      "broken": "Clearing the title while editing a link ended in a server error, and the edit was lost.",
+      "changed": "An empty title now shows a clear message on the form. Requests that leave the title out still work.",
+      "matters": "People can fix the mistake and keep their changes instead of losing them."
+    }
+  ]
+}
