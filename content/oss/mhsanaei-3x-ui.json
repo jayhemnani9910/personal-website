@@ -53,6 +53,22 @@
       "broken": "When a user ran out of data, the panel switched them off. The scheduled reset and the Reset All button zeroed their usage but left them off until an admin stepped in.",
       "changed": "Both resets now switch back on the users their quota had turned off, like every other reset in the panel already did.",
       "matters": "Users on a monthly or daily data plan come back on their own when the period resets."
+    },
+    {
+      "number": 6975,
+      "merged": "2026-11-02",
+      "title": "Vmess links with padded web-safe encoding import again",
+      "broken": "Some vmess links use the web-safe form of base64 and keep their padding. The panel could not read them, so that server silently went missing from an imported subscription.",
+      "changed": "These links now go through the more forgiving decoder the shadowsocks import already uses.",
+      "matters": "Every server in a subscription shows up instead of some quietly disappearing."
+    },
+    {
+      "number": 6977,
+      "merged": "2026-11-02",
+      "title": "Imported server names keep their + and % signs",
+      "broken": "Names on imported vless, trojan, hysteria2 and wireguard links were decoded twice, so a server named VIP+ came back as \"VIP \" and a%20b as \"a b\".",
+      "changed": "These links now decode the name once, as shadowsocks links already did.",
+      "matters": "Servers keep the names they were given when one panel imports from another."
     }
   ]
 }

@@ -1,0 +1,15 @@
+{
+  "repo": "Paymenter/Paymenter",
+  "about": "An open source webshop for hosting companies, with billing and client management.",
+  "stars": 2817,
+  "prs": [
+    {
+      "number": 1434,
+      "merged": "2026-11-02",
+      "title": "Coupons now work through their last day",
+      "broken": "A coupon expiring today was rejected from midnight, because the expiry date was read as the very start of that day. One applied the day before stopped working at checkout.",
+      "changed": "A coupon now stays valid until the end of its expiry date and is rejected from the next day.",
+      "matters": "Customers get the discount for the whole last day the shop promised."
+    }
+  ]
+}

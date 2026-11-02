@@ -1,0 +1,15 @@
+{
+  "repo": "ZoneMinder/zoneminder",
+  "about": "Open source security camera software for Linux, for IP, USB and analog cameras.",
+  "stars": 5978,
+  "prs": [
+    {
+      "number": 5429,
+      "merged": "2026-11-02",
+      "title": "Audit report rows link to their own camera",
+      "broken": "In the Audit Events Report, every row's event count link opened the events of all monitors, not the one in that row.",
+      "changed": "Each row now builds its own link for its own monitor, and a stale saved filter that hid the problem is cleared properly.",
+      "matters": "Checking one camera from the report now shows only that camera's events."
+    }
+  ]
+}

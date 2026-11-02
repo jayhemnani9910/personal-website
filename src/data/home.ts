@@ -575,6 +575,12 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "radareorg/radare2", number: "#27305", href: "https://github.com/radareorg/radare2/pull/27305" },
   { repo: "radareorg/radare2", number: "#27306", href: "https://github.com/radareorg/radare2/pull/27306" },
   { repo: "uutils/acl", number: "#357", href: "https://github.com/uutils/acl/pull/357" },
+  { repo: "DRYTRIX/TimeTracker", number: "#805", href: "https://github.com/DRYTRIX/TimeTracker/pull/805" },
+  { repo: "MHSanaei/3x-ui", number: "#6975", href: "https://github.com/MHSanaei/3x-ui/pull/6975" },
+  { repo: "MHSanaei/3x-ui", number: "#6977", href: "https://github.com/MHSanaei/3x-ui/pull/6977" },
+  { repo: "Paymenter/Paymenter", number: "#1434", href: "https://github.com/Paymenter/Paymenter/pull/1434" },
+  { repo: "ZoneMinder/zoneminder", number: "#5429", href: "https://github.com/ZoneMinder/zoneminder/pull/5429" },
+  { repo: "cachethq/core", number: "#499", href: "https://github.com/cachethq/core/pull/499" },
 ];
 
 /**
