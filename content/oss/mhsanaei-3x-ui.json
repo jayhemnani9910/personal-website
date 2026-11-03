@@ -69,6 +69,14 @@
       "broken": "Names on imported vless, trojan, hysteria2 and wireguard links were decoded twice, so a server named VIP+ came back as \"VIP \" and a%20b as \"a b\".",
       "changed": "These links now decode the name once, as shadowsocks links already did.",
       "matters": "Servers keep the names they were given when one panel imports from another."
+    },
+    {
+      "number": 6976,
+      "merged": "2026-11-03",
+      "title": "IPv6 WireGuard links import with a working address",
+      "broken": "Importing a WireGuard link with an IPv6 server dropped the brackets around the address, so the connection could not start because the address was invalid.",
+      "changed": "The address is now built with its brackets kept. IPv4 addresses and host names stay as they were.",
+      "matters": "WireGuard servers on IPv6 now connect after being imported from a link or a subscription."
     }
   ]
 }
