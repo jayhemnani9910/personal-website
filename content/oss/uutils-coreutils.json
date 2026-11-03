@@ -10,6 +10,14 @@
       "broken": "With the option that joins full lines, pr dropped the separator between columns and between merged files, so the columns ran into each other. GNU pr keeps it.",
       "changed": "pr now writes the separator in that mode like in every other mode, and a test file that had the glued output was corrected.",
       "matters": "Multi-column and merged output stays readable, the same as GNU pr."
+    },
+    {
+      "number": 15673,
+      "merged": "2026-11-02",
+      "title": "pr stops merged output after the last line",
+      "broken": "When merging files with no page footer, pr filled the rest of the page with blank lines. Two short lines came out as 56, where GNU pr prints 2.",
+      "changed": "pr now stops once every file has run out, unless a footer needs the page filled.",
+      "matters": "Merged output is the same length as GNU pr, with no pages of blank lines."
     }
   ]
 }

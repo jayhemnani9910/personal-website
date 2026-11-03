@@ -1,0 +1,15 @@
+{
+  "repo": "micropython/micropython",
+  "about": "A small version of Python that runs on microcontrollers and other tiny devices.",
+  "stars": 22180,
+  "prs": [
+    {
+      "number": 19826,
+      "merged": "2026-11-03",
+      "title": "Counting an empty string matches Python when the range is backwards",
+      "broken": "Counting an empty string with an end before the start returned 1. Regular Python returns 0. Bytes had the same problem.",
+      "changed": "The shortcut for empty strings now only runs when the range is valid, so a backwards range counts nothing.",
+      "matters": "Code gets the same answer on a small device as it does in regular Python."
+    }
+  ]
+}
