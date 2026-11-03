@@ -429,6 +429,14 @@
       "broken": "An iframe with no set size got a 5 pixel box. Playwright could read a button inside but not click it, because the click point landed outside the frame.",
       "changed": "Iframes now default to 300 by 150 like browsers, and the page inside uses that box as its window size.",
       "matters": "Automation that clicks inside iframes works instead of retrying until it times out."
+    },
+    {
+      "number": 4369,
+      "merged": "2026-11-03",
+      "title": "Margin, padding and border sides can be read one at a time",
+      "broken": "Setting padding or margin kept it as one value, so scripts asking for just the top or left side got nothing back, where Chrome gives the real value.",
+      "changed": "These values now split into their four sides, read back as a whole when they match, and a bad value changes nothing.",
+      "matters": "Pages and scripts that measure spacing see the same values as in Chrome."
     }
   ]
 }

@@ -1,0 +1,15 @@
+{
+  "repo": "nvm-sh/nvm",
+  "about": "The popular tool for installing and switching between versions of Node.js.",
+  "stars": 95739,
+  "prs": [
+    {
+      "number": 3962,
+      "merged": "2026-11-03",
+      "title": "The installer writes a working path outside the home folder",
+      "broken": "The installer treated any folder starting with the home path as inside it. A home of /home/me and nvm in /home/me2 wrote a broken path, so nvm did not load.",
+      "changed": "It now writes the home shortcut only when nvm really is inside the home folder, and the full path otherwise.",
+      "matters": "nvm loads in new shells, including in containers whose user has no home folder."
+    }
+  ]
+}

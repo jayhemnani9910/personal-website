@@ -1,0 +1,15 @@
+{
+  "repo": "grokability/snipe-it",
+  "about": "A free tool companies use to keep track of their IT equipment and software licenses.",
+  "stars": 15140,
+  "prs": [
+    {
+      "number": 19994,
+      "merged": "2026-11-02",
+      "title": "Warranty end dates stay in the right month",
+      "broken": "A one month warranty bought on August 31 ended on October 1, because the date spilled past the shorter month. Expiry alerts used the same sum.",
+      "changed": "Warranty dates and the alert window now stop on the last day of the month, so that purchase ends on September 30.",
+      "matters": "Staff see the true warranty end date and get alerts on time."
+    }
+  ]
+}

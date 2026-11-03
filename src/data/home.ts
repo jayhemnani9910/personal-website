@@ -583,6 +583,12 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "cachethq/core", number: "#499", href: "https://github.com/cachethq/core/pull/499" },
   { repo: "Kovah/LinkAce", number: "#1190", href: "https://github.com/Kovah/LinkAce/pull/1190" },
   { repo: "Kovah/LinkAce", number: "#1191", href: "https://github.com/Kovah/LinkAce/pull/1191" },
+  { repo: "gramps-project/gramps-web", number: "#1616", href: "https://github.com/gramps-project/gramps-web/pull/1616" },
+  { repo: "grokability/snipe-it", number: "#19994", href: "https://github.com/grokability/snipe-it/pull/19994" },
+  { repo: "uutils/coreutils", number: "#15673", href: "https://github.com/uutils/coreutils/pull/15673" },
+  { repo: "lightpanda-io/browser", number: "#4369", href: "https://github.com/lightpanda-io/browser/pull/4369" },
+  { repo: "micropython/micropython", number: "#19826", href: "https://github.com/micropython/micropython/pull/19826" },
+  { repo: "nvm-sh/nvm", number: "#3962", href: "https://github.com/nvm-sh/nvm/pull/3962" },
 ];
 
 /**

@@ -1,0 +1,15 @@
+{
+  "repo": "gramps-project/gramps-web",
+  "about": "An online family tree app, based on the Gramps genealogy program.",
+  "stars": 1798,
+  "prs": [
+    {
+      "number": 1616,
+      "merged": "2026-11-02",
+      "title": "The relationship chart uses the symbols you picked",
+      "broken": "The relationship chart ignored the user's settings, so it always showed the star and cross symbols, even with text abbreviations chosen.",
+      "changed": "The chart now gets the app's settings, the same as the other family tree charts.",
+      "matters": "People who chose text abbreviations see them on every chart, not just some."
+    }
+  ]
+}
