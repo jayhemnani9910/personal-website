@@ -37,6 +37,14 @@
       "broken": "Every fatal error started with the program name twice, like \"tar: tar: file.tar: Cannot open\".",
       "changed": "The messages no longer carry their own prefix, so the name is added once, as in GNU tar.",
       "matters": "Errors read the same as GNU tar, and scripts that match them keep working."
+    },
+    {
+      "number": 420,
+      "merged": "2026-11-03",
+      "title": "Extracting with -v prints only file names",
+      "broken": "tar -xvf printed an extra \"Extracting archive\" line before the file names, which GNU tar does not do.",
+      "changed": "The extra line is gone, so the output is just the names of the extracted files.",
+      "matters": "Scripts that read or count the extracted names no longer pick up a line that isn't a file."
     }
   ]
 }

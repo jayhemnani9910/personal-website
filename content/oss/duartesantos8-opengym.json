@@ -1,0 +1,15 @@
+{
+  "repo": "DuarteSantos8/openGym",
+  "about": "An open-source gym and body-weight tracker for phones, with routines, workout logging and imports from other apps.",
+  "stars": 19019,
+  "prs": [
+    {
+      "number": 504,
+      "merged": "2026-11-03",
+      "title": "Strong imports keep warm-ups and failure sets",
+      "broken": "Imports from the Strong app ignored what kind of set each row was. Rest timers became extra sets, warm-ups counted toward volume, and sets to failure lost their mark.",
+      "changed": "The importer now reads Strong's Set Order column. Rest rows are skipped, notes go on the exercise, warm-ups are marked as warm-ups, and failure sets stay flagged.",
+      "matters": "Workout history moved over from Strong now shows the right sets and the right training volume."
+    }
+  ]
+}

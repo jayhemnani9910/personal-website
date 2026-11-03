@@ -589,6 +589,8 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "lightpanda-io/browser", number: "#4369", href: "https://github.com/lightpanda-io/browser/pull/4369" },
   { repo: "micropython/micropython", number: "#19826", href: "https://github.com/micropython/micropython/pull/19826" },
   { repo: "nvm-sh/nvm", number: "#3962", href: "https://github.com/nvm-sh/nvm/pull/3962" },
+  { repo: "DuarteSantos8/openGym", number: "#504", href: "https://github.com/DuarteSantos8/openGym/pull/504" },
+  { repo: "uutils/tar", number: "#420", href: "https://github.com/uutils/tar/pull/420" },
 ];
 
 /**
