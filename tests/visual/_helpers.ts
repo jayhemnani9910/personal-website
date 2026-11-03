@@ -40,4 +40,7 @@ export async function settle(page: Page, path: string) {
   // taken mid-swap bakes in fallback metrics.
   await page.evaluate(() => document.fonts.ready);
   await expect(page.locator("#main-content")).toBeVisible();
+  // The home page adds its tiles from the browser, after "networkidle" can
+  // already have fired. Under parallel load a shot taken before then is 159px short.
+  if (path === "/") await expect(page.getByText("rubik's", { exact: true })).toBeVisible();
 }
