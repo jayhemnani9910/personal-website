@@ -591,6 +591,7 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "nvm-sh/nvm", number: "#3962", href: "https://github.com/nvm-sh/nvm/pull/3962" },
   { repo: "DuarteSantos8/openGym", number: "#504", href: "https://github.com/DuarteSantos8/openGym/pull/504" },
   { repo: "uutils/tar", number: "#420", href: "https://github.com/uutils/tar/pull/420" },
+  { repo: "MHSanaei/3x-ui", number: "#6976", href: "https://github.com/MHSanaei/3x-ui/pull/6976" },
 ];
 
 /**
