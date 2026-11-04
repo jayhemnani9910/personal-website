@@ -596,6 +596,7 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "headroomlabs-ai/headroom", number: "#4318", href: "https://github.com/headroomlabs-ai/headroom/pull/4318" },
   { repo: "lightpanda-io/browser", number: "#4370", href: "https://github.com/lightpanda-io/browser/pull/4370" },
   { repo: "uutils/awk", number: "#142", href: "https://github.com/uutils/awk/pull/142" },
+  { repo: "oauth2-proxy/oauth2-proxy", number: "#3587", href: "https://github.com/oauth2-proxy/oauth2-proxy/pull/3587" },
 ];
 
 /**
