@@ -4,6 +4,14 @@
   "stars": 3140,
   "prs": [
     {
+      "number": 952,
+      "merged": "2026-11-04",
+      "title": "Search hosts saved without http:// now work",
+      "broken": "A search host saved without http:// passed the Test button, but every real search then returned nothing.",
+      "changed": "Searches now add the missing http:// the same way the test does.",
+      "matters": "If the test says a host works, searches on that host work too."
+    },
+    {
       "number": 947,
       "merged": "2026-10-31",
       "title": "Search results show sizes in normal units",

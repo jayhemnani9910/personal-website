@@ -1,0 +1,15 @@
+{
+  "repo": "headroomlabs-ai/headroom",
+  "about": "Shrinks tool output, logs and files before they reach an AI model, so coding agents use fewer tokens.",
+  "stars": 78775,
+  "prs": [
+    {
+      "number": 4318,
+      "merged": "2026-11-04",
+      "title": "Merge diffs keep changes made against the second parent",
+      "broken": "When shrinking a merge diff, changes made against a later parent were treated as plain context and could be cut away.",
+      "changed": "Each line is now judged by all of its parent columns. Ordinary diffs behave as before.",
+      "matters": "An AI agent reading a shortened merge diff still sees every change."
+    }
+  ]
+}
