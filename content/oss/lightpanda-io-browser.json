@@ -4,6 +4,14 @@
   "stars": 36886,
   "prs": [
     {
+      "number": 4370,
+      "merged": "2026-11-04",
+      "title": "XMLSerializer now writes real XML",
+      "broken": "XMLSerializer used the HTML writer, so its output missed namespaces and self-closing tags and was not valid XML.",
+      "changed": "It now has its own writer, with namespaces, self-closing tags and XML escaping, matching what Chrome outputs.",
+      "matters": "Pages that save SVG or XML from the browser get the output they expect."
+    },
+    {
       "number": 4267,
       "merged": "2026-10-29",
       "title": "The :default selector works",

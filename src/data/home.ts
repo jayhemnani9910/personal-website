@@ -592,6 +592,9 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "DuarteSantos8/openGym", number: "#504", href: "https://github.com/DuarteSantos8/openGym/pull/504" },
   { repo: "uutils/tar", number: "#420", href: "https://github.com/uutils/tar/pull/420" },
   { repo: "MHSanaei/3x-ui", number: "#6976", href: "https://github.com/MHSanaei/3x-ui/pull/6976" },
+  { repo: "YouROK/TorrServer", number: "#952", href: "https://github.com/YouROK/TorrServer/pull/952" },
+  { repo: "headroomlabs-ai/headroom", number: "#4318", href: "https://github.com/headroomlabs-ai/headroom/pull/4318" },
+  { repo: "lightpanda-io/browser", number: "#4370", href: "https://github.com/lightpanda-io/browser/pull/4370" },
 ];
 
 /**
