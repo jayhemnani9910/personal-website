@@ -1,0 +1,15 @@
+{
+  "repo": "oauth2-proxy/oauth2-proxy",
+  "about": "A proxy that sits in front of a website or app and makes people log in through Google, Azure or another identity provider first.",
+  "stars": 15322,
+  "prs": [
+    {
+      "number": 3587,
+      "merged": "2026-11-04",
+      "title": "Links with a query no longer loop on the trailing slash redirect",
+      "broken": "When a link to a folder had no ending slash but did have a query, the proxy added the slash after the query. The path never got fixed, so browsers stopped with too many redirects.",
+      "changed": "The slash now goes on the path, before the query, so the second request succeeds.",
+      "matters": "People following these links reach the page instead of a browser error."
+    }
+  ]
+}
