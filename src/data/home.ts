@@ -595,6 +595,7 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "YouROK/TorrServer", number: "#952", href: "https://github.com/YouROK/TorrServer/pull/952" },
   { repo: "headroomlabs-ai/headroom", number: "#4318", href: "https://github.com/headroomlabs-ai/headroom/pull/4318" },
   { repo: "lightpanda-io/browser", number: "#4370", href: "https://github.com/lightpanda-io/browser/pull/4370" },
+  { repo: "uutils/awk", number: "#142", href: "https://github.com/uutils/awk/pull/142" },
 ];
 
 /**

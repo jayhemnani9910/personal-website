@@ -4,6 +4,14 @@
   "stars": 29,
   "prs": [
     {
+      "number": 142,
+      "merged": "2026-11-04",
+      "title": "Text that starts with a number now counts as that number",
+      "broken": "awk only turned text into a number when all of it was a valid number. A value with spaces around it or text after it counted as 0, so summing a column of padded numbers gave 0.",
+      "changed": "It now skips leading spaces and reads the number at the start of the text, as gawk does. Bare words like inf and nan no longer count as numbers.",
+      "matters": "Scripts that add up columns from real files, where numbers often have spaces around them, get the right totals."
+    },
+    {
       "number": 149,
       "merged": "2026-10-27",
       "title": "An unset variable now equals zero when compared with a number",
