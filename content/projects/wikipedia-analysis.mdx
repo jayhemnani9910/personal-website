@@ -1,75 +1,77 @@
 ---
 title: "Wikipedia Analysis"
-summary: "URL → scrape → tokenize → top frequent words with visuals."
-description: "A Flask app that scrapes a Wikipedia article, filters out stopwords, and charts its most frequent words."
+summary: "Paste a Wikipedia URL and get the article's top 25 words as a chart, once the stopword list has been taught to ignore Wikipedia's own vocabulary like 'cite' and 'retrieved'."
+description: "A small Flask app that scrapes a Wikipedia article, filters out stopwords and Wikipedia's own jargon, and charts the top 25 words."
 role: "Developer"
 domain: "Student work"
 tags: ["python", "flask", "nlp", "web"]
 tech: ["Python", "Flask", "BeautifulSoup", "HTML", "CSS"]
-challenge: "Quickly summarize long articles."
+challenge: "Count the words on a Wikipedia page and the page ends up partly describing itself, because metadata terms like 'cite', 'retrieved' and 'archive' dominate the counts. So the interesting part of a word counter is deciding what counts as the article, inside some messy HTML."
 solution:
-  - "BeautifulSoup to scrape; tokenization + stopword removal."
-  - "Frequency counts → charts; simple Flask UI."
+  - "BeautifulSoup pulls out the main content and removes infoboxes, references and navigation."
+  - "Tokens are filtered against NLTK's stopwords plus a hand-picked list of Wikipedia terms."
+  - "The top 25 go to a bar chart in Chart.js, behind a simple Flask UI."
 impact:
-  - "Minutes to insights; handy for research & notes."
+  - "You get a quick read of what an article emphasizes. It's a word count and not a summary, so the themes are yours to work out."
+  - "This is student work with no users or timing numbers to report. It handles one article at a time and doesn't scale to bulk analysis."
 deepDive:
-  context: "I wanted a quick read on the key themes of long Wikipedia articles. Instead of reading thousands of words, I wanted the most frequent terms to show what the article emphasizes. That meant handling Wikipedia's messy HTML, getting through long text quickly, and showing the result as a chart you can read at a glance."
+  context: "I wanted a quick read on the key themes of long Wikipedia articles, with the most frequent terms showing what each one emphasizes. That meant getting through Wikipedia's messy HTML and showing the result as a chart you can read at a glance."
 
-  architecture: "A plain pipeline: a Flask web server receives Wikipedia URLs from users, a scraping layer extracts article content using BeautifulSoup, a text processing engine tokenizes and filters the content, and a visualization layer generates frequency charts. It keeps no state and has no database. The frontend is a little JavaScript and Chart.js; the backend does the counting."
+  architecture: "A plain pipeline with no state and no database. Flask receives the URL, BeautifulSoup extracts the article, the text gets tokenized, filtered and counted, and the frontend draws the chart with a little JavaScript and Chart.js."
 
   components:
     - name: "Web Scraper"
-      purpose: "BeautifulSoup-based extractor that navigates Wikipedia's DOM structure to isolate article content from navigation, sidebars, and metadata. Handles various Wikipedia page layouts including disambiguation pages, redirect pages, and standard articles."
+      purpose: "Finds the article content in Wikipedia's page structure and strips out navigation, sidebars and metadata."
 
     - name: "Text Processor"
-      purpose: "NLP pipeline that performs tokenization, lowercasing, stopword removal, and frequency analysis. Uses NLTK's stopword corpus extended with Wikipedia-specific terms like 'wikipedia', 'reference', 'edit' to filter out noise and focus on content-rich terms."
+      purpose: "Tokenizes, lowercases, removes stopwords and counts. NLTK's stopword corpus is extended with Wikipedia terms like 'wikipedia', 'reference' and 'edit'."
 
     - name: "Visualization Engine"
-      purpose: "Generates bar charts and word clouds showing term frequencies. Uses Chart.js for interactive charts that allow users to hover over bars to see exact counts, making it easy to identify dominant themes at a glance."
+      purpose: "An interactive Chart.js bar chart. Hover over a bar to see the exact count."
 
     - name: "Flask API"
-      purpose: "Lightweight REST endpoint that accepts Wikipedia URLs, runs the scraping and analysis pipeline, and returns JSON data containing top terms and their frequencies for frontend rendering."
+      purpose: "A small endpoint that takes a Wikipedia URL, runs the pipeline and returns the top terms and counts as JSON."
 
   dataFlow:
-    - step: "User Input"
+    - step: "Take the URL"
       component: "Flask API"
-      detail: "User submits Wikipedia article URL through the web interface. URL validation ensures it's a proper Wikipedia domain to prevent scraping arbitrary websites."
+      detail: "You submit an article URL. It has to be on a Wikipedia domain, so the app can't be pointed at arbitrary websites."
 
-    - step: "Content Extraction"
+    - step: "Get the article"
       component: "Web Scraper"
-      detail: "requests fetches the page and BeautifulSoup parses the HTML, targeting the main content div (#mw-content-text) while excluding infoboxes, reference sections, and navigation elements to get pure article text."
+      detail: "requests fetches the page and BeautifulSoup goes to the main content div (#mw-content-text), dropping infoboxes, references and navigation."
 
-    - step: "Text Normalization"
+    - step: "Clean the text"
       component: "Text Processor"
-      detail: "Raw HTML is converted to plain text, stripped of special characters and numbers. Text is lowercased and split into individual tokens using whitespace and punctuation as delimiters."
+      detail: "The text is lowercased and tokenized, and anything that isn't alphabetic is dropped."
 
-    - step: "Filtering & Counting"
+    - step: "Filter and count"
       component: "Text Processor"
-      detail: "Tokens are filtered against an expanded stopword list (common words like 'the', 'is', 'at' plus Wikipedia-specific terms). Remaining tokens are counted using a frequency distribution, with the top 25 terms selected for visualization."
+      detail: "Common words and Wikipedia terms are removed. The rest go into a frequency distribution, and the top 25 are kept."
 
-    - step: "Visualization Rendering"
+    - step: "Draw the chart"
       component: "Visualization Engine"
-      detail: "Frequency data is passed to Chart.js which renders an interactive bar chart. The chart displays terms on the x-axis and occurrence counts on the y-axis, with colors indicating relative frequency intensity."
+      detail: "Chart.js renders terms on the x-axis and counts on the y-axis."
 
   keyDecisions:
     - decision: "Stateless processing"
-      rationale: "Results aren't saved to a database. Each request is processed fresh, so there's nothing to maintain and the tool stays light and deployable anywhere."
+      rationale: "Results aren't saved. Each request runs fresh, so there's nothing to maintain and the app can run anywhere."
       tradeoff: "No history: every analysis starts from scratch, so past results cannot be revisited or compared."
 
     - decision: "BeautifulSoup over the API"
-      rationale: "Wikipedia offers an official API, but BeautifulSoup on raw HTML provided more control over content extraction, specifically the ability to exclude specific sections like references and external links that would skew frequency analysis with non-article terms."
+      rationale: "Wikipedia has an official API, but raw HTML gave me more control over removing sections like references and external links, which would skew the counts."
       tradeoff: "Tied to Wikipedia's HTML layout: a markup change can break the selectors, where the API would stay stable."
 
     - decision: "An extended stopword list"
-      rationale: "Standard NLTK stopwords weren't sufficient for Wikipedia content. Added domain-specific stopwords like 'wikipedia', 'cite', 'reference', 'retrieved', 'archive' to filter out meta-content that appears frequently but doesn't relate to article topics."
+      rationale: "NLTK's standard list wasn't enough. Words like 'wikipedia', 'cite', 'reference', 'retrieved' and 'archive' appear constantly and say nothing about the topic."
       tradeoff: "A hand-kept list: new meta terms have to be noticed and added by hand."
 
     - decision: "Show the top 25 only"
-      rationale: "The chart shows the top 25 terms, not every unique word. That keeps attention on the main themes and the chart readable. Long-tail words (appearing 1-2 times) add noise without insight."
+      rationale: "Words that appear once or twice add noise, and a chart of every unique word is unreadable."
       tradeoff: "A rare but telling word never reaches the chart."
 
   codeSnippets:
-    - label: "Web Scraping with BeautifulSoup"
+    - label: "Finding the article inside the page"
       language: "python"
       code: |
         def scrape_wikipedia(url):
@@ -87,7 +89,7 @@ deepDive:
 
             return content_div.get_text()
 
-    - label: "Text Processing Pipeline"
+    - label: "Filtering and counting"
       language: "python"
       code: |
         from nltk.corpus import stopwords
@@ -110,7 +112,7 @@ deepDive:
 
             return freq_dist.most_common(25)
 
-    - label: "Flask API Endpoint"
+    - label: "The Flask endpoint"
       language: "python"
       code: |
         @app.route('/analyze', methods=['POST'])
@@ -136,18 +138,18 @@ deepDive:
 
   learnings:
     - lesson: "Domain text needs domain filtering"
-      detail: "Generic NLP needs tuning for each domain. Wikipedia articles contain structural elements (citations, infoboxes, navigation) that must be filtered out. Without a Wikipedia-specific stopword list, metadata terms dominate the counts."
+      detail: "Generic NLP needs tuning for each domain. Without the Wikipedia stopwords, metadata terms dominate the counts."
 
     - lesson: "Scraping is brittle"
-      detail: "Wikipedia's HTML structure can change, breaking CSS selectors. The scraper needed defensive code: check elements exist before touching them, handle the different page types (disambiguation, redirect, standard), and degrade gracefully when the structure doesn't match."
+      detail: "Wikipedia's HTML can change and break the selectors, so the scraper checks an element exists before touching it."
 
     - lesson: "Quick beats exact here"
-      detail: "Perfect linguistic analysis wasn't the point; quick answers were. I chose simple tokenization over advanced NLP (stemming, lemmatization, named entity recognition) because speed and simplicity outweighed small accuracy gains. For a quick read of an article, a rougher answer now beat a finer one later."
+      detail: "I chose simple tokenization over stemming, lemmatization or named entity recognition. For a quick read of an article, a rougher answer now beat a finer one later."
 
     - lesson: "The chart is the product"
-      detail: "Raw frequency lists are hard to interpret. With a bar chart, users could see an article's themes at a glance. The chart mattered as much as the counting."
+      detail: "A raw frequency list is hard to read. A bar chart shows an article's themes at a glance, and it mattered as much as the counting."
 
     - lesson: "It does not scale"
-      detail: "Processing individual Wikipedia articles works well, but the architecture doesn't scale to bulk analysis of hundreds of articles. If I came back to it, I'd add caching and batch processing, and maybe move to Wikipedia dumps for large-scale corpus analysis rather than real-time scraping."
+      detail: "One article at a time works well, but hundreds wouldn't. If I came back to it, I'd add caching and batch processing, and maybe move to Wikipedia dumps instead of real-time scraping."
 ---
-A small Flask app that takes a Wikipedia URL, scrapes the article text with BeautifulSoup, filters out stopwords, and charts the most frequent words. It is stateless: each request is scraped and counted fresh, with no database behind it. The point is a quick read of what an article emphasizes before reading all of it.
+Every run scrapes and counts from scratch, with no database anywhere, so the whole app is one request long. The one piece of real judgment is the stopword list, a hand-kept set of Wikipedia's own words. The counting is the easy bit; the thought goes into cleaning the text first.

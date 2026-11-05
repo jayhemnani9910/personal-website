@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { Route } from "next";
 import { getAllProjects } from "@/lib/content";
-import { FEATURED, HOUSE_RULES, DAILY_FACTS, CUBE_PB, buildDeskStats, buildLogEntries } from "@/data/home";
+import { FEATURED, HOUSE_RULES, DAILY_FACTS, CUBE_PB, buildDeskStats, buildLogEntries, MERGED_PRS } from "@/data/home";
 import { SITE_CONFIG } from "@/../content/site";
 import { SecretsProvider } from "./SecretsProvider";
 import { DeskNav } from "./DeskNav";
@@ -13,13 +13,12 @@ import { Guestbook } from "./Guestbook";
 import { CopyEmail } from "./CopyEmail";
 import { Greeting, VisitCount } from "./Visits";
 import { RotatingTitle } from "./RotatingTitle";
+import { ProofSections } from "./ProofSections";
+import { SECTION, H2 } from "./classes";
 import { ReaderToggle } from "@/components/ReaderToggle";
 import { ShellButton } from "@/components/ShellButton";
 import { CHIP, DOTS } from "@/components/desk";
 import { NAV } from "@/components/nav-links";
-
-const SECTION = "mx-auto max-w-[1200px] px-[clamp(16px,4vw,48px)] py-[60px]";
-const H2 = "text-[length:clamp(32px,4.5vw,56px)] font-extrabold tracking-[-0.035em] leading-none";
 
 const NUMBER_WORDS = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen"];
 const TENS = ["", "", "twenty", "thirty", "forty", "fifty", "sixty", "seventy", "eighty", "ninety"];
@@ -31,8 +30,8 @@ export function inWords(n: number): string {
   return String(n);
 }
 
-/** Cut at a word, near the length a four-line clamp on the pick card shows. */
-const PICK_TEXT = 170;
+/** Cut at a word, inside what a four-line clamp on the pick card shows. */
+const PICK_TEXT = 140;
 function clip(text: string): string {
   if (text.length <= PICK_TEXT) return text;
   let cut = text.slice(0, text.lastIndexOf(" ", PICK_TEXT));
@@ -75,7 +74,7 @@ export async function HomeDesk() {
       title: p.title,
       brief: clip(p.description ?? p.summary),
       changed: clip(p.impact[0] ?? p.challenge),
-      tags: p.tech.slice(0, 4),
+      tags: p.tech.slice(0, 3),
     }));
   const shy = projectCount - featured.length;
 
@@ -88,13 +87,14 @@ export async function HomeDesk() {
           <header className="mx-auto max-w-[1200px] px-[clamp(16px,4vw,48px)] pb-8 pt-[clamp(40px,7vw,90px)]">
             <Greeting />
             <h1 className="text-[length:clamp(44px,8vw,112px)] font-extrabold leading-[var(--tr-lh-display)] tracking-[-0.045em] [text-wrap:balance]">
-              I take the vague version and ship the{" "}
-              <span className="desk-hl rounded-md bg-tr-butter px-[0.12em] [box-decoration-break:clone]">real one.</span>
+              I build AI agents you can{" "}
+              <span className="desk-hl rounded-md bg-tr-butter px-[0.12em] [box-decoration-break:clone]">actually trust.</span>
             </h1>
             <div className="mt-7 flex flex-wrap items-end justify-between gap-6">
               <p className="max-w-[520px] text-[length:clamp(17px,1.6vw,20px)] leading-[var(--tr-lh-body)] text-tr-text-mute [text-wrap:pretty]">
-                Jay Hemnani. <RotatingTitle /> from Gujarat. Data pipelines, ML, agents, and occasionally a
-                Rubik&apos;s cube. Currently <b>open to work</b> and, apparently, to building toys for my own homepage.
+                Jay Hemnani. <RotatingTitle /> from Gujarat. The model is the easy part. I build what surrounds
+                it: the guardrails, evals and verifiers that make it safe to ship. Currently <b>open to work</b> and,
+                apparently, to building toys for my own homepage.
               </p>
               <p aria-hidden="true" className="desk-grab-hint font-mono text-[12px] text-tr-text-faint">
                 ↓ grab a tile. throw it. they don&apos;t mind.
@@ -116,6 +116,8 @@ export async function HomeDesk() {
             </dl>
           </section>
 
+          <ProofSections mergedCount={MERGED_PRS.length} />
+
           <section id="work" aria-labelledby="work-h2" className={SECTION}>
             <h2 id="work-h2" className={`${H2} mb-2`}>
               Things I&apos;ve shipped
@@ -132,7 +134,7 @@ export async function HomeDesk() {
                 <li key={p.id} className="flex">
                   <Link
                     href={`/projects/${p.id}` as Route}
-                    className="desk-card flex w-full flex-col gap-3.5 rounded-[18px] border-[1.5px] border-tr-hairline bg-tr-surface-1 p-6 hover:text-tr-text"
+                    className="desk-card desk-panel gap-3.5 hover:text-tr-text"
                   >
                     <span className="flex items-center justify-between">
                       <span className="font-mono text-[12px] text-tr-text-faint">{p.num}</span>
@@ -201,7 +203,7 @@ export async function HomeDesk() {
                 got a vague brief?
               </h2>
               <CopyEmail email={social.email} />
-              <p className="font-mono text-[13px] text-tr-on-ink-mute">click to copy · software, data &amp; ML roles, forward-deployed included</p>
+              <p className="font-mono text-[13px] text-tr-on-ink-mute">click to copy · AI agent, forward-deployed, software, data &amp; ML roles</p>
               <ul className="mt-10 flex flex-wrap gap-3">
                 {SOCIALS.map((s) => (
                   <li key={s.label}>

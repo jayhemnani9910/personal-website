@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
 
-const TITLES = ["Forward Deployed Engineer", "Software, Data and ML Engineer"];
+const TITLES = ["AI Agent Engineer", "Forward Deployed Engineer"];
 const EVERY_MS = 3200;
 
 /**

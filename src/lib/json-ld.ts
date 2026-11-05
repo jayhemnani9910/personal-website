@@ -31,6 +31,8 @@ export const SITE_GRAPH = {
       knowsAbout: [
         "Forward Deployed Engineering",
         "AI agents",
+        "Harness engineering",
+        "LLM evaluation",
         "Model Context Protocol",
         "Retrieval-Augmented Generation",
         "Computer Vision",

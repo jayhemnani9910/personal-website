@@ -1,75 +1,61 @@
 ---
 title: "Immigration Management System"
-summary: "Relational schema + CRUD for immigration ops."
+summary: "One person can be the applicant on one immigration case and the sponsor on another. This student MySQL schema keeps people, cases, roles and expiring documents straight."
 description: "A normalized MySQL schema for immigration case management: people, cases, documents with expiry dates, and an audit trail."
 role: "Developer"
 domain: "Student work"
 tags: ["sql"]
 tech: ["SQL", "MySQL"]
-challenge: "Normalize complex person-/case-centric data."
+challenge: "The tables are the easy part. The hard part is the relationships: one person on many cases in different roles, documents that expire on their own schedules, and a history of status changes that has to survive. The job was to model all of that without copying a person's details around."
 solution:
-  - "ERD → SQL DDL; indexes for frequent lookups; CRUD console."
+  - "An ERD turned into SQL DDL, with indexes for the frequent lookups, a console for CRUD, and a stored procedure that creates a case and its primary applicant in one transaction."
 impact:
-  - "Predictable performance & cleaner data model."
+  - "A cleaner data model, with a junction table for who plays which role and an audit trail for status changes. It's student work and I have no benchmarks to show, so the index choices are design reasoning, not measured wins."
 deepDive:
   context: |
-    Immigration case management means tracking how people, cases, documents and legal processes relate, and those links get messy fast. I needed a normalized relational schema that could handle:
+    Immigration case data looks like a list of forms until you try to normalize it. The schema has to handle:
 
-    - Multiple people per case (applicants, dependents, sponsors)
-    - Various case types (family-based, employment-based, asylum, etc.)
-    - Document lifecycle management (submission, expiration, renewals)
-    - Time-sensitive deadlines and status transitions
-    - Historical audit trails for compliance
+    - Several people per case (applicants, dependents, sponsors)
+    - Different case types (family-based, employment-based, asylum, and so on)
+    - Documents that get submitted, expire and get renewed
+    - Deadlines and status changes
+    - A history of what changed and when
 
   architecture: |
-    **Database Design Approach:**
+    **The design**
 
-    The schema follows a normalized relational model (3NF) with some denormalization for performance:
+    Normalized to 3NF, with one deliberate exception for a counter.
 
-    1. **Core Entity Tables:**
-       - `persons` - Central person registry (applicants, dependents, sponsors)
-       - `cases` - Immigration case metadata with type and status
-       - `documents` - Document tracking with expiration management
-       - `case_persons` - Many-to-many relationship with role differentiation
+    1. **Core tables:**
+       - `persons` - one row per person, whatever their role
+       - `cases` - case metadata, type and status
+       - `documents` - documents and their expiry dates
+       - `case_persons` - who is on which case, and as what
 
-    2. **Supporting Tables:**
-       - `case_status_history` - Audit trail for state transitions
-       - `document_types` - Lookup table for standardized document categories
-       - `case_types` - Immigration case category definitions
+    2. **Supporting tables:**
+       - `case_status_history` - the audit trail
+       - `document_types` and `case_types` - lookup tables
 
-    3. **Indexing Strategy:**
-       - Composite indexes on `(case_id, person_id, role)` for relationship queries
-       - A composite B-tree index on `(expiration_date, status)` for deadline monitoring
-       - A composite index on `(last_name, first_name)` for name lookups
-
-    **Normalization Decisions:**
-    - Separated person data from case data to avoid duplication (one person can be in multiple cases)
-    - Created junction table for many-to-many relationships with additional attributes (role, is_primary flag)
-    - Extracted case types and document types into lookup tables for referential integrity
+    3. **Indexes:**
+       - `(case_id, person_id, role)` for relationship queries
+       - `(expiration_date, status)` for deadline checks
+       - `(last_name, first_name)` for name lookups
 
   components: |
-    **1. Data Definition Layer (DDL)**
-    - Table creation scripts with proper constraints (PRIMARY KEY, FOREIGN KEY, NOT NULL, ENUM)
-    - Index definitions for query optimization
-    - View definitions for common query patterns
+    **1. Schema**
+    - Tables with PRIMARY KEY, FOREIGN KEY, NOT NULL and ENUM constraints, plus indexes and views for common queries
 
-    **2. CRUD Operations Layer**
-    - Parameterized SQL procedures for safe data manipulation
-    - Transaction management for multi-table operations (e.g., creating a case and its primary applicant atomically)
-    - Input validation at the database level through NOT NULL columns and ENUM statuses
+    **2. CRUD**
+    - Parameterized procedures, with transactions around multi-table work like creating a case and its primary applicant together
 
-    **3. Query Interface**
-    - Console-based application for data entry and retrieval
-    - Pre-built queries for common operations (case search, document expiration alerts)
-    - Export functionality for reporting
+    **3. Console**
+    - Data entry and retrieval, pre-built queries like case search and expiring documents, and an export for reporting
 
-    **4. Data Integrity Mechanisms**
-    - Foreign key constraints to maintain referential integrity
-    - `DEFAULT CURRENT_TIMESTAMP` on `created_at` and `ON UPDATE CURRENT_TIMESTAMP` on `updated_at` for automatic timestamps
-    - Cascading deletes configured appropriately (CASCADE vs RESTRICT based on business rules)
+    **4. Integrity**
+    - Foreign keys, automatic `created_at` and `updated_at` timestamps, and CASCADE or RESTRICT chosen per relationship
 
   dataFlow: |
-    **1. Case Creation Flow:**
+    **1. Creating a case:**
     ```
     User Input → Validate Person Data → Insert/Update persons table
               → Create case record in cases table
@@ -77,7 +63,7 @@ deepDive:
               → Initialize case_status_history with "OPEN" status
     ```
 
-    **2. Document Submission Flow:**
+    **2. Submitting a document:**
     ```
     Document Upload → Validate document type against document_types
                    → Insert into documents table with case_id reference
@@ -85,7 +71,7 @@ deepDive:
                    → Update case status if all required documents submitted
     ```
 
-    **3. Case Status Transition:**
+    **3. Changing a status:**
     ```
     Status Change Request → Validate allowed transitions (business rules)
                          → Update cases.status field
@@ -93,38 +79,38 @@ deepDive:
                          → Trigger notifications if needed (via application layer)
     ```
 
-    **4. Query Patterns:**
-    - **Find Expiring Documents:** Index scan on `idx_expiration` for `expiration_date BETWEEN NOW() AND NOW() + 30 DAYS`
-    - **Case Details:** JOIN cases, case_persons, persons to fetch complete case view
-    - **Person History:** JOIN persons, case_persons, cases to show all cases for a person
+    **4. Common queries:**
+    - **Expiring documents:** index scan on `idx_expiration` for `expiration_date BETWEEN NOW() AND NOW() + 30 DAYS`
+    - **Case details:** join cases, case_persons and persons
+    - **Person history:** join persons, case_persons and cases
 
   keyDecisions:
-    - decision: "Keep person data normalized, denormalize case counts in persons table"
-      rationale: "Person data changes infrequently but is queried often. Storing active_case_count avoids expensive COUNT queries while accepting occasional inconsistency risk."
+    - decision: "Keep person data normalized, but store a case count on persons"
+      rationale: "Person data rarely changes and gets read a lot. Storing active_case_count saves a COUNT on every listing."
       tradeoff: "Every case change has to keep active_case_count in step; a missed update shows a wrong count until it is recomputed."
 
-    - decision: "Use case_persons junction table with role enum (applicant, dependent, sponsor, attorney)"
-      rationale: "One person can hold several roles in the same case (e.g., sponsor and attorney) and the schema stays clean."
+    - decision: "A case_persons junction table with a role enum (applicant, dependent, sponsor, attorney)"
+      rationale: "One person can hold several roles on the same case, like sponsor and attorney, and the schema stays clean."
       tradeoff: "The role list is an ENUM, so a new role is a schema change (ALTER TABLE), not a row."
 
-    - decision: "Store both issue_date and expiration_date rather than calculating on-the-fly"
-      rationale: "Different document types have different validity periods, and some may be extended. Storing the date up front makes deadline checks a fast index lookup."
+    - decision: "Store issue_date and expiration_date instead of calculating them"
+      rationale: "Document types have different validity periods and some get extended. A stored date makes deadline checks an index lookup."
       tradeoff: "An extension is an update to the stored date, and nothing in the schema stops a stored date from disagreeing with its document type's validity period."
 
-    - decision: "Separate case_status_history table instead of JSON field in cases table"
-      rationale: "History can be queried with plain SQL, the schema stays normalized, and range queries are fast (e.g., \"all cases that were pending in Q2 2023\")."
+    - decision: "A case_status_history table, not a JSON field on cases"
+      rationale: "History stays queryable with plain SQL, including range questions like \"all cases that were pending in Q2 2023\"."
       tradeoff: "Every status change is two writes inside one transaction, and a case's history is a join away."
 
-    - decision: "MySQL with the InnoDB engine"
-      rationale: "Immigration data needs ACID guarantees. Row-level locking handles concurrent case updates, and foreign keys and transactions are built in."
+    - decision: "MySQL with InnoDB"
+      rationale: "Foreign keys, transactions and row-level locking come built in, and a half-written case is the thing to avoid."
       tradeoff: "The schema leans on MySQL specifics (ENUM columns, ON UPDATE CURRENT_TIMESTAMP), so moving to another database is a rewrite of those parts."
 
-    - decision: "UTF-8 encoding for all text fields"
-      rationale: "Names and addresses come in many languages. UTF-8 stores and sorts those characters properly."
-      tradeoff: "In utf8mb4 a character takes up to four bytes, so long indexed VARCHAR columns reach InnoDB's index-length limit sooner."
+    - decision: "utf8mb4 for all text"
+      rationale: "Names and addresses come in many languages. José and Müller should come back out as José and Müller."
+      tradeoff: "A character takes up to four bytes, so long indexed VARCHAR columns reach InnoDB's index-length limit sooner."
 
   codeSnippets:
-    - title: "Core Schema Definition"
+    - title: "The core tables"
       language: "sql"
       code: |
         -- Person entity (normalized to avoid duplication)
@@ -193,7 +179,7 @@ deepDive:
           INDEX idx_case_docs (case_id, document_type_id)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-    - title: "Complex Query Example - Case Details with All Relationships"
+    - title: "A case with everyone on it, and what's about to expire"
       language: "sql"
       code: |
         -- View for complete case information
@@ -240,7 +226,7 @@ deepDive:
           AND c.status NOT IN ('CLOSED', 'DENIED')
         ORDER BY d.expiration_date ASC;
 
-    - title: "Transaction Example - Safe Case Creation"
+    - title: "Creating a case in one transaction"
       language: "sql"
       code: |
         -- Procedure to create a case with primary applicant atomically
@@ -303,40 +289,16 @@ deepDive:
         DELIMITER ;
 
   learnings: |
-    **Database Design Insights:**
+    1. **Normalization is a default, not a religion.** Storing `active_case_count` on persons saves an aggregate query on every listing, at the cost of keeping that copy consistent.
 
-    1. **Normalization is Not Always Absolute**
-       - Started with strict 3NF but found that denormalizing `active_case_count` in the persons table removed an aggregate query every case listing would otherwise run.
-       - For read-heavy fields, denormalizing is worth the extra work of keeping the copy consistent.
+    2. **Relationships have attributes.** `case_persons` began as just two IDs. Then `role`, `is_primary` and `relationship` turned up, and they belong to the link, not to the person or the case.
 
-    2. **Junction Tables Should Carry Business Logic**
-       - Initially made `case_persons` a pure junction table with just IDs. Later added `role`, `is_primary`, and `relationship` fields.
-       - Many-to-many relationships in real-world domains often have attributes that belong to the relationship itself, not either entity.
+    3. **Date ranges need the right index.** Putting status alongside `expiration_date` in a composite index is what got rid of the filesorts.
 
-    3. **Date Fields Require Careful Indexing**
-       - Queries filtering by `expiration_date` ranges were slow until adding composite index `(expiration_date, status)`.
-       - Date range queries need the right index, and putting status in the composite index got rid of the filesorts.
+    4. **ENUM or foreign key depends on how stable the list is.** `status` and `role` are ENUMs because they rarely change. `case_type` and `document_type` are foreign keys because they will.
 
-    4. **Enums vs. Foreign Keys Trade-off**
-       - Used ENUMs for `status` and `role` fields (limited, stable values) but foreign keys for `case_type` and `document_type` (extensible).
-       - ENUMs are faster and enforce constraints at the schema level, but they're rigid. Use them only for stable domains.
+    5. **Let the database say no.** Foreign keys reject a case with a made-up case type, and NOT NULL dates and ENUM statuses keep document rows trustworthy.
 
-    5. **Audit Trails Are Essential for Compliance**
-       - Immigration data has legal implications. The `case_status_history` table earned its keep answering "when did this case move to PENDING?"
-       - For regulated domains, invest in audit infrastructure early. Retrofitting is painful.
-
-    6. **Constraints Prevent Bad Data**
-       - Foreign key constraints reject a case that names a case type which does not exist.
-       - NOT NULL issue dates and ENUM statuses kept document rows to values the queries could trust.
-       - Let the database enforce business rules where possible. It's the last line of defense against data corruption.
-
-    7. **UTF-8 Encoding is Non-Negotiable**
-       - Names with accented characters (José, Müller, etc.) need utf8mb4; latin1 would mangle them, and converting a populated table later is painful.
-       - Always use UTF-8 (specifically utf8mb4 in MySQL) from day one when dealing with international data.
-
-    8. **Transactions Ensure Consistency**
-       - Creating a case involves 4-5 table inserts. Without transactions, partial failures left orphaned records.
-       - Stored procedure with transaction boundaries solved this completely.
-       - Multi-table operations must be wrapped in transactions. ACID compliance is worth the learning curve.
+    6. **Build the audit trail and the transactions early.** Creating a case touches several tables, and a failure halfway would leave orphaned rows. Retrofitting a history table later is painful.
 ---
-A normalized (3NF) MySQL schema for immigration case management: people, cases, a junction table for who plays which role on each case, documents with issue and expiration dates, and a status-history table as the audit trail. Indexes cover the frequent lookups, such as documents expiring soon, and a stored procedure creates a case and its primary applicant in one transaction.
+The part I'd point at is `case_persons`: a junction table that grew up and started carrying the role, the primary flag and the relationship. A stored procedure creates the person if needed, the case, the link and the first history row in one transaction, or none of them. The one thing I denormalized on purpose is a case count, and it comes with the upkeep you'd expect.

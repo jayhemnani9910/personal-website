@@ -1,7 +1,7 @@
 import { ImageResponse } from "next/og";
 import { RESUME } from "@/data/resume";
 
-export const alt = "Jay Hemnani, an engineer who ships agentic systems into production";
+export const alt = "Jay Hemnani, an engineer who builds AI agents you can actually trust";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -35,9 +35,9 @@ export default async function OpengraphImage() {
   const kicker = "/portfolio";
   const url = "jayhemnani.in";
   const role = RESUME.tagline;
-  const tagline = "Agentic systems, shipped into production.";
+  const tagline = "AI agents you can actually trust.";
   // The half of the tagline that sits on a butter highlight, as titles do on the site.
-  const cut = tagline.indexOf("shipped");
+  const cut = tagline.indexOf("actually");
 
   const [heavy, sans, mono] = await Promise.all([
     loadGoogleFont("Bricolage Grotesque", 800, `${title}.`),

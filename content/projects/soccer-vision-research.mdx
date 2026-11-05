@@ -1,7 +1,7 @@
 ---
 title: "Soccer Vision Research"
-summary: "Modular research framework that wires four pretrained vision models (RF-DETR, SAM2, SigLIP, ResNet) into one configurable soccer-analysis pipeline with selectable fusion strategies."
-description: "Research framework that combines four pretrained vision models (RF-DETR, SAM2, SigLIP, ResNet) into one configurable soccer-analysis pipeline."
+summary: "Can you swap detection, segmentation, identification and classification models behind one config, and compare them without rewriting code? This is my big learning project on that question, and its README is honest about how far it got."
+description: "A soccer-vision learning project: a configurable model pipeline with no trained weights yet, a YouTube frame analyzer, and a very honest README."
 role: "Researcher"
 period: "2024"
 domain: "Computer vision"
@@ -10,66 +10,69 @@ tech: ["Python", "PyTorch", "RF-DETR", "SAM2", "SigLIP"]
 github: "https://github.com/jayhemnani9910/soccer-vision-research"
 links:
   site: "https://jayhemnani9910.github.io/soccer-vision-research/"
-challenge: "Combining several vision models for soccer analysis usually means hard-wiring one fixed pipeline. I wanted a modular framework where detection, segmentation, identification, and classification models are swappable and configurable, so model combinations can be A/B tested without rewriting code."
+challenge: "Soccer recognition is four jobs at once: find the players, segment them, work out who they are, read the jersey. I wanted each one swappable behind one config, so model combinations could be compared without rewriting code. The design is the part that exists today. An audit found the package couldn't be imported and pytest couldn't start, and that's what led to the README reporting the real state."
 solution:
-  - "An orchestration layer (ModelPipeline) that runs RF-DETR detection, SAM2 segmentation and tracking, SigLIP zero-shot identification, and ResNet jersey classification."
-  - "Three execution modes (sequential, parallel, adaptive) plus a result-fusion layer with seven selectable strategies."
-  - "YAML-driven, schema-validated config per model, with a model registry and manager so presets are configuration, not code."
+  - "An orchestration layer (ModelPipeline) with stages for RF-DETR detection, SAM2 segmentation and tracking, SigLIP identification and ResNet jersey classification."
+  - "Three execution modes (sequential, parallel, adaptive) and a fusion layer with seven selectable strategies, written but not proven on real model output."
+  - "YAML config per model with schema validation and a model registry. The config helpers do run."
+  - "A separate tool in yt/ downloads a YouTube video, picks keyframes, asks a vision-language model (Qwen2-VL locally, or OpenAI) to describe them, and stores the answers in SQLite."
+  - "The audit pass fixed crashes so the package imports, removed hardcoded performance claims from the demos, and rewrote the README to say what's real."
 impact:
-  - "Swap models or presets through config alone, so model combinations can be A/B tested quickly."
-  - "SigLIP text-image matching identifies players and teams zero-shot, without training on a specific roster."
-  - "A documented framework with per-model demos and a config system built for research reproducibility."
-priority: 2
+  - "The package now imports, and PlayerRecognizer constructs with models disabled. Most demos run headless to the end, but they mostly use random or synthetic data, so any accuracy or FPS they print is not real."
+  - "No trained weights are included. RF-DETR and SAM2 here are hand-written PyTorch models with untrained heads, not the official releases, and their demos still stop inside those models."
+  - "34 tests pass and 62 fail. Most failures target APIs the code never had, so they test code that was never written."
+  - "The YouTube tool's full pipeline was never run end to end. Its query script's --help does run, which is a modest victory."
+priority: 22
 deepDive:
-  context: "Most soccer-vision projects wire one detector to one tracker to one classifier and ship that fixed chain. Research, though, is mostly about swapping pieces: does RF-DETR beat YOLO here, does SAM2 segmentation help identification, is SigLIP good enough to skip a trained roster model? This project is the framework that makes those experiments cheap. It integrates four pretrained models behind one orchestration layer with config-driven presets and pluggable fusion, so a model combination is a config change rather than a rewrite. It is composition and tooling, not a trained end product; the value is the harness."
-  architecture: "An orchestration framework over four pretrained models. ModelPipeline runs them in one of three execution modes: sequential, parallel (threaded), or adaptive (chosen from available GPU and memory), with GPU fallback, timeouts, and retries. The four stages are RF-DETR for detection, SAM2 for segmentation with temporal tracking, SigLIP for zero-shot identification via text-image matching, and ResNet for jersey classification. A ResultFusion layer then reconciles their outputs under a selectable strategy (majority voting, weighted averaging, confidence-based, ensemble, temporal consistency, spatial alignment, or adaptive), using Hungarian matching to align detections across models and temporal consistency to stabilize identities across frames. Every model is configured from validated YAML through a ModelConfigManager and a model registry, so presets are configuration rather than code."
+  context: "This lives in my learning folder, and that's the right place for it. Research on soccer video is mostly about swapping pieces: does this detector beat that one, is text-image matching good enough to skip a trained roster model? So the idea was a framework where a model combination is a config change. Those experiments never happened, because no trained models are in the box. Read this as an architecture sketch in code, with a README that tells you which parts are toys."
+  architecture: "ModelPipeline is designed to run four model stages in one of three modes: sequential, threaded parallel, or adaptive based on available resources, with GPU fallback, timeouts and retries. The stages are a hand-written RF-DETR, a hand-written SAM2 with a tracker, a hand-written SigLIP text-image matcher, and a ResNet jersey classifier. ResultFusion then merges their outputs under a selectable strategy, grouping detections by spatial proximity and applying temporal consistency. Config comes from validated YAML through a ModelConfigManager and a registry. The yt/ tool is separate: its scanner, tracker and Q&A prompts write results into SQLite, and a small script queries them."
   dataFlow:
     - step: "Preprocess"
       component: "ModelPipeline (orchestration)"
-      detail: "Frames are decoded, resized, and cached; the pipeline picks sequential, parallel, or adaptive execution from available resources."
+      detail: "The plan: decode and resize frames, then pick sequential, parallel or adaptive execution from available resources."
     - step: "Detect"
       component: "RF-DETR detection"
-      detail: "RF-DETR locates players, ball, and officials with confidence scores."
+      detail: "Meant to locate players, ball and officials. The untrained model has no real detections to give, and its demo still stops inside it."
     - step: "Segment + track"
       component: "SAM2 segmentation + tracker"
-      detail: "SAM2 produces masks and carries them across frames for temporal consistency."
+      detail: "Meant to produce masks and carry them across frames. Same caveat: untrained, and the tracking demos stop inside the model."
     - step: "Identify"
       component: "SigLIP identification"
-      detail: "SigLIP matches crops against text prompts for zero-shot player and team identification."
+      detail: "Meant to match player crops against text prompts. No trained weights are included, so this is untested on real players."
     - step: "Classify"
       component: "ResNet jersey classification"
-      detail: "A ResNet head reads jersey cues for team and role classification."
+      detail: "A ResNet head meant to read team and role from jersey cues."
     - step: "Fuse"
       component: "ResultFusion"
-      detail: "ResultFusion reconciles the four outputs under the chosen strategy, resolving conflicts and aligning detections spatially and temporally."
+      detail: "Merges the outputs under the chosen strategy, grouping detections by spatial proximity."
   components:
     - name: "ModelPipeline (orchestration)"
-      purpose: "Runs the four models sequentially, in parallel, or adaptively, with GPU fallback, timeouts, retries, and batch processing."
+      purpose: "Scheduling for the four stages, with GPU fallback, timeouts, retries and batches. Never proven on trained models."
     - name: "RF-DETR detection"
-      purpose: "Transformer-based object detection for players, ball, and officials."
+      purpose: "A hand-written PyTorch model with untrained heads, not the official RF-DETR."
     - name: "SAM2 segmentation + tracker"
-      purpose: "Segment Anything 2 for masks plus a tracker that maintains mask identity across frames."
+      purpose: "A hand-written SAM2-style model, not the official release, plus a tracker that uses Hungarian assignment to keep identities across frames."
     - name: "SigLIP identification"
-      purpose: "Zero-shot identification by matching player crops against text prompts, no per-roster training required."
+      purpose: "Hand-written vision and text transformers for zero-shot matching. No weights included, so it's a design, not a result."
     - name: "ResNet jersey classification"
-      purpose: "Classifies team and role from jersey appearance."
+      purpose: "A ResNet-based classifier for team and role. No trained jersey weights included."
     - name: "ResultFusion"
-      purpose: "Reconciles all four models' outputs under a selectable fusion strategy, with Hungarian spatial alignment and temporal consistency."
+      purpose: "Seven selectable strategies for merging outputs, with spatial grouping and temporal consistency. Nothing here has been measured."
     - name: "ModelConfigManager + registry"
-      purpose: "Loads and validates per-model YAML config against schemas and constraints; the registry makes models swappable by name."
+      purpose: "Loads per-model YAML and validates it against schemas and range limits. The registry is how models were meant to be swapped by name."
   keyDecisions:
     - decision: "A configurable framework instead of one hard-wired pipeline"
-      reasoning: "The research question is which model combination works, so the system was built around a model registry plus validated config presets. Changing detector, fusion strategy, or execution mode is a config edit, not a code change."
-      tradeoff: "More abstraction and moving parts than a single fixed pipeline would need; the payoff is experiment speed."
+      reasoning: "The research question was which combination works, so I designed around a registry and validated presets. In hindsight, this was building the lab before owning a single working instrument."
+      tradeoff: "A lot of abstraction and about 34,000 lines of Python, with no trained model underneath to justify it."
     - decision: "SigLIP zero-shot identification over a trained roster classifier"
-      reasoning: "Text-image matching identifies players and teams without collecting and labeling per-team training data, so it generalizes to any match out of the box."
-      tradeoff: "Less precise than a model trained on a specific roster; it is a flexible baseline rather than a tuned identifier."
+      reasoning: "Text-image matching should identify players without labelling data for every team. That's the appeal, and it only pays off with real weights."
+      tradeoff: "Likely less precise than a roster-trained model. Neither has been measured here."
     - decision: "Selectable fusion strategies rather than one fixed rule"
-      reasoning: "Different scenarios reward different fusion: confidence-based when one model dominates, temporal consistency for video, voting when models disagree. Exposing all seven lets the right one be chosen per experiment."
-      tradeoff: "The caller has to know which strategy fits; a wrong choice can fuse worse than a single model."
+      reasoning: "The thinking: confidence-based when one model dominates, temporal consistency for video, voting when models disagree. Exposing all seven would let each experiment choose."
+      tradeoff: "The caller has to know which fits. With no real outputs to fuse, none of the seven has earned its place."
     - decision: "Sequential, parallel, and adaptive execution modes"
-      reasoning: "Four heavy models do not fit every GPU at once, so the pipeline can run them one at a time, threaded in parallel, or adaptively based on available memory."
-      tradeoff: "Parallel mode adds threading and memory-pressure complexity that sequential mode avoids."
+      reasoning: "Four heavy models won't fit every GPU at once, so the design can run them one at a time, threaded, or based on available resources."
+      tradeoff: "Parallel mode adds threading and memory complexity, and I built it before there was anything heavy to run."
   codeSnippets:
     - title: "Orchestration: execution modes and pipeline config"
       language: "python"
@@ -92,8 +95,8 @@ deepDive:
         class ModelPipeline:
             """Orchestrates RF-DETR, SAM2, SigLIP, and ResNet with scheduling,
             memory management, and fallback strategies."""
-      explanation: "The orchestration layer. It runs the four models in whichever mode suits the hardware, with GPU fallback, per-stage timeouts, and retries so one slow or failing model does not take the run down."
-    - title: "Result fusion: selectable strategies"
+      explanation: "This is the shape of the idea: pick a mode, set limits, and let one slow model fail without taking the run down. Read the docstring as intent, since no trained versions of these models are in the repo."
+    - title: "Result fusion: the plan and the reality"
       language: "python"
       code: |
         class FusionStrategy(Enum):
@@ -110,7 +113,7 @@ deepDive:
         from scipy.spatial.distance import cdist
         # cdist -> cost matrix of box-center distances
         # linear_sum_assignment -> Hungarian one-to-one match
-      explanation: "Fusion is where four independent models become one answer. Spatial alignment matches detections across models with the Hungarian algorithm on box-center distances; temporal consistency then stabilizes identities across frames so labels do not flicker."
+      explanation: "The enum is real. The Hungarian part is more of a wish: the fusion file imports both SciPy functions and never calls them. It groups detections by spatial proximity instead. Hungarian matching does get used, over in the SAM2 tracker."
     - title: "Config-driven models with validation"
       language: "python"
       code: |
@@ -129,14 +132,14 @@ deepDive:
                     },
                     # ... segmentation and classification schemas
                 }
-      explanation: "Each model is loaded from YAML and checked against a schema with field-type and range constraints before it runs. That is what makes a preset safe to swap: bad config fails fast instead of halfway through a video."
+      explanation: "One of the parts that actually runs. Each model's YAML gets checked for required fields and sane ranges before anything loads."
   metrics:
     - value: "4 models"
-      label: "orchestrated"
-      context: "RF-DETR · SAM2 · SigLIP · ResNet"
+      label: "pipeline stages"
+      context: "RF-DETR, SAM2, SigLIP, ResNet; no trained weights included"
     - value: "7"
       label: "fusion strategies"
-      context: "voting, weighted, confidence, temporal, spatial, ensemble, adaptive"
+      context: "written, not measured on real output"
     - value: "3"
       label: "execution modes"
       context: "sequential, parallel, adaptive"
@@ -144,13 +147,14 @@ deepDive:
       label: "config-driven"
       context: "schema-validated per model"
   learnings:
-    - "For a research harness, the registry and config layer matter more than any single model. Once swapping a detector or fusion rule became a config edit, running experiments got an order of magnitude cheaper."
-    - "Zero-shot identification with SigLIP is a useful baseline. It will not beat a roster-trained model, but it works on any match with no labeling, which is exactly what you want early in research."
-    - "Fusion is the hard part, not detection. Getting four models to agree (Hungarian alignment across detections, temporal smoothing of identities) was where most of the real engineering went."
-    - "Validate config before inference, not during. Schema checks with range constraints turn a class of silent mid-video failures into a fast, obvious error at load time."
+    - "Docs aren't features. This repo had many modules, demos and READMEs before it could even be imported. The README now tells readers to treat those docs as plans."
+    - "Demo numbers from random data look exactly like real numbers. That's why the scripts now say when their results are synthetic."
+    - "Failing tests can be useful evidence. Most of these 62 were written against APIs that never existed, which tells you how far the plan drifted from the code."
+    - "Get one real model working end to end before designing how seven strategies will combine four of them."
   futureWork:
-    - "Publish real benchmark outputs (detection, identification, fusion quality) on a fixed clip set so the presets can be compared quantitatively."
-    - "Train a roster-specific jersey/identity head and compare it head-to-head against the SigLIP zero-shot baseline."
-    - "Promote the landing page to a hosted demo that runs an actual clip through the pipeline and shows the fused output."
+    - "Swap the hand-written RF-DETR and SAM2 for the official releases with real weights."
+    - "Fix or delete the 62 failing tests, so a green run means something."
+    - "Run one real clip through the pipeline and publish actual detection and identification numbers, then compare presets."
+    - "Run the YouTube tool end to end with a real vision-language backend."
 ---
-Each model has one job: RF-DETR detection, SAM2 segmentation with temporal tracking, SigLIP zero-shot identification, and ResNet jersey classification. A ModelPipeline runs them sequentially, in parallel, or adaptively; a ResultFusion layer reconciles their outputs under seven selectable strategies; and a schema-validated YAML config system with a model registry makes every model swappable by configuration. It is a composition and experimentation harness, built so model combinations can be A/B tested without rewriting code.
+There are two separate things in this repo, at very different stages. The recognition package is mostly scaffolding, while the YouTube tool is the smaller, more concrete idea: scan each keyframe, track what changed, generate questions, and make it all searchable in SQLite. I never ran that one end to end either. The before-and-after is the useful bit: the README used to promise, and now it reports.

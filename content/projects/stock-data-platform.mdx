@@ -1,6 +1,7 @@
 ---
 title: "Stock Data Platform"
-summary: "Unified market data warehouse: 10 tickers, full price history, 4 data sources. Kafka streaming, Airflow orchestration, TimescaleDB star schema, Dockerized."
+summary: "One warehouse for prices that tick every 15 seconds, filings that come quarterly, and stock history going back to 1962. Kafka handles the live side, Airflow the rest, and both land in the same star schema."
+description: "A market data warehouse for 10 US stocks: live prices through Kafka, batch loads through 23 Airflow DAGs, all in a TimescaleDB star schema."
 role: "Data Engineer"
 period: "2025"
 domain: "Data engineering"
@@ -10,54 +11,54 @@ github: "https://github.com/jayhemnani9910/stock-data-platform"
 links:
   demo: "https://jayhemnani9910.github.io/stock-data-platform/dashboard.html"
   site: "https://jayhemnani9910.github.io/stock-data-platform/"
-challenge: "Build a unified market data warehouse combining real-time streaming with batch historical data from multiple sources."
+challenge: "Market data doesn't arrive in one neat shape. Prices tick all day, filings come quarterly, and a single dividend can rewrite years of adjusted closes overnight. The hard part is a warehouse that holds all of it in one place and stays correct when a source rewrites history."
 solution:
-  - "4 data sources (yfinance, SEC EDGAR, FRED, Alpaca): a Kafka producer polls yfinance for live prices every 15 seconds in market hours, and Airflow loads the rest on a schedule."
-  - "23 Airflow DAGs (one ETL DAG per ticker plus 13 more) orchestrate batch ETL, backfills, and aggregations across 10 major tickers."
-  - "10-table star schema in TimescaleDB (3 dimension + 7 fact tables) with dimensional modeling for prices, fundamentals, earnings, SEC filings, and macro data."
+  - "Two ways in. A Kafka producer polls yfinance every 15 seconds in market hours, and Airflow loads the rest on a schedule. Four sources in total: yfinance, SEC EDGAR, FRED and Alpaca."
+  - "23 Airflow DAGs: one ETL DAG per ticker, plus 13 more for loads, backfills and rollups."
+  - "A 10-table star schema in TimescaleDB, 3 dimension tables and 7 fact tables, covering prices, fundamentals, earnings, SEC filings and macro data."
 impact:
-  - "Full price history, back to each ticker's first traded day, for 10 major US equities (AAPL, NVDA, MSFT, GOOG, AMZN, META, TSLA, JPM, NFLX, DIS)."
-  - "Fully containerized with 7 Docker services, single command deployment."
-  - "A Bloomberg-style Chart.js dashboard for price trends, fundamentals, earnings surprises, and macro indicators."
-priority: 4
+  - "Full price history for 10 big US stocks (AAPL, NVDA, MSFT, GOOG, AMZN, META, TSLA, JPM, NFLX, DIS), back to 1962 for DIS, plus hourly bars from Alpaca back to 2016."
+  - "Seven Docker services, one command to start them. The unit tests need no database or network, and they import the real functions, because an earlier version tested copies and stayed green while the real code was replaced with nonsense."
+  - "A Bloomberg-style Chart.js dashboard for prices, fundamentals, earnings surprises and macro. It's a static page reading JSON exported from the warehouse, so it's a dated snapshot, not a live feed."
+priority: 7
 deepDive:
-  architecture: "Four upstream sources feed the warehouse on two paths. Live prices stream through a Kafka producer into a broker, where a consumer batches and upserts them into TimescaleDB. Batch data (daily and hourly prices, fundamentals, earnings, SEC filings, macro indicators) moves through Airflow DAGs that extract, normalize, and load on a schedule. Everything lands in a 10-table star schema and surfaces through a Chart.js dashboard."
+  architecture: "Four sources feed the warehouse on two paths. Live prices go through a Kafka producer to a broker, and a consumer batches and upserts them into TimescaleDB, updating the current day's row. Batch data (daily and hourly prices, fundamentals, earnings, SEC filings, macro) runs through Airflow DAGs that extract, normalize and load on a schedule. It all lands in a 10-table star schema. An export script then writes JSON files for the static Chart.js dashboard to read."
   dataFlow:
     - step: "Ingest"
       component: "kafka-producer / kafka-consumer"
-      detail: "A Kafka producer polls yfinance and publishes live prices to the broker every 15s during market hours; SEC EDGAR, FRED, and Alpaca come in through Airflow."
+      detail: "A Kafka producer polls yfinance and publishes live prices every 15 seconds in market hours. SEC EDGAR, FRED and Alpaca come in through Airflow."
     - step: "Stream consume"
       component: "kafka-producer / kafka-consumer"
-      detail: "A resilient consumer batches messages (size- or time-triggered) and upserts them into TimescaleDB, reconnecting on broker or DB failure."
+      detail: "The consumer batches messages by size or time and upserts them. If a batch fails, it reconnects to the database and retries once."
     - step: "Orchestrate"
       component: "airflow-webserver / airflow-scheduler"
-      detail: "23 Airflow DAGs run incremental ETL, backfills, and monthly aggregations across the 10 tickers."
+      detail: "23 DAGs run incremental ETL, backfills and monthly aggregations across the 10 tickers."
     - step: "Model"
       component: "timescaledb"
-      detail: "Data is dimensionally modeled into a star schema: dimension tables for company, date, and macro indicators; fact tables for daily, hourly, and monthly prices, fundamentals, earnings, SEC line items, and macro series."
+      detail: "A star schema: dimension tables for company, date and macro indicators, and fact tables for daily, hourly and monthly prices, fundamentals, earnings, SEC line items and macro series."
     - step: "Serve"
-      detail: "A Bloomberg-style dashboard reads the warehouse and renders price, valuation, earnings-surprise, and macro views."
+      detail: "An export script writes warehouse data to JSON, and a Bloomberg-style static dashboard renders price, valuation, earnings-surprise and macro views from those files."
   components:
     - name: "timescaledb"
-      purpose: "Star-schema warehouse (TimescaleDB on Postgres 14), the system of record for all prices, fundamentals, and macro series."
+      purpose: "The star-schema warehouse (TimescaleDB on Postgres 14). Everything ends up here."
     - name: "kafka + zookeeper"
-      purpose: "Message broker and coordination for the live price stream."
+      purpose: "The broker and its coordinator, for the live price stream."
     - name: "kafka-producer / kafka-consumer"
-      purpose: "Custom containers that ingest market data and sink it into TimescaleDB in batches."
+      purpose: "Custom containers that pull market data in and write it to TimescaleDB in batches."
     - name: "airflow-webserver / airflow-scheduler"
-      purpose: "Orchestrate and monitor the 23 batch ETL DAGs."
+      purpose: "Schedule and monitor the 23 batch DAGs."
   keyDecisions:
     - decision: "TimescaleDB over plain Postgres"
-      reasoning: "Decades of daily prices across 10 tickers plus hourly bars and macro series is time-series-heavy; TimescaleDB hypertables keep range queries fast while staying SQL-native."
-      tradeoff: "One more extension to operate versus reaching for a dedicated TSDB like InfluxDB and losing relational joins to the dimension tables."
-    - decision: "Batch-and-flush Kafka consumer, not per-message inserts"
-      reasoning: "Upserting in batches of 50 (or every 10s, whichever comes first) cuts write amplification and keeps the warehouse current without hammering it."
-      tradeoff: "A small bounded staleness window in exchange for far fewer transactions."
+      reasoning: "Decades of daily prices plus hourly bars and macro series is time-series-heavy. Hypertables split those tables into time chunks, and it's still SQL, so joins to the dimension tables keep working."
+      tradeoff: "One more extension to run. A dedicated time-series database like InfluxDB would have cost me the relational joins."
+    - decision: "Batch and flush in the Kafka consumer, no per-message inserts"
+      reasoning: "It upserts every 50 messages or every 10 seconds, whichever comes first. That means far fewer transactions, and the warehouse stays close to current."
+      tradeoff: "Data can wait in the batch for about 10 seconds."
     - decision: "Incremental DAGs keyed on last-loaded date"
-      reasoning: "Each ETL run reads the latest date already in the warehouse and re-reads only a 10-day overlap from there, so reruns are idempotent and late provider corrections are picked up; the first run loads the full history."
-      tradeoff: "More bookkeeping per DAG than a naive full reload."
+      reasoning: "Each run finds the latest date in the warehouse and re-reads 10 days from there, so reruns are safe and late corrections get picked up. If those 10 days no longer match what's stored, a dividend or split has re-adjusted the history, and it reloads the whole series so prices don't step at the boundary. The first run loads everything."
+      tradeoff: "More bookkeeping per DAG than a plain full reload, and spotting those re-adjustments is easy to get wrong. My first check missed an NVDA dividend and left 6,949 closes 0.11% high until I fixed it."
   codeSnippets:
-    - title: "Dimensional star schema (TimescaleDB)"
+    - title: "The star schema (TimescaleDB)"
       language: "sql"
       code: |
         CREATE EXTENSION IF NOT EXISTS timescaledb;
@@ -83,8 +84,8 @@ deepDive:
             volume BIGINT NOT NULL,
             PRIMARY KEY (date, company_key)
         );
-      explanation: "Surrogate-keyed company dimension joined to a daily price fact, keyed on (date, company_key) so it becomes a clean TimescaleDB hypertable."
-    - title: "Resilient Kafka to TimescaleDB consumer"
+      explanation: "A company dimension with a surrogate key, joined to a daily price fact. The primary key is (date, company_key), which also gives the pipeline something to upsert against."
+    - title: "The Kafka to TimescaleDB consumer"
       language: "python"
       code: |
         def _connect_kafka():
@@ -107,8 +108,8 @@ deepDive:
         if batch and (len(batch) >= BATCH_SIZE or now - last_flush >= FLUSH_INTERVAL):
             conn = _flush_batch(conn, batch)
             batch, last_flush = [], now
-      explanation: "Exponential backoff on connect, then a size-or-time batch flush that reconnects to the DB and retries the batch on failure rather than dropping data."
-    - title: "Incremental, idempotent ETL DAG"
+      explanation: "Exponential backoff on connect, then a flush on size or time, whichever trips first. A failed flush reconnects and retries once. If the retry fails too, that batch is discarded, so it survives a database blip but not a long outage."
+    - title: "An incremental ETL DAG you can rerun"
       language: "python"
       code: |
         def _normalize_columns(df, ticker):
@@ -132,7 +133,7 @@ deepDive:
             df = _normalize_columns(yf.download(ticker, start=start_date, end=end_date, progress=False), ticker)
         else:
             df = _normalize_columns(yf.download(ticker, period="max", progress=False), ticker)
-      explanation: "Column normalization handles yfinance's shifting multi-index, and the last-loaded-date lookup keeps each DAG run incremental and safe to rerun."
+      explanation: "yfinance's columns can come back as a multi-index with the ticker attached, so the first function flattens them. The last-loaded-date lookup keeps each run incremental and safe to repeat."
   metrics:
     - value: "Full"
       label: "price history per ticker"
@@ -143,12 +144,14 @@ deepDive:
     - value: "7"
       label: "Docker services"
   learnings:
-    - insight: "Time-or-size batching beats both extremes"
-      description: "Per-message inserts melt the warehouse; pure time batching lags. Flushing on whichever of size/time trips first kept writes cheap and data fresh."
-    - insight: "Idempotency is a schema property, not a script"
-      description: "Keying facts on (date, company_key) and reading the last-loaded date made reruns and backfills boring, which is exactly what you want from a pipeline."
+    - insight: "Batching on size or time beats either alone"
+      description: "Per-message inserts mean a transaction per tick, and time-only batching lets data lag. Flushing on whichever trips first keeps writes cheap and data fresh."
+    - insight: "Reruns get boring when the schema makes them boring"
+      description: "Keying facts on (date, company_key) and upserting means I can rerun a DAG without worrying. Boring is exactly what you want from a pipeline."
+    - insight: "Check the numbers on your own landing page"
+      description: "The Use Cases cards were full of made-up figures, under a line saying a single SQL query could answer each one. Measured against the warehouse, only the SEC card held up."
   futureWork:
-    - "Add great-expectations data-quality gates between extract and load."
-    - "Promote the dashboard to a hosted service with auth instead of a static snapshot."
+    - "Add data-quality checks with Great Expectations between extract and load."
+    - "Move the dashboard to a hosted service with auth, so it stops being a static snapshot."
 ---
-Unified batch + streaming market data warehouse tracking the full price history of 10 major US equities. Combines 4 data sources (yfinance prices, SEC EDGAR filings, FRED macro indicators, and Alpaca hourly bars) through a live Kafka stream and 23 Airflow DAGs into a 10-table star schema on TimescaleDB, shown on a Chart.js dashboard. Fully containerized with 7 Docker services.
+The clever part is how it handles history being rewritten. Each nightly run re-reads 10 days and compares them with what's stored. If they don't match, a dividend or split has re-adjusted the past, and it reloads the whole series so prices don't step at the boundary. Hourly bars get similar care: Alpaca's own hourly bars include pre- and post-market trading, so the loader fetches 30-minute bars and folds them into regular-session hours.

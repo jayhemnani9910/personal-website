@@ -379,3 +379,12 @@ html.lenis {
 /* The still tiles can't be thrown, so the line inviting it goes too. */
 @media (prefers-reduced-motion: reduce) { .desk-grab-hint { display: none; } }
 [data-reader="on"] .desk-grab-hint { display: none; }
+
+/* The home page's cards. Classes rather than utilities: repeated utility
+   strings cost about 2 KB of a page with a hard HTML budget. */
+.desk-panel { display: flex; flex-direction: column; width: 100%; padding: 24px; border: 1.5px solid var(--tr-hairline); border-radius: 18px; background: var(--tr-surface-1); }
+.desk-proof { gap: 8px; font-size: 15px; line-height: 1.5; color: var(--tr-text-mute); }
+.desk-proof:hover { color: var(--tr-text-mute); }
+.desk-proof b { font-size: 22px; font-weight: 800; line-height: var(--tr-lh-h3); letter-spacing: -0.025em; color: var(--tr-text); }
+.desk-proof u { margin-top: auto; padding-top: 8px; font-family: var(--ff-mono); font-size: 12px; color: var(--tr-text); }
+.desk-proof-term { font-family: var(--ff-mono); font-size: 12px; color: var(--tr-text-faint); }

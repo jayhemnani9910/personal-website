@@ -1,103 +1,89 @@
 ---
 title: "Chatbot (NLP)"
-summary: "Intent-based bot trained from JSON corpus."
-description: "An intent-based chatbot trained from a JSON corpus: stemming, bag-of-words, and a small neural network that picks the intent."
+summary: "A chatbot small enough to explain on a napkin: your sentence becomes a row of 1s and 0s, a small neural network picks the intent, and if it's under 70% sure, it asks you to rephrase."
+description: "An old-school intent classifier with no LLM: stemming, bag-of-words and a small neural network, plus a fallback reply when it isn't sure."
 role: "Developer"
 domain: "Student work"
 tags: ["python", "nlp"]
 tech: ["Python", "TensorFlow", "NLTK"]
-challenge: "Lightweight Q/A without heavy infra."
+challenge: "People ask for the same thing in a dozen different ways, and keyword rules break as soon as the phrasing changes. I wanted a small classifier that learns from example phrases and sends similar wording to the same intent, with no heavy infrastructure or cloud NLP service."
 solution:
-  - "Tokenization, stemming, bag-of-words; intent matching."
-  - "Modular intents for rapid updates."
+  - "Tokenize, stem with Porter, then turn the sentence into a binary bag-of-words vector."
+  - "A small feedforward network in TensorFlow/Keras picks the intent."
+  - "Below a 0.7 confidence threshold, the bot asks you to rephrase instead of guessing."
+  - "Intents live in a JSON file, so adding one means editing the file and retraining."
 impact:
-  - "Snappy prototype for FAQs & utilities."
+  - "A working student prototype for FAQ-style questions. I have no accuracy or latency numbers to show."
+  - "This is an old-style intent classifier, not an LLM agent. It picks from replies written by hand and generates nothing itself. Ambiguous or context-dependent questions are where it struggles."
 deepDive:
   context: |
-    Before a chatbot can answer, it has to work out what the user wants: their intent. I wanted a small, accurate intent classifier that didn't need heavy infrastructure or a cloud NLP service.
+    Before a chatbot can answer, it has to work out what you want: your intent. Machine learning can pick that up from examples, so this bot trains on a custom JSON corpus that maps example phrases to intents.
 
-    Rule-based bots match keywords, and that breaks as soon as people phrase things differently. Machine learning picks up patterns instead, so phrases that mean the same thing land on the same intent. This bot uses classical NLP and a neural network, trained on a custom JSON corpus that maps example phrases to intents.
-
-    I wanted a fast prototype I could deploy for FAQs, customer service automation and small utilities, with low latency and few resources.
+    I built it as a quick prototype for FAQs, customer service style questions and small utilities, using few resources.
 
   architecture: |
-    The system follows a pipeline architecture from raw text input to predicted intent:
-
-    **1. User Input → Preprocessing:**
-    Raw user text is normalized: lowercasing, tokenization (splitting into words), and stemming (reducing words to root forms with the Porter stemmer). This reduces vocabulary size and improves generalization.
-
-    **2. Preprocessing → Feature Extraction:**
-    Processed tokens are converted into numerical representations using bag-of-words (BoW) encoding. Each word in the training vocabulary becomes a binary feature (1 if present, 0 if absent), creating a fixed-length vector that represents the input sentence.
-
-    **3. Feature Vector → Neural Network:**
-    The bag-of-words vector feeds into a feedforward neural network trained to classify intents. The network learns to map word patterns to intent categories through supervised learning on the labeled training corpus.
-
-    **4. Intent Prediction → Response Generation:**
-    The model outputs a probability distribution over all possible intents. The highest-probability intent is selected, and the system retrieves a corresponding response from the JSON corpus. Responses can be randomized from a pool to add variety.
-
-    **JSON Corpus Structure:**
-    The training data is organized as intents, each containing example patterns (user inputs) and responses. So updates are quick: a new intent means extending the JSON file and retraining.
+    A straight pipeline from text to reply. The input is lowercased, tokenized and stemmed. Each word in the training vocabulary becomes a 1 or a 0 in a fixed-length vector. A feedforward network turns that vector into a probability for each intent. The top intent wins if it clears the threshold, and the reply comes from that intent's pool in the JSON corpus.
 
   components:
     - name: "Text Preprocessor"
-      purpose: "Tokenizes and stems input text using NLTK. Handles normalization, punctuation removal, and vocabulary reduction to prepare text for vectorization."
+      purpose: "Lowercases, tokenizes and stems with NLTK, and drops punctuation."
 
     - name: "Bag-of-Words Encoder"
-      purpose: "Converts preprocessed tokens into fixed-length binary vectors based on training vocabulary. Implements efficient lookup for real-time inference."
+      purpose: "Turns tokens into a fixed-length binary vector based on the training vocabulary."
 
     - name: "Intent Classifier (Neural Network)"
-      purpose: "Multi-layer feedforward neural network built with TensorFlow/Keras. Uses softmax output layer for multi-class classification across intent categories."
+      purpose: "A small feedforward network in TensorFlow/Keras, with a softmax output across the intents."
 
     - name: "Response Generator"
-      purpose: "Maps predicted intent to appropriate responses from JSON corpus. Implements response randomization and context-aware selection logic."
+      purpose: "Picks a reply at random from the predicted intent's pool in the JSON corpus."
 
     - name: "Training Pipeline"
-      purpose: "Loads JSON corpus, generates training data, performs data augmentation, and trains the neural network. Saves model weights and vocabulary for deployment."
+      purpose: "Loads the corpus, builds the training data, adds augmented examples, trains the network, and saves the weights and vocabulary."
 
   dataFlow:
-    - step: "Intent corpus loaded from JSON"
+    - step: "Load the corpus"
       component: "Training Pipeline"
-      detail: "JSON file contains intent tags, example patterns, and response templates. Parser extracts training data and builds vocabulary."
+      detail: "The JSON holds intent tags, example patterns and replies. The vocabulary is built from it."
 
-    - step: "Training data generation"
+    - step: "Build training data"
       component: "Bag-of-Words Encoder"
-      detail: "Each pattern is tokenized, stemmed, and converted to bag-of-words representation. Labels are one-hot encoded for intent categories."
+      detail: "Each pattern is tokenized, stemmed and encoded. Labels are one-hot encoded intents."
 
-    - step: "Model training"
+    - step: "Train"
       component: "Intent Classifier (Neural Network)"
-      detail: "Neural network is trained using gradient descent (Adam optimizer) with categorical cross-entropy loss. Validation set monitors overfitting."
+      detail: "Adam optimizer, categorical cross-entropy loss, and a validation set to watch for overfitting."
 
-    - step: "User input processing"
+    - step: "Read your message"
       component: "Text Preprocessor"
-      detail: "At inference time, user text follows the same preprocessing → bag-of-words → model prediction pipeline."
+      detail: "Your text goes through the same preprocessing and encoding as the training data, then into the model."
 
-    - step: "Intent confidence thresholding"
+    - step: "Check confidence"
       component: "Intent Classifier (Neural Network)"
-      detail: "If highest probability falls below confidence threshold (e.g., 0.7), the bot returns a fallback response indicating uncertainty."
+      detail: "If the top probability is under 0.7, the bot returns a fallback asking you to rephrase."
 
-    - step: "Response delivery"
+    - step: "Reply"
       component: "Response Generator"
-      detail: "Selected intent triggers response lookup from JSON corpus. A reply is picked at random from the pool so the bot sounds less canned."
+      detail: "A reply is picked at random from the intent's pool so the bot sounds less canned."
 
   keyDecisions:
-    - decision: "Classical NLP over Transformers"
-      rationale: "I used bag-of-words and a small neural network instead of BERT/GPT to keep compute low. For a lightweight deployment, a transformer would be overkill."
-      tradeoff: "Gives up semantic understanding of complex queries for speed and simplicity. Works well for domain-specific intents with clear patterns but struggles with highly ambiguous or context-dependent inputs."
+    - decision: "Classical NLP over transformers"
+      rationale: "Bag-of-words and a small network kept compute low. For something this small, BERT or GPT would be overkill."
+      tradeoff: "No real understanding of complex queries. It works for clear, domain-specific intents and struggles with ambiguous or context-dependent input."
 
-    - decision: "Stemming vs. Lemmatization"
-      rationale: "I used the Porter stemmer, not lemmatization. Stemming is faster and needs no POS tagging, so the pipeline stays simpler and the vocabulary still shrinks."
-      tradeoff: "Stemming can be overly aggressive (e.g., 'university' → 'univers'), potentially merging semantically different words. Fine for intent classification, where exact word forms matter less than the pattern."
+    - decision: "Stemming over lemmatization"
+      rationale: "The Porter stemmer is faster and needs no POS tagging, so the pipeline stays simpler and the vocabulary still shrinks."
+      tradeoff: "It can be aggressive ('university' becomes 'univers') and merge words that mean different things. Fine here, since the pattern matters more than the exact word form."
 
-    - decision: "Modular JSON corpus architecture"
-      rationale: "Intents live as standalone JSON objects, not hardcoded logic, so someone non-technical can change the bot by editing JSON without touching code."
-      tradeoff: "Requires retraining when intents change, adding a deployment step."
+    - decision: "Intents in JSON"
+      rationale: "Intents are standalone JSON objects, not hardcoded logic, so someone non-technical can change them without touching the code."
+      tradeoff: "Any change needs a retrain, which adds a step."
 
-    - decision: "Confidence threshold with fallback"
-      rationale: "A confidence score tells me when the model is unsure. Low-confidence predictions get a generic fallback instead of a possibly wrong answer."
-      tradeoff: "May miss some valid queries that fall outside training distribution. In anything customer-facing, admitting 'not sure' beats a wrong answer."
+    - decision: "A confidence threshold with a fallback"
+      rationale: "The score tells me when the model is unsure, and low-confidence predictions get a generic reply instead of a possibly wrong answer."
+      tradeoff: "It may turn away some valid queries that fall outside the training data. Admitting 'not sure' still beats a wrong answer."
 
   codeSnippets:
-    - title: "Text Preprocessing Pipeline"
+    - title: "Preprocessing"
       language: "python"
       code: |
         import nltk
@@ -126,7 +112,7 @@ deepDive:
         # Input: "What's the weather forecast?"
         # Output: ['what', 'the', 'weather', 'forecast']
 
-    - title: "Bag-of-Words Encoding"
+    - title: "Bag-of-words"
       language: "python"
       code: |
         def bag_of_words(tokenized_input, vocabulary):
@@ -148,7 +134,7 @@ deepDive:
         # Input tokens: ['weather', 'forecast']
         # Output: [0, 1, 1, 0]
 
-    - title: "Neural Network Architecture"
+    - title: "The whole neural network"
       language: "python"
       code: |
         import tensorflow as tf
@@ -183,7 +169,7 @@ deepDive:
         # Dropout: 50%
         # Output Layer: Softmax over intent classes
 
-    - title: "Intent Prediction with Confidence"
+    - title: "Predicting, and knowing when not to"
       language: "python"
       code: |
         import numpy as np
@@ -219,7 +205,7 @@ deepDive:
                 'response': np.random.choice(predicted_intent['responses'])
             }
 
-    - title: "JSON Corpus Structure"
+    - title: "The corpus format"
       language: "json"
       code: |
         {
@@ -270,22 +256,22 @@ deepDive:
         }
 
   learnings:
-    - lesson: "Intent classification quality depends heavily on training data diversity"
-      detail: "The model performs well only when training patterns cover the variety of ways users express the same intent. Data augmentation through paraphrasing and synonym replacement helped expand coverage without manual labeling."
+    - lesson: "The bot is only as good as its example phrases"
+      detail: "It does well only when the patterns cover the ways people express an intent. Paraphrasing and synonym replacement widened the coverage without manual labeling."
 
-    - lesson: "Preprocessing consistency is critical between training and inference"
-      detail: "Early bug: training data was stemmed but inference input wasn't, causing poor predictions. I moved preprocessing into shared functions and checked that the exact same pipeline runs in training and deployment. Saved preprocessing configuration alongside model weights."
+    - lesson: "Training and inference must preprocess identically"
+      detail: "An early bug: training data was stemmed and live input wasn't, and predictions were poor. I moved preprocessing into shared functions and saved its configuration alongside the model weights."
 
-    - lesson: "Bag-of-words loses word order information"
-      detail: "BoW treats 'not good' and 'good' identically if both words appear, missing negation. For this project scope it was acceptable, but production systems need n-grams or sequential models (RNN/LSTM) to capture context. I found this one testing edge cases."
+    - lesson: "Bag-of-words has no idea about word order"
+      detail: "Two sentences with the same words in a different order get the same vector, so negation easily gets lost. That was acceptable at this scope. Capturing context would need n-grams or a sequential model. I found this one testing edge cases."
 
-    - lesson: "Confidence thresholding significantly improves user experience"
-      detail: "Without confidence checks, the bot would confidently return wrong answers for out-of-domain queries. A 0.7 threshold with fallback responses cut down user frustration. Better to say 'I don't know' than mislead. I picked the threshold by testing values on the validation set."
+    - lesson: "A threshold beats a confident wrong answer"
+      detail: "Without it, the bot would confidently give wrong answers to out-of-domain questions. I picked 0.7 by testing values on the validation set."
 
-    - lesson: "Neural networks vs. classical ML for intent classification"
-      detail: "Experimented with both neural networks and traditional classifiers (SVM, Naive Bayes). The neural network handled sparse BoW vectors better and generalized better to unseen patterns, though it's more complex. The non-linear activation functions helped learn subtle pattern combinations that linear models missed."
+    - lesson: "The network beat simpler classifiers, on my tests"
+      detail: "I also tried SVM and Naive Bayes. The network handled sparse vectors and unseen patterns better, at the cost of more complexity. I don't have the numbers to show you."
 
-    - lesson: "Keeping the pieces separate made iteration fast"
-      detail: "Separating intent definitions (JSON), preprocessing logic (Python module), and model architecture (separate file) made experiments faster. I could swap models or add intents without refactoring, which helped a lot when trying different network architectures and preprocessing."
+    - lesson: "Separate pieces made experiments quick"
+      detail: "With intents in JSON, preprocessing in a module and the model in its own file, I could swap models or add intents without refactoring."
 ---
-An intent-based chatbot trained from a JSON corpus of intents, each with example patterns and responses. Input is tokenized, stemmed, and turned into a bag-of-words vector; a small feedforward network picks the intent, and a low-confidence prediction gets a fallback reply instead of a guess. Adding an intent means editing the JSON and retraining.
+The bot's whole personality sits in one JSON file: each intent has example phrases and a pool of replies, and teaching it something new means editing that file and retraining. The model only decides which intent you meant, and apart from the fallback line, every word it says back is one from the corpus. It's intent classification with nothing hidden: stemmer, vector, two hidden layers, done.

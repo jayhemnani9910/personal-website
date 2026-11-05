@@ -86,8 +86,8 @@ describe("HomeDesk", () => {
   it("renders every section, the featured projects and the real counts", async () => {
     await renderHome();
     const projects = await getAllProjects();
-    expect(screen.getByRole("heading", { level: 1 }).textContent).toBe("I take the vague version and ship the real one.");
-    for (const name of ["Today's pick", "Things I've shipped", "House rules", "Where I've been", "Leave a sticky"]) {
+    expect(screen.getByRole("heading", { level: 1 }).textContent).toBe("I build AI agents you can actually trust.");
+    for (const name of ["Today's pick", "The model is the easy part", "Try to get a lie past it", "This site talks to agents too", "Things I've shipped", "House rules", "Where I've been", "Leave a sticky"]) {
       expect(screen.getByRole("heading", { level: 2, name })).toBeDefined();
     }
     for (const p of FEATURED) {

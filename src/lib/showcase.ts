@@ -57,28 +57,71 @@ export const SHOWCASE_PROJECTS: Record<string, ShowcaseConfig> = {
         tool: "search_projects",
         request: `{
   "tool": "search_projects",
-  "arguments": { "query": "protein", "featured_only": true }
+  "arguments": { "query": "agent", "featured_only": true }
 }`,
         response: `{
-  "count": 2,
+  "count": 3,
   "projects": [
     {
-      "id": "nobel-dataintelligence",
-      "title": "Nobel Data Intelligence",
-      "summary": "Physics-informed deep learning for protein stability and enzyme kinetics. A tri-modal architecture fuses ProtT5 sequence embeddings, a VDOS vibrational spectrum from normal mode analysis, and ChemBERTa chemistry through learned gated attention.",
-      "tech": ["Python", "PyTorch", "ProDy", "Transformers", "RDKit", "Biopython"],
-      "tags": ["deep-learning", "molecular-biology", "pytorch", "research", "protein"],
-      "domain": "Research",
-      "url": "https://jayhemnani.in/projects/nobel-dataintelligence"
+      "id": "discharge-summary-agent",
+      "title": "Discharge Summary Agent",
+      "summary": "Hospital records are a mess: handwriting, scans, pages that disagree with each other. So I built an agent with one rule it can't talk its way around: never make anything up.",
+      "tech": [
+        "Python",
+        "Gemini",
+        "DeepSeek",
+        "pypdfium2",
+        "pytest"
+      ],
+      "tags": [
+        "agents",
+        "harness-engineering",
+        "guardrails",
+        "healthcare",
+        "ocr"
+      ],
+      "domain": "AI/ML",
+      "url": "https://jayhemnani.in/projects/discharge-summary-agent"
     },
     {
-      "id": "biotech-accelerator",
-      "title": "Biotech Accelerator",
-      "summary": "Multi-agent AI system for biotech research that routes a query through protein databases, literature, structural analysis, and chemistry, then proposes experiments worth running next.",
-      "tech": ["Python", "LangGraph", "ProDy", "httpx", "Rich", "Docker"],
-      "tags": ["langgraph", "agents", "bioinformatics", "research"],
+      "id": "revolu-idea",
+      "title": "CAG Deep Research",
+      "summary": "What if a research agent had to survive an argument before it could tell you anything? Red team agents hunt for counter-evidence on every causal claim, blue team agents defend it, and a separate judge rules.",
+      "tech": [
+        "Python",
+        "LangGraph",
+        "LangChain",
+        "Pydantic",
+        "Groq"
+      ],
+      "tags": [
+        "langgraph",
+        "agents",
+        "research-automation",
+        "causal"
+      ],
       "domain": "AI/ML",
-      "url": "https://jayhemnani.in/projects/biotech-accelerator"
+      "url": "https://jayhemnani.in/projects/revolu-idea"
+    },
+    {
+      "id": "webmcp-portfolio",
+      "title": "WebMCP Portfolio Integration",
+      "summary": "An AI agent shouldn't have to scrape my portfolio by clicking around like a confused intern. So this site offers it real tools through WebMCP, a draft browser API that changed so much my first version ended up registering nothing.",
+      "tech": [
+        "TypeScript",
+        "Next.js",
+        "WebMCP API",
+        "JSON Schema"
+      ],
+      "tags": [
+        "webmcp",
+        "agents",
+        "w3c",
+        "browser-api",
+        "early-adopter"
+      ],
+      "domain": "Web and tools",
+      "url": "https://jayhemnani.in/projects/webmcp-portfolio"
     }
   ]
 }`,

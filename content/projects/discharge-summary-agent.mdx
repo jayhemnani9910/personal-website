@@ -1,25 +1,119 @@
 ---
 title: "Discharge Summary Agent"
-summary: "Agentic system that drafts a clinically safe discharge summary from messy scanned clinical notes, with a no-fabrication guardrail."
+summary: "Hospital records are a mess: handwriting, scans, pages that disagree with each other. So I built an agent with one rule it can't talk its way around: never make anything up."
+description: "An AI agent that drafts hospital discharge summaries from scanned notes, and can't record a fact unless it quotes the exact words from the cited page."
 role: "Builder"
 period: "2026"
 domain: "AI/ML"
-priority: 13
-tags: ["healthcare", "agents", "nlp", "ocr", "llm"]
+priority: 1
+tags: ["agents", "harness-engineering", "guardrails", "healthcare", "ocr"]
 tech: ["Python", "Gemini", "DeepSeek", "pypdfium2", "pytest"]
-challenge: "Scanned clinical records (71 pages of typed printouts and handwriting) have no text layer, contradict each other across pages, and contain data that is missing or pending. A system reading them must surface conflicts and gaps rather than resolve them with plausible guesses."
-solution:
-  - "From-scratch agent loop (no framework): each step the model receives the running conversation plus tool schemas, emits a reasoning note and tool calls, and re-plans based on results."
-  - "Two-stage ingestion: pypdfium2 rasterizes each page, then a vision model (Gemini) transcribes it; unreadable text is marked [illegible] and flagged, never guessed."
-  - "No-fabrication enforced at three layers: typed state requires a source page and verbatim quote per value; the citation guardrail rejects writes where the quote is not found on that page; an independent verifier LLM re-reads every recorded value after the loop and removes anything unsupported."
-  - "Conflicts, pending results, and missing fields are first-class states (CONFLICT, PENDING, MISSING), stored and surfaced in flags.md, never silently resolved."
-  - "Medication reconciliation diffs admission vs discharge lists; any change without a documented, quote-backed reason is flagged automatically."
-  - "Provider abstraction lets vision OCR (Gemini) and reasoning (Gemini or DeepSeek) run independently, with automatic key rotation on quota errors."
-impact:
-  - "On the 71-page patient record the agent ran 66 steps, raised 41 flags, and the citation guardrail rejected 29 attempts to record a value whose quote was not verbatim on the cited page."
-  - "Surfaced a principal-diagnosis conflict (gastroenteritis vs DKA) and a demographics conflict (mismatched pronouns across pages) rather than picking one answer."
-  - "Post-hoc verifier independently checked 39 recorded values; dropped fabricated or unsupported values and replaced them with flags."
-  - "Part 2 learning loop: mean edit burden dropped from 0.154 baseline to ~0.036 (roughly 77% lower) on a held-out split, with safety retention at 100% throughout."
 github: "https://github.com/jayhemnani9910/discharge-summary-agent"
+links:
+  code: "https://github.com/jayhemnani9910/discharge-summary-agent"
+challenge: "This started as a take-home task, and the test record was brutal: 71 scanned pages with no text layer and a lot of handwriting. Page 1 said gastroenteritis. The ER chart said diabetic ketoacidosis. Even the patient's pronouns changed between pages. A normal LLM smooths over all of that and hands you something confident and readable, which is the one thing you can't have in a medical record. A wrong guess here is worse than a blank."
+solution:
+  - "I wrote the agent loop myself, with no framework. The model decides what to read next and calls tools. My code runs them and hands back the results. Each step is logged, so you can replay why it did what it did."
+  - "A vision model reads each scanned page. If it can't read something, it writes [illegible] and raises a flag. No guessing."
+  - "Then the main trick. To record a value, the agent has to give a page number and a word-for-word quote, and plain code checks the quote is really on that page. If it isn't, the write is refused."
+  - "When the loop ends, a second LLM with a stricter prompt re-reads everything. If the source doesn't directly support a value, the value is removed and replaced with a flag."
+  - "MISSING, PENDING and CONFLICT are real states in the data model, not awkward edge cases. When two pages disagree, it keeps both and tells the doctor."
+  - "It also compares the admission and discharge medication lists. Any change without a documented reason gets flagged."
+impact:
+  - "On the 71-page record it took 66 steps and raised 41 flags. The guardrail refused 29 attempts to record a value whose quote wasn't on the cited page."
+  - "It flagged the gastroenteritis vs DKA conflict instead of picking a winner, and it noticed that insulin had dropped off the discharge list with no reason given."
+  - "In an earlier run, the verifier removed 'bilateral pyelonephritis' because the source only said 'suggestive of'. A small difference in wording, and a big one for a patient."
+  - "71 offline tests run without an API key. The test record is synthetic and this is a take-home project, so it hasn't been near a real clinic. The draft is always labelled for clinician review."
+deepDive:
+  context: "Everyone can get a model to write a nice discharge summary. Getting it to stop when it doesn't know is much harder. Asking nicely in the prompt doesn't hold up, because the model will still sometimes write what sounds right. So I stopped treating this as a prompt problem and made it a harness problem: build the system around the model so that a made-up value has nowhere to go."
+  architecture: "Scanned pages go through a vision model and come out as text, one page at a time. The agent then runs a plan, act, observe loop over them with tools like read_page, search_notes, record_field and flag_for_clinician_review. Every write passes through a citation check. After the loop, an independent verifier re-reads all the values. The model picks the order of work, but it can't skip the rules: finalize_draft refuses until every section is dealt with and the medication checks have run, then tells the model what's still outstanding. If the agent hits its step cap, you still get a partial draft with the unfinished sections marked MISSING, not a crash and not a fake success."
+  dataFlow:
+    - step: "Read the scans"
+      component: "Ingestion (ingest.py)"
+      detail: "Each page becomes an image, then text from a vision model. Pages it can't read are marked unreadable and can't be cited."
+    - step: "Work the case"
+      component: "Agent loop (agent.py)"
+      detail: "The model chooses which pages to read and which tools to call, and re-plans after every result."
+    - step: "Prove each value"
+      component: "Citation guardrail (guardrails.py)"
+      detail: "A page number and a verbatim quote are required. If the quote isn't on that page, the write is refused and the model gets told why."
+    - step: "Get a second opinion"
+      component: "Verifier (verify.py)"
+      detail: "A separate strict LLM pass re-reads every value against its source. Unsupported values are removed and flagged. If the verifier itself fails, the value stays marked unverified."
+    - step: "Show the working"
+      component: "Trace and output (trace.py, render.py)"
+      detail: "You get the draft, a flag list sorted by severity, and a step-by-step trace of how it got there."
+  components:
+    - name: "Ingestion (ingest.py)"
+      purpose: "Turns scanned PDFs into page text with a vision model, with caching and retries. Rotates API keys when one hits its quota."
+    - name: "Agent loop (agent.py)"
+      purpose: "The from-scratch loop, with a hard step cap and a limit on consecutive tool errors."
+    - name: "Typed draft state (state.py)"
+      purpose: "A value can't exist without a source page and a quote. The other options are explicit states like MISSING or CONFLICT."
+    - name: "Citation guardrail (guardrails.py)"
+      purpose: "A plain code check, with no model involved, that the quote is really on the cited page."
+    - name: "Verifier (verify.py)"
+      purpose: "An independent LLM re-read of every recorded value after the loop finishes."
+    - name: "Trace and output (trace.py, render.py)"
+      purpose: "Writes the draft, the flags and a replayable trace of every step."
+    - name: "Learning loop (learning/)"
+      purpose: "Part 2: picks the draft a doctor is likely to edit least, with a safety gate in front so it can't cheat."
+  keyDecisions:
+    - decision: "Enforce the rule in code, not in the prompt"
+      reasoning: "A prompt is a request, and the model can ignore it. A check that refuses the write can't be ignored. That one change is what let me actually claim no-fabrication. In this run it fired 29 times."
+      alternatives: "Stronger prompt wording (the model can still ignore it); checking only at the end (the bad value could shape everything the agent does afterwards)."
+    - decision: "Write the agent loop from scratch"
+      reasoning: "I wanted to see and control every step: what the model saw, what it asked for, what got refused. With about 2,300 lines of Python, there's no framework behaviour I have to guess at when something goes wrong."
+      alternatives: "An agent framework (quicker to start, but the safety rules would sit on top of someone else's loop)."
+    - decision: "Don't let the learning loop cheat"
+      reasoning: "If you reward fewer doctor edits, the easy way to win is to get vaguer or quietly drop the flags. So any candidate that hides a status marker or changes the documented numbers is thrown out, however good its score looks."
+      alternatives: "Trust the edit-distance score alone (this rewards exactly the wrong behaviour)."
+  codeSnippets:
+    - title: "The check that refused 29 writes"
+      language: "python"
+      code: |
+        def quote_supported(store, page: int, quote: str) -> tuple[bool, str]:
+            """Is ``quote`` actually present on ``page``? Returns (ok, reason)."""
+            rec = store.get(page)
+            if rec is None:
+                return False, f"page {page} is not in the record"
+            if not rec.readable:
+                return False, f"page {page} is unreadable; its content cannot be cited"
+            q = _norm(quote)
+            if len(q) < 4:
+                return False, "quote is too short to verify; cite the exact words from the page"
+            if q not in _norm(rec.text):
+                return False, f"quote not found verbatim on page {page}"
+            return True, "ok"
+      explanation: "My favourite part of the project is how boring this is. It's a substring check. No model, nothing to persuade. The reason string goes back to the agent, so it can read the page again or raise a flag instead."
+    - title: "The gate that stops the learning loop cheating"
+      language: "python"
+      code: |
+        def safety_retained(reference_text: str, candidate_text: str) -> bool:
+            if not _markers(reference_text) <= _markers(candidate_text):
+                return False
+            return sorted(_numbers(reference_text)) == sorted(_numbers(candidate_text))
+      explanation: "Every safety marker has to survive, and the documented numbers have to match exactly. Fail this and the draft can't be selected, whatever its score. It's only a text check, so a clever edit could still make the prose vaguer. Re-running the verifier on each candidate would be the stronger version."
+  metrics:
+    - value: "71 pages"
+      label: "scanned record"
+      context: "synthetic, no text layer, lots of handwriting"
+    - value: "41 flags"
+      label: "raised for the doctor"
+      context: "over 66 agent steps"
+    - value: "29"
+      label: "writes refused"
+      context: "the quote wasn't on the cited page"
+    - value: "39"
+      label: "values re-checked"
+      context: "by the independent verifier"
+  learnings:
+    - "The model isn't the product. I got this working by building everything around the model: tools, checks, states, traces, step caps."
+    - "The most useful guardrail I wrote is a substring check. If a rule can be plain code, make it plain code. Save the LLM for the judgment calls."
+    - "Be careful with your own numbers. Part 2's offline curve shows edit burden falling from 0.154 to about 0.036, but that run uses a stand-in judge that can see the real answer. It proves the plumbing works. It doesn't prove an LLM learned a doctor's style, and that needs the live run."
+  futureWork:
+    - "Run the verifier on every learning-loop candidate, not just the text-level safety gate."
+    - "Swap keyword search for embeddings, so 'sugar' can find 'glucose'."
+    - "Replace the small mock drug-interaction table with a real checker behind the same tool."
 ---
-The Discharge Summary Agent reads a patient's scanned clinical notes and produces a structured discharge summary draft for clinician review. Its defining constraint is that it never invents a clinical fact: any value it cannot source from the documents is marked MISSING, PENDING, or CONFLICT and raised as a flag, rather than filled with a plausible guess. I built it from scratch, without an agent framework, as a take-home project. It also has a second component (Part 2) that learns from doctor edits to reduce the editing burden on future drafts while keeping safety flags intact.
+Most AI demos are trying to impress you. This one is trying not to lie to a doctor. It reads a patient's scanned notes and writes a discharge summary draft, and every fact has to come with a page number and an exact quote. If it can't prove something, it says MISSING, PENDING or CONFLICT, and a doctor makes the call. I built it from scratch as a take-home project, and it's still the work I'd show you first, because it's what I think building with AI should look like: assume the model will get things wrong, then build the system that catches it.

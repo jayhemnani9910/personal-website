@@ -3,8 +3,8 @@ import { SITE_CONFIG } from "@/../content/site";
 
 export const RESUME: Resume = {
   name: "Jay Hemnani",
-  tagline: "Software, Data and ML Engineer",
-  summary: "I build data pipelines, ML systems and distributed backends. I've shipped real-time streaming, computer vision research and full-stack apps, and I get prototypes into production fast.",
+  tagline: "AI Agent Engineer",
+  summary: "I build AI agents and the systems around them that make them safe to trust: guardrails, evals and verifiers. Underneath that sit years of data pipelines, ML systems and distributed backends, and I get prototypes into production fast.",
   location: "Gujarat, India",
   contact: {
     email: SITE_CONFIG.social.email,
@@ -12,6 +12,7 @@ export const RESUME: Resume = {
     linkedin: SITE_CONFIG.social.linkedin,
   },
   coreCompetencies: [
+    "AI agents: from-scratch tool loops, multi-agent systems, guardrails, evals, and MCP",
     "Data pipeline design, ETL/ELT workflows, and streaming architectures",
     "ML model development, training, and production deployment",
     "Distributed systems and microservices architecture",
