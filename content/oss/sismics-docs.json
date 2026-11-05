@@ -1,0 +1,15 @@
+{
+  "repo": "sismics/docs",
+  "about": "A light document management system with sharing, tags, search and file storage.",
+  "stars": 2574,
+  "prs": [
+    {
+      "number": 806,
+      "merged": "2026-11-05",
+      "title": "Read-only shares can no longer delete or rename files",
+      "broken": "Deleting or renaming a file only checked that you could read its document. Someone given a read-only share could delete or rename the owner's files.",
+      "changed": "Both actions now need write access to the document, like the other actions that change files.",
+      "matters": "Sharing a document to read stays read-only, and the owner's files stay safe."
+    }
+  ]
+}
