@@ -606,6 +606,8 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "ZSeven-W/openpencil", number: "#260", href: "https://github.com/ZSeven-W/openpencil/pull/260" },
   { repo: "bjarneo/cliamp", number: "#661", href: "https://github.com/bjarneo/cliamp/pull/661" },
   { repo: "bjarneo/cliamp", number: "#671", href: "https://github.com/bjarneo/cliamp/pull/671" },
+  { repo: "floci-io/floci-az", number: "#629", href: "https://github.com/floci-io/floci-az/pull/629" },
+  { repo: "sismics/docs", number: "#806", href: "https://github.com/sismics/docs/pull/806" },
 ];
 
 /**

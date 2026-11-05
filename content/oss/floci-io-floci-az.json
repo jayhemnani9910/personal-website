@@ -1,0 +1,15 @@
+{
+  "repo": "floci-io/floci-az",
+  "about": "A light, free local emulator for Azure services such as Blob Storage.",
+  "stars": 866,
+  "prs": [
+    {
+      "number": 629,
+      "merged": "2026-11-05",
+      "title": "Shared download links keep the file name and type they ask for",
+      "broken": "A shared Blob link can ask for its own file name or file type on download. The emulator accepted the link but sent the stored values, so the file name was lost.",
+      "changed": "When a valid link asks for those values, downloads and property reads now return them in place of the stored ones.",
+      "matters": "Apps that hand out download links behave the same on the emulator as on real Azure."
+    }
+  ]
+}
