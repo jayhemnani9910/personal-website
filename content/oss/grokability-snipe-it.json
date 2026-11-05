@@ -10,6 +10,14 @@
       "broken": "A one month warranty bought on August 31 ended on October 1, because the date spilled past the shorter month. Expiry alerts used the same sum.",
       "changed": "Warranty dates and the alert window now stop on the last day of the month, so that purchase ends on September 30.",
       "matters": "Staff see the true warranty end date and get alerts on time."
+    },
+    {
+      "number": 20018,
+      "merged": "2026-11-04",
+      "title": "Asset lists no longer show empty after switching views",
+      "broken": "From page 2 of the asset list, opening a view with only one page of results reused the old page number, and the table said no records were found.",
+      "changed": "When a response says records exist but returns none, the table now fetches once more from the first page.",
+      "matters": "People see their assets in every view instead of an empty table."
     }
   ]
 }

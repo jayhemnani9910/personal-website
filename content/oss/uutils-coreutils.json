@@ -18,6 +18,14 @@
       "broken": "When merging files with no page footer, pr filled the rest of the page with blank lines. Two short lines came out as 56, where GNU pr prints 2.",
       "changed": "pr now stops once every file has run out, unless a footer needs the page filled.",
       "matters": "Merged output is the same length as GNU pr, with no pages of blank lines."
+    },
+    {
+      "number": 15672,
+      "merged": "2026-11-04",
+      "title": "numfmt refuses suffixed numbers too large to print",
+      "broken": "In the Rust numfmt, a huge number written with a suffix, like 1Y, printed a rounded and wrong value instead of failing.",
+      "changed": "It now stops with the same error as GNU, and the message follows GNU's wording.",
+      "matters": "Scripts that convert sizes get an error, not a silently wrong number."
     }
   ]
 }
