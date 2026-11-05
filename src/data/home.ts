@@ -597,6 +597,12 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "lightpanda-io/browser", number: "#4370", href: "https://github.com/lightpanda-io/browser/pull/4370" },
   { repo: "uutils/awk", number: "#142", href: "https://github.com/uutils/awk/pull/142" },
   { repo: "oauth2-proxy/oauth2-proxy", number: "#3587", href: "https://github.com/oauth2-proxy/oauth2-proxy/pull/3587" },
+  { repo: "D4Vinci/Scrapling", number: "#552", href: "https://github.com/D4Vinci/Scrapling/pull/552" },
+  { repo: "D4Vinci/Scrapling", number: "#554", href: "https://github.com/D4Vinci/Scrapling/pull/554" },
+  { repo: "apify/crawlee", number: "#4249", href: "https://github.com/apify/crawlee/pull/4249" },
+  { repo: "grokability/snipe-it", number: "#20018", href: "https://github.com/grokability/snipe-it/pull/20018" },
+  { repo: "uutils/coreutils", number: "#15672", href: "https://github.com/uutils/coreutils/pull/15672" },
+  { repo: "headroomlabs-ai/headroom", number: "#4319", href: "https://github.com/headroomlabs-ai/headroom/pull/4319" },
 ];
 
 /**

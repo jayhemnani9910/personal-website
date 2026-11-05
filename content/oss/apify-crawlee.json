@@ -10,6 +10,14 @@
       "broken": "A sitemap is a file listing a site's pages for crawlers. When a page address had spaces or line breaks around it in a quoted block, the tool kept the space instead, dropped the page, and could crawl nothing.",
       "changed": "The tool now ignores bits of text that are only spaces or line breaks.",
       "matters": "Crawls that start from these sitemaps visit every page they list."
+    },
+    {
+      "number": 4249,
+      "merged": "2026-11-04",
+      "title": "One broken sitemap no longer loses the pages from the others",
+      "broken": "A sitemap lists a site's pages for crawlers. If one sitemap had an error, like a single unescaped character, the tool threw away every page it had found, often without any message.",
+      "changed": "The error is now logged and the tool moves on to the next sitemap.",
+      "matters": "Crawls keep the pages from every good sitemap and show which one was broken."
     }
   ]
 }

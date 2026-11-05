@@ -1,0 +1,23 @@
+{
+  "repo": "D4Vinci/Scrapling",
+  "about": "A Python framework for web scraping, from a single request to a full crawl.",
+  "stars": 96881,
+  "prs": [
+    {
+      "number": 552,
+      "merged": "2026-11-04",
+      "title": "XPath questions that return a single value now work",
+      "broken": "Scrapling pulls data from web pages with XPath. Asking for one value, like the text of a heading or a count of items, crashed instead of answering.",
+      "changed": "The value now comes back the normal way, including an empty text or a zero.",
+      "matters": "Scripts can read text and count items in one query, with the same answers as the parsel library."
+    },
+    {
+      "number": 554,
+      "merged": "2026-11-04",
+      "title": "Pasted curl commands with the redirect flag now convert",
+      "broken": "Scrapling can turn a curl command into its own request. Commands with the common flag for following redirects were refused with an error.",
+      "changed": "The flag is now accepted. Requests already follow redirects, so nothing else changes.",
+      "matters": "Curl commands copied from docs or a browser work without editing."
+    }
+  ]
+}

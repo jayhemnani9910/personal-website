@@ -10,6 +10,14 @@
       "broken": "When shrinking a merge diff, changes made against a later parent were treated as plain context and could be cut away.",
       "changed": "Each line is now judged by all of its parent columns. Ordinary diffs behave as before.",
       "matters": "An AI agent reading a shortened merge diff still sees every change."
+    },
+    {
+      "number": 4319,
+      "merged": "2026-11-05",
+      "title": "Shortened diffs keep their line numbers right",
+      "broken": "When shrinking a diff, the tool cut context lines but kept the old line numbers in each section's heading, so every line read off it was in the wrong place.",
+      "changed": "Each trimmed section is now split at its gaps and gets a new heading worked out from what is left.",
+      "matters": "An AI agent or patch tool using the short diff edits the right lines."
     }
   ]
 }
