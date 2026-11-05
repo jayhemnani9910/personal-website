@@ -603,6 +603,9 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "grokability/snipe-it", number: "#20018", href: "https://github.com/grokability/snipe-it/pull/20018" },
   { repo: "uutils/coreutils", number: "#15672", href: "https://github.com/uutils/coreutils/pull/15672" },
   { repo: "headroomlabs-ai/headroom", number: "#4319", href: "https://github.com/headroomlabs-ai/headroom/pull/4319" },
+  { repo: "ZSeven-W/openpencil", number: "#260", href: "https://github.com/ZSeven-W/openpencil/pull/260" },
+  { repo: "bjarneo/cliamp", number: "#661", href: "https://github.com/bjarneo/cliamp/pull/661" },
+  { repo: "bjarneo/cliamp", number: "#671", href: "https://github.com/bjarneo/cliamp/pull/671" },
 ];
 
 /**

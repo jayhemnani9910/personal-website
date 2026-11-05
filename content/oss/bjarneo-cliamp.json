@@ -9,7 +9,8 @@
       "title": "Playlists with file:// links now play",
       "broken": "Players like VLC save tracks outside the playlist's folder as file:// links. cliamp read those as paths inside the playlist's folder, so the tracks never opened.",
       "changed": "A local file:// link now turns into the real path on disk, with spaces and other escaped characters decoded.",
-      "matters": "Playlists saved by other players open and play in cliamp."
+      "matters": "Playlists saved by other players open and play in cliamp.",
+      "top": true
     },
     {
       "number": 644,
@@ -17,7 +18,25 @@
       "title": "Radio and IPTV playlists show the right station names",
       "broken": "Radio and IPTV playlists put details such as a logo or group before the station name. cliamp cut the name at the first comma, so a station could show as a broken scrap of those details.",
       "changed": "The name now starts after the first comma outside quotes, and durations like 245.7 seconds are read too.",
-      "matters": "Station lists show real names and lengths, not leftover pieces of tags."
+      "matters": "Station lists show real names and lengths, not leftover pieces of tags.",
+      "top": true
+    },
+    {
+      "number": 661,
+      "merged": "2026-11-05",
+      "title": "PLS playlists find songs next to the playlist file",
+      "broken": "A local PLS playlist kept relative song paths as written, so cliamp looked for them in the current folder instead of beside the playlist and reported them missing.",
+      "changed": "Relative entries now resolve from the playlist's own folder, the same way M3U files already did.",
+      "matters": "A PLS playlist works no matter which folder you start cliamp from."
+    },
+    {
+      "number": 671,
+      "merged": "2026-11-05",
+      "title": "Synced lyrics show repeated lines at every time they play",
+      "broken": "Lyric files often give one chorus line several time tags. cliamp read only the first tag and printed the rest as text, skipped tags with no fraction, and left lines in file order.",
+      "changed": "Each line now appears at all of its time tags, plain tags work, and lines are sorted by time.",
+      "matters": "Choruses come back when they should, and lyrics stay in step with the song.",
+      "top": true
     }
   ]
 }

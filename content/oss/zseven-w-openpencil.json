@@ -1,0 +1,15 @@
+{
+  "repo": "ZSeven-W/openpencil",
+  "about": "An open-source, AI-native vector design tool that turns designs and prompts into code.",
+  "stars": 7074,
+  "prs": [
+    {
+      "number": 260,
+      "merged": "2026-11-05",
+      "title": "Exported text keeps its color",
+      "broken": "OpenPencil turns designs into web and app code. A text node's fill came out as a background, not a text color, in the HTML, Vue, Svelte, React and React Native exports.",
+      "changed": "Text fills now export as the text color. Other shapes keep their background.",
+      "matters": "Exported pages look like the design, with white text staying white on a dark box."
+    }
+  ]
+}
