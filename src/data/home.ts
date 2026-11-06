@@ -611,6 +611,7 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "rohitkumbhar/surmai", number: "#368", href: "https://github.com/rohitkumbhar/surmai/pull/368" },
   { repo: "neurocyte/flow", number: "#671", href: "https://github.com/neurocyte/flow/pull/671" },
   { repo: "wavelog/wavelog", number: "#4058", href: "https://github.com/wavelog/wavelog/pull/4058" },
+  { repo: "Prowlarr/Prowlarr", number: "#2893", href: "https://github.com/Prowlarr/Prowlarr/pull/2893" },
 ];
 
 /**
