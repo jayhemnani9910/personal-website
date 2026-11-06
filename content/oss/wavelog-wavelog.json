@@ -1,0 +1,15 @@
+{
+  "repo": "wavelog/wavelog",
+  "about": "A web app where amateur radio operators log the contacts they make and sync them with services like LoTW.",
+  "stars": 587,
+  "prs": [
+    {
+      "number": 4058,
+      "merged": "2026-11-06",
+      "title": "Valid LoTW certificates are no longer rejected",
+      "broken": "Uploading a valid LoTW certificate could fail with \"Generic error\" because of a leftover error from an earlier request.",
+      "changed": "Old errors are cleared before the certificate is read, so only real problems count.",
+      "matters": "Operators can upload their certificate and sync their log without a confusing failure."
+    }
+  ]
+}
