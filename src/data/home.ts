@@ -608,6 +608,7 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "bjarneo/cliamp", number: "#671", href: "https://github.com/bjarneo/cliamp/pull/671" },
   { repo: "floci-io/floci-az", number: "#629", href: "https://github.com/floci-io/floci-az/pull/629" },
   { repo: "sismics/docs", number: "#806", href: "https://github.com/sismics/docs/pull/806" },
+  { repo: "rohitkumbhar/surmai", number: "#368", href: "https://github.com/rohitkumbhar/surmai/pull/368" },
 ];
 
 /**

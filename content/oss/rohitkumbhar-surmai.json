@@ -1,0 +1,15 @@
+{
+  "repo": "rohitkumbhar/surmai",
+  "about": "A personal and family travel organizer for trips, stays and travel plans.",
+  "stars": 290,
+  "prs": [
+    {
+      "number": 368,
+      "merged": "2026-11-06",
+      "title": "Hotel stays count the right number of nights",
+      "broken": "The lodging stats rounded the time of a stay up, so checking in at 11:00 and out at 15:00 two days later counted as 3 nights.",
+      "changed": "Nights are now counted by the calendar days a stay crosses. A stay inside one day still counts as one night.",
+      "matters": "Travel stats show the nights people actually stayed."
+    }
+  ]
+}
