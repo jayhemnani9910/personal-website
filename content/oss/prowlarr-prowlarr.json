@@ -1,0 +1,15 @@
+{
+  "repo": "Prowlarr/Prowlarr",
+  "about": "A manager for torrent trackers and Usenet indexers that feeds them to apps like Sonarr and Radarr.",
+  "stars": 7517,
+  "prs": [
+    {
+      "number": 2893,
+      "merged": "2026-11-06",
+      "title": "API keys stay out of the logs",
+      "broken": "When an app rejected a sync, the error it sent back was logged with its API key in plain sight.",
+      "changed": "The log cleaner now also spots keys in that escaped form and hides them.",
+      "matters": "Logs people share for help no longer leak the keys to their apps."
+    }
+  ]
+}
