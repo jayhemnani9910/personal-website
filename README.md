@@ -1,8 +1,12 @@
 # jayhemnani.in
 
-Source for [jayhemnani.in](https://jayhemnani.in), Jay Hemnani's portfolio: the
-project catalogue, writing, résumé, YouTube channel page, and the `/fde` page
-with its live scoping simulation.
+![Home page, an FDE simulation preset, and the filtered project list on jayhemnani.in](docs/demo.gif)
+
+Source for jayhemnani.in, my portfolio: projects, writing, résumé and a live FDE simulation.
+
+Live at [jayhemnani.in](https://jayhemnani.in). It has the project catalogue,
+writing, résumé, YouTube channel page, and the `/fde` page with its live
+scoping simulation.
 
 Next.js 16 (App Router), React 19, TypeScript, Tailwind CSS v4. Content is MDX.
 Hosted on Vercel.
@@ -22,12 +26,13 @@ back to saved examples, and the view counter and guestbook keep what they get in
 
 ## Environment
 
-Put local values in `.env.local` (gitignored).
+Put local values in `.env.local` (gitignored). `.env.example` lists them all.
 
 | Variable | Used by | Without it |
 |---|---|---|
 | `GEMINI_API_KEY` | `/api/fde-sim` | The route says no model is available and `/fde` keeps its presets |
 | `UPSTASH_REDIS_REST_URL`, `UPSTASH_REDIS_REST_TOKEN` (or the older `KV_REST_API_URL`, `KV_REST_API_TOKEN`) | View counts, the home page guestbook, rate limits, the daily model budget, FDE metrics | Views and guestbook notes are kept in memory; rate limits, the budget and metrics are off |
+| `IP_HASH_SECRET` | Hashing visitor IPs into keys for rate limits, views and the guestbook | A random secret per instance, so visitor keys reset when an instance restarts |
 | `FDE_EVAL_ENDPOINT` | `npm run eval:fde` | Defaults to the production `/api/fde-sim` |
 | `FDE_EVAL_DATE` | `npm run eval:fde:update` | The recorded baseline says `unset` |
 
@@ -67,3 +72,12 @@ model, so it only runs by hand.
 The reasoning behind the design, the palette, the AI routes and the test setup
 is in [`docs/adr/`](docs/adr/README.md). Read the index before changing any of
 them.
+
+## Contributing
+
+Bug reports and fixes are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md).
+
+## License
+
+The code is under the [MIT License](LICENSE). The writing in `content/` and the
+résumé PDFs in `public/resume/` are mine and not covered by it.
