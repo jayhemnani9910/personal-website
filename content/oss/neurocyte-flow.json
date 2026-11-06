@@ -1,0 +1,15 @@
+{
+  "repo": "neurocyte/flow",
+  "about": "Flow Control, a fast text editor for programmers that runs in the terminal.",
+  "stars": 2532,
+  "prs": [
+    {
+      "number": 671,
+      "merged": "2026-11-06",
+      "title": "Opening a file link keeps its line number",
+      "broken": "Opening a file link that names a line, from the cursor, always landed on line 1, so the line and column were lost.",
+      "changed": "The editor now passes the full link, with line and column, when it opens the file.",
+      "matters": "Jumping from an error message to the exact spot in the code works again."
+    }
+  ]
+}
