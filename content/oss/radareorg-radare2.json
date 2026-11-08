@@ -501,6 +501,14 @@
       "broken": "The \"not\" and bit flip signs in radare2's math skipped the number right after them, so address masks came out wrong and \"not 5\" gave 1.",
       "changed": "Both signs now apply to the value right after them, the same way a minus sign does.",
       "matters": "People who mask addresses in radare2 commands now get the address they asked for."
+    },
+    {
+      "number": 27370,
+      "merged": "2026-11-08",
+      "title": "File comparison with a start offset reports the real positions",
+      "broken": "When two files were compared from a start point, each change was listed relative to that point, not its place in the file.",
+      "changed": "Changes now carry their true position in the file, in every output format, including the patch commands.",
+      "matters": "Applying the printed patch commands used to change the wrong byte. Now they change the right one."
     }
   ]
 }

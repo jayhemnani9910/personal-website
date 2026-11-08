@@ -634,6 +634,10 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "DOMjudge/domjudge", number: "#3895", href: "https://github.com/DOMjudge/domjudge/pull/3895" },
   { repo: "DOMjudge/domjudge", number: "#3896", href: "https://github.com/DOMjudge/domjudge/pull/3896" },
   { repo: "radareorg/radare2", number: "#27371", href: "https://github.com/radareorg/radare2/pull/27371" },
+  { repo: "radareorg/radare2", number: "#27370", href: "https://github.com/radareorg/radare2/pull/27370" },
+  { repo: "spencermountain/compromise", number: "#1263", href: "https://github.com/spencermountain/compromise/pull/1263" },
+  { repo: "spencermountain/compromise", number: "#1264", href: "https://github.com/spencermountain/compromise/pull/1264" },
+  { repo: "uutils/util-linux", number: "#672", href: "https://github.com/uutils/util-linux/pull/672" },
 ];
 
 /**

@@ -1,0 +1,23 @@
+{
+  "repo": "spencermountain/compromise",
+  "about": "A small JavaScript library that reads English text and can change its tense, number and form.",
+  "stars": 12171,
+  "prs": [
+    {
+      "number": 1263,
+      "merged": "2026-11-08",
+      "title": "Common verbs get the right past tense",
+      "broken": "Verbs missing from the word list copied a look-alike irregular verb, so \"budget\" became \"budgot\" and \"string\" became \"strought\".",
+      "changed": "Seven verbs, including budget, string, summarise and panic, now have their correct forms listed.",
+      "matters": "Apps that rewrite text with this library no longer produce made-up words for everyday verbs."
+    },
+    {
+      "number": 1264,
+      "merged": "2026-11-08",
+      "title": "Plurals like toes and cheeses turn singular correctly",
+      "broken": "Making plurals singular cut some words short: \"toes\" became \"to\", \"lies\" became \"ly\" and \"cheeses\" became \"chees\".",
+      "changed": "Three new rules run first for these word shapes. Other words such as heroes and ladies come out as before.",
+      "matters": "Turning \"toes\" into \"to\" silently changes a sentence, so text rewritten by the library now stays correct."
+    }
+  ]
+}

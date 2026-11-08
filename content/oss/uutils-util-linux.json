@@ -37,6 +37,14 @@
       "broken": "The tool only took four built-in namespace names. Passing a real UUID, the way apps make their own name-based IDs, gave an error, while the original tool accepts it.",
       "changed": "It now also reads the value as a UUID, in the same 36-character form the original takes.",
       "matters": "Scripts that build name-based IDs under their own namespace work the same as on util-linux."
+    },
+    {
+      "number": 672,
+      "merged": "2026-11-08",
+      "title": "dmesg no longer crashes on systems with no boot record",
+      "broken": "dmesg crashed on any readable time format when the system kept no boot record, as on recent Ubuntu and most containers.",
+      "changed": "On Linux the boot time now comes straight from the system clock. If none can be found, dmesg prints a clear error.",
+      "matters": "People reading kernel logs with real timestamps get them on common systems, instead of a crash."
     }
   ]
 }
