@@ -45,6 +45,14 @@
       "broken": "tar -xvf printed an extra \"Extracting archive\" line before the file names, which GNU tar does not do.",
       "changed": "The extra line is gone, so the output is just the names of the extracted files.",
       "matters": "Scripts that read or count the extracted names no longer pick up a line that isn't a file."
+    },
+    {
+      "number": 421,
+      "merged": "2026-11-07",
+      "title": "Listing an archive shows numeric owners and lines up sizes",
+      "broken": "tar -tvf showed just \"/\" for an entry with no owner names, and its size column did not line up the way GNU tar does.",
+      "changed": "It now shows the numeric ids and pads the column like GNU tar.",
+      "matters": "Archives list readably, and scripts that read the listing see the GNU format."
     }
   ]
 }

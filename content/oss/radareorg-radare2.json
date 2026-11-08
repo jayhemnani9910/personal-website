@@ -485,6 +485,14 @@
       "broken": "pause and the quadword string instructions, like movsq and stosq with their rep forms, failed with Cannot assemble.",
       "changed": "pause now works in every mode. The quadword forms work in 64-bit mode and stay rejected elsewhere, as in the GNU assembler.",
       "matters": "These show up in ordinary 64-bit code, so more real instructions now assemble."
+    },
+    {
+      "number": 27372,
+      "merged": "2026-11-07",
+      "title": "Math expressions can test \"at most\" and \"at least\"",
+      "broken": "radare2 had no \"less than or equal\" or \"greater than or equal\" in its math, and gave a wrong answer instead of an error, so \"2 is at most 2\" came out false.",
+      "changed": "Both comparisons now work, next to plain less than and greater than.",
+      "matters": "Conditions like \"stop when eax is at least 16\" now do what they say."
     }
   ]
 }

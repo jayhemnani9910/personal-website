@@ -1,0 +1,15 @@
+{
+  "repo": "Leaflet/Leaflet",
+  "about": "The most used JavaScript library for interactive maps.",
+  "stars": 45880,
+  "prs": [
+    {
+      "number": 10544,
+      "merged": "2026-11-08",
+      "title": "Fitting a map with very large padding no longer zooms all the way in",
+      "broken": "If the padding given to fitBounds was bigger than the map, the map jumped to its closest zoom instead of the widest one.",
+      "changed": "When there is no room left after the padding, Leaflet now returns the widest zoom allowed.",
+      "matters": "A sidebar on a phone-width map, or a map in a hidden tab, no longer lands on a useless street-level view."
+    }
+  ]
+}

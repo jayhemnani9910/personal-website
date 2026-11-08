@@ -1,0 +1,15 @@
+{
+  "repo": "filamentphp/filament",
+  "about": "A framework for building admin panels and business apps with Laravel.",
+  "stars": 32446,
+  "prs": [
+    {
+      "number": 20966,
+      "merged": "2026-11-07",
+      "title": "Dropdowns stay open when the window resizes",
+      "broken": "A dropdown opened from its button closed on the next window resize. On phones, tapping a search box inside the Filters menu opened the keyboard and closed the menu.",
+      "changed": "The dropdown now finds its own button correctly, so a resize no longer looks like a click somewhere else.",
+      "matters": "Searchable filters work on phones again."
+    }
+  ]
+}

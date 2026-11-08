@@ -445,6 +445,22 @@
       "broken": "Setting padding or margin kept it as one value, so scripts asking for just the top or left side got nothing back, where Chrome gives the real value.",
       "changed": "These values now split into their four sides, read back as a whole when they match, and a bad value changes nothing.",
       "matters": "Pages and scripts that measure spacing see the same values as in Chrome."
+    },
+    {
+      "number": 4509,
+      "merged": "2026-11-07",
+      "title": "Table text keeps the header on its own line",
+      "broken": "Reading a table's text glued the header row onto the first data row, because rows in the header, body and footer were counted apart.",
+      "changed": "Rows are now separated across the whole table, matching Chrome, and nested tables still keep their own rows.",
+      "matters": "Bots that read data tables get clean rows instead of a merged first line."
+    },
+    {
+      "number": 4510,
+      "merged": "2026-11-08",
+      "title": "Text read from a page keeps spaces when the page styles ask for it",
+      "broken": "innerText only kept spaces and line breaks inside pre tags. Text styled to keep them with CSS was squashed onto one line.",
+      "changed": "The browser now follows the white-space style of each element, the same as Chrome.",
+      "matters": "Code blocks on docs and code hosting pages keep their indentation when read by scripts."
     }
   ]
 }

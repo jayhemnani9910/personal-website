@@ -9,7 +9,8 @@
       "title": "New users keep the permissions picked for them",
       "broken": "When an admin created a user and ticked options like Administrator or delete rights, the user was saved without them, reset to the basic defaults.",
       "changed": "The permissions chosen in the form are now kept, and defaults only fill in what was left unset.",
-      "matters": "Admins get the accounts they asked for, without a second trip to fix each one."
+      "matters": "Admins get the accounts they asked for, without a second trip to fix each one.",
+      "top": true
     },
     {
       "number": 3166,
@@ -17,7 +18,8 @@
       "title": "Share uploads and deletes show up in the activity log",
       "broken": "When someone used a share link to upload or delete files, the Activity Viewer showed nothing. Only renames and downloads were logged.",
       "changed": "Uploads, deletes and bulk deletes made through a share are now logged under the share owner, with the share they came through.",
-      "matters": "Owners can see what visitors did to their files through a share, not just half of it."
+      "matters": "Owners can see what visitors did to their files through a share, not just half of it.",
+      "top": true
     },
     {
       "number": 3234,
@@ -25,7 +27,16 @@
       "title": "Unpacking a tar archive keeps hard-linked files",
       "broken": "When a .tar.gz held files that were hard links to each other, unpacking it kept only the first name and silently dropped the rest, while still reporting success.",
       "changed": "Each hard link is now unpacked as a copy of the file it points to, as long as that file came from the same archive.",
-      "matters": "Folders unpack with every file in place, not with some quietly missing."
+      "matters": "Folders unpack with every file in place, not with some quietly missing.",
+      "top": true
+    },
+    {
+      "number": 3342,
+      "merged": "2026-11-06",
+      "title": "Two user settings are saved again when an admin edits a user",
+      "broken": "In the admin user editor, changes to the prompt close button setting and to new file templates were thrown away on save.",
+      "changed": "Both settings are now included when the edited user is saved.",
+      "matters": "Admins can set these options for other users and have them stick."
     }
   ]
 }
