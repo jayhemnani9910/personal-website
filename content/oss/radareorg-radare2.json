@@ -493,6 +493,14 @@
       "broken": "radare2 had no \"less than or equal\" or \"greater than or equal\" in its math, and gave a wrong answer instead of an error, so \"2 is at most 2\" came out false.",
       "changed": "Both comparisons now work, next to plain less than and greater than.",
       "matters": "Conditions like \"stop when eax is at least 16\" now do what they say."
+    },
+    {
+      "number": 27371,
+      "merged": "2026-11-08",
+      "title": "Math expressions handle \"not\" and bit flips correctly",
+      "broken": "The \"not\" and bit flip signs in radare2's math skipped the number right after them, so address masks came out wrong and \"not 5\" gave 1.",
+      "changed": "Both signs now apply to the value right after them, the same way a minus sign does.",
+      "matters": "People who mask addresses in radare2 commands now get the address they asked for."
     }
   ]
 }
