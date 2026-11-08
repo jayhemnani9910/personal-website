@@ -1,0 +1,15 @@
+{
+  "repo": "wger-project/wger",
+  "about": "A self-hosted tracker for workouts, nutrition and body weight.",
+  "stars": 7240,
+  "prs": [
+    {
+      "number": 2589,
+      "merged": "2026-11-07",
+      "title": "Nutrition diary pages no longer repeat or skip entries",
+      "broken": "Food logged at the same time had no fixed order, so paging through the nutrition diary could show some entries twice and miss others.",
+      "changed": "Entries with the same time are now also sorted by when they were added.",
+      "matters": "Apps reading a diary page by page get every entry exactly once."
+    }
+  ]
+}

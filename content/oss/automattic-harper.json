@@ -1,0 +1,23 @@
+{
+  "repo": "Automattic/harper",
+  "about": "A fast grammar checker that runs offline and keeps your writing private.",
+  "stars": 17467,
+  "prs": [
+    {
+      "number": 4856,
+      "merged": "2026-11-07",
+      "title": "No more false alarm on \"the help they received\"",
+      "broken": "Harper told people to change \"they\" to \"them\" in normal sentences like \"the help they received\" or \"the support they needed\".",
+      "changed": "When \"they\" is followed by a verb, so it is clearly the subject, the check now leaves it alone.",
+      "matters": "Fewer wrong warnings on everyday sentences, so people trust the real ones."
+    },
+    {
+      "number": 4868,
+      "merged": "2026-11-08",
+      "title": "\"later\" and \"further\" no longer flagged as wrong words",
+      "broken": "Harper only knew \"later\" and \"further\" as adjectives, so sentences like \"She would later become president\" got false grammar warnings.",
+      "changed": "Both words are now also marked as adverbs in the dictionary, which turns those two warnings off.",
+      "matters": "Writers stop seeing wrong corrections on two very common words."
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "repo": "flarum/framework",
+  "about": "Simple software for running online discussion forums.",
+  "stars": 6765,
+  "prs": [
+    {
+      "number": 5406,
+      "merged": "2026-11-06",
+      "title": "Quoting a post keeps its spoilers hidden",
+      "broken": "Quoting part of a post that had a spoiler turned the spoiler into plain text, so the reply showed the hidden part to everyone.",
+      "changed": "Quotes now write spoilers back as spoilers, keeping the images, emoji and links inside them.",
+      "matters": "People can quote a post without giving away what its author chose to hide."
+    }
+  ]
+}

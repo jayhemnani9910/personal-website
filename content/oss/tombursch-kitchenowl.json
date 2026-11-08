@@ -1,0 +1,23 @@
+{
+  "repo": "TomBursch/kitchenowl",
+  "about": "A self-hosted grocery list and recipe manager.",
+  "stars": 3819,
+  "prs": [
+    {
+      "number": 1196,
+      "merged": "2026-11-07",
+      "title": "Importing a recipe without servings no longer fails",
+      "broken": "Importing a recipe from a site that lists no servings returned a server error, and nothing was imported.",
+      "changed": "A missing optional field is now skipped, so the rest of the recipe is kept and servings stays empty.",
+      "matters": "Recipes from more sites can be imported instead of failing outright."
+    },
+    {
+      "number": 1197,
+      "merged": "2026-11-07",
+      "title": "Selected filter chips stay first on the web app",
+      "broken": "On the web version, a selected tag jumped to the end of the row and out of view. Phones and desktop kept it first.",
+      "changed": "The sort now uses an explicit order that comes out the same on every platform. Expense categories got the same fix.",
+      "matters": "People on the web app can see which filters are on without scrolling."
+    }
+  ]
+}

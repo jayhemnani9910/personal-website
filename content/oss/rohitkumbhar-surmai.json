@@ -10,6 +10,14 @@
       "broken": "The lodging stats rounded the time of a stay up, so checking in at 11:00 and out at 15:00 two days later counted as 3 nights.",
       "changed": "Nights are now counted by the calendar days a stay crosses. A stay inside one day still counts as one night.",
       "matters": "Travel stats show the nights people actually stayed."
+    },
+    {
+      "number": 369,
+      "merged": "2026-11-07",
+      "title": "Travel Board travel time now counts time zones",
+      "broken": "Travel time just subtracted the two local times, so a 7 hour flight from New York to London counted as 12 hours.",
+      "changed": "When both ends have a time zone, each time is now read in its own zone.",
+      "matters": "Travel stats show how long trips really took."
     }
   ]
 }

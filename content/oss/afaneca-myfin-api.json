@@ -1,0 +1,23 @@
+{
+  "repo": "afaneca/myfin-api",
+  "about": "The backend for MyFin, a personal finance and budgeting app.",
+  "stars": 35,
+  "prs": [
+    {
+      "number": 273,
+      "merged": "2026-11-07",
+      "title": "Expenses late on the last day of a month now count in the budget",
+      "broken": "The Essential total stopped at the very start of the last day of the month, so an expense dated later that day was missed.",
+      "changed": "The range now runs to the end of that day.",
+      "matters": "Budget totals match what was actually spent."
+    },
+    {
+      "number": 274,
+      "merged": "2026-11-07",
+      "title": "Transactions late on December 31 now count in that year",
+      "broken": "Yearly amounts by category, entity and tag stopped at the start of December 31, leaving out anything dated later that day.",
+      "changed": "All three now run to the end of the day.",
+      "matters": "Year-by-year reports no longer come up short."
+    }
+  ]
+}

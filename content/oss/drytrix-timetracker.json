@@ -10,6 +10,14 @@
       "broken": "With 09:00 to 12:00 already logged, adding 12:00 to 17:00 for that day failed with an error, because an entry that only touched the new slot counted as an overlap.",
       "changed": "Bulk entry now only refuses real overlaps, the same rule manual entries already follow.",
       "matters": "People can fill in a normal split work day in one go."
+    },
+    {
+      "number": 852,
+      "merged": "2026-11-07",
+      "title": "The Quote PDF designer is back in the sidebar",
+      "broken": "After a menu redesign, the admin sidebar only linked the invoice PDF designer. The quote designer could only be reached by typing its address.",
+      "changed": "The sidebar has separate links for invoice and quote PDFs again, each highlighted on its own page.",
+      "matters": "Admins can find and edit their quote layout without knowing a hidden address."
     }
   ]
 }

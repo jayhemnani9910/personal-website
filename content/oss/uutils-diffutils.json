@@ -18,6 +18,14 @@
       "broken": "When a block of lines was replaced by a block of a different length, the context format marked only some lines as changed and showed the rest as plain deletions or additions. GNU diff marks the whole block.",
       "changed": "Every line in a changed block now gets the change mark, as in GNU diff.",
       "matters": "Context diffs match GNU's output, so tools that read them see one change, not a split one."
+    },
+    {
+      "number": 308,
+      "merged": "2026-11-07",
+      "title": "One-line adds and deletes print as a single number",
+      "broken": "diff wrote a single added line as \"1a2,2\" where GNU diff writes \"1a2\". Deletes and the ed format had the same problem.",
+      "changed": "One-line ranges are now written as one number, the same as GNU diff.",
+      "matters": "Tools and tests that compare against GNU diff output get the same text."
     }
   ]
 }
