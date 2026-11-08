@@ -1,0 +1,23 @@
+{
+  "repo": "DOMjudge/domjudge",
+  "about": "The system that runs programming contests: it judges submissions and keeps the live scoreboard.",
+  "stars": 924,
+  "prs": [
+    {
+      "number": 3895,
+      "merged": "2026-11-08",
+      "title": "A team's penalty time is counted once on the scoreboard",
+      "broken": "The scoreboard added a team's penalty time twice, so a team with a 30 minute penalty and nothing solved showed 60.",
+      "changed": "The total now uses the stored figure as it is and adds the penalty only when no stored figure exists.",
+      "matters": "Contest rankings depend on total time, so a double penalty could put a team in the wrong place."
+    },
+    {
+      "number": 3896,
+      "merged": "2026-11-08",
+      "title": "Replying to a released clarification no longer crashes",
+      "broken": "If a judge released a contestant's question while another judge was replying, the reply hit a server error and was lost.",
+      "changed": "The \"someone else took this\" warning now appears only when another judge actually holds the question.",
+      "matters": "Judges answering questions during a live contest no longer lose a reply they just wrote."
+    }
+  ]
+}

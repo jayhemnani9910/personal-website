@@ -631,6 +631,9 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "Automattic/harper", number: "#4868", href: "https://github.com/Automattic/harper/pull/4868" },
   { repo: "Leaflet/Leaflet", number: "#10544", href: "https://github.com/Leaflet/Leaflet/pull/10544" },
   { repo: "lightpanda-io/browser", number: "#4510", href: "https://github.com/lightpanda-io/browser/pull/4510" },
+  { repo: "DOMjudge/domjudge", number: "#3895", href: "https://github.com/DOMjudge/domjudge/pull/3895" },
+  { repo: "DOMjudge/domjudge", number: "#3896", href: "https://github.com/DOMjudge/domjudge/pull/3896" },
+  { repo: "radareorg/radare2", number: "#27371", href: "https://github.com/radareorg/radare2/pull/27371" },
 ];
 
 /**
