@@ -10,6 +10,14 @@
       "broken": "For a reseller, searching the system log ignored the search text for their own rows, and clearing old entries deleted all their customers' log rows, recent ones too.",
       "changed": "The part of the query that picks whose rows to read is now grouped, so the search and the age limit apply to every row.",
       "matters": "Resellers get correct search results and no longer lose recent customer logs when they clean up."
+    },
+    {
+      "number": 1435,
+      "merged": "2026-11-09",
+      "title": "Deleting an email address no longer changes another admin's count",
+      "broken": "Deleting an address with forwarders lowered the forwarder count of whichever admin shared the customer's id number, so one reseller's delete changed another reseller's numbers.",
+      "changed": "That count is no longer touched when an address is deleted, the same as when a single forwarder is deleted.",
+      "matters": "Resellers on a shared hosting panel keep correct usage numbers."
     }
   ]
 }

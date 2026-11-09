@@ -1,0 +1,15 @@
+{
+  "repo": "gomarkdown/markdown",
+  "about": "A Go library that turns Markdown text into HTML.",
+  "stars": 1740,
+  "prs": [
+    {
+      "number": 374,
+      "merged": "2026-11-09",
+      "title": "A heading on the last line of a document stays a heading",
+      "broken": "An underlined heading at the very end of a document with no final line break came out as plain text, sometimes with a stray horizontal line.",
+      "changed": "The underline now also counts when the document ends right after it.",
+      "matters": "Documents render the same whether or not the file ends with a line break."
+    }
+  ]
+}

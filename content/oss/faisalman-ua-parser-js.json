@@ -1,0 +1,15 @@
+{
+  "repo": "faisalman/ua-parser-js",
+  "about": "A JavaScript library that works out the browser, device and system from a user agent string.",
+  "stars": 10210,
+  "prs": [
+    {
+      "number": 850,
+      "merged": "2026-11-09",
+      "title": "Current UC Browser on Android is detected again",
+      "broken": "UC Browser for Android now uses a new name in its user agent, so the library no longer recognized it.",
+      "changed": "The library now reads the new name as well as the old one.",
+      "matters": "Sites that report browser use count these visitors correctly."
+    }
+  ]
+}

@@ -9,7 +9,8 @@
       "title": "Unzipped files keep their real modification times",
       "broken": "Files pulled out of a ZIP got times shifted by the computer's time zone, because the precise time stored in the archive was ignored.",
       "changed": "The extractor now reads the precise time the archive stores, like other unzip tools do.",
-      "matters": "File dates stay correct, so backups and sorting by date still work after extracting."
+      "matters": "File dates stay correct, so backups and sorting by date still work after extracting.",
+      "top": true
     },
     {
       "number": 28,
@@ -17,7 +18,8 @@
       "title": "Archives with files dated before 1970 no longer crash the extractor",
       "broken": "A tar archive holding a file dated before 1970 made the extractor crash while listing, testing or extracting it.",
       "changed": "Old dates are now read correctly, and dates that cannot be shown are skipped instead of crashing.",
-      "matters": "Old archives, like scanned family photos or legacy backups, open without the tool falling over."
+      "matters": "Old archives, like scanned family photos or legacy backups, open without the tool falling over.",
+      "top": true
     },
     {
       "number": 42,
@@ -25,7 +27,24 @@
       "title": "Tar files keep dates before 1970 and far in the future",
       "broken": "Files with very old or far future dates came out dated 1 January 1970, because the real date sits in an extra record.",
       "changed": "Extraction now reads that record when it is there.",
-      "matters": "Extracted files keep their real modified dates."
+      "matters": "Extracted files keep their real modified dates.",
+      "top": true
+    },
+    {
+      "number": 47,
+      "merged": "2026-11-09",
+      "title": "Extracted folders keep their permissions and dates",
+      "broken": "Only files got their permissions back. Every folder came out with default permissions and the time of extraction, though the docs promised otherwise.",
+      "changed": "Folders now get the permissions and modified time stored in the archive, even when an extraction is resumed.",
+      "matters": "Folders restored from an archive look the way they did when it was made."
+    },
+    {
+      "number": 81,
+      "merged": "2026-11-09",
+      "title": "Names with a colon extract on Linux and macOS",
+      "broken": "Any name with a colon stopped a 7z or tar extraction with an error about writing outside the folder, including Wine prefixes and files like meeting 10:30.txt.",
+      "changed": "Colons are now allowed outside Windows, while names starting with a drive letter are still refused everywhere.",
+      "matters": "Archives holding these names extract fully, as they do with GNU tar and 7z."
     }
   ]
 }
