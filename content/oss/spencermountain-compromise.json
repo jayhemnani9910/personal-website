@@ -9,7 +9,8 @@
       "title": "Common verbs get the right past tense",
       "broken": "Verbs missing from the word list copied a look-alike irregular verb, so \"budget\" became \"budgot\" and \"string\" became \"strought\".",
       "changed": "Seven verbs, including budget, string, summarise and panic, now have their correct forms listed.",
-      "matters": "Apps that rewrite text with this library no longer produce made-up words for everyday verbs."
+      "matters": "Apps that rewrite text with this library no longer produce made-up words for everyday verbs.",
+      "top": true
     },
     {
       "number": 1264,
@@ -17,7 +18,8 @@
       "title": "Plurals like toes and cheeses turn singular correctly",
       "broken": "Making plurals singular cut some words short: \"toes\" became \"to\", \"lies\" became \"ly\" and \"cheeses\" became \"chees\".",
       "changed": "Three new rules run first for these word shapes. Other words such as heroes and ladies come out as before.",
-      "matters": "Turning \"toes\" into \"to\" silently changes a sentence, so text rewritten by the library now stays correct."
+      "matters": "Turning \"toes\" into \"to\" silently changes a sentence, so text rewritten by the library now stays correct.",
+      "top": true
     },
     {
       "number": 1266,
@@ -25,7 +27,16 @@
       "title": "Last season now means the most recent one to end",
       "broken": "In November, last summer pointed to the summer of the year before, even though this year's summer had already ended.",
       "changed": "A year is now taken off only if the season has not ended yet, the same way last june already worked.",
-      "matters": "Apps that read dates from plain English get the season people mean."
+      "matters": "Apps that read dates from plain English get the season people mean.",
+      "top": true
+    },
+    {
+      "number": 1268,
+      "merged": "2026-11-09",
+      "title": "A clock before \"tonight\" means the evening",
+      "broken": "\"7:45 tonight\" came back as a quarter to eight in the morning, and \"8 tonight\" came back with no time at all.",
+      "changed": "A time written before tonight, this evening or tomorrow night is now read as an evening time.",
+      "matters": "\"Meet me at 7:45 tonight\" no longer lands twelve hours early."
     }
   ]
 }

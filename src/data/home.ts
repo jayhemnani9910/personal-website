@@ -655,6 +655,7 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "lightpanda-io/browser", number: "#4517", href: "https://github.com/lightpanda-io/browser/pull/4517" },
   { repo: "jealous/stockstats", number: "#220", href: "https://github.com/jealous/stockstats/pull/220" },
   { repo: "jealous/stockstats", number: "#221", href: "https://github.com/jealous/stockstats/pull/221" },
+  { repo: "spencermountain/compromise", number: "#1268", href: "https://github.com/spencermountain/compromise/pull/1268" },
 ];
 
 /**
