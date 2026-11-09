@@ -648,6 +648,8 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "spencermountain/compromise", number: "#1266", href: "https://github.com/spencermountain/compromise/pull/1266" },
   { repo: "xevrion/hatchzip", number: "#47", href: "https://github.com/xevrion/hatchzip/pull/47" },
   { repo: "xevrion/hatchzip", number: "#81", href: "https://github.com/xevrion/hatchzip/pull/81" },
+  { repo: "python-babel/babel", number: "#1449", href: "https://github.com/python-babel/babel/pull/1449" },
+  { repo: "uutils/grep", number: "#150", href: "https://github.com/uutils/grep/pull/150" },
 ];
 
 /**

@@ -10,6 +10,14 @@
       "broken": "When a search mixed rules for which files to include and which to skip, any skip rule won, whatever the order. GNU grep lets the last rule that matches a file decide, so the two picked different files.",
       "changed": "The rules are now kept in the order you typed them, and the last one that matches a file decides, like GNU grep.",
       "matters": "Searches over a folder look at the same files as GNU grep."
+    },
+    {
+      "number": 150,
+      "merged": "2026-11-09",
+      "title": "A stray closing bracket in a search pattern is now plain text",
+      "broken": "GNU grep treats a closing round bracket with no opening one as an ordinary character. This grep rejected the pattern with an error and stopped.",
+      "changed": "Extended patterns now accept it as a literal character, while basic patterns keep their existing rules.",
+      "matters": "Scripts that search with these patterns work the same as with GNU grep."
     }
   ]
 }

@@ -1,0 +1,15 @@
+{
+  "repo": "python-babel/babel",
+  "about": "A Python library for showing dates, numbers and text in the right format for each language.",
+  "stars": 1471,
+  "prs": [
+    {
+      "number": 1449,
+      "merged": "2026-11-09",
+      "title": "Two-digit years no longer land a century in the future",
+      "broken": "Reading a short date like 3/9/99 gave the year 2099, so old dates such as birth dates moved a century ahead and a formatted date did not read back as itself.",
+      "changed": "Two-digit years now fall within 80 years before and 20 years after today, the same window ICU and Java use.",
+      "matters": "Apps that read short dates get the year people meant."
+    }
+  ]
+}
