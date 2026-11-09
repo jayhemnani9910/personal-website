@@ -9,7 +9,8 @@
       "title": "File type checks no longer read dots in folder names",
       "broken": "When asked for a file's type, raylib looked for the last dot anywhere in the path. A file with no type inside a folder like \"assets.v2\" came back as type \".v2/readme\", so a game could pick the wrong loader.",
       "changed": "It now looks only at the file's own name. Sound loading also handles a file with no type instead of crashing.",
-      "matters": "Games load their files correctly no matter how the folders are named."
+      "matters": "Games load their files correctly no matter how the folders are named.",
+      "top": true
     },
     {
       "number": 6317,
@@ -17,7 +18,8 @@
       "title": "Blending between two rotations no longer takes the long way round",
       "broken": "raylib's quick rotation blend missed that two rotations can point the same way with opposite signs. It then turned the long way round, and blending a rotation with its mirror copy gave an empty result.",
       "changed": "It now flips the second rotation first in that case, the same check the smooth blend already did, so the two agree.",
-      "matters": "Animations and cameras that blend rotations no longer spin the wrong way or break."
+      "matters": "Animations and cameras that blend rotations no longer spin the wrong way or break.",
+      "top": true
     },
     {
       "number": 6323,
@@ -25,7 +27,16 @@
       "title": "Turning a rotation into angles keeps all three at a straight-up pitch",
       "broken": "When a rotation pointed straight up or down, raylib's conversion to angles lost the turn around the other axis and reported 0, so turning the angles back gave a different rotation.",
       "changed": "At that point the whole turn now goes into one angle, so nothing is lost. Away from it the results are exactly the same as before.",
-      "matters": "Cameras and objects that look straight up or down keep their heading when code goes through angles."
+      "matters": "Cameras and objects that look straight up or down keep their heading when code goes through angles.",
+      "top": true
+    },
+    {
+      "number": 6348,
+      "merged": "2026-11-09",
+      "title": "Reading broken text no longer runs past the end of the string",
+      "broken": "When text ended in a cut-off character, GetCodepoint reported a size that jumped over the end of the string, so code stepping through it read memory it did not own.",
+      "changed": "The size now stops before the byte that broke the character, so that byte is read again and the end of the string is seen.",
+      "matters": "Games that draw text from bad or cut-off files no longer read out of bounds."
     }
   ]
 }
