@@ -638,6 +638,9 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "spencermountain/compromise", number: "#1263", href: "https://github.com/spencermountain/compromise/pull/1263" },
   { repo: "spencermountain/compromise", number: "#1264", href: "https://github.com/spencermountain/compromise/pull/1264" },
   { repo: "uutils/util-linux", number: "#672", href: "https://github.com/uutils/util-linux/pull/672" },
+  { repo: "uutils/diffutils", number: "#330", href: "https://github.com/uutils/diffutils/pull/330" },
+  { repo: "lightpanda-io/browser", number: "#4518", href: "https://github.com/lightpanda-io/browser/pull/4518" },
+  { repo: "raysan5/raylib", number: "#6348", href: "https://github.com/raysan5/raylib/pull/6348" },
 ];
 
 /**

@@ -461,6 +461,14 @@
       "broken": "innerText only kept spaces and line breaks inside pre tags. Text styled to keep them with CSS was squashed onto one line.",
       "changed": "The browser now follows the white-space style of each element, the same as Chrome.",
       "matters": "Code blocks on docs and code hosting pages keep their indentation when read by scripts."
+    },
+    {
+      "number": 4518,
+      "merged": "2026-11-09",
+      "title": "A horizontal line no longer turns the text above it into a heading",
+      "broken": "The Markdown dump wrote --- straight after the previous line. Markdown reads that as a heading, so a paragraph followed by a horizontal line became a title.",
+      "changed": "A horizontal line now gets a blank line before it, like paragraphs and other blocks.",
+      "matters": "Pages saved as Markdown keep their structure, so paragraphs stay paragraphs."
     }
   ]
 }
