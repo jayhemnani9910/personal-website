@@ -469,6 +469,22 @@
       "broken": "The Markdown dump wrote --- straight after the previous line. Markdown reads that as a heading, so a paragraph followed by a horizontal line became a title.",
       "changed": "A horizontal line now gets a blank line before it, like paragraphs and other blocks.",
       "matters": "Pages saved as Markdown keep their structure, so paragraphs stay paragraphs."
+    },
+    {
+      "number": 4516,
+      "merged": "2026-11-09",
+      "title": "Numbered lists keep their starting number in Markdown",
+      "broken": "A list set to start at a number other than 1 was always written out starting from 1 in Markdown.",
+      "changed": "The Markdown output now numbers the list from its start value, with a limit on very large values.",
+      "matters": "Numbered steps that continue from an earlier list keep the right numbers."
+    },
+    {
+      "number": 4517,
+      "merged": "2026-11-09",
+      "title": "Quotes stay whole in Markdown output",
+      "broken": "When a quote held more than one block, like several paragraphs, only part of it stayed marked as a quote in Markdown.",
+      "changed": "Every block inside a quote now stays inside it, and quotes inside table cells stay on one line.",
+      "matters": "Quoted text in a page comes through as one quote, so readers and tools can tell it from the text around it."
     }
   ]
 }

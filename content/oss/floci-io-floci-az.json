@@ -10,6 +10,14 @@
       "broken": "A shared Blob link can ask for its own file name or file type on download. The emulator accepted the link but sent the stored values, so the file name was lost.",
       "changed": "When a valid link asks for those values, downloads and property reads now return them in place of the stored ones.",
       "matters": "Apps that hand out download links behave the same on the emulator as on real Azure."
+    },
+    {
+      "number": 647,
+      "merged": "2026-11-09",
+      "title": "Queue messages come back in the order they were sent",
+      "broken": "The emulator handed queue messages back in whatever order its store listed them, so even one sender saw them shuffled.",
+      "changed": "Messages are now sorted by the order they were sent before they are returned.",
+      "matters": "Apps that rely on queue order behave the same on the emulator as they expect on real Azure."
     }
   ]
 }

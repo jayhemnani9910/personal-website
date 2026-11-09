@@ -650,6 +650,9 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "xevrion/hatchzip", number: "#81", href: "https://github.com/xevrion/hatchzip/pull/81" },
   { repo: "python-babel/babel", number: "#1449", href: "https://github.com/python-babel/babel/pull/1449" },
   { repo: "uutils/grep", number: "#150", href: "https://github.com/uutils/grep/pull/150" },
+  { repo: "floci-io/floci-az", number: "#647", href: "https://github.com/floci-io/floci-az/pull/647" },
+  { repo: "lightpanda-io/browser", number: "#4516", href: "https://github.com/lightpanda-io/browser/pull/4516" },
+  { repo: "lightpanda-io/browser", number: "#4517", href: "https://github.com/lightpanda-io/browser/pull/4517" },
 ];
 
 /**
