@@ -1,0 +1,15 @@
+{
+  "repo": "asticode/go-astisub",
+  "about": "A Go library for reading, converting and writing subtitle files such as SRT and WebVTT.",
+  "stars": 721,
+  "prs": [
+    {
+      "number": 151,
+      "merged": "2026-11-09",
+      "title": "Subtitles keep the text after a blank line",
+      "broken": "When a subtitle in an SRT file had a blank line inside it, everything after that line was lost.",
+      "changed": "Removing empty lines at the end now stops at the last line with text, so the rest of the subtitle stays.",
+      "matters": "Players and tools that read SRT files show the whole subtitle."
+    }
+  ]
+}

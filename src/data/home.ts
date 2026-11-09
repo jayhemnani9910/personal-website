@@ -641,6 +641,13 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "uutils/diffutils", number: "#330", href: "https://github.com/uutils/diffutils/pull/330" },
   { repo: "lightpanda-io/browser", number: "#4518", href: "https://github.com/lightpanda-io/browser/pull/4518" },
   { repo: "raysan5/raylib", number: "#6348", href: "https://github.com/raysan5/raylib/pull/6348" },
+  { repo: "asticode/go-astisub", number: "#151", href: "https://github.com/asticode/go-astisub/pull/151" },
+  { repo: "faisalman/ua-parser-js", number: "#850", href: "https://github.com/faisalman/ua-parser-js/pull/850" },
+  { repo: "froxlor/froxlor", number: "#1435", href: "https://github.com/froxlor/froxlor/pull/1435" },
+  { repo: "gomarkdown/markdown", number: "#374", href: "https://github.com/gomarkdown/markdown/pull/374" },
+  { repo: "spencermountain/compromise", number: "#1266", href: "https://github.com/spencermountain/compromise/pull/1266" },
+  { repo: "xevrion/hatchzip", number: "#47", href: "https://github.com/xevrion/hatchzip/pull/47" },
+  { repo: "xevrion/hatchzip", number: "#81", href: "https://github.com/xevrion/hatchzip/pull/81" },
 ];
 
 /**
