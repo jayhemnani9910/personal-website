@@ -1,0 +1,23 @@
+{
+  "repo": "jealous/stockstats",
+  "about": "A Python library that adds stock indicators to pandas tables.",
+  "stars": 1540,
+  "prs": [
+    {
+      "number": 220,
+      "merged": "2026-11-09",
+      "title": "The linear regression average reads the current bar",
+      "broken": "The linear regression average drew its line one bar too early, so every value lagged behind the standard TA-Lib result.",
+      "changed": "It now reads the line at the current bar and matches TA-Lib, and the inertia indicator built on it moved with it.",
+      "matters": "Traders comparing this indicator with other tools get the same numbers."
+    },
+    {
+      "number": 221,
+      "merged": "2026-11-09",
+      "title": "KAMA squares its smoothing constant",
+      "broken": "The adaptive moving average doubled its smoothing constant instead of squaring it, so the line could overshoot the price.",
+      "changed": "The constant is now squared, as in the published formula.",
+      "matters": "The indicator follows prices the way its author designed, instead of running ahead of them."
+    }
+  ]
+}

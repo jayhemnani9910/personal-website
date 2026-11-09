@@ -653,6 +653,8 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "floci-io/floci-az", number: "#647", href: "https://github.com/floci-io/floci-az/pull/647" },
   { repo: "lightpanda-io/browser", number: "#4516", href: "https://github.com/lightpanda-io/browser/pull/4516" },
   { repo: "lightpanda-io/browser", number: "#4517", href: "https://github.com/lightpanda-io/browser/pull/4517" },
+  { repo: "jealous/stockstats", number: "#220", href: "https://github.com/jealous/stockstats/pull/220" },
+  { repo: "jealous/stockstats", number: "#221", href: "https://github.com/jealous/stockstats/pull/221" },
 ];
 
 /**
