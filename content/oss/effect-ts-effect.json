@@ -269,6 +269,14 @@
       "broken": "Effect hid older AWS signatures from logs and error messages, but the newer kind every AWS tool uses today showed in full.",
       "changed": "The signature, access key and session token in modern AWS links are now hidden by default.",
       "matters": "Logs and traces no longer leak credentials that could let someone download private files."
+    },
+    {
+      "number": 10439,
+      "merged": "2026-11-09",
+      "title": "Renamed time zones now keep the name you gave",
+      "broken": "In Node and Chrome, asking for a renamed time zone such as Europe/Kyiv gave back its old name, Europe/Kiev, so the name you passed in was not the name you got out.",
+      "changed": "The library now keeps the zone name it was given.",
+      "matters": "Dates saved or shown with a time zone carry the name the program actually asked for."
     }
   ]
 }

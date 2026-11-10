@@ -1,0 +1,15 @@
+{
+  "repo": "executablebooks/markdown-it-py",
+  "about": "A Markdown parser for Python, ported from the JavaScript markdown-it.",
+  "stars": 1392,
+  "prs": [
+    {
+      "number": 460,
+      "merged": "2026-11-09",
+      "title": "Code in an image description now stays in its alt text",
+      "broken": "When an image description in Markdown contained a bit of code, that word vanished from the alt text in the finished HTML.",
+      "changed": "Code text now goes into the alt text along with the words around it, as in the original JavaScript parser.",
+      "matters": "People using screen readers get the full description of the image."
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "repo": "dromara/carbon",
+  "about": "A simple, friendly date and time package for Go.",
+  "stars": 5222,
+  "prs": [
+    {
+      "number": 395,
+      "merged": "2026-11-10",
+      "title": "Persian dates from March 2025 are no longer a day ahead",
+      "broken": "The library used a formula that picked the wrong Persian leap year, so every date from March 2025 to March 2026 came out one day ahead.",
+      "changed": "Year starts now follow the 33-year cycle used by the Persian calendar, with the known break years.",
+      "matters": "Persian dates are right for the current year, and matched another calendar library daily from 1800 to 2255."
+    }
+  ]
+}

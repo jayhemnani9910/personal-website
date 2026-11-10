@@ -656,6 +656,12 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "jealous/stockstats", number: "#220", href: "https://github.com/jealous/stockstats/pull/220" },
   { repo: "jealous/stockstats", number: "#221", href: "https://github.com/jealous/stockstats/pull/221" },
   { repo: "spencermountain/compromise", number: "#1268", href: "https://github.com/spencermountain/compromise/pull/1268" },
+  { repo: "Effect-TS/effect", number: "#10439", href: "https://github.com/Effect-TS/effect/pull/10439" },
+  { repo: "executablebooks/markdown-it-py", number: "#460", href: "https://github.com/executablebooks/markdown-it-py/pull/460" },
+  { repo: "uutils/grep", number: "#149", href: "https://github.com/uutils/grep/pull/149" },
+  { repo: "uutils/num-prime", number: "#148", href: "https://github.com/uutils/num-prime/pull/148" },
+  { repo: "uutils/util-linux", number: "#675", href: "https://github.com/uutils/util-linux/pull/675" },
+  { repo: "dromara/carbon", number: "#395", href: "https://github.com/dromara/carbon/pull/395" },
 ];
 
 /**

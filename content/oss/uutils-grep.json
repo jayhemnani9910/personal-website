@@ -18,6 +18,14 @@
       "broken": "GNU grep treats a closing round bracket with no opening one as an ordinary character. This grep rejected the pattern with an error and stopped.",
       "changed": "Extended patterns now accept it as a literal character, while basic patterns keep their existing rules.",
       "matters": "Scripts that search with these patterns work the same as with GNU grep."
+    },
+    {
+      "number": 149,
+      "merged": "2026-11-09",
+      "title": "Line numbers and byte offsets now line up like GNU grep",
+      "broken": "With the option that lines up output with a tab, a file read from standard input got far too much padding, and byte offsets got none at all.",
+      "changed": "The padding now follows the size of the input and also covers byte offsets, matching GNU grep.",
+      "matters": "Output has the same columns as GNU grep, so scripts that read it keep working."
     }
   ]
 }
