@@ -45,6 +45,14 @@
       "broken": "dmesg crashed on any readable time format when the system kept no boot record, as on recent Ubuntu and most containers.",
       "changed": "On Linux the boot time now comes straight from the system clock. If none can be found, dmesg prints a clear error.",
       "matters": "People reading kernel logs with real timestamps get them on common systems, instead of a crash."
+    },
+    {
+      "number": 675,
+      "merged": "2026-11-09",
+      "title": "setsid now accepts its long option names",
+      "broken": "This setsid only understood the short options. The long forms that util-linux documents, such as --fork and --wait, failed with an unknown argument error.",
+      "changed": "The three options now also work under their long names.",
+      "matters": "Scripts written for the standard setsid run without changes."
     }
   ]
 }

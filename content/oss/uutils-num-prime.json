@@ -1,0 +1,15 @@
+{
+  "repo": "uutils/num-prime",
+  "about": "A Rust library for prime tests, factorization and other number theory, used by the uutils factor tool.",
+  "stars": 33,
+  "prs": [
+    {
+      "number": 148,
+      "merged": "2026-11-09",
+      "title": "Factorizing zero now stops with a clear message",
+      "broken": "Asking for the prime factors of zero crashed with a confusing overflow error in debug builds, and in release builds quietly returned a wrong answer.",
+      "changed": "The library now stops with a clear message saying zero has no factorization, and its documentation says so.",
+      "matters": "A program can no longer get a wrong result from zero without noticing."
+    }
+  ]
+}
