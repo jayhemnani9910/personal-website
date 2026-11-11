@@ -1,0 +1,23 @@
+{
+  "repo": "aquasecurity/trivy",
+  "about": "A security scanner that finds known holes in the software packages a project or container uses.",
+  "stars": 39229,
+  "prs": [
+    {
+      "number": 11495,
+      "merged": "2026-11-11",
+      "title": "npm workspaces with similar names no longer add a fake package",
+      "broken": "With two workspaces like \"packages/ui\" and \"packages/ui-kit\", Trivy could file one under the other. Which one won changed from run to run, and some runs listed an extra package with no version.",
+      "changed": "A workspace now only claims its own folder and the folders inside it, not any folder whose name starts the same way.",
+      "matters": "Scans of npm workspaces give the same, correct package list every time."
+    },
+    {
+      "number": 11496,
+      "merged": "2026-11-11",
+      "title": "Yarn packages keep their real names and are no longer dropped",
+      "broken": "Trivy read settings nested deep inside a yarn.lock entry as if they were the entry itself. Some packages showed up under another package's name, and others were dropped with an error.",
+      "changed": "Trivy now reads a package's name, version and dependencies only from the lines where Yarn puts them, and skips the nested settings.",
+      "matters": "Yarn projects get scanned under the right package names, so known holes are matched to the right packages."
+    }
+  ]
+}

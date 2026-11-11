@@ -37,6 +37,14 @@
       "broken": "When text ended in a cut-off character, GetCodepoint reported a size that jumped over the end of the string, so code stepping through it read memory it did not own.",
       "changed": "The size now stops before the byte that broke the character, so that byte is read again and the end of the string is seen.",
       "matters": "Games that draw text from bad or cut-off files no longer read out of bounds."
+    },
+    {
+      "number": 6313,
+      "merged": "2026-11-11",
+      "title": "Turning text into a number now gives the right value",
+      "broken": "raylib's TextToFloat added up rounding errors digit by digit, so \"78042.73\" came back as 78042.7344. It also stopped at an \"e\", so \"1e3\" gave 1 instead of 1000.",
+      "changed": "It now reads the digits as a whole number and scales them once, and it understands exponents like \"1.5e-2\".",
+      "matters": "Games that read numbers from text files or settings get the values that were written."
     }
   ]
 }
