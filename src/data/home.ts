@@ -678,6 +678,9 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "uutils/procps", number: "#824", href: "https://github.com/uutils/procps/pull/824" },
   { repo: "uutils/sed", number: "#620", href: "https://github.com/uutils/sed/pull/620" },
   { repo: "woocommerce/woocommerce", number: "#70751", href: "https://github.com/woocommerce/woocommerce/pull/70751" },
+  { repo: "aquasecurity/trivy", number: "#11495", href: "https://github.com/aquasecurity/trivy/pull/11495" },
+  { repo: "aquasecurity/trivy", number: "#11496", href: "https://github.com/aquasecurity/trivy/pull/11496" },
+  { repo: "raysan5/raylib", number: "#6313", href: "https://github.com/raysan5/raylib/pull/6313" },
 ];
 
 /**
