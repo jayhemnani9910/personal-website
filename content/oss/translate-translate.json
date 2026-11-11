@@ -1,0 +1,15 @@
+{
+  "repo": "translate/translate",
+  "about": "The Translate Toolkit, tools and a Python API for converting and checking translation files.",
+  "stars": 986,
+  "prs": [
+    {
+      "number": 6690,
+      "merged": "2026-11-10",
+      "title": "Backslashes no longer double on each CSV round trip",
+      "broken": "Converting translations to CSV and back doubled every backslash, and doubled it again each time, so changed strings stopped matching and showed as untranslated.",
+      "changed": "The CSV writer no longer adds an escape character the reader does not expect.",
+      "matters": "Translators can edit strings in a spreadsheet without breaking them."
+    }
+  ]
+}

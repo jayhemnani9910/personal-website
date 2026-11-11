@@ -1,0 +1,15 @@
+{
+  "repo": "woocommerce/woocommerce",
+  "about": "An open-source ecommerce platform built on WordPress.",
+  "stars": 10589,
+  "prs": [
+    {
+      "number": 70751,
+      "merged": "2026-11-10",
+      "title": "Stores with some translation files no longer crash",
+      "broken": "When a language had two or more translation files made with a common WordPress tool, combining them crashed the page with a fatal PHP error.",
+      "changed": "Each file's strings are now read from the place that file keeps them, and all are merged.",
+      "matters": "Shops running in another language load normally and keep every translated string."
+    }
+  ]
+}

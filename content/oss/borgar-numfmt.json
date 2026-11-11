@@ -1,0 +1,15 @@
+{
+  "repo": "borgar/numfmt",
+  "about": "A JavaScript library that formats numbers and dates the way spreadsheet number formats do.",
+  "stars": 68,
+  "prs": [
+    {
+      "number": 110,
+      "merged": "2026-11-10",
+      "title": "Fraction formats now show the right whole number",
+      "broken": "Formatting 2.96 as a sixteenths fraction gave 3 15/16, which reads as almost four, and 1.75 in halves gave 1 2/2.",
+      "changed": "The whole number is now taken before rounding, and a fraction that rounds up to one is carried over, matching Excel.",
+      "matters": "Spreadsheet apps built on this library show the same fractions as Excel."
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "repo": "bgreenwell/xleak",
+  "about": "A fast terminal viewer for Excel files, with search, formulas and export to CSV and JSON.",
+  "stars": 1519,
+  "prs": [
+    {
+      "number": 102,
+      "merged": "2026-11-10",
+      "title": "Cells holding only a time now show just the time",
+      "broken": "A cell with only a time, such as a shift start at 09:30, showed as 1899-12-31 09:30:00 in the table and in CSV and JSON exports.",
+      "changed": "Times without a date now show as 09:30:00, and dates and date-times are unchanged.",
+      "matters": "Timesheets and schedules read and export the way they look in Excel."
+    }
+  ]
+}

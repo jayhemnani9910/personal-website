@@ -1,0 +1,15 @@
+{
+  "repo": "aotimme/gocsv",
+  "about": "A command-line tool for working with CSV files.",
+  "stars": 212,
+  "prs": [
+    {
+      "number": 96,
+      "merged": "2026-11-10",
+      "title": "New CSV columns no longer get HTML codes in them",
+      "broken": "Building a column from a template escaped values as if they were web pages, so Tom & Jerry was written as Tom &amp; Jerry with no warning.",
+      "changed": "The add command now fills templates as plain text, and the README says so.",
+      "matters": "New columns hold the same text as the source data."
+    }
+  ]
+}
