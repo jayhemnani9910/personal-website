@@ -1,0 +1,15 @@
+{
+  "repo": "ayoisaiah/f2",
+  "about": "A cross-platform command-line tool for renaming many files and folders quickly and safely.",
+  "stars": 2461,
+  "prs": [
+    {
+      "number": 145,
+      "merged": "2026-11-10",
+      "title": "Removing text from file names no longer crashes",
+      "broken": "On the development branch, renaming with an empty replacement, the usual way to delete part of a name, crashed with a nil pointer error.",
+      "changed": "The step that skipped setup for an empty replacement is gone, so the rename runs normally.",
+      "matters": "Removing a word such as -draft from many file names works again."
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "repo": "dexidp/dex",
+  "about": "An OpenID Connect identity provider and OAuth 2.0 server that connects to many login sources.",
+  "stars": 11246,
+  "prs": [
+    {
+      "number": 5064,
+      "merged": "2026-11-10",
+      "title": "Device login works again when dex runs under a path",
+      "broken": "Since version 2.46.0, signing in on a device like a TV failed with an unregistered redirect error for public clients when dex was served under a path such as /dex.",
+      "changed": "The check now accepts the device callback under the server's path as well.",
+      "matters": "Command-line and TV apps that use device login can sign in again."
+    }
+  ]
+}

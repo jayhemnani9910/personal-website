@@ -18,6 +18,14 @@
       "broken": "Scripts check whether another copy of themselves is running with pidof -o %PPID. The Rust pidof rejected %PPID, so the check always said nothing was running.",
       "changed": "pidof now reads %PPID as the process that started it, and other values as before.",
       "matters": "Cron jobs and init scripts that guard against running twice work again."
+    },
+    {
+      "number": 824,
+      "merged": "2026-11-10",
+      "title": "ps columns no longer shift when a field is empty",
+      "broken": "When ps could not fill a field yet, it printed the header but no value, so every value after it moved one column left and the PID showed under the wrong heading.",
+      "changed": "Such a field now prints a dash, as the standard procps does.",
+      "matters": "Columns line up, so people and scripts read the right values."
     }
   ]
 }

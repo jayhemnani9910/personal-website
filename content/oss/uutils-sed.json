@@ -10,6 +10,14 @@
       "broken": "The markers for the start and end of a word only worked when something else made the pattern a full search. On their own, sed looked for real angle brackets, unlike GNU sed.",
       "changed": "These two markers now always turn on full pattern search, like the other word boundary markers already did.",
       "matters": "Find and replace with whole words gives the same result as GNU sed."
+    },
+    {
+      "number": 620,
+      "merged": "2026-11-10",
+      "title": "Two writes to the same file in one sed script now add up",
+      "broken": "When two w commands named the same file, each opened and emptied it on its own, so their writes overwrote each other.",
+      "changed": "Every command naming a file now shares one open copy, created once, like GNU sed.",
+      "matters": "Scripts that save lines to a file get every line, as with GNU sed."
     }
   ]
 }

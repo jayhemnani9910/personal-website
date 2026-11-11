@@ -10,6 +10,14 @@
       "broken": "When a subtitle in an SRT file had a blank line inside it, everything after that line was lost.",
       "changed": "Removing empty lines at the end now stops at the last line with text, so the rest of the subtitle stays.",
       "matters": "Players and tools that read SRT files show the whole subtitle."
+    },
+    {
+      "number": 152,
+      "merged": "2026-11-10",
+      "title": "YouTube subtitles no longer lose the text of a cue",
+      "broken": "YouTube's auto-generated WebVTT files start each cue with a line holding one space. The reader took that line as the end of the cue, so the text after it was lost.",
+      "changed": "A line of only spaces before a cue's text is now skipped, while one after the text still ends the cue.",
+      "matters": "Converting YouTube captions keeps every line of text."
     }
   ]
 }

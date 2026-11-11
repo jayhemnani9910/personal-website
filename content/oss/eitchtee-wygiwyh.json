@@ -1,0 +1,15 @@
+{
+  "repo": "eitchtee/WYGIWYH",
+  "about": "A simple but powerful self-hosted personal finance tracker.",
+  "stars": 912,
+  "prs": [
+    {
+      "number": 660,
+      "merged": "2026-11-10",
+      "title": "Monthly payments on the 31st stay on the 31st",
+      "broken": "A monthly recurring transaction on the 29th to 31st moved to the 28th for good after February, so rent and projected balances drifted.",
+      "changed": "Each next date now goes back to the original day when the month has it.",
+      "matters": "Budgets and future balances use the right dates all year."
+    }
+  ]
+}

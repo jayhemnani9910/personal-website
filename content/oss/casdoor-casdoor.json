@@ -77,6 +77,14 @@
       "broken": "The column search on list pages sent the typed text without encoding it. Searching for an email like alice+news@example.com showed no results, and &, # and % broke the search too.",
       "changed": "All 40 list fetchers now encode the search value, the same way they already encoded the field name.",
       "matters": "Admins can find users and records whose names or emails contain these common characters."
+    },
+    {
+      "number": 6068,
+      "merged": "2026-11-10",
+      "title": "Apps registered by clients now sign with the organization's key",
+      "broken": "An app created through dynamic client registration copied most settings from the organization's default app, but not its signing certificate, so other services rejected its tokens.",
+      "changed": "New apps now take the certificate of the organization's default app too.",
+      "matters": "Clients that register themselves get tokens the rest of the organization trusts."
     }
   ]
 }

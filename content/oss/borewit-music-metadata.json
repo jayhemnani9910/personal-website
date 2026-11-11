@@ -1,0 +1,23 @@
+{
+  "repo": "Borewit/music-metadata",
+  "about": "A Node.js and browser library that reads tags, format details and duration from audio and video files.",
+  "stars": 1337,
+  "prs": [
+    {
+      "number": 2906,
+      "merged": "2026-11-10",
+      "title": "Mono AAC files from Apple apps now report one channel",
+      "broken": "Voice memos and audiobooks from Apple encoders were reported as stereo, because the library trusted a channel count that is usually left at two.",
+      "changed": "For common AAC audio the channel count now comes from the codec settings inside the file, as the standard defines.",
+      "matters": "Apps that show or convert audio get the real channel count, matching ffprobe."
+    },
+    {
+      "number": 2907,
+      "merged": "2026-11-10",
+      "title": "Album, date, composer and disc tags in Matroska files are now read",
+      "broken": "Matroska and WebM files that store album, album artist, composer, date or disc as plain track tags showed none of them in the common metadata.",
+      "changed": "Those tag names now fill the matching common fields.",
+      "matters": "Music players and taggers see the album details these files already carry."
+    }
+  ]
+}

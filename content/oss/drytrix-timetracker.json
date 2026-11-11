@@ -9,7 +9,8 @@
       "title": "Bulk entry can add a slot right after another one",
       "broken": "With 09:00 to 12:00 already logged, adding 12:00 to 17:00 for that day failed with an error, because an entry that only touched the new slot counted as an overlap.",
       "changed": "Bulk entry now only refuses real overlaps, the same rule manual entries already follow.",
-      "matters": "People can fill in a normal split work day in one go."
+      "matters": "People can fill in a normal split work day in one go.",
+      "top": true
     },
     {
       "number": 852,
@@ -17,7 +18,25 @@
       "title": "The Quote PDF designer is back in the sidebar",
       "broken": "After a menu redesign, the admin sidebar only linked the invoice PDF designer. The quote designer could only be reached by typing its address.",
       "changed": "The sidebar has separate links for invoice and quote PDFs again, each highlighted on its own page.",
-      "matters": "Admins can find and edit their quote layout without knowing a hidden address."
+      "matters": "Admins can find and edit their quote layout without knowing a hidden address.",
+      "top": true
+    },
+    {
+      "number": 866,
+      "merged": "2026-11-10",
+      "title": "Report exports now apply the filters you picked",
+      "broken": "The CSV and Excel exports ignored the client, task, billable, source and tag filters on the form, so an export for one client could include another client's hours.",
+      "changed": "Both exports now apply every filter on the form, the same way the report on screen does.",
+      "matters": "Invoices and timesheets built from an export only contain the hours that were asked for.",
+      "top": true
+    },
+    {
+      "number": 867,
+      "merged": "2026-11-10",
+      "title": "Invoices from many time entries no longer fail on PostgreSQL",
+      "broken": "Making an invoice from about a hundred or more time entries crashed on PostgreSQL, because the list of entry ids was too long for its column.",
+      "changed": "The column now holds text of any length, with a database migration.",
+      "matters": "Teams on PostgreSQL can invoice a busy month in one go."
     }
   ]
 }
