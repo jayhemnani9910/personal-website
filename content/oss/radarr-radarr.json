@@ -1,0 +1,15 @@
+{
+  "repo": "Radarr/Radarr",
+  "about": "An app that finds, downloads and sorts movies for a home media library.",
+  "stars": 14752,
+  "prs": [
+    {
+      "number": 12074,
+      "merged": "2026-11-11",
+      "title": "One bad release no longer breaks a whole movie search",
+      "broken": "When Radarr hit an error on one release during a manual search, it lost that release's details. The search page then failed as a whole instead of showing the results.",
+      "changed": "A release that hits an error now keeps its details, so it shows up as rejected and the rest of the results still appear.",
+      "matters": "People searching for a movie by hand see their results, even when one release can't be handled."
+    }
+  ]
+}

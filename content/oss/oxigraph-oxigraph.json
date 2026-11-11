@@ -18,6 +18,14 @@
       "broken": "Converting a string with spaces around it, like \" 7 \" to an integer, gave no value at all.",
       "changed": "Conversions to numbers, booleans, dates and durations now trim surrounding whitespace first, as the standard says.",
       "matters": "Text from messy sources converts correctly instead of silently leaving query results empty."
+    },
+    {
+      "number": 2025,
+      "merged": "2026-11-11",
+      "title": "Counting values in a query no longer gives up on one bad row",
+      "broken": "In Oxigraph, counting the results of an expression stopped at the first row where the expression failed, so the whole count came back empty instead of a number.",
+      "changed": "A row where the expression fails is now skipped, as the query standard says, and the count goes on.",
+      "matters": "Queries that count values get a real number, even when some rows don't fit."
     }
   ]
 }
