@@ -1,0 +1,15 @@
+{
+  "repo": "django-cms/django-cms",
+  "about": "A system for building and editing websites, made on top of the Django web framework.",
+  "stars": 10681,
+  "prs": [
+    {
+      "number": 8983,
+      "merged": "2026-11-11",
+      "title": "A fresh install no longer fails on start",
+      "broken": "django CMS needs a small helper package to start, but it did not list it as something to install. A clean install crashed at startup with a missing module error.",
+      "changed": "The helper package is now listed, so installing django CMS brings it in too.",
+      "matters": "New sites start on the first try, without hunting down a missing package."
+    }
+  ]
+}

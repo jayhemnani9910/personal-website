@@ -237,6 +237,14 @@
       "broken": "With no logins set up, normal uploads worked but browser form uploads were refused.",
       "changed": "Form uploads now skip the signature check when login is off. Upload limits in the form still apply.",
       "matters": "Web pages can upload files to a test or private server."
+    },
+    {
+      "number": 12497,
+      "merged": "2026-11-11",
+      "title": "Files copied in with filer.copy get a real fingerprint",
+      "broken": "Files uploaded with filer.copy got a fingerprint based on empty data. Two different files of the same size looked the same, so a client could be told nothing changed when it had.",
+      "changed": "filer.copy now works out each part's real checksum while uploading, as the mount tool already did.",
+      "matters": "Browsers and caches fetch the new version of a file after it is replaced."
     }
   ]
 }

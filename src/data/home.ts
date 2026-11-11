@@ -681,6 +681,10 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "aquasecurity/trivy", number: "#11495", href: "https://github.com/aquasecurity/trivy/pull/11495" },
   { repo: "aquasecurity/trivy", number: "#11496", href: "https://github.com/aquasecurity/trivy/pull/11496" },
   { repo: "raysan5/raylib", number: "#6313", href: "https://github.com/raysan5/raylib/pull/6313" },
+  { repo: "Radarr/Radarr", number: "#12074", href: "https://github.com/Radarr/Radarr/pull/12074" },
+  { repo: "django-cms/django-cms", number: "#8983", href: "https://github.com/django-cms/django-cms/pull/8983" },
+  { repo: "oxigraph/oxigraph", number: "#2025", href: "https://github.com/oxigraph/oxigraph/pull/2025" },
+  { repo: "seaweedfs/seaweedfs", number: "#12497", href: "https://github.com/seaweedfs/seaweedfs/pull/12497" },
 ];
 
 /**
