@@ -85,6 +85,14 @@
       "broken": "find's -ls output showed modification times in UTC, so on most machines the time was off by hours compared to GNU find and ls.",
       "changed": "The time is now shown in the local time zone, in both the Unix and Windows code.",
       "matters": "File listings show the same times as every other tool on the machine."
+    },
+    {
+      "number": 926,
+      "merged": "2026-11-11",
+      "title": "find reports missing paths like GNU find",
+      "broken": "A missing starting point or locked folder was reported with an Error prefix and a system code, unlike GNU find.",
+      "changed": "These errors now print the program name, the quoted path and the plain message.",
+      "matters": "Scripts and users see the same messages as with GNU find."
     }
   ]
 }

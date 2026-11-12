@@ -18,6 +18,14 @@
       "broken": "When two w commands named the same file, each opened and emptied it on its own, so their writes overwrote each other.",
       "changed": "Every command naming a file now shares one open copy, created once, like GNU sed.",
       "matters": "Scripts that save lines to a file get every line, as with GNU sed."
+    },
+    {
+      "number": 621,
+      "merged": "2026-11-11",
+      "title": "Writing to /dev/stdout keeps output in order",
+      "broken": "Writing changed lines to /dev/stdout put them after the rest of the output, and with output sent to a file the two overwrote each other.",
+      "changed": "/dev/stdout now goes through sed's own output, as in GNU sed.",
+      "matters": "A common way to print changed lines works in scripts."
     }
   ]
 }

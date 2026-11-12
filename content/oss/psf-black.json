@@ -1,0 +1,15 @@
+{
+  "repo": "psf/black",
+  "about": "The most widely used Python code formatter.",
+  "stars": 42165,
+  "prs": [
+    {
+      "number": 5672,
+      "merged": "2026-11-12",
+      "title": "Formatting a selection keeps stacked decorators valid",
+      "broken": "Formatting only some lines of a file indented with two spaces or tabs broke stacked decorators elsewhere, and Black stopped with an invalid code error.",
+      "changed": "Each decorator outside the selection is now kept and re-indented on its own.",
+      "matters": "Format-selection in editors works on these files."
+    }
+  ]
+}

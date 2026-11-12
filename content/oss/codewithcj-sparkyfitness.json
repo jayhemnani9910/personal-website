@@ -10,6 +10,14 @@
       "broken": "With weight in stones and pounds, 13 st showed as 12 st 14 lb, and typing in the pound box added to the 14. Height had the same problem: 6 ft showed as 5 ft 12 in.",
       "changed": "The conversion back from kilograms and centimetres now rounds to the shown precision before splitting into stones and pounds, or feet and inches.",
       "matters": "People who track in stones or feet see the number they typed, and the boxes behave as expected."
+    },
+    {
+      "number": 3509,
+      "merged": "2026-11-11",
+      "title": "Body measurement exports use your units",
+      "broken": "The body measurements CSV labelled its columns in pounds and inches but wrote the stored kilograms and centimetres.",
+      "changed": "Each value is now converted to the user's units before export, the same way the on-screen table does it.",
+      "matters": "People who track in pounds and inches get an export that matches what they see."
     }
   ]
 }

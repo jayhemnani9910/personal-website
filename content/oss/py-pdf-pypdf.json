@@ -1,0 +1,15 @@
+{
+  "repo": "py-pdf/pypdf",
+  "about": "A pure-Python library for reading, splitting, merging and changing PDF files.",
+  "stars": 10299,
+  "prs": [
+    {
+      "number": 4377,
+      "merged": "2026-11-12",
+      "title": "PDF text extraction puts spaces in the right places",
+      "broken": "Text pulled from LaTeX PDFs split words at kerned letters and joined words after a font change, giving text like \"F rameworks\" and \"Programming:Python\".",
+      "changed": "Only a forward move adds a space, and a gap after a font change is now seen.",
+      "matters": "Text extracted for search and AI tools reads as it does on the page."
+    }
+  ]
+}

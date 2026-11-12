@@ -18,6 +18,14 @@
       "broken": "Travel time just subtracted the two local times, so a 7 hour flight from New York to London counted as 12 hours.",
       "changed": "When both ends have a time zone, each time is now read in its own zone.",
       "matters": "Travel stats show how long trips really took."
+    },
+    {
+      "number": 370,
+      "merged": "2026-11-11",
+      "title": "Trips on New Year's Day show in the right year",
+      "broken": "East of UTC, a trip starting on 1 January was counted in the previous year in the yearly lists.",
+      "changed": "Year boundaries now use the browser's midnight, the same as saved trip dates.",
+      "matters": "Travel boards group trips by the year they happen."
     }
   ]
 }

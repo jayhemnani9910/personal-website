@@ -18,6 +18,14 @@
       "broken": "On the web version, a selected tag jumped to the end of the row and out of view. Phones and desktop kept it first.",
       "changed": "The sort now uses an explicit order that comes out the same on every platform. Expense categories got the same fix.",
       "matters": "People on the web app can see which filters are on without scrolling."
+    },
+    {
+      "number": 1217,
+      "merged": "2026-11-11",
+      "title": "Expense overview works on PostgreSQL",
+      "broken": "On PostgreSQL, the balances overview page failed with a server error because the database saw the day grouping as two different expressions.",
+      "changed": "The day expression is built once and used in both places of the query.",
+      "matters": "Households running KitchenOwl on PostgreSQL can see their expense overview again."
     }
   ]
 }

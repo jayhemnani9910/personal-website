@@ -685,6 +685,22 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "django-cms/django-cms", number: "#8983", href: "https://github.com/django-cms/django-cms/pull/8983" },
   { repo: "oxigraph/oxigraph", number: "#2025", href: "https://github.com/oxigraph/oxigraph/pull/2025" },
   { repo: "seaweedfs/seaweedfs", number: "#12497", href: "https://github.com/seaweedfs/seaweedfs/pull/12497" },
+  { repo: "CodeWithCJ/SparkyFitness", number: "#3509", href: "https://github.com/CodeWithCJ/SparkyFitness/pull/3509" },
+  { repo: "TomBursch/kitchenowl", number: "#1217", href: "https://github.com/TomBursch/kitchenowl/pull/1217" },
+  { repo: "rohitkumbhar/surmai", number: "#370", href: "https://github.com/rohitkumbhar/surmai/pull/370" },
+  { repo: "uutils/findutils", number: "#926", href: "https://github.com/uutils/findutils/pull/926" },
+  { repo: "uutils/sed", number: "#621", href: "https://github.com/uutils/sed/pull/621" },
+  { repo: "DRYTRIX/TimeTracker", number: "#874", href: "https://github.com/DRYTRIX/TimeTracker/pull/874" },
+  { repo: "FreshRSS/FreshRSS", number: "#9556", href: "https://github.com/FreshRSS/FreshRSS/pull/9556" },
+  { repo: "asticode/go-astisub", number: "#153", href: "https://github.com/asticode/go-astisub/pull/153" },
+  { repo: "asticode/go-astisub", number: "#154", href: "https://github.com/asticode/go-astisub/pull/154" },
+  { repo: "bigcapitalhq/bigcapital", number: "#1610", href: "https://github.com/bigcapitalhq/bigcapital/pull/1610" },
+  { repo: "callumalpass/tasknotes", number: "#2540", href: "https://github.com/callumalpass/tasknotes/pull/2540" },
+  { repo: "dream-num/univer", number: "#8177", href: "https://github.com/dream-num/univer/pull/8177" },
+  { repo: "mayswind/ezbookkeeping", number: "#758", href: "https://github.com/mayswind/ezbookkeeping/pull/758" },
+  { repo: "psf/black", number: "#5672", href: "https://github.com/psf/black/pull/5672" },
+  { repo: "py-pdf/pypdf", number: "#4377", href: "https://github.com/py-pdf/pypdf/pull/4377" },
+  { repo: "wavelog/wavelog", number: "#4108", href: "https://github.com/wavelog/wavelog/pull/4108" },
 ];
 
 /**

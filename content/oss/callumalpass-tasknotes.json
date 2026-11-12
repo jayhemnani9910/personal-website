@@ -1,0 +1,15 @@
+{
+  "repo": "callumalpass/tasknotes",
+  "about": "A task and time-tracking plugin for Obsidian with calendar integration.",
+  "stars": 2259,
+  "prs": [
+    {
+      "number": 2540,
+      "merged": "2026-11-12",
+      "title": "Due-only tasks land on their due date in calendars",
+      "broken": "A task with only a due date was exported as an event from its creation time to the due date, so it showed on every day except the one it was due.",
+      "changed": "A task with only a due date is now exported as an event on its due date.",
+      "matters": "Calendar apps that read the feed show tasks on the right day."
+    }
+  ]
+}
