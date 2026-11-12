@@ -10,6 +10,14 @@
       "broken": "Uploading a valid LoTW certificate could fail with \"Generic error\" because of a leftover error from an earlier request.",
       "changed": "Old errors are cleared before the certificate is read, so only real problems count.",
       "matters": "Operators can upload their certificate and sync their log without a confusing failure."
+    },
+    {
+      "number": 4108,
+      "merged": "2026-11-12",
+      "title": "First QSO is kept when the API gets a WSJT-X log",
+      "broken": "When ADIF sent to the API ended its header in lowercase, as WSJT-X writes it, the first contact was silently dropped.",
+      "changed": "The header end is now found in any letter case.",
+      "matters": "Logs pushed from WSJT-X and JTDX import every contact."
     }
   ]
 }

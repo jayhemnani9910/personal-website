@@ -1,0 +1,15 @@
+{
+  "repo": "dream-num/univer",
+  "about": "An open-source office suite SDK for spreadsheets, documents and slides that apps can embed.",
+  "stars": 23354,
+  "prs": [
+    {
+      "number": 8177,
+      "merged": "2026-11-12",
+      "title": "ISO week numbers are right at the turn of the year",
+      "broken": "ISOWEEKNUM gave wrong week numbers around new year, such as week 53 or 54 where it should be week 1, and a whole year was off by one in some years.",
+      "changed": "The ISO week start is computed the standard way, and the time part of a date no longer shifts the result.",
+      "matters": "Spreadsheets that plan or report by week get the same numbers as Excel."
+    }
+  ]
+}

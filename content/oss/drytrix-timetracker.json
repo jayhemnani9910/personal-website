@@ -37,6 +37,14 @@
       "broken": "Making an invoice from about a hundred or more time entries crashed on PostgreSQL, because the list of entry ids was too long for its column.",
       "changed": "The column now holds text of any length, with a database migration.",
       "matters": "Teams on PostgreSQL can invoice a busy month in one go."
+    },
+    {
+      "number": 874,
+      "merged": "2026-11-12",
+      "title": "Nearest rounding no longer drops half-interval entries",
+      "broken": "With nearest rounding, a time entry exactly halfway rounded to the even step, so a 15 minute task on 30 minute rounding was stored as zero.",
+      "changed": "Halves now always round up.",
+      "matters": "Short tasks are no longer lost from timesheets and invoices."
     }
   ]
 }

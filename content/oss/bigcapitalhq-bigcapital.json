@@ -1,0 +1,15 @@
+{
+  "repo": "bigcapitalhq/bigcapital",
+  "about": "Open-source accounting software for small businesses, an alternative to QuickBooks and Xero.",
+  "stars": 4113,
+  "prs": [
+    {
+      "number": 1610,
+      "merged": "2026-11-12",
+      "title": "Tax rate picker can be searched",
+      "broken": "Typing in a line's tax rate field emptied the list, because the search looked at fields tax rates do not have.",
+      "changed": "The search now matches the tax rate's name and code, ignoring case.",
+      "matters": "Users with many tax rates can find the right one by typing."
+    }
+  ]
+}

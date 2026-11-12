@@ -1,0 +1,15 @@
+{
+  "repo": "FreshRSS/FreshRSS",
+  "about": "A free, self-hosted news reader that collects articles from RSS and Atom feeds.",
+  "stars": 16568,
+  "prs": [
+    {
+      "number": 9556,
+      "merged": "2026-11-12",
+      "title": "Restoring a backup keeps titles readable",
+      "broken": "Restoring a FreshRSS export encoded article titles and authors twice, so a title with an ampersand showed the raw code, and each restore added another layer.",
+      "changed": "Titles and authors are decoded before they are encoded again on import.",
+      "matters": "Moving or restoring a FreshRSS install keeps every article title as it was."
+    }
+  ]
+}
