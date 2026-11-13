@@ -701,6 +701,23 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "psf/black", number: "#5672", href: "https://github.com/psf/black/pull/5672" },
   { repo: "py-pdf/pypdf", number: "#4377", href: "https://github.com/py-pdf/pypdf/pull/4377" },
   { repo: "wavelog/wavelog", number: "#4108", href: "https://github.com/wavelog/wavelog/pull/4108" },
+  { repo: "MHSanaei/3x-ui", number: "#7108", href: "https://github.com/MHSanaei/3x-ui/pull/7108" },
+  { repo: "Nixtla/neuralforecast", number: "#1735", href: "https://github.com/Nixtla/neuralforecast/pull/1735" },
+  { repo: "actualbudget/actual", number: "#9527", href: "https://github.com/actualbudget/actual/pull/9527" },
+  { repo: "boyter/scc", number: "#823", href: "https://github.com/boyter/scc/pull/823" },
+  { repo: "josdejong/mathjs", number: "#3770", href: "https://github.com/josdejong/mathjs/pull/3770" },
+  { repo: "modular/modular", number: "#7258", href: "https://github.com/modular/modular/pull/7258" },
+  {
+    repo: "modular/modular",
+    number: "#7265",
+    href: "https://github.com/modular/modular/pull/7265",
+    landed: "https://github.com/modular/modular/commit/698cb83782bfd06036b572b5a03b07898303449a",
+  },
+  { repo: "securo-finance/securo", number: "#1428", href: "https://github.com/securo-finance/securo/pull/1428" },
+  { repo: "sporkmonger/addressable", number: "#691", href: "https://github.com/sporkmonger/addressable/pull/691" },
+  { repo: "tfeldmann/organize", number: "#504", href: "https://github.com/tfeldmann/organize/pull/504" },
+  { repo: "wallabag/wallabag", number: "#9166", href: "https://github.com/wallabag/wallabag/pull/9166" },
+  { repo: "OpenListTeam/OpenList", number: "#3339", href: "https://github.com/OpenListTeam/OpenList/pull/3339" },
 ];
 
 /**

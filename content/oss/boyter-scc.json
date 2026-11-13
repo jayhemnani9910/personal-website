@@ -9,7 +9,8 @@
       "title": "PowerShell files count comments correctly around single quotes",
       "broken": "Single-quoted PowerShell strings were not understood, so a quote mark inside one started a fake string or comment. Real scripts came out with wrong code and comment counts.",
       "changed": "Single-quoted strings and here-strings are now read as strings, so what is inside them can't start anything else.",
-      "matters": "People measuring PowerShell projects get the real number of code and comment lines."
+      "matters": "People measuring PowerShell projects get the real number of code and comment lines.",
+      "top": true
     },
     {
       "number": 817,
@@ -17,7 +18,8 @@
       "title": "A quote character in OCaml and Nim no longer swallows comments",
       "broken": "In OCaml and Nim, a quote written as a single character opened a string that ran on to the next quote, so comments in between counted as code.",
       "changed": "That character form is now recognised and closes right away. Type variables and number suffixes that start with an apostrophe are left alone.",
-      "matters": "OCaml and Nim files report the correct split of code and comments."
+      "matters": "OCaml and Nim files report the correct split of code and comments.",
+      "top": true
     },
     {
       "number": 818,
@@ -25,7 +27,16 @@
       "title": "Elixir character literals no longer swallow comments",
       "broken": "Elixir writes a character's code as a question mark before it. A quote written that way opened a string, so comments up to the next quote counted as code.",
       "changed": "Those forms now count as plain code, since a question mark before a quote means nothing else in Elixir.",
-      "matters": "Elixir code that parses strings gets correct comment and code counts."
+      "matters": "Elixir code that parses strings gets correct comment and code counts.",
+      "top": true
+    },
+    {
+      "number": 823,
+      "merged": "2026-11-12",
+      "title": "History reports skip the same files as a normal count",
+      "broken": "The reports built from git history counted files a normal run leaves out, like lock files, and ignored the exclude options. One big lock file could crown its committer the main author.",
+      "changed": "The history reports now use the same file rules and exclude options as a plain run.",
+      "matters": "Author, timeline and hotspot reports match the normal line counts and reflect real code."
     }
   ]
 }

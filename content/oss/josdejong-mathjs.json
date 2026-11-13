@@ -1,0 +1,15 @@
+{
+  "repo": "josdejong/mathjs",
+  "about": "An extensive math library for JavaScript and Node.js.",
+  "stars": 15107,
+  "prs": [
+    {
+      "number": 3770,
+      "merged": "2026-11-12",
+      "title": "Standard deviation and variance count dimensions the same way",
+      "broken": "In the expression parser, standard deviation and variance with a chosen method counted dimensions from zero, while the short form counted from one. The same dimension gave different answers.",
+      "changed": "The parser now converts the last number after the data, so both forms count dimensions from one. Other functions give the same results as before.",
+      "matters": "Statistics typed into the calculator line up across forms instead of quietly using the wrong rows or columns."
+    }
+  ]
+}

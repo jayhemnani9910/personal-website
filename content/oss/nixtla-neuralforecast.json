@@ -1,0 +1,15 @@
+{
+  "repo": "Nixtla/neuralforecast",
+  "about": "Neural network models for time series forecasting, built to be easy to use and to scale.",
+  "stars": 4316,
+  "prs": [
+    {
+      "number": 1735,
+      "merged": "2026-11-12",
+      "title": "Models with a probability loss can be saved right after training",
+      "broken": "Saving a model right after training failed when it used one of the probability losses. The loss still held a link to the training math that could not be copied.",
+      "changed": "That link is now dropped where the loss is built. It was only needed for predictions, which still work the same.",
+      "matters": "People can train a forecasting model and save it straight away without a crash."
+    }
+  ]
+}

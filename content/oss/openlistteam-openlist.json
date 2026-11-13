@@ -10,6 +10,14 @@
       "broken": "When an app locked a folder over WebDAV, OpenList answered with its internal storage path as the lock's root instead of the web address the app used. Some apps saw the mismatch and refused the lock.",
       "changed": "The answer now names the same web address the app locked, written the way folder listings already write it.",
       "matters": "WebDAV apps that check the lock, like the music player in the bug report, can lock and save files again."
+    },
+    {
+      "number": 3339,
+      "merged": "2026-11-13",
+      "title": "A storage outage no longer looks like a deleted folder",
+      "broken": "When the storage behind OpenList was unreachable, a folder that exists was reported as missing. Sync tools like rclone saw a missing folder instead of a temporary error.",
+      "changed": "A failed listing now passes its real error up. The file sharing layer answers not found only for missing items and a server error for the rest.",
+      "matters": "Sync tools retry during an outage instead of acting as if the files were gone."
     }
   ]
 }

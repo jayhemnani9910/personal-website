@@ -77,6 +77,14 @@
       "broken": "Importing a WireGuard link with an IPv6 server dropped the brackets around the address, so the connection could not start because the address was invalid.",
       "changed": "The address is now built with its brackets kept. IPv4 addresses and host names stay as they were.",
       "matters": "WireGuard servers on IPv6 now connect after being imported from a link or a subscription."
+    },
+    {
+      "number": 7108,
+      "merged": "2026-11-12",
+      "title": "Server notes stay out of node names in most VPN apps",
+      "broken": "When a host had a description, the subscription link carried it at the end. Only two apps read it; v2rayN, OpenClash and others showed it glued to every node name.",
+      "changed": "The description is now added only when the app asking for the subscription is one of the two that read it. Copied links and QR codes keep it.",
+      "matters": "Admins can describe their hosts without messing up node names for most of their users."
     }
   ]
 }

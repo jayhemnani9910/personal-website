@@ -1,0 +1,15 @@
+{
+  "repo": "wallabag/wallabag",
+  "about": "A self-hosted app for saving web pages to read later.",
+  "stars": 13059,
+  "prs": [
+    {
+      "number": 9166,
+      "merged": "2026-11-12",
+      "title": "Bookmarks imported from Shaarli and Pocket keep their titles",
+      "broken": "The Shaarli and Pocket imports dropped each bookmark's title. When the page could not be fetched, like a dead link, the saved entry had no title at all.",
+      "changed": "The link text from the export file is now passed as the title, as the Chrome and Firefox imports already do.",
+      "matters": "Moving old bookmarks into wallabag keeps their names, even for pages that are gone."
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "repo": "sporkmonger/addressable",
+  "about": "A Ruby library for working with web addresses, with forgiving parsing and address templates.",
+  "stars": 1610,
+  "prs": [
+    {
+      "number": 691,
+      "merged": "2026-11-12",
+      "title": "A local address with a port is read as host and port",
+      "broken": "The forgiving address parser read a local address with a port as a strange scheme with no host, while other hosts with ports were read correctly.",
+      "changed": "A local name followed by a port number is now read as host and port, as a browser would. Phone and other real schemes stay as they were.",
+      "matters": "Apps that accept typed addresses handle local development servers the way users expect."
+    }
+  ]
+}
