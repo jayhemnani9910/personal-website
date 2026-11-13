@@ -1,0 +1,15 @@
+{
+  "repo": "maziggy/bambuddy-wiki",
+  "about": "The documentation wiki for Bambuddy, a self-hosted control center for Bambu Lab printers.",
+  "stars": 11,
+  "prs": [
+    {
+      "number": 129,
+      "merged": "2026-11-13",
+      "title": "Docs say the spool import reads semicolon CSV files",
+      "broken": "The import guide did not say whether CSV files with \";\" separators and decimal commas would work.",
+      "changed": "One sentence now says the spool import reads them.",
+      "matters": "People with European Excel files know their file will import."
+    }
+  ]
+}

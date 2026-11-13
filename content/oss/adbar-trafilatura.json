@@ -1,0 +1,15 @@
+{
+  "repo": "adbar/trafilatura",
+  "about": "A Python tool that pulls the main text and metadata out of web pages.",
+  "stars": 7125,
+  "prs": [
+    {
+      "number": 1128,
+      "merged": "2026-11-13",
+      "title": "Markdown output keeps quotes marked as quotes",
+      "broken": "In Markdown output, a quote on a web page came out as plain paragraphs, so it could not be told apart from the text around it.",
+      "changed": "Each line of a quote now gets the Markdown quote mark, and lists or code inside the quote stay inside it.",
+      "matters": "Pages saved as Markdown keep their quotes, so who said what stays clear."
+    }
+  ]
+}
