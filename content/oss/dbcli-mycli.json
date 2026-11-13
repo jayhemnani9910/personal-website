@@ -1,0 +1,15 @@
+{
+  "repo": "dbcli/mycli",
+  "about": "A MySQL command-line client with autocompletion and syntax highlighting.",
+  "stars": 11997,
+  "prs": [
+    {
+      "number": 2430,
+      "merged": "2026-11-13",
+      "title": "SQL files with DELIMITER blocks now run",
+      "broken": "Feeding mycli a SQL file that changes the delimiter, as every database dump with a trigger or stored procedure does, failed at the first one and the rest never ran.",
+      "changed": "mycli now handles the DELIMITER line the way the standard mysql client does.",
+      "matters": "People can restore their database dumps with mycli."
+    }
+  ]
+}

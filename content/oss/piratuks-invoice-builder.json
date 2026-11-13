@@ -1,0 +1,15 @@
+{
+  "repo": "piratuks/invoice-builder",
+  "about": "A desktop app for small businesses and freelancers to make invoices and quotes.",
+  "stars": 1526,
+  "prs": [
+    {
+      "number": 347,
+      "merged": "2026-11-13",
+      "title": "E-invoice totals now add up to the cent",
+      "broken": "Exported e-invoices could have totals off by one cent, like 17.50 plus 3.33 VAT shown as 20.82, so invoice validators rejected them.",
+      "changed": "Every total is now built from the same rounded amounts the invoice lines already use.",
+      "matters": "Invoices pass the checks that governments and buyers run on them."
+    }
+  ]
+}

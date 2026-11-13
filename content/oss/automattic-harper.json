@@ -18,6 +18,14 @@
       "broken": "Harper only knew \"later\" and \"further\" as adjectives, so sentences like \"She would later become president\" got false grammar warnings.",
       "changed": "Both words are now also marked as adverbs in the dictionary, which turns those two warnings off.",
       "matters": "Writers stop seeing wrong corrections on two very common words."
+    },
+    {
+      "number": 4874,
+      "merged": "2026-11-13",
+      "title": "No more false alarm on \"learnt\", \"burnt\" and \"leapt\"",
+      "broken": "Harper read \"learnt\", \"burnt\" and \"leapt\" as present-tense verbs, so \"He learnt the rules\" got a wrong grammar warning.",
+      "changed": "The dictionary now marks these three words as past forms, like \"dreamt\" already was.",
+      "matters": "British and older spellings stop drawing wrong corrections."
     }
   ]
 }

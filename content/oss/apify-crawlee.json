@@ -18,6 +18,14 @@
       "broken": "A sitemap lists a site's pages for crawlers. If one sitemap had an error, like a single unescaped character, the tool threw away every page it had found, often without any message.",
       "changed": "The error is now logged and the tool moves on to the next sitemap.",
       "matters": "Crawls keep the pages from every good sitemap and show which one was broken."
+    },
+    {
+      "number": 4267,
+      "merged": "2026-11-04",
+      "title": "Requests sent through a proxy now really use the proxy",
+      "broken": "When a crawler sent an extra request and asked for a proxy, the proxy setting was dropped and the request went out directly.",
+      "changed": "The proxy setting is now passed along, and the one given for that request wins over the session's proxy.",
+      "matters": "Crawls that must go through a proxy no longer leak requests from the real address."
     }
   ]
 }

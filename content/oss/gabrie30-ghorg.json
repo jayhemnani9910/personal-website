@@ -1,0 +1,15 @@
+{
+  "repo": "gabrie30/ghorg",
+  "about": "A tool that clones or backs up all the repos of an organization or user in one go.",
+  "stars": 2166,
+  "prs": [
+    {
+      "number": 713,
+      "merged": "2026-11-13",
+      "title": "Pruning a Gitea backup no longer deletes every clone",
+      "broken": "With Gitea, the prune option thought every local copy was gone from the server and deleted all of them, so each scheduled run wiped the whole backup.",
+      "changed": "Local copies are now matched to server repos by name too, so only repos really removed on the server are pruned.",
+      "matters": "Backups stay in place, and local work in those folders is not lost."
+    }
+  ]
+}
