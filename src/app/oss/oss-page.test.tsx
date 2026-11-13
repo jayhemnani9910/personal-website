@@ -58,8 +58,8 @@ describe("OssRepoPage", () => {
   });
 
   it("calls a repo that takes work in as commits landed, not merged", async () => {
-    render(await OssRepoPage({ params: Promise.resolve({ slug: "modular-modular" }) }), { wrapper: TerminalProvider });
-    expect(screen.getByRole("heading", { level: 1 }).textContent).toBe("modular/modular");
+    render(await OssRepoPage({ params: Promise.resolve({ slug: "graphify-labs-graphify" }) }), { wrapper: TerminalProvider });
+    expect(screen.getByRole("heading", { level: 1 }).textContent).toBe("Graphify-Labs/graphify");
     expect(document.querySelector("main")!.textContent).toMatch(/\d+ landed/);
   });
 });

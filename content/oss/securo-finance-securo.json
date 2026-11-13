@@ -1,0 +1,15 @@
+{
+  "repo": "securo-finance/securo",
+  "about": "Open-source personal finance manager, self-hosted and privacy-first.",
+  "stars": 4383,
+  "prs": [
+    {
+      "number": 1428,
+      "merged": "2026-11-12",
+      "title": "CSV imports pick one date order for the whole file",
+      "broken": "With the date format on auto, each row was read on its own. A US bank file got some dates day-first and others month-first, so transactions landed in the wrong months.",
+      "changed": "The import now decides the date order once from the whole column, the same way bank files in the QIF format already worked.",
+      "matters": "US exports import with every date in the right month and no silent mistakes."
+    }
+  ]
+}

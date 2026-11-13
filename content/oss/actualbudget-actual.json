@@ -1,0 +1,15 @@
+{
+  "repo": "actualbudget/actual",
+  "about": "A local-first personal finance app for budgeting.",
+  "stars": 30208,
+  "prs": [
+    {
+      "number": 9527,
+      "merged": "2026-11-12",
+      "title": "Bank files with comma decimals import the right amounts",
+      "broken": "Bank files in the OFX format that write amounts with a comma, as French, Belgian and Brazilian banks do, imported every amount a hundred times too big.",
+      "changed": "A comma is now read as the decimal mark when the amount has no dot. Amounts that already use a dot import as before.",
+      "matters": "People with European or Brazilian bank exports get correct transactions without fixing each one by hand."
+    }
+  ]
+}

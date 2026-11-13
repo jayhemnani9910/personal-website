@@ -45,6 +45,22 @@
       "broken": "In Mojo, splitting text into lines also split at every tab. Tab-separated data like a table fell apart into single cells.",
       "changed": "Tabs are no longer treated as line ends, matching Python. The help text that listed tabs as line ends was fixed too, and a test was added.",
       "matters": "Code that reads tab-separated text line by line gets whole rows back."
+    },
+    {
+      "number": 7258,
+      "merged": "2026-11-12",
+      "title": "Reversing a span in Mojo gives the right order at every length",
+      "broken": "Reversing a span scrambled it for many lengths, such as 2, 5 and 6. The fast loop left a few pairs that the cleanup step swapped wrongly or skipped.",
+      "changed": "The leftover pairs are now swapped one by one up to the middle. A new test reverses every length from 0 to 39.",
+      "matters": "Code that reverses a buffer of numbers gets a correct result instead of silently wrong data."
+    },
+    {
+      "number": 7265,
+      "merged": "2026-11-12",
+      "title": "Extending a Mojo deque with an empty list no longer crashes",
+      "broken": "Adding an empty list to a deque, at either end or when building one, crashed the program while freeing memory the list never had.",
+      "changed": "The deque now skips freeing when the list never held anything, the same way the list type itself does.",
+      "matters": "Programs that pass a possibly empty list into a deque keep running."
     }
   ]
 }

@@ -1,0 +1,15 @@
+{
+  "repo": "tfeldmann/organize",
+  "about": "A tool that automates file management with simple rules.",
+  "stars": 3194,
+  "prs": [
+    {
+      "number": 504,
+      "merged": "2026-11-12",
+      "title": "The lowercase extensions rule leaves files without one alone",
+      "broken": "The documented rule for making file extensions lowercase also matched files with no extension, so a file like LICENSE was renamed with a stray dot at the end.",
+      "changed": "The extension filter with no list now matches only files that have an extension.",
+      "matters": "People who copy the example rule from the docs no longer get broken file names."
+    }
+  ]
+}
