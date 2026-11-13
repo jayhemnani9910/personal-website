@@ -1,8 +1,16 @@
 {
   "repo": "wallabag/wallabag",
   "about": "A self-hosted app for saving web pages to read later.",
-  "stars": 13059,
+  "stars": 13060,
   "prs": [
+    {
+      "number": 9165,
+      "merged": "2026-11-13",
+      "title": "Chrome bookmark imports keep their real dates",
+      "broken": "Bookmarks imported from Chrome got dates about 11 years too early. A bookmark saved in 2023 showed up as 2012.",
+      "changed": "The import now reads Chrome's dates the way Chrome stores them, counting from the year 1601.",
+      "matters": "Imported bookmarks sort and show by the day they were really saved."
+    },
     {
       "number": 9166,
       "merged": "2026-11-12",

@@ -1,0 +1,15 @@
+{
+  "repo": "PHPOffice/PhpSpreadsheet",
+  "about": "A PHP library for reading and writing spreadsheet files like Excel.",
+  "stars": 14003,
+  "prs": [
+    {
+      "number": 5095,
+      "merged": "2026-11-13",
+      "title": "XLOOKUP returns a real #N/A when nothing matches",
+      "broken": "When XLOOKUP found nothing, it returned the text \"#N/A!\" instead of the error. ISNA and IFNA did not see it as an error.",
+      "changed": "It now returns the real #N/A error, as Excel does.",
+      "matters": "Formulas that catch a missing lookup with IFNA or ISNA work the same as in Excel."
+    }
+  ]
+}

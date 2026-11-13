@@ -1,0 +1,15 @@
+{
+  "repo": "maziggy/bambuddy",
+  "about": "A self-hosted control center for Bambu Lab 3D printers, from one printer to a whole farm.",
+  "stars": 3312,
+  "prs": [
+    {
+      "number": 3529,
+      "merged": "2026-11-13",
+      "title": "Spool import reads CSV files saved by European Excel",
+      "broken": "Excel in Germany, France and similar places saves CSV with \";\" between fields and \"24,99\" for prices. The spool import read nothing from those files.",
+      "changed": "The import now spots the \";\" separator from the header and reads decimal commas as numbers.",
+      "matters": "People outside English-speaking places can import their spool lists straight from Excel."
+    }
+  ]
+}

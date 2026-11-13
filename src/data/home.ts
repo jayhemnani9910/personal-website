@@ -718,6 +718,12 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "tfeldmann/organize", number: "#504", href: "https://github.com/tfeldmann/organize/pull/504" },
   { repo: "wallabag/wallabag", number: "#9166", href: "https://github.com/wallabag/wallabag/pull/9166" },
   { repo: "OpenListTeam/OpenList", number: "#3339", href: "https://github.com/OpenListTeam/OpenList/pull/3339" },
+  { repo: "Dolibarr/dolibarr", number: "#42965", href: "https://github.com/Dolibarr/dolibarr/pull/42965" },
+  { repo: "PHPOffice/PhpSpreadsheet", number: "#5095", href: "https://github.com/PHPOffice/PhpSpreadsheet/pull/5095" },
+  { repo: "adbar/trafilatura", number: "#1128", href: "https://github.com/adbar/trafilatura/pull/1128" },
+  { repo: "maziggy/bambuddy", number: "#3529", href: "https://github.com/maziggy/bambuddy/pull/3529" },
+  { repo: "maziggy/bambuddy-wiki", number: "#129", href: "https://github.com/maziggy/bambuddy-wiki/pull/129" },
+  { repo: "wallabag/wallabag", number: "#9165", href: "https://github.com/wallabag/wallabag/pull/9165" },
 ];
 
 /**

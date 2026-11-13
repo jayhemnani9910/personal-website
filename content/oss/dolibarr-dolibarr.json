@@ -1,0 +1,15 @@
+{
+  "repo": "Dolibarr/dolibarr",
+  "about": "An open source ERP and CRM for running a business: contacts, invoices, orders, stock and accounting.",
+  "stars": 7864,
+  "prs": [
+    {
+      "number": 42965,
+      "merged": "2026-11-13",
+      "title": "Month-end invoices name the right previous and next month",
+      "broken": "Invoices dated the 29th to 31st named the wrong month in their notes. An invoice on 31 March said the previous month was March, not February.",
+      "changed": "Adding or removing a month now stops at the end of the shorter month instead of spilling into the next one.",
+      "matters": "Recurring invoices made at month end show the right billing month on the PDF."
+    }
+  ]
+}
