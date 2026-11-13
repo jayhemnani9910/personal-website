@@ -724,6 +724,11 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "maziggy/bambuddy", number: "#3529", href: "https://github.com/maziggy/bambuddy/pull/3529" },
   { repo: "maziggy/bambuddy-wiki", number: "#129", href: "https://github.com/maziggy/bambuddy-wiki/pull/129" },
   { repo: "wallabag/wallabag", number: "#9165", href: "https://github.com/wallabag/wallabag/pull/9165" },
+  { repo: "apify/crawlee", number: "#4267", href: "https://github.com/apify/crawlee/pull/4267" },
+  { repo: "Automattic/harper", number: "#4874", href: "https://github.com/Automattic/harper/pull/4874" },
+  { repo: "dbcli/mycli", number: "#2430", href: "https://github.com/dbcli/mycli/pull/2430" },
+  { repo: "gabrie30/ghorg", number: "#713", href: "https://github.com/gabrie30/ghorg/pull/713" },
+  { repo: "piratuks/invoice-builder", number: "#347", href: "https://github.com/piratuks/invoice-builder/pull/347" },
 ];
 
 /**
