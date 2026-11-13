@@ -697,7 +697,6 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "bigcapitalhq/bigcapital", number: "#1610", href: "https://github.com/bigcapitalhq/bigcapital/pull/1610" },
   { repo: "callumalpass/tasknotes", number: "#2540", href: "https://github.com/callumalpass/tasknotes/pull/2540" },
   { repo: "dream-num/univer", number: "#8177", href: "https://github.com/dream-num/univer/pull/8177" },
-  { repo: "mayswind/ezbookkeeping", number: "#758", href: "https://github.com/mayswind/ezbookkeeping/pull/758" },
   { repo: "psf/black", number: "#5672", href: "https://github.com/psf/black/pull/5672" },
   { repo: "py-pdf/pypdf", number: "#4377", href: "https://github.com/py-pdf/pypdf/pull/4377" },
   { repo: "wavelog/wavelog", number: "#4108", href: "https://github.com/wavelog/wavelog/pull/4108" },
@@ -729,6 +728,7 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "dbcli/mycli", number: "#2430", href: "https://github.com/dbcli/mycli/pull/2430" },
   { repo: "gabrie30/ghorg", number: "#713", href: "https://github.com/gabrie30/ghorg/pull/713" },
   { repo: "piratuks/invoice-builder", number: "#347", href: "https://github.com/piratuks/invoice-builder/pull/347" },
+  { repo: "jealous/stockstats", number: "#225", href: "https://github.com/jealous/stockstats/pull/225" },
 ];
 
 /**
