@@ -9,7 +9,8 @@
       "title": "Word start and word end markers now work on their own",
       "broken": "The markers for the start and end of a word only worked when something else made the pattern a full search. On their own, sed looked for real angle brackets, unlike GNU sed.",
       "changed": "These two markers now always turn on full pattern search, like the other word boundary markers already did.",
-      "matters": "Find and replace with whole words gives the same result as GNU sed."
+      "matters": "Find and replace with whole words gives the same result as GNU sed.",
+      "top": true
     },
     {
       "number": 620,
@@ -17,7 +18,8 @@
       "title": "Two writes to the same file in one sed script now add up",
       "broken": "When two w commands named the same file, each opened and emptied it on its own, so their writes overwrote each other.",
       "changed": "Every command naming a file now shares one open copy, created once, like GNU sed.",
-      "matters": "Scripts that save lines to a file get every line, as with GNU sed."
+      "matters": "Scripts that save lines to a file get every line, as with GNU sed.",
+      "top": true
     },
     {
       "number": 621,
@@ -25,7 +27,16 @@
       "title": "Writing to /dev/stdout keeps output in order",
       "broken": "Writing changed lines to /dev/stdout put them after the rest of the output, and with output sent to a file the two overwrote each other.",
       "changed": "/dev/stdout now goes through sed's own output, as in GNU sed.",
-      "matters": "A common way to print changed lines works in scripts."
+      "matters": "A common way to print changed lines works in scripts.",
+      "top": true
+    },
+    {
+      "number": 613,
+      "merged": "2026-11-14",
+      "title": "sed matches the start and end of the whole buffer",
+      "broken": "GNU sed has two anchors for the very start and end of the text being edited. Here they were read as plain characters, so they never matched.",
+      "changed": "sed now treats them as the buffer anchors, also in multiline mode, as GNU sed does.",
+      "matters": "Scripts that edit multiline text with these anchors give the same result as GNU sed."
     }
   ]
 }

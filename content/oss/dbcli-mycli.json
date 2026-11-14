@@ -10,6 +10,14 @@
       "broken": "Feeding mycli a SQL file that changes the delimiter, as every database dump with a trigger or stored procedure does, failed at the first one and the rest never ran.",
       "changed": "mycli now handles the DELIMITER line the way the standard mysql client does.",
       "matters": "People can restore their database dumps with mycli."
+    },
+    {
+      "number": 2433,
+      "merged": "2026-11-14",
+      "title": "A use line without a semicolon no longer eats the next statement",
+      "broken": "Scripts often write use db without a semicolon, as the mysql client allows. Piped into mycli, that line swallowed the next statement and the run stopped with an unknown database error.",
+      "changed": "mycli now ends use and source lines at the newline, the same way the mysql client does.",
+      "matters": "SQL scripts written for the mysql client run the same in mycli."
     }
   ]
 }

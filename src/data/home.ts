@@ -738,6 +738,9 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "gamosoft/NoteDiscovery", number: "#343", href: "https://github.com/gamosoft/NoteDiscovery/pull/343" },
   { repo: "gamosoft/NoteDiscovery", number: "#344", href: "https://github.com/gamosoft/NoteDiscovery/pull/344" },
   { repo: "owntracks/recorder", number: "#587", href: "https://github.com/owntracks/recorder/pull/587" },
+  { repo: "dbcli/mycli", number: "#2433", href: "https://github.com/dbcli/mycli/pull/2433" },
+  { repo: "uutils/diffutils", number: "#314", href: "https://github.com/uutils/diffutils/pull/314" },
+  { repo: "uutils/sed", number: "#613", href: "https://github.com/uutils/sed/pull/613" },
 ];
 
 /**
