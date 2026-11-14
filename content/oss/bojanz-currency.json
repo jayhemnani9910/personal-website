@@ -1,0 +1,15 @@
+{
+  "repo": "bojanz/currency",
+  "about": "A Go library for handling money amounts and formatting them for each country and language.",
+  "stars": 644,
+  "prs": [
+    {
+      "number": 54,
+      "merged": "2026-11-14",
+      "title": "Norwegian prices format as Norwegian again",
+      "broken": "After a locale data update, amounts for Norwegian Bokmål came out in English style, like NOK 1,234.56 instead of 1 234,56 kr.",
+      "changed": "The library again knows that Bokmål uses the general Norwegian formatting rules, as it did in the previous release.",
+      "matters": "Shops and apps showing prices to Norwegian users get the right format back."
+    }
+  ]
+}
