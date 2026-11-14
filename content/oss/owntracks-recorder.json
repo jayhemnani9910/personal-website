@@ -1,0 +1,15 @@
+{
+  "repo": "owntracks/recorder",
+  "about": "A server that stores and shows the locations sent by the OwnTracks phone apps.",
+  "stars": 1224,
+  "prs": [
+    {
+      "number": 587,
+      "merged": "2026-11-14",
+      "title": "CSV exports keep every value in its own column",
+      "broken": "The CSV export took its header from the first location, so later rows with different fields shifted into the wrong columns.",
+      "changed": "The header now covers every field in the export, and each row fills its own columns, leaving blanks where a field is missing.",
+      "matters": "Location history exported to CSV opens correctly in spreadsheets."
+    }
+  ]
+}
