@@ -1,0 +1,15 @@
+{
+  "repo": "FOSSBilling/FOSSBilling",
+  "about": "A free billing and client management app for web hosting businesses.",
+  "stars": 1748,
+  "prs": [
+    {
+      "number": 4672,
+      "merged": "2026-11-14",
+      "title": "Monthly orders keep the right month",
+      "broken": "An order started on the 29th to 31st could expire in the wrong month. One placed on 31 January skipped February and then renewed on the 3rd.",
+      "changed": "Month and year periods now land on the last day of the target month when that month is shorter.",
+      "matters": "Customers are billed and renewed in the month they expect."
+    }
+  ]
+}

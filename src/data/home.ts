@@ -742,6 +742,10 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "uutils/diffutils", number: "#314", href: "https://github.com/uutils/diffutils/pull/314" },
   { repo: "uutils/sed", number: "#613", href: "https://github.com/uutils/sed/pull/613" },
   { repo: "bojanz/currency", number: "#54", href: "https://github.com/bojanz/currency/pull/54" },
+  { repo: "FOSSBilling/FOSSBilling", number: "#4672", href: "https://github.com/FOSSBilling/FOSSBilling/pull/4672" },
+  { repo: "Prowlarr/Prowlarr", number: "#2897", href: "https://github.com/Prowlarr/Prowlarr/pull/2897" },
+  { repo: "Radarr/Radarr", number: "#12091", href: "https://github.com/Radarr/Radarr/pull/12091" },
+  { repo: "hairyhenderson/gomplate", number: "#2961", href: "https://github.com/hairyhenderson/gomplate/pull/2961" },
 ];
 
 /**

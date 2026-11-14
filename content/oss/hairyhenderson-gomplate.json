@@ -1,0 +1,15 @@
+{
+  "repo": "hairyhenderson/gomplate",
+  "about": "A command-line tool that fills in text templates with data from files and online sources.",
+  "stars": 3219,
+  "prs": [
+    {
+      "number": 2961,
+      "merged": "2026-11-14",
+      "title": "Sort works on lists with decimals",
+      "broken": "Sorting a list of numbers that had both whole numbers and decimals returned it unsorted, which hit any JSON or YAML list with a decimal in it.",
+      "changed": "Lists of numbers now sort by value, whatever mix they hold.",
+      "matters": "Templates that sort prices or other numbers give the right order."
+    }
+  ]
+}
