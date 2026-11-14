@@ -741,6 +741,7 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "dbcli/mycli", number: "#2433", href: "https://github.com/dbcli/mycli/pull/2433" },
   { repo: "uutils/diffutils", number: "#314", href: "https://github.com/uutils/diffutils/pull/314" },
   { repo: "uutils/sed", number: "#613", href: "https://github.com/uutils/sed/pull/613" },
+  { repo: "bojanz/currency", number: "#54", href: "https://github.com/bojanz/currency/pull/54" },
 ];
 
 /**
