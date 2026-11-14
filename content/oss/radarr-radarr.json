@@ -4,6 +4,14 @@
   "stars": 14752,
   "prs": [
     {
+      "number": 12091,
+      "merged": "2026-11-14",
+      "title": "Search matches movies by IMDb ID",
+      "broken": "When a release's year did not match the movie, the IMDb ID fallback never matched, so good releases were rejected as an unknown movie.",
+      "changed": "The fallback now writes both IDs the same way before comparing them.",
+      "matters": "Foreign and anime films with a festival year are found by search again."
+    },
+    {
       "number": 12074,
       "merged": "2026-11-11",
       "title": "One bad release no longer breaks a whole movie search",

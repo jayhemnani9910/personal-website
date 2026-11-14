@@ -4,6 +4,14 @@
   "stars": 7517,
   "prs": [
     {
+      "number": 2897,
+      "merged": "2026-11-14",
+      "title": "Clear message when qBittorrent already has a release",
+      "broken": "Grabbing a release qBittorrent already had showed a connection error, telling people to check settings that were fine.",
+      "changed": "That case is now reported as a rejected grab, with qBittorrent's own reason.",
+      "matters": "People are not sent chasing a settings problem that does not exist."
+    },
+    {
       "number": 2893,
       "merged": "2026-11-06",
       "title": "API keys stay out of the logs",
