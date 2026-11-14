@@ -37,6 +37,14 @@
       "broken": "With bytes skipped at the start, cmp -l padded each offset as if nothing had been skipped, so the columns came out wider than GNU cmp's.",
       "changed": "The column width now comes from the bytes actually left to compare, after the skips.",
       "matters": "Scripts that read cmp -l output get the same text as with GNU cmp."
+    },
+    {
+      "number": 314,
+      "merged": "2026-11-14",
+      "title": "diff accepts --label to name its inputs",
+      "broken": "diff -L or --label was rejected as an unknown option. Git diff drivers, test scripts and patch tools that compare temp files depend on it.",
+      "changed": "diff now takes up to two labels and prints them in the headers instead of the file names, as GNU diff does.",
+      "matters": "Tools that build patches from temp files work with this diff."
     }
   ]
 }
