@@ -1,0 +1,15 @@
+{
+  "repo": "dmellok/tesserae",
+  "about": "A dashboard maker for e-ink screens: build it in a browser and push it to the panel.",
+  "stars": 1220,
+  "prs": [
+    {
+      "number": 500,
+      "merged": "2026-11-13",
+      "title": "Calendar events without a time zone show at the right hour",
+      "broken": "Calendar events saved without a time zone were read as UTC, so a 9:00 meeting showed at 4:00 in New York, sometimes on the wrong day.",
+      "changed": "Those times are now read in the dashboard's own time zone, as the calendar standard says. Events with a zone are unchanged.",
+      "matters": "Meetings from common calendar exports show at the time people expect."
+    }
+  ]
+}

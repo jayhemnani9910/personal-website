@@ -9,7 +9,8 @@
       "title": "Importing a recipe without servings no longer fails",
       "broken": "Importing a recipe from a site that lists no servings returned a server error, and nothing was imported.",
       "changed": "A missing optional field is now skipped, so the rest of the recipe is kept and servings stays empty.",
-      "matters": "Recipes from more sites can be imported instead of failing outright."
+      "matters": "Recipes from more sites can be imported instead of failing outright.",
+      "top": true
     },
     {
       "number": 1197,
@@ -17,7 +18,8 @@
       "title": "Selected filter chips stay first on the web app",
       "broken": "On the web version, a selected tag jumped to the end of the row and out of view. Phones and desktop kept it first.",
       "changed": "The sort now uses an explicit order that comes out the same on every platform. Expense categories got the same fix.",
-      "matters": "People on the web app can see which filters are on without scrolling."
+      "matters": "People on the web app can see which filters are on without scrolling.",
+      "top": true
     },
     {
       "number": 1217,
@@ -25,7 +27,16 @@
       "title": "Expense overview works on PostgreSQL",
       "broken": "On PostgreSQL, the balances overview page failed with a server error because the database saw the day grouping as two different expressions.",
       "changed": "The day expression is built once and used in both places of the query.",
-      "matters": "Households running KitchenOwl on PostgreSQL can see their expense overview again."
+      "matters": "Households running KitchenOwl on PostgreSQL can see their expense overview again.",
+      "top": true
+    },
+    {
+      "number": 1222,
+      "merged": "2026-11-13",
+      "title": "Weekly expense overview starts on the right Monday",
+      "broken": "On a Monday, the weekly overview showed last week as this week, every older week a week late, and that day's expenses nowhere.",
+      "changed": "The week now starts on the current Monday, counting today when today is a Monday.",
+      "matters": "People checking their spending at the start of the week see the right totals."
     }
   ]
 }
