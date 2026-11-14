@@ -9,7 +9,8 @@
       "title": "Shared download links keep the file name and type they ask for",
       "broken": "A shared Blob link can ask for its own file name or file type on download. The emulator accepted the link but sent the stored values, so the file name was lost.",
       "changed": "When a valid link asks for those values, downloads and property reads now return them in place of the stored ones.",
-      "matters": "Apps that hand out download links behave the same on the emulator as on real Azure."
+      "matters": "Apps that hand out download links behave the same on the emulator as on real Azure.",
+      "top": true
     },
     {
       "number": 647,
@@ -17,7 +18,25 @@
       "title": "Queue messages come back in the order they were sent",
       "broken": "The emulator handed queue messages back in whatever order its store listed them, so even one sender saw them shuffled.",
       "changed": "Messages are now sorted by the order they were sent before they are returned.",
-      "matters": "Apps that rely on queue order behave the same on the emulator as they expect on real Azure."
+      "matters": "Apps that rely on queue order behave the same on the emulator as they expect on real Azure.",
+      "top": true
+    },
+    {
+      "number": 646,
+      "merged": "2026-11-14",
+      "title": "Storage accounts keep the settings they were created with",
+      "broken": "Reading a storage account back returned default settings instead of the ones it was created with, so Terraform kept planning to replace it.",
+      "changed": "The account now returns the type, kind and properties that were set, with read-only fields still computed.",
+      "matters": "Terraform runs against the emulator settle instead of recreating accounts every time.",
+      "top": true
+    },
+    {
+      "number": 654,
+      "merged": "2026-11-14",
+      "title": "Blob properties can be updated",
+      "broken": "Updating a blob's content type or cache headers returned \"not implemented\", so common SDK and CLI calls failed.",
+      "changed": "The emulator now supports this call: it replaces the headers, keeps the data and metadata, and respects leases.",
+      "matters": "Apps and scripts that set blob headers can be tested locally."
     }
   ]
 }

@@ -732,6 +732,12 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "TagStudioDev/TagStudio", number: "#1568", href: "https://github.com/TagStudioDev/TagStudio/pull/1568" },
   { repo: "TomBursch/kitchenowl", number: "#1222", href: "https://github.com/TomBursch/kitchenowl/pull/1222" },
   { repo: "dmellok/tesserae", number: "#500", href: "https://github.com/dmellok/tesserae/pull/500" },
+  { repo: "asticode/go-astisub", number: "#155", href: "https://github.com/asticode/go-astisub/pull/155" },
+  { repo: "floci-io/floci-az", number: "#646", href: "https://github.com/floci-io/floci-az/pull/646" },
+  { repo: "floci-io/floci-az", number: "#654", href: "https://github.com/floci-io/floci-az/pull/654" },
+  { repo: "gamosoft/NoteDiscovery", number: "#343", href: "https://github.com/gamosoft/NoteDiscovery/pull/343" },
+  { repo: "gamosoft/NoteDiscovery", number: "#344", href: "https://github.com/gamosoft/NoteDiscovery/pull/344" },
+  { repo: "owntracks/recorder", number: "#587", href: "https://github.com/owntracks/recorder/pull/587" },
 ];
 
 /**

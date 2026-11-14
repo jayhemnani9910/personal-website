@@ -37,6 +37,14 @@
       "broken": "The SSA and ASS writer used a soft line break, which players show as a space, so every two-line subtitle played on one line.",
       "changed": "The writer now uses the hard line break.",
       "matters": "Subtitles converted to ASS look the same in mpv, VLC and ffmpeg as in the source."
+    },
+    {
+      "number": 155,
+      "merged": "2026-11-14",
+      "title": "Styled subtitle lines keep their spacing in SSA/ASS",
+      "broken": "Converting subtitles with italic or bold words to SSA/ASS added stray spaces, so \"Hello world!\" came out as \"Hello  world !\".",
+      "changed": "The pieces of a line are now joined as they are, the way the other formats already did.",
+      "matters": "Converted subtitles read normally instead of showing odd gaps around styled words."
     }
   ]
 }

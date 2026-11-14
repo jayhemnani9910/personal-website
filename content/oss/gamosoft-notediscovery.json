@@ -1,0 +1,23 @@
+{
+  "repo": "gamosoft/NoteDiscovery",
+  "about": "A self-hosted notes app that keeps notes as plain Markdown files.",
+  "stars": 2879,
+  "prs": [
+    {
+      "number": 343,
+      "merged": "2026-11-14",
+      "title": "Quoted tags count as the same tag",
+      "broken": "Tags written with quotes kept the quotes, so the same tag showed up twice and the tag filter missed notes.",
+      "changed": "One pair of quotes is now removed from each tag, on the server and in the browser.",
+      "matters": "Vaults brought in from other tools, which often quote tags, filter correctly."
+    },
+    {
+      "number": 344,
+      "merged": "2026-11-14",
+      "title": "The graph shows links to notes created later",
+      "broken": "A link to a note that didn't exist yet never showed in the graph after the note was created, until a restart.",
+      "changed": "Creating a note now resolves links that other notes already have to it.",
+      "matters": "Clicking a missing link to create the note shows the connection in the graph right away."
+    }
+  ]
+}
