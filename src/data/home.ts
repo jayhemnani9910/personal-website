@@ -729,6 +729,9 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "gabrie30/ghorg", number: "#713", href: "https://github.com/gabrie30/ghorg/pull/713" },
   { repo: "piratuks/invoice-builder", number: "#347", href: "https://github.com/piratuks/invoice-builder/pull/347" },
   { repo: "jealous/stockstats", number: "#225", href: "https://github.com/jealous/stockstats/pull/225" },
+  { repo: "TagStudioDev/TagStudio", number: "#1568", href: "https://github.com/TagStudioDev/TagStudio/pull/1568" },
+  { repo: "TomBursch/kitchenowl", number: "#1222", href: "https://github.com/TomBursch/kitchenowl/pull/1222" },
+  { repo: "dmellok/tesserae", number: "#500", href: "https://github.com/dmellok/tesserae/pull/500" },
 ];
 
 /**

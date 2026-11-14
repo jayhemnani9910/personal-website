@@ -1,0 +1,15 @@
+{
+  "repo": "TagStudioDev/TagStudio",
+  "about": "A photo and file manager that organizes files with tags instead of folders.",
+  "stars": 7291,
+  "prs": [
+    {
+      "number": 1568,
+      "merged": "2026-11-13",
+      "title": "Search filters apply only to their own word",
+      "broken": "A filter like filetype:jpeg also applied to the words after it, so \"filetype:jpeg vacation\" found nothing and some exclusions stopped working.",
+      "changed": "A word without a filter is always a tag search again, whatever comes before it.",
+      "matters": "Searches give the same results no matter the order the words are typed in."
+    }
+  ]
+}
