@@ -1,0 +1,15 @@
+{
+  "repo": "superfly/flyctl",
+  "about": "The command line tool for deploying and running apps on Fly.io.",
+  "stars": 1720,
+  "prs": [
+    {
+      "number": 5452,
+      "merged": "2026-11-14",
+      "title": "Machines made through the AI tools get the right settings",
+      "broken": "Creating or running a Fly Machine through flyctl's AI assistant tools gave it the wrong start command and the wrong auto-stop setting.",
+      "changed": "The auto-stop option is now passed in a form the command line reads as one setting.",
+      "matters": "Machines started by AI assistants run the command the user asked for and stop the way they expect."
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "repo": "Part-DB/Part-DB-server",
+  "about": "An open source inventory system for electronic parts, run on your own server.",
+  "stars": 1850,
+  "prs": [
+    {
+      "number": 1643,
+      "merged": "2026-11-14",
+      "title": "Parts exported from Part-DB import back in",
+      "broken": "Importing a parts file that Part-DB had exported itself failed with a server error when a supplier had no shipping cost, and nothing was imported.",
+      "changed": "An empty number cell in an import file is now read as no value instead of crashing.",
+      "matters": "People can move or restore their parts list with Part-DB's own export and import."
+    }
+  ]
+}

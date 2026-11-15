@@ -37,6 +37,14 @@
       "broken": "GNU sed has two anchors for the very start and end of the text being edited. Here they were read as plain characters, so they never matched.",
       "changed": "sed now treats them as the buffer anchors, also in multiline mode, as GNU sed does.",
       "matters": "Scripts that edit multiline text with these anchors give the same result as GNU sed."
+    },
+    {
+      "number": 624,
+      "merged": "2026-11-14",
+      "title": "sed accepts a space after the y command",
+      "broken": "A space between the y command and a following ; or comment made sed reject the whole script, while GNU sed runs it.",
+      "changed": "The y command now skips spaces before its end, like every other command.",
+      "matters": "Existing sed scripts written for GNU run without changes."
     }
   ]
 }

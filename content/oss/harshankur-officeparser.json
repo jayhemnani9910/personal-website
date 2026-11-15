@@ -1,0 +1,23 @@
+{
+  "repo": "harshankur/officeParser",
+  "about": "A JavaScript library that reads Word, Excel, PowerPoint and PDF files and pulls out their text.",
+  "stars": 569,
+  "prs": [
+    {
+      "number": 146,
+      "merged": "2026-11-14",
+      "title": "Formula results in Excel show the & sign as written",
+      "broken": "Text produced by a formula in an Excel sheet came out with codes like &amp; instead of the & sign, while other cells were fine.",
+      "changed": "Formula text results are now decoded the same way as other cell text.",
+      "matters": "Text pulled from spreadsheets, like a company name AT&T, now reads correctly."
+    },
+    {
+      "number": 147,
+      "merged": "2026-11-14",
+      "title": "Excel files made by .NET tools are read",
+      "broken": "Excel files written by Microsoft's .NET Open XML toolkit came back as one empty sheet, with no warning.",
+      "changed": "The parser now understands the naming style these files use and reads their sheets, rows and text.",
+      "matters": "Spreadsheets produced by many business apps no longer turn up empty."
+    }
+  ]
+}
