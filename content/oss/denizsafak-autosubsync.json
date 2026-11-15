@@ -1,0 +1,23 @@
+{
+  "repo": "denizsafak/AutoSubSync",
+  "about": "A desktop tool that lines up subtitles with the video they belong to.",
+  "stars": 1249,
+  "prs": [
+    {
+      "number": 104,
+      "merged": "2026-11-15",
+      "title": "Batch mode pairs each episode with its own subtitle",
+      "broken": "When one subtitle was missing in a folder of episodes, each later episode was matched with the next episode's subtitle, then synced and saved.",
+      "changed": "Episode numbers in file names are no longer mistaken for language tags when pairing files.",
+      "matters": "A whole season no longer ends up with every subtitle on the wrong episode."
+    },
+    {
+      "number": 105,
+      "merged": "2026-11-15",
+      "title": "Short WebVTT subtitles are no longer lost",
+      "broken": "Subtitle times without hours, which Whisper writes for videos under an hour, were skipped: shifting left them unmoved and converting to SRT gave an empty file.",
+      "changed": "These short times are now read, shifted and converted like full ones.",
+      "matters": "Subtitles made by Whisper sync and convert correctly."
+    }
+  ]
+}

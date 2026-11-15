@@ -1,0 +1,15 @@
+{
+  "repo": "mini-software/MiniExcel",
+  "about": "A fast .NET library for reading and writing Excel files with little memory.",
+  "stars": 3661,
+  "prs": [
+    {
+      "number": 1044,
+      "merged": "2026-11-15",
+      "title": "Durations from Excel keep their whole seconds",
+      "broken": "Time lengths read from Excel often came back a hair short, so 11 seconds showed as 10. In one test sheet 1541 of 5600 durations were off.",
+      "changed": "Durations are now rounded to milliseconds, the same way dates already were.",
+      "matters": "Reports and imports show the same times Excel shows."
+    }
+  ]
+}

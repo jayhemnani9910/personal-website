@@ -37,6 +37,22 @@
       "broken": "\"7:45 tonight\" came back as a quarter to eight in the morning, and \"8 tonight\" came back with no time at all.",
       "changed": "A time written before tonight, this evening or tomorrow night is now read as an evening time.",
       "matters": "\"Meet me at 7:45 tonight\" no longer lands twelve hours early."
+    },
+    {
+      "number": 1271,
+      "merged": "2026-11-14",
+      "title": "Wake turns into woke, not waked",
+      "broken": "Putting \"I wake up at 7\" in the past tense gave \"I waked up at 7\".",
+      "changed": "The duplicate old form was removed from the word list, so the past tense is woke and the participle is woken.",
+      "matters": "Text rewritten by the library uses the form people actually say."
+    },
+    {
+      "number": 1272,
+      "merged": "2026-11-14",
+      "title": "Rhyming and soothing are spelled right",
+      "broken": "Turning some verbs into their -ing form kept a silent e or doubled a letter, giving words like \"rhymeing\", \"sootheing\" and \"bangging\".",
+      "changed": "Ten verbs got their correct forms added, which also fixes others like bathe and clothe. No verb that was right before changed.",
+      "matters": "Apps that rewrite sentences no longer produce misspelled words."
     }
   ]
 }

@@ -746,6 +746,20 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "Prowlarr/Prowlarr", number: "#2897", href: "https://github.com/Prowlarr/Prowlarr/pull/2897" },
   { repo: "Radarr/Radarr", number: "#12091", href: "https://github.com/Radarr/Radarr/pull/12091" },
   { repo: "hairyhenderson/gomplate", number: "#2961", href: "https://github.com/hairyhenderson/gomplate/pull/2961" },
+  { repo: "Part-DB/Part-DB-server", number: "#1643", href: "https://github.com/Part-DB/Part-DB-server/pull/1643" },
+  { repo: "commenthol/date-holidays", number: "#715", href: "https://github.com/commenthol/date-holidays/pull/715" },
+  { repo: "harshankur/officeParser", number: "#146", href: "https://github.com/harshankur/officeParser/pull/146" },
+  { repo: "harshankur/officeParser", number: "#147", href: "https://github.com/harshankur/officeParser/pull/147" },
+  { repo: "oss-apps/split-pro", number: "#806", href: "https://github.com/oss-apps/split-pro/pull/806" },
+  { repo: "spencermountain/compromise", number: "#1271", href: "https://github.com/spencermountain/compromise/pull/1271" },
+  { repo: "spencermountain/compromise", number: "#1272", href: "https://github.com/spencermountain/compromise/pull/1272" },
+  { repo: "superfly/flyctl", number: "#5452", href: "https://github.com/superfly/flyctl/pull/5452" },
+  { repo: "uutils/coreutils", number: "#15712", href: "https://github.com/uutils/coreutils/pull/15712" },
+  { repo: "uutils/coreutils", number: "#16236", href: "https://github.com/uutils/coreutils/pull/16236" },
+  { repo: "uutils/sed", number: "#624", href: "https://github.com/uutils/sed/pull/624" },
+  { repo: "denizsafak/AutoSubSync", number: "#104", href: "https://github.com/denizsafak/AutoSubSync/pull/104" },
+  { repo: "denizsafak/AutoSubSync", number: "#105", href: "https://github.com/denizsafak/AutoSubSync/pull/105" },
+  { repo: "mini-software/MiniExcel", number: "#1044", href: "https://github.com/mini-software/MiniExcel/pull/1044" },
 ];
 
 /**

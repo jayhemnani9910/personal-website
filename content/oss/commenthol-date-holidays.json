@@ -1,0 +1,15 @@
+{
+  "repo": "commenthol/date-holidays",
+  "about": "A JavaScript library that knows the public holidays of countries around the world.",
+  "stars": 1122,
+  "prs": [
+    {
+      "number": 715,
+      "merged": "2026-11-14",
+      "title": "Korean New Year holiday starts on the right day",
+      "broken": "The three-day Seollal holiday in South Korea started one day late every year, so the day before the lunar new year counted as a work day.",
+      "changed": "The holiday now starts the day before the lunar new year, matching the official Korean calendar for 2020 to 2030.",
+      "matters": "Calendars and scheduling apps using this library now show the real days off in South Korea."
+    }
+  ]
+}

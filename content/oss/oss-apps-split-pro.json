@@ -1,0 +1,15 @@
+{
+  "repo": "oss-apps/split-pro",
+  "about": "An open source app for splitting shared bills with friends, like Splitwise.",
+  "stars": 1492,
+  "prs": [
+    {
+      "number": 806,
+      "merged": "2026-11-14",
+      "title": "Splitwise import keeps who owes whom",
+      "broken": "Importing balances from Splitwise dropped the minus sign, so money you owed a friend was imported as money they owed you.",
+      "changed": "Balances are now read with their sign, so debts come across in the right direction.",
+      "matters": "People switching from Splitwise start with correct balances instead of flipped debts."
+    }
+  ]
+}

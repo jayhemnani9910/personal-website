@@ -9,7 +9,8 @@
       "title": "pr keeps the column separator when joining lines",
       "broken": "With the option that joins full lines, pr dropped the separator between columns and between merged files, so the columns ran into each other. GNU pr keeps it.",
       "changed": "pr now writes the separator in that mode like in every other mode, and a test file that had the glued output was corrected.",
-      "matters": "Multi-column and merged output stays readable, the same as GNU pr."
+      "matters": "Multi-column and merged output stays readable, the same as GNU pr.",
+      "top": true
     },
     {
       "number": 15673,
@@ -17,7 +18,8 @@
       "title": "pr stops merged output after the last line",
       "broken": "When merging files with no page footer, pr filled the rest of the page with blank lines. Two short lines came out as 56, where GNU pr prints 2.",
       "changed": "pr now stops once every file has run out, unless a footer needs the page filled.",
-      "matters": "Merged output is the same length as GNU pr, with no pages of blank lines."
+      "matters": "Merged output is the same length as GNU pr, with no pages of blank lines.",
+      "top": true
     },
     {
       "number": 15672,
@@ -25,7 +27,24 @@
       "title": "numfmt refuses suffixed numbers too large to print",
       "broken": "In the Rust numfmt, a huge number written with a suffix, like 1Y, printed a rounded and wrong value instead of failing.",
       "changed": "It now stops with the same error as GNU, and the message follows GNU's wording.",
-      "matters": "Scripts that convert sizes get an error, not a silently wrong number."
+      "matters": "Scripts that convert sizes get an error, not a silently wrong number.",
+      "top": true
+    },
+    {
+      "number": 15712,
+      "merged": "2026-11-14",
+      "title": "fmt wraps a one-line tagged paragraph like GNU",
+      "broken": "With the tagged paragraph option, a single long line that wrapped got a different indent on its following lines than GNU fmt gives.",
+      "changed": "The following lines now get the same indent GNU uses, including when a prefix is set.",
+      "matters": "Scripts that format text with fmt get the same output as on a GNU system."
+    },
+    {
+      "number": 16236,
+      "merged": "2026-11-14",
+      "title": "pr uses your separator when merging files",
+      "broken": "Merging files side by side with pr ignored the chosen separator and width, always padding columns and joining them with a tab.",
+      "changed": "Merge mode now uses the separator and width options the way GNU pr does.",
+      "matters": "A common way to join files line by line, like with a comma, works again."
     }
   ]
 }
