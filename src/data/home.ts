@@ -760,6 +760,7 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "denizsafak/AutoSubSync", number: "#104", href: "https://github.com/denizsafak/AutoSubSync/pull/104" },
   { repo: "denizsafak/AutoSubSync", number: "#105", href: "https://github.com/denizsafak/AutoSubSync/pull/105" },
   { repo: "mini-software/MiniExcel", number: "#1044", href: "https://github.com/mini-software/MiniExcel/pull/1044" },
+  { repo: "casdoor/casdoor", number: "#6092", href: "https://github.com/casdoor/casdoor/pull/6092" },
 ];
 
 /**
