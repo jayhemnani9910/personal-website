@@ -85,6 +85,14 @@
       "broken": "An app created through dynamic client registration copied most settings from the organization's default app, but not its signing certificate, so other services rejected its tokens.",
       "changed": "New apps now take the certificate of the organization's default app too.",
       "matters": "Clients that register themselves get tokens the rest of the organization trusts."
+    },
+    {
+      "number": 6092,
+      "merged": "2026-11-15",
+      "title": "Signing in through LDAP with an email address now works",
+      "broken": "The LDAP server took the first uid or cn it saw in a search filter as the exact username, so searches like \"username or email\" found nobody and users who typed their email could not log in.",
+      "changed": "It now reads the parsed filter and only treats a plain uid or cn match as a username; everything else goes through the existing safe search.",
+      "matters": "Apps that let users sign in through Casdoor's LDAP with either a username or an email now find the right user."
     }
   ]
 }
