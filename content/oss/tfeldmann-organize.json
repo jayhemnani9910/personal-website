@@ -10,6 +10,22 @@
       "broken": "The documented rule for making file extensions lowercase also matched files with no extension, so a file like LICENSE was renamed with a stray dot at the end.",
       "changed": "The extension filter with no list now matches only files that have an extension.",
       "matters": "People who copy the example rule from the docs no longer get broken file names."
+    },
+    {
+      "number": 505,
+      "merged": "2026-11-15",
+      "title": "Two documentation examples work as written",
+      "broken": "One example rule failed on every file with an error, and the keep-folder-structure examples put each file inside a folder named after itself.",
+      "changed": "Both examples are corrected and give the documented results.",
+      "matters": "People who copy rules from the docs get working renames and moves."
+    },
+    {
+      "number": 506,
+      "merged": "2026-11-15",
+      "title": "The duplicate finder catches copies it used to miss",
+      "broken": "When an unrelated file of the same size and with the same start was seen first, real copies of a later file were not reported as duplicates.",
+      "changed": "Each file's fingerprint is now remembered even when it has no match yet, so later copies find it.",
+      "matters": "Cleaning up duplicate scans or images no longer leaves copies behind."
     }
   ]
 }

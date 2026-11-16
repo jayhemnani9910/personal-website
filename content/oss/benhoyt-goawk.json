@@ -1,0 +1,15 @@
+{
+  "repo": "benhoyt/goawk",
+  "about": "An AWK interpreter written in Go, with built-in support for CSV files.",
+  "stars": 2072,
+  "prs": [
+    {
+      "number": 312,
+      "merged": "2026-11-15",
+      "title": "CSV header mode reads Excel CSV files again",
+      "broken": "With the CSV header option, a small file saved from Excel as CSV UTF-8 gave no rows at all, because of a hidden mark at its start.",
+      "changed": "The CSV reader now keeps going after skipping that mark and the header, so the rows after them are read.",
+      "matters": "Scripts that process spreadsheet exports get their data instead of an empty result."
+    }
+  ]
+}

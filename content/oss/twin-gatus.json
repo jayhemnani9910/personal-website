@@ -1,0 +1,15 @@
+{
+  "repo": "TwiN/gatus",
+  "about": "A self-hosted status page that checks websites and services and sends alerts when they go down.",
+  "stars": 12791,
+  "prs": [
+    {
+      "number": 1941,
+      "merged": "2026-11-15",
+      "title": "Checks on large numbers in a response compare correctly",
+      "broken": "A check that a number in the response equals 1234567 always failed, because numbers of a million or more were turned into scientific notation and no longer matched.",
+      "changed": "Numbers from the response are now written out in full, and decimals stay as they were.",
+      "matters": "Status pages stop reporting healthy services as down when they check big counts or IDs."
+    }
+  ]
+}

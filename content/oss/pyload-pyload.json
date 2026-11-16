@@ -1,0 +1,15 @@
+{
+  "repo": "pyload/pyload",
+  "about": "A free download manager written in Python and run from a web page.",
+  "stars": 3912,
+  "prs": [
+    {
+      "number": 4800,
+      "merged": "2026-11-15",
+      "title": "Checksum checks finish instead of hanging forever",
+      "broken": "With the checksum add-on on, any download that came with an SFV or CRC file never finished, and pyLoad kept a processor core busy until killed.",
+      "changed": "The check now stops at the end of the file, so it completes and reports the result.",
+      "matters": "Downloads get verified and finish, and the machine is not tied up."
+    }
+  ]
+}

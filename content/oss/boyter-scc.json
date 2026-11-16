@@ -37,6 +37,14 @@
       "broken": "The reports built from git history counted files a normal run leaves out, like lock files, and ignored the exclude options. One big lock file could crown its committer the main author.",
       "changed": "The history reports now use the same file rules and exclude options as a plain run.",
       "matters": "Author, timeline and hotspot reports match the normal line counts and reflect real code."
+    },
+    {
+      "number": 825,
+      "merged": "2026-11-15",
+      "title": "TypeScript files that build XML count as TypeScript",
+      "broken": "Any TypeScript file containing an XML header, like code that builds a sitemap or RSS feed, was counted as a Qt translation file instead.",
+      "changed": "Only files with the real Qt translation markers are counted as Qt translation files now.",
+      "matters": "TypeScript projects get correct language totals."
     }
   ]
 }

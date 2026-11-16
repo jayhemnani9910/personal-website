@@ -1,0 +1,15 @@
+{
+  "repo": "hhursev/recipe-scrapers",
+  "about": "A Python library that pulls recipes, ingredients and servings out of cooking websites.",
+  "stars": 2266,
+  "prs": [
+    {
+      "number": 2093,
+      "merged": "2026-11-15",
+      "title": "Yields like 4 dozen cookies keep the dozen",
+      "broken": "A recipe yield of 4 dozen cookies came back as 4 cookies, losing the dozen.",
+      "changed": "Dozen is now kept as the unit whenever it appears, as the documentation already promised.",
+      "matters": "Recipe apps that scale by servings are no longer twelve times off for cookies and muffins."
+    }
+  ]
+}

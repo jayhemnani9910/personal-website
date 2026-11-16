@@ -1,0 +1,15 @@
+{
+  "repo": "qax-os/excelize",
+  "about": "A Go library for reading and writing Excel spreadsheets.",
+  "stars": 21137,
+  "prs": [
+    {
+      "number": 2482,
+      "merged": "2026-11-16",
+      "title": "Edits after saving a new sheet land in the right cells",
+      "broken": "After saving a file with a new or copied sheet, later edits and formulas on that sheet could go to the wrong cells, with no error.",
+      "changed": "Each sheet is now reloaded in full after it is saved, so its rows and cells stay where they belong.",
+      "matters": "Programs that save a report and keep editing it no longer corrupt the data."
+    }
+  ]
+}

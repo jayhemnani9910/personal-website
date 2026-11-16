@@ -1,0 +1,15 @@
+{
+  "repo": "rsheftel/pandas_market_calendars",
+  "about": "A Python library with trading days and hours for stock exchanges around the world.",
+  "stars": 1010,
+  "prs": [
+    {
+      "number": 528,
+      "merged": "2026-11-15",
+      "title": "Hong Kong half days close at noon",
+      "broken": "The Hong Kong exchange closes at noon on the eves of Christmas, New Year and Lunar New Year, but the calendar showed a normal 4 pm close.",
+      "changed": "Those half days now close at 12:00, matching the exchange's published hours.",
+      "matters": "Trading tools and backtests stop expecting an afternoon session that does not happen."
+    }
+  ]
+}
