@@ -10,6 +10,14 @@
       "broken": "After a locale data update, amounts for Norwegian Bokmål came out in English style, like NOK 1,234.56 instead of 1 234,56 kr.",
       "changed": "The library again knows that Bokmål uses the general Norwegian formatting rules, as it did in the previous release.",
       "matters": "Shops and apps showing prices to Norwegian users get the right format back."
+    },
+    {
+      "number": 56,
+      "merged": "2026-11-15",
+      "title": "US dollars no longer look like pesos in Mexican Spanish",
+      "broken": "In Mexican Spanish and a few other locales, US dollars and the local currency both showed as $, so a dollar price read as pesos.",
+      "changed": "Any locale whose own currency also uses $ now shows US dollars as US$.",
+      "matters": "Shoppers can tell which currency a price is in."
     }
   ]
 }

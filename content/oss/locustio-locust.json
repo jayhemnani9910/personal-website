@@ -1,0 +1,15 @@
+{
+  "repo": "locustio/locust",
+  "about": "A tool for load testing websites and services, with tests written in plain Python.",
+  "stars": 28288,
+  "prs": [
+    {
+      "number": 3606,
+      "merged": "2026-11-15",
+      "title": "CSV results include the end of the test run",
+      "broken": "After a test run, the CSV result files missed the last few seconds, so their totals were lower than the printed summary and the JSON report.",
+      "changed": "The CSV files are now written one last time when the run shuts down.",
+      "matters": "Results saved for reports or comparisons match what the test really did."
+    }
+  ]
+}

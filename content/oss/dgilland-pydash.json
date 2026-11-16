@@ -1,0 +1,15 @@
+{
+  "repo": "dgilland/pydash",
+  "about": "A Python library of small helper functions for lists, dicts and text, modelled on Lodash.",
+  "stars": 1450,
+  "prs": [
+    {
+      "number": 459,
+      "merged": "2026-11-15",
+      "title": "Slugs keep letters like ß, æ, ø and Ł",
+      "broken": "Making a web address slug deleted letters with no simple accent form, so Straße became strae and Łódź became odz.",
+      "changed": "Those letters are now turned into plain ones first, so the slugs read strasse and lodz.",
+      "matters": "Sites in German, Danish, Polish and other languages get readable web addresses."
+    }
+  ]
+}

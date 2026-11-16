@@ -45,6 +45,14 @@
       "broken": "With nearest rounding, a time entry exactly halfway rounded to the even step, so a 15 minute task on 30 minute rounding was stored as zero.",
       "changed": "Halves now always round up.",
       "matters": "Short tasks are no longer lost from timesheets and invoices."
+    },
+    {
+      "number": 877,
+      "merged": "2026-11-15",
+      "title": "CSV imports work when the file was saved from Excel",
+      "broken": "Saving the import template from Excel as CSV UTF-8, which is needed for names with accents, added a hidden mark at the start. Every row then failed to import.",
+      "changed": "Project and client imports now ignore that hidden mark, as the bank statement import already did.",
+      "matters": "People can fill in the template in Excel and import it without errors."
     }
   ]
 }

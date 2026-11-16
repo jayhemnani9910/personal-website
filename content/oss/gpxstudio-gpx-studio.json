@@ -1,0 +1,23 @@
+{
+  "repo": "gpxstudio/gpx.studio",
+  "about": "A free online editor for GPS tracks, for planning, editing and merging routes.",
+  "stars": 1265,
+  "prs": [
+    {
+      "number": 408,
+      "merged": "2026-11-15",
+      "title": "Temperatures from Garmin files are kept",
+      "broken": "Temperatures in tracks exported from Garmin Connect were dropped on import, because Garmin writes them with a decimal point.",
+      "changed": "Decimal temperatures are now read and rounded, so they stay in the file.",
+      "matters": "Riders and runners keep their temperature data after editing a track."
+    },
+    {
+      "number": 409,
+      "merged": "2026-11-15",
+      "title": "Waypoint times survive opening and saving a file",
+      "broken": "Opening a file with timestamped waypoints and saving it again removed every waypoint's time.",
+      "changed": "Waypoint times are now read on import, just like track point times.",
+      "matters": "Editing a route no longer quietly loses when each stop was recorded."
+    }
+  ]
+}

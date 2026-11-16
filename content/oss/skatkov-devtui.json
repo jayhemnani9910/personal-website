@@ -1,0 +1,23 @@
+{
+  "repo": "skatkov/devtui",
+  "about": "A terminal app that bundles everyday developer tools, like formatters and converters.",
+  "stars": 557,
+  "prs": [
+    {
+      "number": 247,
+      "merged": "2026-11-15",
+      "title": "The JSON formatter no longer changes your data",
+      "broken": "Formatting JSON changed the data itself: long numbers were rounded, keys were sorted, 2.50 became 2.5 and some symbols were escaped.",
+      "changed": "The formatter now only changes spacing and line breaks.",
+      "matters": "People can tidy JSON without silently altering IDs, prices or key order."
+    },
+    {
+      "number": 249,
+      "merged": "2026-11-15",
+      "title": "The YAML formatter keeps comments and key order",
+      "broken": "Formatting a YAML file removed every comment and sorted the keys, so a config written back lost its notes.",
+      "changed": "The formatter now keeps comments and the original order.",
+      "matters": "Config files can be tidied without losing the explanations in them."
+    }
+  ]
+}

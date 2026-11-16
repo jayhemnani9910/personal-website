@@ -1,0 +1,15 @@
+{
+  "repo": "placemark/placemark",
+  "about": "A web-based editor for viewing, editing and converting map data.",
+  "stars": 1477,
+  "prs": [
+    {
+      "number": 288,
+      "merged": "2026-11-15",
+      "title": "CSV import picks the right latitude and longitude columns",
+      "broken": "With a column like population before lat and lon, the import picked population as latitude, putting places off the map or dropping every row.",
+      "changed": "Headers that are exactly lat, lon or lng, or start with them, now win over ones that only contain them.",
+      "matters": "Spreadsheets of places land on the map correctly without fixing the columns by hand."
+    }
+  ]
+}

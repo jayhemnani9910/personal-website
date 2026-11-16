@@ -1,0 +1,15 @@
+{
+  "repo": "weshatheleopard/rubyXL",
+  "about": "A Ruby library for reading, writing and changing Excel files.",
+  "stars": 1322,
+  "prs": [
+    {
+      "number": 485,
+      "merged": "2026-11-15",
+      "title": "True and false values are saved into cells",
+      "broken": "Adding true or false to a cell left it blank in the saved file, with no error.",
+      "changed": "They are now saved as real true/false cells, the same way Excel stores them.",
+      "matters": "Spreadsheets made from Ruby keep their yes/no data instead of losing it."
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "repo": "dgorissen/pycel",
+  "about": "A Python library that turns Excel spreadsheets into Python code and works out their formulas.",
+  "stars": 634,
+  "prs": [
+    {
+      "number": 180,
+      "merged": "2026-11-15",
+      "title": "Weekday formulas with a start-of-week option work",
+      "broken": "Weekday formulas that count Monday as day one, the usual form in timesheets, crashed instead of giving a result.",
+      "changed": "The weekday function now accepts every start-of-week option Excel supports, and gives Excel's error for unknown ones.",
+      "matters": "Timesheet and schedule spreadsheets calculate the same as in Excel."
+    },
+    {
+      "number": 181,
+      "merged": "2026-11-15",
+      "title": "Text numbers with commas, percent or dollar signs are read",
+      "broken": "Turning text like 1,234.50, 12% or $12.50 into a number gave an error, though Excel reads all three. The error then spread into any total.",
+      "changed": "Those common formats are now read as numbers the way Excel reads them.",
+      "matters": "Sheets built on imported or pasted text numbers give the right totals."
+    }
+  ]
+}

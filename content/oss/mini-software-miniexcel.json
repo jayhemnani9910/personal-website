@@ -10,6 +10,14 @@
       "broken": "Time lengths read from Excel often came back a hair short, so 11 seconds showed as 10. In one test sheet 1541 of 5600 durations were off.",
       "changed": "Durations are now rounded to milliseconds, the same way dates already were.",
       "matters": "Reports and imports show the same times Excel shows."
+    },
+    {
+      "number": 1045,
+      "merged": "2026-11-16",
+      "title": "Durations of a day or more export as durations",
+      "broken": "A time length of a day or more was saved with a date format, so 36 hours showed as 1/1/1900 in Excel. Shorter ones wrapped around at 24 hours.",
+      "changed": "All durations are now saved with Excel's hours format, which counts past 24 and reads back as a duration.",
+      "matters": "Time tracking totals and job durations show correctly in Excel."
     }
   ]
 }

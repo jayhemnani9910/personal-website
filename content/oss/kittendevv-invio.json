@@ -1,0 +1,15 @@
+{
+  "repo": "kittendevv/Invio",
+  "about": "A self-hosted app for making and sending invoices.",
+  "stars": 1204,
+  "prs": [
+    {
+      "number": 181,
+      "merged": "2026-11-15",
+      "title": "UBL invoices pass the European buyer name check",
+      "broken": "Every UBL invoice broke a European e-invoicing rule because the buyer's legal name was missing, so PEPPOL networks and validators rejected it.",
+      "changed": "The buyer's legal name is now included, as the seller's already was.",
+      "matters": "Businesses can send their invoices through e-invoicing networks without rejections."
+    }
+  ]
+}

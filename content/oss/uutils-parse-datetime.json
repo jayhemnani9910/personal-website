@@ -18,6 +18,14 @@
       "broken": "The date parser rejected the time zone names MET, HAST and HADT, which GNU date accepts.",
       "changed": "The three names were added with the same offsets GNU date uses, and checked against every short name GNU knows.",
       "matters": "Dates written with these zone names now parse the same as with GNU date."
+    },
+    {
+      "number": 342,
+      "merged": "2026-11-15",
+      "title": "Dates with a full time zone rule are understood",
+      "broken": "A date given with a full time zone rule, including summer time, was rejected as invalid. Zones written in the quoted form tzdata uses were silently read as UTC.",
+      "changed": "Full time zone rules are now read the same way as when they come from the environment, as GNU date does.",
+      "matters": "Scripts that give date a time zone get the right time instead of an error or a wrong hour."
     }
   ]
 }

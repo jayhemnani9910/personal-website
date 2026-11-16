@@ -9,7 +9,8 @@
       "title": "pmap takes memory addresses written with 0x",
       "broken": "Asking pmap for a range of memory with addresses like 0x1000 failed with a parse error. The original tool accepts them with or without the 0x.",
       "changed": "I made pmap drop a leading 0x or 0X before reading an address, for a single address and both ends of a range.",
-      "matters": "Address ranges copied from other tools work as typed."
+      "matters": "Address ranges copied from other tools work as typed.",
+      "top": true
     },
     {
       "number": 820,
@@ -17,7 +18,8 @@
       "title": "pidof understands %PPID, so scripts can skip their own shell",
       "broken": "Scripts check whether another copy of themselves is running with pidof -o %PPID. The Rust pidof rejected %PPID, so the check always said nothing was running.",
       "changed": "pidof now reads %PPID as the process that started it, and other values as before.",
-      "matters": "Cron jobs and init scripts that guard against running twice work again."
+      "matters": "Cron jobs and init scripts that guard against running twice work again.",
+      "top": true
     },
     {
       "number": 824,
@@ -25,7 +27,16 @@
       "title": "ps columns no longer shift when a field is empty",
       "broken": "When ps could not fill a field yet, it printed the header but no value, so every value after it moved one column left and the PID showed under the wrong heading.",
       "changed": "Such a field now prints a dash, as the standard procps does.",
-      "matters": "Columns line up, so people and scripts read the right values."
+      "matters": "Columns line up, so people and scripts read the right values.",
+      "top": true
+    },
+    {
+      "number": 822,
+      "merged": "2026-11-15",
+      "title": "ps with blank headers prints no empty first line",
+      "broken": "Asking ps to hide all column headers still printed an empty first line, so scripts reading the first line got nothing.",
+      "changed": "When every header is blank, the header line is left out, as in the original ps.",
+      "matters": "Shell scripts that read a process ID from ps work the same as with the original tool."
     }
   ]
 }
