@@ -1,0 +1,15 @@
+{
+  "repo": "pydoit/doit",
+  "about": "A command line tool for automating tasks, like a Python version of make.",
+  "stars": 2099,
+  "prs": [
+    {
+      "number": 512,
+      "merged": "2026-11-16",
+      "title": "Running tasks in parallel works on Python 3.14",
+      "broken": "On Python 3.14, running tasks in parallel crashed at start if the task file had any small inline function, because Python changed how it starts worker processes on Linux.",
+      "changed": "The tool now uses the old way of starting workers where it is available.",
+      "matters": "People can upgrade to Python 3.14 without their parallel builds breaking."
+    }
+  ]
+}

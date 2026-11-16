@@ -18,6 +18,14 @@
       "broken": "Formatting a YAML file removed every comment and sorted the keys, so a config written back lost its notes.",
       "changed": "The formatter now keeps comments and the original order.",
       "matters": "Config files can be tidied without losing the explanations in them."
+    },
+    {
+      "number": 248,
+      "merged": "2026-11-16",
+      "title": "Converting to TOML keeps whole numbers whole",
+      "broken": "Converting JSON or YAML to TOML wrote every number as a decimal, so 8080 became 8080.0 and large IDs lost digits.",
+      "changed": "Whole numbers now stay whole numbers, and decimals stay decimals.",
+      "matters": "Config files made with the converter load with the right types."
     }
   ]
 }

@@ -1,0 +1,15 @@
+{
+  "repo": "markedjs/marked",
+  "about": "A fast Markdown parser used by many websites and editors.",
+  "stars": 37306,
+  "prs": [
+    {
+      "number": 4198,
+      "merged": "2026-11-16",
+      "title": "Code blocks inside list items no longer turn into text",
+      "broken": "In a list item with a deeper indented line, a code block that followed was shown as plain paragraph text.",
+      "changed": "The parser now ends that line where it should, so the code block stays a code block.",
+      "matters": "Step-by-step docs with code in their steps show up correctly."
+    }
+  ]
+}

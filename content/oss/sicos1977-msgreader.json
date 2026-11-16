@@ -1,0 +1,15 @@
+{
+  "repo": "Sicos1977/MSGReader",
+  "about": "A C# library that reads and edits Outlook .msg email files without needing Outlook.",
+  "stars": 558,
+  "prs": [
+    {
+      "number": 550,
+      "merged": "2026-11-16",
+      "title": "Saving a message after removing an attachment works again",
+      "broken": "Removing an attachment from an email file and saving it crashed with an error, after a library update made saving stricter.",
+      "changed": "The library now finishes writing its changes before it tidies up the file.",
+      "matters": "Apps can strip attachments from saved emails again without crashing."
+    }
+  ]
+}

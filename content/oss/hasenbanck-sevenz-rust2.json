@@ -1,0 +1,15 @@
+{
+  "repo": "hasenbanck/sevenz-rust2",
+  "about": "A Rust library for making and opening 7z archives.",
+  "stars": 127,
+  "prs": [
+    {
+      "number": 161,
+      "merged": "2026-11-16",
+      "title": "Unpacked files keep their permissions",
+      "broken": "Files unpacked from a 7z archive lost their permissions, so scripts and programs could no longer be run.",
+      "changed": "On Linux and macOS, files are now created with the permissions saved in the archive.",
+      "matters": "Programs and scripts work straight out of the archive, like with the 7z tool."
+    }
+  ]
+}

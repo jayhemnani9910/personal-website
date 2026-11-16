@@ -1,0 +1,15 @@
+{
+  "repo": "gookit/goutil",
+  "about": "A large collection of everyday helper functions for Go.",
+  "stars": 2362,
+  "prs": [
+    {
+      "number": 320,
+      "merged": "2026-11-16",
+      "title": "Snake case handles names like UserID and APIKey",
+      "broken": "Turning names like UserID or APIKey into snake_case left the capital letters as they were, giving userID or API_key.",
+      "changed": "It now splits and lower-cases acronyms, so the results are user_id and api_key.",
+      "matters": "Database columns, JSON fields and settings names come out the way people expect."
+    }
+  ]
+}

@@ -10,6 +10,14 @@
       "broken": "Converting translations to CSV and back doubled every backslash, and doubled it again each time, so changed strings stopped matching and showed as untranslated.",
       "changed": "The CSV writer no longer adds an escape character the reader does not expect.",
       "matters": "Translators can edit strings in a spreadsheet without breaking them."
+    },
+    {
+      "number": 6715,
+      "merged": "2026-11-16",
+      "title": "JSON files with numbers or true/false convert again",
+      "broken": "A single number or true/false value anywhere in a JSON translation file made the converter skip the whole file.",
+      "changed": "The converter now skips those values and keeps going, and puts them back when converting back.",
+      "matters": "Common app translation files can be used without editing them first."
     }
   ]
 }
