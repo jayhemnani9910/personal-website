@@ -1,0 +1,15 @@
+{
+  "repo": "igorshubovych/markdownlint-cli",
+  "about": "A command line tool that checks Markdown files for style and formatting problems.",
+  "stars": 1106,
+  "prs": [
+    {
+      "number": 690,
+      "merged": "2026-11-16",
+      "title": "Linting files outside the current folder no longer crashes",
+      "broken": "With an ignore file in the current folder, linting a Markdown file from another folder crashed before checking anything, and the exit looked like a lint failure.",
+      "changed": "Files outside the current folder now skip that ignore file, since its patterns can't match them, and are linted normally.",
+      "matters": "Editors and scripts that lint files across folders get real results instead of a crash."
+    }
+  ]
+}

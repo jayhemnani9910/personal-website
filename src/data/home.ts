@@ -788,6 +788,7 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "weshatheleopard/rubyXL", number: "#485", href: "https://github.com/weshatheleopard/rubyXL/pull/485" },
   { repo: "mini-software/MiniExcel", number: "#1045", href: "https://github.com/mini-software/MiniExcel/pull/1045" },
   { repo: "qax-os/excelize", number: "#2482", href: "https://github.com/qax-os/excelize/pull/2482" },
+  { repo: "igorshubovych/markdownlint-cli", number: "#690", href: "https://github.com/igorshubovych/markdownlint-cli/pull/690" },
 ];
 
 /**
