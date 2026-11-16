@@ -1,0 +1,15 @@
+{
+  "repo": "slhck/ffmpeg-normalize",
+  "about": "A tool that evens out the loudness of audio and video files.",
+  "stars": 1542,
+  "prs": [
+    {
+      "number": 324,
+      "merged": "2026-11-16",
+      "title": "Files fixed in place keep their permissions",
+      "broken": "Normalizing a file in place left it readable only by its owner, so media servers and shared folders could no longer open it.",
+      "changed": "The new file now gets the same permissions as the original.",
+      "matters": "People can normalize a music library in place without breaking their media server."
+    }
+  ]
+}

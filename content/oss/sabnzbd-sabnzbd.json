@@ -1,0 +1,15 @@
+{
+  "repo": "sabnzbd/sabnzbd",
+  "about": "A popular app that downloads files from Usenet automatically.",
+  "stars": 3183,
+  "prs": [
+    {
+      "number": 3695,
+      "merged": "2026-11-16",
+      "title": "The monthly download limit resets once, not twice",
+      "broken": "With a monthly limit set to reset on the 29th to 31st, short months reset it twice: on the last day and again on the 1st.",
+      "changed": "The reset day is now capped at the length of the month.",
+      "matters": "People who match the limit to their internet bill no longer get an extra month of data by mistake."
+    }
+  ]
+}

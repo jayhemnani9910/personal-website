@@ -1,0 +1,15 @@
+{
+  "repo": "fccview/jotty",
+  "about": "A lightweight app for personal notes and checklists, stored as plain files.",
+  "stars": 2042,
+  "prs": [
+    {
+      "number": 663,
+      "merged": "2026-11-16",
+      "title": "Checklist items with a | keep all their text",
+      "broken": "A checklist item with a | in it, like \"Alpha | beta\", showed only the first part, and the rest was deleted the next time the list was saved.",
+      "changed": "The app now reads the item text and its hidden details in the right order.",
+      "matters": "People no longer lose part of their notes just for using a | character."
+    }
+  ]
+}

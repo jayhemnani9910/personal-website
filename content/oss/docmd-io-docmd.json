@@ -1,0 +1,15 @@
+{
+  "repo": "docmd-io/docmd",
+  "about": "A tool that turns Markdown files into a documentation website.",
+  "stars": 2567,
+  "prs": [
+    {
+      "number": 285,
+      "merged": "2026-11-16",
+      "title": "Moving a site over from MkDocs gives a working sidebar",
+      "broken": "Importing an MkDocs site built a broken sidebar: some links went to pages that did not exist, plugin names showed up as menu items, and quoted titles kept their quotes.",
+      "changed": "The importer now reads only the menu section, links folder home pages correctly and drops the quotes.",
+      "matters": "People switching from MkDocs get a sidebar that works the first time."
+    }
+  ]
+}

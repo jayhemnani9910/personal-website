@@ -1,0 +1,15 @@
+{
+  "repo": "duke-git/lancet",
+  "about": "A large library of ready-made helper functions for Go.",
+  "stars": 5304,
+  "prs": [
+    {
+      "number": 430,
+      "merged": "2026-11-16",
+      "title": "Counting days across a clock change gives the right number",
+      "broken": "Counting the days between two dates came out one day short when the range crossed the spring clock change, because that day only has 23 hours.",
+      "changed": "It now compares calendar dates and times, so a short day still counts as a day.",
+      "matters": "Date math in apps using it is no longer off by one in March."
+    }
+  ]
+}

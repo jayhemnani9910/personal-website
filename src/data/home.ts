@@ -789,6 +789,18 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "mini-software/MiniExcel", number: "#1045", href: "https://github.com/mini-software/MiniExcel/pull/1045" },
   { repo: "qax-os/excelize", number: "#2482", href: "https://github.com/qax-os/excelize/pull/2482" },
   { repo: "igorshubovych/markdownlint-cli", number: "#690", href: "https://github.com/igorshubovych/markdownlint-cli/pull/690" },
+  { repo: "Sicos1977/MSGReader", number: "#550", href: "https://github.com/Sicos1977/MSGReader/pull/550" },
+  { repo: "docmd-io/docmd", number: "#285", href: "https://github.com/docmd-io/docmd/pull/285" },
+  { repo: "duke-git/lancet", number: "#430", href: "https://github.com/duke-git/lancet/pull/430" },
+  { repo: "fccview/jotty", number: "#663", href: "https://github.com/fccview/jotty/pull/663" },
+  { repo: "gookit/goutil", number: "#320", href: "https://github.com/gookit/goutil/pull/320" },
+  { repo: "hasenbanck/sevenz-rust2", number: "#161", href: "https://github.com/hasenbanck/sevenz-rust2/pull/161" },
+  { repo: "markedjs/marked", number: "#4198", href: "https://github.com/markedjs/marked/pull/4198" },
+  { repo: "pydoit/doit", number: "#512", href: "https://github.com/pydoit/doit/pull/512" },
+  { repo: "sabnzbd/sabnzbd", number: "#3695", href: "https://github.com/sabnzbd/sabnzbd/pull/3695" },
+  { repo: "skatkov/devtui", number: "#248", href: "https://github.com/skatkov/devtui/pull/248" },
+  { repo: "slhck/ffmpeg-normalize", number: "#324", href: "https://github.com/slhck/ffmpeg-normalize/pull/324" },
+  { repo: "translate/translate", number: "#6715", href: "https://github.com/translate/translate/pull/6715" },
 ];
 
 /**
