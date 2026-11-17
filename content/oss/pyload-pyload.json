@@ -10,6 +10,14 @@
       "broken": "With the checksum add-on on, any download that came with an SFV or CRC file never finished, and pyLoad kept a processor core busy until killed.",
       "changed": "The check now stops at the end of the file, so it completes and reports the result.",
       "matters": "Downloads get verified and finish, and the machine is not tied up."
+    },
+    {
+      "number": 4801,
+      "merged": "2026-11-16",
+      "title": "Checksum reads .md5 files correctly",
+      "broken": "With the checksum add-on on, every .md5 file failed, because it took the hash as the file name.",
+      "changed": "It now reads the hash and the name in the right order, in both md5sum formats.",
+      "matters": "Downloads that ship an .md5 file get checked instead of throwing an error."
     }
   ]
 }

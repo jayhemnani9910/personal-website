@@ -1,0 +1,15 @@
+{
+  "repo": "django-q2/django-q2",
+  "about": "A task queue for Django that runs background and scheduled jobs.",
+  "stars": 635,
+  "prs": [
+    {
+      "number": 361,
+      "merged": "2026-11-16",
+      "title": "Monthly schedules keep their day east of UTC",
+      "broken": "Monthly and yearly jobs in time zones ahead of UTC counted months from the wrong day, so a job on the 1st slid to the 29th after February and stayed there.",
+      "changed": "Month and year steps now use the local date.",
+      "matters": "Scheduled jobs keep running on the day people set them for."
+    }
+  ]
+}

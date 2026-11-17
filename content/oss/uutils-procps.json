@@ -37,6 +37,14 @@
       "broken": "Asking ps to hide all column headers still printed an empty first line, so scripts reading the first line got nothing.",
       "changed": "When every header is blank, the header line is left out, as in the original ps.",
       "matters": "Shell scripts that read a process ID from ps work the same as with the original tool."
+    },
+    {
+      "number": 821,
+      "merged": "2026-11-16",
+      "title": "pgrep --older checks how long a process has run",
+      "broken": "pgrep --older compared the limit with the time since boot when the process started, so nearly every process matched.",
+      "changed": "It now compares the limit with the process's real age.",
+      "matters": "Scripts that pick old processes with pgrep, pkill or pidwait get the right ones, as with the original tools."
     }
   ]
 }

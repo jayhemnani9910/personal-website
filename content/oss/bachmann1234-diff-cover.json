@@ -1,0 +1,15 @@
+{
+  "repo": "Bachmann1234/diff_cover",
+  "about": "A tool that finds the changed lines in a branch that have no test coverage.",
+  "stars": 851,
+  "prs": [
+    {
+      "number": 657,
+      "merged": "2026-11-17",
+      "title": "LCOV reports work from a subfolder",
+      "broken": "Run from a subfolder of the repo, diff-cover matched no files in an LCOV report and passed a coverage check it should have failed.",
+      "changed": "Paths in LCOV reports are now read from the folder the tool ran in, or as absolute paths.",
+      "matters": "Coverage gates on LCOV reports catch untested code again."
+    }
+  ]
+}

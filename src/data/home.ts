@@ -801,6 +801,19 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "skatkov/devtui", number: "#248", href: "https://github.com/skatkov/devtui/pull/248" },
   { repo: "slhck/ffmpeg-normalize", number: "#324", href: "https://github.com/slhck/ffmpeg-normalize/pull/324" },
   { repo: "translate/translate", number: "#6715", href: "https://github.com/translate/translate/pull/6715" },
+  { repo: "CodeWithCJ/SparkyFitness", number: "#3582", href: "https://github.com/CodeWithCJ/SparkyFitness/pull/3582" },
+  { repo: "Nixtla/neuralforecast", number: "#1736", href: "https://github.com/Nixtla/neuralforecast/pull/1736" },
+  { repo: "Nixtla/neuralforecast", number: "#1737", href: "https://github.com/Nixtla/neuralforecast/pull/1737" },
+  { repo: "django-q2/django-q2", number: "#361", href: "https://github.com/django-q2/django-q2/pull/361" },
+  { repo: "gka/chroma.js", number: "#423", href: "https://github.com/gka/chroma.js/pull/423" },
+  { repo: "gka/chroma.js", number: "#424", href: "https://github.com/gka/chroma.js/pull/424" },
+  { repo: "jealous/stockstats", number: "#226", href: "https://github.com/jealous/stockstats/pull/226" },
+  { repo: "jealous/stockstats", number: "#227", href: "https://github.com/jealous/stockstats/pull/227" },
+  { repo: "pyload/pyload", number: "#4801", href: "https://github.com/pyload/pyload/pull/4801" },
+  { repo: "tomas/needle", number: "#450", href: "https://github.com/tomas/needle/pull/450" },
+  { repo: "uutils/procps", number: "#821", href: "https://github.com/uutils/procps/pull/821" },
+  { repo: "Bachmann1234/diff_cover", number: "#657", href: "https://github.com/Bachmann1234/diff_cover/pull/657" },
+  { repo: "Sonarr/Sonarr", number: "#9287", href: "https://github.com/Sonarr/Sonarr/pull/9287" },
 ];
 
 /**
