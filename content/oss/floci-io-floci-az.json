@@ -37,6 +37,14 @@
       "broken": "Updating a blob's content type or cache headers returned \"not implemented\", so common SDK and CLI calls failed.",
       "changed": "The emulator now supports this call: it replaces the headers, keeps the data and metadata, and respects leases.",
       "matters": "Apps and scripts that set blob headers can be tested locally."
+    },
+    {
+      "number": 679,
+      "merged": "2026-11-17",
+      "title": "A test that pins how shared links override file headers",
+      "broken": "Only one of the five header overrides a shared download link can set was checked by a test, so the others could break unnoticed.",
+      "changed": "A new test checks that all of them replace the values stored on the file, and that links without overrides keep them.",
+      "matters": "The emulator keeps matching real Azure storage as it changes."
     }
   ]
 }

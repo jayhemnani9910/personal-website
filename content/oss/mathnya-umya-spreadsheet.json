@@ -1,0 +1,23 @@
+{
+  "repo": "MathNya/umya-spreadsheet",
+  "about": "A Rust library for reading and writing Excel spreadsheet files.",
+  "stars": 494,
+  "prs": [
+    {
+      "number": 402,
+      "merged": "2026-11-17",
+      "title": "\"Between\" rules in spreadsheets keep both limits",
+      "broken": "A data check like \"a whole number between 1 and 10\" lost both numbers when the file was saved, so the rule no longer checked anything.",
+      "changed": "Both limits are now written when the file is saved.",
+      "matters": "Spreadsheets keep their input checks after being opened and saved."
+    },
+    {
+      "number": 405,
+      "merged": "2026-11-17",
+      "title": "Charts on sheets named like O'Brien no longer crash saving",
+      "broken": "Saving a workbook crashed when a chart sat on a sheet whose name had an apostrophe, such as O'Brien.",
+      "changed": "Sheet names with apostrophes are now read and written back correctly in chart references.",
+      "matters": "Workbooks with everyday names like O'Brien save without crashing."
+    }
+  ]
+}

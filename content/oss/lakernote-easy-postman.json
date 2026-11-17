@@ -1,0 +1,15 @@
+{
+  "repo": "lakernote/easy-postman",
+  "about": "A desktop app for testing and load testing web APIs, similar to Postman.",
+  "stars": 738,
+  "prs": [
+    {
+      "number": 199,
+      "merged": "2026-11-17",
+      "title": "Imported form data turns + into a space",
+      "broken": "Pasting a browser's \"Copy as cURL\" kept + signs in form fields, so \"hello world\" was sent as \"hello+world\".",
+      "changed": "Form data from imported commands now reads + as a space, while query data sent with -G stays as it was.",
+      "matters": "Requests copied from the browser send the same data the browser did."
+    }
+  ]
+}

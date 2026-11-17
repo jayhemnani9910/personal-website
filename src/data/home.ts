@@ -819,6 +819,19 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "uutils/findutils", number: "#932", href: "https://github.com/uutils/findutils/pull/932" },
   { repo: "cjinhuo/text-search-engine", number: "#73", href: "https://github.com/cjinhuo/text-search-engine/pull/73" },
   { repo: "adamhathcock/sharpcompress", number: "#1495", href: "https://github.com/adamhathcock/sharpcompress/pull/1495" },
+  { repo: "DRYTRIX/TimeTracker", number: "#884", href: "https://github.com/DRYTRIX/TimeTracker/pull/884" },
+  { repo: "DRYTRIX/TimeTracker", number: "#885", href: "https://github.com/DRYTRIX/TimeTracker/pull/885" },
+  { repo: "David-Crty/databasement", number: "#780", href: "https://github.com/David-Crty/databasement/pull/780" },
+  { repo: "Eyevinn/mp4ff", number: "#722", href: "https://github.com/Eyevinn/mp4ff/pull/722" },
+  { repo: "MathNya/umya-spreadsheet", number: "#402", href: "https://github.com/MathNya/umya-spreadsheet/pull/402" },
+  { repo: "MathNya/umya-spreadsheet", number: "#405", href: "https://github.com/MathNya/umya-spreadsheet/pull/405" },
+  { repo: "NeogitOrg/neogit", number: "#2036", href: "https://github.com/NeogitOrg/neogit/pull/2036" },
+  { repo: "deadc0de6/dotdrop", number: "#497", href: "https://github.com/deadc0de6/dotdrop/pull/497" },
+  { repo: "floci-io/floci-az", number: "#679", href: "https://github.com/floci-io/floci-az/pull/679" },
+  { repo: "lakernote/easy-postman", number: "#199", href: "https://github.com/lakernote/easy-postman/pull/199" },
+  { repo: "ruby-docx/docx", number: "#202", href: "https://github.com/ruby-docx/docx/pull/202" },
+  { repo: "securo-finance/securo", number: "#1431", href: "https://github.com/securo-finance/securo/pull/1431" },
+  { repo: "securo-finance/securo", number: "#1437", href: "https://github.com/securo-finance/securo/pull/1437" },
 ];
 
 /**

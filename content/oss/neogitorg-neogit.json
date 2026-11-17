@@ -1,0 +1,15 @@
+{
+  "repo": "NeogitOrg/neogit",
+  "about": "A Git interface inside the Neovim editor, modeled on Magit.",
+  "stars": 5677,
+  "prs": [
+    {
+      "number": 2036,
+      "merged": "2026-11-17",
+      "title": "Discarding staged changes keeps your other edits",
+      "broken": "Discarding the staged part of a file also threw away edits that were not staged yet, so work was lost.",
+      "changed": "Only the staged changes are now undone, and the unstaged edits stay, the way Magit does it.",
+      "matters": "People can clean up what they staged without losing work in progress."
+    }
+  ]
+}
