@@ -1,0 +1,15 @@
+{
+  "repo": "ruby-docx/docx",
+  "about": "A Ruby library for reading and editing Word documents.",
+  "stars": 480,
+  "prs": [
+    {
+      "number": 202,
+      "merged": "2026-11-17",
+      "title": "Edits to Word for the web files are saved",
+      "broken": "Documents saved by Word for the web keep their text in a differently named part, so every edit was silently lost on save.",
+      "changed": "The library now remembers which part it read and writes the changes back to it.",
+      "matters": "Filled-in templates and edits actually end up in the saved file."
+    }
+  ]
+}

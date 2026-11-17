@@ -1,0 +1,15 @@
+{
+  "repo": "Eyevinn/mp4ff",
+  "about": "A Go library and tools for working with MP4 video and audio files.",
+  "stars": 666,
+  "prs": [
+    {
+      "number": 722,
+      "merged": "2026-11-17",
+      "title": "Cropped audio files can be played again",
+      "broken": "Cutting an audio-only MP4 with mp4ff-crop could write a file that ffmpeg and players could not open, because one table of sample positions came out wrong.",
+      "changed": "The crop now writes that table correctly when the cut falls inside the first block of samples.",
+      "matters": "Trimmed audio files open and play as expected."
+    }
+  ]
+}

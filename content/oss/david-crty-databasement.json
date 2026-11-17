@@ -1,0 +1,15 @@
+{
+  "repo": "David-Crty/databasement",
+  "about": "A self-hosted tool that schedules, saves and restores database backups.",
+  "stars": 2630,
+  "prs": [
+    {
+      "number": 780,
+      "merged": "2026-11-17",
+      "title": "Monthly backups are no longer deleted at month end",
+      "broken": "When cleanup ran on the 31st, the retention rule skipped some months, so it deleted the only backup of months like September and June that it should have kept.",
+      "changed": "Each month is now worked out from the first of the month, so no month is skipped.",
+      "matters": "Database backups people count on are not silently deleted."
+    }
+  ]
+}

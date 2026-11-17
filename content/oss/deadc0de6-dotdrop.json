@@ -1,0 +1,15 @@
+{
+  "repo": "deadc0de6/dotdrop",
+  "about": "A tool that keeps your config files in one place and installs them on every machine.",
+  "stars": 1957,
+  "prs": [
+    {
+      "number": 497,
+      "merged": "2026-11-17",
+      "title": "Uninstall no longer deletes your saved dotfiles",
+      "broken": "Uninstalling a folder that was installed as a link followed the link and deleted the original files kept in the dotfiles repo.",
+      "changed": "A link is now removed as a link, and the files it points to are left alone.",
+      "matters": "People's saved config files are safe when they uninstall."
+    }
+  ]
+}

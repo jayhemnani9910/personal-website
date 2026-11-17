@@ -53,6 +53,22 @@
       "broken": "Saving the import template from Excel as CSV UTF-8, which is needed for names with accents, added a hidden mark at the start. Every row then failed to import.",
       "changed": "Project and client imports now ignore that hidden mark, as the bank statement import already did.",
       "matters": "People can fill in the template in Excel and import it without errors."
+    },
+    {
+      "number": 884,
+      "merged": "2026-11-17",
+      "title": "Project attachments upload in Docker and survive restarts",
+      "broken": "Uploading a file to a project failed with a server error in the Docker image, and when it did work the file was lost when the container was recreated.",
+      "changed": "Project attachments are now saved in the same uploads folder the other attachments use, which is kept between restarts.",
+      "matters": "Teams running TimeTracker in Docker can attach files to projects and keep them."
+    },
+    {
+      "number": 885,
+      "merged": "2026-11-17",
+      "title": "Backups now include receipts and user avatars",
+      "broken": "The full backup left out expense receipts and profile pictures, so they were gone after restoring, even though the backups page said uploads were included.",
+      "changed": "Backups now also save the folder where receipts and avatars live, and restoring puts them back.",
+      "matters": "A restore brings back everything, including receipts people may need for expenses."
     }
   ]
 }
