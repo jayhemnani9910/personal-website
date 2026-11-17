@@ -814,6 +814,7 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "uutils/procps", number: "#821", href: "https://github.com/uutils/procps/pull/821" },
   { repo: "Bachmann1234/diff_cover", number: "#657", href: "https://github.com/Bachmann1234/diff_cover/pull/657" },
   { repo: "Sonarr/Sonarr", number: "#9287", href: "https://github.com/Sonarr/Sonarr/pull/9287" },
+  { repo: "Automattic/harper", number: "#4855", href: "https://github.com/Automattic/harper/pull/4855" },
 ];
 
 /**
