@@ -817,6 +817,7 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "Automattic/harper", number: "#4855", href: "https://github.com/Automattic/harper/pull/4855" },
   { repo: "slhck/ffmpeg-normalize", number: "#325", href: "https://github.com/slhck/ffmpeg-normalize/pull/325" },
   { repo: "uutils/findutils", number: "#932", href: "https://github.com/uutils/findutils/pull/932" },
+  { repo: "cjinhuo/text-search-engine", number: "#73", href: "https://github.com/cjinhuo/text-search-engine/pull/73" },
 ];
 
 /**

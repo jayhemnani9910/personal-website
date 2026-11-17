@@ -1,0 +1,15 @@
+{
+  "repo": "cjinhuo/text-search-engine",
+  "about": "A small search library that finds Chinese text when you type its pinyin, mixed with English.",
+  "stars": 477,
+  "prs": [
+    {
+      "number": 73,
+      "merged": "2026-11-17",
+      "title": "Pinyin search finds 银行, 成都 and other common words",
+      "broken": "Common words like 银行 (bank) and 成都 (Chengdu) could not be found by typing their pinyin, because the dictionary knew only one way to read some characters.",
+      "changed": "The second, common reading was added for 12 characters such as 行, 都, 调 and 厦.",
+      "matters": "People typing pinyin now find the everyday words they are looking for."
+    }
+  ]
+}
