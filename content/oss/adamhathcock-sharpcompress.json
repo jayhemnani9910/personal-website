@@ -1,0 +1,15 @@
+{
+  "repo": "adamhathcock/sharpcompress",
+  "about": "A C# library for reading and writing zip, tar, 7z and other archive formats.",
+  "stars": 2598,
+  "prs": [
+    {
+      "number": 1495,
+      "merged": "2026-11-17",
+      "title": "Saved tar files keep each file's permissions",
+      "broken": "Saving a tar archive gave every file full permissions for everyone, so a private key packed as owner-only came out readable and writable by anyone after unpacking.",
+      "changed": "Each file and folder now keeps the permissions it had in the archive. New files still get the old default.",
+      "matters": "Private files stay private when archives are rewritten, for example in Docker images."
+    }
+  ]
+}

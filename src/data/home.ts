@@ -818,6 +818,7 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "slhck/ffmpeg-normalize", number: "#325", href: "https://github.com/slhck/ffmpeg-normalize/pull/325" },
   { repo: "uutils/findutils", number: "#932", href: "https://github.com/uutils/findutils/pull/932" },
   { repo: "cjinhuo/text-search-engine", number: "#73", href: "https://github.com/cjinhuo/text-search-engine/pull/73" },
+  { repo: "adamhathcock/sharpcompress", number: "#1495", href: "https://github.com/adamhathcock/sharpcompress/pull/1495" },
 ];
 
 /**
