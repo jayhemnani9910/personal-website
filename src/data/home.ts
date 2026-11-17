@@ -815,6 +815,8 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "Bachmann1234/diff_cover", number: "#657", href: "https://github.com/Bachmann1234/diff_cover/pull/657" },
   { repo: "Sonarr/Sonarr", number: "#9287", href: "https://github.com/Sonarr/Sonarr/pull/9287" },
   { repo: "Automattic/harper", number: "#4855", href: "https://github.com/Automattic/harper/pull/4855" },
+  { repo: "slhck/ffmpeg-normalize", number: "#325", href: "https://github.com/slhck/ffmpeg-normalize/pull/325" },
+  { repo: "uutils/findutils", number: "#932", href: "https://github.com/uutils/findutils/pull/932" },
 ];
 
 /**

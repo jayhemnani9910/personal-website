@@ -93,6 +93,14 @@
       "broken": "A missing starting point or locked folder was reported with an Error prefix and a system code, unlike GNU find.",
       "changed": "These errors now print the program name, the quoted path and the plain message.",
       "matters": "Scripts and users see the same messages as with GNU find."
+    },
+    {
+      "number": 932,
+      "merged": "2026-11-17",
+      "title": "find now supports -used",
+      "broken": "The Rust find refused \"-used\", an option GNU find has for finding files opened some days after they last changed, so scripts using it stopped with an error.",
+      "changed": "find now understands -used and counts the days the same way GNU find does, including the rounding at day boundaries.",
+      "matters": "Scripts written for GNU find keep working when the Rust version is installed."
     }
   ]
 }
