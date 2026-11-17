@@ -1,0 +1,15 @@
+{
+  "repo": "tomas/needle",
+  "about": "A small, streaming HTTP client for Node.js.",
+  "stars": 1635,
+  "prs": [
+    {
+      "number": 450,
+      "merged": "2026-11-16",
+      "title": "Redirects give their connection back",
+      "broken": "After following a redirect, the first response was never read, so its connection stayed busy. Scripts hung for 30 seconds before exiting, and limited connection pools stopped answering.",
+      "changed": "The redirect response is now drained before following it.",
+      "matters": "Scripts exit right away, and apps with a connection limit keep working."
+    }
+  ]
+}

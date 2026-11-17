@@ -1,0 +1,15 @@
+{
+  "repo": "Sonarr/Sonarr",
+  "about": "An app that finds, downloads and organizes TV episodes.",
+  "stars": 17745,
+  "prs": [
+    {
+      "number": 9287,
+      "merged": "2026-11-17",
+      "title": "API keys inside JSON are hidden in logs",
+      "broken": "When a web address sat inside a JSON body, its API key was written to the logs in plain text.",
+      "changed": "The log cleaner now also spots keys in that escaped form.",
+      "matters": "Logs people share for support no longer leak their indexer keys."
+    }
+  ]
+}

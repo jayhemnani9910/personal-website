@@ -1,0 +1,23 @@
+{
+  "repo": "gka/chroma.js",
+  "about": "A JavaScript library for working with colors.",
+  "stars": 10606,
+  "prs": [
+    {
+      "number": 423,
+      "merged": "2026-11-16",
+      "title": "oklab and oklch colors keep 3 decimals",
+      "broken": "Colors written as oklab or oklch text were rounded to 2 decimals, which on that small scale visibly changed the color.",
+      "changed": "They now keep 3 decimals.",
+      "matters": "A color saved as text and read back looks the same as before."
+    },
+    {
+      "number": 424,
+      "merged": "2026-11-16",
+      "title": "Averaging oklch colors goes around the color wheel",
+      "broken": "Averaging red and pink in oklch gave teal, because the hue was averaged as a plain number, not an angle.",
+      "changed": "The hue is now averaged around the circle, as it is for the other color modes.",
+      "matters": "Blends in oklch give the color people expect, matching other color libraries."
+    }
+  ]
+}

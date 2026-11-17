@@ -10,6 +10,22 @@
       "broken": "Saving a model right after training failed when it used one of the probability losses. The loss still held a link to the training math that could not be copied.",
       "changed": "That link is now dropped where the loss is built. It was only needed for predictions, which still work the same.",
       "matters": "People can train a forecasting model and save it straight away without a crash."
+    },
+    {
+      "number": 1736,
+      "merged": "2026-11-16",
+      "title": "In-sample forecasts work with category series ids",
+      "broken": "When series ids were stored as categories, asking for in-sample forecasts crashed with one series or with more than two.",
+      "changed": "The results are now joined the same way cross-validation already joins them.",
+      "matters": "Users with category ids get their forecasts instead of an error, with the same output as text ids."
+    },
+    {
+      "number": 1737,
+      "merged": "2026-11-16",
+      "title": "IQLoss returns the quantiles you ask for",
+      "broken": "With the IQLoss model, asking for the 10% quantile came back as the 5% forecast, because fixed forecasts were treated as random samples.",
+      "changed": "Each requested quantile is now predicted directly, and simulation reads them off a sorted grid.",
+      "matters": "Forecast ranges now mean what they say, so risk numbers built on them are right."
     }
   ]
 }
