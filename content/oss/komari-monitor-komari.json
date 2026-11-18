@@ -1,0 +1,15 @@
+{
+  "repo": "komari-monitor/komari",
+  "about": "A simple tool for watching your servers and keeping track of when their plans run out.",
+  "stars": 7080,
+  "prs": [
+    {
+      "number": 707,
+      "merged": "2026-11-18",
+      "title": "Month-end renewal dates stay in the right month",
+      "broken": "A plan ending on the 31st renewed into the next month, like Oct 31 becoming Dec 1, and stayed late from then on.",
+      "changed": "Renewals now land on the last day of the target month when that day does not exist.",
+      "matters": "Expiry dates and their reminders stay on time."
+    }
+  ]
+}
