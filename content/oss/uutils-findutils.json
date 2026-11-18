@@ -101,6 +101,14 @@
       "broken": "The Rust find refused \"-used\", an option GNU find has for finding files opened some days after they last changed, so scripts using it stopped with an error.",
       "changed": "find now understands -used and counts the days the same way GNU find does, including the rounding at day boundaries.",
       "matters": "Scripts written for GNU find keep working when the Rust version is installed."
+    },
+    {
+      "number": 929,
+      "merged": "2026-11-17",
+      "title": "Followed links report the type of what they point to",
+      "broken": "When asked to follow links, find still printed \"link\" as the file type, where GNU find prints the type of the file or folder the link points to.",
+      "changed": "The type now comes from the file being followed, and stays \"link\" only when the link is not followed or is broken.",
+      "matters": "Scripts that sort files by type give the same answer as with GNU find."
     }
   ]
 }

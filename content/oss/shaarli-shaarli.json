@@ -1,0 +1,15 @@
+{
+  "repo": "shaarli/Shaarli",
+  "about": "A small self-hosted bookmarking service that needs no database.",
+  "stars": 3924,
+  "prs": [
+    {
+      "number": 2304,
+      "merged": "2026-11-17",
+      "title": "Links saved at the turn of the year show in the right week",
+      "broken": "Links saved in the last days of December could land on the weekly page from a year earlier, and the real first week of the new year pointed back to an empty page.",
+      "changed": "The weekly page now uses the same year as the week number, so the two always agree.",
+      "matters": "Every link shows up on the weekly page for the week it was saved."
+    }
+  ]
+}

@@ -45,6 +45,14 @@
       "broken": "Code that turned a letter or number into text by adding empty text came back from the tool without the empty text. The rebuilt code returned a number where text was expected and would not compile.",
       "changed": "When the only piece being joined is not text, the tool now keeps the empty text in front, so the result is still text.",
       "matters": "Rebuilt apps compile again and mean the same thing as the original code."
+    },
+    {
+      "number": 3080,
+      "merged": "2026-11-17",
+      "title": "Code after an if stays inside its error handler",
+      "broken": "When a protected block started with an if, the decompiled code moved the rest of the block outside the error handler, so it ran even after an error. No warning was shown.",
+      "changed": "The tool now checks that the start it picks really comes before every line of the block, and otherwise starts before the if.",
+      "matters": "The decompiled code does what the app really does when something fails."
     }
   ]
 }

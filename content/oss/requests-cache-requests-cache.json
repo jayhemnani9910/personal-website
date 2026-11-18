@@ -1,0 +1,15 @@
+{
+  "repo": "requests-cache/requests-cache",
+  "about": "A Python library that saves web responses so repeat requests are answered from a local cache.",
+  "stars": 1511,
+  "prs": [
+    {
+      "number": 1218,
+      "merged": "2026-11-17",
+      "title": "Cached pages keep their accented letters",
+      "broken": "With one cache setting on, pages that did not name their text encoding were saved wrongly, so accented letters came back garbled. Pages in other encodings came back changed too.",
+      "changed": "Text is now saved as text only when it can be turned back into the exact original bytes. Anything else is kept as raw bytes.",
+      "matters": "A page read from the cache matches the page the server sent."
+    }
+  ]
+}

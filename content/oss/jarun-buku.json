@@ -1,0 +1,15 @@
+{
+  "repo": "jarun/buku",
+  "about": "A command-line bookmark manager that keeps your bookmarks in a small local database.",
+  "stars": 7256,
+  "prs": [
+    {
+      "number": 925,
+      "merged": "2026-11-17",
+      "title": "Bookmark titles with brackets or & export cleanly",
+      "broken": "Exporting bookmarks to the browser format wrote titles, tags and notes as they were. A title with angle brackets, like those on web reference pages, broke the file, and importing it back lost the title.",
+      "changed": "Titles, tags and notes are now written safely in the exported file, as the other export format already did.",
+      "matters": "Bookmarks moved to a browser or back keep their full titles."
+    }
+  ]
+}

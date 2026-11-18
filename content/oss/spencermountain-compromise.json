@@ -53,6 +53,22 @@
       "broken": "Turning some verbs into their -ing form kept a silent e or doubled a letter, giving words like \"rhymeing\", \"sootheing\" and \"bangging\".",
       "changed": "Ten verbs got their correct forms added, which also fixes others like bathe and clothe. No verb that was right before changed.",
       "matters": "Apps that rewrite sentences no longer produce misspelled words."
+    },
+    {
+      "number": 1274,
+      "merged": "2026-11-17",
+      "title": "\"Wednesday afternoon at 2\" reads as 2pm",
+      "broken": "\"Wednesday afternoon at 2\" was read as midnight, and \"tomorrow afternoon at 2\" gave no date at all. Morning and evening worked, but afternoon was missing.",
+      "changed": "Afternoon is now understood the same way, so these phrases give 2pm on the right day.",
+      "matters": "Apps that turn written plans into calendar times get afternoon meetings right."
+    },
+    {
+      "number": 1275,
+      "merged": "2026-11-17",
+      "title": "\"By end of day\" means the end of today",
+      "broken": "\"By end of day\" gave a deadline that ended at midnight the night before, so it had already passed. \"By end of week\" and \"by eod\" were right.",
+      "changed": "When the date already sits at the end of the day, it is now used as the deadline as it is.",
+      "matters": "Tasks due by the end of the day get today as their deadline."
     }
   ]
 }
