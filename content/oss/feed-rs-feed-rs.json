@@ -1,0 +1,15 @@
+{
+  "repo": "feed-rs/feed-rs",
+  "about": "A Rust library that reads RSS, Atom and JSON Feed news feeds.",
+  "stars": 214,
+  "prs": [
+    {
+      "number": 308,
+      "merged": "2026-11-18",
+      "title": "JSON feeds with a number as an item id are read",
+      "broken": "A JSON feed where one item's id was a number failed to load at all, though the JSON Feed rules say readers should accept it.",
+      "changed": "An item id can now be a number or text.",
+      "matters": "Feed readers built on it no longer drop whole feeds over one item."
+    }
+  ]
+}

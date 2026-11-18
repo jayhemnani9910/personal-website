@@ -1,0 +1,15 @@
+{
+  "repo": "Rohithgilla12/data-peek",
+  "about": "A fast desktop app for looking at and exporting data from your databases.",
+  "stars": 1685,
+  "prs": [
+    {
+      "number": 368,
+      "merged": "2026-11-18",
+      "title": "Database exports keep mixed-case table names",
+      "broken": "Exporting a Postgres database with mixed-case table names, the default for Prisma, stopped with an error and left a half-written file.",
+      "changed": "Names with capital letters are now quoted in the export, and each export uses the right SQL style for its database.",
+      "matters": "Exports from Prisma and similar projects finish and restore with the same table names."
+    }
+  ]
+}

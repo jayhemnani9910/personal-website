@@ -852,6 +852,13 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "carlos7ags/folio", number: "#490", href: "https://github.com/carlos7ags/folio/pull/490" },
   { repo: "komari-monitor/komari", number: "#707", href: "https://github.com/komari-monitor/komari/pull/707" },
   { repo: "tj/git-extras", number: "#1285", href: "https://github.com/tj/git-extras/pull/1285" },
+  { repo: "Rohithgilla12/data-peek", number: "#368", href: "https://github.com/Rohithgilla12/data-peek/pull/368" },
+  { repo: "dgorissen/pycel", number: "#182", href: "https://github.com/dgorissen/pycel/pull/182" },
+  { repo: "feed-rs/feed-rs", number: "#308", href: "https://github.com/feed-rs/feed-rs/pull/308" },
+  { repo: "gaul/s3proxy", number: "#1260", href: "https://github.com/gaul/s3proxy/pull/1260" },
+  { repo: "leo-arch/clifm", number: "#393", href: "https://github.com/leo-arch/clifm/pull/393" },
+  { repo: "letehaha/moneymatter", number: "#909", href: "https://github.com/letehaha/moneymatter/pull/909" },
+  { repo: "letehaha/moneymatter", number: "#910", href: "https://github.com/letehaha/moneymatter/pull/910" },
 ];
 
 /**

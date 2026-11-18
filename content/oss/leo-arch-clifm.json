@@ -1,0 +1,15 @@
+{
+  "repo": "leo-arch/clifm",
+  "about": "A terminal file manager that works like a command shell.",
+  "stars": 1737,
+  "prs": [
+    {
+      "number": 393,
+      "merged": "2026-11-18",
+      "title": "Bulk rename no longer gives files the wrong names",
+      "broken": "When one listed file was missing, bulk rename gave every file after it the next file's new name, and one file was not renamed.",
+      "changed": "Bulk rename now pairs new names only with the files it actually listed.",
+      "matters": "Renaming many files at once can't silently mix up their names."
+    }
+  ]
+}

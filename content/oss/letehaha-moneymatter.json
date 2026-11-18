@@ -1,0 +1,23 @@
+{
+  "repo": "letehaha/moneymatter",
+  "about": "A self-hosted budget tracker and personal finance app.",
+  "stars": 254,
+  "prs": [
+    {
+      "number": 909,
+      "merged": "2026-11-18",
+      "title": "CSV imports keep large amounts with thousands separators",
+      "broken": "Importing a CSV with amounts like 3,250,000 saved them as 3.25, with no warning, so transactions and balances were wrong.",
+      "changed": "Repeated thousands separators, including Indian style 1,00,000, are now read as grouping, and odd ones are rejected.",
+      "matters": "Imported bank data gives the right amounts and balances."
+    },
+    {
+      "number": 910,
+      "merged": "2026-11-18",
+      "title": "OFX imports accept French bank amount formats",
+      "broken": "Bank statements with a plus sign or a decimal comma in amounts, common in French bank exports, were rejected and nothing was imported.",
+      "changed": "Both forms are now read, while ambiguous amounts are still rejected.",
+      "matters": "Users of those banks can import their statements."
+    }
+  ]
+}

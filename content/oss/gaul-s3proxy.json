@@ -1,0 +1,15 @@
+{
+  "repo": "gaul/s3proxy",
+  "about": "A server that lets apps use other storage backends through the Amazon S3 API.",
+  "stars": 2423,
+  "prs": [
+    {
+      "number": 1260,
+      "merged": "2026-11-18",
+      "title": "The Docker image stores file names with accents again",
+      "broken": "Since version 4.1.0 the Docker image refused every file name with a non-English letter, like café.jpg, while older images stored them fine.",
+      "changed": "The image now sets a UTF-8 language setting, which the new base image had dropped.",
+      "matters": "Users can store and list files with any name again."
+    }
+  ]
+}
