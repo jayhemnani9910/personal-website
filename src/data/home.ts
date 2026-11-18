@@ -848,6 +848,10 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "bscott/subtrackr", number: "#163", href: "https://github.com/bscott/subtrackr/pull/163" },
   { repo: "bscott/subtrackr", number: "#167", href: "https://github.com/bscott/subtrackr/pull/167" },
   { repo: "lakernote/easy-postman", number: "#200", href: "https://github.com/lakernote/easy-postman/pull/200" },
+  { repo: "carlos7ags/folio", number: "#489", href: "https://github.com/carlos7ags/folio/pull/489" },
+  { repo: "carlos7ags/folio", number: "#490", href: "https://github.com/carlos7ags/folio/pull/490" },
+  { repo: "komari-monitor/komari", number: "#707", href: "https://github.com/komari-monitor/komari/pull/707" },
+  { repo: "tj/git-extras", number: "#1285", href: "https://github.com/tj/git-extras/pull/1285" },
 ];
 
 /**

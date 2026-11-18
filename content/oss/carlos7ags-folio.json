@@ -1,0 +1,23 @@
+{
+  "repo": "carlos7ags/folio",
+  "about": "A Go library for making and editing PDF files, from page layout to forms and signatures.",
+  "stars": 881,
+  "prs": [
+    {
+      "number": 490,
+      "merged": "2026-11-18",
+      "title": "Text extraction reads text inside templates",
+      "broken": "Pulling text out of a page skipped anything inside an embedded template, so some pages came out empty.",
+      "changed": "Text extraction now follows those templates and reads their text too.",
+      "matters": "Pages built from templates, like many saved by macOS, give back all their text."
+    },
+    {
+      "number": 489,
+      "merged": "2026-11-18",
+      "title": "Optimizing a PDF no longer loses its text",
+      "broken": "Shrinking some PDFs pointed fonts at the wrong parts of the file, so text disappeared from the result.",
+      "changed": "Shared parts of the file are now renumbered once, so every font keeps pointing at the right place.",
+      "matters": "Optimized PDFs look the same as the originals."
+    }
+  ]
+}
