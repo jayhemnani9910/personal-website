@@ -1,0 +1,15 @@
+{
+  "repo": "faiscadev/fakecloud",
+  "about": "A free, open-source stand-in for Amazon's cloud services, for testing apps on your own machine.",
+  "stars": 798,
+  "prs": [
+    {
+      "number": 2837,
+      "merged": "2026-11-17",
+      "title": "Range queries from the AWS Python library work again",
+      "broken": "Asking the database for a range of records with the AWS Python library failed with an error saying the main key was missing, because the library wraps the question in brackets.",
+      "changed": "The check now looks inside brackets before deciding whether the main key is there, as the real Amazon database does.",
+      "matters": "Code that searches by date or order range runs the same against the test copy as in production."
+    }
+  ]
+}

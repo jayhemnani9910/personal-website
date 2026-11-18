@@ -10,6 +10,14 @@
       "broken": "Pasting a browser's \"Copy as cURL\" kept + signs in form fields, so \"hello world\" was sent as \"hello+world\".",
       "changed": "Form data from imported commands now reads + as a space, while query data sent with -G stays as it was.",
       "matters": "Requests copied from the browser send the same data the browser did."
+    },
+    {
+      "number": 200,
+      "merged": "2026-11-18",
+      "title": "Imported commands keep the ^ sign in their data",
+      "broken": "Importing a command copied from a Linux or Mac terminal removed or changed every ^ sign, even inside quoted data, which could break the request body.",
+      "changed": "The Windows-only handling of ^ is now skipped for commands quoted in the Linux and Mac style.",
+      "matters": "Requests with patterns or other text containing ^ send exactly what was copied."
     }
   ]
 }

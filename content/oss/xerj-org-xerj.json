@@ -9,7 +9,8 @@
       "title": "Changing one cluster setting keeps the others",
       "broken": "Saving one cluster-wide setting wiped every other setting saved before it. Settings sent in the nested style were stored but never used.",
       "changed": "I made it merge each update into the saved settings, the way Elasticsearch does, and store every setting under one name form.",
-      "matters": "Earlier settings, like a disk or memory limit, stay in force when someone changes something else."
+      "matters": "Earlier settings, like a disk or memory limit, stay in force when someone changes something else.",
+      "top": true
     },
     {
       "number": 1596,
@@ -17,7 +18,8 @@
       "title": "Turning off the disk check lifts the full-disk block",
       "broken": "When a disk got too full, writes were blocked. The standard setting to turn that check off was accepted but ignored, so the block stayed on.",
       "changed": "I made the server read that setting, so turning the check off also lifts the block.",
-      "matters": "Users can unblock writes the same way they would in Elasticsearch."
+      "matters": "Users can unblock writes the same way they would in Elasticsearch.",
+      "top": true
     },
     {
       "number": 1744,
@@ -25,7 +27,24 @@
       "title": "Date range searches now respect the time zone",
       "broken": "A date range search ignored the time zone you gave it and read every date as UTC. Documents inside the real window were left out.",
       "changed": "I made the search read dates in the given zone, including daylight saving changes, and round dates there too, the way Elasticsearch does.",
-      "matters": "Range searches with a time zone return the same documents as Elasticsearch."
+      "matters": "Range searches with a time zone return the same documents as Elasticsearch.",
+      "top": true
+    },
+    {
+      "number": 3063,
+      "merged": "2026-11-17",
+      "title": "Sorting by a declared extra field works",
+      "broken": "Sorting on an extra field set up in the index layout, the usual text-plus-exact-value setup, failed with an error saying the field did not exist. Elasticsearch sorts it fine.",
+      "changed": "The server now reads extra fields declared in the layout, not only those it adds by itself.",
+      "matters": "Common Elasticsearch setups for sorting by name or title work without changes."
+    },
+    {
+      "number": 3064,
+      "merged": "2026-11-17",
+      "title": "Date ranges like \"last 30 days\" are worked out",
+      "broken": "Grouping results by date ranges such as \"older than 30 days\" ignored the relative date, so every group held every document.",
+      "changed": "Range limits that start with \"now\" are now worked out as real dates before counting.",
+      "matters": "Reports that split data by recent and older periods show the right counts."
     }
   ]
 }

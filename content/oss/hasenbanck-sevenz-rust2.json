@@ -10,6 +10,14 @@
       "broken": "Files unpacked from a 7z archive lost their permissions, so scripts and programs could no longer be run.",
       "changed": "On Linux and macOS, files are now created with the permissions saved in the archive.",
       "matters": "Programs and scripts work straight out of the archive, like with the 7z tool."
+    },
+    {
+      "number": 164,
+      "merged": "2026-11-17",
+      "title": "Shortcut links in a folder are packed, not dropped",
+      "broken": "Packing a folder into a 7z archive quietly skipped any links inside it, so those files and folders were missing from the archive with no error.",
+      "changed": "Links are now followed: a link to a file stores the file, a link to a folder stores the folder, as the 7z tool does.",
+      "matters": "Archives hold everything the folder showed, so nothing goes missing on unpacking."
     }
   ]
 }

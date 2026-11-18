@@ -1,0 +1,23 @@
+{
+  "repo": "bscott/subtrackr",
+  "about": "A self-hosted app for keeping track of paid subscriptions and what they cost.",
+  "stars": 491,
+  "prs": [
+    {
+      "number": 163,
+      "merged": "2026-11-18",
+      "title": "The API accepts the JSON examples from its own guide",
+      "broken": "The guide's examples for adding and changing a subscription through the API did not work. Adding stored a blank entry and changing did nothing, while both reported success.",
+      "changed": "Those two calls now accept JSON as well as form data, and bad JSON gets a clear error.",
+      "matters": "Scripts written from the guide add and update subscriptions as expected."
+    },
+    {
+      "number": 167,
+      "merged": "2026-11-18",
+      "title": "Restored backups keep the right tags",
+      "broken": "Restoring a backup linked tags by their old number, so a subscription tagged \"work\" could come back tagged \"personal\", or lose its tag, while the app said all was fine.",
+      "changed": "Tags are now matched by name after each subscription is restored, as copying a subscription already did.",
+      "matters": "Restoring into an app that already has tags keeps every subscription sorted as before."
+    }
+  ]
+}

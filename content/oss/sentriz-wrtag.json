@@ -1,0 +1,15 @@
+{
+  "repo": "sentriz/wrtag",
+  "about": "A fast tool that tags and sorts a music library using the MusicBrainz database.",
+  "stars": 457,
+  "prs": [
+    {
+      "number": 259,
+      "merged": "2026-11-17",
+      "title": "Albums whose discs share song titles are not overwritten",
+      "broken": "Albums with two discs of the same songs, like mono and stereo mixes, sent both copies to the same file name. Half the songs overwrote the others, and moving deleted the originals.",
+      "changed": "The tool now stops with an error before moving or copying anything when two songs would land on the same file.",
+      "matters": "Users no longer lose half of a multi-disc album without being told."
+    }
+  ]
+}

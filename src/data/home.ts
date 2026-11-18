@@ -832,6 +832,22 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "ruby-docx/docx", number: "#202", href: "https://github.com/ruby-docx/docx/pull/202" },
   { repo: "securo-finance/securo", number: "#1431", href: "https://github.com/securo-finance/securo/pull/1431" },
   { repo: "securo-finance/securo", number: "#1437", href: "https://github.com/securo-finance/securo/pull/1437" },
+  { repo: "faiscadev/fakecloud", number: "#2837", href: "https://github.com/faiscadev/fakecloud/pull/2837" },
+  { repo: "floodtide/dom-docx", number: "#14", href: "https://github.com/floodtide/dom-docx/pull/14" },
+  { repo: "hasenbanck/sevenz-rust2", number: "#164", href: "https://github.com/hasenbanck/sevenz-rust2/pull/164" },
+  { repo: "jarun/buku", number: "#925", href: "https://github.com/jarun/buku/pull/925" },
+  { repo: "requests-cache/requests-cache", number: "#1218", href: "https://github.com/requests-cache/requests-cache/pull/1218" },
+  { repo: "sentriz/wrtag", number: "#259", href: "https://github.com/sentriz/wrtag/pull/259" },
+  { repo: "shaarli/Shaarli", number: "#2304", href: "https://github.com/shaarli/Shaarli/pull/2304" },
+  { repo: "skylot/jadx", number: "#3080", href: "https://github.com/skylot/jadx/pull/3080" },
+  { repo: "spencermountain/compromise", number: "#1274", href: "https://github.com/spencermountain/compromise/pull/1274" },
+  { repo: "spencermountain/compromise", number: "#1275", href: "https://github.com/spencermountain/compromise/pull/1275" },
+  { repo: "uutils/findutils", number: "#929", href: "https://github.com/uutils/findutils/pull/929" },
+  { repo: "xerj-org/xerj", number: "#3063", href: "https://github.com/xerj-org/xerj/pull/3063" },
+  { repo: "xerj-org/xerj", number: "#3064", href: "https://github.com/xerj-org/xerj/pull/3064" },
+  { repo: "bscott/subtrackr", number: "#163", href: "https://github.com/bscott/subtrackr/pull/163" },
+  { repo: "bscott/subtrackr", number: "#167", href: "https://github.com/bscott/subtrackr/pull/167" },
+  { repo: "lakernote/easy-postman", number: "#200", href: "https://github.com/lakernote/easy-postman/pull/200" },
 ];
 
 /**
