@@ -45,6 +45,14 @@
       "broken": "Converting subtitles with italic or bold words to SSA/ASS added stray spaces, so \"Hello world!\" came out as \"Hello  world !\".",
       "changed": "The pieces of a line are now joined as they are, the way the other formats already did.",
       "matters": "Converted subtitles read normally instead of showing odd gaps around styled words."
+    },
+    {
+      "number": 156,
+      "merged": "2026-11-19",
+      "title": "Subtitles timed with a duration load instead of crashing",
+      "broken": "A TTML subtitle line that gave a duration, or took its timing from its section, crashed the whole program while reading the file.",
+      "changed": "Durations and section timing are now read, and a line with no timing at all returns an error.",
+      "matters": "Common subtitle files open, and a bad one no longer takes the app down."
     }
   ]
 }

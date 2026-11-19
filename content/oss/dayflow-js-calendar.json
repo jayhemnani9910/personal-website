@@ -10,6 +10,14 @@
       "broken": "Importing a calendar file or subscribing to a calendar dropped the repeat rule, so a weekly meeting showed only once. Exporting and importing again lost repeats too.",
       "changed": "The repeat rule is now read on import and written on export, using the same fields the calendar uses for repeats made in the app.",
       "matters": "Calendars from Google or Outlook, where most events repeat, show every meeting."
+    },
+    {
+      "number": 178,
+      "merged": "2026-11-19",
+      "title": "Outlook calendars import their timed events",
+      "broken": "Events with a quoted time zone, or a Windows zone name as Outlook writes it, were rejected, so an Outlook calendar imported no timed events.",
+      "changed": "Quotes are now removed, and an unknown zone name keeps the event at its time in the default zone.",
+      "matters": "Calendars exported from Outlook and Exchange come in whole."
     }
   ]
 }

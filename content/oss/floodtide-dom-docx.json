@@ -10,6 +10,22 @@
       "broken": "Text that was not inside a tag was left out of the Word file. \"Your order #123 has shipped\" came out as just \"#123\", and plain text gave an empty document.",
       "changed": "Loose text, and the spaces between bits of bold or italic text, now go into the document with everything else.",
       "matters": "Letters and messages built from simple snippets keep every word."
+    },
+    {
+      "number": 15,
+      "merged": "2026-11-19",
+      "title": "List items written as paragraphs keep their numbers",
+      "broken": "List items whose text sat inside a paragraph lost their number or bullet, which is how Markdown writes lists with blank lines between items.",
+      "changed": "The list numbering now goes on paragraphs inside a list item too.",
+      "matters": "Markdown turned into Word keeps its numbered and bulleted lists."
+    },
+    {
+      "number": 16,
+      "merged": "2026-11-19",
+      "title": "Numbered lists continue from where they left off",
+      "broken": "A numbered list that picked up again after a code block started over at 1, because its starting number was ignored.",
+      "changed": "A list with a start number now gets its own numbering that begins there.",
+      "matters": "Step-by-step guides keep the right step numbers in Word."
     }
   ]
 }

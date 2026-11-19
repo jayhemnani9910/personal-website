@@ -876,6 +876,18 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "databacker/mysql-backup", number: "#555", href: "https://github.com/databacker/mysql-backup/pull/555" },
   { repo: "ruby-docx/docx", number: "#203", href: "https://github.com/ruby-docx/docx/pull/203" },
   { repo: "tianma-if/edgeever", number: "#864", href: "https://github.com/tianma-if/edgeever/pull/864" },
+  { repo: "TraceApps/nutritrace", number: "#333", href: "https://github.com/TraceApps/nutritrace/pull/333" },
+  { repo: "TraceApps/nutritrace", number: "#334", href: "https://github.com/TraceApps/nutritrace/pull/334" },
+  { repo: "alonrbar/easy-template-x", number: "#167", href: "https://github.com/alonrbar/easy-template-x/pull/167" },
+  { repo: "asticode/go-astisub", number: "#156", href: "https://github.com/asticode/go-astisub/pull/156" },
+  { repo: "databacker/mysql-backup", number: "#554", href: "https://github.com/databacker/mysql-backup/pull/554" },
+  { repo: "dayflow-js/calendar", number: "#178", href: "https://github.com/dayflow-js/calendar/pull/178" },
+  { repo: "dutchcoders/transfer.sh", number: "#681", href: "https://github.com/dutchcoders/transfer.sh/pull/681" },
+  { repo: "floodtide/dom-docx", number: "#15", href: "https://github.com/floodtide/dom-docx/pull/15" },
+  { repo: "floodtide/dom-docx", number: "#16", href: "https://github.com/floodtide/dom-docx/pull/16" },
+  { repo: "genspark-ai/genoffice", number: "#2850", href: "https://github.com/genspark-ai/genoffice/pull/2850" },
+  { repo: "rochacbruno/marmite", number: "#567", href: "https://github.com/rochacbruno/marmite/pull/567" },
+  { repo: "vrana/adminer", number: "#1382", href: "https://github.com/vrana/adminer/pull/1382" },
 ];
 
 /**

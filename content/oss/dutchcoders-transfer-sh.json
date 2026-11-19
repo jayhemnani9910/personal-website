@@ -1,0 +1,15 @@
+{
+  "repo": "dutchcoders/transfer.sh",
+  "about": "File sharing from the command line.",
+  "stars": 15911,
+  "prs": [
+    {
+      "number": 681,
+      "merged": "2026-11-19",
+      "title": "Encrypted uploads keep the whole file",
+      "broken": "With server-side encryption on, any file over about 4 KB was stored as a tiny stub, and the download failed, so the file was lost.",
+      "changed": "The encryption step now reads the whole file before closing, and tests cover several read sizes.",
+      "matters": "Encrypted uploads can be downloaded again intact."
+    }
+  ]
+}

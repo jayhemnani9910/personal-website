@@ -1,0 +1,15 @@
+{
+  "repo": "genspark-ai/genoffice",
+  "about": "An open-source office suite for documents, sheets and slides, with a command-line tool.",
+  "stars": 12641,
+  "prs": [
+    {
+      "number": 2850,
+      "merged": "2026-11-19",
+      "title": "Nested Word lists stay nested when converted",
+      "broken": "Sub-items of a Word list came out as top-level items in HTML and Markdown, so a converted document lost its outline.",
+      "changed": "Items at a deeper list level are now written as a list nested inside their parent item.",
+      "matters": "Documents keep their structure when converted to Markdown or read back."
+    }
+  ]
+}
