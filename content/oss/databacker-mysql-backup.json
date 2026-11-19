@@ -1,0 +1,15 @@
+{
+  "repo": "databacker/mysql-backup",
+  "about": "A container image that backs up and restores MySQL databases on a schedule.",
+  "stars": 763,
+  "prs": [
+    {
+      "number": 555,
+      "merged": "2026-11-19",
+      "title": "Backups restore the same decimals, fractions of a second and times",
+      "broken": "Dumps kept only six decimals of floating point numbers, dropped fractions of a second, and shifted TIMESTAMP values by the server's time zone offset on restore.",
+      "changed": "Numbers are written with all their digits, times keep their fractions, and the dump reads timestamps in the same zone it restores them in.",
+      "matters": "A restored database holds the same values as the one that was backed up."
+    }
+  ]
+}

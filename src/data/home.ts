@@ -873,6 +873,9 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "ranaroussi/yfinance", number: "#3047", href: "https://github.com/ranaroussi/yfinance/pull/3047" },
   { repo: "datnguye/dbterd", number: "#178", href: "https://github.com/datnguye/dbterd/pull/178" },
   { repo: "securo-finance/securo", number: "#1624", href: "https://github.com/securo-finance/securo/pull/1624" },
+  { repo: "databacker/mysql-backup", number: "#555", href: "https://github.com/databacker/mysql-backup/pull/555" },
+  { repo: "ruby-docx/docx", number: "#203", href: "https://github.com/ruby-docx/docx/pull/203" },
+  { repo: "tianma-if/edgeever", number: "#864", href: "https://github.com/tianma-if/edgeever/pull/864" },
 ];
 
 /**

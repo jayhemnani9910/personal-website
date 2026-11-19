@@ -1,0 +1,15 @@
+{
+  "repo": "tianma-if/edgeever",
+  "about": "A note-taking app that can import notes from Evernote and Obsidian.",
+  "stars": 3423,
+  "prs": [
+    {
+      "number": 864,
+      "merged": "2026-11-19",
+      "title": "Evernote notes with tasks keep their title and dates on import",
+      "broken": "When an Evernote note had tasks, each task's title and dates were glued onto the note's own, so the title got longer and the note lost its original dates.",
+      "changed": "The importer now reads the title and dates only from the note itself, not from the tasks inside it.",
+      "matters": "Notes moved over from Evernote look the same and stay in the right order by date."
+    }
+  ]
+}
