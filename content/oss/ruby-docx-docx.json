@@ -10,6 +10,14 @@
       "broken": "Documents saved by Word for the web keep their text in a differently named part, so every edit was silently lost on save.",
       "changed": "The library now remembers which part it read and writes the changes back to it.",
       "matters": "Filled-in templates and edits actually end up in the saved file."
+    },
+    {
+      "number": 203,
+      "merged": "2026-11-19",
+      "title": "Text that looks like HTML stays text when a document is shown as HTML",
+      "broken": "Turning a document into HTML copied its text and link addresses in as they were, so anything that looked like a tag vanished or became real markup in the page.",
+      "changed": "Text and attribute values are now escaped before they go into the HTML.",
+      "matters": "Documents show up in a browser exactly as written, and markup inside a document can't sneak into the page."
     }
   ]
 }
