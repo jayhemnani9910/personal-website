@@ -859,6 +859,20 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "leo-arch/clifm", number: "#393", href: "https://github.com/leo-arch/clifm/pull/393" },
   { repo: "letehaha/moneymatter", number: "#909", href: "https://github.com/letehaha/moneymatter/pull/909" },
   { repo: "letehaha/moneymatter", number: "#910", href: "https://github.com/letehaha/moneymatter/pull/910" },
+  { repo: "Automattic/harper", number: "#4869", href: "https://github.com/Automattic/harper/pull/4869" },
+  { repo: "Hyacinthe-primus/File-Converter-Pro", number: "#35", href: "https://github.com/Hyacinthe-primus/File-Converter-Pro/pull/35" },
+  { repo: "Levminer/authme", number: "#370", href: "https://github.com/Levminer/authme/pull/370" },
+  { repo: "dayflow-js/calendar", number: "#177", href: "https://github.com/dayflow-js/calendar/pull/177" },
+  { repo: "emersion/go-webdav", number: "#224", href: "https://github.com/emersion/go-webdav/pull/224" },
+  { repo: "jarun/buku", number: "#926", href: "https://github.com/jarun/buku/pull/926" },
+  { repo: "jarun/buku", number: "#927", href: "https://github.com/jarun/buku/pull/927" },
+  { repo: "jbms/beancount-import", number: "#300", href: "https://github.com/jbms/beancount-import/pull/300" },
+  { repo: "mini-software/MiniExcel", number: "#1046", href: "https://github.com/mini-software/MiniExcel/pull/1046" },
+  { repo: "nilsteampassnet/TeamPass", number: "#5471", href: "https://github.com/nilsteampassnet/TeamPass/pull/5471" },
+  { repo: "nilsteampassnet/TeamPass", number: "#5472", href: "https://github.com/nilsteampassnet/TeamPass/pull/5472" },
+  { repo: "ranaroussi/yfinance", number: "#3047", href: "https://github.com/ranaroussi/yfinance/pull/3047" },
+  { repo: "datnguye/dbterd", number: "#178", href: "https://github.com/datnguye/dbterd/pull/178" },
+  { repo: "securo-finance/securo", number: "#1624", href: "https://github.com/securo-finance/securo/pull/1624" },
 ];
 
 /**

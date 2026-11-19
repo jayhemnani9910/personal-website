@@ -1,0 +1,15 @@
+{
+  "repo": "datnguye/dbterd",
+  "about": "A tool that draws database diagrams from dbt projects.",
+  "stars": 349,
+  "prs": [
+    {
+      "number": 178,
+      "merged": "2026-11-19",
+      "title": "A fresh install of dbterd runs",
+      "broken": "dbterd needed a package it never listed, so a clean install failed on every command with a missing module error. The project's own tests did not notice.",
+      "changed": "The missing package is now listed as a requirement, so it installs with dbterd.",
+      "matters": "New users can install the tool and run it right away."
+    }
+  ]
+}

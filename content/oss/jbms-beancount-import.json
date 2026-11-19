@@ -1,0 +1,15 @@
+{
+  "repo": "jbms/beancount-import",
+  "about": "A web app that helps bring bank and card data into Beancount, a plain-text accounting tool.",
+  "stars": 478,
+  "prs": [
+    {
+      "number": 300,
+      "merged": "2026-11-18",
+      "title": "Bank amounts with a comma decimal import at the right size",
+      "broken": "Some banks, French banks for example, write amounts like 34,51. These were imported 100 times too large, so -34,51 became -3451, with no warning.",
+      "changed": "A comma is now read as the decimal mark when the amount has no period. Amounts with a period are read as before.",
+      "matters": "Imported accounts show the real amounts and balances, not numbers off by a factor of 100."
+    }
+  ]
+}

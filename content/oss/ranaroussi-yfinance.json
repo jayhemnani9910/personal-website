@@ -1,0 +1,15 @@
+{
+  "repo": "ranaroussi/yfinance",
+  "about": "A Python library for downloading market data from Yahoo Finance.",
+  "stars": 25961,
+  "prs": [
+    {
+      "number": 3047,
+      "merged": "2026-11-18",
+      "title": "Market cap is right for London, Johannesburg and Tel Aviv stocks",
+      "broken": "The quick market cap for stocks priced in pence or cents, like Vodafone in London, came out 100 times too big.",
+      "changed": "The value now converts those prices to pounds, rand or shekels first, as the price history already did.",
+      "matters": "Screens and comparisons across markets use the real company size."
+    }
+  ]
+}

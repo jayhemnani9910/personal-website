@@ -18,6 +18,14 @@
       "broken": "A time length of a day or more was saved with a date format, so 36 hours showed as 1/1/1900 in Excel. Shorter ones wrapped around at 24 hours.",
       "changed": "All durations are now saved with Excel's hours format, which counts past 24 and reads back as a duration.",
       "matters": "Time tracking totals and job durations show correctly in Excel."
+    },
+    {
+      "number": 1046,
+      "merged": "2026-11-18",
+      "title": "CSV values with a tab inside stay in one column",
+      "broken": "The CSV reader split rows on tabs as well as commas. A value with a tab inside got split in two, shifting columns or crashing the read. MiniExcel could not read back its own files.",
+      "changed": "Rows are now split only on the separator the user set.",
+      "matters": "CSV files with tabs in notes or text load with every value in the right column."
     }
   ]
 }

@@ -1,0 +1,15 @@
+{
+  "repo": "Hyacinthe-primus/File-Converter-Pro",
+  "about": "A free offline file converter for Windows for documents, images, audio and video.",
+  "stars": 605,
+  "prs": [
+    {
+      "number": 35,
+      "merged": "2026-11-18",
+      "title": "Optimizing Word and PowerPoint files keeps transparent images",
+      "broken": "Shrinking a Word or PowerPoint file turned transparent images, like logos, icons and signatures, black where they should be see-through. With backups off, the damaged file replaced the original.",
+      "changed": "Images with transparency are now left as they are. Other images are still compressed as before.",
+      "matters": "People can make documents smaller without ruining their logos and signatures."
+    }
+  ]
+}
