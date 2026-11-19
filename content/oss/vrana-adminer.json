@@ -1,0 +1,15 @@
+{
+  "repo": "vrana/adminer",
+  "about": "Database management in a single PHP file.",
+  "stars": 7960,
+  "prs": [
+    {
+      "number": 1382,
+      "merged": "2026-11-19",
+      "title": "PostgreSQL exports with identity columns import again",
+      "broken": "Tables keyed by an always-generated identity column exported inserts that PostgreSQL rejects, so those tables came back empty on import.",
+      "changed": "The export now adds the clause PostgreSQL needs to accept the saved ids.",
+      "matters": "Exported databases can be restored with their rows and links intact."
+    }
+  ]
+}

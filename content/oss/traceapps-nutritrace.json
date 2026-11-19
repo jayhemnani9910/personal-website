@@ -1,0 +1,23 @@
+{
+  "repo": "TraceApps/nutritrace",
+  "about": "A self-hosted nutrition tracker that runs in one container.",
+  "stars": 398,
+  "prs": [
+    {
+      "number": 333,
+      "merged": "2026-11-19",
+      "title": "Imported numbers with a thousands separator keep their value",
+      "broken": "Spreadsheet imports read 1,150 as 1.15, so foods saved with calories and sodium about a thousand times too low, with no error.",
+      "changed": "Commas that group thousands are now dropped, while small decimal commas like 1,5 and 0,125 still read as decimals.",
+      "matters": "Diaries brought in from a spreadsheet show the real calories."
+    },
+    {
+      "number": 334,
+      "merged": "2026-11-19",
+      "title": "Lose It! imports count each food once",
+      "broken": "The import multiplied Lose It's calories by the logged amount, although they were already totals, so 50 g of oats counted as 9,250 kcal.",
+      "changed": "The logged amount is now kept as the portion, and the calories are used as they are.",
+      "matters": "Imported days show the same totals Lose It did."
+    }
+  ]
+}

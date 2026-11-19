@@ -1,0 +1,15 @@
+{
+  "repo": "alonrbar/easy-template-x",
+  "about": "A library that fills Word templates with data, in Node or the browser.",
+  "stars": 537,
+  "prs": [
+    {
+      "number": 167,
+      "merged": "2026-11-19",
+      "title": "List loops over several paragraphs leave no template text behind",
+      "broken": "A repeating list that spanned three or more paragraphs left a copy of the raw template paragraph at the top of the output.",
+      "changed": "Every original template paragraph is now removed after the list is filled in.",
+      "matters": "Generated documents contain only the filled-in items."
+    }
+  ]
+}

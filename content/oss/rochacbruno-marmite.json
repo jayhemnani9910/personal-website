@@ -1,0 +1,15 @@
+{
+  "repo": "rochacbruno/marmite",
+  "about": "A static site generator that turns Markdown into a blog.",
+  "stars": 891,
+  "prs": [
+    {
+      "number": 567,
+      "merged": "2026-11-19",
+      "title": "Draft posts stay out of the sitemap",
+      "broken": "Draft posts, the drafts page and draft feeds that did not exist were listed in the sitemap, so search engines found drafts and broken links.",
+      "changed": "The sitemap now leaves out drafts and everything that lists them.",
+      "matters": "Unpublished posts stay hidden, as the docs promise."
+    }
+  ]
+}
