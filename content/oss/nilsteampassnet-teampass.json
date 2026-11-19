@@ -1,0 +1,23 @@
+{
+  "repo": "nilsteampassnet/TeamPass",
+  "about": "A self-hosted password manager for teams.",
+  "stars": 1894,
+  "prs": [
+    {
+      "number": 5471,
+      "merged": "2026-11-18",
+      "title": "Passwords ending in a backslash import correctly",
+      "broken": "Importing from KeePassXC, LastPass or 1Password garbled any entry whose value ended in a backslash. The saved password was wrong and the notes were lost, while the import said it worked.",
+      "changed": "The import now reads these files the standard way these apps write them, as TeamPass's general CSV import already did.",
+      "matters": "People moving to TeamPass get the passwords they actually had."
+    },
+    {
+      "number": 5472,
+      "merged": "2026-11-18",
+      "title": "CSV export keeps multi-line notes whole",
+      "broken": "Exporting to CSV broke on any item whose description had a line break. Reading the file back, that item lost its password and login, and later items were swallowed into it.",
+      "changed": "The export now writes each full record, line breaks included, and quotes values the standard way.",
+      "matters": "The export works as a real backup or a way to move to another password manager."
+    }
+  ]
+}

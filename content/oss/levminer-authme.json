@@ -1,0 +1,15 @@
+{
+  "repo": "Levminer/authme",
+  "about": "A simple two-factor authenticator app for the desktop.",
+  "stars": 550,
+  "prs": [
+    {
+      "number": 370,
+      "merged": "2026-11-18",
+      "title": "Bitwarden vaults import their two-factor codes",
+      "broken": "Importing a Bitwarden export did nothing, with no error, for most real vaults. Secure notes, cards, and keys typed in by hand stopped the whole import.",
+      "changed": "Items without a two-factor key are now skipped, and keys typed in by hand are turned into proper entries, as the 2FAS import already does.",
+      "matters": "People moving from Bitwarden get their codes in one go instead of a button that silently fails."
+    }
+  ]
+}

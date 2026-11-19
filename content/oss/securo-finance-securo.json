@@ -9,7 +9,8 @@
       "title": "CSV imports pick one date order for the whole file",
       "broken": "With the date format on auto, each row was read on its own. A US bank file got some dates day-first and others month-first, so transactions landed in the wrong months.",
       "changed": "The import now decides the date order once from the whole column, the same way bank files in the QIF format already worked.",
-      "matters": "US exports import with every date in the right month and no silent mistakes."
+      "matters": "US exports import with every date in the right month and no silent mistakes.",
+      "top": true
     },
     {
       "number": 1431,
@@ -17,7 +18,8 @@
       "title": "Bank CSVs with a time next to the date import",
       "broken": "CSV exports that put a time after each date, like Revolut statements, imported nothing and marked every row as a bad date.",
       "changed": "The importer now reads the date part and ignores the time.",
-      "matters": "People can import their bank statements without editing them first."
+      "matters": "People can import their bank statements without editing them first.",
+      "top": true
     },
     {
       "number": 1437,
@@ -25,7 +27,16 @@
       "title": "Old Quicken files import dates from 2000 to 2009",
       "broken": "Quicken writes dates from 2000 to 2009 with a space before the year, so every transaction from that decade failed to import.",
       "changed": "The importer now reads those dates, so 3/ 1' 8 becomes March 1, 2008.",
-      "matters": "Imported money history no longer has a ten-year hole."
+      "matters": "Imported money history no longer has a ten-year hole.",
+      "top": true
+    },
+    {
+      "number": 1624,
+      "merged": "2026-11-19",
+      "title": "Bank CSVs with accented letters import",
+      "broken": "CSV files saved by Excel or exported by many Brazilian and European banks use an older text encoding. Any accented letter, like in \"São João\", made the whole import fail.",
+      "changed": "The import now falls back to that older encoding when a file is not UTF-8, as the other import formats already did.",
+      "matters": "People can import their bank statements without converting the file first."
     }
   ]
 }

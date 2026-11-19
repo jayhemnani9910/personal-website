@@ -10,6 +10,22 @@
       "broken": "Exporting bookmarks to the browser format wrote titles, tags and notes as they were. A title with angle brackets, like those on web reference pages, broke the file, and importing it back lost the title.",
       "changed": "Titles, tags and notes are now written safely in the exported file, as the other export format already did.",
       "matters": "Bookmarks moved to a browser or back keep their full titles."
+    },
+    {
+      "number": 926,
+      "merged": "2026-11-18",
+      "title": "Bookmark feeds with & in a title stay readable",
+      "broken": "Exporting bookmarks as an RSS or Atom feed wrote titles as they were. One title like \"Q&A\" or \"AT&T\" broke the whole file, so feed readers and buku itself rejected it.",
+      "changed": "Titles are now written safely, the same way links, tags and notes already were.",
+      "matters": "Exported feeds open in feed readers and import back into buku."
+    },
+    {
+      "number": 927,
+      "merged": "2026-11-18",
+      "title": "Bookmark notes survive an XBEL import",
+      "broken": "Importing an XBEL bookmark file dropped every bookmark's notes, even files that buku had exported itself.",
+      "changed": "The import now looks for the notes inside each bookmark, where the format puts them.",
+      "matters": "Moving bookmarks between buku and other apps keeps the notes people wrote."
     }
   ]
 }

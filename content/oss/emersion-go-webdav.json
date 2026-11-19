@@ -1,0 +1,15 @@
+{
+  "repo": "emersion/go-webdav",
+  "about": "A Go library for WebDAV, CalDAV and CardDAV file and calendar servers.",
+  "stars": 504,
+  "prs": [
+    {
+      "number": 224,
+      "merged": "2026-11-18",
+      "title": "Copying a folder on the WebDAV server works",
+      "broken": "Copying a folder with files in it failed with a server error. When copying over an existing folder, that folder's files were already deleted by the time it failed.",
+      "changed": "Each file and subfolder is now copied to its own place under the new folder, keeping its permissions.",
+      "matters": "Folder copies work, and a failed copy no longer wipes out a backup folder."
+    }
+  ]
+}

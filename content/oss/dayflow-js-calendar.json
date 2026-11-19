@@ -1,0 +1,15 @@
+{
+  "repo": "dayflow-js/calendar",
+  "about": "A full calendar component for React, Vue, Angular and Svelte apps.",
+  "stars": 819,
+  "prs": [
+    {
+      "number": 177,
+      "merged": "2026-11-18",
+      "title": "Repeating events stay repeating after a calendar import",
+      "broken": "Importing a calendar file or subscribing to a calendar dropped the repeat rule, so a weekly meeting showed only once. Exporting and importing again lost repeats too.",
+      "changed": "The repeat rule is now read on import and written on export, using the same fields the calendar uses for repeats made in the app.",
+      "matters": "Calendars from Google or Outlook, where most events repeat, show every meeting."
+    }
+  ]
+}

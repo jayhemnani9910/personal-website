@@ -37,6 +37,14 @@
       "broken": "Harper treated words like \"opening\", \"hearing\", \"ruling\" and \"prayer\" as uncountable, so \"a hearing on Monday\" got a false warning.",
       "changed": "These words are now marked as nouns you can count, the same fix \"heading\" got before.",
       "matters": "Normal sentences with these common words stop getting wrong corrections."
+    },
+    {
+      "number": 4869,
+      "merged": "2026-11-18",
+      "title": "No more false alarm on \"the greenhouse effect causes\"",
+      "broken": "Harper told people to change \"effect\" to \"affect\" in normal sentences like \"The greenhouse effect causes warming\", where \"effect\" is clearly the thing doing something.",
+      "changed": "When \"effect\" follows a noun and comes before a verb like \"causes\", the check now leaves it alone. Real mistakes like \"Pollution effects our health\" are still caught.",
+      "matters": "Science and everyday writing stop getting a wrong correction on a common phrase."
     }
   ]
 }
