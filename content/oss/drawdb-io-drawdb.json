@@ -1,0 +1,15 @@
+{
+  "repo": "drawdb-io/drawdb",
+  "about": "A free online editor for drawing database diagrams and turning them into SQL.",
+  "stars": 40347,
+  "prs": [
+    {
+      "number": 1209,
+      "merged": "2026-11-19",
+      "title": "Importing Postgres SQL keeps list-type columns",
+      "broken": "When importing Postgres SQL, columns that hold lists lost that. Some turned into a type Postgres does not have, so the exported SQL failed to run.",
+      "changed": "The importer now spots list columns and keeps them as lists, so the export writes them back correctly.",
+      "matters": "A Postgres schema can go in and come back out without breaking."
+    }
+  ]
+}

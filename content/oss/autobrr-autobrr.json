@@ -1,0 +1,15 @@
+{
+  "repo": "autobrr/autobrr",
+  "about": "A tool that watches torrent and usenet feeds and grabs releases that match your filters.",
+  "stars": 3217,
+  "prs": [
+    {
+      "number": 2842,
+      "merged": "2026-11-19",
+      "title": "Freeleech filters check every range in the list",
+      "broken": "A freeleech filter with more than one range only looked at the first. If that one did not match, the release was rejected, even when a later range matched.",
+      "changed": "Every range in the list is now checked before the release is turned down.",
+      "matters": "Filters grab the releases people set them up to grab, instead of quietly missing them."
+    }
+  ]
+}

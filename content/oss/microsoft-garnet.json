@@ -1,0 +1,15 @@
+{
+  "repo": "microsoft/garnet",
+  "about": "A fast cache server from Microsoft Research that works with Redis clients.",
+  "stars": 12095,
+  "prs": [
+    {
+      "number": 2410,
+      "merged": "2026-11-19",
+      "title": "Fetching several keys no longer hangs newer Redis clients",
+      "broken": "Asking for several keys at once, when one was missing, sent back an old-style empty answer. The newest Python Redis client waited forever for data that never came.",
+      "changed": "Missing keys now get the same empty answer the other commands already use with newer clients.",
+      "matters": "Apps using current Redis clients no longer freeze on a common command."
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "repo": "JamesHeinrich/getID3",
+  "about": "A PHP library that reads details like title, length and format from audio and video files.",
+  "stars": 1240,
+  "prs": [
+    {
+      "number": 524,
+      "merged": "2026-11-19",
+      "title": "Apple Lossless music files are read as audio",
+      "broken": "Apple Lossless music files were reported as video, with no audio format, sample rate or channels. Normal AAC files of the same kind were read fine.",
+      "changed": "These files are now read as audio, with the right format, sample rate, channels and bit depth, including high-resolution 96 kHz files.",
+      "matters": "Music apps and libraries built on it can now show and sort lossless music properly."
+    }
+  ]
+}

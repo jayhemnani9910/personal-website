@@ -1,0 +1,23 @@
+{
+  "repo": "umputun/spot",
+  "about": "A simple tool for deploying and setting up software on remote machines.",
+  "stars": 553,
+  "prs": [
+    {
+      "number": 377,
+      "merged": "2026-11-19",
+      "title": "Replacing a line only changes the lines that match",
+      "broken": "A rule to replace the line starting with PORT also rewrote lines like DB_PORT and REDIS_PORT. On server configs it changed commented lines too.",
+      "changed": "The \"starts with\" and \"ends with\" parts of the match are now kept, so only the right lines change.",
+      "matters": "Config edits no longer quietly break other settings in the same file."
+    },
+    {
+      "number": 378,
+      "merged": "2026-11-20",
+      "title": "Secrets with a $ or backtick reach the server unchanged",
+      "broken": "Secrets passed to commands were changed by the remote shell. A password with a $ lost part of its value, and a backtick ran as a command.",
+      "changed": "Secret values are now escaped so the shell reads them back exactly, and logs still hide them.",
+      "matters": "Services get the password they were meant to get, and secrets cannot run commands."
+    }
+  ]
+}

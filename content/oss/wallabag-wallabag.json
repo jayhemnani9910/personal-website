@@ -18,6 +18,14 @@
       "broken": "The Shaarli and Pocket imports dropped each bookmark's title. When the page could not be fetched, like a dead link, the saved entry had no title at all.",
       "changed": "The link text from the export file is now passed as the title, as the Chrome and Firefox imports already do.",
       "matters": "Moving old bookmarks into wallabag keeps their names, even for pages that are gone."
+    },
+    {
+      "number": 9197,
+      "merged": "2026-11-19",
+      "title": "Pocket CSV imports keep their tags and archived state",
+      "broken": "Importing Pocket's CSV export gave every article a random code as its only tag, dropped the real tags, and left archived articles unread.",
+      "changed": "Columns are now found by their names in the header row, so the tags and status come from the right place.",
+      "matters": "People leaving Pocket keep their tags and reading history."
     }
   ]
 }
