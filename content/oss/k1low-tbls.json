@@ -1,0 +1,15 @@
+{
+  "repo": "k1LoW/tbls",
+  "about": "A tool that writes documentation for a database, made to run in CI.",
+  "stars": 4400,
+  "prs": [
+    {
+      "number": 888,
+      "merged": "2026-11-19",
+      "title": "SQLite docs show a multi-column primary key once",
+      "broken": "For SQLite, a primary key made of two columns was listed three times: once per column and once for the real key. That wrongly said each column alone was a key.",
+      "changed": "The docs now list the real key once, over all its columns.",
+      "matters": "The generated docs describe the database correctly instead of misleading readers."
+    }
+  ]
+}

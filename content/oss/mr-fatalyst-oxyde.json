@@ -1,0 +1,23 @@
+{
+  "repo": "mr-fatalyst/oxyde",
+  "about": "A fast Python library for working with databases through typed models.",
+  "stars": 781,
+  "prs": [
+    {
+      "number": 56,
+      "merged": "2026-11-19",
+      "title": "Saving a new record with a generated ID creates it",
+      "broken": "With an ID generated automatically, as the docs show, saving a new record tried to update a row that did not exist and failed with a not-found error.",
+      "changed": "Saving now creates the row when the ID only has its default value, and updates it on later saves.",
+      "matters": "The setup the docs recommend works on the first try."
+    },
+    {
+      "number": 57,
+      "merged": "2026-11-19",
+      "title": "Picking columns works on queries that join tables",
+      "broken": "Asking for only some columns failed with an error on any query that filtered on or joined a related table. The same query without that step worked.",
+      "changed": "The results are now read the same way as full queries, so these queries return their rows.",
+      "matters": "A common way to fetch just the data you need now works across related tables."
+    }
+  ]
+}

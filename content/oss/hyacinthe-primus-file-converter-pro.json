@@ -10,6 +10,22 @@
       "broken": "Shrinking a Word or PowerPoint file turned transparent images, like logos, icons and signatures, black where they should be see-through. With backups off, the damaged file replaced the original.",
       "changed": "Images with transparency are now left as they are. Other images are still compressed as before.",
       "matters": "People can make documents smaller without ruining their logos and signatures."
+    },
+    {
+      "number": 36,
+      "merged": "2026-11-19",
+      "title": "JSON to CSV works when records have different fields",
+      "broken": "Turning a JSON list into CSV failed with an error when a later record had a field the first one did not. No CSV file was written at all.",
+      "changed": "The columns now come from every record, in the order they first appear. Records missing a field get an empty cell.",
+      "matters": "Exported data with optional fields, which is very common, now converts instead of failing."
+    },
+    {
+      "number": 37,
+      "merged": "2026-11-19",
+      "title": "CSV to JSON reads files saved by Excel correctly",
+      "broken": "Both CSV formats Excel saves came out wrong. One left a hidden mark on the first column name, the other turned accented letters like é into garbage, and both reported success.",
+      "changed": "The converter now tries the text encodings Excel uses, in order, and removes the hidden mark.",
+      "matters": "Spreadsheets saved from Excel convert to clean JSON with the right names and letters."
     }
   ]
 }

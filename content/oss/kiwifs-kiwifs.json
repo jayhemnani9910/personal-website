@@ -1,0 +1,23 @@
+{
+  "repo": "kiwifs/kiwifs",
+  "about": "A file system of Markdown pages for teams and AI agents.",
+  "stars": 852,
+  "prs": [
+    {
+      "number": 598,
+      "merged": "2026-11-20",
+      "title": "Spreadsheet imports keep ZIP codes, phone numbers and long IDs",
+      "broken": "Imports turned values like ZIP codes and phone numbers into numbers, dropping leading zeros. Long IDs lost digits, so two different records could overwrite each other.",
+      "changed": "Values with a leading zero, and IDs too long to store as numbers, now stay as text.",
+      "matters": "Imported data stays exactly as it was, and no records are lost."
+    },
+    {
+      "number": 599,
+      "merged": "2026-11-20",
+      "title": "CSV files saved by Excel import with the right column names",
+      "broken": "Excel's CSV files start with a hidden mark that stuck to the first column name. Pages got the wrong names and searches on that column found nothing.",
+      "changed": "The importer now removes the hidden mark before reading the file.",
+      "matters": "Spreadsheets from Excel import cleanly and can be searched."
+    }
+  ]
+}

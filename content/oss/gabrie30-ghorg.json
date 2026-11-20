@@ -10,6 +10,14 @@
       "broken": "With Gitea, the prune option thought every local copy was gone from the server and deleted all of them, so each scheduled run wiped the whole backup.",
       "changed": "Local copies are now matched to server repos by name too, so only repos really removed on the server are pruned.",
       "matters": "Backups stay in place, and local work in those folders is not lost."
+    },
+    {
+      "number": 716,
+      "merged": "2026-11-20",
+      "title": "Pruning with a filter keeps repos still on the server",
+      "broken": "When a run used a filter, the prune option deleted local copies of repos the filter left out, even though they still existed on the server.",
+      "changed": "Prune now checks against the full list of repos on the server, not just the filtered ones.",
+      "matters": "Running a smaller backup no longer deletes the rest of it."
     }
   ]
 }

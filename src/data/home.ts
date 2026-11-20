@@ -888,6 +888,21 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "genspark-ai/genoffice", number: "#2850", href: "https://github.com/genspark-ai/genoffice/pull/2850" },
   { repo: "rochacbruno/marmite", number: "#567", href: "https://github.com/rochacbruno/marmite/pull/567" },
   { repo: "vrana/adminer", number: "#1382", href: "https://github.com/vrana/adminer/pull/1382" },
+  { repo: "Hyacinthe-primus/File-Converter-Pro", number: "#36", href: "https://github.com/Hyacinthe-primus/File-Converter-Pro/pull/36" },
+  { repo: "Hyacinthe-primus/File-Converter-Pro", number: "#37", href: "https://github.com/Hyacinthe-primus/File-Converter-Pro/pull/37" },
+  { repo: "JamesHeinrich/getID3", number: "#524", href: "https://github.com/JamesHeinrich/getID3/pull/524" },
+  { repo: "autobrr/autobrr", number: "#2842", href: "https://github.com/autobrr/autobrr/pull/2842" },
+  { repo: "drawdb-io/drawdb", number: "#1209", href: "https://github.com/drawdb-io/drawdb/pull/1209" },
+  { repo: "k1LoW/tbls", number: "#888", href: "https://github.com/k1LoW/tbls/pull/888" },
+  { repo: "microsoft/garnet", number: "#2410", href: "https://github.com/microsoft/garnet/pull/2410" },
+  { repo: "mr-fatalyst/oxyde", number: "#56", href: "https://github.com/mr-fatalyst/oxyde/pull/56" },
+  { repo: "mr-fatalyst/oxyde", number: "#57", href: "https://github.com/mr-fatalyst/oxyde/pull/57" },
+  { repo: "umputun/spot", number: "#377", href: "https://github.com/umputun/spot/pull/377" },
+  { repo: "wallabag/wallabag", number: "#9197", href: "https://github.com/wallabag/wallabag/pull/9197" },
+  { repo: "gabrie30/ghorg", number: "#716", href: "https://github.com/gabrie30/ghorg/pull/716" },
+  { repo: "kiwifs/kiwifs", number: "#598", href: "https://github.com/kiwifs/kiwifs/pull/598" },
+  { repo: "kiwifs/kiwifs", number: "#599", href: "https://github.com/kiwifs/kiwifs/pull/599" },
+  { repo: "umputun/spot", number: "#378", href: "https://github.com/umputun/spot/pull/378" },
 ];
 
 /**
