@@ -18,6 +18,14 @@
       "broken": "A single number or true/false value anywhere in a JSON translation file made the converter skip the whole file.",
       "changed": "The converter now skips those values and keeps going, and puts them back when converting back.",
       "matters": "Common app translation files can be used without editing them first."
+    },
+    {
+      "number": 6725,
+      "merged": "2026-11-20",
+      "title": "A test for PHP texts split across lines",
+      "broken": "PHP translation files that split one text over several lines with a join were read wrong, and the bug had no test to stop it coming back.",
+      "changed": "A test now checks that such a text reads as one string and is written back correctly.",
+      "matters": "The fix for these files stays fixed in future releases."
     }
   ]
 }

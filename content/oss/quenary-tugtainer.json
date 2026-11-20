@@ -1,0 +1,15 @@
+{
+  "repo": "Quenary/tugtainer",
+  "about": "A web app that keeps Docker containers updated automatically.",
+  "stars": 1557,
+  "prs": [
+    {
+      "number": 278,
+      "merged": "2026-11-20",
+      "title": "Updated containers keep their input open",
+      "broken": "When the tool updated a container that was started to accept input, it recreated it without that setting. Some containers then stopped right away, and others ignored typed input.",
+      "changed": "The setting is now copied over when the container is recreated.",
+      "matters": "Automatic updates no longer break containers that rely on input."
+    }
+  ]
+}

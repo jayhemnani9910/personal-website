@@ -905,6 +905,12 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "umputun/spot", number: "#378", href: "https://github.com/umputun/spot/pull/378" },
   { repo: "docmd-io/docmd", number: "#296", href: "https://github.com/docmd-io/docmd/pull/296" },
   { repo: "holistics/dbml", number: "#1047", href: "https://github.com/holistics/dbml/pull/1047" },
+  { repo: "MathNya/umya-spreadsheet", number: "#409", href: "https://github.com/MathNya/umya-spreadsheet/pull/409" },
+  { repo: "MathNya/umya-spreadsheet", number: "#410", href: "https://github.com/MathNya/umya-spreadsheet/pull/410" },
+  { repo: "Quenary/tugtainer", number: "#278", href: "https://github.com/Quenary/tugtainer/pull/278" },
+  { repo: "sivchari/kumo", number: "#1048", href: "https://github.com/sivchari/kumo/pull/1048" },
+  { repo: "sivchari/kumo", number: "#1051", href: "https://github.com/sivchari/kumo/pull/1051" },
+  { repo: "translate/translate", number: "#6725", href: "https://github.com/translate/translate/pull/6725" },
 ];
 
 /**
