@@ -1,0 +1,15 @@
+{
+  "repo": "holistics/dbml",
+  "about": "A simple language for describing database tables, with tools that convert it to and from SQL.",
+  "stars": 3726,
+  "prs": [
+    {
+      "number": 1047,
+      "merged": "2026-11-20",
+      "title": "JSON column defaults from Postgres survive the round trip",
+      "broken": "Reading a Postgres database into DBML lost the quotes and type on JSON column defaults, so turning it back into SQL gave code Postgres refused to run.",
+      "changed": "JSON defaults are now kept exactly as Postgres reports them, the same way the SQL importer already writes them.",
+      "matters": "Schemas pulled from a live Postgres database can be turned back into working SQL."
+    }
+  ]
+}
