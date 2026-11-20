@@ -17,7 +17,26 @@
       "title": "Charts on sheets named like O'Brien no longer crash saving",
       "broken": "Saving a workbook crashed when a chart sat on a sheet whose name had an apostrophe, such as O'Brien.",
       "changed": "Sheet names with apostrophes are now read and written back correctly in chart references.",
-      "matters": "Workbooks with everyday names like O'Brien save without crashing."
+      "matters": "Workbooks with everyday names like O'Brien save without crashing.",
+      "top": true
+    },
+    {
+      "number": 409,
+      "merged": "2026-11-20",
+      "title": "Adding or removing rows changes only the sheet you named",
+      "broken": "Inserting or deleting a row or column on one sheet did the same to every other sheet in the file. Rows on other sheets were silently lost when it was saved.",
+      "changed": "Row and column edits now move only the cells of the sheet that was named.",
+      "matters": "Editing one sheet no longer quietly destroys data on the others.",
+      "top": true
+    },
+    {
+      "number": 410,
+      "merged": "2026-11-20",
+      "title": "Removing rows no longer crashes on whole-column formulas",
+      "broken": "Deleting a row or column crashed the program if any formula used a whole column, like a sum of column A. Inserting left such formulas pointing at the wrong place.",
+      "changed": "Whole-column and whole-row references now move with the edit like any other reference.",
+      "matters": "Common spreadsheets with column totals can be edited without crashing or wrong results.",
+      "top": true
     }
   ]
 }

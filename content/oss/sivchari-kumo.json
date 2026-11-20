@@ -1,0 +1,23 @@
+{
+  "repo": "sivchari/kumo",
+  "about": "A lightweight stand-in for AWS services, for testing on your own machine.",
+  "stars": 1511,
+  "prs": [
+    {
+      "number": 1048,
+      "merged": "2026-11-20",
+      "title": "Batch writes no longer crash the standard Python client",
+      "broken": "When every item in a batch write was saved, the reply left out a field real AWS always sends. The common Python batch writer crashed and the rest of the items were never sent.",
+      "changed": "The reply now always includes the field, empty when nothing is left over.",
+      "matters": "Code that writes data in batches works against the emulator the same as against AWS."
+    },
+    {
+      "number": 1051,
+      "merged": "2026-11-20",
+      "title": "Reading part of a nested record returns that part",
+      "broken": "Asking for a value inside a nested record or list returned nothing, as if the record did not exist.",
+      "changed": "Requests for nested values now pick out and return just those values, as AWS does.",
+      "matters": "Apps that read only part of a record get correct results when tested locally."
+    }
+  ]
+}
