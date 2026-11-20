@@ -1,0 +1,15 @@
+{
+  "repo": "mikepenz/action-junit-report",
+  "about": "A GitHub Action that shows test results on pull requests.",
+  "stars": 433,
+  "prs": [
+    {
+      "number": 1666,
+      "merged": "2026-11-20",
+      "title": "Failing tests are counted even past the annotation limit",
+      "broken": "Once the limit on annotations was reached, the action stopped reading the test report. A failing test after that point was never seen, and the check passed.",
+      "changed": "Every test is now counted; only the annotations stop at the limit.",
+      "matters": "A failing test can't hide behind a passing check."
+    }
+  ]
+}

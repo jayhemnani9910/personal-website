@@ -1,0 +1,15 @@
+{
+  "repo": "dennisklappe/CloudMeet",
+  "about": "A free, open-source meeting scheduler, like Calendly, that syncs with Google and Outlook calendars.",
+  "stars": 560,
+  "prs": [
+    {
+      "number": 44,
+      "merged": "2026-11-20",
+      "title": "Correct booking times for New Zealand hosts and on clock change days",
+      "broken": "For hosts thirteen or fourteen hours ahead of UTC, like New Zealand in summer, slots showed a day late and booking them failed. On clock change days slots were an hour off.",
+      "changed": "Times are now worked out from the full date and time in the host's zone.",
+      "matters": "Guests see and can book the hours the host actually set."
+    }
+  ]
+}

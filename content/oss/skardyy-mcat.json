@@ -1,0 +1,23 @@
+{
+  "repo": "Skardyy/mcat",
+  "about": "A terminal viewer for images, videos, PDFs, Markdown and office documents.",
+  "stars": 1477,
+  "prs": [
+    {
+      "number": 117,
+      "merged": "2026-11-20",
+      "title": "Word documents turn into Markdown without stray text",
+      "broken": "Converting a Word file printed deleted tracked changes, hidden page number codes, and split a heading at the very top onto two lines.",
+      "changed": "Only the visible text of the document is now kept.",
+      "matters": "The Markdown reads like the document you see in Word."
+    },
+    {
+      "number": 118,
+      "merged": "2026-11-20",
+      "title": "Spreadsheet dates show as dates",
+      "broken": "Date cells in Excel files came out as raw serial numbers like 45366 instead of a date.",
+      "changed": "Dates are now written as year, month and day, with the time when the cell has one.",
+      "matters": "Tables made from spreadsheets can be read without decoding the numbers."
+    }
+  ]
+}

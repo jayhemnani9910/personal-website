@@ -9,7 +9,8 @@
       "title": "Backups restore the same decimals, fractions of a second and times",
       "broken": "Dumps kept only six decimals of floating point numbers, dropped fractions of a second, and shifted TIMESTAMP values by the server's time zone offset on restore.",
       "changed": "Numbers are written with all their digits, times keep their fractions, and the dump reads timestamps in the same zone it restores them in.",
-      "matters": "A restored database holds the same values as the one that was backed up."
+      "matters": "A restored database holds the same values as the one that was backed up.",
+      "top": true
     },
     {
       "number": 554,
@@ -17,7 +18,8 @@
       "title": "Binary and bit columns survive a backup and restore",
       "broken": "Binary and bit values were written into the dump as raw bytes, so restores failed with a syntax error or brought back wrong values.",
       "changed": "These values are now written as escaped binary strings, the same way other binary columns already were.",
-      "matters": "Backups of tables with hashes, tokens or flags restore correctly."
+      "matters": "Backups of tables with hashes, tokens or flags restore correctly.",
+      "top": true
     },
     {
       "number": 556,
@@ -26,6 +28,15 @@
       "broken": "Backups wrote empty binary fields as NULL. After a restore, a value that was empty became missing, which can break apps and constraints that expect a value.",
       "changed": "Empty binary values are now written as empty strings, so a restore gives back exactly what was stored.",
       "matters": "Backups restore the data as it was."
+    },
+    {
+      "number": 557,
+      "merged": "2026-11-20",
+      "title": "Triggers come back from a backup with the right timing",
+      "broken": "Backups wrote every trigger as one that runs after a change, even ones meant to run before it. Restores then failed or brought back triggers that behave differently.",
+      "changed": "Each trigger is now written with the timing it really has.",
+      "matters": "Databases that use triggers restore and keep working as before.",
+      "top": true
     }
   ]
 }

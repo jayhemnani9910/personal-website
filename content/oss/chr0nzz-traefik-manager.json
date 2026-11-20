@@ -1,0 +1,15 @@
+{
+  "repo": "chr0nzz/traefik-manager",
+  "about": "A self-hosted web page for managing Traefik, a program that routes web traffic to services.",
+  "stars": 1729,
+  "prs": [
+    {
+      "number": 246,
+      "merged": "2026-11-20",
+      "title": "Deleting a route keeps services other config files still use",
+      "broken": "With several config files, deleting or disabling a route removed its service even when a route in another file still used it, so that other route stopped working.",
+      "changed": "The app now checks every config file before removing a service.",
+      "matters": "Changing one route no longer quietly takes down another site."
+    }
+  ]
+}
