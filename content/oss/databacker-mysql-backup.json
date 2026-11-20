@@ -18,6 +18,14 @@
       "broken": "Binary and bit values were written into the dump as raw bytes, so restores failed with a syntax error or brought back wrong values.",
       "changed": "These values are now written as escaped binary strings, the same way other binary columns already were.",
       "matters": "Backups of tables with hashes, tokens or flags restore correctly."
+    },
+    {
+      "number": 556,
+      "merged": "2026-11-20",
+      "title": "Empty binary values come back empty, not missing",
+      "broken": "Backups wrote empty binary fields as NULL. After a restore, a value that was empty became missing, which can break apps and constraints that expect a value.",
+      "changed": "Empty binary values are now written as empty strings, so a restore gives back exactly what was stored.",
+      "matters": "Backups restore the data as it was."
     }
   ]
 }
