@@ -10,6 +10,14 @@
       "broken": "Importing an MkDocs site built a broken sidebar: some links went to pages that did not exist, plugin names showed up as menu items, and quoted titles kept their quotes.",
       "changed": "The importer now reads only the menu section, links folder home pages correctly and drops the quotes.",
       "matters": "People switching from MkDocs get a sidebar that works the first time."
+    },
+    {
+      "number": 296,
+      "merged": "2026-11-20",
+      "title": "Sidebar links work on every page of a site moved from MkDocs",
+      "broken": "After moving a site over from MkDocs, sidebar and next/previous links on any page below the home page pointed to pages that did not exist.",
+      "changed": "Menu links from the import now start at the site root, so they lead to the same page from anywhere.",
+      "matters": "People switching from MkDocs get a site that can be browsed past the home page."
     }
   ]
 }

@@ -903,6 +903,8 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "kiwifs/kiwifs", number: "#598", href: "https://github.com/kiwifs/kiwifs/pull/598" },
   { repo: "kiwifs/kiwifs", number: "#599", href: "https://github.com/kiwifs/kiwifs/pull/599" },
   { repo: "umputun/spot", number: "#378", href: "https://github.com/umputun/spot/pull/378" },
+  { repo: "docmd-io/docmd", number: "#296", href: "https://github.com/docmd-io/docmd/pull/296" },
+  { repo: "holistics/dbml", number: "#1047", href: "https://github.com/holistics/dbml/pull/1047" },
 ];
 
 /**
