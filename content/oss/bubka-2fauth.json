@@ -1,0 +1,15 @@
+{
+  "repo": "Bubka/2FAuth",
+  "about": "A self-hosted web app that keeps your two-factor accounts and shows their login codes.",
+  "stars": 4231,
+  "prs": [
+    {
+      "number": 585,
+      "merged": "2026-11-20",
+      "title": "Bitwarden vault imports work when some items have no code",
+      "broken": "Importing a Bitwarden export failed with an error unless every item was a login with a two-factor code, which almost no real vault is. Notes, cards and plain logins broke it.",
+      "changed": "Items without a code are now skipped, and a code saved as a bare key is read as the secret.",
+      "matters": "People moving from Bitwarden can import their whole vault in one go."
+    }
+  ]
+}

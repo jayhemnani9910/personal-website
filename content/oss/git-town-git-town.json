@@ -1,0 +1,15 @@
+{
+  "repo": "git-town/git-town",
+  "about": "A command line tool that makes working with many Git branches easier.",
+  "stars": 3401,
+  "prs": [
+    {
+      "number": 6338,
+      "merged": "2026-11-20",
+      "title": "Undo no longer deletes a branch with new work on it",
+      "broken": "Undo deleted the branches the last command made, even if someone had added new commits to them since. Those commits were lost.",
+      "changed": "Undo now checks for new commits first, says which branches changed and stops. A force option undoes anyway.",
+      "matters": "Undo can't throw away work by surprise."
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "repo": "crocidb/bulletty",
+  "about": "A feed reader for the terminal that saves articles as Markdown.",
+  "stars": 453,
+  "prs": [
+    {
+      "number": 246,
+      "merged": "2026-11-20",
+      "title": "Blogger posts open the post, not the comments feed",
+      "broken": "Posts from Blogger feeds used the comments feed as their link, so opening one in the browser showed a page of raw feed data.",
+      "changed": "The reader now picks the link that points to the post itself, and falls back to the first link as before.",
+      "matters": "Posts from Blogger sites open as normal web pages."
+    }
+  ]
+}

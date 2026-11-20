@@ -914,6 +914,17 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "databacker/mysql-backup", number: "#556", href: "https://github.com/databacker/mysql-backup/pull/556" },
   { repo: "kittendevv/Invio", number: "#184", href: "https://github.com/kittendevv/Invio/pull/184" },
   { repo: "skatkov/devtui", number: "#252", href: "https://github.com/skatkov/devtui/pull/252" },
+  { repo: "Bubka/2FAuth", number: "#585", href: "https://github.com/Bubka/2FAuth/pull/585" },
+  { repo: "Skardyy/mcat", number: "#117", href: "https://github.com/Skardyy/mcat/pull/117" },
+  { repo: "Skardyy/mcat", number: "#118", href: "https://github.com/Skardyy/mcat/pull/118" },
+  { repo: "chr0nzz/traefik-manager", number: "#246", href: "https://github.com/chr0nzz/traefik-manager/pull/246" },
+  { repo: "crocidb/bulletty", number: "#246", href: "https://github.com/crocidb/bulletty/pull/246" },
+  { repo: "databacker/mysql-backup", number: "#557", href: "https://github.com/databacker/mysql-backup/pull/557" },
+  { repo: "dennisklappe/CloudMeet", number: "#44", href: "https://github.com/dennisklappe/CloudMeet/pull/44" },
+  { repo: "git-town/git-town", number: "#6338", href: "https://github.com/git-town/git-town/pull/6338" },
+  { repo: "mikepenz/action-junit-report", number: "#1666", href: "https://github.com/mikepenz/action-junit-report/pull/1666" },
+  { repo: "openinary/openinary", number: "#199", href: "https://github.com/openinary/openinary/pull/199" },
+  { repo: "php-gettext/Gettext", number: "#314", href: "https://github.com/php-gettext/Gettext/pull/314" },
 ];
 
 /**
