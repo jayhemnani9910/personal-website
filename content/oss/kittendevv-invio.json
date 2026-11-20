@@ -10,6 +10,14 @@
       "broken": "Every UBL invoice broke a European e-invoicing rule because the buyer's legal name was missing, so PEPPOL networks and validators rejected it.",
       "changed": "The buyer's legal name is now included, as the seller's already was.",
       "matters": "Businesses can send their invoices through e-invoicing networks without rejections."
+    },
+    {
+      "number": 184,
+      "merged": "2026-11-20",
+      "title": "E-invoices include the customer's city and postal code",
+      "broken": "Invoices exported in the European e-invoice format left out the city and postal code, so validators and some receiving systems rejected them.",
+      "changed": "The export now writes the city and postal code into their proper fields.",
+      "matters": "Invoices can be sent to systems that require a full address."
     }
   ]
 }

@@ -911,6 +911,9 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "sivchari/kumo", number: "#1048", href: "https://github.com/sivchari/kumo/pull/1048" },
   { repo: "sivchari/kumo", number: "#1051", href: "https://github.com/sivchari/kumo/pull/1051" },
   { repo: "translate/translate", number: "#6725", href: "https://github.com/translate/translate/pull/6725" },
+  { repo: "databacker/mysql-backup", number: "#556", href: "https://github.com/databacker/mysql-backup/pull/556" },
+  { repo: "kittendevv/Invio", number: "#184", href: "https://github.com/kittendevv/Invio/pull/184" },
+  { repo: "skatkov/devtui", number: "#252", href: "https://github.com/skatkov/devtui/pull/252" },
 ];
 
 /**

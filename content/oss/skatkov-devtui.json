@@ -9,7 +9,8 @@
       "title": "The JSON formatter no longer changes your data",
       "broken": "Formatting JSON changed the data itself: long numbers were rounded, keys were sorted, 2.50 became 2.5 and some symbols were escaped.",
       "changed": "The formatter now only changes spacing and line breaks.",
-      "matters": "People can tidy JSON without silently altering IDs, prices or key order."
+      "matters": "People can tidy JSON without silently altering IDs, prices or key order.",
+      "top": true
     },
     {
       "number": 249,
@@ -25,7 +26,17 @@
       "title": "Converting to TOML keeps whole numbers whole",
       "broken": "Converting JSON or YAML to TOML wrote every number as a decimal, so 8080 became 8080.0 and large IDs lost digits.",
       "changed": "Whole numbers now stay whole numbers, and decimals stay decimals.",
-      "matters": "Config files made with the converter load with the right types."
+      "matters": "Config files made with the converter load with the right types.",
+      "top": true
+    },
+    {
+      "number": 252,
+      "merged": "2026-11-20",
+      "title": "JSON to XML escapes special characters",
+      "broken": "Converting JSON to XML copied characters like the ampersand and the less-than sign straight into the output, which made the XML invalid.",
+      "changed": "Those characters are now escaped, so the XML is valid and reads back the same text.",
+      "matters": "Converted files open in any XML tool without errors.",
+      "top": true
     }
   ]
 }
