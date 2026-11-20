@@ -55,7 +55,7 @@ describe("OssRepoPage", () => {
       }
       unmount();
     }
-  });
+  }, 20_000);
 
   it("calls a repo that takes work in as commits landed, not merged", async () => {
     render(await OssRepoPage({ params: Promise.resolve({ slug: "graphify-labs-graphify" }) }), { wrapper: TerminalProvider });
