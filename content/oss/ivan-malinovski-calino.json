@@ -1,0 +1,15 @@
+{
+  "repo": "Ivan-Malinovski/calino",
+  "about": "A web calendar and contacts client for CalDAV and CardDAV servers.",
+  "stars": 376,
+  "prs": [
+    {
+      "number": 280,
+      "merged": "2026-11-24",
+      "title": "Contacts with accented names import with their names",
+      "broken": "Importing contacts from Android or Outlook saved many of them as \"Unknown\" with empty names, because name lines that carry extra settings, like those used for accented letters, were not read.",
+      "changed": "Name, organization and title lines are now read with their settings, and encoded values are decoded.",
+      "matters": "Contacts moved from a phone keep their real names, including non-English ones."
+    }
+  ]
+}

@@ -69,6 +69,14 @@
       "broken": "The full backup left out expense receipts and profile pictures, so they were gone after restoring, even though the backups page said uploads were included.",
       "changed": "Backups now also save the folder where receipts and avatars live, and restoring puts them back.",
       "matters": "A restore brings back everything, including receipts people may need for expenses."
+    },
+    {
+      "number": 967,
+      "merged": "2026-11-24",
+      "title": "Restoring a JSON backup no longer claims success",
+      "broken": "Restoring the JSON backup the same page creates said \"Backup restored successfully\" but wrote nothing, so a user moving servers or undoing a bad import thought their data was back.",
+      "changed": "A JSON backup is now refused with a clear message that points to restoring a ZIP backup from the admin page.",
+      "matters": "People are no longer told their data came back when it did not."
     }
   ]
 }
