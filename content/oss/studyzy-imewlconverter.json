@@ -1,0 +1,23 @@
+{
+  "repo": "studyzy/imewlconverter",
+  "about": "A free tool that converts word lists between Chinese input methods, such as Sogou, Google and Microsoft Pinyin.",
+  "stars": 10579,
+  "prs": [
+    {
+      "number": 434,
+      "merged": "2026-11-24",
+      "title": "Sogou backup export keeps words with lüe and nüe",
+      "broken": "Exporting to the Sogou backup format silently dropped every word whose pinyin has lüe or nüe, such as common words for strategy and neglect, and reported them as filtered.",
+      "changed": "These syllables are now written the way Sogou's pinyin table spells them, so the words are found and kept.",
+      "matters": "People moving their word lists to Sogou keep all their common words."
+    },
+    {
+      "number": 435,
+      "merged": "2026-11-24",
+      "title": "Batch export into a folder works from the command line",
+      "broken": "The batch mode from the README, exporting several word lists into a folder, always failed with an access error and wrote nothing.",
+      "changed": "When the output path is a folder, the command line now writes one file per input, as the desktop app already did.",
+      "matters": "The documented way to convert many word lists at once works."
+    }
+  ]
+}
