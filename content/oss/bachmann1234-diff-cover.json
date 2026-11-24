@@ -10,6 +10,14 @@
       "broken": "Run from a subfolder of the repo, diff-cover matched no files in an LCOV report and passed a coverage check it should have failed.",
       "changed": "Paths in LCOV reports are now read from the folder the tool ran in, or as absolute paths.",
       "matters": "Coverage gates on LCOV reports catch untested code again."
+    },
+    {
+      "number": 660,
+      "merged": "2026-11-24",
+      "title": "Java coverage reports work when run from a subfolder",
+      "broken": "Running diff-cover with a JaCoCo report from a Java module's own folder, the usual monorepo layout, matched no files, reported no coverage and passed the check.",
+      "changed": "Report paths are now matched relative to where the tool runs, including on Windows and with source root options.",
+      "matters": "Coverage checks in multi-module Java repos actually catch untested changes."
     }
   ]
 }
