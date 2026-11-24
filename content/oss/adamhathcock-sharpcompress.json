@@ -10,6 +10,14 @@
       "broken": "Saving a tar archive gave every file full permissions for everyone, so a private key packed as owner-only came out readable and writable by anyone after unpacking.",
       "changed": "Each file and folder now keeps the permissions it had in the archive. New files still get the old default.",
       "matters": "Private files stay private when archives are rewritten, for example in Docker images."
+    },
+    {
+      "number": 1508,
+      "merged": "2026-11-24",
+      "title": "Symlinked files are stored whole in tar archives",
+      "broken": "Adding a folder to a tar archive on Linux or macOS stored a symlinked file as just a few bytes, the length of the link path. tar unpacked it with no error, so the file was silently broken.",
+      "changed": "The size now comes from the file that was actually opened, so the full contents are stored.",
+      "matters": "Backups and packages that contain symlinks unpack with the real file contents."
     }
   ]
 }

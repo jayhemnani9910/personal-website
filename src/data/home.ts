@@ -982,6 +982,9 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "translate/translate", number: "#6748", href: "https://github.com/translate/translate/pull/6748" },
   { repo: "Kong/insomnia", number: "#10801", href: "https://github.com/Kong/insomnia/pull/10801" },
   { repo: "dream-num/univer", number: "#8392", href: "https://github.com/dream-num/univer/pull/8392" },
+  { repo: "DRYTRIX/TimeTracker", number: "#967", href: "https://github.com/DRYTRIX/TimeTracker/pull/967" },
+  { repo: "Ivan-Malinovski/calino", number: "#280", href: "https://github.com/Ivan-Malinovski/calino/pull/280" },
+  { repo: "adamhathcock/sharpcompress", number: "#1508", href: "https://github.com/adamhathcock/sharpcompress/pull/1508" },
 ];
 
 /**
