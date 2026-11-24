@@ -985,6 +985,9 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "DRYTRIX/TimeTracker", number: "#967", href: "https://github.com/DRYTRIX/TimeTracker/pull/967" },
   { repo: "Ivan-Malinovski/calino", number: "#280", href: "https://github.com/Ivan-Malinovski/calino/pull/280" },
   { repo: "adamhathcock/sharpcompress", number: "#1508", href: "https://github.com/adamhathcock/sharpcompress/pull/1508" },
+  { repo: "Eyevinn/mp4ff", number: "#732", href: "https://github.com/Eyevinn/mp4ff/pull/732" },
+  { repo: "studyzy/imewlconverter", number: "#434", href: "https://github.com/studyzy/imewlconverter/pull/434" },
+  { repo: "studyzy/imewlconverter", number: "#435", href: "https://github.com/studyzy/imewlconverter/pull/435" },
 ];
 
 /**

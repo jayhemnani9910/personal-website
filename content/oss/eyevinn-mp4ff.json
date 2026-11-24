@@ -10,6 +10,14 @@
       "broken": "Cutting an audio-only MP4 with mp4ff-crop could write a file that ffmpeg and players could not open, because one table of sample positions came out wrong.",
       "changed": "The crop now writes that table correctly when the cut falls inside the first block of samples.",
       "matters": "Trimmed audio files open and play as expected."
+    },
+    {
+      "number": 732,
+      "merged": "2026-11-24",
+      "title": "Defragmented B-frame video keeps its last frames",
+      "broken": "Turning an HLS or DASH video with B-frames back into a plain MP4 cut the last two frames, because the track's length was taken from the decode end instead of the display end.",
+      "changed": "The final edit now reaches the end of the display timeline, and tracks without an edit list keep the standard duration.",
+      "matters": "Videos converted back from streaming formats play to the end."
     }
   ]
 }
