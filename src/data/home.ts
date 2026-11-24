@@ -981,6 +981,7 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "tobilg/polyglot", number: "#533", href: "https://github.com/tobilg/polyglot/pull/533" },
   { repo: "translate/translate", number: "#6748", href: "https://github.com/translate/translate/pull/6748" },
   { repo: "Kong/insomnia", number: "#10801", href: "https://github.com/Kong/insomnia/pull/10801" },
+  { repo: "dream-num/univer", number: "#8392", href: "https://github.com/dream-num/univer/pull/8392" },
 ];
 
 /**
