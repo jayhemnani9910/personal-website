@@ -1,0 +1,15 @@
+{
+  "repo": "chrisvel/tududi",
+  "about": "A self-hosted app for organizing tasks, projects and notes.",
+  "stars": 3579,
+  "prs": [
+    {
+      "number": 2094,
+      "merged": "2026-11-23",
+      "title": "Monthly tasks come back on the right day",
+      "broken": "Finishing a monthly task set the next due date a day early or late for many time zones, and a last-day-of-month task could skip a month.",
+      "changed": "I made the next date work from the user's own local date instead of the UTC clock.",
+      "matters": "Monthly bills and chores show up on the day the user picked."
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "repo": "pgrundev/pgbot",
+  "about": "A command-line helper that reads a Postgres database and suggests fixes.",
+  "stars": 1518,
+  "prs": [
+    {
+      "number": 124,
+      "merged": "2026-11-23",
+      "title": "Setup SQL works for names with capitals or dashes",
+      "broken": "The setup commands the tool printed failed in Postgres when the role or database name had a dash, a space or a capital letter.",
+      "changed": "I made the tool put such names in quotes, and leave plain lowercase names as they were.",
+      "matters": "Setup works on databases with ordinary names like My-App, without hand edits."
+    }
+  ]
+}

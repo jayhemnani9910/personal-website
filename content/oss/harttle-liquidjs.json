@@ -1,0 +1,15 @@
+{
+  "repo": "harttle/liquidjs",
+  "about": "A JavaScript version of Liquid, the template language Shopify and many static sites use.",
+  "stars": 1890,
+  "prs": [
+    {
+      "number": 992,
+      "merged": "2026-11-21",
+      "title": "Splitting text on a space works like Shopify",
+      "broken": "Splitting text on a space kept tabs and line breaks inside the words, and double spaces gave empty items. Shopify splits on any run of whitespace.",
+      "changed": "I made a single space split on any whitespace and ignore spaces at the start and end, as Shopify does.",
+      "matters": "Word counts and word lists in templates match what Shopify gives."
+    }
+  ]
+}

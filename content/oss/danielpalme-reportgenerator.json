@@ -1,0 +1,15 @@
+{
+  "repo": "danielpalme/ReportGenerator",
+  "about": "A tool that turns code coverage files into readable reports.",
+  "stars": 3114,
+  "prs": [
+    {
+      "number": 796,
+      "merged": "2026-11-20",
+      "title": "Coverage files with line checksums report the right coverage",
+      "broken": "Some coverage files add a checksum to each line. The tool read it as part of the hit count, so every line looked covered and an 80% project showed 100%.",
+      "changed": "I made it read only the hit count and ignore the checksum.",
+      "matters": "Coverage reports show the real number instead of a reassuring wrong one."
+    }
+  ]
+}

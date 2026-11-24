@@ -1,0 +1,15 @@
+{
+  "repo": "MarkusSintonen/pyreqwest",
+  "about": "A fast Python HTTP client built on the Rust reqwest library.",
+  "stars": 410,
+  "prs": [
+    {
+      "number": 60,
+      "merged": "2026-11-23",
+      "title": "File uploads work through the sync httpx transport",
+      "broken": "Any file upload through the library's sync httpx transport failed before sending, with an error saying the stream was async.",
+      "changed": "I made the check reject only streams that cannot be read in sync code, since httpx's upload stream supports both.",
+      "matters": "Apps using httpx with this faster transport can upload files again."
+    }
+  ]
+}

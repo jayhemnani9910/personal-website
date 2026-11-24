@@ -1,0 +1,15 @@
+{
+  "repo": "pdf-rs/pdf",
+  "about": "A Rust library for reading, changing and writing PDF files.",
+  "stars": 1729,
+  "prs": [
+    {
+      "number": 306,
+      "merged": "2026-11-23",
+      "title": "New PDFs no longer use the object number other readers ignore",
+      "broken": "PDFs built with the library gave their first object number 0, which the PDF format reserves. Other readers treated it as missing, so an image could vanish or a page render blank.",
+      "changed": "I made a new file keep number 0 reserved, so the first real object gets number 1.",
+      "matters": "PDFs the library writes open correctly in other viewers."
+    }
+  ]
+}

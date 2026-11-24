@@ -1,0 +1,15 @@
+{
+  "repo": "slingdata-io/sling-cli",
+  "about": "A command line tool that moves data between files and databases.",
+  "stars": 927,
+  "prs": [
+    {
+      "number": 839,
+      "merged": "2026-11-22",
+      "title": "Times loaded into SQLite keep their time zone",
+      "broken": "Loading timestamps with a time zone offset into SQLite dropped the offset and labelled them UTC. Every time was off by its offset.",
+      "changed": "I made the loader write the real offset, and still write UTC times as before.",
+      "matters": "Order and event times from other zones land in SQLite at the right moment."
+    }
+  ]
+}

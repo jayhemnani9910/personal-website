@@ -1,0 +1,15 @@
+{
+  "repo": "firecow/gitlab-ci-local",
+  "about": "A tool that runs a project's GitLab CI pipeline on your own computer, without pushing.",
+  "stars": 4166,
+  "prs": [
+    {
+      "number": 1998,
+      "merged": "2026-11-23",
+      "title": "Pipelines with change rules run on projects that use master",
+      "broken": "If the remote's default branch was not recorded, the tool assumed it was called main. On projects using master, any pipeline with change rules crashed.",
+      "changed": "I made it check whether main or master exists on the remote and use that one, and name it in the warning.",
+      "matters": "Older projects, and ones first pushed from a fresh local repo, can test their pipelines locally."
+    }
+  ]
+}

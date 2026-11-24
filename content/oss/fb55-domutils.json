@@ -1,0 +1,15 @@
+{
+  "repo": "fb55/domutils",
+  "about": "A JavaScript library of helpers for working with parsed HTML and XML pages.",
+  "stars": 227,
+  "prs": [
+    {
+      "number": 2380,
+      "merged": "2026-11-22",
+      "title": "Atom feeds give the page link, not the comments or feed link",
+      "broken": "Reading an Atom feed took whichever link came first. On Blogger that was the comments feed, and on YouTube or Reddit it was the feed's own address, not the page.",
+      "changed": "I made it pick the link that points to the page, as the Atom standard says, and fall back to the first one.",
+      "matters": "Feed readers built on it open the actual post when you click it."
+    }
+  ]
+}

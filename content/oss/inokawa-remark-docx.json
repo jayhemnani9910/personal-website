@@ -1,0 +1,15 @@
+{
+  "repo": "inokawa/remark-docx",
+  "about": "A JavaScript plugin that turns Markdown into Word documents.",
+  "stars": 120,
+  "prs": [
+    {
+      "number": 212,
+      "merged": "2026-11-23",
+      "title": "Extra paragraphs in a list item stay inside that item",
+      "broken": "A numbered item with a second paragraph or a code block got each block numbered as its own item, so a two-item list came out as three in Word.",
+      "changed": "I made only the first block get the number, and indented the rest under the same item.",
+      "matters": "Lists in the Word file match the Markdown they came from."
+    }
+  ]
+}

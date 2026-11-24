@@ -1,0 +1,23 @@
+{
+  "repo": "FreePeak/db-mcp-server",
+  "about": "A server that lets AI assistants look at and query several kinds of databases.",
+  "stars": 487,
+  "prs": [
+    {
+      "number": 117,
+      "merged": "2026-11-22",
+      "title": "SQLite tables show which columns can be empty the right way round",
+      "broken": "Describing a SQLite table showed it backwards. Columns that must have a value were marked as allowed to be empty, and the others the opposite.",
+      "changed": "I flipped the check so it reports the same way it does for PostgreSQL.",
+      "matters": "Anyone reading a table's layout, person or assistant, gets the truth about which fields are required."
+    },
+    {
+      "number": 118,
+      "merged": "2026-11-22",
+      "title": "Same-named PostgreSQL tables in different schemas stay separate",
+      "broken": "When two schemas had a table with the same name, as every Supabase project does, describing it mixed both into one made-up table. Naming the schema returned nothing at all.",
+      "changed": "I made it find the one table the name actually points to, and look only at that table's columns, indexes and keys.",
+      "matters": "The description matches the real table, so queries written from it work."
+    }
+  ]
+}

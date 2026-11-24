@@ -10,6 +10,14 @@
       "broken": "Exporting a Postgres database with mixed-case table names, the default for Prisma, stopped with an error and left a half-written file.",
       "changed": "Names with capital letters are now quoted in the export, and each export uses the right SQL style for its database.",
       "matters": "Exports from Prisma and similar projects finish and restore with the same table names."
+    },
+    {
+      "number": 373,
+      "merged": "2026-11-21",
+      "title": "Dates export cleanly to CSV and Markdown",
+      "broken": "Exporting query results wrapped every date and time in extra quote marks, so a spreadsheet read them as text instead of dates.",
+      "changed": "I made the export write dates as plain date and time text, with no quotes added.",
+      "matters": "Exported tables open in a spreadsheet with dates it can sort and filter."
     }
   ]
 }

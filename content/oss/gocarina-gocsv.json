@@ -1,0 +1,15 @@
+{
+  "repo": "gocarina/gocsv",
+  "about": "A Go library for turning CSV files into data and back.",
+  "stars": 2203,
+  "prs": [
+    {
+      "number": 318,
+      "merged": "2026-11-21",
+      "title": "Empty date cells no longer fail the whole CSV file",
+      "broken": "One empty cell in an optional date column made the whole file fail to load. The library writes empty cells for missing dates itself, so it could not read its own files back.",
+      "changed": "I made an empty cell leave the value missing instead of trying to read it as a date.",
+      "matters": "Files with gaps load, and what the library saves it can open again."
+    }
+  ]
+}

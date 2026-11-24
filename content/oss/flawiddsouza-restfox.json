@@ -1,0 +1,23 @@
+{
+  "repo": "flawiddsouza/Restfox",
+  "about": "An offline-first app for testing web APIs, on the web and desktop.",
+  "stars": 2784,
+  "prs": [
+    {
+      "number": 397,
+      "merged": "2026-11-21",
+      "title": "Requests copied from Chrome import with the right body",
+      "broken": "Chrome writes request bodies with quotes, line breaks or exclamation marks in a special shell form. Importing them cut the body off or filled it with stray backslash text.",
+      "changed": "I made the import decode that form before reading the command.",
+      "matters": "Requests copied from the browser's developer tools come in exactly as the page sent them."
+    },
+    {
+      "number": 398,
+      "merged": "2026-11-21",
+      "title": "Imported commands keep their address when the get option comes first",
+      "broken": "Importing a command with the get option before the address left the address empty. That is how Stripe and other API docs write their list and search examples.",
+      "changed": "I made the import treat that option as a simple switch, so it no longer swallows the address.",
+      "matters": "Examples pasted straight from API docs import and run."
+    }
+  ]
+}

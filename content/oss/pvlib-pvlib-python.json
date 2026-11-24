@@ -1,0 +1,15 @@
+{
+  "repo": "pvlib/pvlib-python",
+  "about": "A Python library for working out how much power solar panels will make.",
+  "stars": 1734,
+  "prs": [
+    {
+      "number": 2941,
+      "merged": "2026-11-21",
+      "title": "The library loads on a fresh install again",
+      "broken": "A recent change made the library need a package that only the test setup installs. On a normal fresh install, loading the library failed straight away.",
+      "changed": "I switched to the same version check that pandas already ships, so nothing extra is needed.",
+      "matters": "The next release would have failed to load for many new users. Now it does not."
+    }
+  ]
+}

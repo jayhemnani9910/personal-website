@@ -1,0 +1,15 @@
+{
+  "repo": "phpipam/phpipam",
+  "about": "A web app for managing IP addresses and networks.",
+  "stars": 2829,
+  "prs": [
+    {
+      "number": 4684,
+      "merged": "2026-11-22",
+      "title": "Change history stays after the user who made it is deleted",
+      "broken": "Deleting a user also hid every change they had made from the address, subnet and section history pages.",
+      "changed": "I made those pages keep the entries and show them with a blank user name, as the main history page already did.",
+      "matters": "The record of who changed what on the network survives staff leaving."
+    }
+  ]
+}

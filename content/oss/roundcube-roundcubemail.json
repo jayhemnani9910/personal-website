@@ -1,0 +1,15 @@
+{
+  "repo": "roundcube/roundcubemail",
+  "about": "A webmail app that runs in the browser.",
+  "stars": 7295,
+  "prs": [
+    {
+      "number": 10410,
+      "merged": "2026-11-22",
+      "title": "Google Contacts exports import with emails and phone numbers",
+      "broken": "Importing a contacts file exported from Google today brought in only names and birthdays. Emails, phones, addresses, company and labels were silently dropped.",
+      "changed": "I taught the importer the column names Google uses now, and the company and label columns.",
+      "matters": "People moving their contacts from Google get the whole address book, not just names."
+    }
+  ]
+}

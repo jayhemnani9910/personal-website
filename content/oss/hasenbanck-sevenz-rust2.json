@@ -18,6 +18,14 @@
       "broken": "Packing a folder into a 7z archive quietly skipped any links inside it, so those files and folders were missing from the archive with no error.",
       "changed": "Links are now followed: a link to a file stores the file, a link to a folder stores the folder, as the 7z tool does.",
       "matters": "Archives hold everything the folder showed, so nothing goes missing on unpacking."
+    },
+    {
+      "number": 165,
+      "merged": "2026-11-21",
+      "title": "Scripts packed on Linux and macOS stay runnable",
+      "broken": "Packing files on Linux or macOS did not save their permissions, so a runnable script came back as a plain file after unpacking, with this library or with the 7z tool.",
+      "changed": "I made it store each file's permissions the same way the 7z tool does.",
+      "matters": "Archives made by the library unpack with scripts and programs still ready to run."
     }
   ]
 }

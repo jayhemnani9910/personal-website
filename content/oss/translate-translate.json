@@ -9,7 +9,8 @@
       "title": "Backslashes no longer double on each CSV round trip",
       "broken": "Converting translations to CSV and back doubled every backslash, and doubled it again each time, so changed strings stopped matching and showed as untranslated.",
       "changed": "The CSV writer no longer adds an escape character the reader does not expect.",
-      "matters": "Translators can edit strings in a spreadsheet without breaking them."
+      "matters": "Translators can edit strings in a spreadsheet without breaking them.",
+      "top": true
     },
     {
       "number": 6715,
@@ -17,7 +18,8 @@
       "title": "JSON files with numbers or true/false convert again",
       "broken": "A single number or true/false value anywhere in a JSON translation file made the converter skip the whole file.",
       "changed": "The converter now skips those values and keeps going, and puts them back when converting back.",
-      "matters": "Common app translation files can be used without editing them first."
+      "matters": "Common app translation files can be used without editing them first.",
+      "top": true
     },
     {
       "number": 6725,
@@ -25,7 +27,16 @@
       "title": "A test for PHP texts split across lines",
       "broken": "PHP translation files that split one text over several lines with a join were read wrong, and the bug had no test to stop it coming back.",
       "changed": "A test now checks that such a text reads as one string and is written back correctly.",
-      "matters": "The fix for these files stays fixed in future releases."
+      "matters": "The fix for these files stays fixed in future releases.",
+      "top": true
+    },
+    {
+      "number": 6748,
+      "merged": "2026-11-23",
+      "title": "YAML files with numbers or dates convert again",
+      "broken": "A single decimal number or date anywhere in a YAML translation file stopped the converter, and no translation file was made.",
+      "changed": "I made the converter skip those values and keep them as they are when writing back.",
+      "matters": "Locale files from Rails, Jekyll or Hugo can be translated without edits."
     }
   ]
 }

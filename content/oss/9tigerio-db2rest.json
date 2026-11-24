@@ -1,0 +1,15 @@
+{
+  "repo": "9tigerio/db2rest",
+  "about": "A tool that turns a relational database into a ready-made web API.",
+  "stars": 473,
+  "prs": [
+    {
+      "number": 977,
+      "merged": "2026-11-23",
+      "title": "Filters on decimal columns work on PostgreSQL",
+      "broken": "On PostgreSQL, any filter on a decimal column, like price greater than 1.5, failed with an error. The value was sent as text, and PostgreSQL will not compare a number with text.",
+      "changed": "I made the filter turn decimal values into numbers before sending them, as it already did for whole numbers and true or false.",
+      "matters": "People can filter by prices, rates and other decimal values on PostgreSQL."
+    }
+  ]
+}

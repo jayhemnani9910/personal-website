@@ -9,7 +9,8 @@
       "title": "Optimizing Word and PowerPoint files keeps transparent images",
       "broken": "Shrinking a Word or PowerPoint file turned transparent images, like logos, icons and signatures, black where they should be see-through. With backups off, the damaged file replaced the original.",
       "changed": "Images with transparency are now left as they are. Other images are still compressed as before.",
-      "matters": "People can make documents smaller without ruining their logos and signatures."
+      "matters": "People can make documents smaller without ruining their logos and signatures.",
+      "top": true
     },
     {
       "number": 36,
@@ -17,7 +18,8 @@
       "title": "JSON to CSV works when records have different fields",
       "broken": "Turning a JSON list into CSV failed with an error when a later record had a field the first one did not. No CSV file was written at all.",
       "changed": "The columns now come from every record, in the order they first appear. Records missing a field get an empty cell.",
-      "matters": "Exported data with optional fields, which is very common, now converts instead of failing."
+      "matters": "Exported data with optional fields, which is very common, now converts instead of failing.",
+      "top": true
     },
     {
       "number": 37,
@@ -25,7 +27,16 @@
       "title": "CSV to JSON reads files saved by Excel correctly",
       "broken": "Both CSV formats Excel saves came out wrong. One left a hidden mark on the first column name, the other turned accented letters like é into garbage, and both reported success.",
       "changed": "The converter now tries the text encodings Excel uses, in order, and removes the hidden mark.",
-      "matters": "Spreadsheets saved from Excel convert to clean JSON with the right names and letters."
+      "matters": "Spreadsheets saved from Excel convert to clean JSON with the right names and letters.",
+      "top": true
+    },
+    {
+      "number": 38,
+      "merged": "2026-11-20",
+      "title": "Semicolon CSV files convert to JSON correctly",
+      "broken": "CSV files saved by Excel in countries that use a decimal comma are split by semicolons. The converter always split on commas, so the JSON came out as one jumbled field.",
+      "changed": "I made it look at the start of the file to pick comma, semicolon or tab, and fall back to comma when it cannot tell.",
+      "matters": "Spreadsheets from much of Europe now turn into clean JSON."
     }
   ]
 }

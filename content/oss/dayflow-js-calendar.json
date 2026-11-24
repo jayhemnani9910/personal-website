@@ -9,7 +9,8 @@
       "title": "Repeating events stay repeating after a calendar import",
       "broken": "Importing a calendar file or subscribing to a calendar dropped the repeat rule, so a weekly meeting showed only once. Exporting and importing again lost repeats too.",
       "changed": "The repeat rule is now read on import and written on export, using the same fields the calendar uses for repeats made in the app.",
-      "matters": "Calendars from Google or Outlook, where most events repeat, show every meeting."
+      "matters": "Calendars from Google or Outlook, where most events repeat, show every meeting.",
+      "top": true
     },
     {
       "number": 178,
@@ -17,7 +18,25 @@
       "title": "Outlook calendars import their timed events",
       "broken": "Events with a quoted time zone, or a Windows zone name as Outlook writes it, were rejected, so an Outlook calendar imported no timed events.",
       "changed": "Quotes are now removed, and an unknown zone name keeps the event at its time in the default zone.",
-      "matters": "Calendars exported from Outlook and Exchange come in whole."
+      "matters": "Calendars exported from Outlook and Exchange come in whole.",
+      "top": true
+    },
+    {
+      "number": 180,
+      "merged": "2026-11-21",
+      "title": "Imported events keep their description when they have a reminder",
+      "broken": "When an imported event had a reminder, the reminder's text replaced the event's own description. Google, Apple and Outlook add reminders to most events.",
+      "changed": "I made the importer skip the lines that belong to the reminder when it reads the event.",
+      "matters": "Event notes from the big calendar apps now come through on import."
+    },
+    {
+      "number": 181,
+      "merged": "2026-11-21",
+      "title": "Repeating events keep their time after the clocks change",
+      "broken": "Repeating events were exported in UTC, so other calendars kept the UTC hour all year. A 9 o'clock weekly meeting moved to 10 after the switch to summer time.",
+      "changed": "I made repeating events export in their own time zone. One-off events stay in UTC.",
+      "matters": "Weekly meetings shared with other calendars stay at the right hour all year.",
+      "top": true
     }
   ]
 }

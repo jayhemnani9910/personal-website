@@ -53,6 +53,14 @@
       "broken": "The responses endpoint always said zero prompt tokens came from the cache, even when the provider said many did.",
       "changed": "The provider's cached token count is now passed through in the usage numbers.",
       "matters": "People can see how much prompt caching is saving them."
+    },
+    {
+      "number": 1934,
+      "merged": "2026-11-23",
+      "title": "Long answers no longer stop at 1024 words or one",
+      "broken": "Through the Ollama-style connection, long answers were cut at 1024 tokens, and asking for no limit returned a single token.",
+      "changed": "I made the length limit apply only when a real positive number is given, and use a larger default otherwise.",
+      "matters": "Chat apps like Open WebUI get full answers instead of cut-off ones."
     }
   ]
 }

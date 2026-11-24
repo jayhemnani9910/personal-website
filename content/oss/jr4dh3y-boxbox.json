@@ -1,0 +1,15 @@
+{
+  "repo": "jR4dh3y/BoxBox",
+  "about": "A self-hosted file manager for a home server, used from the web browser.",
+  "stars": 370,
+  "prs": [
+    {
+      "number": 268,
+      "merged": "2026-11-23",
+      "title": "Moving a folder between drives keeps links and file permissions",
+      "broken": "Moving a folder to another drive copies it, then deletes the original. The copy dropped shortcut links and made scripts lose their run permission, while the job said it finished.",
+      "changed": "I made folder copies recreate the links and keep each file's permissions.",
+      "matters": "Moving folders between disks no longer quietly loses files or breaks scripts."
+    }
+  ]
+}
