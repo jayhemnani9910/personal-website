@@ -18,6 +18,14 @@
       "broken": "Importing a command copied from a Linux or Mac terminal removed or changed every ^ sign, even inside quoted data, which could break the request body.",
       "changed": "The Windows-only handling of ^ is now skipped for commands quoted in the Linux and Mac style.",
       "matters": "Requests with patterns or other text containing ^ send exactly what was copied."
+    },
+    {
+      "number": 201,
+      "merged": "2026-11-22",
+      "title": "Imported API specs fill in path values like IDs",
+      "broken": "Importing an OpenAPI or Swagger file left placeholders like the pet ID in the address as is. Those requests went out with the placeholder and failed with a not found error.",
+      "changed": "I made the import turn those placeholders into path variables, with the example value from the spec filled in.",
+      "matters": "Imported APIs work on the first try, including every request that takes an ID."
     }
   ]
 }

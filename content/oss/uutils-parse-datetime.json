@@ -9,7 +9,8 @@
       "title": "A time zone followed by DST now reads as summer time",
       "broken": "GNU date lets you write a zone like EST followed by the word DST to mean that zone's summer time. Here it was rejected as an invalid date.",
       "changed": "A DST word after a standard time zone now adds the hour. Zones that are already summer time still reject it, as in GNU.",
-      "matters": "Dates written this way give the same time as GNU date."
+      "matters": "Dates written this way give the same time as GNU date.",
+      "top": true
     },
     {
       "number": 345,
@@ -25,7 +26,17 @@
       "title": "Dates with a full time zone rule are understood",
       "broken": "A date given with a full time zone rule, including summer time, was rejected as invalid. Zones written in the quoted form tzdata uses were silently read as UTC.",
       "changed": "Full time zone rules are now read the same way as when they come from the environment, as GNU date does.",
-      "matters": "Scripts that give date a time zone get the right time instead of an error or a wrong hour."
+      "matters": "Scripts that give date a time zone get the right time instead of an error or a wrong hour.",
+      "top": true
+    },
+    {
+      "number": 346,
+      "merged": "2026-11-22",
+      "title": "Times skipped by the spring clock change match GNU date",
+      "broken": "A time that does not exist, like 2:30 on the night clocks jump forward, was moved an hour on. Written with UTC, it was off by an hour.",
+      "changed": "I made skipped local times an error, as GNU date does, and apply a written zone to the time as typed.",
+      "matters": "Scripts that move to this date tool get the same answers they got from GNU.",
+      "top": true
     }
   ]
 }

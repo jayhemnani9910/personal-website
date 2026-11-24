@@ -1,0 +1,15 @@
+{
+  "repo": "GopeedLab/gopeed",
+  "about": "A fast download manager for HTTP, BitTorrent, Magnet and ed2k, for desktop and phone.",
+  "stars": 27935,
+  "prs": [
+    {
+      "number": 1673,
+      "merged": "2026-11-23",
+      "title": "Downloaded programs keep their real names",
+      "broken": "Files with no extension, such as programs from GitHub releases, were saved as kubectl.bin or README.asc, so scripts that ran them by name broke.",
+      "changed": "I made the downloader add an extension only when the server names a real file type, not a generic one.",
+      "matters": "Downloaded tools run straight away without being renamed."
+    }
+  ]
+}

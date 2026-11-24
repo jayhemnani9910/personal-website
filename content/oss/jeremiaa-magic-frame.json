@@ -1,0 +1,15 @@
+{
+  "repo": "jeremiaa/magic-frame",
+  "about": "A self-hosted home display that works as a photo frame, family board and smart home dashboard.",
+  "stars": 528,
+  "prs": [
+    {
+      "number": 146,
+      "merged": "2026-11-22",
+      "title": "Long-running repeating events show up on the calendar",
+      "broken": "Repeating events that started long ago did not appear. The app stopped counting after a few dozen past dates, so a weekly event from last year never reached today.",
+      "changed": "I made it count only the dates inside the shown window.",
+      "matters": "Regular events like weekly practice or daily reminders now show on the home display."
+    }
+  ]
+}

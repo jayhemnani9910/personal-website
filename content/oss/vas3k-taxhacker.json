@@ -1,0 +1,15 @@
+{
+  "repo": "vas3k/TaxHacker",
+  "about": "A self-hosted accounting app that reads receipts and invoices.",
+  "stars": 6895,
+  "prs": [
+    {
+      "number": 208,
+      "merged": "2026-11-20",
+      "title": "Imported CSV amounts are no longer a cent short",
+      "broken": "Importing amounts from a CSV file saved many of them one cent low, so 4.35 was stored as 4.34, because of a rounding slip.",
+      "changed": "I made the import round to the nearest cent, as the entry form already did.",
+      "matters": "Imported books add up to the same totals as the bank statement."
+    }
+  ]
+}

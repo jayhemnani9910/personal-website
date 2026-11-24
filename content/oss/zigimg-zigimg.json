@@ -9,7 +9,8 @@
       "title": "32-bit BMP images save with the right colors",
       "broken": "Saving a 32-bit image as a BMP file wrote a header that did not match the pixel order. Some programs refused the file and others showed the colors swapped.",
       "changed": "I made the header describe the pixels in the order they are actually written.",
-      "matters": "BMP files saved by the library open correctly in other programs."
+      "matters": "BMP files saved by the library open correctly in other programs.",
+      "top": true
     },
     {
       "number": 347,
@@ -17,7 +18,41 @@
       "title": "24-bit BMP images of any width save and load correctly",
       "broken": "BMP files need each row padded to a multiple of 4 bytes. The library skipped that, so images of other widths saved as broken files and loaded skewed.",
       "changed": "I made it add the padding when saving and skip it when loading.",
-      "matters": "Images of any width now go in and out of BMP files intact."
+      "matters": "Images of any width now go in and out of BMP files intact.",
+      "top": true
+    },
+    {
+      "number": 350,
+      "merged": "2026-11-22",
+      "title": "Odd-width color PCX images with black in them read correctly",
+      "broken": "Reading odd-width color PCX images skipped every zero byte, not just the padding. Any pixel with no red, green or blue came out garbled, even in files the library wrote itself.",
+      "changed": "I made it skip the padding by its place in the row instead of by its value.",
+      "matters": "PCX images of any width load with their true colors."
+    },
+    {
+      "number": 351,
+      "merged": "2026-11-22",
+      "title": "Odd-width Sun raster images no longer come out slanted",
+      "broken": "Sun raster rows are padded to an even length. The reader only knew that for black and white images, so other images with odd rows came out slanted.",
+      "changed": "I made it count the padding at every color depth and leave it out of the pixels.",
+      "matters": "Sun raster files of any width load the way ImageMagick shows them."
+    },
+    {
+      "number": 353,
+      "merged": "2026-11-22",
+      "title": "Black and white fax-style TIFF images load without crashing",
+      "broken": "Black and white TIFFs using fax-style compression, as Pillow and ImageMagick write them, crashed the reader. Some others came out inverted.",
+      "changed": "I made each row start fresh, read to its true end, and decode black and white the way the main TIFF library does.",
+      "matters": "Common scanned documents and fax images now open, and match other tools pixel for pixel.",
+      "top": true
+    },
+    {
+      "number": 354,
+      "merged": "2026-11-22",
+      "title": "Grayscale TIFFs where white is zero no longer load as negatives",
+      "broken": "Some grayscale TIFFs store white as zero. The reader ignored that for 8-bit images, so they loaded as negatives.",
+      "changed": "I made the reader flip the values for those images after decoding.",
+      "matters": "These grayscale files, which ImageMagick can write, now look right."
     }
   ]
 }

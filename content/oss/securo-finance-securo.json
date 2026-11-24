@@ -37,6 +37,14 @@
       "broken": "CSV files saved by Excel or exported by many Brazilian and European banks use an older text encoding. Any accented letter, like in \"São João\", made the whole import fail.",
       "changed": "The import now falls back to that older encoding when a file is not UTF-8, as the other import formats already did.",
       "matters": "People can import their bank statements without converting the file first."
+    },
+    {
+      "number": 1671,
+      "merged": "2026-11-23",
+      "title": "Bank files with a time zone keep the bank's dates",
+      "broken": "Some banks stamp each transaction with a time zone. The import shifted those to a different zone, so transactions in Europe or Japan landed a day early, sometimes in the previous month.",
+      "changed": "I made the import ignore the time zone and keep the date the bank printed.",
+      "matters": "Transactions stay in the right day and month, and match the same ones from a bank sync."
     }
   ]
 }

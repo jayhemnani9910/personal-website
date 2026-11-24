@@ -10,6 +10,14 @@
       "broken": "Copying a folder with files in it failed with a server error. When copying over an existing folder, that folder's files were already deleted by the time it failed.",
       "changed": "Each file and subfolder is now copied to its own place under the new folder, keeping its permissions.",
       "matters": "Folder copies work, and a failed copy no longer wipes out a backup folder."
+    },
+    {
+      "number": 225,
+      "merged": "2026-11-21",
+      "title": "Copying or moving a file onto itself no longer deletes it",
+      "broken": "Copying or moving a file or folder to its own path deleted it. The server removed the destination first, which was the source, and then failed.",
+      "changed": "I made the server refuse a copy or move onto the same path, as the WebDAV standard says.",
+      "matters": "A slip in a file manager or sync tool can no longer wipe out data."
     }
   ]
 }

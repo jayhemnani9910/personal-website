@@ -1,0 +1,23 @@
+{
+  "repo": "karimz1/imgcompress",
+  "about": "A self-hosted web app for compressing and converting images.",
+  "stars": 383,
+  "prs": [
+    {
+      "number": 1054,
+      "merged": "2026-11-21",
+      "title": "Phone photos converted to PNG or AVIF stay upright",
+      "broken": "Phone photos converted to PNG or AVIF came out sideways, because the note saying which way is up was dropped. Print photos in CMYK color failed to convert to PNG at all.",
+      "changed": "I made both formats turn the photo upright first, and change CMYK colors to normal screen colors for PNG.",
+      "matters": "Converted photos look the way they did on the phone, and print images convert."
+    },
+    {
+      "number": 1055,
+      "merged": "2026-11-21",
+      "title": "Transparent GIFs and small PNGs get a white background as JPEG",
+      "broken": "Converting a transparent GIF or a compressed PNG logo to JPEG filled the see-through parts with black, while other transparent PNGs got white.",
+      "changed": "I made these images go through the same step as other transparent images, so they land on white.",
+      "matters": "Logos and icons convert to JPEG looking clean instead of sitting on a black box."
+    }
+  ]
+}

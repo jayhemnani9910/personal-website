@@ -1,0 +1,15 @@
+{
+  "repo": "SteveTheKiller/KillerPDF",
+  "about": "A free PDF editor for Windows that can also export to Word and other formats.",
+  "stars": 4445,
+  "prs": [
+    {
+      "number": 507,
+      "merged": "2026-11-21",
+      "title": "Exported PDF text keeps the spaces between words",
+      "broken": "Many PDFs place words apart without a space character. Exporting them to Word, Markdown or text glued words together, and table cells ran into each other, so 1 and 2.50 became 12.50.",
+      "changed": "I made it add a space wherever the gap between letters is as wide as a word gap, while keeping each piece's own font.",
+      "matters": "Exported papers read as normal sentences and table numbers stay correct."
+    }
+  ]
+}

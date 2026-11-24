@@ -1,0 +1,15 @@
+{
+  "repo": "scipenai/tylax",
+  "about": "A converter between LaTeX and Typst documents, in both directions.",
+  "stars": 520,
+  "prs": [
+    {
+      "number": 67,
+      "merged": "2026-11-23",
+      "title": "LaTeX quotes and email addresses convert to valid Typst",
+      "broken": "LaTeX-style quote marks and email addresses were copied straight into Typst, where those characters mean something else. Ordinary text gave a file that would not compile.",
+      "changed": "I made the converter turn LaTeX quotes into real curly quotes and escape the at sign in text.",
+      "matters": "Plain papers with quotes or an email in a footnote now convert and compile."
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "repo": "kellyjonbrazil/jc",
+  "about": "A command-line tool that turns the output of common Linux commands into JSON.",
+  "stars": 8708,
+  "prs": [
+    {
+      "number": 906,
+      "merged": "2026-11-23",
+      "title": "Failed systemd services are listed correctly",
+      "broken": "On newer systemd, the list of failed services also included junk rows taken from the help footer, so 2 failed services showed as 6.",
+      "changed": "I made the reader stop at the new footer as well as the old one.",
+      "matters": "Scripts that check for failed services see the real count."
+    },
+    {
+      "number": 907,
+      "merged": "2026-11-23",
+      "title": "Swap sizes with decimals no longer crash",
+      "broken": "Reading plain swapon output crashed when a size had a decimal point, like 2.2G, which is how it usually prints.",
+      "changed": "I made sizes read as decimal numbers and then turned into whole bytes.",
+      "matters": "Swap usage can be read on ordinary machines without an error."
+    },
+    {
+      "number": 908,
+      "merged": "2026-11-23",
+      "title": "Reading ss output for TCP or UDP no longer crashes",
+      "broken": "Turning the output of ss -t or ss -u into JSON crashed, because those commands leave out one column the reader expected.",
+      "changed": "I made rows without that column read the same way, just without that field.",
+      "matters": "Common network checks like listing listening ports now work."
+    }
+  ]
+}

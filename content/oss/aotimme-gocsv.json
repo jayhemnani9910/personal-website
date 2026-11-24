@@ -10,6 +10,14 @@
       "broken": "Building a column from a template escaped values as if they were web pages, so Tom & Jerry was written as Tom &amp; Jerry with no warning.",
       "changed": "The add command now fills templates as plain text, and the README says so.",
       "matters": "New columns hold the same text as the source data."
+    },
+    {
+      "number": 99,
+      "merged": "2026-11-20",
+      "title": "Excel sheets with blank cells at the end convert to valid CSV",
+      "broken": "Turning an Excel sheet into CSV cut a row short when its last cells were empty. Every other command then stopped at that row with an error.",
+      "changed": "I pad each row with empty fields up to the widest row in the sheet, the way Excel and LibreOffice do.",
+      "matters": "Real address books and lists, full of blank cells, now work through the whole tool chain."
     }
   ]
 }

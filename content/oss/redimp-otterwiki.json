@@ -1,0 +1,15 @@
+{
+  "repo": "redimp/otterwiki",
+  "about": "A simple wiki built on Markdown and git.",
+  "stars": 1588,
+  "prs": [
+    {
+      "number": 605,
+      "merged": "2026-11-20",
+      "title": "Renaming a page also fixes links to its subpages",
+      "broken": "Renaming a page moves its subpages along, but wiki links to those subpages kept the old path and pointed at pages that no longer existed.",
+      "changed": "I made the rename update links to subpages too, as it already did for normal Markdown links.",
+      "matters": "Reorganizing a wiki no longer leaves a trail of broken links."
+    }
+  ]
+}

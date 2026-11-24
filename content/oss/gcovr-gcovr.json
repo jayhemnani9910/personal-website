@@ -1,0 +1,15 @@
+{
+  "repo": "gcovr/gcovr",
+  "about": "A tool that turns test coverage data from C and C++ compilers into readable reports.",
+  "stars": 997,
+  "prs": [
+    {
+      "number": 1338,
+      "merged": "2026-11-21",
+      "title": "Coveralls reports work outside a git checkout",
+      "broken": "Asking for a Coveralls report from a source tarball or a Docker build without git history made the tool crash and write no reports at all.",
+      "changed": "I made the git check accept a no, so the report is simply written without the git details.",
+      "matters": "Builds from release tarballs and containers get their coverage reports again."
+    }
+  ]
+}

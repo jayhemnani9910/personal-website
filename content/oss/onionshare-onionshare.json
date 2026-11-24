@@ -1,0 +1,15 @@
+{
+  "repo": "onionshare/onionshare",
+  "about": "An app for sharing files, hosting sites and chatting privately over the Tor network.",
+  "stars": 7244,
+  "prs": [
+    {
+      "number": 2163,
+      "merged": "2026-11-22",
+      "title": "Received files with non-Latin names are no longer lost",
+      "broken": "Files named in Chinese, Russian or Arabic lost their whole name except the ending, so four uploads saved as two files and the rest were overwritten. The log still said all four arrived.",
+      "changed": "I made it spell such names in Latin letters, and add a number when two names clash.",
+      "matters": "Everyone sending files gets them all delivered, whatever language they name them in."
+    }
+  ]
+}

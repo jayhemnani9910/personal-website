@@ -1,0 +1,23 @@
+{
+  "repo": "formkit/tempo",
+  "about": "A JavaScript library for reading, formatting and doing math with dates and times.",
+  "stars": 2591,
+  "prs": [
+    {
+      "number": 93,
+      "merged": "2026-11-22",
+      "title": "Day and week counts are right across a clock change",
+      "broken": "Counting the days or weeks between two dates came out one short when the range crossed the start of summer time, because that day is only 23 hours.",
+      "changed": "I made the count make up for the clock change before dividing into days and weeks.",
+      "matters": "Booking lengths, countdowns and due dates in spring are no longer off by a day."
+    },
+    {
+      "number": 92,
+      "merged": "2026-11-23",
+      "title": "Month names in Russian, Polish and Korean dates read correctly",
+      "broken": "Reading a date like \"9 января 2026\" gave the current month instead of January, and an unknown month name gave no error at all.",
+      "changed": "I made the reader try both forms of each month name and raise an error when neither matches.",
+      "matters": "Dates the library writes itself can be read back, in many languages."
+    }
+  ]
+}

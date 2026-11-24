@@ -1,0 +1,15 @@
+{
+  "repo": "Kong/insomnia",
+  "about": "An open-source app for building and testing APIs, with REST, GraphQL, WebSockets and gRPC.",
+  "stars": 40185,
+  "prs": [
+    {
+      "number": 10801,
+      "merged": "2026-11-24",
+      "title": "\"No Auth\" requests from Postman stay without a login",
+      "broken": "A Postman request set to No Auth was imported as \"inherit\", so it quietly sent the folder's or collection's token or API key.",
+      "changed": "I made the importer turn Postman's No Auth into Insomnia's own No Auth setting, so it stops inheritance as Postman does.",
+      "matters": "Moving a collection from Postman no longer sends secrets to endpoints that should get none."
+    }
+  ]
+}

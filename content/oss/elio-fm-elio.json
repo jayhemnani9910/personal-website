@@ -1,0 +1,15 @@
+{
+  "repo": "elio-fm/elio",
+  "about": "A fast file manager that runs in the terminal.",
+  "stars": 920,
+  "prs": [
+    {
+      "number": 406,
+      "merged": "2026-11-21",
+      "title": "Moving a folder to another drive keeps its links and permissions",
+      "broken": "Moving a folder to another drive copies it and deletes the original. Links inside became full copies of what they pointed to, and private folders came out open to others.",
+      "changed": "I made the move keep links as links and give each folder its original permissions.",
+      "matters": "Moved folders arrive as they were, without bloat or loosened privacy."
+    }
+  ]
+}

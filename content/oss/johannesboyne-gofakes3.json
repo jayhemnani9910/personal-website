@@ -1,0 +1,15 @@
+{
+  "repo": "johannesboyne/gofakes3",
+  "about": "A fake Amazon S3 storage server for running tests locally.",
+  "stars": 943,
+  "prs": [
+    {
+      "number": 127,
+      "merged": "2026-11-22",
+      "title": "Partial downloads work with current AWS tools",
+      "broken": "Current AWS tools send a checksum with every upload. The fake server sent it back on partial downloads too, so the tools checked a piece against the whole file and failed. Big downloads broke the same way.",
+      "changed": "I made partial downloads leave out the whole-file checksum, as real S3 does.",
+      "matters": "Tests using current AWS tools against the fake server pass again."
+    }
+  ]
+}

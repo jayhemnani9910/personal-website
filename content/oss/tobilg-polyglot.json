@@ -1,0 +1,23 @@
+{
+  "repo": "tobilg/polyglot",
+  "about": "A SQL translator, written in Rust, that rewrites queries between more than 30 database dialects.",
+  "stars": 1013,
+  "prs": [
+    {
+      "number": 532,
+      "merged": "2026-11-23",
+      "title": "Division in SQLite queries keeps whole-number results",
+      "broken": "Translating a query to or from SQLite changed every division to decimal math, so 7 / 2 gave 3.5 where the database gives 3.",
+      "changed": "I made that change only when the source database really does decimal division.",
+      "matters": "Translated queries return the same numbers as the originals."
+    },
+    {
+      "number": 533,
+      "merged": "2026-11-23",
+      "title": "Date formatting from DuckDB to SQLite works",
+      "broken": "DuckDB date-formatting calls were copied to SQLite with their two parts in the wrong order, so every row came back empty.",
+      "changed": "I made the translator swap the two parts for SQLite, as it already did for other databases.",
+      "matters": "Reports moved from DuckDB to SQLite show their dates."
+    }
+  ]
+}
