@@ -988,6 +988,7 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "Eyevinn/mp4ff", number: "#732", href: "https://github.com/Eyevinn/mp4ff/pull/732" },
   { repo: "studyzy/imewlconverter", number: "#434", href: "https://github.com/studyzy/imewlconverter/pull/434" },
   { repo: "studyzy/imewlconverter", number: "#435", href: "https://github.com/studyzy/imewlconverter/pull/435" },
+  { repo: "Bachmann1234/diff_cover", number: "#660", href: "https://github.com/Bachmann1234/diff_cover/pull/660" },
 ];
 
 /**
