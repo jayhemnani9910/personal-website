@@ -1010,6 +1010,12 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "networkupstools/nut", number: "#3835", href: "https://github.com/networkupstools/nut/pull/3835" },
   { repo: "openinary/openinary", number: "#218", href: "https://github.com/openinary/openinary/pull/218" },
   { repo: "rochacbruno/marmite", number: "#574", href: "https://github.com/rochacbruno/marmite/pull/574" },
+  { repo: "denizsafak/AutoSubSync", number: "#107", href: "https://github.com/denizsafak/AutoSubSync/pull/107" },
+  { repo: "denizsafak/AutoSubSync", number: "#110", href: "https://github.com/denizsafak/AutoSubSync/pull/110" },
+  { repo: "denizsafak/AutoSubSync", number: "#111", href: "https://github.com/denizsafak/AutoSubSync/pull/111" },
+  { repo: "placemark/placemark", number: "#289", href: "https://github.com/placemark/placemark/pull/289" },
+  { repo: "placemark/placemark", number: "#290", href: "https://github.com/placemark/placemark/pull/290" },
+  { repo: "umputun/spot", number: "#380", href: "https://github.com/umputun/spot/pull/380" },
 ];
 
 /**
