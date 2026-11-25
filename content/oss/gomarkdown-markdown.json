@@ -10,6 +10,14 @@
       "broken": "An underlined heading at the very end of a document with no final line break came out as plain text, sometimes with a stray horizontal line.",
       "changed": "The underline now also counts when the document ends right after it.",
       "matters": "Documents render the same whether or not the file ends with a line break."
+    },
+    {
+      "number": 375,
+      "merged": "2026-11-24",
+      "title": "Links ending in a bracket keep it",
+      "broken": "A bare link like a Wikipedia page ending in (programming_language) lost its closing bracket, so the link opened a missing page.",
+      "changed": "Brackets are now counted inside the link itself, as GitHub's Markdown does.",
+      "matters": "Pasted links to Wikipedia and docs pages work."
     }
   ]
 }

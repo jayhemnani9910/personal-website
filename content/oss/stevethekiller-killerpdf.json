@@ -10,6 +10,14 @@
       "broken": "Many PDFs place words apart without a space character. Exporting them to Word, Markdown or text glued words together, and table cells ran into each other, so 1 and 2.50 became 12.50.",
       "changed": "I made it add a space wherever the gap between letters is as wide as a word gap, while keeping each piece's own font.",
       "matters": "Exported papers read as normal sentences and table numbers stay correct."
+    },
+    {
+      "number": 525,
+      "merged": "2026-11-24",
+      "title": "Form data files from other tools import",
+      "broken": "Importing form data refused files made by pdftk and most other tools, because they have no cross-reference table, which the format allows.",
+      "changed": "Such files are now read object by object, in file order.",
+      "matters": "People can fill PDF forms from data files made by other programs."
     }
   ]
 }

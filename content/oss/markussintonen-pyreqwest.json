@@ -10,6 +10,14 @@
       "broken": "Any file upload through the library's sync httpx transport failed before sending, with an error saying the stream was async.",
       "changed": "I made the check reject only streams that cannot be read in sync code, since httpx's upload stream supports both.",
       "matters": "Apps using httpx with this faster transport can upload files again."
+    },
+    {
+      "number": 61,
+      "merged": "2026-11-24",
+      "title": "Query strings and forms accept lists of values",
+      "broken": "Passing a list, like several ids, to a request's query or form failed with a builder error, even though the types said lists were allowed.",
+      "changed": "Lists are now sent as repeated keys, the same way the URL helper already did.",
+      "matters": "Common API calls that take several values for one parameter work without workarounds."
     }
   ]
 }

@@ -10,6 +10,14 @@
       "broken": "Current AWS tools send a checksum with every upload. The fake server sent it back on partial downloads too, so the tools checked a piece against the whole file and failed. Big downloads broke the same way.",
       "changed": "I made partial downloads leave out the whole-file checksum, as real S3 does.",
       "matters": "Tests using current AWS tools against the fake server pass again."
+    },
+    {
+      "number": 130,
+      "merged": "2026-11-24",
+      "title": "File metadata names come back in lowercase, as on S3",
+      "broken": "Custom metadata on stored files came back with capitalized names, so code that works against Amazon S3 failed with missing-key errors in tests.",
+      "changed": "Metadata header names are now sent in lowercase in every storage backend.",
+      "matters": "Tests against this fake S3 behave like the real service."
     }
   ]
 }

@@ -989,6 +989,20 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "studyzy/imewlconverter", number: "#434", href: "https://github.com/studyzy/imewlconverter/pull/434" },
   { repo: "studyzy/imewlconverter", number: "#435", href: "https://github.com/studyzy/imewlconverter/pull/435" },
   { repo: "Bachmann1234/diff_cover", number: "#660", href: "https://github.com/Bachmann1234/diff_cover/pull/660" },
+  { repo: "CodeWithCJ/SparkyFitness", number: "#3742", href: "https://github.com/CodeWithCJ/SparkyFitness/pull/3742" },
+  { repo: "MarkusSintonen/pyreqwest", number: "#61", href: "https://github.com/MarkusSintonen/pyreqwest/pull/61" },
+  { repo: "SteveTheKiller/KillerPDF", number: "#525", href: "https://github.com/SteveTheKiller/KillerPDF/pull/525" },
+  { repo: "gomarkdown/markdown", number: "#375", href: "https://github.com/gomarkdown/markdown/pull/375" },
+  { repo: "johannesboyne/gofakes3", number: "#130", href: "https://github.com/johannesboyne/gofakes3/pull/130" },
+  { repo: "php-gettext/Gettext", number: "#315", href: "https://github.com/php-gettext/Gettext/pull/315" },
+  { repo: "stefan-jansen/zipline-reloaded", number: "#370", href: "https://github.com/stefan-jansen/zipline-reloaded/pull/370" },
+  { repo: "uutils/findutils", number: "#923", href: "https://github.com/uutils/findutils/pull/923" },
+  { repo: "zigimg/zigimg", number: "#357", href: "https://github.com/zigimg/zigimg/pull/357" },
+  { repo: "zigimg/zigimg", number: "#358", href: "https://github.com/zigimg/zigimg/pull/358" },
+  { repo: "MathNya/umya-spreadsheet", number: "#417", href: "https://github.com/MathNya/umya-spreadsheet/pull/417" },
+  { repo: "feed-rs/feed-rs", number: "#317", href: "https://github.com/feed-rs/feed-rs/pull/317" },
+  { repo: "tj/git-extras", number: "#1289", href: "https://github.com/tj/git-extras/pull/1289" },
+  { repo: "tj/git-extras", number: "#1290", href: "https://github.com/tj/git-extras/pull/1290" },
 ];
 
 /**

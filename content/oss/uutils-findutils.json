@@ -109,6 +109,14 @@
       "broken": "When asked to follow links, find still printed \"link\" as the file type, where GNU find prints the type of the file or folder the link points to.",
       "changed": "The type now comes from the file being followed, and stays \"link\" only when the link is not followed or is broken.",
       "matters": "Scripts that sort files by type give the same answer as with GNU find."
+    },
+    {
+      "number": 923,
+      "merged": "2026-11-24",
+      "title": "find names the missing file in newer-than checks",
+      "broken": "When the reference file for a newer-than test was missing, find only said \"No such file or directory\", without saying which file.",
+      "changed": "The error now starts with the missing file's name, as GNU find does.",
+      "matters": "Scripts with several such tests show exactly what is missing."
     }
   ]
 }

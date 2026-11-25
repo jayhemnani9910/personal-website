@@ -10,6 +10,14 @@
       "broken": "A JSON feed where one item's id was a number failed to load at all, though the JSON Feed rules say readers should accept it.",
       "changed": "An item id can now be a number or text.",
       "matters": "Feed readers built on it no longer drop whole feeds over one item."
+    },
+    {
+      "number": 317,
+      "merged": "2026-11-25",
+      "title": "Podcast episodes keep their audio file",
+      "broken": "An episode's audio file was dropped when the feed item also listed another file, like the author's picture, which WordPress podcast feeds always do.",
+      "changed": "The audio file is now kept alongside the other media.",
+      "matters": "Podcast apps built on this library can play these episodes."
     }
   ]
 }

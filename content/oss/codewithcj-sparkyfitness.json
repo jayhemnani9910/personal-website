@@ -9,7 +9,8 @@
       "title": "Whole stones and feet no longer come back one short",
       "broken": "With weight in stones and pounds, 13 st showed as 12 st 14 lb, and typing in the pound box added to the 14. Height had the same problem: 6 ft showed as 5 ft 12 in.",
       "changed": "The conversion back from kilograms and centimetres now rounds to the shown precision before splitting into stones and pounds, or feet and inches.",
-      "matters": "People who track in stones or feet see the number they typed, and the boxes behave as expected."
+      "matters": "People who track in stones or feet see the number they typed, and the boxes behave as expected.",
+      "top": true
     },
     {
       "number": 3509,
@@ -17,7 +18,8 @@
       "title": "Body measurement exports use your units",
       "broken": "The body measurements CSV labelled its columns in pounds and inches but wrote the stored kilograms and centimetres.",
       "changed": "Each value is now converted to the user's units before export, the same way the on-screen table does it.",
-      "matters": "People who track in pounds and inches get an export that matches what they see."
+      "matters": "People who track in pounds and inches get an export that matches what they see.",
+      "top": true
     },
     {
       "number": 3582,
@@ -25,7 +27,16 @@
       "title": "Oxford BMR now uses the right equation for each age",
       "broken": "The Oxford calorie formula used one equation per sex at every age, and the female one was wrong, so older users got a resting calorie burn that was too high.",
       "changed": "It now picks the published equation for ages 18 to 30, 30 to 60 and over 60.",
-      "matters": "A 65 year old woman of 60 kg now sees 1177 kcal instead of 1331, so her daily target is right."
+      "matters": "A 65 year old woman of 60 kg now sees 1177 kcal instead of 1331, so her daily target is right.",
+      "top": true
+    },
+    {
+      "number": 3742,
+      "merged": "2026-11-24",
+      "title": "Exercise exports use your weight unit",
+      "broken": "The exercise CSV export wrote set weights in kilograms under a plain Weight header, so a 220 lb set showed as 100. A note with a quote mark shifted the rest of the row.",
+      "changed": "Weights are now written in the user's unit, the header names it, and quotes in notes are escaped.",
+      "matters": "Exported workout history matches what people logged and opens correctly in a spreadsheet."
     }
   ]
 }
