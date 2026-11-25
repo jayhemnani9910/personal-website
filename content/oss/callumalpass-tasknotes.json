@@ -10,6 +10,14 @@
       "broken": "A task with only a due date was exported as an event from its creation time to the due date, so it showed on every day except the one it was due.",
       "changed": "A task with only a due date is now exported as an event on its due date.",
       "matters": "Calendar apps that read the feed show tasks on the right day."
+    },
+    {
+      "number": 2702,
+      "merged": "2026-11-25",
+      "title": "Calendar links put due-only tasks on their due date",
+      "broken": "Adding a task with only a due date to Google, Outlook or Yahoo Calendar opened it on the wrong day or with no start at all.",
+      "changed": "The three calendar links now use the same date rules as the calendar file export: all-day for a plain date, one hour for a timed due.",
+      "matters": "A task lands on the day it is due when you add it to your calendar."
     }
   ]
 }

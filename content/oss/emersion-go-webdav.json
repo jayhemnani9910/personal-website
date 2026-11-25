@@ -18,6 +18,14 @@
       "broken": "Copying or moving a file or folder to its own path deleted it. The server removed the destination first, which was the source, and then failed.",
       "changed": "I made the server refuse a copy or move onto the same path, as the WebDAV standard says.",
       "matters": "A slip in a file manager or sync tool can no longer wipe out data."
+    },
+    {
+      "number": 228,
+      "merged": "2026-11-25",
+      "title": "A move of a missing file no longer deletes the target",
+      "broken": "A move whose source file was missing deleted the destination file before failing. Retrying a move that had already worked lost the file.",
+      "changed": "The server now checks that the source exists before it touches the destination, as copy already did.",
+      "matters": "A retried move from a sync tool can no longer wipe out a file."
     }
   ]
 }

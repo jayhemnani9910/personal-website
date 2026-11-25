@@ -1003,6 +1003,13 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "feed-rs/feed-rs", number: "#317", href: "https://github.com/feed-rs/feed-rs/pull/317" },
   { repo: "tj/git-extras", number: "#1289", href: "https://github.com/tj/git-extras/pull/1289" },
   { repo: "tj/git-extras", number: "#1290", href: "https://github.com/tj/git-extras/pull/1290" },
+  { repo: "PHPOffice/PhpSpreadsheet", number: "#5096", href: "https://github.com/PHPOffice/PhpSpreadsheet/pull/5096" },
+  { repo: "callumalpass/tasknotes", number: "#2702", href: "https://github.com/callumalpass/tasknotes/pull/2702" },
+  { repo: "emersion/go-webdav", number: "#228", href: "https://github.com/emersion/go-webdav/pull/228" },
+  { repo: "kiwifs/kiwifs", number: "#604", href: "https://github.com/kiwifs/kiwifs/pull/604" },
+  { repo: "networkupstools/nut", number: "#3835", href: "https://github.com/networkupstools/nut/pull/3835" },
+  { repo: "openinary/openinary", number: "#218", href: "https://github.com/openinary/openinary/pull/218" },
+  { repo: "rochacbruno/marmite", number: "#574", href: "https://github.com/rochacbruno/marmite/pull/574" },
 ];
 
 /**

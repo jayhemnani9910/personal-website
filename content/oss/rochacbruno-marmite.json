@@ -10,6 +10,14 @@
       "broken": "Draft posts, the drafts page and draft feeds that did not exist were listed in the sitemap, so search engines found drafts and broken links.",
       "changed": "The sitemap now leaves out drafts and everything that lists them.",
       "matters": "Unpublished posts stay hidden, as the docs promise."
+    },
+    {
+      "number": 574,
+      "merged": "2026-11-25",
+      "title": "Draft posts stay out of series pages",
+      "broken": "A draft post in a series showed up on the public series page, and published parts linked to it as the next part.",
+      "changed": "Series pages and next and previous links now leave drafts out, as tag and archive pages already did.",
+      "matters": "Unfinished posts stay private until you publish them."
     }
   ]
 }

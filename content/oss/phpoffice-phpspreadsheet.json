@@ -10,6 +10,14 @@
       "broken": "When XLOOKUP found nothing, it returned the text \"#N/A!\" instead of the error. ISNA and IFNA did not see it as an error.",
       "changed": "It now returns the real #N/A error, as Excel does.",
       "matters": "Formulas that catch a missing lookup with IFNA or ISNA work the same as in Excel."
+    },
+    {
+      "number": 5096,
+      "merged": "2026-11-25",
+      "title": "Exact lookups no longer match empty cells",
+      "broken": "VLOOKUP and HLOOKUP with an exact match treated an empty cell as a match for an empty lookup value, returning a result where Excel gives #N/A.",
+      "changed": "An exact match now skips empty cells, the same way MATCH already did, for both lookups.",
+      "matters": "Spreadsheets with blank rows give the same lookup results as in Excel."
     }
   ]
 }

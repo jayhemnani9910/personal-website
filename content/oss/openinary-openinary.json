@@ -10,6 +10,14 @@
       "broken": "Converting a transparent image to JPEG gave it a black background, and asking for another background color changed nothing. Rounded corners came out black too.",
       "changed": "Transparent areas are now filled with the chosen color, white by default, before saving as JPEG.",
       "matters": "Logos and icons look right when served as JPEG."
+    },
+    {
+      "number": 218,
+      "merged": "2026-11-25",
+      "title": "Auto image format is cached per browser",
+      "broken": "With automatic format, the first browser to ask decided the format for everyone. Safari could get an AVIF image it cannot show.",
+      "changed": "The cache now records which format each browser gets, as it does when no format is given.",
+      "matters": "Every browser gets an image it can display."
     }
   ]
 }
