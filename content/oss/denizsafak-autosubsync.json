@@ -9,7 +9,8 @@
       "title": "Batch mode pairs each episode with its own subtitle",
       "broken": "When one subtitle was missing in a folder of episodes, each later episode was matched with the next episode's subtitle, then synced and saved.",
       "changed": "Episode numbers in file names are no longer mistaken for language tags when pairing files.",
-      "matters": "A whole season no longer ends up with every subtitle on the wrong episode."
+      "matters": "A whole season no longer ends up with every subtitle on the wrong episode.",
+      "top": true
     },
     {
       "number": 105,
@@ -17,7 +18,33 @@
       "title": "Short WebVTT subtitles are no longer lost",
       "broken": "Subtitle times without hours, which Whisper writes for videos under an hour, were skipped: shifting left them unmoved and converting to SRT gave an empty file.",
       "changed": "These short times are now read, shifted and converted like full ones.",
-      "matters": "Subtitles made by Whisper sync and convert correctly."
+      "matters": "Subtitles made by Whisper sync and convert correctly.",
+      "top": true
+    },
+    {
+      "number": 107,
+      "merged": "2026-11-25",
+      "title": "ASS to SRT keeps italics and drops comments",
+      "broken": "Converting ASS subtitles to SRT left style codes in the text, so italics showed as raw markup, and comment lines showed up on screen as part of the previous subtitle.",
+      "changed": "Italic, bold and underline codes now become SRT tags, other style codes are dropped, and comment lines are skipped.",
+      "matters": "Converted subtitles look right in any player."
+    },
+    {
+      "number": 110,
+      "merged": "2026-11-25",
+      "title": "TTML subtitles with tick or millisecond times sync again",
+      "broken": "DFXP and TTML subtitles that give times in ticks or milliseconds were read wrong, so the converted SRT was broken and syncing failed.",
+      "changed": "Times in ticks, using the file's tick rate, and in milliseconds are now read correctly.",
+      "matters": "Subtitles from streaming services can be synced.",
+      "top": true
+    },
+    {
+      "number": 111,
+      "merged": "2026-11-25",
+      "title": "Shifting a DFXP file keeps valid times",
+      "broken": "Shifting the timing of a DFXP subtitle file by hand wrote times the format does not allow, so players could not read the result.",
+      "changed": "Shifted times are written as proper clock times.",
+      "matters": "Manually shifted subtitles still play."
     }
   ]
 }

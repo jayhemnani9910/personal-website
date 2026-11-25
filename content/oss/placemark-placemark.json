@@ -10,6 +10,22 @@
       "broken": "With a column like population before lat and lon, the import picked population as latitude, putting places off the map or dropping every row.",
       "changed": "Headers that are exactly lat, lon or lng, or start with them, now win over ones that only contain them.",
       "matters": "Spreadsheets of places land on the map correctly without fixing the columns by hand."
+    },
+    {
+      "number": 289,
+      "merged": "2026-11-25",
+      "title": "CSV exports keep descriptions and nested properties",
+      "broken": "Exporting to CSV wrote [object Object] for any property holding an object, so HTML descriptions from Google My Maps were lost.",
+      "changed": "Such values are now written as JSON text, as the other exporters already did.",
+      "matters": "A CSV export keeps all of your map data."
+    },
+    {
+      "number": 290,
+      "merged": "2026-11-25",
+      "title": "CSV imports read decimal-comma coordinates",
+      "broken": "CSV files from European Excel, with commas as decimal points, had every point cut to whole degrees, moving it many kilometres.",
+      "changed": "Coordinates written with a decimal comma are now read as the numbers they are.",
+      "matters": "Points from European spreadsheets land where they belong."
     }
   ]
 }
