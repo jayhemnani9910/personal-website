@@ -18,6 +18,14 @@
       "broken": "Excel's CSV files start with a hidden mark that stuck to the first column name. Pages got the wrong names and searches on that column found nothing.",
       "changed": "The importer now removes the hidden mark before reading the file.",
       "matters": "Spreadsheets from Excel import cleanly and can be searched."
+    },
+    {
+      "number": 604,
+      "merged": "2026-11-25",
+      "title": "JSON imports keep large ids exact",
+      "broken": "JSON imports turned ids into rounded numbers. Large ids collided, so one record silently replaced another, and page names showed numbers like 1.2e+07.",
+      "changed": "Numbers are now read exactly, so ids and amounts keep their digits and their normal form.",
+      "matters": "Imports of data with database or chat ids keep every record."
     }
   ]
 }

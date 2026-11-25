@@ -1,0 +1,15 @@
+{
+  "repo": "networkupstools/nut",
+  "about": "Network UPS Tools, software that monitors UPS power supplies and shuts computers down safely on a power cut.",
+  "stars": 4513,
+  "prs": [
+    {
+      "number": 3835,
+      "merged": "2026-11-25",
+      "title": "Shutdown reaches every UPS in order",
+      "broken": "On a setup with several UPS units, a shutdown of all devices only reached the ones in the first shutdown group. The rest never got the command.",
+      "changed": "The device list now restarts for each shutdown group, so every unit is reached in order.",
+      "matters": "On a power cut, all UPS units shut down as configured, not just the first."
+    }
+  ]
+}
