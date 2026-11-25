@@ -53,6 +53,22 @@
       "broken": "Some grayscale TIFFs store white as zero. The reader ignored that for 8-bit images, so they loaded as negatives.",
       "changed": "I made the reader flip the values for those images after decoding.",
       "matters": "These grayscale files, which ImageMagick can write, now look right."
+    },
+    {
+      "number": 357,
+      "merged": "2026-11-24",
+      "title": "Compressed TGA images without a footer load",
+      "broken": "Compressed TGA images saved without the optional footer, as ImageMagick writes them, failed to load unless their size happened to be a round number.",
+      "changed": "The decoder now stops at the real end of the file instead of reading past it.",
+      "matters": "Images that other viewers open load in apps using this library too."
+    },
+    {
+      "number": 358,
+      "merged": "2026-11-24",
+      "title": "Unsupported TIFF compression returns an error, not a crash",
+      "broken": "Opening a TIFF with a compression the library does not decode, such as the JPEG kind scanners write, crashed the program.",
+      "changed": "Unknown compression types now return an unsupported error.",
+      "matters": "Apps can tell users a file is not supported instead of crashing."
     }
   ]
 }

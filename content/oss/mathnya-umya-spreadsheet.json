@@ -37,6 +37,14 @@
       "changed": "Whole-column and whole-row references now move with the edit like any other reference.",
       "matters": "Common spreadsheets with column totals can be edited without crashing or wrong results.",
       "top": true
+    },
+    {
+      "number": 417,
+      "merged": "2026-11-25",
+      "title": "Dropdown rules move with inserted rows and columns",
+      "broken": "Inserting or removing rows or columns left data validation rules, like dropdown lists, on their old cells, so they ended up on the wrong column.",
+      "changed": "Validation ranges now shift with the cells, and are cut or removed when their cells go away.",
+      "matters": "Spreadsheets edited by code keep their dropdowns and input rules in the right place."
     }
   ]
 }

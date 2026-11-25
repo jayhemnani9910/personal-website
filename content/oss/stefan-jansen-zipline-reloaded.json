@@ -1,0 +1,15 @@
+{
+  "repo": "stefan-jansen/zipline-reloaded",
+  "about": "A Python library for testing stock trading strategies against historical data.",
+  "stars": 2022,
+  "prs": [
+    {
+      "number": 370,
+      "merged": "2026-11-24",
+      "title": "Maximum drawdown is measured from the peak",
+      "broken": "The maximum drawdown factor divided by the lowest price instead of the peak, so a 50% fall was reported as 100%.",
+      "changed": "It now returns the largest drop as a fraction of the peak before it.",
+      "matters": "Strategies that filter or rank stocks by drawdown get the right numbers."
+    }
+  ]
+}

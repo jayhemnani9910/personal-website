@@ -10,6 +10,14 @@
       "broken": "When a translation file was read, every comment before an empty comment line was lost. That is the standard header, so saving the file again dropped its copyright, license and translator lines.",
       "changed": "Those comments are now kept and attached to the entry that follows.",
       "matters": "Loading and saving a translation file no longer erases who wrote it and under what license."
+    },
+    {
+      "number": 315,
+      "merged": "2026-11-24",
+      "title": "Saved translation files keep quotes in headers valid",
+      "broken": "Saving a translation file whose translator name had quotes, as Weblate writes it, produced a file the standard gettext tools reject.",
+      "changed": "Header values are now escaped when the file is written.",
+      "matters": "Translation files round-trip through this library and still compile."
     }
   ]
 }
