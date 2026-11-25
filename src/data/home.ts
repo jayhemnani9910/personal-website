@@ -1016,6 +1016,9 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "placemark/placemark", number: "#289", href: "https://github.com/placemark/placemark/pull/289" },
   { repo: "placemark/placemark", number: "#290", href: "https://github.com/placemark/placemark/pull/290" },
   { repo: "umputun/spot", number: "#380", href: "https://github.com/umputun/spot/pull/380" },
+  { repo: "Yakitrak/notesmd-cli", number: "#143", href: "https://github.com/Yakitrak/notesmd-cli/pull/143" },
+  { repo: "Yakitrak/notesmd-cli", number: "#144", href: "https://github.com/Yakitrak/notesmd-cli/pull/144" },
+  { repo: "Yakitrak/notesmd-cli", number: "#146", href: "https://github.com/Yakitrak/notesmd-cli/pull/146" },
 ];
 
 /**

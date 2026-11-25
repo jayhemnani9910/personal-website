@@ -1,0 +1,31 @@
+{
+  "repo": "Yakitrak/notesmd-cli",
+  "about": "A command-line tool for working with an Obsidian notes vault from the terminal.",
+  "stars": 1610,
+  "prs": [
+    {
+      "number": 143,
+      "merged": "2026-11-25",
+      "title": "Moving a note updates links to names with spaces",
+      "broken": "Moving a note whose name had a space left links to it pointing at the old file, because Obsidian writes those spaces as %20.",
+      "changed": "The move now also rewrites the %20 form of those links.",
+      "matters": "Moving notes no longer leaves dead links behind."
+    },
+    {
+      "number": 144,
+      "merged": "2026-11-25",
+      "title": "Daily notes fill in the date, time and title",
+      "broken": "Daily notes made from a template kept the placeholders for date, time and title as raw text in every new note.",
+      "changed": "The template is now filled in the same way Obsidian's daily notes plugin does it.",
+      "matters": "Daily notes come out ready to use, as they do in Obsidian."
+    },
+    {
+      "number": 146,
+      "merged": "2026-11-25",
+      "title": "Moving a note onto an existing one no longer deletes it",
+      "broken": "Moving a note onto a name that was already used silently replaced that note, and its text was gone.",
+      "changed": "The move now stops with an error when the target note exists. Renaming a note only by letter case still works.",
+      "matters": "A typo in a move command can no longer wipe out a note."
+    }
+  ]
+}
