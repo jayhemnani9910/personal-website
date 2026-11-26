@@ -18,6 +18,14 @@
       "broken": "Importing a Postgres schema with a float column wrote its type as doubleprecision, so the SQL exported from it failed to load in Postgres.",
       "changed": "The importer now keeps the space between the two words of the type.",
       "matters": "Schemas from pg_dump round-trip back into Postgres."
+    },
+    {
+      "number": 1059,
+      "merged": "2026-11-26",
+      "title": "SQL Server exports no longer try to create dbo",
+      "broken": "SQL Server exports began with a command to create the dbo schema, which always exists, so SQL Server stopped there and created no tables.",
+      "changed": "The export now skips creating the built-in dbo schema.",
+      "matters": "Exported SQL runs on SQL Server as it is."
     }
   ]
 }
