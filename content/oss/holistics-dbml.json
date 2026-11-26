@@ -10,6 +10,14 @@
       "broken": "Reading a Postgres database into DBML lost the quotes and type on JSON column defaults, so turning it back into SQL gave code Postgres refused to run.",
       "changed": "JSON defaults are now kept exactly as Postgres reports them, the same way the SQL importer already writes them.",
       "matters": "Schemas pulled from a live Postgres database can be turned back into working SQL."
+    },
+    {
+      "number": 1060,
+      "merged": "2026-11-26",
+      "title": "Postgres imports keep the double precision type",
+      "broken": "Importing a Postgres schema with a float column wrote its type as doubleprecision, so the SQL exported from it failed to load in Postgres.",
+      "changed": "The importer now keeps the space between the two words of the type.",
+      "matters": "Schemas from pg_dump round-trip back into Postgres."
     }
   ]
 }

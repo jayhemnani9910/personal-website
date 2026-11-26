@@ -1028,6 +1028,13 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "markrai/scrumboy", number: "#385", href: "https://github.com/markrai/scrumboy/pull/385" },
   { repo: "nilsteampassnet/TeamPass", number: "#5475", href: "https://github.com/nilsteampassnet/TeamPass/pull/5475" },
   { repo: "seaweedfs/seaweedfs", number: "#12988", href: "https://github.com/seaweedfs/seaweedfs/pull/12988" },
+  { repo: "Rohithgilla12/data-peek", number: "#378", href: "https://github.com/Rohithgilla12/data-peek/pull/378" },
+  { repo: "holistics/dbml", number: "#1060", href: "https://github.com/holistics/dbml/pull/1060" },
+  { repo: "jolars/panache", number: "#640", href: "https://github.com/jolars/panache/pull/640" },
+  { repo: "jolars/panache", number: "#641", href: "https://github.com/jolars/panache/pull/641" },
+  { repo: "onionshare/onionshare", number: "#2168", href: "https://github.com/onionshare/onionshare/pull/2168" },
+  { repo: "onionshare/onionshare", number: "#2169", href: "https://github.com/onionshare/onionshare/pull/2169" },
+  { repo: "tj/git-extras", number: "#1291", href: "https://github.com/tj/git-extras/pull/1291" },
 ];
 
 /**

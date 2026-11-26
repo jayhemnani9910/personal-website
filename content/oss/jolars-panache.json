@@ -1,0 +1,23 @@
+{
+  "repo": "jolars/panache",
+  "about": "A language server, formatter and linter for Quarto and other Markdown flavors.",
+  "stars": 248,
+  "prs": [
+    {
+      "number": 640,
+      "merged": "2026-11-26",
+      "title": "A table right after a list stays outside the list",
+      "broken": "Formatting a document indented a table that came straight after a bullet list, which moved the table into the last list item when rendered.",
+      "changed": "A table after a list now stays flush left, so it remains its own block.",
+      "matters": "Formatting no longer changes how a document renders."
+    },
+    {
+      "number": 641,
+      "merged": "2026-11-26",
+      "title": "Line wrapping no longer turns references into list items",
+      "broken": "Wrapping a list item could put a reference like @fig-scatter. at the start of a line, where Pandoc and Quarto read it as a new list item and lost the reference.",
+      "changed": "The wrapper now keeps those references off the start of a line.",
+      "matters": "Cross-references and citations survive formatting."
+    }
+  ]
+}
