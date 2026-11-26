@@ -9,7 +9,8 @@
       "title": "Squash leaves unfinished edits alone",
       "broken": "git squash also swept in any edited file you had not staged, putting half-done work into the commit.",
       "changed": "It now commits only what is staged.",
-      "matters": "Work in progress stays out of the squashed commit."
+      "matters": "Work in progress stays out of the squashed commit.",
+      "top": true
     },
     {
       "number": 1289,
@@ -17,7 +18,8 @@
       "title": "merge-into no longer applies an old stash",
       "broken": "With only untracked files present, merge-into stashed nothing and then popped an older, unrelated stash onto the branch.",
       "changed": "It now stashes only when there are tracked changes to save.",
-      "matters": "Saved work in the stash stays where it was."
+      "matters": "Saved work in the stash stays where it was.",
+      "top": true
     },
     {
       "number": 1290,
@@ -25,7 +27,16 @@
       "title": "effort and summary count files with non-ASCII names",
       "broken": "git effort skipped files with accented or other non-ASCII names, and git summary counted no lines for them.",
       "changed": "Both now read file names as they are instead of git's quoted form.",
-      "matters": "Projects with non-English file names get full stats."
+      "matters": "Projects with non-English file names get full stats.",
+      "top": true
+    },
+    {
+      "number": 1291,
+      "merged": "2026-11-26",
+      "title": "Merging a repo into the current folder keeps dotfiles",
+      "broken": "Merging another repository into the current folder left out its hidden files, and could apply an old saved change by mistake.",
+      "changed": "Hidden files are now included, and only the change saved during the merge is restored.",
+      "matters": "Merged repositories arrive complete, without surprise edits."
     }
   ]
 }

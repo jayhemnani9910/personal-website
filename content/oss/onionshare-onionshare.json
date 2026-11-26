@@ -10,6 +10,22 @@
       "broken": "Files named in Chinese, Russian or Arabic lost their whole name except the ending, so four uploads saved as two files and the rest were overwritten. The log still said all four arrived.",
       "changed": "I made it spell such names in Latin letters, and add a number when two names clash.",
       "matters": "Everyone sending files gets them all delivered, whatever language they name them in."
+    },
+    {
+      "number": 2168,
+      "merged": "2026-11-26",
+      "title": "Files with the same name are all shared",
+      "broken": "Sharing two files with the same name from different folders delivered only one of them, with no warning.",
+      "changed": "Each shared file and folder now gets its own name in the share.",
+      "matters": "Everything you pick to share actually reaches the other person."
+    },
+    {
+      "number": 2169,
+      "merged": "2026-11-26",
+      "title": "Files shared next to a folder are no longer dropped",
+      "broken": "Sharing a file together with a folder silently left the file out of the download, the file list and website mode.",
+      "changed": "Selected files are allowed next to selected folders again, with the symlink protections kept.",
+      "matters": "Mixed shares and websites work as you picked them."
     }
   ]
 }

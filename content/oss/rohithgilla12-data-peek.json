@@ -18,6 +18,14 @@
       "broken": "Exporting query results wrapped every date and time in extra quote marks, so a spreadsheet read them as text instead of dates.",
       "changed": "I made the export write dates as plain date and time text, with no quotes added.",
       "matters": "Exported tables open in a spreadsheet with dates it can sort and filter."
+    },
+    {
+      "number": 378,
+      "merged": "2026-11-26",
+      "title": "MySQL exports keep backslashes in text",
+      "broken": "SQL exports for MySQL wrote backslashes in text as they were, which MySQL reads as escapes, so restored data changed or the import failed.",
+      "changed": "Backslashes are now escaped in exported strings.",
+      "matters": "Exported data restores exactly as it was."
     }
   ]
 }
