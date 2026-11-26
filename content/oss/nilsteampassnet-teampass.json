@@ -18,6 +18,14 @@
       "broken": "Exporting to CSV broke on any item whose description had a line break. Reading the file back, that item lost its password and login, and later items were swallowed into it.",
       "changed": "The export now writes each full record, line breaks included, and quotes values the standard way.",
       "matters": "The export works as a real backup or a way to move to another password manager."
+    },
+    {
+      "number": 5475,
+      "merged": "2026-11-25",
+      "title": "Bitwarden imports keep custom fields",
+      "broken": "Importing a Bitwarden export dropped every custom field, such as PINs, security answers and API keys, with no warning.",
+      "changed": "Custom fields are now added to the item's notes as name and value lines.",
+      "matters": "Moving from Bitwarden no longer loses secrets."
     }
   ]
 }

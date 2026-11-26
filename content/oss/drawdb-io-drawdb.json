@@ -10,6 +10,14 @@
       "broken": "When importing Postgres SQL, columns that hold lists lost that. Some turned into a type Postgres does not have, so the exported SQL failed to run.",
       "changed": "The importer now spots list columns and keeps them as lists, so the export writes them back correctly.",
       "matters": "A Postgres schema can go in and come back out without breaking."
+    },
+    {
+      "number": 1216,
+      "merged": "2026-11-25",
+      "title": "MySQL imports keep the table indexes",
+      "broken": "Importing a MySQL or MariaDB schema dropped every index written inside the table definition, so the diagram and its exported SQL were missing them.",
+      "changed": "Those indexes are now imported, unnamed ones get a generated name, and full-text and spatial keys are left out.",
+      "matters": "Imported schemas keep their indexes, and exports run without errors."
     }
   ]
 }

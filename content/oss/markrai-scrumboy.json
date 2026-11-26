@@ -1,0 +1,15 @@
+{
+  "repo": "markrai/scrumboy",
+  "about": "A self-hosted project management tool with boards, calendars, analytics and imports.",
+  "stars": 452,
+  "prs": [
+    {
+      "number": 385,
+      "merged": "2026-11-25",
+      "title": "Trello imports work with any label name",
+      "broken": "Importing a Trello board failed when a label name had punctuation or spaces that tag names do not allow.",
+      "changed": "Label names are now turned into valid tag names during the import.",
+      "matters": "Real Trello boards import in one go."
+    }
+  ]
+}

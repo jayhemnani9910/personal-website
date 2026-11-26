@@ -10,6 +10,22 @@
       "broken": "A checklist item with a | in it, like \"Alpha | beta\", showed only the first part, and the rest was deleted the next time the list was saved.",
       "changed": "The app now reads the item text and its hidden details in the right order.",
       "matters": "People no longer lose part of their notes just for using a | character."
+    },
+    {
+      "number": 669,
+      "merged": "2026-11-25",
+      "title": "Checklist items checked with a capital X load as done",
+      "broken": "An item checked with a capital X, as GitHub and Obsidian write it, loaded as unchecked, and the next save doubled its checkbox.",
+      "changed": "Both parsers now accept a capital X as checked.",
+      "matters": "Checklists made in other editors keep their checked items."
+    },
+    {
+      "number": 677,
+      "merged": "2026-11-25",
+      "title": "Sub-items indented with 4 spaces or tabs are kept",
+      "broken": "Checklist sub-items indented with 4 spaces or a tab were flattened or dropped, and the next save erased them from the file.",
+      "changed": "Each item's level now comes from its indent compared with the lines above it.",
+      "matters": "Nested checklists from other editors survive a save."
     }
   ]
 }

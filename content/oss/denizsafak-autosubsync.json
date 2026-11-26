@@ -45,6 +45,14 @@
       "broken": "Shifting the timing of a DFXP subtitle file by hand wrote times the format does not allow, so players could not read the result.",
       "changed": "Shifted times are written as proper clock times.",
       "matters": "Manually shifted subtitles still play."
+    },
+    {
+      "number": 108,
+      "merged": "2026-11-25",
+      "title": "MicroDVD subtitles get the right times",
+      "broken": "MicroDVD subtitle files came out with every time 2.5 to 4 times too small, and the frame rate line showed up as a subtitle.",
+      "changed": "The numbers are now read as frame numbers, using the frame rate given in the file.",
+      "matters": "MicroDVD subtitles line up with the video."
     }
   ]
 }
