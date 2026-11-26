@@ -1019,6 +1019,15 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "Yakitrak/notesmd-cli", number: "#143", href: "https://github.com/Yakitrak/notesmd-cli/pull/143" },
   { repo: "Yakitrak/notesmd-cli", number: "#144", href: "https://github.com/Yakitrak/notesmd-cli/pull/144" },
   { repo: "Yakitrak/notesmd-cli", number: "#146", href: "https://github.com/Yakitrak/notesmd-cli/pull/146" },
+  { repo: "bndct-devops/tome", number: "#334", href: "https://github.com/bndct-devops/tome/pull/334" },
+  { repo: "bndct-devops/tome", number: "#335", href: "https://github.com/bndct-devops/tome/pull/335" },
+  { repo: "denizsafak/AutoSubSync", number: "#108", href: "https://github.com/denizsafak/AutoSubSync/pull/108" },
+  { repo: "drawdb-io/drawdb", number: "#1216", href: "https://github.com/drawdb-io/drawdb/pull/1216" },
+  { repo: "fccview/jotty", number: "#669", href: "https://github.com/fccview/jotty/pull/669" },
+  { repo: "fccview/jotty", number: "#677", href: "https://github.com/fccview/jotty/pull/677" },
+  { repo: "markrai/scrumboy", number: "#385", href: "https://github.com/markrai/scrumboy/pull/385" },
+  { repo: "nilsteampassnet/TeamPass", number: "#5475", href: "https://github.com/nilsteampassnet/TeamPass/pull/5475" },
+  { repo: "seaweedfs/seaweedfs", number: "#12988", href: "https://github.com/seaweedfs/seaweedfs/pull/12988" },
 ];
 
 /**

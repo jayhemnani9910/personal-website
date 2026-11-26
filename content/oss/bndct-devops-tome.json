@@ -1,0 +1,23 @@
+{
+  "repo": "bndct-devops/tome",
+  "about": "A self-hosted ebook library server with a built-in reader, KOReader sync and an OPDS feed.",
+  "stars": 131,
+  "prs": [
+    {
+      "number": 334,
+      "merged": "2026-11-25",
+      "title": "Downloaded EPUBs stay valid when the book has an ISBN",
+      "broken": "Downloading a book with an ISBN set gave a broken EPUB: writing the ISBN removed the identifier that marks the book, and readers like calibre flagged the file.",
+      "changed": "Only other ISBN entries are replaced now. The book's own identifier is left exactly as it was.",
+      "matters": "Downloaded books open everywhere, and their embedded fonts keep working."
+    },
+    {
+      "number": 335,
+      "merged": "2026-11-25",
+      "title": "ISBNs are read from calibre and retail EPUBs",
+      "broken": "Imported EPUBs from calibre or shops never got an ISBN, because only the first identifier was checked and that is usually a different id.",
+      "changed": "The import now looks for an identifier marked as an ISBN first, then a plain number with no other label.",
+      "matters": "Books get their ISBN on import, so metadata lookups find them."
+    }
+  ]
+}
