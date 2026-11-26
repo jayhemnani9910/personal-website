@@ -37,6 +37,14 @@
       "broken": "A single decimal number or date anywhere in a YAML translation file stopped the converter, and no translation file was made.",
       "changed": "I made the converter skip those values and keep them as they are when writing back.",
       "matters": "Locale files from Rails, Jekyll or Hugo can be translated without edits."
+    },
+    {
+      "number": 6778,
+      "merged": "2026-11-26",
+      "title": "YAML values next to translated text come back as they were",
+      "broken": "Converting translations back to YAML dropped decimal numbers and dates that sat next to translated text, so the finished locale file lost settings it had before.",
+      "changed": "The converter now copies those values from the original file and puts them back in place.",
+      "matters": "Rails and Hugo locale files keep every value after a round of translation."
     }
   ]
 }

@@ -10,6 +10,14 @@
       "broken": "Food logged at the same time had no fixed order, so paging through the nutrition diary could show some entries twice and miss others.",
       "changed": "Entries with the same time are now also sorted by when they were added.",
       "matters": "Apps reading a diary page by page get every entry exactly once."
+    },
+    {
+      "number": 2614,
+      "merged": "2026-11-26",
+      "title": "Workout logs and gallery pages no longer repeat or skip entries",
+      "broken": "Sets logged with the same date, reps and weight had no fixed order, so paging through workout logs could show some sets twice and miss others.",
+      "changed": "Workout logs and gallery photos are now also sorted by when they were added.",
+      "matters": "Apps syncing a training history get every set exactly once."
     }
   ]
 }

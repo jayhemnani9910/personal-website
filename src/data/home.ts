@@ -1039,6 +1039,10 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "docmd-io/docmd", number: "#310", href: "https://github.com/docmd-io/docmd/pull/310" },
   { repo: "duke-git/lancet", number: "#437", href: "https://github.com/duke-git/lancet/pull/437" },
   { repo: "holistics/dbml", number: "#1059", href: "https://github.com/holistics/dbml/pull/1059" },
+  { repo: "SuiteCRM/SuiteCRM", number: "#10970", href: "https://github.com/SuiteCRM/SuiteCRM/pull/10970" },
+  { repo: "gpdf-dev/gpdf", number: "#58", href: "https://github.com/gpdf-dev/gpdf/pull/58" },
+  { repo: "translate/translate", number: "#6778", href: "https://github.com/translate/translate/pull/6778" },
+  { repo: "wger-project/wger", number: "#2614", href: "https://github.com/wger-project/wger/pull/2614" },
 ];
 
 /**

@@ -1,0 +1,15 @@
+{
+  "repo": "SuiteCRM/SuiteCRM",
+  "about": "An open source CRM for sales, marketing and customer support.",
+  "stars": 5880,
+  "prs": [
+    {
+      "number": 10970,
+      "merged": "2026-11-26",
+      "title": "Contact picker works for company names with an ampersand",
+      "broken": "Picking a contact on a contract, quote or invoice for a company like AtoZ & Co cut the name at the ampersand, so the list showed contacts from other companies.",
+      "changed": "The company name is now sent safely in all three screens.",
+      "matters": "Sales staff pick the right contact without scrolling through other companies."
+    }
+  ]
+}
