@@ -1,0 +1,15 @@
+{
+  "repo": "gpdf-dev/gpdf",
+  "about": "A Go library for making and editing PDF files.",
+  "stars": 405,
+  "prs": [
+    {
+      "number": 58,
+      "merged": "2026-11-26",
+      "title": "Stamping a PDF no longer wipes the page's own text",
+      "broken": "Adding a stamp or overlay to a PDF made by LibreOffice or Ghostscript replaced the page's fonts, so the original text disappeared.",
+      "changed": "The page's own fonts and images are now kept and the overlay's are added next to them.",
+      "matters": "Watermarks and stamps can go on everyday office PDFs without ruining them."
+    }
+  ]
+}
