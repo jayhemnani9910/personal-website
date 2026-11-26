@@ -1035,6 +1035,10 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "onionshare/onionshare", number: "#2168", href: "https://github.com/onionshare/onionshare/pull/2168" },
   { repo: "onionshare/onionshare", number: "#2169", href: "https://github.com/onionshare/onionshare/pull/2169" },
   { repo: "tj/git-extras", number: "#1291", href: "https://github.com/tj/git-extras/pull/1291" },
+  { repo: "docmd-io/docmd", number: "#309", href: "https://github.com/docmd-io/docmd/pull/309" },
+  { repo: "docmd-io/docmd", number: "#310", href: "https://github.com/docmd-io/docmd/pull/310" },
+  { repo: "duke-git/lancet", number: "#437", href: "https://github.com/duke-git/lancet/pull/437" },
+  { repo: "holistics/dbml", number: "#1059", href: "https://github.com/holistics/dbml/pull/1059" },
 ];
 
 /**

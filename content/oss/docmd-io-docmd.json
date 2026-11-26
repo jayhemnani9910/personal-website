@@ -9,7 +9,8 @@
       "title": "Moving a site over from MkDocs gives a working sidebar",
       "broken": "Importing an MkDocs site built a broken sidebar: some links went to pages that did not exist, plugin names showed up as menu items, and quoted titles kept their quotes.",
       "changed": "The importer now reads only the menu section, links folder home pages correctly and drops the quotes.",
-      "matters": "People switching from MkDocs get a sidebar that works the first time."
+      "matters": "People switching from MkDocs get a sidebar that works the first time.",
+      "top": true
     },
     {
       "number": 296,
@@ -17,7 +18,25 @@
       "title": "Sidebar links work on every page of a site moved from MkDocs",
       "broken": "After moving a site over from MkDocs, sidebar and next/previous links on any page below the home page pointed to pages that did not exist.",
       "changed": "Menu links from the import now start at the site root, so they lead to the same page from anywhere.",
-      "matters": "People switching from MkDocs get a site that can be browsed past the home page."
+      "matters": "People switching from MkDocs get a site that can be browsed past the home page.",
+      "top": true
+    },
+    {
+      "number": 309,
+      "merged": "2026-11-26",
+      "title": "VitePress migration copies pages in folders",
+      "broken": "Migrating a standard VitePress site copied only its top-level pages. Pages in folders and the public folder were left behind, while the tool still said the migration was complete.",
+      "changed": "Every folder of the site is now copied, except hidden ones.",
+      "matters": "Migrated sites keep all of their pages.",
+      "top": true
+    },
+    {
+      "number": 310,
+      "merged": "2026-11-26",
+      "title": "VitePress migration finds TypeScript configs",
+      "broken": "Migrating a VitePress site set up with TypeScript stopped with a missing config error, because the tool did not look for config.mts.",
+      "changed": "The migration now also looks for config.mts.",
+      "matters": "TypeScript VitePress sites can be migrated."
     }
   ]
 }

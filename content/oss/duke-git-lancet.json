@@ -10,6 +10,14 @@
       "broken": "Counting the days between two dates came out one day short when the range crossed the spring clock change, because that day only has 23 hours.",
       "changed": "It now compares calendar dates and times, so a short day still counts as a day.",
       "matters": "Date math in apps using it is no longer off by one in March."
+    },
+    {
+      "number": 437,
+      "merged": "2026-11-26",
+      "title": "Zipping a folder reports errors from subfolders",
+      "broken": "Zipping a folder returned success but left files out when something in a subfolder could not be read, such as a linked folder or a locked file.",
+      "changed": "Errors from subfolders are now returned instead of being dropped.",
+      "matters": "A zip that looks done really holds every file, or you are told why not."
     }
   ]
 }
