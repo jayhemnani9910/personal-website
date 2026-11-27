@@ -18,6 +18,14 @@
       "broken": "The batch mode from the README, exporting several word lists into a folder, always failed with an access error and wrote nothing.",
       "changed": "When the output path is a folder, the command line now writes one file per input, as the desktop app already did.",
       "matters": "The documented way to convert many word lists at once works."
+    },
+    {
+      "number": 437,
+      "merged": "2026-11-27",
+      "title": "Gboard dictionaries keep the right pinyin",
+      "broken": "Importing a Gboard dictionary gave words like 学生 and 月亮 wrong pinyin, such as xve and yve, so they stopped matching in every other input method.",
+      "changed": "The reader now turns Gboard's stored ve back into ue.",
+      "matters": "People moving their Gboard words to another Chinese input method keep words that type correctly."
     }
   ]
 }

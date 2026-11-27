@@ -1,0 +1,15 @@
+{
+  "repo": "krayin/laravel-crm",
+  "about": "A free, open source CRM for managing customers, leads and sales, built with Laravel.",
+  "stars": 24218,
+  "prs": [
+    {
+      "number": 2805,
+      "merged": "2026-11-27",
+      "title": "Importing contacts works when a row has no phone",
+      "broken": "Importing a list of people failed with an error if any row had no phone number, and nothing in that batch was imported.",
+      "changed": "The importer only uses the phone number when one is there.",
+      "matters": "Teams can import contact lists where some people have only an e-mail, as the CRM allows everywhere else."
+    }
+  ]
+}

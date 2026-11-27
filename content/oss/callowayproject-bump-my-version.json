@@ -1,0 +1,15 @@
+{
+  "repo": "callowayproject/bump-my-version",
+  "about": "A command line tool that updates every version string in a project's code and can commit and tag the release.",
+  "stars": 637,
+  "prs": [
+    {
+      "number": 466,
+      "merged": "2026-11-26",
+      "title": "Backslashes in version replacements are written as typed",
+      "broken": "A replacement with a backslash, like a LaTeX command or a Windows path, was mangled into control characters or stopped the version bump with an error.",
+      "changed": "The replacement text is now written exactly as configured; only the search pattern is treated as a pattern.",
+      "matters": "Projects that keep a version in LaTeX files or Windows paths can bump it without corrupting the file."
+    }
+  ]
+}

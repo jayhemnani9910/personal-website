@@ -10,6 +10,22 @@
       "broken": "Importing contacts from Android or Outlook saved many of them as \"Unknown\" with empty names, because name lines that carry extra settings, like those used for accented letters, were not read.",
       "changed": "Name, organization and title lines are now read with their settings, and encoded values are decoded.",
       "matters": "Contacts moved from a phone keep their real names, including non-English ones."
+    },
+    {
+      "number": 293,
+      "merged": "2026-11-26",
+      "title": "iPhone contacts keep their phones, e-mails and addresses",
+      "broken": "Contacts from an iPhone or iCloud showed up with no phone numbers, e-mail addresses, street addresses or websites, because Apple stores those in labelled groups the importer skipped.",
+      "changed": "The importer now reads Apple's labelled groups and their labels, and restores escaped characters in web addresses.",
+      "matters": "People moving contacts from an iPhone get every number and address, with the right labels."
+    },
+    {
+      "number": 294,
+      "merged": "2026-11-26",
+      "title": "Accented text from Android contacts imports correctly",
+      "broken": "Addresses and notes from Android contact exports came in as garbled codes like M=C3=BCnchner, and long notes were cut short.",
+      "changed": "Encoded text is now decoded on every contact field, and long lines that the export wraps are joined back together.",
+      "matters": "Names, streets and notes with accents or other non-English letters are saved as people typed them."
     }
   ]
 }

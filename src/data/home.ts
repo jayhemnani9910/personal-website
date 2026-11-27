@@ -1043,6 +1043,14 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "gpdf-dev/gpdf", number: "#58", href: "https://github.com/gpdf-dev/gpdf/pull/58" },
   { repo: "translate/translate", number: "#6778", href: "https://github.com/translate/translate/pull/6778" },
   { repo: "wger-project/wger", number: "#2614", href: "https://github.com/wger-project/wger/pull/2614" },
+  { repo: "Ivan-Malinovski/calino", number: "#293", href: "https://github.com/Ivan-Malinovski/calino/pull/293" },
+  { repo: "Ivan-Malinovski/calino", number: "#294", href: "https://github.com/Ivan-Malinovski/calino/pull/294" },
+  { repo: "callowayproject/bump-my-version", number: "#466", href: "https://github.com/callowayproject/bump-my-version/pull/466" },
+  { repo: "mvanhorn/last30days-skill", number: "#1593", href: "https://github.com/mvanhorn/last30days-skill/pull/1593" },
+  { repo: "superfly/flyctl", number: "#5451", href: "https://github.com/superfly/flyctl/pull/5451" },
+  { repo: "superfly/flyctl", number: "#5576", href: "https://github.com/superfly/flyctl/pull/5576" },
+  { repo: "krayin/laravel-crm", number: "#2805", href: "https://github.com/krayin/laravel-crm/pull/2805" },
+  { repo: "studyzy/imewlconverter", number: "#437", href: "https://github.com/studyzy/imewlconverter/pull/437" },
 ];
 
 /**

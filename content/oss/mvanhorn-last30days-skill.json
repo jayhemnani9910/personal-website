@@ -61,6 +61,14 @@
       "broken": "When none of the sources named with --search could run, for example TikTok without its API key, the tool ended in a Python traceback that did not say which source was the problem.",
       "changed": "It now names the sources that cannot run, points to the doctor command, and exits like its other usage errors.",
       "matters": "Users see what is missing and how to fix it, instead of something that looks like a crash."
+    },
+    {
+      "number": 1593,
+      "merged": "2026-11-26",
+      "title": "GitHub results come back for software topics",
+      "broken": "Searching a software topic like sqlite or kubernetes returned no GitHub results, because the search pulled popular issues that only mentioned the word, and the topic filter then dropped them all.",
+      "changed": "The GitHub search now looks for the topic in titles, so the results it finds are ones the filter keeps.",
+      "matters": "Research on a software topic includes the GitHub discussion about it again."
     }
   ]
 }
