@@ -10,6 +10,22 @@
       "broken": "Creating or running a Fly Machine through flyctl's AI assistant tools gave it the wrong start command and the wrong auto-stop setting.",
       "changed": "The auto-stop option is now passed in a form the command line reads as one setting.",
       "matters": "Machines started by AI assistants run the command the user asked for and stop the way they expect."
+    },
+    {
+      "number": 5451,
+      "merged": "2026-11-26",
+      "title": "The AI tool for updating a machine updates it",
+      "broken": "The AI assistant tool for updating a Fly Machine tried to create a new one instead, and failed. Fixing that alone would have reset start and stop settings on every update.",
+      "changed": "The tool now runs the update command, only passes the settings the caller gave, and passes the start command too.",
+      "matters": "AI assistants can change a running machine without breaking it or quietly changing its other settings."
+    },
+    {
+      "number": 5576,
+      "merged": "2026-11-26",
+      "title": "Every environment variable reaches the machine",
+      "broken": "Giving the AI machine tools several environment variables or metadata entries produced one variable with all the values glued together by commas.",
+      "changed": "Each entry is now passed to the command line on its own.",
+      "matters": "Machines started by AI assistants get every variable they were given, with the right values."
     }
   ]
 }
