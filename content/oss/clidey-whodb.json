@@ -1,0 +1,15 @@
+{
+  "repo": "clidey/whodb",
+  "about": "A database tool for browsing, querying and exporting data from many kinds of databases.",
+  "stars": 5071,
+  "prs": [
+    {
+      "number": 1465,
+      "merged": "2026-11-27",
+      "title": "Negative numbers export as numbers, not text",
+      "broken": "Exports put an apostrophe in front of every negative number, so spreadsheets showed it and treated the cells as text that could not be added up.",
+      "changed": "I made the export leave plain numbers alone while still guarding real formulas.",
+      "matters": "Exported CSV and Excel files open with working numbers."
+    }
+  ]
+}

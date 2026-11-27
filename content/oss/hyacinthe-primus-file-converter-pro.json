@@ -37,6 +37,14 @@
       "broken": "CSV files saved by Excel in countries that use a decimal comma are split by semicolons. The converter always split on commas, so the JSON came out as one jumbled field.",
       "changed": "I made it look at the start of the file to pick comma, semicolon or tab, and fall back to comma when it cannot tell.",
       "matters": "Spreadsheets from much of Europe now turn into clean JSON."
+    },
+    {
+      "number": 39,
+      "merged": "2026-11-27",
+      "title": "Phone photos come out upright when turned into a PDF",
+      "broken": "Phones store portrait photos sideways with a tag saying how to turn them. Image to PDF ignored the tag, so portrait photos landed sideways on the page.",
+      "changed": "I made it turn each photo upright before putting it in the PDF, keeping its quality and size.",
+      "matters": "Photos taken on a phone show the right way up in the PDF."
     }
   ]
 }

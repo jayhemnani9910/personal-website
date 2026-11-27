@@ -1,0 +1,15 @@
+{
+  "repo": "maugenst/zip-a-folder",
+  "about": "A Node.js library that packs a whole folder into a zip or tar file.",
+  "stars": 79,
+  "prs": [
+    {
+      "number": 82,
+      "merged": "2026-11-27",
+      "title": "Long file paths survive in tar archives",
+      "broken": "Tar files cut every path at 100 characters. Two files with long, similar paths got the same name, so unpacking kept only one of them.",
+      "changed": "I made it record the full path in a standard extra header that tar tools read.",
+      "matters": "Folders with deep paths, like node_modules, unpack with every file."
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "repo": "mxmlnkn/ratarmount",
+  "about": "A tool that opens large archives like TAR, ZIP and RAR as a normal folder.",
+  "stars": 1329,
+  "prs": [
+    {
+      "number": 205,
+      "merged": "2026-11-27",
+      "title": "Files in mounted ZIPs show the right times",
+      "broken": "Files inside a mounted ZIP showed times shifted by the local time zone, hours off from what unzip shows.",
+      "changed": "I made it read the time as local, or use the UTC time stored in the file when there is one.",
+      "matters": "File times in a mounted ZIP match the real ones."
+    }
+  ]
+}

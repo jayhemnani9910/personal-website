@@ -1,0 +1,15 @@
+{
+  "repo": "mjmirza/app-store-compliance",
+  "about": "A playbook and checker that catches common App Store and Google Play rejection causes before you submit.",
+  "stars": 7667,
+  "prs": [
+    {
+      "number": 2427,
+      "merged": "2026-11-27",
+      "title": "Removed Android permissions no longer block a release",
+      "broken": "The checker flagged a permission even on the line that removes it. Apps that stripped risky permissions were still marked blocked.",
+      "changed": "I made four permission checks read each manifest entry and skip ones marked for removal.",
+      "matters": "Apps that drop risky permissions pass instead of being blocked by mistake."
+    }
+  ]
+}
