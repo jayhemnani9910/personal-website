@@ -1,0 +1,15 @@
+{
+  "repo": "jovandeginste/workout-tracker",
+  "about": "A self-hosted web app for tracking workouts, built around running, cycling and other GPS activities.",
+  "stars": 1255,
+  "prs": [
+    {
+      "number": 920,
+      "merged": "2026-11-27",
+      "title": "Each workout in a zip upload gets its own type",
+      "broken": "Uploading a zip or a FitoTrack backup with the type left on auto gave every workout the type of the first one, so a ride after a run was saved as a run.",
+      "changed": "The type is now worked out for each workout in the upload.",
+      "matters": "People importing a batch of workouts get rides, runs and other activities saved correctly."
+    }
+  ]
+}
