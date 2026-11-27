@@ -45,6 +45,22 @@
       "broken": "Inserting or removing rows or columns left data validation rules, like dropdown lists, on their old cells, so they ended up on the wrong column.",
       "changed": "Validation ranges now shift with the cells, and are cut or removed when their cells go away.",
       "matters": "Spreadsheets edited by code keep their dropdowns and input rules in the right place."
+    },
+    {
+      "number": 421,
+      "merged": "2026-11-27",
+      "title": "Formulas keep pointing at the right cells after inserting rows",
+      "broken": "Inserting or removing rows or columns left formulas with fixed ($) references pointing at the old cells, so totals and lookups silently read the wrong data.",
+      "changed": "Fixed references now move with their cells when rows or columns are inserted or removed, as in Excel and LibreOffice.",
+      "matters": "Spreadsheets edited by code keep correct totals and lookups."
+    },
+    {
+      "number": 422,
+      "merged": "2026-11-27",
+      "title": "Dropdowns and formatting rules follow inserted rows",
+      "broken": "After inserting rows, dropdown lists and conditional formatting rules still pointed at the old cells, so a dropdown showed blanks and rules checked the wrong row.",
+      "changed": "The formulas inside dropdowns and formatting rules now move along with the cells.",
+      "matters": "Dropdowns keep their choices and highlighting keeps working after rows are added or removed."
     }
   ]
 }

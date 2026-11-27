@@ -1053,6 +1053,10 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "studyzy/imewlconverter", number: "#437", href: "https://github.com/studyzy/imewlconverter/pull/437" },
   { repo: "jovandeginste/workout-tracker", number: "#920", href: "https://github.com/jovandeginste/workout-tracker/pull/920" },
   { repo: "umputun/spot", number: "#381", href: "https://github.com/umputun/spot/pull/381" },
+  { repo: "MathNya/umya-spreadsheet", number: "#421", href: "https://github.com/MathNya/umya-spreadsheet/pull/421" },
+  { repo: "MathNya/umya-spreadsheet", number: "#422", href: "https://github.com/MathNya/umya-spreadsheet/pull/422" },
+  { repo: "padloc/padloc", number: "#818", href: "https://github.com/padloc/padloc/pull/818" },
+  { repo: "uutils/sed", number: "#619", href: "https://github.com/uutils/sed/pull/619" },
 ];
 
 /**

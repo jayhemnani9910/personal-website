@@ -1,0 +1,15 @@
+{
+  "repo": "padloc/padloc",
+  "about": "An open source password manager for individuals and teams.",
+  "stars": 2945,
+  "prs": [
+    {
+      "number": 818,
+      "merged": "2026-11-27",
+      "title": "Exporting a backup no longer removes attachments",
+      "broken": "Exporting an encrypted backup removed every attachment from the vault in the app, and the next edit saved the vault without them, so the files were lost from their items.",
+      "changed": "The export now works on copies, so only the exported file leaves attachments out.",
+      "matters": "People can back up their vault without losing the files attached to their passwords."
+    }
+  ]
+}

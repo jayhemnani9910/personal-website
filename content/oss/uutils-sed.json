@@ -45,6 +45,14 @@
       "broken": "A space between the y command and a following ; or comment made sed reject the whole script, while GNU sed runs it.",
       "changed": "The y command now skips spaces before its end, like every other command.",
       "matters": "Existing sed scripts written for GNU run without changes."
+    },
+    {
+      "number": 619,
+      "merged": "2026-11-27",
+      "title": "Step addresses can start a range",
+      "broken": "Scripts that start a range with a step address, like every third line through the next one, failed with an error instead of running as in GNU sed.",
+      "changed": "A step address can now start a range, and the range ends at the second address as usual.",
+      "matters": "Scripts written for GNU sed run unchanged on the Rust version."
     }
   ]
 }
