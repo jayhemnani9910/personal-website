@@ -9,7 +9,8 @@
       "title": "Replacing a line only changes the lines that match",
       "broken": "A rule to replace the line starting with PORT also rewrote lines like DB_PORT and REDIS_PORT. On server configs it changed commented lines too.",
       "changed": "The \"starts with\" and \"ends with\" parts of the match are now kept, so only the right lines change.",
-      "matters": "Config edits no longer quietly break other settings in the same file."
+      "matters": "Config edits no longer quietly break other settings in the same file.",
+      "top": true
     },
     {
       "number": 378,
@@ -17,7 +18,8 @@
       "title": "Secrets with a $ or backtick reach the server unchanged",
       "broken": "Secrets passed to commands were changed by the remote shell. A password with a $ lost part of its value, and a backtick ran as a command.",
       "changed": "Secret values are now escaped so the shell reads them back exactly, and logs still hide them.",
-      "matters": "Services get the password they were meant to get, and secrets cannot run commands."
+      "matters": "Services get the password they were meant to get, and secrets cannot run commands.",
+      "top": true
     },
     {
       "number": 380,
@@ -25,7 +27,16 @@
       "title": "Line replace and append write the text you gave",
       "broken": "Replacing or appending a line with &, a quote or a backslash in it wrote different text or failed. A $ from a script variable gained a backslash.",
       "changed": "The text is now escaped for sed and the shell, so it lands in the file exactly as written.",
-      "matters": "Config edits come out exactly as intended."
+      "matters": "Config edits come out exactly as intended.",
+      "top": true
+    },
+    {
+      "number": 381,
+      "merged": "2026-11-27",
+      "title": "Appended lines start on their own line",
+      "broken": "Appending a line to a file that did not end with a newline glued the new text onto the last line, turning name=a into name=adebug=true, and still reported success.",
+      "changed": "The append now adds a newline first when the file is missing one.",
+      "matters": "Config changes made by deploy tasks land as separate lines instead of silently corrupting the setting before them."
     }
   ]
 }

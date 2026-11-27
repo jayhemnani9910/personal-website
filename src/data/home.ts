@@ -1051,6 +1051,8 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "superfly/flyctl", number: "#5576", href: "https://github.com/superfly/flyctl/pull/5576" },
   { repo: "krayin/laravel-crm", number: "#2805", href: "https://github.com/krayin/laravel-crm/pull/2805" },
   { repo: "studyzy/imewlconverter", number: "#437", href: "https://github.com/studyzy/imewlconverter/pull/437" },
+  { repo: "jovandeginste/workout-tracker", number: "#920", href: "https://github.com/jovandeginste/workout-tracker/pull/920" },
+  { repo: "umputun/spot", number: "#381", href: "https://github.com/umputun/spot/pull/381" },
 ];
 
 /**
