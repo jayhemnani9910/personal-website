@@ -1057,6 +1057,14 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "MathNya/umya-spreadsheet", number: "#422", href: "https://github.com/MathNya/umya-spreadsheet/pull/422" },
   { repo: "padloc/padloc", number: "#818", href: "https://github.com/padloc/padloc/pull/818" },
   { repo: "uutils/sed", number: "#619", href: "https://github.com/uutils/sed/pull/619" },
+  { repo: "Hyacinthe-primus/File-Converter-Pro", number: "#39", href: "https://github.com/Hyacinthe-primus/File-Converter-Pro/pull/39" },
+  { repo: "clidey/whodb", number: "#1465", href: "https://github.com/clidey/whodb/pull/1465" },
+  { repo: "maugenst/zip-a-folder", number: "#82", href: "https://github.com/maugenst/zip-a-folder/pull/82" },
+  { repo: "mjmirza/app-store-compliance", number: "#2427", href: "https://github.com/mjmirza/app-store-compliance/pull/2427" },
+  { repo: "mxmlnkn/ratarmount", number: "#205", href: "https://github.com/mxmlnkn/ratarmount/pull/205" },
+  { repo: "php-gettext/Gettext", number: "#316", href: "https://github.com/php-gettext/Gettext/pull/316" },
+  { repo: "radareorg/radare2", number: "#27601", href: "https://github.com/radareorg/radare2/pull/27601" },
+  { repo: "zigimg/zigimg", number: "#359", href: "https://github.com/zigimg/zigimg/pull/359" },
 ];
 
 /**

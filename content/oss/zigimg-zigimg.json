@@ -69,6 +69,14 @@
       "broken": "Opening a TIFF with a compression the library does not decode, such as the JPEG kind scanners write, crashed the program.",
       "changed": "Unknown compression types now return an unsupported error.",
       "matters": "Apps can tell users a file is not supported instead of crashing."
+    },
+    {
+      "number": 359,
+      "merged": "2026-11-27",
+      "title": "Transparent GIFs keep their see-through pixels",
+      "broken": "Transparent GIFs loaded with their see-through pixels filled in black or the background color.",
+      "changed": "I made the reader mark the transparent color as fully see-through.",
+      "matters": "GIFs with transparency look right after loading."
     }
   ]
 }

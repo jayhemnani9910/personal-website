@@ -509,6 +509,14 @@
       "broken": "When two files were compared from a start point, each change was listed relative to that point, not its place in the file.",
       "changed": "Changes now carry their true position in the file, in every output format, including the patch commands.",
       "matters": "Applying the printed patch commands used to change the wrong byte. Now they change the right one."
+    },
+    {
+      "number": 27601,
+      "merged": "2026-11-27",
+      "title": "More arm64 loads and stores assemble to the right instruction",
+      "broken": "Some sized arm64 loads and stores, and loads into float registers, quietly became a different instruction, with no error.",
+      "changed": "I made the assembler read the size from the instruction name and refuse register types it cannot encode.",
+      "matters": "Patched arm64 code does what was written, or fails loudly."
     }
   ]
 }

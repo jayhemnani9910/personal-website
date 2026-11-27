@@ -18,6 +18,14 @@
       "broken": "Saving a translation file whose translator name had quotes, as Weblate writes it, produced a file the standard gettext tools reject.",
       "changed": "Header values are now escaped when the file is written.",
       "matters": "Translation files round-trip through this library and still compile."
+    },
+    {
+      "number": 316,
+      "merged": "2026-11-27",
+      "title": "Translations keep their plural rules by default",
+      "broken": "Translation files made the way the guide shows left out the plural rules, so Russian, Polish, Arabic and others used English plurals and showed wrong words.",
+      "changed": "I made it write the header with the plural rules by default, as the standard tool does.",
+      "matters": "Plural words come out right in languages with more than two forms."
     }
   ]
 }
