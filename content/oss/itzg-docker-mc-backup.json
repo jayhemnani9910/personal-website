@@ -1,0 +1,15 @@
+{
+  "repo": "itzg/docker-mc-backup",
+  "about": "A companion container that backs up Minecraft server worlds on a schedule.",
+  "stars": 559,
+  "prs": [
+    {
+      "number": 341,
+      "merged": "2026-11-28",
+      "title": "Count pruning no longer deletes the newest backup",
+      "broken": "With tar backups and a \"latest\" link, pruning by count also counted the link. Keeping one backup deleted the archive just written, leaving no backup at all.",
+      "changed": "Pruning now skips the link and counts only real archives.",
+      "matters": "Minecraft servers keep the number of backups they asked for."
+    }
+  ]
+}

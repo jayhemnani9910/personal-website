@@ -1,0 +1,15 @@
+{
+  "repo": "poweradmin/poweradmin",
+  "about": "A web panel and API for managing PowerDNS name servers.",
+  "stars": 938,
+  "prs": [
+    {
+      "number": 1945,
+      "merged": "2026-11-28",
+      "title": "Zone import understands @ in records",
+      "broken": "Importing a zone file stored @ literally in records, so www and mail pointed at a name like @.example.org that does not exist.",
+      "changed": "@ in record data now means the zone itself, as in any zone file.",
+      "matters": "Imported zones work right away, with no broken mail or web records."
+    }
+  ]
+}

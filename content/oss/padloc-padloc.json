@@ -4,6 +4,14 @@
   "stars": 2945,
   "prs": [
     {
+      "number": 812,
+      "merged": "2026-11-28",
+      "title": "Bitwarden import keeps two-factor secrets",
+      "broken": "Importing a Bitwarden export dropped every two-factor (TOTP) secret while reporting success, so deleting the old vault lost the codes.",
+      "changed": "The import now brings over TOTP secrets, both as links and as bare secrets.",
+      "matters": "People moving from Bitwarden keep their two-factor logins."
+    },
+    {
       "number": 818,
       "merged": "2026-11-27",
       "title": "Exporting a backup no longer removes attachments",

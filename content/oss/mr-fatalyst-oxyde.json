@@ -4,6 +4,14 @@
   "stars": 781,
   "prs": [
     {
+      "number": 58,
+      "merged": "2026-11-28",
+      "title": "Sums and averages work with related filters",
+      "broken": "sum, avg, min and max failed with an error on any query that filtered on a related model, while count worked.",
+      "changed": "Results of these queries are now read correctly.",
+      "matters": "Totals and averages over filtered data just work."
+    },
+    {
       "number": 56,
       "merged": "2026-11-19",
       "title": "Saving a new record with a generated ID creates it",

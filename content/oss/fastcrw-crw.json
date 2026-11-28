@@ -1,0 +1,15 @@
+{
+  "repo": "fastcrw/crw",
+  "about": "A fast, self-hosted web scraper and crawler with an API, written in Rust.",
+  "stars": 1328,
+  "prs": [
+    {
+      "number": 797,
+      "merged": "2026-11-28",
+      "title": "Code from Python docs sites stays a code block",
+      "broken": "Code blocks without an inner code tag, as on docs.python.org and Read the Docs, came out broken: comments became headings and indented code was split apart.",
+      "changed": "These blocks are now written as fenced code blocks.",
+      "matters": "Scraped documentation keeps its code examples intact."
+    }
+  ]
+}

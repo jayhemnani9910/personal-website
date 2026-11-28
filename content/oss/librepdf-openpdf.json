@@ -1,0 +1,15 @@
+{
+  "repo": "LibrePDF/OpenPDF",
+  "about": "A Java library for creating, editing and reading PDF files.",
+  "stars": 4402,
+  "prs": [
+    {
+      "number": 1658,
+      "merged": "2026-11-28",
+      "title": "Text from tagged PDFs keeps its line breaks",
+      "broken": "Extracting text from a tagged PDF, such as LibreOffice makes by default, ran every line together into one long line.",
+      "changed": "Line breaks between separately tagged parts of the page are now kept.",
+      "matters": "Text pulled from these PDFs reads the way it looks on the page."
+    }
+  ]
+}

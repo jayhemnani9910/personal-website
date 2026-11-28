@@ -4,6 +4,14 @@
   "stars": 5304,
   "prs": [
     {
+      "number": 442,
+      "merged": "2026-11-28",
+      "title": "Newer Mastercard numbers pass the check",
+      "broken": "The Mastercard check only knew the old 51 to 55 prefixes, so it rejected every card starting with 2221 to 2720, issued since 2017.",
+      "changed": "The check now accepts the 2-series range too.",
+      "matters": "Checkouts built on it no longer refuse valid Mastercards."
+    },
+    {
       "number": 430,
       "merged": "2026-11-16",
       "title": "Counting days across a clock change gives the right number",
