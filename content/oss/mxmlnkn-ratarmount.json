@@ -4,6 +4,14 @@
   "stars": 1329,
   "prs": [
     {
+      "number": 207,
+      "merged": "2026-11-27",
+      "title": "Hard-linked files readable in combined and writable mounts",
+      "broken": "In an archive made from a folder with \"tar -C dir .\", hard-linked files gave an input/output error when the archive was combined with others or mounted writable.",
+      "changed": "Hard link paths are now tidied before they are looked up.",
+      "matters": "Every file in such archives can be read in all mount modes."
+    },
+    {
       "number": 205,
       "merged": "2026-11-27",
       "title": "Files in mounted ZIPs show the right times",

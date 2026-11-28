@@ -1,0 +1,15 @@
+{
+  "repo": "kz26/PyExcelerate",
+  "about": "A fast Python library for writing Excel spreadsheet files.",
+  "stars": 560,
+  "prs": [
+    {
+      "number": 298,
+      "merged": "2026-11-28",
+      "title": "Sheet names with & make valid files",
+      "broken": "A sheet named something like \"R&D\" produced a broken Excel file that other programs refused to open.",
+      "changed": "Sheet names are now escaped when written into the file.",
+      "matters": "Workbooks with any sheet name open in Excel and other tools."
+    }
+  ]
+}

@@ -4,6 +4,22 @@
   "stars": 25104,
   "prs": [
     {
+      "number": 27599,
+      "merged": "2026-11-28",
+      "title": "arm64 cbz and cbnz jump to the right place",
+      "broken": "The built-in arm64 assembler treated the target of cbz and cbnz as a distance, so any one written away from address zero jumped to the wrong place.",
+      "changed": "It now works out the distance from the current address.",
+      "matters": "Patches that use these branches go where they were written to go."
+    },
+    {
+      "number": 27600,
+      "merged": "2026-11-28",
+      "title": "Some backward arm64 branches land correctly",
+      "broken": "One in sixteen backward conditional branches was assembled 32 bytes too far back, because of a mistake in building negative distances.",
+      "changed": "Distances are now encoded the standard way.",
+      "matters": "Conditional branches in patches always land on the intended instruction."
+    },
+    {
       "number": 27230,
       "merged": "2026-10-28",
       "title": "x86 multiply instructions now assemble to the right bytes",

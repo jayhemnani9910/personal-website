@@ -1065,6 +1065,20 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "php-gettext/Gettext", number: "#316", href: "https://github.com/php-gettext/Gettext/pull/316" },
   { repo: "radareorg/radare2", number: "#27601", href: "https://github.com/radareorg/radare2/pull/27601" },
   { repo: "zigimg/zigimg", number: "#359", href: "https://github.com/zigimg/zigimg/pull/359" },
+  { repo: "fabiocaccamo/python-benedict", number: "#670", href: "https://github.com/fabiocaccamo/python-benedict/pull/670" },
+  { repo: "mxmlnkn/ratarmount", number: "#207", href: "https://github.com/mxmlnkn/ratarmount/pull/207" },
+  { repo: "rtfpessoa/diff2html", number: "#600", href: "https://github.com/rtfpessoa/diff2html/pull/600" },
+  { repo: "rtfpessoa/diff2html", number: "#601", href: "https://github.com/rtfpessoa/diff2html/pull/601" },
+  { repo: "usetrmnl/larapaper", number: "#339", href: "https://github.com/usetrmnl/larapaper/pull/339" },
+  { repo: "coderaiser/putout", number: "#247", href: "https://github.com/coderaiser/putout/pull/247" },
+  { repo: "coderaiser/putout", number: "#248", href: "https://github.com/coderaiser/putout/pull/248" },
+  { repo: "dubyte/dir2opds", number: "#79", href: "https://github.com/dubyte/dir2opds/pull/79" },
+  { repo: "dubyte/dir2opds", number: "#80", href: "https://github.com/dubyte/dir2opds/pull/80" },
+  { repo: "gosom/scrapemate", number: "#39", href: "https://github.com/gosom/scrapemate/pull/39" },
+  { repo: "jovandeginste/workout-tracker", number: "#932", href: "https://github.com/jovandeginste/workout-tracker/pull/932" },
+  { repo: "kz26/PyExcelerate", number: "#298", href: "https://github.com/kz26/PyExcelerate/pull/298" },
+  { repo: "radareorg/radare2", number: "#27599", href: "https://github.com/radareorg/radare2/pull/27599" },
+  { repo: "radareorg/radare2", number: "#27600", href: "https://github.com/radareorg/radare2/pull/27600" },
 ];
 
 /**

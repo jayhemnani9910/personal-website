@@ -1,0 +1,15 @@
+{
+  "repo": "fabiocaccamo/python-benedict",
+  "about": "A Python dictionary with extra powers, including reading and writing CSV, JSON, INI, TOML and other file formats in one call.",
+  "stars": 1606,
+  "prs": [
+    {
+      "number": 670,
+      "merged": "2026-11-27",
+      "title": "Files saved by Excel and Windows tools load correctly",
+      "broken": "Files that start with an invisible byte order mark, which Excel and older Windows tools add, failed to load or got a garbled first column name.",
+      "changed": "Text files are now read in a way that skips that mark, and files without it load as before.",
+      "matters": "CSV exports from Excel and similar files work without cleaning them up first."
+    }
+  ]
+}

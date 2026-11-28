@@ -1,0 +1,15 @@
+{
+  "repo": "usetrmnl/larapaper",
+  "about": "A self-hosted server for TRMNL e-ink displays, with support for shared plugin recipes.",
+  "stars": 464,
+  "prs": [
+    {
+      "number": 339,
+      "merged": "2026-11-27",
+      "title": "Plugin request headers survive import and export",
+      "broken": "Importing a shared plugin merged all its request headers into one and broke passwords and tokens ending in \"=\". Exporting also changed web addresses inside the plugin.",
+      "changed": "Headers are now split and joined the right way in both directions.",
+      "matters": "Shared plugins that need a login keep working after import, and export gives back the same plugin."
+    }
+  ]
+}

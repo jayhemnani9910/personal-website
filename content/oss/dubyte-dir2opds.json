@@ -1,0 +1,23 @@
+{
+  "repo": "dubyte/dir2opds",
+  "about": "A small self-hosted server that turns a folder of ebooks into a library that reading apps can browse.",
+  "stars": 130,
+  "prs": [
+    {
+      "number": 80,
+      "merged": "2026-11-28",
+      "title": "Folders with # in their names can be paged",
+      "broken": "In folders named like \"C# Programming\", the next page and parent links broke at the \"#\", so books past the first page could not be reached.",
+      "changed": "These links now encode the folder name properly.",
+      "matters": "Large folders with # in their names can be browsed to the end."
+    },
+    {
+      "number": 79,
+      "merged": "2026-11-28",
+      "title": "Books with % in their names open",
+      "broken": "A book or folder with a percent sign in its name could not be opened. The server gave an error, or served a different file.",
+      "changed": "The server no longer decodes the address a second time.",
+      "matters": "Every book in the folder can be downloaded, whatever its name."
+    }
+  ]
+}

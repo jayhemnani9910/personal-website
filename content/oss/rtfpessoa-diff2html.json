@@ -1,0 +1,23 @@
+{
+  "repo": "rtfpessoa/diff2html",
+  "about": "A JavaScript library that turns code diffs into readable, colour-highlighted web pages.",
+  "stars": 3435,
+  "prs": [
+    {
+      "number": 601,
+      "merged": "2026-11-27",
+      "title": "Non-English file names show properly",
+      "broken": "Git writes names with accents or other non-English letters as coded number sequences. diff2html showed those codes, like /303/274, instead of the real name.",
+      "changed": "Those quoted names are now decoded back into the real characters.",
+      "matters": "Files named in any language appear with their real names."
+    },
+    {
+      "number": 600,
+      "merged": "2026-11-27",
+      "title": "File names with spaces keep their highlighting",
+      "broken": "For files with a space in the path, git adds an invisible tab after the name. diff2html kept it, so the file type was lost and code was not highlighted.",
+      "changed": "That trailing tab is now dropped from file names.",
+      "matters": "Diffs of files in folders like \"My Docs\" show clean names and proper colours."
+    }
+  ]
+}

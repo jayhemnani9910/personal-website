@@ -1,0 +1,15 @@
+{
+  "repo": "gosom/scrapemate",
+  "about": "A Go framework for building web crawlers and scrapers.",
+  "stars": 218,
+  "prs": [
+    {
+      "number": 39,
+      "merged": "2026-11-28",
+      "title": "CSV output skips empty results instead of crashing",
+      "broken": "When a page returned no data, the CSV writer crashed the whole scraping run.",
+      "changed": "Results without data are now skipped.",
+      "matters": "One empty page no longer stops a long scrape and loses its output."
+    }
+  ]
+}
