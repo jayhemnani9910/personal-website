@@ -1,0 +1,23 @@
+{
+  "repo": "coderaiser/putout",
+  "about": "A JavaScript tool that finds problems in code and rewrites it automatically using plugins.",
+  "stars": 804,
+  "prs": [
+    {
+      "number": 248,
+      "merged": "2026-11-28",
+      "title": "Exported variables are left alone",
+      "broken": "A rule that joins a variable with its first assignment also rewrote exported variables, which can break modules that depend on that export.",
+      "changed": "The rule now skips exports.",
+      "matters": "Running the fixer does not change what a module exports."
+    },
+    {
+      "number": 247,
+      "merged": "2026-11-28",
+      "title": "Number separators no longer break binary numbers",
+      "broken": "The rule that adds underscores to long numbers also touched binary and uppercase hex or octal numbers, putting separators in places that changed or broke the code.",
+      "changed": "The rule now skips those prefixed numbers.",
+      "matters": "Running the fixer never turns working number literals into errors."
+    }
+  ]
+}

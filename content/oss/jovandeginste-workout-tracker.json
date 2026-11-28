@@ -4,6 +4,14 @@
   "stars": 1255,
   "prs": [
     {
+      "number": 932,
+      "merged": "2026-11-28",
+      "title": "Fast GPS tracks keep their real timing",
+      "broken": "For tracks recorded several times a second, gaps under one second were rounded to zero, so speed and pace on the map came out wrong.",
+      "changed": "Time between track points now keeps fractions of a second.",
+      "matters": "Speed and pace are right for watches and apps that record often."
+    },
+    {
       "number": 920,
       "merged": "2026-11-27",
       "title": "Each workout in a zip upload gets its own type",
