@@ -1079,6 +1079,16 @@ export const MERGED_PRS: { repo: string; number: string; href: string; landed?: 
   { repo: "kz26/PyExcelerate", number: "#298", href: "https://github.com/kz26/PyExcelerate/pull/298" },
   { repo: "radareorg/radare2", number: "#27599", href: "https://github.com/radareorg/radare2/pull/27599" },
   { repo: "radareorg/radare2", number: "#27600", href: "https://github.com/radareorg/radare2/pull/27600" },
+  { repo: "LibrePDF/OpenPDF", number: "#1658", href: "https://github.com/LibrePDF/OpenPDF/pull/1658" },
+  { repo: "PSU3D0/formualizer", number: "#587", href: "https://github.com/PSU3D0/formualizer/pull/587" },
+  { repo: "PSU3D0/formualizer", number: "#641", href: "https://github.com/PSU3D0/formualizer/pull/641" },
+  { repo: "dgorissen/pycel", number: "#183", href: "https://github.com/dgorissen/pycel/pull/183" },
+  { repo: "duke-git/lancet", number: "#442", href: "https://github.com/duke-git/lancet/pull/442" },
+  { repo: "fastcrw/crw", number: "#797", href: "https://github.com/fastcrw/crw/pull/797" },
+  { repo: "itzg/docker-mc-backup", number: "#341", href: "https://github.com/itzg/docker-mc-backup/pull/341" },
+  { repo: "mr-fatalyst/oxyde", number: "#58", href: "https://github.com/mr-fatalyst/oxyde/pull/58" },
+  { repo: "padloc/padloc", number: "#812", href: "https://github.com/padloc/padloc/pull/812" },
+  { repo: "poweradmin/poweradmin", number: "#1945", href: "https://github.com/poweradmin/poweradmin/pull/1945" },
 ];
 
 /**

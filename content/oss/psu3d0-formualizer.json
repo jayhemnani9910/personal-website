@@ -1,0 +1,23 @@
+{
+  "repo": "PSU3D0/formualizer",
+  "about": "A fast spreadsheet engine that reads, calculates and edits Excel workbooks from Rust, Python or the browser.",
+  "stars": 217,
+  "prs": [
+    {
+      "number": 641,
+      "merged": "2026-11-28",
+      "title": "SUMPRODUCT ignores text and TRUE/FALSE like Excel",
+      "broken": "SUMPRODUCT counted numbers stored as text and TRUE/FALSE cells as numbers, so its totals were higher than Excel gives for the same sheet.",
+      "changed": "Those cells now count as zero, as in Excel, unless the formula converts them first.",
+      "matters": "Sheets get the same totals as in Excel."
+    },
+    {
+      "number": 587,
+      "merged": "2026-11-28",
+      "title": "Numbers turned into text read like Excel",
+      "broken": "A number joined into text kept tiny rounding noise, so \"Total: \"&(0.1+0.2) showed 0.30000000000000004 instead of 0.3.",
+      "changed": "Numbers are now written with 15 significant digits, as Excel does.",
+      "matters": "Labels and keys built from numbers match what Excel shows."
+    }
+  ]
+}

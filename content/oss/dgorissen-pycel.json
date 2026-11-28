@@ -4,12 +4,21 @@
   "stars": 634,
   "prs": [
     {
+      "number": 183,
+      "merged": "2026-11-28",
+      "title": "Sums over OFFSET and INDIRECT ranges work",
+      "broken": "SUM, AVERAGE, MAX and most other functions over an OFFSET or INDIRECT range quietly returned 0, and some raised an error.",
+      "changed": "Those ranges are now resolved before such functions use them.",
+      "matters": "Spreadsheets that build ranges this way calculate the same results as Excel."
+    },
+    {
       "number": 180,
       "merged": "2026-11-15",
       "title": "Weekday formulas with a start-of-week option work",
       "broken": "Weekday formulas that count Monday as day one, the usual form in timesheets, crashed instead of giving a result.",
       "changed": "The weekday function now accepts every start-of-week option Excel supports, and gives Excel's error for unknown ones.",
-      "matters": "Timesheet and schedule spreadsheets calculate the same as in Excel."
+      "matters": "Timesheet and schedule spreadsheets calculate the same as in Excel.",
+      "top": true
     },
     {
       "number": 181,
@@ -17,7 +26,8 @@
       "title": "Text numbers with commas, percent or dollar signs are read",
       "broken": "Turning text like 1,234.50, 12% or $12.50 into a number gave an error, though Excel reads all three. The error then spread into any total.",
       "changed": "Those common formats are now read as numbers the way Excel reads them.",
-      "matters": "Sheets built on imported or pasted text numbers give the right totals."
+      "matters": "Sheets built on imported or pasted text numbers give the right totals.",
+      "top": true
     },
     {
       "number": 182,
@@ -25,7 +35,8 @@
       "title": "Numbers joined into text match Excel",
       "broken": "Joining a number into text gave long results like Total: 0.30000000000000004, where Excel shows Total: 0.3.",
       "changed": "Numbers turned into text are now rounded to 15 digits, as Excel does.",
-      "matters": "Labels and text built from formulas look the same as in Excel."
+      "matters": "Labels and text built from formulas look the same as in Excel.",
+      "top": true
     }
   ]
 }
